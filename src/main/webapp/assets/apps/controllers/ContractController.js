@@ -192,14 +192,14 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	        fd.append("files", file);
 			}
 			fd.append('id',$scope.contractVO.id); 
-			fd.append('orderSerial',$scope.contractVO.orderSerial); 
+			if($scope.contractVO.orderSerial)fd.append('orderSerial',$scope.contractVO.orderSerial); 
 			fd.append('contractNum',$scope.contractVO.contractNum); 
 	        fd.append('contractType',$scope.contractVO.contractType); 
-	        fd.append('firstParty',$scope.contractVO.firstParty); 
-	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-	        fd.append('secondParty',$scope.contractVO.secondParty); 
-	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	        if($scope.contractVO.firstParty)fd.append('firstParty',$scope.contractVO.firstParty); 
+	        if($scope.contractVO.firstPartySigner)fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	        if($scope.contractVO.secondParty)fd.append('secondParty',$scope.contractVO.secondParty); 
+	        if($scope.contractVO.secondPartySigner)fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	        if($scope.contractVO.otherPartyContractNum)fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
 	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
 	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
 	        fd.append('signDate',$scope.contractVO.signDate); 

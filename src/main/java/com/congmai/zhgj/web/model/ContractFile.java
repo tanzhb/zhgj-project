@@ -6,10 +6,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class OrderFile {
+public class ContractFile {
     private String serialNum;
 
-    private String orderSerial;
+    private String contractSerial;
 
     private String fileType;
 
@@ -42,12 +42,12 @@ public class OrderFile {
         this.serialNum = serialNum == null ? null : serialNum.trim();
     }
 
-    public String getOrderSerial() {
-        return orderSerial;
+    public String getContractSerial() {
+        return contractSerial;
     }
 
-    public void setOrderSerial(String orderSerial) {
-        this.orderSerial = orderSerial == null ? null : orderSerial.trim();
+    public void setContractSerial(String contractSerial) {
+        this.contractSerial = contractSerial == null ? null : contractSerial.trim();
     }
 
     public String getFileType() {

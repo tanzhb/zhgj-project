@@ -63,22 +63,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                  <div class="">
-                                 	<div  ng-hide="buyFrameInput">
-                                 		<div class="row">
-                         					<div class="col-md-8">
-                         						<select class="form-control" id="supplyComId"  data-live-search="true"  name="supplyComId" class="form-control" style="width:100px"
-                                 		 ng-model="buyFrame.comId"  data-size="8">
-                                                   <option value=""></option>
-                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
-                                               </select>
-                         					</div>
-                         					<div class="col-md-4">
-                         						<button type="button" ng-click="addCompany()"  class="btn green   btn-sm">
-                           							增加企业 </button>
-                         					</div>
-                         				</div>	
-                                               </div>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.comName}} </p>
+                                     <p class="form-control-static"> {{buyFrame.comName}} </p>
                                  </div>
                                  
                                  

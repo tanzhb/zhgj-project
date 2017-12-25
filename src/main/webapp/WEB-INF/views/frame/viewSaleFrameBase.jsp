@@ -48,9 +48,9 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">供应商：</label>
+                                 <label class="control-label col-md-5 bold">采购商：</label>
                                  <div class="col-md-7">
-                                     <p class="form-control-static"> {{buyFrame.comName}} </p>
+                                     <p class="form-control-static"> {{saleFrame.comName}} </p>
                                  </div>
                                  
                                  
@@ -88,7 +88,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">框架协议号：</label>
                                  <div class="col-md-7">
-                                     <p class="form-control-static" > {{buyFrame.contractNum}} </p>
+                                     <p class="form-control-static" > {{saleFrame.contractNum}} </p>
                                  </div>
                                  
                              </div>
@@ -97,16 +97,16 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">上传电子协议：</label>
                                  <div class="col-md-7">
-                                      	<p class="form-control-static"  id="noFileFlag" ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''" class="c_edit" >未上传附件</p>
-                                      	<p class="form-control-static"  ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(buyFrame.electronicContract)">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</a></p>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-if="saleFrame.electronicContract==null||saleFrame.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-if="saleFrame.electronicContract!=null&&saleFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(saleFrame.electronicContract)">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</a></p>
                                  </div>
                              </div>
                          </div>
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购商：</label>
+                                 <label class="control-label col-md-5 bold">供应商：</label>
                                     <div class="col-md-7">
-                                     <p class="form-control-static" > {{buyFrame.seller}} </p>
+                                     <p class="form-control-static" > {{saleFrame.seller}} </p>
                                  </div>
                              </div>
                          </div>
@@ -117,7 +117,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">开始日期：</label>
                                  <div class="col-md-7">
-                                     <p class="form-control-static" > {{buyFrame.startDate}} </p>
+                                     <p class="form-control-static" > {{saleFrame.startDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -125,7 +125,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold"> 结束日期：</label>
                                  <div class="col-md-7">
-                                     <p class="form-control-static" > {{buyFrame.endDate}} </p>
+                                     <p class="form-control-static" > {{saleFrame.endDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -133,7 +133,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
                                  <div class="col-md-7">
-                                     <p class="form-control-static"> {{buyFrame.remark}} </p>
+                                     <p class="form-control-static"> {{saleFrame.remark}} </p>
                                  </div>
                              </div>
                          </div>
@@ -375,7 +375,7 @@ margin-right: 20px;
                              <thead>
                                  <tr>
 								<th>商品编号</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">海关编码</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">海关编码</th>
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
@@ -387,13 +387,13 @@ margin-right: 20px;
 								<th>税率</th>
 								<th>不含税金额</th>
 								<th>税额</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">关税率</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">关税金额</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费率</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折扣率</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</th>
-								<th ng-if="buyFrame.settlementClause =='红票'">红票金额</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">关税率</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">关税金额</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费率</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折扣率</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</th>
+								<th ng-if="saleFrame.settlementClause =='红票'">红票金额</th>
 								
 								<th>含税金额</th>
 								<th>交付日期</th>
@@ -406,7 +406,7 @@ margin-right: 20px;
 		                          <td>
 		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
-		                          <td ng-if="buyFrame.tradeType =='外贸'">
+		                          <td ng-if="saleFrame.tradeType =='外贸'">
 		                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 		                          </td>
 		                          <td>
@@ -432,10 +432,10 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{buyFrame.currency}} </p>
+                                     		<p class="form-control-static" > {{saleFrame.currency}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{buyFrame.rate}}% </p>
+                                     		<p class="form-control-static" > {{saleFrame.rate}}% </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{format2Thousands(_arithmeticAmount(this))}} </p>
@@ -443,21 +443,21 @@ margin-right: 20px;
 		                          <td>  
                                      		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 		                          </td>
-		                          <td ng-if="buyFrame.tradeType =='外贸'">
+		                          <td ng-if="saleFrame.tradeType =='外贸'">
                                      		<p class="form-control-static" > {{_orderMateriel.customsRate}}% </p>
 		                          </td>
-								  <td ng-if="buyFrame.tradeType =='外贸'">
+								  <td ng-if="saleFrame.tradeType =='外贸'">
 								  		<p class="form-control-static" > {{format2Thousands(_arithmeticCustomsRateAmount(this))}} </p>
 								  </td>
-		                          <td ng-if="buyFrame.settlementClause =='服务费'">
+		                          <td ng-if="saleFrame.settlementClause =='服务费'">
                                      	<p class="form-control-static" > {{_orderMateriel.serviceRate}} </p>
 		                          </td>
-								<td ng-if="buyFrame.settlementClause =='服务费'">服务费</td>
-								<td ng-if="buyFrame.settlementClause =='折扣折让'">
+								<td ng-if="saleFrame.settlementClause =='服务费'">服务费</td>
+								<td ng-if="saleFrame.settlementClause =='折扣折让'">
                                      	<p class="form-control-static" > {{_orderMateriel.discountRate}} </p>
 								</td>
-								<td ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</td>
-								<td ng-if="buyFrame.settlementClause =='红票'">
+								<td ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</td>
+								<td ng-if="saleFrame.settlementClause =='红票'">
                                      	<p class="form-control-static" > {{_orderMateriel.redTicket}} </p>
 								</td>
 		                          <td>  
@@ -476,7 +476,7 @@ margin-right: 20px;
                                  </tr>
                                  <tr>
 								<th></th>
-								<th ng-if="buyFrame.tradeType =='外贸'"></th>
+								<th ng-if="saleFrame.tradeType =='外贸'"></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
 								<th></th>
@@ -488,13 +488,13 @@ margin-right: 20px;
 								<th></th>
 								<th>{{format2Thousands(totalAmount())}}</th>
 								<th>{{format2Thousands(totalRateAmount())}}</th>
-								<th ng-if="buyFrame.tradeType =='外贸'"></th>
-								<th ng-if="buyFrame.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费率</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折扣率</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</th>
-								<th ng-if="buyFrame.settlementClause =='红票'">红票金额</th>
+								<th ng-if="saleFrame.tradeType =='外贸'"></th>
+								<th ng-if="saleFrame.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费率</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折扣率</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</th>
+								<th ng-if="saleFrame.settlementClause =='红票'">红票金额</th>
 								
 								<th>{{format2Thousands(totalRateAndAmount())}}</th>
 								<th></th>

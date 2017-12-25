@@ -11,16 +11,16 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="buyFrame">采购订单</a>
+            <a ui-sref="buyOrder">采购订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>查看</a>
+            <a>{{opration}}</a>
         </li>
     </ul>
     <div class="page-toolbar">
           <div class="btn-group pull-right">
-              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('buyFramePrint')"> 
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('buyOrderPrint')"> 
               	<i class="fa fa-print"></i>
                   		打印
               </button>
@@ -28,7 +28,7 @@
           </div>
       </div>
 </div> -->
-<div class="row" id="buyFramePrint">
+<div class="row" id="buyOrderPrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
@@ -39,19 +39,8 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyFrameBase.jsp"/>
-					
-		            <div class="portlet-title">
-			               <div class="tools">
-			               		<button type="button" ng-if = "buyFrame.status==0" ng-click="pingTaiSubmitFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交供方确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiSubmitFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新提交确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiConfirmedFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==0||buyFrame.status==77" ng-click="submitBuyFrameApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">申请</button>
-				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
-				            </div>
-					</div>
+					<jsp:include  page="editSupplyFrameBase.jsp"/>
       			</div>
 			</div>
 	</div>
 </div>
-

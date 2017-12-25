@@ -11,7 +11,7 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="buyFrame">采购订单</a>
+            <a ui-sref="saleFrame">采购订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
@@ -20,7 +20,7 @@
     </ul>
     <div class="page-toolbar">
           <div class="btn-group pull-right">
-              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('buyFramePrint')"> 
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('saleFramePrint')"> 
               	<i class="fa fa-print"></i>
                   		打印
               </button>
@@ -28,7 +28,7 @@
           </div>
       </div>
 </div> -->
-<div class="row" id="buyFramePrint">
+<div class="row" id="saleFramePrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
@@ -39,7 +39,7 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editBuyFrameBase.jsp"/>
+					<jsp:include  page="editSaleFrameBase.jsp"/>
       			</div>
       			   <div class="row">
 						<div class="col-md-12">
@@ -82,7 +82,7 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark" class="form-control"  ng-model="buyFrame.remark"  >
+				                                  <input type="text" name="remark" class="form-control"  ng-model="saleFrame.remark"  >
 			                                      <div class="form-control-focus"> </div>
 			                                      <span class="help-block">请重新输入原因</span>
 				                               	</div>

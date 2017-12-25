@@ -796,13 +796,39 @@ public class ProcessServiceImp implements IProcessService{
 
 	@Override
 	public String startBuyFramerProcess(ContractVO contract) {
-		// TODO Auto-generated method stub
-		return null;
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
 	}
 
 	@Override
 	public String startSaleFramerProcess(ContractVO contract) {
-		// TODO Auto-generated method stub
-		return null;
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
 	}
 }

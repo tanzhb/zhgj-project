@@ -96,8 +96,8 @@
 						 <div class="row">
 						<div class="col-md-12">
 							<div class="modal-footer">
-								<button type="button" ng-click="orderPass()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">通过</button>
-								<button type="button" ng-click="orderUnPass()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">不通过</button>
+								<button type="button" ng-click="framePass()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">通过</button>
+								<button type="button" ng-click="frameUnPass()" ng-hide="orderStatusInput" class="btn red btn-circle  btn-sm">不通过</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 							</div>
 						</div>

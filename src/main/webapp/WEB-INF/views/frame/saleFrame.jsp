@@ -5,7 +5,7 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">采购框架</a>
+			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售框架</a>
 			</li>
 	</ul>
     <div class="tab-content">
@@ -30,14 +30,14 @@
 								<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 									<label class="btn btn-transparent green btn-circle btn-sm"
-										ui-sref="addBuyFrame"> <i class="fa fa-plus"></i> 添加
+										ui-sref="addSaleFrame"> <i class="fa fa-plus"></i> 添加
 									</label>
 									<label class="btn btn-transparent purple btn-circle btn-sm"
-										ng-click="editBuyFrame()"> <i class="fa fa-edit"></i>
+										ng-click="editSaleFrame()"> <i class="fa fa-edit"></i>
 										修改
 									</label>
 										<label class="btn btn-transparent red btn-circle btn-sm"
-											ng-click="deleteBuyFrame()"> <i class="fa fa-minus"></i>
+											ng-click="deleteSaleFrame()"> <i class="fa fa-minus"></i>
 											删除
 										</label>
 							</div>
@@ -53,7 +53,7 @@
                                             </label>
                                         </th>
 			                            <th> 框架协议号 </th>
-			                            <th> 供应商 </th>
+			                            <th> 采购商 </th>
 			                            <th> 框架类型 </th>
 			                            <th> 框架合同号 </th>
 			                            <th> 生效日期 </th>
@@ -145,7 +145,7 @@
  </div>
  </div>
  <!-- 删除订单modal 开始 -->
-	<div id="delBuyFrameModal" class="modal fade" tabindex="-1"
+	<div id="delSaleFrameModal" class="modal fade" tabindex="-1"
 		data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<div class="modal-content">

@@ -37,20 +37,22 @@
 	<!-- AND
 	comId IS NULL -->
 	and b.serialNum IS NULL
+	and a.contractType != '销售框架'
+	and a.contractType != '采购框架'
     </select>
     
     <!--查询销售合同列表  -->
     <select id="querySaleContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.buyComId) AS comId,
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-    a.versionNO,b.status
+    a.versionNO,ifNull(b.status,a.status) as status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND ((b.supplyComId IS NULL AND b.delFlg='0'
 	and b.status !=0)
-	or ((a.status=3 or a.status=2) and a.contractType = '采购框架'))
+	or ((a.status=3 or a.status=2) and a.contractType = '销售框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -58,14 +60,14 @@
      <!--查询采购合同列表  -->
     <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.supplyComId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-	a.versionNO,b.status
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+	a.versionNO,ifNull(b.status,a.status) as status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND ((b.buyComId IS NULL AND b.delFlg='0'
 	and b.status !=0 and b.status !=66 and b.status !=77 and b.status !=1)  <!-- 审批通过的采购订单，才生成采购合同 -->
-	or ((a.status=3 or a.status=2) and a.contractType = '销售框架'))
+	or ((a.status=3 or a.status=2) and a.contractType = '采购框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -119,7 +121,8 @@
 	(SELECT comName FROM company WHERE comId=a.comId) AS comName,
 	a.contractNumber,
 	a.contractContent,
-	a.seller
+	a.seller,
+	a.status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
@@ -220,6 +223,9 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="remark != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
 	updater=#{updater},
 	updateTime=NOW()
 	WHERE
@@ -265,31 +271,71 @@
       
     </select> 
     
-    
+    <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ContractVO" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="comId" property="comId" jdbcType="VARCHAR" />
+    <result column="contractNum" property="contractNum" jdbcType="VARCHAR" />
+    <result column="contractType" property="contractType" jdbcType="VARCHAR" />
+    <result column="serviceModel" property="serviceModel" jdbcType="VARCHAR" />
+    <result column="settlementClause" property="settlementClause" jdbcType="VARCHAR" />
+    <result column="startDate" property="startDate" jdbcType="DATE" />
+    <result column="endDate" property="endDate" jdbcType="DATE" />
+    <result column="signDate" property="signDate" jdbcType="DATE" />
+    <result column="firstParty" property="firstParty" jdbcType="VARCHAR" />
+    <result column="secondParty" property="secondParty" jdbcType="VARCHAR" />
+    <result column="firstPartySigner" property="firstPartySigner" jdbcType="VARCHAR" />
+    <result column="secondPartySigner" property="secondPartySigner" jdbcType="VARCHAR" />
+    <result column="otherPartyContractNum" property="otherPartyContractNum" jdbcType="VARCHAR" />
+    <result column="signer" property="signer" jdbcType="VARCHAR" />
+    <result column="contractNumber" property="contractNumber" jdbcType="VARCHAR" />
+    <result column="signerAddress" property="signerAddress" jdbcType="VARCHAR" />
+    <result column="paymentMethod" property="paymentMethod" jdbcType="VARCHAR" />
+    <result column="paymentPeriod" property="paymentPeriod" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="totalMaterialMoney" property="totalMaterialMoney" jdbcType="VARCHAR" />
+    <result column="serviceMoney" property="serviceMoney" jdbcType="VARCHAR" />
+    <result column="logisticsMoney" property="logisticsMoney" jdbcType="VARCHAR" />
+    <result column="totalMoney" property="totalMoney" jdbcType="VARCHAR" />
+    <result column="electronicContract" property="electronicContract" jdbcType="VARCHAR" />
+    <result column="signContract" property="signContract" jdbcType="VARCHAR" />
+    <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
+    <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="seller" property="seller" jdbcType="VARCHAR" />
+    <result column="contractContent" property="contractContent" jdbcType="VARCHAR" />
+    <association property="comName" column="comId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
+    <association property="processBase" column="id" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
+  </resultMap>
     <!--查询合同列表  -->
-   <select id="selectList" parameterType="com.congmai.zhgj.web.model.ContractVO" resultType="com.congmai.zhgj.web.model.ContractVO">
+   <select id="selectList" resultMap="BaseResultMap" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT 
-    a.serialNum AS Id,
-	a.contractNum,
-	a.firstParty,
-	a.secondParty,
-	a.contractType,
-	a.serviceModel,
-	a.signDate,
-	a.signer,
-	a.startDate,
-	a.endDate,
-	a.versionNO,
-	a.status,
-	a.creator,
-	(SELECT comName FROM company WHERE comId=a.comId) AS comId
+    serialNum as id, comId, contractNum, contractType, serviceModel, settlementClause, startDate, 
+    endDate, signDate, firstParty, secondParty, firstPartySigner, secondPartySigner, 
+    otherPartyContractNum, signer, contractNumber, signerAddress, paymentMethod, paymentPeriod, 
+    remark, totalMaterialMoney, serviceMoney, logisticsMoney, totalMoney, electronicContract, 
+    signContract, versionNO, isLatestVersion, status, delFlg, creator, createTime, updater, 
+    updateTime, seller, contractContent
 	FROM
 	contract a
 	
 	WHERE
-	a.delFlg='0'
+	delFlg='0'
 		<if test="contractType != null" >
         and contractType = #{contractType,jdbcType=VARCHAR}
+      </if>
+      <if test="status == 'supplyFrame'" >
+        and status != 0
+      </if>
+      <if test="status == 'customerFrame'" >
+        and status != 0
+      </if>
+      <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
       </if>
 
     </select>
@@ -403,7 +449,7 @@
         contractContent = #{contractContent,jdbcType=VARCHAR},
       </if>
     </set>
-    where serialNum = #{serialNum,jdbcType=VARCHAR}
+    where serialNum = #{id,jdbcType=VARCHAR}
   </update>
   
 </mapper>

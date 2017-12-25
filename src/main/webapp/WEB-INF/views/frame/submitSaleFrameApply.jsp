@@ -11,16 +11,16 @@
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a ui-sref="buyFrame">采购订单</a>
+            <a ui-sref="saleFrame">采购订单</a>
             <i class="fa fa-angle-right"></i>
         </li>
         <li>
-            <a>查看</a>
+            <a>申请</a>
         </li>
     </ul>
     <div class="page-toolbar">
           <div class="btn-group pull-right">
-              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('buyFramePrint')"> 
+              <button type="button" class="btn btn-fit-height grey-salt dropdown-toggle" onclick="printdiv('saleFramePrint')"> 
               	<i class="fa fa-print"></i>
                   		打印
               </button>
@@ -28,7 +28,7 @@
           </div>
       </div>
 </div> -->
-<div class="row" id="buyFramePrint">
+<div class="row" id="saleFramePrint">
     <div class="col-md-12">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 			<div class="portlet light ">
@@ -39,14 +39,30 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyFrameBase.jsp"/>
+					<jsp:include  page="viewSaleFrameBase.jsp"/>
 					
+					<!-- //申请原因 -->
+					<div class="portlet-body form">
+					     <form >
+						     <div class="form-body">
+			                      <div class="row">
+			                          <div class="col-md-8">
+			                          		<div class="form-group ">
+				                              	<label class="control-label bold">原因：</label>
+				                                <div class="">
+				                                  <input type="text" name="remark"  class="form-control"  ng-model="remark"  >
+			                                      <div class="form-control-focus"> </div>
+			                                      <span class="help-block" >请输入原因</span>
+				                               	</div>
+			                               </div>
+			                          </div>
+			                      </div>
+			                  </div>
+			                </form>
+		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-if = "buyFrame.status==0" ng-click="pingTaiSubmitFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交供方确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiSubmitFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新提交确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==77" ng-click="pingTaiConfirmedFrame()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>
-			               		<button type="button" ng-if = "buyFrame.status==0||buyFrame.status==77" ng-click="submitBuyFrameApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">申请</button>
+			               		<button type="button" ng-click="confirmSaleFrameApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

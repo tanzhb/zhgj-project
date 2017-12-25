@@ -50,7 +50,7 @@
 			                          		<div class="form-group ">
 				                              	<label class="control-label bold">原因：</label>
 				                                <div class="">
-				                                  <input type="text" name="remark"  class="form-control"  ng-model="buyFrame.remark"  >
+				                                  <input type="text" name="remark"  class="form-control"  ng-model="remark"  >
 			                                      <div class="form-control-focus"> </div>
 			                                      <span class="help-block" >请输入原因</span>
 				                               	</div>
@@ -62,7 +62,7 @@
 		            </div>
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button type="button" ng-click="confirmBuyApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交申请</button>
+			               		<button type="button" ng-click="confirmBuyFrameApply()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交申请</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

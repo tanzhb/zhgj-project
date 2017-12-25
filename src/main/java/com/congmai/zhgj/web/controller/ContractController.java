@@ -240,13 +240,17 @@ public class ContractController {
 
 			//给各自的文件字段赋值文件名
 			contractVO.setSignContract(signContract);
+			contractVO.setStatus(ContractVO.SIGN);
 
 			contractService.signSaleContract(contractVO);
 			
-			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("updater", currenLoginName);
-			map.put("serialNum", contractVO.getOrderSerial());
-			contractService.updateOrderAfterSign(map);
+			if(contractVO.getOrderSerial()!=null){
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("updater", currenLoginName);
+				map.put("serialNum", contractVO.getOrderSerial());
+				contractService.updateOrderAfterSign(map);
+			}
+			
 
 
 		HttpHeaders headers = new HttpHeaders();

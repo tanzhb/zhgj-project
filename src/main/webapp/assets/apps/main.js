@@ -1204,6 +1204,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 供应商修改平台采购框架
+        .state('addSupplyFrame', {
+            url: "/addSupplyFrame?:serialNum&:view",
+            templateUrl: "rest/page/addSupplyFrame",
+            data: {pageTitle: '新增采购框架'},
+            controller: "supplyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/supplyFrameController.js'
+                      ]
+                    });
+                }]
+            }
+        })
         // 新增采购订单
         .state('addBuyOrder', {
             url: "/addBuyOrder?:serialNum&:view",
@@ -4134,6 +4161,13 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改订单</a></li>";
 						 } else html += "<li><a>新增订单</a></li>";
+			   }else if('addSupplyFrame' == toState.name){//供应商修改平台采购框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyFrame'>框架协议</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改框架协议</a></li>";
+						 } else html += "<li><a>新增框架协议</a></li>";
 			   }else if('viewBuyOrder' == toState.name){//查看采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -4637,6 +4671,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('buyFrame' == toState.name){
 						getTodoTaskLength('buyFrame', 'buyFrame');
 						getEndTaskLength('buyFrame', 'buyFrame');					
+					}else if('saleFrame' == toState.name){
+						getTodoTaskLength('saleFrame', 'saleFrame');
+						getEndTaskLength('saleFrame', 'saleFrame');					
 					}else if('takeDelivery' == toState.name){ //收货
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');

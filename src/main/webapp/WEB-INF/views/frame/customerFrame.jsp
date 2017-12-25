@@ -28,7 +28,7 @@
                                             </label>
                                         </th>
 			                            <th> 框架协议号 </th>
-			                            <th> 供应商 </th>
+			                            <th> 采购商 </th>
 			                            <th> 框架类型 </th>
 			                            <th> 框架合同号 </th>
 			                            <th> 生效日期 </th>
@@ -37,7 +37,7 @@
 			                            <th> 签订人 </th>
 			                            <th> 版本 </th>
 			                            <th> 状态</th>
-			                            <th> 操作 </th>
+			                            <!-- <th> 操作 </th> -->
 			                        </tr>
 			                    </thead>
 			                    <tbody>
