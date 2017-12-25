@@ -171,11 +171,12 @@
     <update id="updatePaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
     UPDATE
 	paymentRecord
-	SET
+ SET
 	paymentType=#{paymentType},
 	paymentNum=#{paymentNum},
 	orderSerial=#{orderSerial},
 	supplyComId=#{supplyComId},
+	buyComId=#{buyComId},
 	applyPaymentAmount=#{applyPaymentAmount},
 	applyCurrency=#{applyCurrency},
 	playPaymentDate=#{playPaymentDate},
@@ -185,6 +186,7 @@
 	billStyle=#{billStyle},
 	billType=#{billType},
 	accountPeriod=#{accountPeriod},
+	paymentAmount=#{paymentAmount},
 	deliveryRate=#{deliveryRate},
 	customsFormSerial=#{customsFormSerial},
 	isBill=#{isBill},
@@ -204,6 +206,7 @@
 	userId=#{userId},
 	<if test="status != null" >
 	status=#{status},
+	paymentDate=NOW(),
 	</if>
 	updateTime=NOW()
 	WHERE
@@ -255,4 +258,35 @@
     <update id="confirmGatheringMoney" parameterType="java.util.HashMap">
     UPDATE paymentRecord SET status='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{serialNum}
     </update>
+    <!--查找水单对应的应收付款账单  -->
+    <select id="findPaymentRecord" parameterType="java.util.HashMap" resultType="com.congmai.zhgj.web.model.PaymentRecord">
+	 SELECT
+	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	a.supplyComId, a.buyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.payee,a.isBill,a.applyDate
+	FROM
+	paymentRecord a
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
+	WHERE a.delFlg='0'
+	<if test="type=='receive'">
+	and  a.buyComId=#{comId}
+	</if>
+	<if test="type=='pay'">
+	and  a.supplyComId=#{comId}
+	</if>
+    </select>
+      <!--查找应收付款账单对应的收付款水单 -->
+    <select id="findMemoRecord" parameterType="java.util.HashMap" resultType="com.congmai.zhgj.web.model.MemoRecord">
+	 SELECT
+	m.serialNum, m.memoNum,m.supplyComId, m.buyComId, m.verificationMoneyAmount,m.moneyAmount, 
+    m.currency, m.paymentDate, m.paymentStyle
+	FROM
+	memorecord m
+	WHERE m.delFlg='0'
+	<if test="type=='receive'">
+	and  m.buyComId=#{comId}
+	</if>
+	<if test="type=='pay'">
+	and  m.supplyComId=#{comId}
+	</if>
+    </select>
 </mapper>

@@ -3885,7 +3885,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         
         .state('viewReceiveMemo', {
-            url: "/viewReceiveMemo:serialNum",
+            url: "/viewReceiveMemo:serialNum&:type",
             templateUrl: "rest/page/viewReceiveMemo",
             data: {pageTitle: '收款水单详情'},
             controller: "ReceiveMemoController",

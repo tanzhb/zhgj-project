@@ -26,8 +26,8 @@
 											class="btn green  btn-circle  btn-sm" ng-show="input">
 											<i class="fa fa-save"></i> 保存
 										</button>
-										<button type="submit" ng-click="editReceiveInfo('receive')"
-											class="btn blue  btn-circle  btn-sm" ng-show="inputEdit">
+										<button type="button" ng-click="verificateInfo('receive')"
+											class="btn blue  btn-circle  btn-sm" ng-show="input">
 											核销
 										</button>
 										<!-- <button ng-click="goBack()" type="button"
@@ -281,7 +281,7 @@
 		</div>
 	</div>
 </div>
-
+<jsp:include page="selectReceivePaymentRecord.jsp"></jsp:include>
 
 
 <script type="text/javascript">

@@ -10,7 +10,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$rootScope.settings.layout.pageSidebarClosed = false;
 
 		loadMainTable();
-		loadMainTable1();
 
 		//控制输入框和span标签的显示
 		$scope.span =false;
@@ -32,6 +31,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
          }*/
 		 
 		 if($state.current.name=="addPay"){
+			 loadMainTable1();
 				$scope.span =false;
 				$scope.input = true;
 				$scope.inputFile=true;
@@ -50,12 +50,16 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				});
 					    }
 			
-			}else if($state.current.name=="viewPay"){
-				$scope.getPayInfo($stateParams.serialNum);	
+			}else if($state.current.name=="applyPay"){
 				$scope.input=false;
-				$scope.span=true;
-				
+				$scope.span =true;
+				 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
+			}else if($state.current.name=="viewPay"){
+				$scope.input=false;
+				$scope.span =true;
+				$scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
 			}
+		 
 		 
 	});
 
@@ -1428,6 +1432,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            			type, row, meta) {
 						                            		if(data==null||data==''){
 						                            			return row.applyDate;
+						                            		}else{
+						                            			return data;
 						                            		}
 						                            	},
 						                            }
