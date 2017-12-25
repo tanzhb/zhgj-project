@@ -176,7 +176,7 @@
             	<shiro:hasPermission name="zhgj:purchaseForecast:*">
 	                <li>
 	                    <a ui-sref="purchaseForecast">
-	                         采购预测</span>
+	                         采购计划</span>
 	                    </a>
 	                </li>
                 </shiro:hasPermission>
@@ -194,13 +194,6 @@
 		                    </a>
 		            </li>
 				</shiro:hasPermission>
-                <shiro:hasPermission name="zhgj:customerFrame:*">
-	                <li>
-	                    <a ui-sref="customerFrame">
-	                        框架协议</span>
-	                    </a>
-	                </li>
-	             </shiro:hasPermission>
                 <shiro:hasPermission name="zhgj:buyOrder:*">
                 <li>
                     <a ui-sref="customsClearanceForm">
@@ -215,6 +208,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                 <shiro:hasPermission name="zhgj:customerFrame:*">
+	                <li>
+	                    <a ui-sref="customerFrame">
+	                        框架协议</span>
+	                    </a>
+	                </li>
+	             </shiro:hasPermission>
                <!--  <li>
                     <a ui-sref="">
                         <i class="icon-check"></i>收货单</span>

@@ -4671,6 +4671,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					}else if('buyFrame' == toState.name){
 						getTodoTaskLength('buyFrame', 'buyFrame');
 						getEndTaskLength('buyFrame', 'buyFrame');					
+					}else if('saleFrame' == toState.name){
+						getTodoTaskLength('saleFrame', 'saleFrame');
+						getEndTaskLength('saleFrame', 'saleFrame');					
 					}else if('takeDelivery' == toState.name){ //收货
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');

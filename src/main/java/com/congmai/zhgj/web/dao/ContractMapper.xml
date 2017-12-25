@@ -331,6 +331,12 @@
       <if test="status == 'supplyFrame'" >
         and status != 0
       </if>
+      <if test="status == 'customerFrame'" >
+        and status != 0
+      </if>
+      <if test="comId != null" >
+        and comId = #{comId,jdbcType=VARCHAR}
+      </if>
 
     </select>
     

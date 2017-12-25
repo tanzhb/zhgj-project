@@ -229,7 +229,7 @@ public class PageController {
      */
     @RequestMapping("/customerFrame")
     public String customerFrame() {
-        return "Frame/customerFrame";
+        return "frame/customerFrame";
     }
     
     /**

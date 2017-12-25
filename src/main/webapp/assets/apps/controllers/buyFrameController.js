@@ -315,7 +315,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[11, "asc"],[1, "desc"]],// 默认排序列及排序方式
+                order: [[12, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -422,7 +422,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 	                        				return clickhtm + '';
 										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
-											return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.id+'\',\''+row.comId+'\')">签订</a>'
+											return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.id+'\',\''+row.comName+'\')">签订</a>'
 										}else if(row.processBase.status=="APPROVAL_FAILED"){
 											return clickhtm + '';
 										}else{
@@ -433,15 +433,9 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 	                        		}
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyFrameApply(\''+row.id+'\')">申请</a>'
 								}else if(row.status==2){
-									if(isNull(row.deliveryCount)||row.deliveryCount==0){
-										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.id+'\')">代发货</a>'
-									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
-										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.id+'\')">代发货</a>'
-									}else{
-										return clickhtm + '';
-									}
+									return clickhtm + '';
 								}else if(row.status==3){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.id+'\',\''+row.comId+'\')">签订</a>'
+									return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.id+'\',\''+row.comName+'\')">签订</a>'
 								}else if(row.status=="66"){
 									return clickhtm + '';
 								}else if(row.status=="77"){
@@ -3774,7 +3768,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 	       /** *************关联销售框架协议  end*************** */ 
 	 	       //从框架协议签订合同
 	 	       $scope.signContract= function(ids,comId) {
-	 	    	  $state.go('frameSign',{id:ids,comId:comId,type:"buy"});
+	 	    	  $state.go('saleOrderSign',{id:ids,comId:comId,type:"buy"});
 	 	       }
 
 	 	       

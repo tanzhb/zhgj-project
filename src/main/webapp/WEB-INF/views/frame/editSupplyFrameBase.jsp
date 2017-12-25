@@ -20,7 +20,7 @@ margin-right: 20px;
 <!-- 采购订单基本信息 START -->
 <ul class="nav nav-tabs">
 	<li class="active bold">
-              		<a data-target="#tab_1_1" data-toggle="tab">订单信息</a>
+              		<a data-target="#tab_1_1" data-toggle="tab">框架信息</a>
           		</li>
 	<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">合同信息</a>
 	</li> -->

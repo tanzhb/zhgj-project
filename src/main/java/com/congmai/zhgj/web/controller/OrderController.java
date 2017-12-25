@@ -750,6 +750,12 @@ public class OrderController {
     	
     	parm.setStatus(selectFor);
     	
+    	String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+		}
+    	parm.setComId(comId);
     	contractList = contractService.selectList(parm);
     	
     	//封装datatables数据返回到前台
@@ -2240,8 +2246,10 @@ public class OrderController {
 			return flag;
 		}
 		
-//		contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
-//    	contractService.update(contract);//更新备注
+		String remarkString = contract.getRemark();
+		contract.setRemark(null);
+    	contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+    	contractService.update(contract);
     	
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
@@ -2251,7 +2259,7 @@ public class OrderController {
 		contract.setBusinessType(BaseVO.SALEFRAME); 			//业务类型：销售框架
 		contract.setStatus(BaseVO.PENDING);					//审批中
 		contract.setApplyDate(new Date());
-		contract.setReason(contract.getRemark());
+		contract.setReason(remarkString);
 		contract.setSerialNum(contract.getId());
     	processBaseService.insert(contract);
 		String businessKey = contract.getId().toString();
@@ -2374,11 +2382,12 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(contract.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			ContractVO c = new ContractVO();
     			c.setId(contract.getId());
-    			if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
+    			/*if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
     				c.setStatus("1");
     			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
     				c.setStatus("3");
-    			}
+    			}*/
+    			c.setStatus("3");
     			this.contractService.update(c);
     		}
     		

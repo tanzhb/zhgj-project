@@ -41,11 +41,11 @@ margin-right: 20px;
 	<div class="tab-pane fade active in" id="tab_1_1">
 		<div class="portlet-title" style="min-height: 48px;">
               <div class="tools" style="float:right" id="noprintdiv">
-                        	<button type="submit" ng-click="save()" ng-hide="buyFrameInput" class="btn green  btn-circle  btn-sm">
+                        	<button type="submit" ng-click="save()" ng-hide="saleFrameInput" class="btn green  btn-circle  btn-sm">
                            		<i class="fa fa-save"></i> 保存 </button>
-                           <button ng-click="cancel()" type="button" ng-hide="buyFrameInput" class="btn defualt  btn-circle  btn-sm">
+                           <button ng-click="cancel()" type="button" ng-hide="saleFrameInput" class="btn defualt  btn-circle  btn-sm">
                            		<i class="fa fa-undo"></i> 取消 </button>
-                           <button ng-click="edit()" type="button" ng-show="buyFrameShow&&noShow" class="btn purple  btn-circle  btn-sm">
+                           <button ng-click="edit()" type="button" ng-show="saleFrameShow&&noShow" class="btn purple  btn-circle  btn-sm">
                            		<i class="fa fa-edit"></i> 编辑 </button>
                            <!--  <a href="javascript：;" class="collapse"> </a> -->
                          </div>
@@ -61,15 +61,15 @@ margin-right: 20px;
                      <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                  <div class="">
-                                 	<div  ng-hide="buyFrameInput">
+                                 	<div  ng-hide="saleFrameInput">
                                  		<div class="row">
                          					<div class="col-md-8">
-                         						<select class="form-control" id="supplyComId"  data-live-search="true"  name="supplyComId" class="form-control" style="width:100px"
-                                 		 ng-model="buyFrame.comId"  data-size="8">
+                         						<select class="form-control" id="buyComId"  data-live-search="true"  name="buyComId" class="form-control" style="width:100px"
+                                 		 ng-model="saleFrame.comId"  data-size="8">
                                                    <option value=""></option>
-                                                   <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
+                                                   <option  ng-repeat="customer in customers" value="{{customer.comId}}" >{{customer.comName}}</option>
                                                </select>
                          					</div>
                          					<div class="col-md-4">
@@ -78,7 +78,7 @@ margin-right: 20px;
                          					</div>
                          				</div>	
                                                </div>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.comName}} </p>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.comName}} </p>
                                  </div>
                                  
                                  
@@ -116,10 +116,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>框架协议号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNum" class="form-control" ng-hide="buyFrameInput" ng-model="buyFrame.contractNum"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="saleFrameInput" ng-model="saleFrame.contractNum"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyFrameInput">请输入框架协议号</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.contractNum}} </p>
+                                     <span class="help-block" ng-hide="saleFrameInput">请输入框架协议号</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.contractNum}} </p>
                                  </div>
                                  
                              </div>
@@ -128,35 +128,35 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>上传电子协议：</label>
                                  <div class="">
-                                 		<div ng-hide="buyFrameInput"   ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                 		<div ng-hide="saleFrameInput"   ng-if="saleFrame.electronicContract==null||saleFrame.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
-                                            <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
+                                            <span class="fileinput-filename">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                        <div ng-hide="buyFrameInput"   ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div ng-hide="saleFrameInput"   ng-if="saleFrame.electronicContract!=null&&saleFrame.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
-                                            <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.electronicContract" ng-click="uploadFile('electronicContract')" /> </span>
+                                            <span class="fileinput-filename">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                      	<p class="form-control-static"  id="noFileFlag" ng-show="buyFrameShow" ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''" class="c_edit" >未上传附件</p>
-                                      	<p class="form-control-static"  ng-show="buyFrameShow" ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(buyFrame.electronicContract)">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</a></p>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-show="saleFrameShow" ng-if="saleFrame.electronicContract==null||saleFrame.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="saleFrameShow" ng-if="saleFrame.electronicContract!=null&&saleFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(saleFrame.electronicContract)">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</a></p>
                                  </div>
                              </div>
                          </div>
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>供应商：</label>
                                     <div class="">
-                                  <input type="text" name="seller" class="form-control" ng-hide="buyFrameInput" ng-model="buyFrame.seller" value="" >
+                                  <input type="text" name="seller" class="form-control" ng-hide="saleFrameInput" ng-model="saleFrame.seller" value="" >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyFrameInput">请输入采购商</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.seller}} </p>
+                                     <span class="help-block" ng-hide="saleFrameInput">请输入供应商</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.seller}} </p>
                                  </div>
                              </div>
                          </div>
@@ -168,10 +168,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>开始日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.startDate"  ng-hide="buyFrameInput" id="startDate" name="startDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="saleFrame.startDate"  ng-hide="saleFrameInput" id="startDate" name="startDate"/>
 									<div class="form-control-focus"> </div>
-									<span class="help-block" ng-hide="buyFrameInput">请输入开始日期</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.startDate}} </p>
+									<span class="help-block" ng-hide="saleFrameInput">请输入开始日期</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.startDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -180,10 +180,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>结束日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.endDate"  ng-hide="buyFrameInput" id="endDate" name="endDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="saleFrame.endDate"  ng-hide="saleFrameInput" id="endDate" name="endDate"/>
 									<div class="form-control-focus"> </div>
-									<span class="help-block" ng-hide="buyFrameInput">请输入结束日期</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.endDate}} </p>
+									<span class="help-block" ng-hide="saleFrameInput">请输入结束日期</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.endDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -191,10 +191,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label bold">备注：</label>
                                  <div class="">
-                                 <input type="text" name="remark" class="form-control" ng-hide="buyFrameInput" ng-model="buyFrame.remark"  >
+                                 <input type="text" name="remark" class="form-control" ng-hide="saleFrameInput" ng-model="saleFrame.remark"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyFrameInput">请输入备注</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.remark}} </p>
+                                     <span class="help-block" ng-hide="saleFrameInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.remark}} </p>
                                  </div>
                                  
                              </div>
@@ -228,10 +228,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同编号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNum" class="form-control" ng-hide="contractInput" ng-model="buyFrame.contractNum"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="contractInput" ng-model="saleFrame.contractNum"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="contractInput">请输入合同编号</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.contractNum}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.contractNum}} </p>
                                  </div>
                                  
                              </div>
@@ -242,10 +242,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>开始日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.startDate"  ng-hide="contractInput" id="startDate" name="startDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="saleFrame.startDate"  ng-hide="contractInput" id="startDate" name="startDate"/>
 									<div class="form-control-focus"> </div>
 									<span class="help-block" ng-hide="contractInput">请输入开始日期</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.startDate}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.startDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -255,10 +255,10 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>结束日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.endDate"  ng-hide="contractInput" id="endDate" name="endDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="saleFrame.endDate"  ng-hide="contractInput" id="endDate" name="endDate"/>
 									<div class="form-control-focus"> </div>
 									<span class="help-block" ng-hide="contractInput">请输入结束日期</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.endDate}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.endDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -271,10 +271,10 @@ margin-right: 20px;
                                  <label class="control-label bold">签订日期：</label>
                                  <div class="">
                                  		<input type="text" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="buyFrame.signDate" ng-hide="contractInput"  id="signDate" name="signDate"/>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-model="saleFrame.signDate" ng-hide="contractInput"  id="signDate" name="signDate"/>
 									<div class="form-control-focus"> </div>
 									<span class="help-block" ng-hide="contractInput">请输入签订日期</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.signDate}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.signDate}} </p>
                                  </div>
                              </div>
                          </div>
@@ -283,10 +283,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">签约地点：</label>
                                  <div class="">
-                                 <input type="text" name="signerAddress" class="form-control" ng-hide="contractInput" ng-model="buyFrame.signerAddress"  >
+                                 <input type="text" name="signerAddress" class="form-control" ng-hide="contractInput" ng-model="saleFrame.signerAddress"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="contractInput">请输入签约地点</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.signerAddress}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.signerAddress}} </p>
                                  </div>
                              </div>
                          </div>
@@ -295,10 +295,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">签订人：</label>
                                  <div class="">
-                                 <input type="text" name="signer" class="form-control" ng-hide="contractInput" ng-model="buyFrame.signer"  >
+                                 <input type="text" name="signer" class="form-control" ng-hide="contractInput" ng-model="saleFrame.signer"  >
                                      <div class="form-control-focus"> </div>
                                      <span class="help-block" ng-hide="contractInput">请输入签订人</span>
-                                     <p class="form-control-static" ng-show="contractShow"> {{buyFrame.signer}} </p>
+                                     <p class="form-control-static" ng-show="contractShow"> {{saleFrame.signer}} </p>
                                  </div>
                              </div>
                          </div>
@@ -310,24 +310,24 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同附件：</label>
                                  <div class="">
-                                 		<div ng-hide="contractInput"   ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                 		<div ng-hide="contractInput"   ng-if="saleFrame.electronicContract==null||saleFrame.electronicContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
-                                            <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                        <div ng-hide="contractInput"   ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div ng-hide="contractInput"   ng-if="saleFrame.electronicContract!=null&&saleFrame.electronicContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
-                                            <span class="fileinput-filename">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="electronicContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.electronicContract" ng-click="uploadFile('electronicContract')" > </span>
+                                            <span class="fileinput-filename">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('electronicContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                      	<p class="form-control-static"  id="noFileFlag" ng-show="contractShow" ng-if="buyFrame.electronicContract==null||buyFrame.electronicContract==''" class="c_edit" >未上传附件</p>
-                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="buyFrame.electronicContract!=null&&buyFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(buyFrame.electronicContract)">{{buyFrame.electronicContract.substring(buyFrame.electronicContract.indexOf("_")+1)}}</a></p>
+                                      	<p class="form-control-static"  id="noFileFlag" ng-show="contractShow" ng-if="saleFrame.electronicContract==null||saleFrame.electronicContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="saleFrame.electronicContract!=null&&saleFrame.electronicContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(saleFrame.electronicContract)">{{saleFrame.electronicContract.substring(saleFrame.electronicContract.indexOf("_")+1)}}</a></p>
                                  </div>
                              </div>
                          </div>
@@ -336,24 +336,24 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label bold">纸质合同：</label>
                                  <div class="">
-                                 		<div ng-hide="contractInput"   ng-if="buyFrame.signContract==null||buyFrame.signContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
+                                 		<div ng-hide="contractInput"   ng-if="saleFrame.signContract==null||saleFrame.signContract==''"  class="fileinput fileinput-new" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="signContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.signContract" ng-click="uploadFile('signContract')" > </span>
-                                            <span class="fileinput-filename">{{buyFrame.signContract.substring(buyFrame.signContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="signContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.signContract" ng-click="uploadFile('signContract')" > </span>
+                                            <span class="fileinput-filename">{{saleFrame.signContract.substring(saleFrame.signContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists" ng-click="removefile('signContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                        <div ng-hide="contractInput"   ng-if="buyFrame.signContract!=null&&buyFrame.signContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+                                        <div ng-hide="contractInput"   ng-if="saleFrame.signContract!=null&&saleFrame.signContract!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
                                             <span class="btn blue btn-circle btn-file">
                                                 <span class="fileinput-new">上传附件</span>
                                                 <span class="fileinput-exists">更改</span>
-                                                <input type="file" name="signContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="buyFrame.signContract" ng-click="uploadFile('signContract')" > </span>
-                                            <span class="fileinput-filename">{{buyFrame.signContract.substring(buyFrame.signContract.indexOf("_")+1)}}</span> &nbsp;
+                                                <input type="file" name="signContract" nv-file-select uploader="uploader" onchange="angular.element(this).scope().up(this.files[0])" ng-model="saleFrame.signContract" ng-click="uploadFile('signContract')" > </span>
+                                            <span class="fileinput-filename">{{saleFrame.signContract.substring(saleFrame.signContract.indexOf("_")+1)}}</span> &nbsp;
                                             <a href="javascript：;" class="close fileinput-exists"  ng-click="removefile('signContract')" data-dismiss="fileinput"> </a>
                                         </div>
-                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="buyFrame.signContract==null||buyFrame.signContract==''" class="c_edit" >未上传附件</p>
-                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="buyFrame.signContract!=null&&buyFrame.signContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(buyFrame.signContract)">{{buyFrame.signContract.substring(buyFrame.signContract.indexOf("_")+1)}}</a></p>
+                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="saleFrame.signContract==null||saleFrame.signContract==''" class="c_edit" >未上传附件</p>
+                                      	<p class="form-control-static"  ng-show="contractShow" ng-if="saleFrame.signContract!=null&&saleFrame.signContract!=''" class="c_edit" ><a href="javascript：;" ng-click="downloadFile(saleFrame.signContract)">{{saleFrame.signContract.substring(saleFrame.signContract.indexOf("_")+1)}}</a></p>
 
                                  </div>
                                  
@@ -364,10 +364,10 @@ margin-right: 20px;
                              <div class="form-group ">
                                 <label class="control-label bold">采购合同号：</label>
                                  <div class="">
-                                 <input type="text" name="contractNum" class="form-control" ng-hide="buyFrameInput" ng-model="buyFrame.contractNum"  >
+                                 <input type="text" name="contractNum" class="form-control" ng-hide="saleFrameInput" ng-model="saleFrame.contractNum"  >
                                      <div class="form-control-focus"> </div>
-                                     <span class="help-block" ng-hide="buyFrameInput">请输入合同号</span>
-                                     <p class="form-control-static" ng-show="buyFrameShow"> {{buyFrame.contractNum}} </p>
+                                     <span class="help-block" ng-hide="saleFrameInput">请输入合同号</span>
+                                     <p class="form-control-static" ng-show="saleFrameShow"> {{saleFrame.contractNum}} </p>
                                  </div>
                              </div>
                          </div>
@@ -474,7 +474,7 @@ margin-right: 20px;
                              <thead>
                                  <tr>
 								<th>商品编号</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">海关编码</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">海关编码</th>
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
@@ -486,13 +486,13 @@ margin-right: 20px;
 								<th>税率</th>
 								<th>不含税金额</th>
 								<th>税额</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">关税率</th>
-								<th ng-if="buyFrame.tradeType =='外贸'">关税金额</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费率</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折扣率</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</th>
-								<th ng-if="buyFrame.settlementClause =='红票'">红票金额</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">关税率</th>
+								<th ng-if="saleFrame.tradeType =='外贸'">关税金额</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费率</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折扣率</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</th>
+								<th ng-if="saleFrame.settlementClause =='红票'">红票金额</th>
 								
 								<th>含税金额</th>
 								<th>交付日期</th>
@@ -507,7 +507,7 @@ margin-right: 20px;
                                            <!-- <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
 		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
-		                          <td ng-if="buyFrame.tradeType =='外贸'">
+		                          <td ng-if="saleFrame.tradeType =='外贸'">
 		                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 		                          </td>
 		                          <td>
@@ -539,10 +539,10 @@ margin-right: 20px;
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{buyFrame.currency}} </p>
+                                     		<p class="form-control-static" > {{saleFrame.currency}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{buyFrame.rate}}% </p>
+                                     		<p class="form-control-static" > {{saleFrame.rate}}% </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{format2Thousands(_arithmeticAmount(this))}} </p>
@@ -550,24 +550,24 @@ margin-right: 20px;
 		                          <td>  
                                      		<p class="form-control-static"> {{format2Thousands(_arithmeticRateAmount(this))}} </p>
 		                          </td>
-		                          <td ng-if="buyFrame.tradeType =='外贸'">
+		                          <td ng-if="saleFrame.tradeType =='外贸'">
 		                          		<input style="padding:6px 3px" type="text"  name="customsRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].customsRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'customsRate')"  >
                                      		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.customsRate}}% </p>
 		                          </td>
-								  <td ng-if="buyFrame.tradeType =='外贸'">
+								  <td ng-if="saleFrame.tradeType =='外贸'">
 								  		<p class="form-control-static" > {{format2Thousands(_arithmeticCustomsRateAmount(this))}} </p>
 								  </td>
-		                          <td ng-if="buyFrame.settlementClause =='服务费'">
+		                          <td ng-if="saleFrame.settlementClause =='服务费'">
 		                          	<input style="padding:6px 3px" type="text"  name="serviceRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].serviceRate"   ng-keyup="clearNoNumPoint(orderMateriel[$index],'serviceRate')" >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.serviceRate}} </p>
 		                          </td>
-								<td ng-if="buyFrame.settlementClause =='服务费'">服务费</td>
-								<td ng-if="buyFrame.settlementClause =='折扣折让'">
+								<td ng-if="saleFrame.settlementClause =='服务费'">服务费</td>
+								<td ng-if="saleFrame.settlementClause =='折扣折让'">
 									<input style="padding:6px 3px" type="text"  name="discountRate{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].discountRate" ng-keyup="clearNoNumPoint(orderMateriel[$index],'discountRate')" >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.discountRate}} </p>
 								</td>
-								<td ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</td>
-								<td ng-if="buyFrame.settlementClause =='红票'">
+								<td ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</td>
+								<td ng-if="saleFrame.settlementClause =='红票'">
 									<input style="padding:6px 3px" type="text"  name="redTicket{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].redTicket" ng-keyup="clearNoNumPoint(orderMateriel[$index],'redTicket')"  >
                                      	<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.redTicket}} </p>
 								</td>
@@ -616,7 +616,7 @@ margin-right: 20px;
                                  </tr>
                                  <tr>
 								<th></th>
-								<th ng-if="buyFrame.tradeType =='外贸'"></th>
+								<th ng-if="saleFrame.tradeType =='外贸'"></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
 								<th></th>
@@ -628,13 +628,13 @@ margin-right: 20px;
 								<th></th>
 								<th>{{format2Thousands(totalAmount())}}</th>
 								<th>{{format2Thousands(totalRateAmount())}}</th>
-								<th ng-if="buyFrame.tradeType =='外贸'"></th>
-								<th ng-if="buyFrame.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费率</th>
-								<th ng-if="buyFrame.settlementClause =='服务费'">服务费</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折扣率</th>
-								<th ng-if="buyFrame.settlementClause =='折扣折让'">折后金额</th>
-								<th ng-if="buyFrame.settlementClause =='红票'">红票金额</th>
+								<th ng-if="saleFrame.tradeType =='外贸'"></th>
+								<th ng-if="saleFrame.tradeType =='外贸'">{{format2Thousands(totalCustomsRateAmount())}}</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费率</th>
+								<th ng-if="saleFrame.settlementClause =='服务费'">服务费</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折扣率</th>
+								<th ng-if="saleFrame.settlementClause =='折扣折让'">折后金额</th>
+								<th ng-if="saleFrame.settlementClause =='红票'">红票金额</th>
 								
 								<th>{{format2Thousands(totalRateAndAmount())}}</th>
 								<th></th>
@@ -798,13 +798,13 @@ margin-right: 20px;
 		                          <td>
                                      		<select  id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >
 		                                <option value=""></option>
-                                            	<option ng-if="buyFrame.tradeType =='外贸'" value="T" >T</option>
-                                              <option ng-if="buyFrame.tradeType =='外贸'" value="TL" >TL</option>
-                                              <option ng-if="buyFrame.tradeType =='外贸'" value="C" >C</option>
+                                            	<option ng-if="saleFrame.tradeType =='外贸'" value="T" >T</option>
+                                              <option ng-if="saleFrame.tradeType =='外贸'" value="TL" >TL</option>
+                                              <option ng-if="saleFrame.tradeType =='外贸'" value="C" >C</option>
                                               
-                                              <option ng-if="buyFrame.tradeType =='内贸'" value="电汇" >电汇</option>
-                                              <option ng-if="buyFrame.tradeType =='内贸'" value="银行承兑" >银行承兑</option>
-                                              <option ng-if="buyFrame.tradeType =='内贸'" value="商业承兑" >商业承兑</option>
+                                              <option ng-if="saleFrame.tradeType =='内贸'" value="电汇" >电汇</option>
+                                              <option ng-if="saleFrame.tradeType =='内贸'" value="银行承兑" >银行承兑</option>
+                                              <option ng-if="saleFrame.tradeType =='内贸'" value="商业承兑" >商业承兑</option>
                                               </select>
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentMethod}} </p>
 		                          </td>
@@ -1225,10 +1225,10 @@ margin-right: 20px;
 	                          		<div class="form-group ">
 		                              	<label class="control-label bold">备注：</label>
 		                                <div class="">
-		                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="buyFrame.remark"  >
+		                                  <input type="text" name="remark" ng-hide="orderStatusInput" class="form-control"  ng-model="saleFrame.remark"  >
 	                                      <div class="form-control-focus"> </div>
 	                                      <span class="help-block" ng-hide="orderStatusInput">请输入备注</span>
-	                                      <p class="form-control-static" ng-show="orderStatusShow"> {{buyFrame.remark}} </p>
+	                                      <p class="form-control-static" ng-show="orderStatusShow"> {{saleFrame.remark}} </p>
 		                               	</div>
 	                               </div>
 	                          </div>
