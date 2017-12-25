@@ -541,11 +541,24 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
-    			if(order.getBuyComId()==null){//采购订单
-    				oi.setStatus("3");
-    			}else{//销售订单
-    				oi.setStatus("1");
-    			}
+    			
+    			//获取合同信息
+    	    	ContractVO contract = null;
+    			if(StringUtils.isNotEmpty(order.getContractSerial())){
+    	    		contract=contractService.selectConbtractById(order.getContractSerial());
+    	    	}
+    	    	if(contract!=null){
+    	    		if(StaticConst.getInfo("buyOrder").equals(contract.getContractType())){//采购订单
+    	    			oi.setStatus("2");//跳过合同签订
+    	    		}else if(StaticConst.getInfo("saleOrder").equals(contract.getContractType())){//销售订单
+    	    			oi.setStatus("2");//跳过合同签订
+    	    		}else if(StaticConst.getInfo("buyContract").equals(contract.getContractType())){//采购合同
+    	    			oi.setStatus("3");//跳过合同签订
+    	    		}else if(StaticConst.getInfo("saleContract").equals(contract.getContractType())){//销售合同
+    	    			oi.setStatus("1");//跳过合同签订
+    	    		}
+    	    	}
+    			
     			this.orderService.updateStatus(oi);
     		}
     		

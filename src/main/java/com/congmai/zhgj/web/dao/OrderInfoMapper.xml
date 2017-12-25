@@ -17,6 +17,7 @@
     <result column="projectNum" property="projectNum" jdbcType="VARCHAR" />
     <result column="settlementClause" property="settlementClause" jdbcType="VARCHAR" />
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR" />
+    <result column="frameSerial" property="frameSerial" jdbcType="VARCHAR" />
     <result column="deliveryMode" property="deliveryMode" jdbcType="VARCHAR" />
     <result column="transportMode" property="transportMode" jdbcType="VARCHAR" />
     <result column="orderDate" property="orderDate" jdbcType="DATE" />
@@ -49,6 +50,7 @@
     <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
+    <association property="frame" column="frameSerial" select="com.congmai.zhgj.web.dao.ContractMapper.selectContractById"></association>
     
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -111,7 +113,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, contractSerial, supplyComId, buyComId, orderNum, orderType,tradeType, seller, entrustParty, 
-    serviceModel, demandPlanSerial, saleApplySerial,projectNum, settlementClause, orderSerial, deliveryMode, 
+    serviceModel, demandPlanSerial, saleApplySerial,projectNum, settlementClause, orderSerial, frameSerial, deliveryMode, 
     transportMode, orderDate,makeDate, maker, rate, currency, exchangeRate, orderAmount,IFNULL(deliveryCount,0) as deliveryCount ,payAmount, materielCount,
 materielAmount,
 rateAmount,
@@ -140,7 +142,7 @@ billStatus,
   <select id="selectFramByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial,orderInfo.projectNum, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,orderInfo.deliveryCount,orderInfo.payAmount,
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial,orderInfo.projectNum, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.frameSerial,orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,orderInfo.deliveryCount,orderInfo.payAmount,
     orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent,orderInfo.remark,orderRemark, 
     orderInfo.status,orderInfo.deliverStatus,
 orderInfo.payStatus,
@@ -187,7 +189,7 @@ orderInfo.billStatus, orderInfo.delFlg,
   <select id="selectCommenByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     select
     orderInfo.serialNum, orderInfo.contractSerial, orderInfo.supplyComId, orderInfo.buyComId, orderInfo.orderNum, orderInfo.orderType,orderInfo.tradeType, orderInfo.seller, orderInfo.entrustParty, 
-    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial,orderInfo.projectNum, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,orderInfo.deliveryCount,orderInfo.payAmount,
+    orderInfo.serviceModel, orderInfo.demandPlanSerial, orderInfo.saleApplySerial,orderInfo.projectNum, orderInfo.settlementClause, orderInfo.orderSerial, orderInfo.frameSerial, orderInfo.deliveryMode, orderInfo.materielCount,orderInfo.orderAmount,orderInfo.deliveryCount,orderInfo.payAmount,
     orderInfo.transportMode, orderInfo.orderDate,orderInfo.makeDate, orderInfo.maker, orderInfo.rate, orderInfo.currency, orderInfo.exchangeRate, orderInfo.contractContent, orderInfo.remark,orderInfo.orderRemark, 
     orderInfo.status,orderInfo.deliverStatus,
 orderInfo.payStatus,
@@ -254,7 +256,7 @@ orderInfo.billStatus, orderInfo.delFlg,
       buyComId, orderNum, orderType,tradeType, 
       seller, entrustParty, serviceModel, 
       demandPlanSerial, saleApplySerial,projectNum, settlementClause, 
-      orderSerial, deliveryMode, transportMode, 
+      orderSerial, frameSerial, deliveryMode, transportMode, 
       orderDate,makeDate, maker, rate, 
       currency, exchangeRate, materielCount,
 materielAmount,
@@ -270,7 +272,7 @@ billStatus,
       #{buyComId,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR},
       #{seller,jdbcType=VARCHAR}, #{entrustParty,jdbcType=VARCHAR}, #{serviceModel,jdbcType=VARCHAR}, 
       #{demandPlanSerial,jdbcType=VARCHAR}, #{saleApplySerial,jdbcType=VARCHAR}, #{projectNum,jdbcType=VARCHAR}, #{settlementClause,jdbcType=VARCHAR}, 
-      #{orderSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, #{transportMode,jdbcType=VARCHAR}, 
+      #{orderSerial,jdbcType=VARCHAR}, #{frameSerial,jdbcType=VARCHAR}, #{deliveryMode,jdbcType=VARCHAR}, #{transportMode,jdbcType=VARCHAR}, 
       #{orderDate,jdbcType=DATE},#{makeDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{rate,jdbcType=VARCHAR}, 
       #{currency,jdbcType=VARCHAR}, #{exchangeRate,jdbcType=VARCHAR}, 
       #{materielCount,jdbcType=VARCHAR}, 
@@ -331,6 +333,9 @@ billStatus,
       </if>
       <if test="orderSerial != null" >
         orderSerial,
+      </if>
+      <if test="frameSerial != null" >
+        frameSerial,
       </if>
       <if test="deliveryMode != null" >
         deliveryMode,
@@ -459,6 +464,9 @@ billStatus,
       </if>
       <if test="orderSerial != null" >
         #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="frameSerial != null" >
+         #{frameSerial,jdbcType=VARCHAR},
       </if>
       <if test="deliveryMode != null" >
         #{deliveryMode,jdbcType=VARCHAR},
@@ -600,6 +608,9 @@ billStatus,
       <if test="record.orderSerial != null" >
         orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.frameSerial != null" >
+        frameSerial = #{record.frameSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.deliveryMode != null" >
         deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
       </if>
@@ -703,6 +714,7 @@ billStatus,
       projectNum = #{record.projectNum,jdbcType=VARCHAR},
       settlementClause = #{record.settlementClause,jdbcType=VARCHAR},
       orderSerial = #{record.orderSerial,jdbcType=VARCHAR},
+      frameSerial = #{record.frameSerial,jdbcType=VARCHAR},
       deliveryMode = #{record.deliveryMode,jdbcType=VARCHAR},
       transportMode = #{record.transportMode,jdbcType=VARCHAR},
       orderDate = #{record.orderDate,jdbcType=DATE},
@@ -782,6 +794,9 @@ billStatus,
       </if>
       <if test="orderSerial != null" >
         orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="frameSerial != null" >
+        frameSerial = #{frameSerial,jdbcType=VARCHAR},
       </if>
       <if test="deliveryMode != null" >
         deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
@@ -886,6 +901,7 @@ billStatus,
       projectNum = #{projectNum,jdbcType=VARCHAR},
       settlementClause = #{settlementClause,jdbcType=VARCHAR},
       orderSerial = #{orderSerial,jdbcType=VARCHAR},
+      frameSerial = #{frameSerial,jdbcType=VARCHAR},
       deliveryMode = #{deliveryMode,jdbcType=VARCHAR},
       transportMode = #{transportMode,jdbcType=VARCHAR},
       orderDate = #{orderDate,jdbcType=DATE},

@@ -519,7 +519,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					'targets' : 6,
 					'render' : function(data,
 							type, row, meta) {
-						if(isNull(row.contract)){
+						if(isNull(row.contract)||isNull(row.contract.contractNum)){
 							return ""
 						}else{
 							return row.contract.contractNum 
@@ -773,7 +773,19 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	        })
             };
         
-        
+    		jQuery.validator.addMethod("noFrameFlag", function(value, element) {  
+    			if($scope.contract.contractType!='采购订单'){
+    				return true;
+    			}else{
+    				if(isNull($scope.buyOrder.frame)){
+    					return false;    
+    				}else{
+    					return true;  
+    				}
+    			}
+    			
+    		}, "框架协议不能为空"); 
+    		
     		var validateInit = function() {
             	var e = $("#form_sample_1"),
     	        r = $(".alert-danger", e),
@@ -794,7 +806,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	            	currency:{required:"币种不能为空！"},
     	            	maker:{required:"制单人不能为空！"},
     	            	seller:{required:"采购商不能为空！"},
-    	            	orderDate:{required:"下单日期不能为空！"}
+    	            	orderDate:{required:"下单日期不能为空！"},
+    	            	frameNum:{noFrameFlag:"框架协议不能为空！"}
     	            },
                 	rules: {orderNum: {required: !0,maxlength: 20},
                 		orderType: {required: !0,maxlength: 20},
@@ -806,8 +819,8 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                 		maker: {required: !0,maxlength: 20},
     	            	seller:{required: !0,maxlength: 20},
                 		currency: {required: !0,maxlength: 20},
-                		orderDate: {required: !0}
-                			},
+                		orderDate: {required: !0},
+                		frameNum:{noFrameFlag:true}},
                 		invalidHandler: function(e, t) {
                         i.hide(), r.show(), App.scrollTo(r, -200)
                     },
@@ -3945,6 +3958,143 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 $scope.jumpToUrl= function(judgeString) {
     	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
      }
+	 
+
+	 	
+	 	/** ************关联框架协议 start*************** */
+     $scope.selectFrame = function() {
+			 $('#addFrame').modal('show');// 删除成功后关闭模态框
+			 loadFrameTable();
+		 };
+     
+     // 确认选择开始***************************************
+		 $scope.confirmSelectFrame = function() {
+			 var ids = '';
+			 FrameTable.$('input[type="radio"]').each(function() {
+					if ($.contains(document, this)) {											
+						if (this.checked) {
+							// 将选中数据id放入ids中
+							if (ids == '') {
+								ids = this.value;
+							} else
+								ids = ids + ','
+										+ this.value;
+						}
+					}
+				});
+
+			 if(ids!=''){
+				 orderService.getFrameInfo(ids).then(
+	          		     function(data){//加载页面对象
+	          		    	$scope.buyOrder.frameSerial = data.contract.id;
+	          		    	$scope.buyOrder.frame=data.contract;
+	          		    	$scope.clauseAfterSales=data.clauseAfterSales;
+	          		    	$scope.clauseAdvance=data.clauseAdvance;
+	          		    	$scope.clauseCheckAccept=data.clauseCheckAccept;
+	          		    	$scope.clauseDelivery=data.clauseDelivery;
+	          		    	$scope.clauseSettlement=data.clauseSettlement;
+	          		    	if(!isNull(data.clauseSettlement)){
+	          		    		$scope.clauseSettlement.CSD = [{}]
+	          		    		$scope.clauseSettlement.CSD=data.clauseSettlement.clauseSettlementDetails;
+	          		    		if(!isNull(data.clauseSettlement.clauseSettlementDetails)){
+	          		    			_index = data.clauseSettlement.clauseSettlementDetails.length;
+	          		    		}
+	          		    	}else{
+	          		    		$scope.clauseSettlement = {}
+	          		    	}
+	          		    	if(isNull($scope.clauseSettlement.otherAmount)){
+	          		    		$scope.clauseSettlement.otherAmount = 0;
+	          		    	}
+	    					
+	          		    	$scope.buyOrder.contractContent = data.contract.contractContent
+	                    	$scope.initContractContent();
+	          		    	
+	          		    	$('#addFrame').modal('hide');// 删除成功后关闭模态框
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		     }
+	          		 );
+			 }else{
+				 toastr.error('未选择框架协议！');
+			 }
+
+		 };
+     
+     var FrameTable;
+	    var loadFrameTable = function() {
+	            a = 0;
+	            App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	            if(!isNull(table1)) return;
+	           FrameTable = $("#sample_Frame")
+				.DataTable({
+	                language: {
+	                    aria: {
+	                        sortAscending: ": 以升序排列此列",
+	                        sortDescending: ": 以降序排列此列"
+	                    },
+	                    emptyTable: "空表",
+	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	                    infoEmpty: "没有数据",
+	                    //infoFiltered: "(filtered1 from _MAX_ total entries)",
+	                    lengthMenu: "每页显示 _MENU_ 条数据",
+	                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+	                    zeroRecords: "抱歉， 没有找到！",
+	                    paginate: {
+	                        "sFirst": "首页",
+	                        "sPrevious": "前一页",
+	                        "sNext": "后一页",
+	                        "sLast": "尾页"
+	                     }
+	                },
+	/*                fixedHeader: {//固定表头、表底
+	                    header: !0,
+	                    footer: !0,
+	                    headerOffset: a
+	                },*/
+	                order: [[1, "desc"]],//默认排序列及排序方式
+	                searching: true,//是否过滤检索
+	                ordering:  true,//是否排序
+	                lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	                pageLength: 5,//每页显示数量
+	                processing: true,//loading等待框
+//	                serverSide: true,
+	                ajax:"rest/order/findFrameList?type=buy&selectFor=order",//加载数据中
+	                "aoColumns": [
+								{ mData: 'id'},
+								{ mData: 'contractNum' },
+								{ mData: 'comName' },
+								{ mData: 'contractType' },
+								{ mData: 'contractNum' },
+								{ mData: 'startDate' },
+								{ mData: 'endDate' },
+								{ mData: 'contractNum' },
+								{ mData: 'creator' },
+								{ mData: 'versionNO' },
+
+	                        ],
+	               'aoColumnDefs' : [ {
+								'targets' : 0,
+								'searchable' : false,
+								'orderable' : false,
+								'render' : function(data,
+										type, row, meta) {
+									return "<label class='mt-radio mt-radio-single mt-radio-outline'>" +
+									"<input type='radio' name='serialNum' class='checkboxes' value="+ row.id +" />" +
+									"<span></span></label>";
+								},
+								"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							       }
+							}]
+
+	            }).on('order.dt',
+	            function() {
+	                console.log('排序');
+	            })
+	        };
+	   
+	       /** *************关联框架协议  end*************** */
 }]);
 
 

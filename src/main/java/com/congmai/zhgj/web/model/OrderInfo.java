@@ -75,6 +75,8 @@ public class OrderInfo extends BaseVO {
     private String contractSerial;
     
     private ContractVO contract;
+    
+    private ContractVO frame;//框架协议
 
     private String supplyComId;
 
@@ -101,6 +103,8 @@ public class OrderInfo extends BaseVO {
     private String settlementClause;
 
     private String orderSerial;
+    
+    private String frameSerial;
 
     private String deliveryMode;
     
@@ -576,7 +580,22 @@ public class OrderInfo extends BaseVO {
 	public void setPayAmount(String payAmount) {
 		this.payAmount = payAmount;
 	}
-	
+
+	public String getFrameSerial() {
+		return frameSerial;
+	}
+
+	public void setFrameSerial(String frameSerial) {
+		this.frameSerial = frameSerial;
+	}
+
+	public ContractVO getFrame() {
+		return frame;
+	}
+
+	public void setFrame(ContractVO frame) {
+		this.frame = frame;
+	}
 
 	
 }

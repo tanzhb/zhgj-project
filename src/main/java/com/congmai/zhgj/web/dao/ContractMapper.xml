@@ -334,6 +334,9 @@
       <if test="status == 'customerFrame'" >
         and status != 0
       </if>
+      <if test="status == 'order'" >
+        and status = 2
+      </if>
       <if test="comId != null" >
         and comId = #{comId,jdbcType=VARCHAR}
       </if>
