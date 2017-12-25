@@ -37,20 +37,22 @@
 	<!-- AND
 	comId IS NULL -->
 	and b.serialNum IS NULL
+	and a.contractType != '销售框架'
+	and a.contractType != '采购框架'
     </select>
     
     <!--查询销售合同列表  -->
     <select id="querySaleContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.buyComId) AS comId,
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-    a.versionNO,b.status
+    a.versionNO,ifNull(b.status,a.status) as status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND ((b.supplyComId IS NULL AND b.delFlg='0'
 	and b.status !=0)
-	or ((a.status=3 or a.status=2) and a.contractType = '采购框架'))
+	or ((a.status=3 or a.status=2) and a.contractType = '销售框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -58,14 +60,14 @@
      <!--查询采购合同列表  -->
     <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=b.supplyComId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-	a.versionNO,b.status
+	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+	a.versionNO,ifNull(b.status,a.status) as status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
 	WHERE a.delFlg='0' AND ((b.buyComId IS NULL AND b.delFlg='0'
 	and b.status !=0 and b.status !=66 and b.status !=77 and b.status !=1)  <!-- 审批通过的采购订单，才生成采购合同 -->
-	or ((a.status=3 or a.status=2) and a.contractType = '销售框架'))
+	or ((a.status=3 or a.status=2) and a.contractType = '采购框架'))
 	<!-- AND a.creator=#{userId} -->
 	GROUP BY(a.serialNum)
     </select>
@@ -220,6 +222,9 @@
       </if>
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
 	updater=#{updater},
 	updateTime=NOW()

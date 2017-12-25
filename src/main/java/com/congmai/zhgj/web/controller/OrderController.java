@@ -541,9 +541,9 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
-    			if(oi.getSupplyComId()==null){//销售订单
+    			if(order.getBuyComId()==null){//采购订单
     				oi.setStatus("3");
-    			}else{//采购订单
+    			}else{//销售订单
     				oi.setStatus("1");
     			}
     			this.orderService.updateStatus(oi);
@@ -1077,8 +1077,8 @@ public class OrderController {
 	
 	
 	/**
-	 * 订单保存合同
-	 * @param contract（合同对象）
+	 * 保存框架
+	 * @param contract（框架对象）
 	 * @param request（http 请求对象）
 	 * @return 操作结果
 	 */
@@ -1094,6 +1094,7 @@ public class OrderController {
 				contract.setId(ApplicationUtils.random32UUID());
 	    		Subject currentUser = SecurityUtils.getSubject();
 	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setSigner(currenLoginName);
 	    		contract.setCreator(currenLoginName);
 	    		contract.setUpdater(currenLoginName);
 	    		contract.setCreateTime(new Date());
@@ -2374,9 +2375,9 @@ public class OrderController {
     			ContractVO c = new ContractVO();
     			c.setId(contract.getId());
     			if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
-    				c.setStatus("3");
-    			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
     				c.setStatus("1");
+    			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
+    				c.setStatus("3");
     			}
     			this.contractService.update(c);
     		}
