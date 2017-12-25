@@ -19,10 +19,20 @@ public class TakeDeliveryParams {
 	
 	private List<StockOutBatch> stockOutMateriels;//出库批次信息
 	
+	private List<VerificationRecord> verificationRecords;//核销记录
+	
 	private StockInOutRecord record;
 
 	public Delivery getDelivery() {
 		return delivery;
+	}
+
+	public List<VerificationRecord> getVerificationRecords() {
+		return verificationRecords;
+	}
+
+	public void setVerificationRecords(List<VerificationRecord> verificationRecords) {
+		this.verificationRecords = verificationRecords;
 	}
 
 	public void setDelivery(Delivery delivery) {

@@ -10,12 +10,11 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$rootScope.settings.layout.pageSidebarClosed = false;
 
 		loadMainTable();
-		loadMainTable1();
-
 		//控制输入框和span标签的显示
 		validateFileInit();//file表单初始化
 		
 	if($state.current.name=="addGatheringMoney"){
+		loadMainTable1();
 		$scope.span =false;
 		$scope.input = true;
 		$scope.inputFile=true;
@@ -616,6 +615,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            				return '初始';
 						                            			}else if(data=='1'){
 						                            				return '已确认';
+						                            			}else if(data=='2'){
+						                            				return '已核销';
 						                            			}
 						                            		}else{
 						                            			return "";
@@ -655,6 +656,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            			type, row, meta) {
 						                            		if(data==null||data==''){
 						                            			return row.applyDate;
+						                            		}else{
+						                            			return data;
 						                            		}
 						                            	},
 						                            	

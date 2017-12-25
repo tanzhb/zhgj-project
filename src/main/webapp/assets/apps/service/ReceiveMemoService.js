@@ -7,7 +7,8 @@ angular.module('MetronicApp').factory('ReceiveMemoService', ['$rootScope', '$htt
     		//删除
     		delReceiveMemo:delReceiveMemo,
     		//单个查找
-    		selectReceiveMemo:selectReceiveMemo
+    		selectReceiveMemo:selectReceiveMemo,
+    		saveVerificateData:saveVerificateData//保存核销记录
     		
     };
 
@@ -164,6 +165,20 @@ angular.module('MetronicApp').factory('ReceiveMemoService', ['$rootScope', '$htt
             })  
         return deferred.promise;  
     }
+    /**
+	 * 保存出库信息
+	 */
+    function saveVerificateData (params){
+		var deferred = $q.defer();
+		$http.post("rest/pay/saveVerificateData", 
+				JSON.stringify(params)//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
     
 }]);
 

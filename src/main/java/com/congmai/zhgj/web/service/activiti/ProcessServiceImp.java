@@ -62,6 +62,7 @@ import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -791,5 +792,17 @@ public class ProcessServiceImp implements IProcessService{
         //最后要设置null，就是这么做，还没研究为什么
         this.identityService.setAuthenticatedUserId(null);
         return processInstanceId;
+	}
+
+	@Override
+	public String startBuyFramerProcess(ContractVO contract) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String startSaleFramerProcess(ContractVO contract) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

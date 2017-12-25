@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,6 +51,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -66,15 +68,19 @@ import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.CustomsForm;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.StockOutBatch;
+import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
+import com.congmai.zhgj.web.model.VerificationRecord;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
@@ -1038,4 +1044,63 @@ public class PayController {
 		}
 		return new ResponseEntity<MemoRecord>(memoRecord, HttpStatus.OK);
 	}
+	 /**
+	  * @Description (获取收付款水单对应的应收/付账单)
+	 * @param comId 公司id
+	 * @param type 收付款
+	  * @return
+	  */
+	 @RequestMapping(value="paymentRecordList",method=RequestMethod.GET)
+	 public ResponseEntity<Map<String,Object>> paymentRecordList(String comId,String type) {
+		 List<PaymentRecord> paymentRecordList=payService.findPaymentRecord(comId, type);
+		 // 封装datatables数据返回到前台
+		 Map<String,Object> pageMap = new HashMap<String,Object>();
+		 pageMap.put("draw", 1);
+		 pageMap.put("recordsTotal", paymentRecordList==null?0:paymentRecordList.size());
+		 pageMap.put("recordsFiltered", paymentRecordList==null?0:paymentRecordList.size());
+		 pageMap.put("data", paymentRecordList);
+		 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+	 }
+	 /**
+	 * @Description (获取应收/付账单对应的收付款水单)
+	 * @param comId 公司id
+	 * @param type 收付款
+	 * @return
+	 */
+	@RequestMapping(value="memoRecordList",method=RequestMethod.GET)
+	 public ResponseEntity<Map<String,Object>> memoRecordList(String comId,String type) {
+		 List<MemoRecord> memoRecordList=payService.findMemoRecord(comId, type);
+		 // 封装datatables数据返回到前台
+		 Map<String,Object> pageMap = new HashMap<String,Object>();
+		 pageMap.put("draw", 1);
+		 pageMap.put("recordsTotal", memoRecordList==null?0:memoRecordList.size());
+		 pageMap.put("recordsFiltered", memoRecordList==null?0:memoRecordList.size());
+		 pageMap.put("data", memoRecordList);
+		 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+	 }
+    /**
+     * @Description (保存核销记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveVerificateData",method=RequestMethod.POST)
+    @ResponseBody
+    public String saveVerificateData(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+  	   	  	TakeDeliveryParams  takeDeliveryParams = null;
+			takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+        	try{
+        	Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		List<VerificationRecord>verList=takeDeliveryParams.getVerificationRecords();
+        		Boolean falg=payService.insertVerificateData(verList, currenLoginName,verList.get(0).getReceiveMemoSerial());
+        		if(falg){
+        			flag = "1";
+        		}
+        	}catch(Exception e){
+        		logger.warn(e.getMessage(), e);
+        		return null;
+        	}
+    	return flag;
+    }
 }

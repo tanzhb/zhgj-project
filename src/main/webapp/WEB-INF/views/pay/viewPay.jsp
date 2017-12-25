@@ -202,7 +202,7 @@
 														<input type="text" name="deliveryRate" class="form-control" ng-if="paymentRecord.paymentType!='清关'"
 															readonly ng-model="paymentRecord.deliveryRate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}%</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}</p>
 													</div>
 												</div>
 											</div>

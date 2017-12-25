@@ -13,27 +13,19 @@
 								data-toggle="tab">收款信息</a></li>
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
 							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
-							<li class="dropdown pull-right tabdrop">
-								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
-							</li>							
+													
 							</li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
-										<button type="submit" ng-click="saveBasicInfo('receive')"
-											class="btn green  btn-circle  btn-sm" ng-show="input">
-											<i class="fa fa-save"></i> 保存
+										
+										<button   type="button" ng-click="verificateInfo('receive')" 
+											class="btn blue btn-sm btn-circle"  ng-show="inputEdit">
+											<i class="fa fa-plus"></i>核销
 										</button>
-										<button type="submit" ng-click="editReceiveInfo('receive')"
-											class="btn blue  btn-circle  btn-sm" ng-show="inputEdit">
-											核销
-										</button>
-										<!-- <button ng-click="goBack()" type="button"
-											class="btn defualt  btn-circle  btn-sm">
-											<i class="fa fa-undo"></i> 取消
-										</button> -->
+										 
 									</div>
 								</div>
 
@@ -281,7 +273,7 @@
 		</div>
 	</div>
 </div>
-
+<jsp:include page="selectReceivePaymentRecord.jsp"></jsp:include>
 
 
 <script type="text/javascript">

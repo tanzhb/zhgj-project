@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class PaymentRecord extends BaseVO implements Serializable{
 	
 	private static final long serialVersionUID = -1495795296316800235L;
-
+	    private String status;
 	//先款后票
 	public static final String XKHP = "先款后票";
 	//先票后款
@@ -45,8 +45,11 @@ public class PaymentRecord extends BaseVO implements Serializable{
     //支付类型
     private String paymentType;
     
-    //付款金额
+    //付款金额(已核销)
     private String paymentAmount;
+    
+    //未核销金额
+    private String unPaymentAmount;
     
     //付款类型
     private String paymentStyle;
@@ -62,6 +65,7 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     
     //付款日期
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date paymentDate;
 
     //申请人
@@ -289,7 +293,7 @@ public class PaymentRecord extends BaseVO implements Serializable{
     public void setBillStyle(String billStyle) {
         this.billStyle = billStyle == null ? null : billStyle.trim();
     }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getPaymentDate() {
         return paymentDate;
     }
@@ -763,6 +767,22 @@ public class PaymentRecord extends BaseVO implements Serializable{
 
 	public void setIsQbG(String isQbG) {
 		this.isQbG = isQbG;
+	}
+
+	public String getUnPaymentAmount() {
+		return unPaymentAmount;
+	}
+
+	public void setUnPaymentAmount(String unPaymentAmount) {
+		this.unPaymentAmount = unPaymentAmount;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 }

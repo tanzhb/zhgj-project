@@ -150,7 +150,7 @@
 															<option value="人民币">人民币</option>
 															<option value="美元">美元</option>
 															<option value="欧元">欧元</option>
-															<option value="日币">日币</option>
+															<option value="日元">日元</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.applyCurrency}}</p>
 													</div>

@@ -27,10 +27,14 @@
 											class="btn green  btn-circle  btn-sm" ng-show="input">
 											<i class="fa fa-save"></i> 保存
 										</button>
-									<!-- 	<button type="submit" ng-click="editBasicInfo('receive')"
+										<!-- <button type="submit" ng-click="editBasicInfo('receive')"
 											class="btn green  btn-circle  btn-sm" ng-show="inputEdit">
 											<i class="fa fa-save"></i> 编辑
 										</button> -->
+										<button type="submit" ng-click="verificateInfo('receive')"
+											class="btn green  btn-circle  btn-sm" ng-show="inputEdit">
+											<i class="fa fa-save"></i> 核销
+										</button>
 										<button ng-click="goBack()" type="button"
 											class="btn defualt  btn-circle  btn-sm">
 											<i class="fa fa-undo"></i> 取消
@@ -151,7 +155,7 @@
 															<option value="人民币">人民币</option>
 															<option value="美元">美元</option>
 															<option value="欧元">欧元</option>
-															<option value="日币">日币</option>
+															<option value="日元">日元</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.applyCurrency}}</p>
 													</div>
@@ -1085,6 +1089,7 @@
 		</div>
 	</div>
 </div>
+<jsp:include page="selectReceiveMemo.jsp"></jsp:include>
 <script type="text/javascript">
 	$('#playArrivalDate').datepicker({
 		rtl : App.isRTL(),
