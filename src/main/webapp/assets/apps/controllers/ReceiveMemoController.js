@@ -149,7 +149,10 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	$scope.getMemoInfo  = function(serialNum) {
 		ReceiveMemoService.selectReceiveMemo(serialNum).then(
       		     function(data){
-      		    	$scope.memoRecord=data;
+      		    	 debugger;
+      		    	$scope.memoRecord=data.memoRecord;
+      		    	$scope.verificationList=data.rvList;
+      		    	$scope.queryForPage();
       		     },
       		     function(error){
       		         toastr.error('连接服务器出错,请登录重试！');
@@ -157,8 +160,77 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
       		 );
     	
     }; 
-    
-
+    $scope.calcTotalData=function() {//统计核算记录详情信息
+    	if($scope.verificationList.length>0){
+    		var totalPaymentAmount=0;
+    		for(var i=0;i<$scope.verificationList.length;i++){
+    			totalPaymentAmount+=Number($scope.verificationList[i].paymentRecord.paymentAmount);
+    		}
+    		$scope.totalPaymentAmount=totalPaymentAmount;
+    }
+  }
+    /********************************核算记录模糊检索及分页 START *********************************/
+ 	 /** *************核算记录明细可检索化  start*************** */
+ 	 $scope.pageIndex = 1; //记录当前页
+ 	 $scope.pageSize = '10'; //每页的记录数
+ 	 $scope.totalPage = '1'; //记录总页数
+ 	 $scope.dispalyVerificationRecord = [];//页面显示结果
+ 	 $scope.filterVerificationRecord = [];//查询筛选结果
+ 	 
+ 	 $scope.createFilterList = function(){
+ 		 $scope.filterVerificationRecord = [];
+ 		if($scope.verificationList.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+ 			for(var i = 0;i <$scope.verificationList.length;i++){// data.data为选择的标准物料
+ 				if(($scope.verificationList)[i].paymentRecord.paymentNum.indexOf($scope.queryStr)>=0){
+ 					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+ 				}else if(($scope.verificationList)[i].paymentRecord.paymentType.indexOf($scope.queryStr)>=0){
+ 					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+ 				}else if(($scope.verificationList)[i].paymentRecord.paymentAmount.indexOf($scope.queryStr)>=0){
+ 					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+ 				}else if(($scope.verificationList)[i].paymentRecord.paymentAmount.indexOf($scope.queryStr)>=0){
+ 					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+ 				}else if(($scope.verificationList)[i].paymentRecord.applyPaymentAmount.indexOf($scope.queryStr)>=0){
+ 					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+ 				}
+ 			}
+ 		}else{
+ 			$scope.filterVerificationRecord = angular.copy($scope.verificationList);
+ 		}
+ 		
+ 	 };
+ 	 
+ 	 $scope.createDispalyList = function(){
+ 		 $scope.dispalyVerificationRecord = $scope.filterVerificationRecord.slice(
+ 				 ($scope.pageIndex-1)*$scope.pageSize,
+ 				 $scope.pageIndex*$scope.pageSize);
+ 		 
+ 		 $scope.totalPage = Math.ceil($scope.filterVerificationRecord.length/$scope.pageSize);
+ 	 };
+ 	 
+ 	 $scope.queryForPage=function(){
+ 		 $scope.createFilterList();
+ 		 $scope.pageIndex = 1; //设置为第一页
+ 		 $scope.createDispalyList();
+ 	 };
+ 	 
+ 	 $scope.link2ThisPage = function(index){
+ 		 $scope.pageIndex = index;
+ 		 $scope.createDispalyList();
+ 	 }
+ 	 
+ 	 $scope.link2PreviousPage = function(){
+ 		 $scope.pageIndex--;
+ 		 $scope.createDispalyList();
+ 	 }
+ 	 
+ 	 $scope.link2NextPage = function(){
+ 		 $scope.pageIndex++;
+ 		 $scope.createDispalyList();
+ 	 }
+ 	 
+ 	/** *************核算记录明细可检索化  end*************** */
+           
+   /********************************核算记录模糊检索及分页 END *********************************/
 
 	//返回按钮
 	$scope.goBack=function(){
@@ -610,7 +682,9 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						                            			if(data=='0'){
 						                            				return '<span  class="label label-sm label-info ng-scope">待核销</span>';
 						                            			}else if(data=='1'){
-						                            				return '<span  class="label label-sm label-success ng-scope">已核销</span>';
+						                            				return '<span  class="label label-sm label-success ng-scope">部分核销</span>';
+						                            			}else if(data=='2'){
+						                            				return '<span  class="label label-sm label-success ng-scope">已完成</span>';
 						                            			}
 						                            		}else{
 						                            			return "";
@@ -1347,7 +1421,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 			$scope.customsForm1.qgOrBgNum=customsFormNum;
 			$scope.customsForm1.totalMoney=Number(customsAmount)+Number(addedTax);
 		}
-		
+		 
 		// 添加checkbox功能***************************************
 		// Handle click on "Select all" control
 		$('#example-select-all').on(

@@ -204,7 +204,7 @@ public interface PayService extends GenericService<PaymentRecord, String> {
     public List<MemoRecord>findPayMemoRecord(String userId);
     
     /**
-     * 查询收款水单对应的核销记录(通过收款水单流水)
+     * 查询收款/付款水单对应的核销记录(通过收款/付款水单流水)
      * @param userId
      * @return
      */
@@ -224,5 +224,11 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	 public List<PaymentRecord> findPaymentRecord(String comId,String type);//查找水单对应的应收付款账单
 	 public List<MemoRecord> findMemoRecord(String comId,String type);//查找应收付款账单对应的收付款水单
 	 public  Boolean  insertVerificateData(List<VerificationRecord>list,String currenLoginName,String serialNum);//保存核销记录  serialNum 水单流水
+	 /**
+	     * 查询应收款/付款单对应的核销记录(通过应收款/付款单流水)
+	     * @param userId
+	     * @return
+	     */
+	    public List< VerificationRecord>findVerificationRecordByPaymentRecordSerial(String serialNum);
 	
 }

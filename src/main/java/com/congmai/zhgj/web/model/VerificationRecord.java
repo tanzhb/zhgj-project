@@ -29,6 +29,10 @@ public class VerificationRecord {
     private String updater;
 
     private Date updateTime;
+    
+    private PaymentRecord  paymentRecord;
+    
+    private MemoRecord   memoRecord;
 
     public String getSerialNum() {
         return serialNum;
@@ -101,4 +105,21 @@ public class VerificationRecord {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public PaymentRecord getPaymentRecord() {
+		return paymentRecord;
+	}
+
+	public void setPaymentRecord(PaymentRecord paymentRecord) {
+		this.paymentRecord = paymentRecord;
+	}
+
+	public MemoRecord getMemoRecord() {
+		return memoRecord;
+	}
+
+	public void setMemoRecord(MemoRecord memoRecord) {
+		this.memoRecord = memoRecord;
+	}
+    
 }

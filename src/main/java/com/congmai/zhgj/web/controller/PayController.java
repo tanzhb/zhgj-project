@@ -823,8 +823,8 @@ public class PayController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectPayById", method = RequestMethod.GET)
-	public ResponseEntity<PaymentRecord> selectPayById(String serialNum) {
-
+	public ResponseEntity<Map<String,Object>> selectPayById(String serialNum) {
+		Map<String,Object>map=new HashMap<String,Object>();
 		PaymentRecord c = payService.selectPayById(serialNum);
 		String orderSerial = c.getOrderSerial();
 		String paiedMoney = payService.selectPaiedMoney(orderSerial);
@@ -849,13 +849,11 @@ public class PayController {
 					c.setCustomsAmount(customsForm.getCustomsAmount());
 					c.setRate(customsForm.getOrderInfo().getRate());
 				}
-				OrderInfo orderInfo=orderService.selectById(orderSerial);
-				Boolean createBG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要报关
-				Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&!StringUtils.isEmpty(orderInfo.getSupplyComId());//该订单是否需要清关
-				/*if(){
-					
-				}*/
-		return new ResponseEntity<PaymentRecord>(c, HttpStatus.OK);
+				map.put("paymentRecord",c);
+				//获取核销记录
+				List<VerificationRecord>rvList=payService.findVerificationRecordByPaymentRecordSerial(serialNum);
+				map.put("rvList", rvList);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 	}
 	
 	
@@ -1032,17 +1030,22 @@ public class PayController {
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	/**
-	 * 通过id查询收款水单详情
+	 * 通过id查询收付款水单详情
 	 */
 	@RequestMapping(value = "/selectReceiveMemo", method = RequestMethod.GET)
-	public ResponseEntity<MemoRecord> selectReceiveMemo(String serialNum) {
+	public ResponseEntity<Map<String,Object>> selectReceiveMemo(String serialNum) {
+		Map<String,Object>map=new  HashMap<String,Object>();
 		MemoRecord memoRecord=payService.selectMemoRecordById(serialNum);
 		if(StringUtil.isEmpty(memoRecord.getBuyComId())){
 			memoRecord.setComName(companyService.selectOne(memoRecord.getSupplyComId()).getComName());
 		}else{
 			memoRecord.setComName(companyService.selectOne(memoRecord.getBuyComId()).getComName());
 		}
-		return new ResponseEntity<MemoRecord>(memoRecord, HttpStatus.OK);
+		map.put("memoRecord", memoRecord);
+		//获取核销记录
+		List<VerificationRecord>rvList=payService.findVerificationRecord(serialNum);
+		map.put("rvList", rvList);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.OK);
 	}
 	 /**
 	  * @Description (获取收付款水单对应的应收/付账单)
