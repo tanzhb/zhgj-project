@@ -68,7 +68,8 @@
 				                  <div class="form-body">
 				                      <div class="alert alert-danger display-hide">
 				                          <button class="close" data-close="alert"></button> 请先输入正确数据！ </div>
-				                      <shiro:hasRole name="admin">
+				                      <shiro:lacksRole name="supplier">
+				                      <shiro:lacksRole name="customer">
 				                      <div class="row">
 				                          <div class="col-md-4">
 				                              <div class="form-group">
@@ -203,8 +204,9 @@
 				                              </div>
 				                          </div>
 				                      </div>
-				                      </shiro:hasRole>
-				                      <shiro:lacksRole name="admin">
+				                      </shiro:lacksRole>
+				                      </shiro:lacksRole>
+				                      <shiro:hasAnyRoles  name="supplier, customer">
 					                      <div class="row">
 					                          <div class="col-md-4">
 					                              <div class="form-group">
@@ -297,7 +299,7 @@
 					                          </div>
 					                      </div>
 				                      
-				                      </shiro:lacksRole>
+				                      </shiro:hasAnyRoles>
 				                     <!--  <div class="row">
 				                          
 				                          /span

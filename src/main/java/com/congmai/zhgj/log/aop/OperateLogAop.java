@@ -148,7 +148,7 @@ public class OperateLogAop{
             }
             //保存操作结果    
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return ret;
     }
