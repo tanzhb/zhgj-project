@@ -14,7 +14,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		//控制输入框和span标签的显示
 		validateFileInit();//file表单初始化
 		
-	if($state.current.name=="addReceiveMemo"){
+	if($state.current.name=="addReceiveMemo"||$state.current.name=="addPayMemo"){
 		$scope.span =false;
 		$scope.input = true;
 		$scope.inputFile=true;
@@ -22,17 +22,30 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		 if($stateParams.serialNum){
 				$scope.getMemoInfo($stateParams.serialNum);	
 			    }else{
-	$rootScope.setNumCode("MO",function(newCode){
-		$scope.memoRecord={};
-			$scope.memoRecord.memoNum= newCode;//收款水单号
-			$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
-			//getCurrentUser();
-		});
-			    }
-		 initCustomers();
-		 
+			    	if($state.current.name=="addReceiveMemo"){
+			    		$rootScope.setNumCode("RM",function(newCode){
+			    			$scope.memoRecord={};
+			    				$scope.memoRecord.memoNum= newCode;//收款水单号
+			    				$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
+			    				//getCurrentUser();
+			    			});
+			    	}else{
+			    		$rootScope.setNumCode("PM",function(newCode){
+			    			$scope.memoRecord={};
+			    				$scope.memoRecord.memoNum= newCode;//付款水单号
+			    				$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
+			    				//getCurrentUser();
+			    			});
+			    	}
 	
-	}else if($state.current.name=="viewReceiveMemo"){
+			    }
+		 if($state.current.name=="addReceiveMemo"){
+			 initCustomers();
+		 }else{
+			 initCustomers();
+		 }
+	
+	}else if($state.current.name=="viewReceiveMemo"||$state.current.name=="viewPayMemo"){
 		$scope.getMemoInfo($stateParams.serialNum);
 		if($stateParams.type!=undefined){//显示核销按钮
 			$scope.inputEdit=true;
@@ -116,7 +129,42 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
    	   }*/
 			 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(name));
      };
-     
+ 	$scope.showSX=function(){
+ 		if($scope.showSXf!='1'){
+			$scope.showSXf='1';
+		}else{
+			$scope.showSXf='0';
+		}
+		/*debugger;
+		if(judgeString=='s'){
+			if($scope.saleOrder==undefined){
+				toastr.warning("请先选择销售订单");
+				return;
+			}
+			if($scope.companyAddressess.length==0){
+				toastr.warning("该企业无联系地址");
+				return;
+			}
+			if($scope.showSXs!='1'){
+				$scope.showSXs='1';
+			}else{
+				$scope.showSXs='0';
+			}
+			$scope.takeDeliveryWarehouseAddress='';
+		}else{
+			if($scope.companyAddressesf.length==0){
+				toastr.warning("该企业无联系地址");
+			return;
+			}
+			if($scope.showSXf!='1'){
+				$scope.showSXf='1';
+			}else{
+				$scope.showSXf='0';
+			}
+			$scope.warehouseAddress='';
+		}*/
+	
+	}
 	//修改
 	$scope.jumpToEdit = function() {
 		var ids = '';
@@ -563,6 +611,34 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		if(!$('#form_sample_1').valid()){
 			return;
 		}
+		if($scope.showSXf =='1'){
+			if(isNull($("select[name='bank']").val())){
+				toastr.error('银行不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountNumber']").val())){
+				toastr.error('账号不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountName']").val())){
+				toastr.error('户名不能为空！');
+    			return;
+			}
+		}
+		if($scope.showSXf!='1'){
+			if(isNull($("select[name='bank1']").val())){
+				toastr.error('银行不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountNumber1']").val())){
+				toastr.error('账号不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountName1']").val())){
+				toastr.error('户名不能为空！');
+    			return;
+			}
+		}
 			 $rootScope.judgeIsExist("payOrReceive",$scope.memoRecord.memoNum, $scope.memoRecord.serialNum,function(result){
 	    			var 	isExist = result;
 	    		if(isExist){
@@ -577,6 +653,15 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		    	        var file = document.querySelector('input[name="file"]').files[0];
 		    	        fd.append("files", file);
 		    			}
+	    			if($scope.showSXf!=1){
+	    				$scope.memoRecord.accountName=$("input[name='accountName1']").val();
+	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber1']").val();
+	    				$scope.memoRecord.bank=$("input[name='bank1']").val();
+	    			}else if($scope.showSXf==1){
+	    				$scope.memoRecord.accountName=$("input[name='accountName']").val();
+	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber']").val();
+	    				$scope.memoRecord.bank=$("select[name='bank']").val()
+	    			}
 	    			fd.append('memoNum',$scope.memoRecord.memoNum); 
 	    			fd.append('moneyAmount',$scope.memoRecord.moneyAmount);
 	    			if($scope.memoRecord.serialNum!=undefined){

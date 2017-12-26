@@ -401,6 +401,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
    						$scope.isQG=data.createQG;
    						$scope.clauseSettlementList=data.clauseSettlementDetail;
    						$scope.comFinances=data.comFinances//收付款信息
+   						$scope.comContacts=data.comContacts//联系信息
    						$scope.paymentRecord.payee=data.orderInfo.supplyName;
    						
    					}else{
@@ -423,6 +424,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
    		);
 
    	};
+   	$scope.changeContactValue=function(){//筛选联系人信息
+   		for(var i=0;i<$scope.comContacts.length;i++){
+   			if($scope.paymentRecord.contact==$scope.comContacts[i].contactName){
+   				$scope.paymentRecord.contactNum=$scope.comContacts[i].contactTel;
+   				return;
+   			}
+   		}
+   	}
 	//选择支付节点赋值
    	$scope.selectPaymentNode=function(node){
 		var serialNum;

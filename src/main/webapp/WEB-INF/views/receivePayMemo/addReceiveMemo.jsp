@@ -158,22 +158,48 @@
 													<label class="control-label bold">付款银行<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="bank" name="bank"  ng-change="changeValue()"
+														<!-- <select class="form-control" id="bank" name="bank"  ng-change="changeValue()"
 															ng-model="memoRecord.bank" ng-show="input" >
 															<option value=""></option>
 																<option ng-repeat="item in comFinances"
 																value="{{item.openingBank}}">{{item.openingBank}}</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{memoRecord.bank}}</p>
+														<p class="form-control-static" ng-show="span">{{memoRecord.bank}}</p> -->
+														<div class="input-group"  >
+													<input type="text" name="bank1"
+															class="form-control"
+															ng-model="memoRecord.bank"    ng-if="showSXf!='1'"  ng-show="input"/>
+															<div  ng-show="showSXf=='1'">
+																<select class="form-control" id="bank" name="bank"   ng-change="changeValue()"
+															ng-model="memoRecord.bank" ng-show="input" >
+															<option value=""></option>
+																<option ng-repeat="item in comFinances"
+																value="{{item.openingBank}}">{{item.openingBank}}</option>
+														</select>
+														</div>
+															<span ng-show="input"  class="input-group-btn" ng-click="showSX()"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXf!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXf=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
 													</div>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款账号</label>
+													<label class="control-label bold">付款账号<span
+														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control"  readonly
+														<input type="text" class="form-control"  readonly   ng-if="showSXf=='1'"
 															name="accountNumber" ng-model="memoRecord.accountNumber"
+															ng-show="input" />
+															<input type="text" class="form-control"    ng-if="showSXf!='1'"
+															name="accountNumber1" ng-model="memoRecord.accountNumber"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{memoRecord.accountNumber}}</p>
@@ -184,10 +210,13 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">户名</label>
+													<label class="control-label bold">户名<span
+														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="accountName"
+														<input type="text" class="form-control" name="accountName"  ng-if="showSXf=='1'"
 															ng-model="memoRecord.accountName" ng-show="input"  readonly/>
+															<input type="text" class="form-control" name="accountName1"  ng-if="showSXf!='1'"
+															ng-model="memoRecord.accountName" ng-show="input"  />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{memoRecord.accountName}}</p>
 													</div>

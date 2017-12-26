@@ -587,10 +587,16 @@
 														class="required" aria-required="true"> * </span>
 													</label>
 													<div class="">
-														<input type="text" class="form-control" name="contact"
+														<!-- <input type="text" class="form-control" name="contact"
 															ng-model="paymentRecord.contact" ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.contact}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contact}}</p> -->
+														<select class="form-control" id="contact" name="contact"  ng-change="changeContactValue()"
+															ng-model="paymentRecord.contact" ng-show="input" >
+															<option value=""></option>
+																<option ng-repeat="item in comContacts"
+																value="{{item.contactName}}">{{item.contactName}}</option>
+														</select>
 													</div>
 												</div>
 											</div>
@@ -601,7 +607,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="contactNum"
-															ng-model="paymentRecord.contactNum" ng-show="input" />
+															ng-model="paymentRecord.contactNum" ng-show="input"  readonly/>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{paymentRecord.contactNum}}</p>
 													</div>
