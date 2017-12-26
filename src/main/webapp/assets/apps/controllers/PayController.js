@@ -46,6 +46,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					$scope.paymentRecord.applyDate= $filter('date')(new Date(), 'yyyy-MM-dd');//申请日期
 					$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
 					$scope.paymentRecord.isBill='0';
+					$scope.paymentRecord.status='0';
 					getCurrentUser();
 				});
 					    }
@@ -534,8 +535,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		    			fd.append('payType',$scope.paymentRecord.payType);
 		    			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
 		    			/*fd.append('nodeNum',$scope.paymentRecord.nodeNum);*/
-		    			fd.append('accountPeriod',$scope.paymentRecord.accountPeriod); 
-		    			fd.append('deliveryRate',$scope.paymentRecord.deliveryRate);
+		    			fd.append('accountPeriod',$scope.paymentRecord.accountPeriod);
 		    			fd.append('billType',$scope.paymentRecord.billType); 
 		    			fd.append('isBill',$scope.paymentRecord.isBill==undefined?'0':$scope.paymentRecord.isBill);
 	    				fd.append('applyDate',$scope.paymentRecord.applyDate);
@@ -1508,7 +1508,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			            	  'orderable' : false,
 			            	  'render' : function(data,
 			            			  type, full, meta) {
-			            		  return '<input type="radio" name="serialNum" value="'
+			            		  return '<input type="radio" name="serialNum" value="'+data+'"'
 			            		  + $('<div/>')
 			            		  .text(
 			            				  data)

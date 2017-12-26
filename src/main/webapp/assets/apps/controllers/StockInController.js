@@ -200,17 +200,19 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         		promise.then(function(data){
         			$scope.takeDeliveryMateriels = data.data;
         			var deliveryMaterielSerialNums=new Array()
-        		
+        			var array=new Array();
     				for(var i in data.data){
     					if(data.data[i].supplyMateriel!=null){
         					$scope.takeDeliveryMateriels[i].orderMateriel = data.data[i].supplyMateriel;
         					delete $scope.takeDeliveryMateriels[i].supplyMateriel;
     					}
-    					if(data.data[i].serialNum!=null){
+    					if(data.data[i].serialNum!=null&&data.data[i].deliverCount!=0){
     						deliveryMaterielSerialNums.push(data.data[i].serialNum);
+    						array.push(data.data[i]);
     					}
     				}
         			$scope.deliveryMaterielSerialNums=deliveryMaterielSerialNums;//把所有发货物料流水存到该数组
+        			$scope.takeDeliveryMateriels=array;
         			countWarehouseAndPosition();
         			var totalOrderCount=0, totalDeliveryCount=0;
 	        		var  totalQualifiedCount=0,totalStockInCount=0;

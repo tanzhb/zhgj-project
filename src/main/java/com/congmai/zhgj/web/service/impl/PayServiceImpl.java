@@ -428,6 +428,7 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 					pr.setPaymentAmount(pr.getApplyPaymentAmount());
 				}else{
 					pr.setPaymentAmount(paymentAmount.toString());
+					pr.setStatus("1");
 				}
 				payMapper.updatePaymentRecord(pr);
 				
@@ -441,12 +442,22 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 				memoRecord.setVerificationMoneyAmount(mr.getMoneyAmount());
 			}else{
 				memoRecord.setVerificationMoneyAmount(nowVerificationMoneyAmount.toString());
+				memoRecord.setStatus("1");
 			}
 			memoRecordMapper.updateByPrimaryKeySelective(memoRecord);
 		}
 		
 		
 		return true;
+	}
+
+	@Override
+	public List<VerificationRecord> findVerificationRecordByPaymentRecordSerial(
+			String serialNum) {
+		VerificationRecordExample mre=new VerificationRecordExample();
+		com.congmai.zhgj.web.model.VerificationRecordExample.Criteria c=mre.createCriteria();
+		c.andPaymentRecordSerialEqualTo(serialNum);
+		return verificationRecordMapper.selectByExampleForPaymentRecord(mre);
 	}
 
 	

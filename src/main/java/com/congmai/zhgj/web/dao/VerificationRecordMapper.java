@@ -27,4 +27,6 @@ public interface VerificationRecordMapper {
     int updateByPrimaryKeySelective(VerificationRecord record);
 
     int updateByPrimaryKey(VerificationRecord record);
+    
+    List<VerificationRecord> selectByExampleForPaymentRecord(VerificationRecordExample example);
 }

@@ -11,8 +11,8 @@
 						<ul class="nav nav-tabs">
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">应付信息</a></li>
-							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
-							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">附件</a>
+							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
+							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a>
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 							</li>							
@@ -396,7 +396,9 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.status}}</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='0'">待核销</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='2'">已完成</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='1'">部分核销</p>
 													</div>
 												</div>
 											</div>
@@ -557,7 +559,7 @@
 										<div class="row"   >
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款方 <span
+													<label class="control-label bold">收款方 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="payee" readonly
@@ -871,9 +873,112 @@
 									</div>
 								</div>
 							</div> -->
-					
+					<div class="tab-pane fade" id="tab_1_2">
+								<div class="portlet-body">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
+			<div class="table-scrollable">
+				<table id="verificationRecordTable"
+					class="table table-striped table-bordered table-advance table-hover">
+					<thead>
+						<tr>
+							<th style="text-align: center">收款水单号</th>
+							<th style="text-align: center">收款金额</th>
+							<th style="text-align: center">币种</th>
+							<th style="text-align: center">收款方式</th>
+							<th style="text-align: center">到账日期</th>
+							<th style="text-align: center">核销金额</th>
+							<th style="text-align: center">核销日期</th>
+							<th style="text-align: center" >核销状态</th>
+						</tr>
+						
+					</thead>
+					<tbody>
+						<tr
+							ng-repeat="verificationRecord in dispalyVerificationRecord  track by $index">
+							<td style="text-align: center">{{verificationRecord.memoRecord.memoNum}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.moneyAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.currency}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.paymentStyle}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.paymentDate}}</td>
+							<td style="text-align: center">{{verificationRecord.moneyAmount}}</td>
+							<td  style="text-align: center">{{verificationRecord.createTime}}</td>
+							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='2'">已完成</td>
+							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='1'">部分核销</td>
+						</tr>
+						<tr
+							ng-if="dispalyVerificationRecord.length==0">
+							<td colspan="7" align="center">没有符合条件的核销记录信息</td>
+						</tr>
+					</tbody>
+					<tfoot>
+													<tr>
+														<td></td>
+														<td style="text-align: center">收款单金额:{{calcTotalData()}} {{paymentRecord.applyPaymentAmount}}</td>
+														<td style="text-align: center">已核销金额:{{totalPaymentAmount}}</td>
+														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount}}</td>
+														<td  style="text-align: center" ng-if="paymentRecord.status=='0'">核销状态:待核销</td>
+														<td  style="text-align: center" ng-if="paymentRecord.status=='1'">核销状态:部分核销</td>
+														<td  style="text-align: center" ng-if="paymentRecord.status=='2'">核销状态:已完成 </td>
+														<td></td>
+														<td></td>
+													</tr>
+												</tfoot>
+				</table>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-5 col-sm-5">
+					<div class="dataTables_info" id="sample_5_info" role="status"
+						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterVerificationRecord.length?filterVerificationRecord.length:(pageIndex-1)*pageSize+1}}
+						到 {{pageIndex*pageSize>filterVerificationRecord.length?filterVerificationRecord.length:pageIndex*pageSize}} /共 {{filterVerificationRecord.length}} 条数据（从{{verificationList.length}}条数据中筛选）</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div  style="text-align: right;" id="sample_5_paginate">
+						<ul class="pagination" style="visibility: visible;">
+							<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
+							<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex}}</a></li>
+							<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
+							<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+									class="fa fa-angle-right"></i></a></li>
+							<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+									class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			
+		</div>
+							</div>
+							</div>
 
-							<div class="tab-pane fade" id="tab_1_2">
+							<div class="tab-pane fade" id="tab_1_3">
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
 										<button type="submit" ng-click="saveFile()"

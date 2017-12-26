@@ -29,6 +29,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			$scope.paymentRecord.applyDate= $filter('date')(new Date(), 'yyyy-MM-dd');//申请日期
 			$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
 			$scope.paymentRecord.isBill='0';
+			$scope.paymentRecord.status='0';
 			getCurrentUser();
 		});
 			    }
@@ -87,20 +88,20 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	$scope.getPayInfo  = function(serialNum) {
 		GatheringMoneyService.selectPay(serialNum).then(
       		     function(data){
-      		    	$scope.paymentRecord=data;
+      		    	$scope.paymentRecord=data.paymentRecord;
       		    	$scope.saleOrder={};
-      		    	$scope.saleOrder.orderAmount=data.orderAmount;
-      		    	$scope.saleOrder.orderNum=data.orderNum;
-      		    	$scope.file=data.fileList;
-      		    	$scope.orderSerial=data.orderSerial;
-      		    	for(var i=0;i<data.fileList.length;i++){
+      		    	$scope.saleOrder.orderAmount=$scope.paymentRecord.orderAmount;
+      		    	$scope.saleOrder.orderNum=$scope.paymentRecord.orderNum;
+      		    	$scope.file=$scope.paymentRecord.fileList;
+      		    	$scope.orderSerial=$scope.paymentRecord.orderSerial;
+      		    	for(var i=0;i<$scope.paymentRecord.fileList.length;i++){
       		    	$scope.file[i].paymentSerial = $scope.pay.serialNum;
       		    	}
       		    	
       		    	if($scope.paymentRecord.paymentType=='报关'){
       		    		$scope.isBG=true;
-      		    	   $scope.paymentRecord.playPaymentDate=data.applyDate;
-      		    		$scope.paymentRecord.customsFormSerial=data.customsFormSerial;
+      		    	   $scope.paymentRecord.playPaymentDate=$scope.paymentRecord.applyDate;
+      		    		$scope.paymentRecord.customsFormSerial=$scope.paymentRecord.customsFormSerial;
       		    		$scope.paymentRecord.totalMoney=$scope.paymentRecord.applyPaymentAmount;
       		    		$scope.chnTotalMoney=convertCurrency($scope.paymentRecord.applyPaymentAmount);
       		    		$scope.paymentRecord.applyDateForBg=$scope.paymentRecord.applyDate;
@@ -109,10 +110,12 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
       		    		$scope.chnAmount=$scope.paymentRecord.applyPaymentAmount;
       		    		$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
       		    	}
-      		    	$scope.clauseSettlementList=data.clauseSettList;
-      		    	$scope.paymentRecord.payType=data.payType;
-      		    	$scope.comFinances=data.comFinances//收付款信息
-      		    	$scope.paymentRecord.bank=data.bank;
+      		    	$scope.clauseSettlementList=$scope.paymentRecord.clauseSettList;
+      		    	$scope.paymentRecord.payType=$scope.paymentRecord.payType;
+      		    	$scope.comFinances=$scope.paymentRecord.comFinances//收付款信息
+      		    	$scope.paymentRecord.bank=$scope.paymentRecord.bank;
+      		    	$scope.verificationList=data.rvList;
+      		    	$scope.queryForPage();
       		     },
       		     function(error){
       		         toastr.error('连接服务器出错,请登录重试！');
@@ -120,8 +123,73 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
       		 );
     	
     }; 
-    
-
+    $scope.calcTotalData=function() {//统计核算记录详情信息
+    	if($scope.verificationList.length>0){
+    		var totalPaymentAmount=0;
+    		for(var i=0;i<$scope.verificationList.length;i++){
+    			totalPaymentAmount+=Number($scope.verificationList[i].moneyAmount);
+    		}
+    		$scope.totalPaymentAmount=totalPaymentAmount;
+    }
+  }
+    /********************************核算记录模糊检索及分页 START *********************************/
+	 /** *************核算记录明细可检索化  start*************** */
+	 $scope.pageIndex = 1; //记录当前页
+	 $scope.pageSize = '10'; //每页的记录数
+	 $scope.totalPage = '1'; //记录总页数
+	 $scope.dispalyVerificationRecord = [];//页面显示结果
+	 $scope.filterVerificationRecord = [];//查询筛选结果
+	 
+	 $scope.createFilterList = function(){
+		 $scope.filterVerificationRecord = [];
+		if($scope.verificationList.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+			for(var i = 0;i <$scope.verificationList.length;i++){// data.data为选择的标准物料
+				if(($scope.verificationList)[i].memoRecord.memoNum.indexOf($scope.queryStr)>=0){
+					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+				}else if(($scope.verificationList)[i].memoRecord.currency.indexOf($scope.queryStr)>=0){
+					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+				}else if(($scope.verificationList)[i].memoRecord.paymentStyle.indexOf($scope.queryStr)>=0){
+					$scope.filterVerificationRecord.push(angular.copy(($scope.verificationList)[i]));
+				}
+			}
+		}else{
+			$scope.filterVerificationRecord = angular.copy($scope.verificationList);
+		}
+		
+	 };
+	 
+	 $scope.createDispalyList = function(){
+		 $scope.dispalyVerificationRecord = $scope.filterVerificationRecord.slice(
+				 ($scope.pageIndex-1)*$scope.pageSize,
+				 $scope.pageIndex*$scope.pageSize);
+		 
+		 $scope.totalPage = Math.ceil($scope.filterVerificationRecord.length/$scope.pageSize);
+	 };
+	 
+	 $scope.queryForPage=function(){
+		 $scope.createFilterList();
+		 $scope.pageIndex = 1; //设置为第一页
+		 $scope.createDispalyList();
+	 };
+	 
+	 $scope.link2ThisPage = function(index){
+		 $scope.pageIndex = index;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2PreviousPage = function(){
+		 $scope.pageIndex--;
+		 $scope.createDispalyList();
+	 }
+	 
+	 $scope.link2NextPage = function(){
+		 $scope.pageIndex++;
+		 $scope.createDispalyList();
+	 }
+	 
+	/** *************核算记录明细可检索化  end*************** */
+          
+  /********************************核算记录模糊检索及分页 END *********************************/
 
 	//返回按钮
 	$scope.goBack=function(){
