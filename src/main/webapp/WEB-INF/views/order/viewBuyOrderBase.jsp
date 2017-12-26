@@ -85,7 +85,7 @@ margin-right: 20px;
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-8">
+                         <div class="col-md-8"  ng-show="contract.contractType=='采购合同'">
                              <div class="form-group ">
                                  <label class="control-label col-md-3  bold">合同内容：</label>
                                  <div class="control-label col-md-9">
@@ -107,6 +107,24 @@ margin-right: 20px;
                                           </div>
                                       </div>
                                  </div>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='采购订单'">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">框架协议编号：</label>
+                                 <div class=" col-md-7">
+                                     <p class="form-control-static"> {{buyOrder.frame.contractNum}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='采购订单'">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">协议有效期：</label>
+                                 <div class="">
+                                     <p class="form-control-static" >{{buyOrder.frame.startDate}}~{{buyOrder.frame.endDate}} </p>
                                  </div>
                                  
                              </div>
@@ -212,7 +230,7 @@ margin-right: 20px;
                          <!--/span-->
                      </div>
                   <div class="row">
-                  		<div class="col-md-4">
+                  		<div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -221,7 +239,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                  		<div class="col-md-4">
+                  		<div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">采购合同号：</label>
                                  <div class="control-label col-md-7">
@@ -231,7 +249,7 @@ margin-right: 20px;
                              </div>
                          </div>
                          
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">合同签订日期：</label>
                                  <div class="control-label col-md-7">
@@ -344,7 +362,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -353,7 +371,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">采购合同号：</label>
                                  <div class="control-label col-md-7">
@@ -361,20 +379,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         
-                         <!--/span-->
-                     </div>
-                     <div  class="row">
-                     	<div class="col-md-4">
-                             <div class="form-group ">
-                                <label class="control-label col-md-5 bold">合同签订日期：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{contract.signDate}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType=='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
                                  <div class="control-label col-md-7">
@@ -383,7 +388,48 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                     	<div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType=='采购订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">状态：</label>
+                                 <div class="control-label col-md-7">
+                                     <p ng-if="buyOrder.status==1&&(buyOrder.processBase.status=='PENDING'
+                                     ||buyOrder.processBase.status=='WAITING_FOR_APPROVAL')"  
+                                     ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
+                                     
+                                      <p ng-if="buyOrder.status==1&&(buyOrder.processBase.status=='APPROVAL_FAILED')"  
+                                     ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
+                                     
+                                      <p ng-if="buyOrder.status==3"  
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     
+                                     <p ng-if="buyOrder.status==2"   
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已签合同 </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <!--/span-->
+                     </div>
+                     <div  class="row" >
+                     	<div class="col-md-4" ng-if="contract.contractType!='采购订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">合同签订日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{contract.signDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">备注：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{buyOrder.orderRemark}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                     	<div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
@@ -498,7 +544,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                          <!--/span-->
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">电子合同：</label>
                                  <div class="control-label col-md-7">
@@ -507,7 +553,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4" ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">采购合同号：</label>
                                  <div class="control-label col-md-7">
@@ -517,7 +563,7 @@ margin-right: 20px;
                          </div>
                          
                          <!--/span-->
-                     	<div class="col-md-4">
+                     	<div class="col-md-4"  ng-if="contract.contractType!='采购订单'">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">合同签订日期：</label>
                                  <div class="control-label col-md-7">

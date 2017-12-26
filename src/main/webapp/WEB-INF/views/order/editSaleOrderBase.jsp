@@ -85,7 +85,8 @@ margin-right: 20px;
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>合同类型：</label>
                                  <div class="">
                                  	<div ng-hide="saleOrderInput">
-                               	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType!='框架合同'" value="销售合同"> 销售合同
+                                <input type="radio" ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='销售订单'" value="销售订单"> 销售订单
+                               	<input type="radio" ng-click="hidnClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='销售合同'" value="销售合同"> 销售合同
                        			<!-- <input type="radio" ng-click="showClauseFramework()"  ng-model="contract.contractType" name="contractType" ng-checked="contract.contractType=='框架合同'" value="框架合同"> 框架合同 -->
                                    </div>
                                    <p class="form-control-static" ng-show="saleOrderShow"> {{contract.contractType}} </p>
@@ -120,7 +121,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-8">
+                         <div class="col-md-8"  ng-show="contract.contractType=='销售合同'">
                              <div class="form-group ">
                                  <label class="control-label bold">合同内容：</label>
                                  <div class="">
@@ -142,6 +143,28 @@ margin-right: 20px;
                                           </div>
                                       </div>
                                  </div>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>框架协议编号：</label>
+                                 <div class="">
+                                 <input type="text" name="frameNum" readonly class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.frame.contractNum" 
+                                 ng-click="selectFrame()" >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请选择框架协议</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.frame.contractNum}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='销售订单'">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">协议有效期：</label>
+                                 <div class="">
+                                     <p class="form-control-static" >{{saleOrder.frame.startDate}}~{{saleOrder.frame.endDate}} </p>
                                  </div>
                                  
                              </div>
@@ -303,7 +326,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                              <div class="form-group ">
                                 <label class="control-label bold">服务委托书：</label>
                                  <div class="">
@@ -328,7 +351,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                               <div class="form-group ">
                                  <label class="control-label bold">销售合同号：</label>
                                   <div class="">
@@ -339,9 +362,20 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
-                          
+                          <div class="col-md-4" ng-if="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 <input type="text" name="orderRemark" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderRemark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderRemark}} </p>
+                                 </div>
+                                 
+                             </div>
+                     		</div>
                      </div>
-                     <div class="row">
+                     <div class="row"  ng-if="contract.contractType!='销售订单'">
                          <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">合同签订日期：</label>
@@ -459,7 +493,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                              <div class="form-group ">
                                 <label class="control-label bold">服务委托书：</label>
                                  <div class="">
@@ -484,7 +518,18 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         
+                         <div class="col-md-4"  ng-if="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 <input type="text" name="orderRemark" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderRemark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderRemark}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                           <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>制单人：</label>
@@ -511,7 +556,7 @@ margin-right: 20px;
                          </div> -->
                          <!--/span-->
                      </div>  
-                     <div class="row">
+                     <div class="row"  ng-if="contract.contractType!='销售订单'">
                         <div class="col-md-4">
                               <div class="form-group ">
                                  <label class="control-label bold">销售合同号：</label>
@@ -692,7 +737,7 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                              <div class="form-group ">
                                 <label class="control-label bold">服务委托书：</label>
                                  <div class="">
@@ -717,7 +762,7 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                               <div class="form-group ">
                                  <label class="control-label bold">销售合同号：</label>
                                   <div class="">
@@ -728,9 +773,20 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
-                          
+                          <div class="col-md-4" ng-if="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 <input type="text" name="orderRemark" class="form-control" ng-hide="saleOrderInput" ng-model="saleOrder.orderRemark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="saleOrderInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="saleOrderShow"> {{saleOrder.orderRemark}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                      </div>
-                     <div class="row">
+                     <div class="row"  ng-if="contract.contractType!='销售订单'">
                          <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">合同签订日期：</label>

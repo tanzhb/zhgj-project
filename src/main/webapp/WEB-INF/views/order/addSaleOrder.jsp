@@ -39,3 +39,45 @@
 </div> 
 
 <jsp:include  page="selectMateriel.jsp"/> <!-- 选择供应物料 -->
+
+
+<div id="addFrame" class="modal fade bs-modal-lg" tabindex="-1"
+	data-backdrop="static" data-keyboard="false">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true"></button>
+				<h4 class="modal-title">选择框架协议</h4>
+			</div>
+			<div class="modal-body">
+				<table
+					class="table table-striped table-bordered table-hover table-checkable order-column"
+					id="sample_Frame">
+					<thead>
+						<tr>
+							<th style="text-align: center"></th>
+							<th> 框架协议号 </th>
+                            <th> 采购商 </th>
+                            <th> 框架类型 </th>
+                            <th> 框架合同号 </th>
+                            <th> 生效日期 </th>
+                            <th> 失效日期 </th>
+                            <th> 订单 </th>
+                            <th> 签订人 </th>
+                            <th> 版本 </th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" data-dismiss="modal"
+					class="btn dark btn-outline">取消</button>
+				<button type="button" ng-click="confirmSelectFrame()" class="btn green">确定
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

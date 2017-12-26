@@ -24,6 +24,8 @@ public enum StaticConst {
 	
 	CONTRACT_TYPE_BUY("buyContract","采购合同"),
 	
+	CONTRACT_TYPE_SALE("saleContract","销售合同"),
+	
 	CONTRACT_TYPE_BUYFRAME("buyFrame","采购框架"),
 	
 	CONTRACT_TYPE_BUYORDER("buyOrder","采购订单"),

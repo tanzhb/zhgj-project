@@ -280,6 +280,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		    	}*/
 	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
 //	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+	        		    	if($scope.contract.contractType=='采购订单'){
+	        		    		$scope.contract.contractNum = null;
+	        		    	}
 	 	   	    		orderService.saveContract($scope.contract).then(
 	 	   	       		     function(data){
 	 	   	       		    	toastr.success('数据保存成功！');
@@ -325,6 +328,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			        		    	$scope.buyOrder = data;
 			        		    	$scope.contract.orderSerial = data.serialNum;
 			        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
+			        		    	if($scope.contract.contractType=='采购订单'){
+			        		    		$scope.contract.contractNum = null;
+			        		    	}
 			 	   	    		orderService.saveContract($scope.contract).then(
 			 	   	       		     function(data){
 			 	   	       		    	toastr.success('订单自动保存成功！');
@@ -592,7 +598,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 6,
 							'render' : function(data,
 									type, row, meta) {
-								if(isNull(row.contract)){
+								if(isNull(row.contract)||isNull(row.contract.contractNum)){
 									return ""
 								}else{
 									return '<a href="javascript:void(0);" ng-click="goContract()">'+row.contract.contractNum+'</a></br>' 
@@ -1081,7 +1087,18 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		};
 		// 删除结束***************************************
         
-		
+		jQuery.validator.addMethod("noFrameFlag", function(value, element) {  
+			if($scope.contract.contractType!='采购订单'){
+				return true;
+			}else{
+				if(isNull($scope.buyOrder.frame)){
+					return false;    
+				}else{
+					return true;  
+				}
+			}
+			
+		}, "框架协议不能为空"); 
 		
 		var validateInit = function() {
         	var e = $("#form_sample_1"),
@@ -1103,7 +1120,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	            	currency:{required:"币种不能为空！"},
 	            	maker:{required:"制单人不能为空！"},
 	            	seller:{required:"采购商不能为空！"},
-	            	orderDate:{required:"下单日期不能为空！"}
+	            	orderDate:{required:"下单日期不能为空！"},
+	            	frameNum:{noFrameFlag:"框架协议不能为空！"}
 	            },
             	rules: {orderNum: {required: !0,maxlength: 20},
             		orderType: {required: !0,maxlength: 20},
@@ -1115,8 +1133,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		maker: {required: !0,maxlength: 20},
 	            	seller:{required: !0,maxlength: 20},
             		currency: {required: !0,maxlength: 20},
-            		orderDate: {required: !0}
-            			},
+            		orderDate: {required: !0},
+            		frameNum:{noFrameFlag:true}},
             		invalidHandler: function(e, t) {
                     i.hide(), r.show(), App.scrollTo(r, -200)
                 },
@@ -2078,37 +2096,37 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 		            }})
 		        };
     	 
-		        $scope.saveContract  = function() {// 保存合同信息
-		   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
-		   	    		toastr.error('请先保存订单信息！');return
-		   			}
-		   	    	if($('#form_contract').valid()){
-		   	    		$scope.contract.orderSerial = $scope.buyOrder.serialNum;
-		   	    		$scope.contract.comId = $scope.buyOrder.buyComId;
-		   	    		orderService.saveContract($scope.contract).then(
-		   	       		     function(data){
-		   	       		    	toastr.success('数据保存成功！');
-		   	       		    	$scope.contract = data.data;
-		   	       		    	if(!isNull(data.data)){
-		          		    		var myJsDate=$filter('date')(data.data.startDate,'yyyy-MM-dd');
-		        					$scope.contract.startDate=myJsDate;
-		        					
-		        					var myJsDate1=$filter('date')(data.data.endDate,'yyyy-MM-dd');
-		        					$scope.contract.endDate=myJsDate1;
-		        					
-		        					var myJsDate2=$filter('date')(data.data.signDate,'yyyy-MM-dd');
-		        					$scope.contract.signDate=myJsDate2;
-		          		    	}
-		   	       		    	$scope.cancelContract();
-		   	       		     },
-		   	       		     function(error){
-		   	       		    	toastr.error('数据保存出错！');
-		   	       		         $scope.error = error;
-		   	       		     }
-		   	       		 );
-		   	    	}
-		   	    	
-		   	    }; 	
+//		        $scope.saveContract  = function() {// 保存合同信息
+//		   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
+//		   	    		toastr.error('请先保存订单信息！');return
+//		   			}
+//		   	    	if($('#form_contract').valid()){
+//		   	    		$scope.contract.orderSerial = $scope.buyOrder.serialNum;
+//		   	    		$scope.contract.comId = $scope.buyOrder.buyComId;
+//		   	    		orderService.saveContract($scope.contract).then(
+//		   	       		     function(data){
+//		   	       		    	toastr.success('数据保存成功！');
+//		   	       		    	$scope.contract = data.data;
+//		   	       		    	if(!isNull(data.data)){
+//		          		    		var myJsDate=$filter('date')(data.data.startDate,'yyyy-MM-dd');
+//		        					$scope.contract.startDate=myJsDate;
+//		        					
+//		        					var myJsDate1=$filter('date')(data.data.endDate,'yyyy-MM-dd');
+//		        					$scope.contract.endDate=myJsDate1;
+//		        					
+//		        					var myJsDate2=$filter('date')(data.data.signDate,'yyyy-MM-dd');
+//		        					$scope.contract.signDate=myJsDate2;
+//		          		    	}
+//		   	       		    	$scope.cancelContract();
+//		   	       		     },
+//		   	       		     function(error){
+//		   	       		    	toastr.error('数据保存出错！');
+//		   	       		         $scope.error = error;
+//		   	       		     }
+//		   	       		 );
+//		   	    	}
+//		   	    	
+//		   	    }; 	
 		   	    
 		   	    $scope.cancelContract  = function() {// 取消编辑合同信息
 		   	    	$scope.contractInput = true;
@@ -3027,38 +3045,38 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        $scope.cancelPage  = function() {// 取消编辑
 	        	$state.go("buyOrder");
 	        };
-	        $scope.submitPage  = function() {// 提交审核
-	        	$scope.submitOrder = {}
-	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
-	        	$scope.submitOrder.remark = $scope.buyOrder.remark;
-	        	$scope.submitOrder.status = 1;
-	        	$scope.buyOrder.status = 1;
-	        	orderService.save($scope.submitOrder).then(
-	          		     function(data){
-	          		    	$scope.contract.orderSerial = data.serialNum;
-	          		    	if(isNull($scope.contract.contractNum)){
-	           		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
-	           		    	}
-	    	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
-	    	   	    		orderService.saveContract($scope.contract).then(
-	    	   	       		     function(data){
-	    	   	       		    	toastr.success('数据保存成功！');
-	    	   	       		    	$scope.contract = data.data;
-	    	   	       		     },
-	    	   	       		     function(error){
-	    	   	       		    	toastr.error('数据保存出错！');
-	    	   	       		         $scope.error = error;
-	    	   	       		     }
-	    	   	       		 );
-	          		    	$scope.cancelOrderStatus();
-//	          		    	$location.search({serialNum:data.serialNum,view:'all'});
-	          		     },
-	          		     function(error){
-	          		         $scope.error = error;
-	          		         toastr.error('数据保存出错！');
-	          		     }
-	          		 );
-	        };
+//	        $scope.submitPage  = function() {// 提交审核
+//	        	$scope.submitOrder = {}
+//	        	$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
+//	        	$scope.submitOrder.remark = $scope.buyOrder.remark;
+//	        	$scope.submitOrder.status = 1;
+//	        	$scope.buyOrder.status = 1;
+//	        	orderService.save($scope.submitOrder).then(
+//	          		     function(data){
+//	          		    	$scope.contract.orderSerial = data.serialNum;
+//	          		    	if(isNull($scope.contract.contractNum)){
+//	           		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+//	           		    	}
+//	    	   	    		$scope.contract.comId = $scope.buyOrder.supplyComId;
+//	    	   	    		orderService.saveContract($scope.contract).then(
+//	    	   	       		     function(data){
+//	    	   	       		    	toastr.success('数据保存成功！');
+//	    	   	       		    	$scope.contract = data.data;
+//	    	   	       		     },
+//	    	   	       		     function(error){
+//	    	   	       		    	toastr.error('数据保存出错！');
+//	    	   	       		         $scope.error = error;
+//	    	   	       		     }
+//	    	   	       		 );
+//	          		    	$scope.cancelOrderStatus();
+////	          		    	$location.search({serialNum:data.serialNum,view:'all'});
+//	          		     },
+//	          		     function(error){
+//	          		         $scope.error = error;
+//	          		         toastr.error('数据保存出错！');
+//	          		     }
+//	          		 );
+//	        };
 	        
 	        $scope.cancelOrderStatus  = function() {//隐藏编辑备注及提交
 	        	$scope.orderStatusShow = true;
@@ -4436,6 +4454,142 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 			}
 	 		
 	 		}
+	 	 	
+	 	 	
+	 	 	/** ************关联框架协议 start*************** */
+	        $scope.selectFrame = function() {
+				 $('#addFrame').modal('show');// 删除成功后关闭模态框
+				 loadFrameTable();
+			 };
+	        
+	        // 确认选择开始***************************************
+			 $scope.confirmSelectFrame = function() {
+				 var ids = '';
+				 FrameTable.$('input[type="radio"]').each(function() {
+						if ($.contains(document, this)) {											
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+											+ this.value;
+							}
+						}
+					});
+
+				 if(ids!=''){
+					 orderService.getFrameInfo(ids).then(
+		          		     function(data){//加载页面对象
+		          		    	$scope.buyOrder.frameSerial = data.contract.id;
+		          		    	$scope.buyOrder.frame=data.contract;
+		          		    	$scope.clauseAfterSales=data.clauseAfterSales;
+		          		    	$scope.clauseAdvance=data.clauseAdvance;
+		          		    	$scope.clauseCheckAccept=data.clauseCheckAccept;
+		          		    	$scope.clauseDelivery=data.clauseDelivery;
+		          		    	$scope.clauseSettlement=data.clauseSettlement;
+		          		    	if(!isNull(data.clauseSettlement)){
+		          		    		$scope.clauseSettlement.CSD = [{}]
+		          		    		$scope.clauseSettlement.CSD=data.clauseSettlement.clauseSettlementDetails;
+		          		    		if(!isNull(data.clauseSettlement.clauseSettlementDetails)){
+		          		    			_index = data.clauseSettlement.clauseSettlementDetails.length;
+		          		    		}
+		          		    	}else{
+		          		    		$scope.clauseSettlement = {}
+		          		    	}
+		          		    	if(isNull($scope.clauseSettlement.otherAmount)){
+		          		    		$scope.clauseSettlement.otherAmount = 0;
+		          		    	}
+		    					
+		          		    	$scope.buyOrder.contractContent = data.contract.contractContent
+		                    	$scope.initContractContent();
+		          		    	
+		          		    	$('#addFrame').modal('hide');// 删除成功后关闭模态框
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		     }
+		          		 );
+				 }else{
+					 toastr.error('未选择框架协议！');
+				 }
+
+			 };
+	        
+	        var FrameTable;
+	 	    var loadFrameTable = function() {
+	 	            a = 0;
+	 	            App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+	 	            if(!isNull(FrameTable)) return;
+	 	           FrameTable = $("#sample_Frame")
+	 				.DataTable({
+	 	                language: {
+	 	                    aria: {
+	 	                        sortAscending: ": 以升序排列此列",
+	 	                        sortDescending: ": 以降序排列此列"
+	 	                    },
+	 	                    emptyTable: "空表",
+	 	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+	 	                    infoEmpty: "没有数据",
+	 	                    //infoFiltered: "(filtered1 from _MAX_ total entries)",
+	 	                    lengthMenu: "每页显示 _MENU_ 条数据",
+	 	                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+	 	                    zeroRecords: "抱歉， 没有找到！",
+	 	                    paginate: {
+	 	                        "sFirst": "首页",
+	 	                        "sPrevious": "前一页",
+	 	                        "sNext": "后一页",
+	 	                        "sLast": "尾页"
+	 	                     }
+	 	                },
+	 	/*                fixedHeader: {//固定表头、表底
+	 	                    header: !0,
+	 	                    footer: !0,
+	 	                    headerOffset: a
+	 	                },*/
+	 	                order: [[1, "desc"]],//默认排序列及排序方式
+	 	                searching: true,//是否过滤检索
+	 	                ordering:  true,//是否排序
+	 	                lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+	 	                pageLength: 5,//每页显示数量
+	 	                processing: true,//loading等待框
+//	 	                serverSide: true,
+	 	                ajax:"rest/order/findFrameList?type=buy&selectFor=order",//加载数据中
+	 	                "aoColumns": [
+									{ mData: 'id'},
+									{ mData: 'contractNum' },
+									{ mData: 'comName' },
+									{ mData: 'contractType' },
+									{ mData: 'contractNum' },
+									{ mData: 'startDate' },
+									{ mData: 'endDate' },
+									{ mData: 'contractNum' },
+									{ mData: 'creator' },
+									{ mData: 'versionNO' },
+
+	 	                        ],
+	 	               'aoColumnDefs' : [ {
+	 								'targets' : 0,
+	 								'searchable' : false,
+	 								'orderable' : false,
+	 								'render' : function(data,
+	 										type, row, meta) {
+	 									return "<label class='mt-radio mt-radio-single mt-radio-outline'>" +
+										"<input type='radio' name='serialNum' class='checkboxes' value="+ row.id +" />" +
+										"<span></span></label>";
+	 								},
+	 								"createdCell": function (td, cellData, rowData, row, col) {
+	 									 $compile(td)($scope);
+	 							       }
+	 							}]
+
+	 	            }).on('order.dt',
+	 	            function() {
+	 	                console.log('排序');
+	 	            })
+	 	        };
+	 	   
+	 	       /** *************关联框架协议  end*************** */
 }]);
 
 
