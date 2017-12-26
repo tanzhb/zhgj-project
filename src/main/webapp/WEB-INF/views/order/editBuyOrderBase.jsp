@@ -79,7 +79,7 @@ margin-right: 20px;
                                  <div class="">
 	                                 <div ng-hide="buyOrderInput">
 		                               	<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.tradeType=='内贸'" value="内贸"> 内贸
-		                       			<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.tradeType=='外贸'" value="外贸"> 外贸
+		                               	<input type="radio"  ng-model="buyOrder.tradeType" name="tradeType" ng-checked="buyOrder.tradeType=='外贸'" value="外贸"> 外贸
 	                                 </div>
 	                                 <p class="form-control-static" ng-show="buyOrderShow"> {{buyOrder.tradeType}} </p>
                                  </div>

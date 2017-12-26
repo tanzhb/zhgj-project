@@ -1485,10 +1485,10 @@ angular.module('MetronicApp').controller('supplyFrameController', ['$rootScope',
 			} 
 			 
 			jQuery.validator.addMethod("noFileFlag", function(value, element) {  
-				if($("#noFileFlag").length>0){
-					return false;    
+				if(!isNull($scope.buyFrame.electronicContract)){
+					return true;    
 				}else{
-					return true;  
+					return false;  
 				}
 			}, "文件不能为空"); 
 	        var validateContractInit = function() {

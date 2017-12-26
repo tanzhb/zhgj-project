@@ -101,10 +101,10 @@ public class FileOperateController {
 			while ((k = fis.read(buffer)) > 0) {
 				response.getOutputStream().write(buffer, 0, k);
 			}
-			System.out.println("下载文件------"+fileName);
+//			System.out.println("下载文件------"+fileName);
 			fis.close();
 		} catch (Exception e) {
-			System.out.println("文件下载失败------"+fileName+"------Exception:"+e.getMessage());
+//			System.out.println("文件下载失败------"+fileName+"------Exception:"+e.getMessage());
 		}
 		
 		return null;
