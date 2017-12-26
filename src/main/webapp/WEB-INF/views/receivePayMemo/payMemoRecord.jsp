@@ -16,12 +16,12 @@
 
 		<script type="text/javascript">
 
-		function MyCtrl($scope, $location) {
+		 function MyCtrl($scope, $location) {
 			  $scope.jumpToUrl = function(path) {
 			 
 				  $location.path(path);
 			  };
-			}
+			} 
 		
 		</script>
 
@@ -30,16 +30,16 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">收款水单列表</span>
+					<span class="caption-subject font-green bold uppercase">付款水单列表</span>
 				</div>
 				<div class="actions" >
-				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addReceiveMemo')"><i class="fa fa-plus"></i> 添加</label>
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPayMemo')"><i class="fa fa-plus"></i> 添加</label>
 									
 				<!-- <label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label> -->
 									
-				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del('pay')"> <i class="fa fa-minus"></i> 删除</label>
 									
-				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportReceiveMemo()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportReceiveMemo('pay')"> <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>
 			</div>
 
@@ -58,7 +58,7 @@
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDel()" class="btn green">确定
+							<button type="button" ng-click="confirmDel('pay')" class="btn green">确定
 							</button>
 						</div>
 					</div>
@@ -77,12 +77,12 @@
                                     <span></span>
                                 </label>
                             </th>
-							<th style="white-space: nowrap;">收款水单号</th>
-							<th style="white-space: nowrap;">收款金额</th>
+							<th style="white-space: nowrap;">付款水单号</th>
+							<th style="white-space: nowrap;">付款金额</th>
 							<th style="white-space: nowrap;">币种</th>
-							<th style="white-space: nowrap;">收款方式</th>
+							<th style="white-space: nowrap;">付款方式</th>
 							<th style="white-space: nowrap;">到账日期</th>
-							<th style="white-space: nowrap;">付款方</th>
+							<th style="white-space: nowrap;">收款方</th>
 							<th style="white-space: nowrap;">备注</th>
 							<th style="white-space: nowrap;">已核销金额</th>
 							<th style="white-space: nowrap;">水单余额</th>

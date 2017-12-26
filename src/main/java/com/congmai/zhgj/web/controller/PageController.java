@@ -728,9 +728,9 @@ public class PageController {
      * 付款水单详情页面
      * @return 付款水单详情页面url
      */
-    @RequestMapping("/viewPayMemo")
+    @RequestMapping("/viewMemoPay")
     public String viewPayMemo() {
-        return "receivePayMemo/viewPayMemo";
+        return "receivePayMemo/viewMemoPay";
     }
     /**
      * 添加/修改付款水单页面

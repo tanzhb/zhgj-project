@@ -27,7 +27,7 @@
 											<i class="fa fa-save"></i> 保存
 										</button>
 										<button type="button" ng-click="verificateInfo('receive')"
-											class="btn blue  btn-circle  btn-sm" ng-show="input">
+											class="btn blue  btn-circle  btn-sm" ng-show="span"  ng-if="memoRecord.status!='2'">
 											核销
 										</button>
 										<!-- <button ng-click="goBack()" type="button"
@@ -281,7 +281,9 @@
 												<div class="form-group">
 													<label class="control-label bold">核销状态</label>
 													<div class="">
-														
+														<p class="form-control-static"  ng-if="memoRecord.status=='0'||memoRecord.status==undefined">待核销</p>
+														<p class="form-control-static"   ng-if="memoRecord.status=='2'">已完成</p>
+														<p class="form-control-static"   ng-if="memoRecord.status=='1'">部分核销</p>
 													</div>
 
 												</div>

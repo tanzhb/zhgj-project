@@ -3247,7 +3247,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         .state('addPay', {
-            url: "/addPay:serialNum",
+            url: "/addPay?:serialNum",
             templateUrl: "rest/page/addPay",
             data: {pageTitle: '新增付款'},
             controller: "PayController",
@@ -3277,7 +3277,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('viewPay', {
-            url: "/viewPay:serialNum",
+            url: "/viewPay?:serialNum",
             templateUrl: "rest/page/viewPay",
             data: {pageTitle: '付款详情'},
             controller: "PayController",
@@ -3308,7 +3308,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('applyPay', {
-            url: "/applyPay:serialNum",
+            url: "/applyPay?:serialNum",
             templateUrl: "rest/page/applyPay",
             data: {pageTitle: '应付款申请'},
             controller: "PayController",
@@ -3818,7 +3818,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
          .state('addReceiveMemo', {
-            url: "/addReceiveMemo:serialNum",
+            url: "/addReceiveMemo?:serialNum",
             templateUrl: "rest/page/addReceiveMemo",
             data: {pageTitle: '新增收款水单'},
             controller: "ReceiveMemoController",
@@ -3916,7 +3916,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
           .state('addPayMemo', {
-            url: "/addPayMemo:serialNum",
+            url: "/addPayMemo?:serialNum",
             templateUrl: "rest/page/addPayMemo",
             data: {pageTitle: '新增付款水单'},
             controller: "ReceiveMemoController",
@@ -3980,9 +3980,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
-        .state('viewPayMemo', {
-            url: "/viewPayMemo:serialNum&:type",
-            templateUrl: "rest/page/viewPayMemo",
+        .state('viewMemoPay', {
+            url: "/viewMemoPay?:serialNum&:type",
+            templateUrl: "rest/page/viewMemoPay",
             data: {pageTitle: '付款水单详情'},
             controller: "ReceiveMemoController",
             resolve: {
@@ -4749,12 +4749,12 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
-					 		"<li><a>新增收款水单</a></li>";					 
+					 		"<li><a>新增付款水单</a></li>";					 
 			   }else if('viewPayMemo' == toState.name){//查看付款水单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
-				 		"<li><a>查看收款水单</a></li>";					 
+				 		"<li><a>查看付款水单</a></li>";					 
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

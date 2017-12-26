@@ -10,7 +10,7 @@
 					<div class="portlet light ">
 						<ul class="nav nav-tabs">
 							<li class="active bold"><a data-target="#tab_1_1"
-								data-toggle="tab">收款信息</a></li>
+								data-toggle="tab">付款信息</a></li>
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
 							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
 													
@@ -21,7 +21,7 @@
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
 										
-										<button   type="button" ng-click="verificateInfo('receive')" 
+										<button   type="button" ng-click="verificateInfo('pay')" 
 											class="btn blue btn-sm btn-circle"  ng-show="span"  ng-if="memoRecord.status!='2'">
 											<i class="fa fa-plus"></i>核销
 										</button>
@@ -40,7 +40,7 @@
 										<div class="row"   >
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款水单号<span
+													<label class="control-label bold">付款水单号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="memoNum" class="form-control"
@@ -54,7 +54,7 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款金额<span
+													<label class="control-label bold">付款金额<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" name="moneyAmount" class="form-control"  ng-change="changeMoney()"
@@ -110,7 +110,7 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收款日期<span
+													<label class="control-label bold">付款日期<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<input type="text" class="form-control" name="paymentDate"  
@@ -126,7 +126,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款方<span
+													<label class="control-label bold">收款方<span
 														class="required" aria-required="true"> * </span></label>
 													<div class=""    ng-hide="span">
 														<select class="form-control"
@@ -147,7 +147,7 @@
 											<div class="row">
 										<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款银行<span
+													<label class="control-label bold">收款银行<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control" id="bank" name="bank"  ng-change="changeValue()"
@@ -162,7 +162,7 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款账号</label>
+													<label class="control-label bold">收款账号</label>
 													<div class="">
 														<input type="text" class="form-control"  readonly
 															name="accountNumber" ng-model="memoRecord.accountNumber"
@@ -290,10 +290,10 @@
 					class="table table-striped table-bordered table-advance table-hover">
 					<thead>
 						<tr>
-							<th style="text-align: center">应收账单号</th>
+							<th style="text-align: center">应付账单号</th>
 							<th style="text-align: center">支付类型</th>
-							<th style="text-align: center">应收金额</th>
-							<th style="text-align: center">应收日期</th>
+							<th style="text-align: center">应付金额</th>
+							<th style="text-align: center">应付日期</th>
 							<th style="text-align: center">核销金额</th>
 							<th style="text-align: center">核销日期</th>
 							<th style="text-align: center" >核销状态</th>
@@ -320,7 +320,7 @@
 					<tfoot>
 													<tr>
 														<td></td>
-														<td style="text-align: center">收款水单金额:{{calcTotalData()}} {{memoRecord.moneyAmount}}</td>
+														<td style="text-align: center">付款水单金额:{{calcTotalData()}} {{memoRecord.moneyAmount}}</td>
 														<td style="text-align: center">已核销金额:{{totalPaymentAmount}}</td>
 														<td style="text-align: center">水单余额:{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount}}</td>
 														<td  style="text-align: center" ng-if="memoRecord.status=='0'">核销状态:待核销</td>
@@ -371,7 +371,7 @@
 		</div>
 	</div>
 </div>
-<jsp:include page="selectReceivePaymentRecord.jsp"></jsp:include>
+<jsp:include page="selectPayPaymentRecord.jsp"></jsp:include>
 
 
 <script type="text/javascript">

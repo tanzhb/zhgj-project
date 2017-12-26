@@ -557,9 +557,9 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static"  ng-if="paymentRecord.status=='0'">待核销</p>
-														<p class="form-control-static"   ng-if="paymentRecord.status=='2'">已完成</p>
-														<p class="form-control-static"   ng-if="paymentRecord.status=='1'">部分核销</p>
+														<<p class="form-control-static"  ng-if="memoRecord.status=='0'||memoRecord.status==undefined">待核销</p>
+														<p class="form-control-static"   ng-if="memoRecord.status=='2'">已完成</p>
+														<p class="form-control-static"   ng-if="memoRecord.status=='1'">部分核销</p>
 													</div>
 												</div>
 											</div>

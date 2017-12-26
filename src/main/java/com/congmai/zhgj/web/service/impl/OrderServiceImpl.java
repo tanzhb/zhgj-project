@@ -20,6 +20,7 @@ import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DemandPlanMapper;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.dao.MemoRecordMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.dao.PaymentRecordMapper;
@@ -43,6 +44,8 @@ import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MemoRecord;
+import com.congmai.zhgj.web.model.MemoRecordExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -111,6 +114,9 @@ public class OrderServiceImpl implements OrderService {
   	
   	@Resource
   	private 	StockInOutRecordMapper     stockInOutRecordMapper;
+	@Resource
+  	private 	MemoRecordMapper     memoRecordMapper;
+  	
   	
   	
   	
@@ -432,8 +438,19 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 			if(CollectionUtils.isEmpty(list)){
 				flag=false;
 			}
+		}else if("payOrReceiveMemo".equals(codeType)){//收付款水单
+			MemoRecordExample  mre=new MemoRecordExample();
+			com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andMemoNumEqualTo(num);
+			if(!StringUtils.isEmpty(serialNum)){
+				c.andSerialNumNotEqualTo(serialNum);
+			}
+			List<MemoRecord>list=memoRecordMapper.selectByExample(mre);
+			if(CollectionUtils.isEmpty(list)){
+				flag=false;
+			}
 		}
-		
 		return flag;
 	}
 
