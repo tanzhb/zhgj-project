@@ -947,6 +947,7 @@
 														<td  style="text-align: center" ng-if="paymentRecord.status=='2'">核销状态:已完成 </td>
 														<td></td>
 														<td></td>
+														<td></td>
 													</tr>
 												</tfoot>
 				</table>

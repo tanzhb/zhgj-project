@@ -84,8 +84,10 @@
 															name="currency"
 															ng-model="memoRecord.currency">
 															<option value="">币种</option>
-															<option value="USD">USD</option>
-															<option value="RMB">RMB</option>
+															 <option value="人民币" >人民币</option>
+                                            				<option value="美元" >美元</option>
+                                            				<option value="欧元" >欧元</option>
+                                            				<option value="英镑" >英镑</option>
 														</select>
 														<p class="form-control-static" ng-show="span">{{memoRecord.currency}}</p>
 														<div class="form-control-focus"></div>
@@ -195,12 +197,15 @@
 													<label class="control-label bold">收款账号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control"  readonly   ng-if="showSXf=='1'"
+													<input type="text" class="form-control"  
+															name="accountNumber" ng-model="memoRecord.accountNumber"
+															ng-show="input" />
+														<!-- <input type="text" class="form-control"  readonly   ng-if="showSXf=='1'"
 															name="accountNumber" ng-model="memoRecord.accountNumber"
 															ng-show="input" />
 															<input type="text" class="form-control"    ng-if="showSXf!='1'"
 															name="accountNumber1" ng-model="memoRecord.accountNumber"
-															ng-show="input" />
+															ng-show="input" /> -->
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{memoRecord.accountNumber}}</p>
 													</div>
@@ -213,9 +218,11 @@
 													<label class="control-label bold">户名<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" class="form-control" name="accountName"  ng-if="showSXf=='1'"
+														<!-- <input type="text" class="form-control" name="accountName"  ng-if="showSXf=='1'"
 															ng-model="memoRecord.accountName" ng-show="input"  readonly/>
 															<input type="text" class="form-control" name="accountName1"  ng-if="showSXf!='1'"
+															ng-model="memoRecord.accountName" ng-show="input"  /> -->
+															<input type="text" class="form-control" name="accountName"  
 															ng-model="memoRecord.accountName" ng-show="input"  />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">{{memoRecord.accountName}}</p>
