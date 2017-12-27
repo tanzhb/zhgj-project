@@ -934,7 +934,7 @@
 					<tfoot>
 													<tr>
 														<td></td>
-														<td style="text-align: center">收款单金额:{{calcTotalData()}} {{paymentRecord.applyPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">应收账单金额:{{calcTotalData()}} {{paymentRecord.applyPaymentAmount|currency:''}}</td>
 														<td style="text-align: center">已核销金额:{{totalPaymentAmount|currency:''}}</td>
 														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount|currency:''}}</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='0'">核销状态:待核销</td>
