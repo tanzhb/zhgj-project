@@ -12,7 +12,7 @@
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">应收信息</a></li>
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
-							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
+							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a> -->
 							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a>
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
@@ -31,8 +31,8 @@
 											class="btn green  btn-circle  btn-sm" ng-show="inputEdit">
 											<i class="fa fa-save"></i> 编辑
 										</button> -->
-										<button type="submit" ng-click="verificateInfo('receive')"
-											class="btn green  btn-circle  btn-sm" ng-show="inputEdit">
+										<button type="submit" ng-click="verificateInfo()"
+											class="btn green  btn-circle  btn-sm" ng-show="span"   ng-if="paymentRecord.status!='2'">
 											<i class="fa fa-save"></i> 核销
 										</button>
 										<button ng-click="goBack()" type="button"
@@ -73,7 +73,7 @@
 														<div class="input-group" data-target="#basicMaterielInfo"
 															data-toggle="modal" ng-click="selectMateriel()"
 															onclick="return false;">
-															<input id="orderSerial" name="orderNum" type="text" ng-show="input"
+															<input id="orderNum" name="orderNum" type="text" ng-show="input"
 																class="form-control" ng-model="saleOrder.orderNum"
 																readonly="readonly"> <span
 																class="input-group-btn" ng-show="input" style="vertical-align: top;">
@@ -83,7 +83,6 @@
 															</span>
 															<p class="form-control-static" ng-show="span">{{paymentRecord.orderNum}}</p>
 														</div>
-														<input type="text" ng-model="orderSerial" ng-hide="true" />
 													</div>
 												</div>
 											</div>
@@ -362,8 +361,7 @@
 
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">申请部门<span
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">申请部门</label>
 													<div class="">
 														<input type="text" class="form-control" name="applyDept"
 															ng-model="paymentRecord.applyDept" ng-show="input"/>
@@ -935,11 +933,11 @@
 						<tr
 							ng-repeat="verificationRecord in dispalyVerificationRecord  track by $index">
 							<td style="text-align: center">{{verificationRecord.memoRecord.memoNum}}</td>
-							<td style="text-align: center">{{verificationRecord.memoRecord.moneyAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.moneyAmount|currency:''}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.currency}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.paymentStyle}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.paymentDate}}</td>
-							<td style="text-align: center">{{verificationRecord.moneyAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.moneyAmount|currency:''}}</td>
 							<td  style="text-align: center">{{verificationRecord.createTime}}</td>
 							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='2'">已完成</td>
 							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='1'">部分核销</td>
@@ -952,9 +950,9 @@
 					<tfoot>
 													<tr>
 														<td></td>
-														<td style="text-align: center">收款单金额:{{paymentRecord.applyPaymentAmount}}</td>
-														<td style="text-align: center">已核销金额:{{totalPaymentAmount}}</td>
-														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount}}</td>
+														<td style="text-align: center">收款单金额:{{paymentRecord.applyPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">已核销金额:{{totalPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount|currency:''}}</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='0'">核销状态:待核销</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='1'">核销状态:部分核销</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='2'">核销状态:已完成 </td>

@@ -23,13 +23,9 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
-										<button type="submit" ng-click="saveBasicInfo('receive')"
-											class="btn green  btn-circle  btn-sm" ng-show="input">
-											<i class="fa fa-save"></i> 保存
-										</button>
-										<button ng-click="goBack()" type="button"
-											class="btn defualt  btn-circle  btn-sm">
-											<i class="fa fa-undo"></i> 取消
+										<button   type="button" ng-click="verificateInfo()" 
+											class="btn blue btn-sm btn-circle"  ng-show="span"  ng-if="paymentRecord.status!='2'">
+											<i class="fa fa-plus"></i>核销
 										</button>
 									</div>
 								</div>
@@ -397,7 +393,9 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.status}}</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='0'">待核销</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='2'">已完成</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='1'">部分核销</p>
 													</div>
 												</div>
 											</div>
@@ -547,9 +545,9 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='0'">待核销</p>
-														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='2'">已完成</p>
-														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='1'">部分核销</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='0'">待核销</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='2'">已完成</p>
+														<p class="form-control-static"  ng-if="paymentRecord.status=='1'">部分核销</p>
 													</div>
 												</div>
 											</div>
@@ -919,11 +917,11 @@
 						<tr
 							ng-repeat="verificationRecord in dispalyVerificationRecord  track by $index">
 							<td style="text-align: center">{{verificationRecord.memoRecord.memoNum}}</td>
-							<td style="text-align: center">{{verificationRecord.memoRecord.moneyAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.memoRecord.moneyAmount|currency:''}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.currency}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.paymentStyle}}</td>
 							<td style="text-align: center">{{verificationRecord.memoRecord.paymentDate}}</td>
-							<td style="text-align: center">{{verificationRecord.moneyAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.moneyAmount|currency:''}}</td>
 							<td  style="text-align: center">{{verificationRecord.createTime}}</td>
 							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='2'">已完成</td>
 							<td style="text-align: center" ng-if="verificationRecord.memoRecord.status=='1'">部分核销</td>
@@ -936,9 +934,9 @@
 					<tfoot>
 													<tr>
 														<td></td>
-														<td style="text-align: center">收款单金额:{{calcTotalData()}} {{paymentRecord.applyPaymentAmount}}</td>
-														<td style="text-align: center">已核销金额:{{totalPaymentAmount}}</td>
-														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount}}</td>
+														<td style="text-align: center">收款单金额:{{calcTotalData()}} {{paymentRecord.applyPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">已核销金额:{{totalPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">未核销金额:{{paymentRecord.applyPaymentAmount-paymentRecord.paymentAmount|currency:''}}</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='0'">核销状态:待核销</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='1'">核销状态:部分核销</td>
 														<td  style="text-align: center" ng-if="paymentRecord.status=='2'">核销状态:已完成 </td>
@@ -1181,6 +1179,7 @@
 		</div>
 	</div>
 </div>
+<jsp:include page="selectReceiveMemo.jsp"></jsp:include>
 <script type="text/javascript">
 	$('#playArrivalDate').datepicker({
 		rtl : App.isRTL(),

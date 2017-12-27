@@ -3268,6 +3268,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3299,6 +3300,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3330,6 +3332,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3362,6 +3365,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3394,6 +3398,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3426,6 +3431,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							    'assets/apps/scripts/angular-file-upload.min.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js',
 				
@@ -3468,6 +3474,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3508,8 +3515,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			    'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
 				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3550,6 +3559,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 			    'assets/apps/controllers/GatheringMoneyController.js',
+			    'assets/apps/service/ReceiveMemoService.js',
 			    'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
@@ -3590,6 +3600,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/service/ReceiveMemoService.js',
 				  'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'

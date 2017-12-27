@@ -305,9 +305,9 @@
 							ng-repeat="verificationRecord in dispalyVerificationRecord  track by $index">
 							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentNum}}</td>
 							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentType}}</td>
-							<td style="text-align: center">{{verificationRecord.paymentRecord.applyPaymentAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.paymentRecord.applyPaymentAmount|currency:''}}</td>
 							<td style="text-align: center">{{verificationRecord.paymentRecord.playPaymentDate==null?verificationRecord.paymentRecord.applyDate:verificationRecord.paymentRecord.playPaymentDate}}</td>
-							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentAmount}}</td>
+							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentAmount|currency:''}}</td>
 							<td  style="text-align: center">{{verificationRecord.paymentRecord.paymentDate}}</td>
 							<td style="text-align: center" ng-if="verificationRecord.paymentRecord.status=='2'">已完成</td>
 							<td style="text-align: center" ng-if="verificationRecord.paymentRecord.status!='2'">部分完成</td>
@@ -320,9 +320,9 @@
 					<tfoot>
 													<tr>
 														<td></td>
-														<td style="text-align: center">收款水单金额:{{calcTotalData()}} {{memoRecord.moneyAmount}}</td>
-														<td style="text-align: center">已核销金额:{{totalPaymentAmount}}</td>
-														<td style="text-align: center">水单余额:{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount}}</td>
+														<td style="text-align: center">收款水单金额:{{calcTotalData()}} {{memoRecord.moneyAmount|currency:''}}</td>
+														<td style="text-align: center">已核销金额:{{totalPaymentAmount|currency:''}}</td>
+														<td style="text-align: center">水单余额:{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount|currency:''}}</td>
 														<td  style="text-align: center" ng-if="memoRecord.status=='0'">核销状态:待核销</td>
 														<td  style="text-align: center" ng-if="memoRecord.status=='1'">核销状态:部分核销</td>
 														<td  style="text-align: center" ng-if="memoRecord.status=='2'">核销状态:已完成 </td>

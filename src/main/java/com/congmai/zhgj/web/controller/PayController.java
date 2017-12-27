@@ -861,7 +861,8 @@ public class PayController {
 					c.setQgOrBgNum(customsForm.getCustomsFormNum());
 					c.setAddedTax(customsForm.getAddedTax());
 					c.setCustomsAmount(customsForm.getCustomsAmount());
-					c.setRate(customsForm.getOrderInfo().getRate());
+					OrderInfo o=orderService.selectById(c.getOrderSerial());
+					c.setRate(o.getRate());
 				}
 				map.put("paymentRecord",c);
 				//获取核销记录

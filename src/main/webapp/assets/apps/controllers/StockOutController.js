@@ -178,6 +178,13 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
     				//$scope.record.warehosueCount = data.data.length;
         			countWarehouseAndPosition();
         			//$scope.deliver.materielCount = data.orderMateriel.length;
+        			var  array=new Array();
+        			for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){
+        				if($scope.takeDeliveryMateriels[i].deliverCount!=0){
+        					array.push($scope.takeDeliveryMateriels[i]);
+        				}
+        			}
+        			$scope.takeDeliveryMateriels =array;
         			var totalOrderCount=0, totalDeliveryCount=0;
 	        		var  totalQualifiedCount=0,totalStockOutCount=0;
 	        		for(var i in $scope.takeDeliveryMateriels ){
