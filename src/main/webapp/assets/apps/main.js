@@ -4761,7 +4761,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a>新增付款水单</a></li>";					 
-			   }else if('viewPayMemo' == toState.name){//查看付款水单
+			   }else if('viewMemoPay' == toState.name){//查看付款水单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
