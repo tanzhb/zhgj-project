@@ -706,7 +706,7 @@ public class PageController {
      */
     @RequestMapping("/viewReceiveMemo")
     public String viewReceiveMemo() {
-        return "receiveMemo/viewReceiveMemo";
+        return "receivePayMemo/viewReceiveMemo";
     }
     /**
      * 添加/修改收款水单页面
@@ -714,7 +714,7 @@ public class PageController {
      */
     @RequestMapping("/addReceiveMemo")
     public String addReceiveMemo() {
-        return "receiveMemo/addReceiveMemo";
+        return "receivePayMemo/addReceiveMemo";
     }
     /**
      * 收款水单列表页面
@@ -722,6 +722,30 @@ public class PageController {
      */
     @RequestMapping("/receiveMemo")
     public String receiveMemoRecord() {
-        return "receiveMemo/receiveMemoRecord";
+        return "receivePayMemo/receiveMemoRecord";
+    }
+    /**
+     * 付款水单详情页面
+     * @return 付款水单详情页面url
+     */
+    @RequestMapping("/viewMemoPay")
+    public String viewPayMemo() {
+        return "receivePayMemo/viewMemoPay";
+    }
+    /**
+     * 添加/修改付款水单页面
+     * @return 添加/修改付款水单页面url
+     */
+    @RequestMapping("/addPayMemo")
+    public String addPayMemo() {
+        return "receivePayMemo/addPayMemo";
+    }
+    /**
+     * 付款水单列表页面
+     * @return 付款水单列表页面url
+     */
+    @RequestMapping("/payMemo")
+    public String payMemoRecord() {
+        return "receivePayMemo/payMemoRecord";
     }
 }

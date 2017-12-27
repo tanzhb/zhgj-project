@@ -3247,7 +3247,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         .state('addPay', {
-            url: "/addPay:serialNum",
+            url: "/addPay?:serialNum",
             templateUrl: "rest/page/addPay",
             data: {pageTitle: '新增付款'},
             controller: "PayController",
@@ -3268,6 +3268,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3277,7 +3278,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('viewPay', {
-            url: "/viewPay:serialNum",
+            url: "/viewPay?:serialNum",
             templateUrl: "rest/page/viewPay",
             data: {pageTitle: '付款详情'},
             controller: "PayController",
@@ -3299,6 +3300,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3308,7 +3310,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('applyPay', {
-            url: "/applyPay:serialNum",
+            url: "/applyPay?:serialNum",
             templateUrl: "rest/page/applyPay",
             data: {pageTitle: '应付款申请'},
             controller: "PayController",
@@ -3330,6 +3332,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3362,6 +3365,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3394,6 +3398,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3426,6 +3431,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							    'assets/apps/scripts/angular-file-upload.min.js',
 								'assets/apps/controllers/PayController.js',
 								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js',
 				
@@ -3468,6 +3474,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
 				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3508,8 +3515,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			    'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
 				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3550,6 +3559,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 			    'assets/apps/controllers/GatheringMoneyController.js',
+			    'assets/apps/service/ReceiveMemoService.js',
 			    'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
@@ -3590,6 +3600,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/service/ReceiveMemoService.js',
 				  'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
@@ -3818,7 +3829,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
          .state('addReceiveMemo', {
-            url: "/addReceiveMemo:serialNum",
+            url: "/addReceiveMemo?:serialNum",
             templateUrl: "rest/page/addReceiveMemo",
             data: {pageTitle: '新增收款水单'},
             controller: "ReceiveMemoController",
@@ -3915,7 +3926,102 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+          .state('addPayMemo', {
+            url: "/addPayMemo?:serialNum",
+            templateUrl: "rest/page/addPayMemo",
+            data: {pageTitle: '新增付款水单'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         
+        .state('payMemo', {
+            url: "/payMemo",
+            templateUrl: "rest/page/payMemo",
+            data: {pageTitle: '付款水单列表'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+			    'assets/apps/controllers/ReceiveMemoController.js',
+			    'assets/apps/service/CommonService.js',
+			    'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('viewMemoPay', {
+            url: "/viewMemoPay?:serialNum&:type",
+            templateUrl: "rest/page/viewMemoPay",
+            data: {pageTitle: '付款水单详情'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         }]);
 
 
@@ -4646,6 +4752,20 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a ui-sref='receiveMemo'>收款水单</a> <i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看收款水单</a></li>";					 
+			   }else if('payMemo' == toState.name){//付款水单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>付款水单</a></li>";				   
+			   }else if('addPayMemo' == toState.name){//新增付款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增付款水单</a></li>";					 
+			   }else if('viewMemoPay' == toState.name){//查看付款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看付款水单</a></li>";					 
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

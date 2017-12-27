@@ -48,8 +48,8 @@
 				<div class="portlet light ">
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
-                      <!--  <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="delivery.status=='0'||delivery.status==undefined">
-                              <i class="fa fa-check"></i> 确认提货 </button> -->
+                       <button class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="deliver.status=='0'||deliver.status==undefined">
+                              <i class="fa fa-check"></i> 确认提货 </button>
                               <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
                               <i class="fa fa-check"></i> 保存 </button>
                               <button ng-click="editDeliveryInfo()" type="button"   ng-show="deliverView"   class="btn purple  btn-circle  btn-sm">

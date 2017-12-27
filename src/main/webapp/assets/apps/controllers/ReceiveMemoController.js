@@ -9,12 +9,15 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
 
-		loadMainTable();
-
 		//控制输入框和span标签的显示
 		validateFileInit();//file表单初始化
+		if($state.current.name=="receiveMemo"){
+			loadMainTable('receive');
+		}else if($state.current.name=="payMemo"){
+			loadMainTable('pay');
+		}
 		
-	if($state.current.name=="addReceiveMemo"){
+	if($state.current.name=="addReceiveMemo"||$state.current.name=="addPayMemo"){
 		$scope.span =false;
 		$scope.input = true;
 		$scope.inputFile=true;
@@ -22,17 +25,30 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		 if($stateParams.serialNum){
 				$scope.getMemoInfo($stateParams.serialNum);	
 			    }else{
-	$rootScope.setNumCode("MO",function(newCode){
-		$scope.memoRecord={};
-			$scope.memoRecord.memoNum= newCode;//收款水单号
-			$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
-			//getCurrentUser();
-		});
-			    }
-		 initCustomers();
-		 
+			    	if($state.current.name=="addReceiveMemo"){
+			    		$rootScope.setNumCode("RM",function(newCode){
+			    			$scope.memoRecord={};
+			    				$scope.memoRecord.memoNum= newCode;//收款水单号
+			    				$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
+			    				//getCurrentUser();
+			    			});
+			    	}else{
+			    		$rootScope.setNumCode("PM",function(newCode){
+			    			$scope.memoRecord={};
+			    				$scope.memoRecord.memoNum= newCode;//付款水单号
+			    				$scope.memoRecord.paymentDate= $filter('date')(new Date(), 'yyyy-MM-dd');//计划收款日期
+			    				//getCurrentUser();
+			    			});
+			    	}
 	
-	}else if($state.current.name=="viewReceiveMemo"){
+			    }
+		 if($state.current.name=="addReceiveMemo"){
+			 initCustomers();
+		 }else{
+			 initSuppliers();
+		 }
+	
+	}else if($state.current.name=="viewReceiveMemo"||$state.current.name=="viewMemoPay"){
 		$scope.getMemoInfo($stateParams.serialNum);
 		if($stateParams.type!=undefined){//显示核销按钮
 			$scope.inputEdit=true;
@@ -75,7 +91,25 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
         		//调用承诺接口reject();
         	});
 	}
-	
+	/**
+	 * 加载采购商(付款方)数据
+	 */
+	var initSuppliers = function(){
+		var promise = orderService.initSuppliers();
+        	promise.then(function(data){
+        		$scope.companyList = data.data;
+        		setTimeout(function () {
+        			$("#buyComId").selectpicker({
+                        showSubtext: true
+                    });
+        			$('#buyComId').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        		
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
+	}
 	$scope.getBankInfo=function(){
 		var promise = orderService.initComFinances($scope.memoRecord.buyComId);
     	promise.then(function(data){
@@ -91,6 +125,9 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
     	},function(data){
     		//调用承诺接口reject();
     	});
+	}
+	$scope.jumpToUrl=function(judgeString){
+		$state.go(judgeString);
 	}
 	$scope.changeMoney=function(){
 		$scope.memoRecord.verificationMoneyAmount=0;
@@ -116,7 +153,42 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
    	   }*/
 			 window.location.href= $rootScope.basePath+"/rest/fileOperate/downloadFile?fileName="+encodeURI(encodeURI(name));
      };
-     
+ 	$scope.showSX=function(){
+ 		if($scope.showSXf!='1'){
+			$scope.showSXf='1';
+		}else{
+			$scope.showSXf='0';
+		}
+		/*debugger;
+		if(judgeString=='s'){
+			if($scope.saleOrder==undefined){
+				toastr.warning("请先选择销售订单");
+				return;
+			}
+			if($scope.companyAddressess.length==0){
+				toastr.warning("该企业无联系地址");
+				return;
+			}
+			if($scope.showSXs!='1'){
+				$scope.showSXs='1';
+			}else{
+				$scope.showSXs='0';
+			}
+			$scope.takeDeliveryWarehouseAddress='';
+		}else{
+			if($scope.companyAddressesf.length==0){
+				toastr.warning("该企业无联系地址");
+			return;
+			}
+			if($scope.showSXf!='1'){
+				$scope.showSXf='1';
+			}else{
+				$scope.showSXf='0';
+			}
+			$scope.warehouseAddress='';
+		}*/
+	
+	}
 	//修改
 	$scope.jumpToEdit = function() {
 		var ids = '';
@@ -161,7 +233,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
     	
     }; 
     $scope.calcTotalData=function() {//统计核算记录详情信息
-    	if($scope.verificationList.length>0){
+    	if($scope.verificationList!=undefined&&$scope.verificationList.length>0){
     		var totalPaymentAmount=0;
     		for(var i=0;i<$scope.verificationList.length;i++){
     			totalPaymentAmount+=Number($scope.verificationList[i].paymentRecord.paymentAmount);
@@ -563,11 +635,41 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		if(!$('#form_sample_1').valid()){
 			return;
 		}
-			 $rootScope.judgeIsExist("payOrReceive",$scope.memoRecord.memoNum, $scope.memoRecord.serialNum,function(result){
+		if($scope.showSXf =='1'){
+			if(isNull($scope.memoRecord.bank)){
+				toastr.error('银行不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountNumber']").val())){
+				toastr.error('账号不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountName']").val())){
+				toastr.error('户名不能为空！');
+    			return;
+			}
+		}
+		if($scope.showSXf!='1'){
+			if(isNull($scope.memoRecord.bank)){
+				toastr.error('银行不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountNumber1']").val())){
+				toastr.error('账号不能为空！');
+    			return;
+			}
+			if(isNull($("input[name='accountName1']").val())){
+				toastr.error('户名不能为空！');
+    			return;
+			}
+		}
+			 $rootScope.judgeIsExist("payOrReceiveMemo",$scope.memoRecord.memoNum, $scope.memoRecord.serialNum,function(result){
 	    			var 	isExist = result;
 	    		if(isExist){
 	    			 if(judgeString=='receive'){
 	    				 toastr.error('收款水单号重复！');
+	    			}else if(judgeString=='pay'){
+	    				 toastr.error('付款水单号重复！');
 	    			}
 	    			return;
 	    		}else{
@@ -577,6 +679,15 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		    	        var file = document.querySelector('input[name="file"]').files[0];
 		    	        fd.append("files", file);
 		    			}
+	    			if($scope.showSXf!=1){
+	    				$scope.memoRecord.accountName=$("input[name='accountName1']").val();
+	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber1']").val();
+	    				$scope.memoRecord.bank=$("input[name='bank1']").val();
+	    			}else if($scope.showSXf==1){
+	    				$scope.memoRecord.accountName=$("input[name='accountName']").val();
+	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber']").val();
+	    				$scope.memoRecord.bank=$("select[name='bank']").val()
+	    			}
 	    			fd.append('memoNum',$scope.memoRecord.memoNum); 
 	    			fd.append('moneyAmount',$scope.memoRecord.moneyAmount);
 	    			if($scope.memoRecord.serialNum!=undefined){
@@ -585,7 +696,11 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	    			fd.append('currency',$scope.memoRecord.currency); 
 	    			fd.append('paymentStyle',$scope.memoRecord.paymentStyle); 
 	    			fd.append('paymentDate',$scope.memoRecord.paymentDate); 
-	    			fd.append('buyComId',$scope.memoRecord.buyComId);
+	    			if(judgeString=='receive'){
+	    				fd.append('buyComId',$scope.memoRecord.buyComId);
+	    			}else  if(judgeString=='pay'){
+	    				fd.append('supplyComId',$scope.memoRecord.buyComId);	
+	    			}
 	    			fd.append('bank',$scope.memoRecord.bank);
 	    			fd.append('accountName',$scope.memoRecord.accountName);
 	    			fd.append('accountNumber',$scope.memoRecord.accountNumber);
@@ -612,8 +727,13 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	    		
 	    		});
 		}
-	$scope.jumpToReceiveMemoInfo  = function(serialNum) {
-    	$state.go('viewReceiveMemo',{serialNum:serialNum});
+	$scope.jumpToMemoInfo  = function(serialNum,judgeString) {
+		if(judgeString=='receive'){
+			$state.go('viewReceiveMemo',{serialNum:serialNum});
+		}else{
+			$state.go('viewMemoPay',{serialNum:serialNum});
+		}
+    	
     }; 
     $scope.goVerificate= function(serialNum) {//去核销
     	$state.go('viewReceiveMemo',{serialNum:serialNum,type:'verificate'});
@@ -627,12 +747,17 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	}
 
 	//收款列表
-	var table;
-	var loadMainTable = function() {
+	var table,tableAjaxUrl;
+	var loadMainTable = function(judgeString) {
 		var a = 0;
 		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
 			$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
-
+			if(judgeString=='receive'){
+				tableAjaxUrl="rest/pay/findReceiveMemoRecord";
+			}else if(judgeString=='pay'){
+				tableAjaxUrl="rest/pay/findPayMemoRecord";
+			}
+			
 			table = $("#sample_2").DataTable(
 					{
 						language : {
@@ -664,7 +789,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						              pageLength : 10,// 每页显示数量
 						              processing : true,// loading等待框
 						              // serverSide: true,
-						              ajax: "rest/pay/findReceiveMemoRecord",//加载数据中user表数据
+						              ajax: tableAjaxUrl,//加载数据中user表数据
 						              "aoColumns": [
 						                            { mData: 'serialNum'},
 						                            { mData: 'memoNum' },//paymentType
@@ -707,7 +832,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            		return '<a  data-toggle="modal" ng-click="jumpToReceiveMemoInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+						                            		return '<a  data-toggle="modal" ng-click="jumpToMemoInfo(\''+row.serialNum+'\',\''+judgeString+'\')" ">'+data+'</a>';
 						                            	},
 						                            	"createdCell": function (td, cellData, rowData, row, col) {
 						                            		$compile(td)($scope);
@@ -950,13 +1075,13 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 			focusInvalid: !1,
 			ignore: "",
 			messages: {
-				memoNum:{required:"收款水单号不能为空！"},
-				moneyAmount:{required:"收款金额不能为空！",number:"格式不正确!",minNumber:"最小值为0.01"},
+				memoNum:{required:"收付款水单号不能为空！"},
+				moneyAmount:{required:"收付款金额不能为空！",number:"格式不正确!",minNumber:"最小值为0.01"},
 				currency:{required:"币种不能为空！"},
 				paymentType:{required:"支付方式不能为空！"},
-				paymentDate:{required:"收款日期不能为空！"},
-				buyComId:{required:"收款方不能为空！"},
-				file:{required:"付款凭证不能为空！"}
+				paymentDate:{required:"收付款日期不能为空！"},
+				buyComId:{required:"收付款方不能为空！"},
+				file:{required:"支付凭证不能为空！"}
 			},
 			rules: {
 				name: {
@@ -1016,8 +1141,12 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		console.log($scope.orderSerial);
 	}
 	$scope.verificateInfo=function(judgeString){
-		$('#receivePaymentRecordInfo').modal('show');//显示弹框
-		loadVerificateTable();
+		if(judgeString=='receive'){
+			$('#receivePaymentRecordInfo').modal('show');//显示弹框
+		}else if(judgeString=='pay'){
+			$('#payPaymentRecordInfo').modal('show');//显示弹框
+		}
+		loadVerificateTable(judgeString);
 	}
 	 /**
 		 * 遍历checkbox计算收款单金额(当前收款单未核销总金额)
@@ -1031,19 +1160,25 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 			 }
 			 $scope.totalUnVerificateCount=count;
 		}
-	 var  verificateTable,tableUrl;// 核销弹框
-      var loadVerificateTable = function() {
-    	  var buyComId=$scope.memoRecord.buyComId;
+	 var  verificateTable,tableUrl,comId,tableId;// 核销弹框
+      var loadVerificateTable = function(judgeString) {
+    	  if(judgeString=='receive'){
+    		  comId=$scope.memoRecord.buyComId;
+    		  tableId="select_sample_receivePaymentRecord";
+    	  }else{
+    		  comId=$scope.memoRecord.supplyComId;  
+    		  tableId="select_sample_payPaymentRecord";
+    	  }
     	  var  remainMoneyAmount=Number($scope.memoRecord.moneyAmount)-Number($scope.memoRecord.verificationMoneyAmount);//水单余额
     	  $scope.remainMoneyAmount=remainMoneyAmount;
-    	  var type='receive';
-    	  tableUrl="rest/pay/paymentRecordList?comId="+buyComId+"&type="+type;
+    	  tableUrl="rest/pay/paymentRecordList?comId="+comId+"&type="+judgeString;
                a = 0;
                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
               if(verificateTable!=undefined){
             	  verificateTable.destroy(); 
 		 	    	 }
-              verificateTable = $("#select_sample_receivePaymentRecord")
+            
+              verificateTable = $("#"+tableId)
    			.DataTable({
                    language: {
                        aria: {

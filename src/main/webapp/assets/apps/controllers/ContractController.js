@@ -262,7 +262,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 				//	$scope.contractVO.secondParty=$stateParams.comId;
 							$scope.contractVO.secondParty=data.comName;
 						}else if($stateParams.type=="sale"){
-							$scope.contractVO.firstParty=$stateParams.comId;
+							//$scope.contractVO.firstParty=$stateParams.comId;
+							$scope.contractVO.firstParty=data.comName;
 							$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
 						}
 						

@@ -307,9 +307,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					
 					$scope.deliver.orderNum = order.orderNum;
-					
-        			$scope.orderMateriels = data.orderMateriel;
-        			$scope.deliver.materielCount = data.orderMateriel.length;
+					var array=new Array();
+					for(var i=0;i< data.orderMateriel.length;i++){
+						if(data.orderMateriel[i].amount-data.orderMateriel[i].deliveredCount!=0){
+							array.push(data.orderMateriel[i]);
+						}
+					}
+        			$scope.orderMateriels = array;
+        			$scope.deliver.materielCount = array.length;
         		},function(data){
         			//调用承诺接口reject();
         		});

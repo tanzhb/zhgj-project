@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Resource;
+import javax.print.DocFlavor.STRING;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -65,6 +66,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.CustomsForm;
@@ -81,6 +83,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.VerificationRecord;
+import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
@@ -137,6 +140,8 @@ public class PayController {
 	private CompanyFinanceService companyFinanceService;
 	@Autowired
 	private CustomsFormService customsFormService;
+	@Autowired
+	private CompanyContactService companyContactService;
 	@Autowired  
 	Environment env;
 	/**
@@ -359,6 +364,15 @@ public class PayController {
 		String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
 		List<CompanyFinance>comFinances=companyFinanceService.selectListByComId(comId);
 		map.put("comFinances", comFinances);
+		List<CompanyContact>comContacts=null;
+		if(StringUtil.isEmpty(orderInfo.getBuyComId())){
+			comContacts=companyContactService.selectListByComId(orderInfo.getSupplyComId());
+			map.put("comContacts", comContacts);
+		}else{
+			comContacts=companyContactService.selectListByComId(orderInfo.getBuyComId());
+			map.put("comContacts", comContacts);
+		}
+		
 		String paiedMoney = payService.selectPaiedMoney(serialNum);
 		orderInfo.setPaiedMoney(paiedMoney);
 		String billedMoney = payService.selectBilledMoney(serialNum);
@@ -847,7 +861,8 @@ public class PayController {
 					c.setQgOrBgNum(customsForm.getCustomsFormNum());
 					c.setAddedTax(customsForm.getAddedTax());
 					c.setCustomsAmount(customsForm.getCustomsAmount());
-					c.setRate(customsForm.getOrderInfo().getRate());
+					OrderInfo o=orderService.selectById(c.getOrderSerial());
+					c.setRate(o.getRate());
 				}
 				map.put("paymentRecord",c);
 				//获取核销记录

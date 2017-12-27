@@ -1,5 +1,5 @@
-angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScope','$scope','$http', 'settings', 'GatheringMoneyService','commonService','$state','$compile','$stateParams','$filter','FileUploader',
-                                                           function($rootScope,$scope,$http,settings,GatheringMoneyService,commonService,$state,$compile,$stateParams,$filter,FileUploader) {
+angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScope','$scope','$http', 'settings', 'ReceiveMemoService','GatheringMoneyService','commonService','$state','$compile','$stateParams','$filter','FileUploader',
+                                                           function($rootScope,$scope,$http,settings,ReceiveMemoService,GatheringMoneyService,commonService,$state,$compile,$stateParams,$filter,FileUploader) {
 	$scope.$on('$viewContentLoaded', function() {   
 		
 		App.initAjax();
@@ -123,8 +123,12 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
       		 );
     	
     }; 
+	$scope.verificateInfo=function(){
+			$('#receiveMemoInfo').modal('show');//显示弹框
+		loadVerificateTable('receive');
+	}
     $scope.calcTotalData=function() {//统计核算记录详情信息
-    	if($scope.verificationList.length>0){
+    	if($scope.verificationList!=undefined&&$scope.verificationList.length>0){
     		var totalPaymentAmount=0;
     		for(var i=0;i<$scope.verificationList.length;i++){
     			totalPaymentAmount+=Number($scope.verificationList[i].moneyAmount);
@@ -132,6 +136,248 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
     		$scope.totalPaymentAmount=totalPaymentAmount;
     }
   }
+    /**
+	 * 遍历checkbox计算收款单金额(当前收款水单余额总金额)
+	 */
+	function CalTotalUnVerificateCount(){
+		var inputs=verificateTable.$('input[type="checkbox"]');
+		var count=0;
+		 for(var i=0;i<inputs.length;i++){
+			  var input=inputs[i];
+			  count+=Number($(input).attr("name"));
+		 }
+		 $scope.totalUnVerificateCount=count;
+	}
+    
+	 var  verificateTable,tableUrl,comId,tableId;// 核销弹框
+     var loadVerificateTable = function(judgeString) {
+   		  comId=$scope.paymentRecord.buyComId;
+   		  tableId="select_sample_receiveMemo";
+   	  var  remainMoneyAmount=Number($scope.paymentRecord.applyPaymentAmount)-Number($scope.paymentRecord.paymentAmount);//应收款单余额
+   	  $scope.remainMoneyAmount=remainMoneyAmount;
+   	  tableUrl="rest/pay/memoRecordList?comId="+comId+"&type="+judgeString;
+              a = 0;
+              App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+             if(verificateTable!=undefined){
+           	  verificateTable.destroy(); 
+		 	    	 }
+           
+             verificateTable = $("#"+tableId)
+  			.DataTable({
+                  language: {
+                      aria: {
+                          sortAscending: ": 以升序排列此列",
+                          sortDescending: ": 以降序排列此列"
+                      },
+                      emptyTable: "空表",
+                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                      infoEmpty: "没有数据",
+                      //infoFiltered: "(filtered1 from _MAX_ total entries)",
+                      lengthMenu: "每页显示 _MENU_ 条数据",
+                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+                      zeroRecords: "抱歉， 没有找到！",
+                      paginate: {
+                          "sFirst": "首页",
+                          "sPrevious": "前一页",
+                          "sNext": "后一页",
+                          "sLast": "尾页"
+                       }
+                  },
+  /*                fixedHeader: {//固定表头、表底
+                      header: !0,
+                      footer: !0,
+                      headerOffset: a
+                  },*/
+                  order: [[1, "desc"]],//默认排序列及排序方式
+                  searching: true,//是否过滤检索
+                  ordering:  true,//是否排序
+                /* destroy:true,*/
+                  lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                  pageLength: 5,//每页显示数量
+                  processing: true,//loading等待框
+//                  serverSide: true,
+                  ajax: tableUrl,//加载数据中 
+                  "aoColumns": [
+                               { mData: 'serialNum' },
+                               { mData: 'memoNum' },
+                               { mData: 'moneyAmount' },
+                               { mData: 'paymentStyle' },
+                               { mData: 'paymentDate' },
+                               { mData: 'verificationMoneyAmount' },
+                               { mData: 'remainMoneyAmount' }
+                          ],
+                 'aoColumnDefs' : [ {
+  							'targets' : 0,
+  							'searchable' : false,
+  							'orderable' : false,
+  							
+  							'render' : function(data,
+  									type, row, meta) {
+  								var  unPaymentAmount;
+  								if(row.paymentAmount==null){
+									unPaymentAmount=Number(row.moneyAmount);
+								}else{
+									unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
+								}
+  									return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+	                                     '<input type="checkbox" data-check="false"  name="'+unPaymentAmount+'"       class="checkboxes" ng-click="showUnPaymentAmount(\''+row.serialNum+'\',\''+row.paymentAmount+'\',\''+unPaymentAmount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_receivePaymentRecord .checkboxes" />'+
+	                                     '<span></span></label>';
+  							},
+  							"createdCell": function (td, cellData, rowData, row, col) {
+  								 $compile(td)($scope);
+  						       }
+  						},{
+								'targets' : 2,
+								'render' : function(data,
+										type, row, meta) {
+									if(row.currency=='RMB'){
+	  									return  $filter('currency')(data,'￥');
+	  								}else if(row.currency=='USD'){
+	  									return $filter('currency')(data,'$'); 
+	  								}
+								}
+							},{
+								'targets' : 5,
+								'render' : function(data,
+										type, row, meta) {
+									if(row.currency=='RMB'){
+										return  $filter('currency')(Number(row.moneyAmount)-Number(data),'￥');
+	  								}else if(row.currency=='USD'){
+	  									return  $filter('currency')(Number(row.moneyAmount)-Number(data),'$');
+	  								}
+								}
+							},{
+								'targets' : 6,
+								'className' : 'dt-body-center',
+								'render' : function(data,
+										type, row, meta) {
+									var  unPaymentAmount;
+									if(row.verificationMoneyAmount==null){
+										unPaymentAmount=Number(row.moneyAmount);
+									}else{
+										unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
+									}// ng-init="unPaymentAmount'+row.serialNum+'=\''+unPaymentAmount+'\'" 
+									return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"  '+ 
+									 ' id="up'+row.serialNum+'" ng-model="unPaymentAmount'+row.serialNum+'"  ng-blur="judgeNumber(\''+remainMoneyAmount+'\',\''+unPaymentAmount+'\',\''+row.serialNum+'\')" />';
+									
+								},"createdCell": function (td, cellData, rowData, row, col) {
+									 $compile(td)($scope);
+							    }
+							}],
+							//stateSave:false,
+							"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+			                	  CalTotalUnVerificateCount();
+			                   }
+
+              });
+             $("#select_sample_receiveMemo").find(".group-checkable").change(function() {
+			        var e = jQuery(this).attr("data-set"),
+			        t = jQuery(this).is(":checked");
+			        jQuery(e).each(function() {
+			            t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+			        })
+			    }),
+			    $("#select_sample_receiveMemo").on("change", "tbody tr .checkboxes",
+			    function() {
+			        $(this).parents("tr").toggleClass("active")
+			    })
+       
+			   return verificateTable;
+             
+            
+          };
+  		$scope.showUnPaymentAmount=function(serialNum,paymentAmount){//选中checkbox显示输入框
+			var value;
+			if($scope.totalVerificateCount==undefined){
+				$scope.totalVerificateCount=0;
+			}else if($scope.totalVerificateCount>=$scope.remainMoneyAmount){
+				 toastr.warning("不需再选收款水单！");
+				 $("#"+serialNum).attr("checked",false);
+				 return;
+			}
+			if($("#"+serialNum).is(':checked')){
+				$("#up"+serialNum).css("border","1px solid");
+				$("#up"+serialNum).attr("readonly",false);
+			}else{
+				$("#up"+serialNum).css("border","none");
+				$("#up"+serialNum).attr("readonly",true);
+				value=$("#up"+serialNum).val();
+				$("#up"+serialNum).val(0);//重新置为0
+				$scope.totalVerificateCount=($scope.totalVerificateCount-Number(value));
+				/* toastr.warning("重新选择出库,数量为"+value+"!");*/
+				
+			}
+			//$scope.judgeNumber(stockCount,stockOutCount,serialNum);
+		}
+  		$scope.judgeNumber=function(remainMoneyAmount,unPaymentAmount,serialNum){
+			 var value=$("#up"+serialNum).val();//核销金额
+			 if(isNaN(value)||value<=0){
+				 toastr.warning("核销金额必须为大于0的数字！");
+				 return;
+			 }
+			 if(Number(value)>Number(unPaymentAmount)){
+				toastr.warning("当前核销金额不得大于水单余额！");
+				  $("#up"+serialNum).empty();
+				 $("#up"+serialNum).focus(); 
+				 return;
+			 }else if(Number(value)>Number(remainMoneyAmount)){
+				 toastr.warning("当前核销金额不得大于收款单余额！");
+				  $("#up"+serialNum).empty();
+				 $("#up"+serialNum).focus(); 
+				 return;
+			 }
+			 var checkboxs=$('input[class="checkboxes"]:checked');
+			 var count=0;
+			 for(var i=0;i<checkboxs.length;i++){
+				  var serialNum=$(checkboxs[i]).val();
+				  var value=$("#up"+serialNum).val();
+				  count=count+Number(value);//累加核销金额
+			 }
+			 $scope.totalVerificateCount=count;
+			 if(count>remainMoneyAmount){
+				 toastr.warning("当前核销总金额不得大于收款水单余额！");
+				 $("#up"+serialNum).empty();
+				 $("#up"+serialNum).focus(); 
+			 }
+		 }
+  	    /**
+	        * 确认核销
+	        */
+	       $scope.confirmVerificate= function(){
+	    	   var checkboxs=$('input[class="checkboxes"]:checked');
+				 if(checkboxs.length==0){
+					 toastr.warning("未勾选收款水单"); 
+					 return;
+				 }
+	    	   handle.confirm("确认核销吗？",function(){
+	    		   handle.blockUI();
+	        		var inputs=verificateTable.$('input[type="checkbox"]:checked');
+	        		var params = {};
+	        		params.verificationRecords = [];
+	        		var param;
+	        		for(var i=0;i<inputs.length;i++){
+	        			param={};
+	        			var input=inputs[i];
+	        			param.receiveMemoSerial=$(input).attr("id");//
+	        			param.paymentRecordSerial=$scope.paymentRecord.serialNum;
+	        			param.moneyAmount=$("#up"+$(input).attr("id")).val();
+	        			params.verificationRecords.push(param);
+	        		}
+	        		var promise = ReceiveMemoService.saveVerificateData(params);
+	        		promise.then(function(data){
+	        			toastr.success("确认核销成功");
+	        			handle.unblockUI();
+	        			$('#receiveMemoInfo').modal('hide');//隐藏弹框
+	        			setTimeout(function () {
+	        				 $state.go('gatheringMoneyRecord',{},{reload:true}); //返回列表
+		                }, 2000);
+		        		
+	 	            },function(data){
+	 	               //调用承诺接口reject();
+	 	            });
+	        		
+	        	});
+	       }
     /********************************核算记录模糊检索及分页 START *********************************/
 	 /** *************核算记录明细可检索化  start*************** */
 	 $scope.pageIndex = 1; //记录当前页
@@ -253,6 +499,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						$scope.isBG=data.createBG;
 						$scope.paymentRecord.orderDate=data.orderInfo.orderDate;
 						$scope.comFinances=data.comFinances//收付款信息
+						$scope.comContacts=data.comContacts//联系信息
 						$scope.paymentRecord.payee=data.orderInfo.buyName;
 					}else{
 						/*$scope.pay.orderNum=data.orderInfo.orderNum;
@@ -271,7 +518,14 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	};
 	
-	
+	$scope.changeContactValue=function(){//筛选联系人信息
+   		for(var i=0;i<$scope.comContacts.length;i++){
+   			if($scope.paymentRecord.contact==$scope.comContacts[i].contactName){
+   				$scope.paymentRecord.contactNum=$scope.comContacts[i].contactTel;
+   				return;
+   			}
+   		}
+   	}	
  	//选择支付节点赋值
    	$scope.selectPaymentNode=function(node){
 		var serialNum;
@@ -518,7 +772,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	  //********附件  end****************//
 
 	//添加收款
-	$scope.saveBasicInfo=function (){
+	$scope.saveBasicInfo=function (judgeString){
 		if($('#form_sample_1').valid()){
 			 $rootScope.judgeIsExist("payOrReceive",$scope.paymentRecord.paymentNum, $scope.paymentRecord.serialNum,function(result){
 	    			var 	isExist = result;
@@ -617,7 +871,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		window.location.href=$rootScope.basePath+"/rest/pay/exportGatheringMoney";
 		handle.unblockUI(); 
 	}
-
+	  $scope.goVerificate= function(serialNum) {//去核销
+	    	$state.go('viewGatheringMoney',{serialNum:serialNum});
+	    };
 	//收款列表
 	var table;
 	var loadMainTable = function() {
@@ -682,19 +938,16 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            			if(data=='0'){
 						                            				return '初始';
 						                            			}else if(data=='1'){
-						                            				return '已确认';
+						                            				return '部分核销';
 						                            			}else if(data=='2'){
-						                            				return '已核销';
+						                            				return '已完成';
 						                            			}
 						                            		}else{
 						                            			return "";
 						                            		}
 						                            	}
 						                            },
-						                            { mData: 'status',
-						                            	mRender:function(data){
-						                            		return "";
-						                            	}
+						                            { mData: 'status'
 						                            	},
 						                            ],
 						                            'aoColumnDefs': [ {
@@ -729,6 +982,21 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            		}
 						                            	},
 						                            	
+						                            } ,
+						                            {
+						                            	'targets' : 11,
+						                            	'className' : 'dt-body-center',
+						                            	'render' : function(data,
+						                            			type, row, meta) {
+						                            	if(row.status=='1'){
+						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+						                            		}else{
+						                            			return '';	
+						                            		}
+						                            	},
+						                            	"createdCell": function (td, cellData, rowData, row, col) {
+						                            		$compile(td)($scope);
+						                            	}
 						                            }
 						                            ]}).on('order.dt',
 						                            		function() {
@@ -1097,6 +1365,10 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		var e = $("#form_sample_1"),
 		r = $(".alert-danger", e),
 		i = $(".alert-success", e);
+		/*var flag=false;
+		if($scope.paymentRecord!=undefined||$scope.paymentRecord.paymentType=='报关'){
+			flag=true;
+		}*/
 		e.validate({
 			errorElement: "span",
 			errorClass: "help-block help-block-error",
@@ -1117,7 +1389,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 				applyDept:{required:"申请部门不能为空！"},
 				payee:{required:"收款方不能为空！"},
 				contact:{required:"收款方联系人不能为空,请选择！"},
-				qgOrBgNum:{required:"报关单号不能为空！"},
+				/*qgOrBgNum:{required:"报关单号不能为空！"},*/
 				contactNum:{required:"联系电话不能为空！",isPhone:"请正确填写您的联系电话！"},
 				bank:{required:"收款银行不能为空！"},
 				accountName:{required:"户名不能为空！"},
@@ -1144,9 +1416,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 					minlength: 6,
 					required: !0
 				},
-				qgOrBgNum:{
-					required:true,
-				},
+				/*qgOrBgNum:{
+					required:flag,
+				},*/
 				paymentNum:{required:true,
 					rangelength:[3,20]
 				},

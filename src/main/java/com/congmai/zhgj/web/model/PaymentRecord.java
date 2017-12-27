@@ -221,6 +221,7 @@ public class PaymentRecord extends BaseVO implements Serializable{
     
     
     private  List<CompanyFinance>comFinances;
+    private  List<CompanyContact>comContacts;
 
 	public String getBillType() {
 		return billType;
@@ -783,6 +784,14 @@ public class PaymentRecord extends BaseVO implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public List<CompanyContact> getComContacts() {
+		return comContacts;
+	}
+
+	public void setComContacts(List<CompanyContact> comContacts) {
+		this.comContacts = comContacts;
 	}
 	
 }

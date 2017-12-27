@@ -96,7 +96,7 @@
     <!--通过id查询收付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,a.buyComId,
+	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,a.orderSerial,a.supplyComId,a.buyComId,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,a.paymentAmount,a.paymentDate,
     a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId,a.billType,b.orderDate,a.accountPeriod,.b.orderAmount,b.orderNum,a.deliveryRate,
@@ -281,7 +281,7 @@
     m.currency, m.paymentDate, m.paymentStyle
 	FROM
 	memorecord m
-	WHERE m.delFlg='0' and a.status!=2
+	WHERE m.delFlg='0' and m.status!=2
 	<if test="type=='receive'">
 	and  m.buyComId=#{comId}
 	</if>
