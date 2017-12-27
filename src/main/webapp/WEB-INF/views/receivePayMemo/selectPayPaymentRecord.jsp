@@ -34,7 +34,7 @@
 	            <div class="modal-footer">
 					<button type="button" data-dismiss="modal"
 						class="btn dark btn-outline">取消</button>
-					<button type="button" ng-click="confirmVerificate()" class="btn green">确定核销
+					<button type="button" ng-click="confirmVerificate('pay')" class="btn green">确定核销
 						</button>
 				</div>
 			</div>

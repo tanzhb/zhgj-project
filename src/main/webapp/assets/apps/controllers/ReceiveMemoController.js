@@ -640,28 +640,28 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 				toastr.error('银行不能为空！');
     			return;
 			}
-			if(isNull($("input[name='accountNumber']").val())){
+			/*if(isNull($("input[name='accountNumber']").val())){
 				toastr.error('账号不能为空！');
     			return;
 			}
 			if(isNull($("input[name='accountName']").val())){
 				toastr.error('户名不能为空！');
     			return;
-			}
+			}*/
 		}
 		if($scope.showSXf!='1'){
 			if(isNull($scope.memoRecord.bank)){
 				toastr.error('银行不能为空！');
     			return;
 			}
-			if(isNull($("input[name='accountNumber1']").val())){
+			/*if(isNull($("input[name='accountNumber1']").val())){
 				toastr.error('账号不能为空！');
     			return;
 			}
 			if(isNull($("input[name='accountName1']").val())){
 				toastr.error('户名不能为空！');
     			return;
-			}
+			}*/
 		}
 			 $rootScope.judgeIsExist("payOrReceiveMemo",$scope.memoRecord.memoNum, $scope.memoRecord.serialNum,function(result){
 	    			var 	isExist = result;
@@ -735,8 +735,13 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		}
     	
     }; 
-    $scope.goVerificate= function(serialNum) {//去核销
-    	$state.go('viewReceiveMemo',{serialNum:serialNum,type:'verificate'});
+    $scope.goVerificate= function(serialNum,judgeString) {//去核销
+    	if(judgeString=='receive'){
+    		$state.go('viewReceiveMemo',{serialNum:serialNum});
+		}else{
+			$state.go('viewMemoPay',{serialNum:serialNum});
+		}
+    	
     };
     
 	//导出收款
@@ -843,9 +848,9 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            		if(row.currency=='USD'){
+						                            		if(row.currency=='美元'){
 						                            			return $filter('currency')(data,'$');
-						                            		}else if(row.currency=='RMB'){
+						                            		}else if(row.currency=='人民币'){
 						                            			return $filter('currency')(data,'￥');
 						                            		}
 						                            	},
@@ -856,9 +861,9 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            		if(row.currency=='USD'){
+						                            		if(row.currency=='美元'){
 						                            			return $filter('currency')(Number(row.moneyAmount)-Number(row.verificationMoneyAmount),'$');
-						                            		}else if(row.currency=='RMB'){
+						                            		}else if(row.currency=='人民币'){
 						                            			return $filter('currency')(Number(row.moneyAmount)-Number(row.verificationMoneyAmount),'￥');
 						                            		}
 						                            	},
@@ -870,7 +875,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
 						                            		if(row.status!=2){
-						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\',\''+judgeString+'\')">核销</a>';
 						                            		}else{
 						                            			return '';	
 						                            		}
@@ -1081,7 +1086,9 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 				paymentType:{required:"支付方式不能为空！"},
 				paymentDate:{required:"收付款日期不能为空！"},
 				buyComId:{required:"收付款方不能为空！"},
-				file:{required:"支付凭证不能为空！"}
+				file:{required:"支付凭证不能为空！"},
+				accountNumber:{required:"账号不能为空！",creditcard:"请输入正确的银行账号！"},
+				accountName:{required:"户名不能为空！"}
 			},
 			rules: {
 				name: {
@@ -1111,6 +1118,13 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 				paymentDate:{required:true,
 				},
 				buyComId:{required:true,
+				},
+				accountNumber:{
+					required:true,
+					creditcard:true
+				},
+				accountName:{
+					required:true,
 				}
 			},
 			invalidHandler: function(e, t) {
@@ -1236,7 +1250,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 									unPaymentAmount=Number(row.applyPaymentAmount)-Number(row.paymentAmount);
 								}
    									return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-	                                     '<input type="checkbox" data-check="false"  name="'+unPaymentAmount+'"       class="checkboxes" ng-click="showUnPaymentAmount(\''+row.serialNum+'\',\''+row.paymentAmount+'\',\''+unPaymentAmount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_receivePaymentRecord .checkboxes" />'+
+	                                     '<input type="checkbox" data-check="false"  name="'+unPaymentAmount+'"       class="checkboxes" ng-click="showUnPaymentAmount(\''+row.serialNum+'\',\''+judgeString+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_receivePaymentRecord .checkboxes" />'+
 	                                     '<span></span></label>';
    							},
    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -1333,12 +1347,16 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
               
              
            };
-   		$scope.showUnPaymentAmount=function(serialNum,paymentAmount){//选中checkbox显示输入框
+   		$scope.showUnPaymentAmount=function(serialNum,judgeString){//选中checkbox显示输入框
 			var value;
 			if($scope.totalVerificateCount==undefined){
 				$scope.totalVerificateCount=0;
 			}else if($scope.totalVerificateCount>=$scope.remainMoneyAmount){
-				 toastr.warning("不需再选应收账单！");
+				if(judgeString=='receive'){
+					toastr.warning("不需再选应收账单！");
+				}else{
+					toastr.warning("不需再选应付账单！");
+				}
 				 $("#"+serialNum).attr("checked",false);
 				 return;
 			}
@@ -1390,10 +1408,14 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
    	    /**
 	        * 确认核销
 	        */
-	       $scope.confirmVerificate= function(){
+	       $scope.confirmVerificate= function(judgeString){
 	    	   var checkboxs=$('input[class="checkboxes"]:checked');
 				 if(checkboxs.length==0){
-					 toastr.warning("未勾选应收账单"); 
+					 if(judgeString=='receive'){
+						 toastr.warning("未勾选应收账单"); 
+						}else{
+							toastr.warning("未勾选应付账单"); 
+						}
 					 return;
 				 }
 	    	   handle.confirm("确认核销吗？",function(){
@@ -1414,11 +1436,18 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	        		promise.then(function(data){
 	        			toastr.success("确认核销成功");
 	        			handle.unblockUI();
-	        			$('#receivePaymentRecordInfo').modal('hide');//隐藏弹框
-	        			setTimeout(function () {
-	        				 $state.go('receiveMemo',{},{reload:true}); //返回列表
-		                }, 2000);
-		        		
+	        			if(judgeString=='receive'){
+	        				$('#receivePaymentRecordInfo').modal('hide');//隐藏弹框
+	        				setTimeout(function () {
+		        				 $state.go('receiveMemo',{},{reload:true}); //返回列表
+			                }, 2000);
+							}else{
+								$('#payPaymentRecordInfo').modal('hide');//隐藏弹框
+								setTimeout(function () {
+			        				 $state.go('payMemo',{},{reload:true}); //返回列表
+				                }, 2000);
+							}
+	        		
 	 	            },function(data){
 	 	               //调用承诺接口reject();
 	 	            });

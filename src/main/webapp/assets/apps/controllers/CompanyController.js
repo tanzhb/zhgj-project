@@ -760,7 +760,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				messages: {
 					openingBank:{required:"银行不能为空！"},
 					accountName:{required:"户名不能为空！"},
-					accountNumber:{required:"账号不能为空！",digits:"银行账号必须为数字！"}
+					accountNumber:{required:"账号不能为空！",creditcard:"请输入正确的银行账号！"}
 				},
 				rules: {
 					accountName: {
@@ -771,7 +771,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					},
 					accountNumber: {
 						required: !0,
-						digits:true
+						creditcard:true
 					}
 				},
 				invalidHandler: function(e, t) {

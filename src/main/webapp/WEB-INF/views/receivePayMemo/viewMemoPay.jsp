@@ -60,8 +60,7 @@
 														<input type="text" name="moneyAmount" class="form-control"  ng-change="changeMoney()"
 															ng-model="memoRecord.moneyAmount" ng-show="input">
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='USD'">{{memoRecord.moneyAmount|currency:'$'}}</p>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='RMB'">{{memoRecord.moneyAmount|currency:'¥'}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
@@ -220,8 +219,7 @@
 															name="verificationMoneyAmount" ng-model="memoRecord.verificationMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='USD'">{{memoRecord.verificationMoneyAmount|currency:'$'}}</p>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='RMB'">{{memoRecord.verificationMoneyAmount|currency:'¥'}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
@@ -235,8 +233,7 @@
 															name="remainMoneyAmount" ng-model="memoRecord.remainMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='USD'">{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount|currency:'$'}}</p>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='RMB'">{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount|currency:'¥'}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
