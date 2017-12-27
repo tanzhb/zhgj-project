@@ -460,7 +460,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
-											return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
+											return clickhtm + '<span ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" style="color:#fcb95b">审核中</span>';
 										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else if(row.processBase.status=="APPROVAL_FAILED"){

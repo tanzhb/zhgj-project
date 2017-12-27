@@ -73,6 +73,7 @@ import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.IVacationService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
@@ -712,7 +713,13 @@ public class ProcessServiceImp implements IProcessService{
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance;
         if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
-        	processInstance = runtimeService.startProcessInstanceByKey(Constants.FOREIGN_TRADE_ORDER, businessKey, variables);
+        	if("4a6d7471644248dbb057298d141413ee".equals(orderInfo.getSupplyComId()))//如果是FT公司，走特殊流程
+        	{
+        		processInstance = runtimeService.startProcessInstanceByKey(Constants.FT_BUY_ORDER, businessKey, variables);
+        	}else{
+        		processInstance = runtimeService.startProcessInstanceByKey(Constants.FOREIGN_TRADE_ORDER, businessKey, variables);
+        	}
+        	
 		}else{
 			processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
 		}
