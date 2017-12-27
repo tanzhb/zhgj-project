@@ -62,6 +62,9 @@ public class Constants {
 	/***************** 外贸采购订单流程key *****************/
 	public static final String FOREIGN_TRADE_ORDER = "com.congmai.zhgj.foreignTradeOrder";
 	
+	/***************** FT外贸采购订单流程key *****************/
+	public static final String FT_BUY_ORDER = "com.congmai.zhgj.FTBuyOrder";
+	
 	/***************** 采购框架流程key *****************/
 	public static final String BUYFRAME = "com.congmai.zhgj.buyFrame";
 	

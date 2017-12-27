@@ -368,6 +368,8 @@ public class OrderController {
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		try {
+			OrderInfo orderInfo2 = orderService.selectById(orderInfo.getSerialNum());
+			orderInfo.setSupplyComId(orderInfo2.getSupplyComId());
 			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
 //                message.setStatus(Boolean.TRUE);
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
