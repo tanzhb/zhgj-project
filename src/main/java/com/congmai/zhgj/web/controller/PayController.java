@@ -952,6 +952,9 @@ public class PayController {
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<MemoRecord> memoRecordlist = payService
 				.findPayMemoRecord(currenLoginName);
+		for(MemoRecord memoRecord:memoRecordlist){
+			memoRecord.setComName(companyService.selectOne(memoRecord.getSupplyComId()).getComName());
+		}
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
