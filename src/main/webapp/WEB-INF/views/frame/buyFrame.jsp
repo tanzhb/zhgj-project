@@ -28,7 +28,7 @@
 			            <div class="portlet-title">
 							<div class="actions">
 								<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+										ng-click="submitBuyFrameApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addBuyFrame"> <i class="fa fa-plus"></i> 添加
 									</label>

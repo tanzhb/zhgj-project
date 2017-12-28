@@ -1694,7 +1694,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 重新编辑采购框架申请
         .state('editBuyFrameApply', {
-            url: "/editBuyApply?:serialNum&:view",
+            url: "/editBuyFrameApply?:serialNum&:view",
             params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
             templateUrl: "rest/page/editBuyFrameApply",
             data: {pageTitle: '重新编辑框架协议'},

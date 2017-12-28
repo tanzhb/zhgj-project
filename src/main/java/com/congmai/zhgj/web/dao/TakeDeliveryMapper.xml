@@ -58,7 +58,6 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
-    <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
    
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="dtSerialNum" property="serialNum" jdbcType="VARCHAR" />

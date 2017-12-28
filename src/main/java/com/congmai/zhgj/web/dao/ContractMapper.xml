@@ -340,7 +340,7 @@
       <if test="comId != null" >
         and comId = #{comId,jdbcType=VARCHAR}
       </if>
-
+		order by updateTime DESC
     </select>
     
     <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ContractVO" >

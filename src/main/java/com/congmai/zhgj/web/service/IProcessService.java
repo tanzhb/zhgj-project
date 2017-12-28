@@ -224,4 +224,7 @@ public interface IProcessService {
 
 	public String startSaleFramerProcess(ContractVO contract);
 
+	//自定义已办任务查询
+	public List<BaseVO> findFinishedTaskInstancesDiy(User user, String businessType);
+
 }

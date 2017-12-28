@@ -297,20 +297,25 @@ public class ProcessAction {
     @ResponseBody
     public ResponseEntity<Map<String,Object>> findFinishedTaskInstances(@PathVariable("businessType") String businessType) throws Exception {
     	User user = UserUtil.getUserFromSession();
-    	List<BaseVO> taskList = this.processService.findFinishedTaskInstances(user);
+//    	if("All".equals(businessType))businessType=null;
+    	List<BaseVO> taskList = this.processService.findFinishedTaskInstancesDiy(user,businessType);
     	List<Object> jsonList=new ArrayList<Object>(); 
     	for(BaseVO base : taskList){
     		Map<String, Object> map = new HashMap<String, Object>();
     		map.put("businessType", base.getBusinessType());
     		map.put("userName", base.getUser_name());
     		map.put("title", base.getTitle());
-    		map.put("taskId", base.getHistoricTaskInstance().getId());
-    		map.put("processInstanceId", base.getHistoricTaskInstance().getProcessInstanceId());
-    		map.put("startTime", base.getHistoricTaskInstance().getStartTime());
-    		map.put("claimTime", base.getHistoricTaskInstance().getClaimTime());
-    		map.put("endTime", base.getHistoricTaskInstance().getEndTime());
-    		map.put("deleteReason", base.getHistoricTaskInstance().getDeleteReason());
-    		map.put("version", base.getProcessDefinition().getVersion());
+    		map.put("taskId", base.getHistoricTaskVO().getTaskId());
+    		map.put("processInstanceId", base.getHistoricTaskVO().getProcessInstanceId());
+    		map.put("startTime", base.getHistoricTaskVO().getStartTime());
+    		map.put("claimTime", base.getHistoricTaskVO().getClaimTime());
+    		map.put("endTime", base.getHistoricTaskVO().getEndTime());
+    		map.put("deleteReason", base.getHistoricTaskVO().getDeleteReason());
+    		if(base.getProcessDefinition()!=null){
+    			map.put("version", base.getProcessDefinition().getVersion());
+    		}
+    		
+//    		jsonList.add(map);
     		if(!"All".equals(businessType)){
 				if(businessType.equals(base.getBusinessType())){//根据流程类型添加到已办事项
 					jsonList.add(map);
