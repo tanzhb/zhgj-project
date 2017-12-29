@@ -593,8 +593,16 @@
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
-    </delete>
+    </delete><!-- getGuideUnitPrice -->
     <select id="selectByPriceType" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select
+      distinct
+    buyComId
+    from priceList
+    where priceType=#{priceType} and priceId=#{priceId}
+  
+  </select>
+  <select id="getGuideUnitPrice"   resultType ="java.lang.String"   parameterType="java.lang.String"  >
     select
       distinct
     buyComId

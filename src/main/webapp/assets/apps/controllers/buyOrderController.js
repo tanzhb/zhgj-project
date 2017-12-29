@@ -649,8 +649,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status==2){
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
 										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
-									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
-										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
+									}else if(Number(row.materielCount)>=Number(row.deliveryCount)){
+										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
+											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
+											}
 									}else{
 										return clickhtm + '';
 									}
@@ -4442,6 +4446,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 	    //从订单代发货
 	 	      $scope.takeDeliveryAdd= function(serialNum) {
 	 	    	  $state.go('takeDeliveryAdd',{oprateType:"forBuyOrder",orderSerialNum:serialNum});
+	 	       }
+	 	     //从订单付款
+	 	      $scope.goPayMoney= function(serialNum) {
+	 	    	  $state.go('addPay',{orderSerialNum:serialNum});
+	 	       }
+	 	     //从订单收票
+	 	      $scope.goCollectInvoice= function(serialNum) {
+	 	    	  $state.go('addOrEditInvoice',{inOrOut:"in",orderSerialNum:serialNum});
 	 	       }
 	 	 	$scope.showSX=function(judgeString){
 	 			debugger;

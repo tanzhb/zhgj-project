@@ -62,6 +62,8 @@ public class UserServiceImpl extends GenericServiceImpl<User, Integer> implement
 		
 		if (list != null && list.size() > 0) {
 			user = list.get(0);
+			User user1=userMapper.getUserInfo(user);
+			user.setDepartment(user1.getDepartment());
 		}
 		return user;
 	}

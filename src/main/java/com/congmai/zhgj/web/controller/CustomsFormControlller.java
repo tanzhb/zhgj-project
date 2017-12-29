@@ -170,16 +170,17 @@ public class CustomsFormControlller {
 						DeliveryVO d = deliveryService
 								.selectDetailById(customsForm
 										.getDeliverSerial());
-						customsForm.setDeliverNum(d == null ? "" : d
-								.getDeliverNum());
-					} else if (StringUtils
+						customsForm.setDeliverNum(d == null ? "" : d.getDeliverNum());
+						OrderInfo o = orderService.selectById(customsForm.getOrderSerial());
+						customsForm.setBuyOrderNum(o.getOrderNum());
+					} /*else if (StringUtils
 							.isEmpty(customsForm.getOrderSerial())) {
 						OrderInfo o = orderService.selectById(customsForm
 								.getOrderSerial());
 						customsForm.setBuyOrderNum(o == null ? "" : o
 								.getOrderNum());
 					}
-
+*/
 				}
 			}
 		} else {

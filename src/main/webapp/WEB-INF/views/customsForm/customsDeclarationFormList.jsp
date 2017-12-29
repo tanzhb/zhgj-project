@@ -3,19 +3,19 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 
 <div class="tabbable-line">
-			<ul class="nav nav-tabs " >
+			<!-- <ul class="nav nav-tabs " >
 				<li class="active"><a href="#declaration" data-toggle="tab"
 					> 报关单 </a></li>
-			</ul>
+			</ul> -->
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="tab-content">
 				<div class="tab-pane active" id="declaration">
 		<div class="portlet light">
 			<div class="portlet-title">
-			<!-- 	<div class="caption">
+				<div class="caption">
 					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">采购价格列表</span>
-				</div> -->
+					<span class="caption-subject font-green bold uppercase">报关单</span>
+				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
 				<label class="btn btn-transparent yellow btn-circle btn-sm"
@@ -156,6 +156,7 @@
 							<th>报关单号 </th>
                             <th> 到港日期</th>
                             <th> 海关单位</th>
+                            <th> 销售订单号</th>
                             <th>发货单号</th>
                             <th>发货金额</th>
                              <th>增值税</th>

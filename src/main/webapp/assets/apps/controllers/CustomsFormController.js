@@ -56,6 +56,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			 promise.then(function(data){
 				 debugger;
 				$scope.customsForm=data.customsForm;
+				$scope.customsForm.totalTax=Number(data.customsForm.customsAmount)+Number(data.customsForm.addedTax);
 				$scope.file=data.file;
 				_fileIndex=$scope.file.length;
 				loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial,$scope.customsFormType);//加载物料信息列表
@@ -155,6 +156,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                               { mData: 'customsFormNum' },
                               { mData: 'playArrivalDate' },
                               { mData: 'port' },
+                              { mData: 'buyOrderNum' },
                               { mData: 'deliverNum' },
                               { mData: 'deliverAmount' ,
 									mRender:function(data){
@@ -209,7 +211,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                     		  $compile(td)($scope);
                     	  }
                       },{
-                      	  'targets' : 12,
+                      	  'targets' : 13,
                     	  'render' : function(data,
                     			  type, row, meta) {
                     		  if(data!=""&&data!=null){
@@ -328,6 +330,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                                   { mData: 'customsFormNum' },
                                   { mData: 'playArrivalDate' },
                                   { mData: 'port' },
+                                  { mData: 'buyOrderNum' },
                                   { mData: 'deliverNum' },
                                   { mData: 'deliverAmount',
 										mRender:function(data){
@@ -382,7 +385,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     	                    		  $compile(td)($scope);
     	                    	  }
     	                      },{
-    	                      	  'targets' : 12,
+    	                      	  'targets' : 13,
     	                    	  'render' : function(data,
     	                    			  type, row, meta) {
     	                    		  if(data!=""&&data!=null){
@@ -729,6 +732,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 													  $scope.customsForm.deliverAmount=data.deliverAmount;
 								  					  $scope.customsForm.addedTax=data.addedTax;
 								  					  $scope.customsForm.customsAmount=data.customsAmount;
+								  					  $scope.customsForm.totalTax=data.customsAmount+data.addedTax;
 								  					  $scope.customsForm.port=data.port;
 								  					  $scope.customsForm.shipNumber=data.shipNumber;
 								  					  $scope.customsForm.playArrivalDate=data.playArrivalDate;

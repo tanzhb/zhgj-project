@@ -10,7 +10,8 @@ angular.module('MetronicApp').factory('InvoiceService', ['$rootScope', '$http', 
             saveInvoiceBillingRecord:saveInvoiceBillingRecord,
             startInvoiceProcess:startInvoiceProcess,
             getAuditInfos:getAuditInfos,
-            judgeIsApproval:judgeIsApproval
+            judgeIsApproval:judgeIsApproval,
+            saveAllInvoiceBillingRecord:saveAllInvoiceBillingRecord//保存物料收开票记录
     };
 
     return factory;
@@ -124,4 +125,18 @@ debugger;
 		             })  
 		         return deferred.promise;  
 	    }
+	 /**
+		 * 保存物料收开票记录
+		 */
+	    function saveAllInvoiceBillingRecord (params){
+			var deferred = $q.defer();
+			$http.post($rootScope.basePath +"/rest/invoice/saveAllInvoiceBillingRecordInfo", 
+					JSON.stringify(params)//传整个表单数据  
+			).then(function success(result) {
+				deferred.resolve(result);//请求成功
+			}, function error(err) {
+				deferred.reject(err);//请求失败
+			});
+			return deferred.promise;//返回承诺
+		}
 }]);

@@ -99,6 +99,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
             		// 加载数据
                 	initSuppliers();
                 	initWarehouse();
+                	initPtWarehouseAddress();
                 	//合同内容
                 	$scope.buyFrame.contractContent = '111100';
                 	$scope.initContractContent();
@@ -867,6 +868,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
           		    	// 加载数据
                     	initSuppliers();
                     	initWarehouse();
+                    	initPtWarehouseAddress();
                     	
           		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
@@ -2017,12 +2019,47 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
    	   	    	if(isNull($scope.clauseDelivery)){// 交付条款为空的处理
    	   	    		toastr.error('请填写交付条款后保存！');return
    	   			}
+   	   	  if($scope.showSXf =='1'){
+				if(isNull($("select[name='warehouseAddress1']").val())&&isNull($scope.clauseDelivery.deliveryMode)){
+					toastr.error('地址不能为空！');
+	    			return;
+				}
+				if(isNull($("select[name='warehouseAddress1']").val())&&($scope.clauseDelivery.deliveryMode=='自提')){
+					toastr.error('提货地址不能为空！');
+	    			return;
+				}
+				if(isNull($("select[name='warehouseAddress1']").val())&&($scope.clauseDelivery.deliveryMode=='配送')){
+					toastr.error('收货地址不能为空！');
+	    			return;
+				}
+			}else{
+				if(isNull($("input[name='warehouseAddress']").val())&&isNull($scope.clauseDelivery.deliveryMode)){
+					toastr.error('地址不能为空！');
+	    			return;
+				}
+				if(isNull($("input[name='warehouseAddress']").val())&&($scope.clauseDelivery.deliveryMode=='自提')){
+					toastr.error('提货地址不能为空！');
+	    			return;
+				}
+				if(isNull($("input[name='warehouseAddress']").val())&&($scope.clauseDelivery.deliveryMode=='配送')){
+					toastr.error('收货地址不能为空！');
+	    			return;
+				}
+			}
+ 	    	 if($scope.showSXf =='1'){
+ 				$scope.clauseDelivery.warehouseAddress=$("select[name='warehouseAddress1']").val();
+ 			}else{
+ 				$scope.clauseDelivery.warehouseAddress=$("input[name='warehouseAddress']").val();
+ 			}
    	   	    	if($('#form_clauseDelivery').valid()){
    	   	    		$scope.clauseDelivery.contractSerial = $scope.buyFrame.id;
    	   	    		orderService.saveClauseDelivery($scope.clauseDelivery).then(
    	   	       		     function(data){
    	   	       		    	toastr.success('数据保存成功！');
    	   	       		    	$scope.clauseDelivery = data.data;
+   	   	       		if($scope.showSXf =='1'){
+   	       			 	$scope.showSXf ='0';
+   	       		    	}
    	   	       		    	$scope.cancelClauseDelivery();
    	   	       		     },
    	   	       		     function(error){
@@ -3770,8 +3807,36 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 	       $scope.signContract= function(ids,comId) {
 	 	    	  $state.go('saleOrderSign',{id:ids,comId:comId,type:"buy"});
 	 	       }
-
-	 	       
+	 	  	$scope.showSX=function(judgeString){//增加交付条款地址筛选 
+	 			debugger;
+	 			if(judgeString=='f'){
+	 				if($scope.showSXf!='1'){
+	 					$scope.showSXf='1';
+	 				}else{
+	 					$scope.showSXf='0';
+	 				}
+	 			}
+	 		
+	 		}
+	 		/**
+	 		 * 加载平台仓库数据
+	 		 */
+	 		var initPtWarehouseAddress = function(){
+	 		var promise = orderService.initPtWarehouseAddress();
+	 		promise.then(function(data){
+	 			$scope.warehouseAddresses = data.data;
+	 			setTimeout(function () {
+	 				$("select[name='warehouseAddress1']").selectpicker({
+	 	                showSubtext: true,
+	 	                size : 5
+	 	            });
+	 				$("select[name='warehouseAddress1']").selectpicker('refresh');//刷新插件
+	 				
+	 	        }, 100);
+	 		},function(data){
+	 			//调用承诺接口reject();
+	 		});
+	 		}  
 }]);
 
 

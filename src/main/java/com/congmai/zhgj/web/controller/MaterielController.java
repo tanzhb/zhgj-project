@@ -860,9 +860,9 @@ public class MaterielController {
      * @param ids
      * @return
      */
-    @RequestMapping(value="chooseBasicMateriels",method=RequestMethod.POST)
+    @RequestMapping(value="chooseBasicMateriels")
     @ResponseBody
-    public List<Materiel> chooseBasicMateriels(@RequestBody String ids){
+    public List<Materiel> chooseBasicMateriels(String ids,String comId){
     	List<Materiel> list = null;
     	try {
     		list = materielService.chooseMateriel(ids);

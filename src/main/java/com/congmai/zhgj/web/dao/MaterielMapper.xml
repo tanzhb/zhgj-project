@@ -60,6 +60,8 @@
     <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <!-- 查询库存数量，影响查询效率 -->
     <association property="stockCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
+    <!-- 查询物料指导单价,没有显示无 有过期了为已过期 -->
+    <!-- <association property="guideUnitPrice" column="serialNum" select="com.congmai.zhgj.web.dao.PriceListMapper.getGuideUnitPrice"/> -->
     <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
     
   </resultMap>
@@ -1023,9 +1025,9 @@
    left join invoiceBillingRecord ibr on   ibr.orderMaterielSerial=om.serialNum 
    </if>
     <if test="deliverySerial!=null">
-   left join deliveryMateriel dm  on   dm.orderMaterielSerial=om.serialNum and dm.deliverSerial=#{deliverySerial,jdbcType=VARCHAR} 
+   left join deliveryMateriel dm  on   dm.orderMaterielSerial=om.serialNum and dm.deliverSerial=#{deliverySerial,jdbcType=VARCHAR} and dm.delFlg=0
    </if>
-  where  om.orderSerial=#{orderSerial,jdbcType=VARCHAR} 
+  where  om.orderSerial=#{orderSerial,jdbcType=VARCHAR}  and om.delFlg=0
   <if test="invoiceSerial!=null">
    and  ibr.invoiceSerial=#{invoiceSerial,jdbcType=VARCHAR} 
    </if>

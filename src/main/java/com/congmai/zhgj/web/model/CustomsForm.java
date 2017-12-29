@@ -48,7 +48,7 @@ public class CustomsForm {
     
     private  String deliverNum;//发货单号
     
-    private  String buyOrderNum;//采购单号
+    private  String buyOrderNum;//采购单号(采购单号/销售单号清报关列表显示)
     
     private  String agentUnit;//代理报关/清关单位
     

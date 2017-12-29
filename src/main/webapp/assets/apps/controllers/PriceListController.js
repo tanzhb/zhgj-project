@@ -755,7 +755,25 @@ function loadPriceListSaleTable(){
 		                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 		                            		}
 		                            	}
-		                            }],
+		                            }/*,
+		                            { mData: 'processBase',//操作
+		                            	mRender:function(data,
+		    									type, row, meta){
+		                            		if(data!=""&&data!=null){
+		                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"||data.status=="APPROVAL_SUCCESS"||ata.status=="APPROVAL_FAILED"){
+		    										return '';
+		    									}else{
+		    										return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo('sale',\''+row.serialNum+'\')">申请</a>';
+		    									}
+		                            		}else{
+		                            			return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo('sale',\''+row.serialNum+'\')">申请</a>';
+		                            		}
+		                            	},
+		                            	"createdCell": function (td, cellData, rowData, row, col) {
+			                            		$compile(td)($scope);
+			                            	}
+		                            }*/
+		                            ],
 	                              'aoColumnDefs' : [ {
 	                            	  'targets' : 0,
 	                            	  'searchable' : false,

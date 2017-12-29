@@ -21,6 +21,10 @@ public class TakeDeliveryParams {
 	
 	private List<VerificationRecord> verificationRecords;//核销记录
 	
+	private List<InvoiceBillingRecord> invoiceBillingRecords;//发票物料收开票记录
+	
+	
+	
 	private StockInOutRecord record;
 
 	public Delivery getDelivery() {
@@ -77,6 +81,15 @@ public class TakeDeliveryParams {
 
 	public void setStockOutMateriels(List<StockOutBatch> stockOutMateriels) {
 		this.stockOutMateriels = stockOutMateriels;
+	}
+
+	public List<InvoiceBillingRecord> getInvoiceBillingRecords() {
+		return invoiceBillingRecords;
+	}
+
+	public void setInvoiceBillingRecords(
+			List<InvoiceBillingRecord> invoiceBillingRecords) {
+		this.invoiceBillingRecords = invoiceBillingRecords;
 	}
 	
 	

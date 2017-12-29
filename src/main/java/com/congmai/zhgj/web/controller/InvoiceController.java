@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +51,9 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.ProcessBase;
+import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.VerificationRecord;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
@@ -291,16 +294,17 @@ public class InvoiceController {
 		Company company=null;
 		String  payOrReceiptMoney=null;
 		String  billOrReceiptMoney=null;
-		List<CompanyFinance> companyFinanceList=null;
+		List<CompanyFinance> companyFinanceList=new ArrayList<CompanyFinance>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(serialNum.indexOf("in")>-1){//进项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
+			company=companyService.selectById(orderInfo.getSupplyComId());
 			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
 			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else if(serialNum.indexOf("out")>-1){//销项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 			company=companyService.selectById(orderInfo.getBuyComId());
-			//companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
+			companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
 			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
 			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else{
@@ -312,8 +316,7 @@ public class InvoiceController {
 		orderInfo.setUnPayOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(payOrReceiptMoney)).toString() );
 		map.put("orderInfo", orderInfo);
 		map.put("company",company);
-		map.put("companyFinanceList",companyFinanceList);
-    	
+		 map.put("companyFinanceList",companyFinanceList);
     	return map;
 	}
 	/**
@@ -652,5 +655,30 @@ public class InvoiceController {
 			}
 		}
     	return result;
+    }
+	   /**
+     * @Description (保存物料收开票记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveAllInvoiceBillingRecordInfo",method=RequestMethod.POST)
+    @ResponseBody
+    public String saveAllInvoiceBillingRecordInfo(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+  	   	  	TakeDeliveryParams  takeDeliveryParams = null;
+			takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+        	try{
+        	Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		List<InvoiceBillingRecord>invoiceBillingRecords=takeDeliveryParams.getInvoiceBillingRecords();
+        		Boolean falg=invoiceService.insertAllInvoiceBillingRecordInfo(invoiceBillingRecords, currenLoginName, invoiceBillingRecords.get(0).getInvoiceSerial());
+        		if(falg){
+        			flag = "1";
+        		}
+        	}catch(Exception e){
+        		logger.warn(e.getMessage(), e);
+        		return null;
+        	}
+    	return flag;
     }
 }

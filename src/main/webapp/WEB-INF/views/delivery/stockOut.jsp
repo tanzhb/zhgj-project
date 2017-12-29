@@ -52,6 +52,8 @@
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a></li>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
+						<button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()">
+                              		<i class="fa fa-check"></i> 确认出库 </button>
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>												
 					</ul>
@@ -67,8 +69,8 @@
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button   ng-hide="deliverAdd" class="btn blue  btn-outline  btn-sm " ng-click="savedeliver()">
                                             <i class="fa fa-save"></i> 保存 </button> -->
-                                 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()">
-                              		<i class="fa fa-check"></i> 确认出库 </button>
+                                 <!-- <button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()">
+                              		<i class="fa fa-check"></i> 确认出库 </button> -->
                               		 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut('save')">
                               		<i class="fa fa-save"></i>保存 </button>
                       			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">

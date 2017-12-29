@@ -3094,6 +3094,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 					  'assets/global/plugins/bootbox/bootbox.min.js',
 			        'assets/apps/service/InvoiceService.js',
 					'assets/apps/controllers/InvoiceController.js',
+					 'assets/apps/service/CommonService.js',
 					'assets/apps/scripts/angular-file-upload-shim.min.js',
                 	'assets/apps/scripts/angular-file-upload.min.js',
                 	'assets/global/css/dialog.css',
@@ -3110,7 +3111,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         .state('addOrEditInvoice', {//发票新建编辑
-        	url: "/addOrEditInvoice?:inOrOut",
+        	url: "/addOrEditInvoice?:inOrOut&:orderSerialNum",
         	templateUrl: "rest/invoice/addOrEditInvoice",
         	data: {pageTitle: '新建发票信息'},
         	reload:true, 
@@ -3125,6 +3126,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/datatables/datatables.all.min.js',
         				        'assets/apps/service/InvoiceService.js',
         						'assets/apps/controllers/InvoiceController.js',
+        						 'assets/apps/service/CommonService.js',
         						 'assets/apps/scripts/pageHandle.js',
         						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
          				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
@@ -3139,7 +3141,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	}	        
         })
         
-        .state('invoiceView', {//出入库检验查看
+        .state('invoiceView', {//发票查看
 	        	url: "/invoiceView?:inOrOut",
 	        	templateUrl: "rest/invoice/viewInvoice",
 	        	data: {pageTitle: '发票详情'},
@@ -3155,9 +3157,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/service/InvoiceService.js',
 	        						'assets/apps/controllers/InvoiceController.js',
+	        						 'assets/apps/service/CommonService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
-	        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+	        				        'assets/pages/scripts/table-datatables-scroller.min.js' ,
+	        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+	        				        'assets/apps/scripts/angular-file-upload.min.js',
+	        				        'assets/apps/scripts/FileUploader.js'
 	        				        ]
 	        			});
 	        		}]
@@ -3182,7 +3188,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
-				'assets/apps/controllers/InvoiceController.js'
+				'assets/apps/controllers/InvoiceController.js',
+				 'assets/apps/service/CommonService.js'
 	        	
                       ]
                     });
@@ -3210,6 +3217,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/InvoiceController.js'
 	        	
                       ]
@@ -3238,6 +3246,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/InvoiceController.js'
 	        	
                       ]
@@ -3247,7 +3256,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         .state('addPay', {
-            url: "/addPay?:serialNum",
+            url: "/addPay?:serialNum&:orderSerialNum",
             templateUrl: "rest/page/addPay",
             data: {pageTitle: '新增付款'},
             controller: "PayController",

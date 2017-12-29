@@ -49,6 +49,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					$scope.paymentRecord.status='0';
 					getCurrentUser();
 				});
+			if(!isNull($stateParams.orderSerialNum)){
+				$scope.getSaleOrderInfo($stateParams.orderSerialNum);
+			}
 					    }
 			
 			}else if($state.current.name=="applyPay"){

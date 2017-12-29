@@ -1645,7 +1645,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 					return;
 				}
     			var id =  $('input[name="serialNum"]:checked').val(); 
-    			var promise = materielService.chooseMateriels(id);
+    			var promise = materielService.chooseMateriels(id,$scope.saleOrder.buyComId);
         		promise.then(function(data){
         			if($scope.materielSelectedIndex != undefined){
         				$scope.orderMateriel[$scope.materielSelectedIndex].supplyMaterielSerial = data.data[0].serialNum;
@@ -1751,7 +1751,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 					}
 				}
         		handle.blockUI();
-        		var promise = materielService.chooseBasicMateriels(ids);
+        		var promise = materielService.chooseBasicMateriels(ids,$scope.saleOrder.buyComId);
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
@@ -4390,7 +4390,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			type, row, meta) {
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='8' ||data=='10'){
-		 							                            				return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">收货</span>';
+		 							                            				return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">收货</a>';
+		 							                            			//	return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')"></span>';
 		 							                            			}else{
 		 																		return '';
 		 																	}

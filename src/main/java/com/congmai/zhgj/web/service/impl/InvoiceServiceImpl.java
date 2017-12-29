@@ -9,10 +9,12 @@ import javax.annotation.Resource;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
@@ -25,6 +27,7 @@ import com.congmai.zhgj.web.model.InvoiceBillingRecord;
 import com.congmai.zhgj.web.model.InvoiceBillingRecordExample;
 import com.congmai.zhgj.web.model.InvoiceExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.VerificationRecord;
 import com.congmai.zhgj.web.model.InvoiceExample.Criteria;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -199,6 +202,28 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		// TODO Auto-generated method stub
 		invoiceMapper.insert(in);
 		
+	}
+
+	@Override
+	public Boolean insertAllInvoiceBillingRecordInfo(
+			List<InvoiceBillingRecord> list, String currenLoginName,
+			String serialNum) {
+		if(!CollectionUtils.isEmpty(list)){
+			for(InvoiceBillingRecord v:list){
+				if(StringUtil.isEmpty(v.getSerialNum())||"null".equals(v.getSerialNum())){
+					v.setSerialNum(ApplicationUtils.random32UUID());
+					v.setCreateTime(new Date());
+					v.setDelFlg("0");
+					v.setCreator(currenLoginName);
+					invoiceBillingRecordMapper.insert(v);//保存收开票记录
+				}else{
+					v.setUpdateTime(new Date());
+					v.setUpdater(currenLoginName);
+					invoiceBillingRecordMapper.updateByPrimaryKey(v);//更新收开票记录
+				}
+			}
+		}
+		return true;
 	}
 	}
 	
