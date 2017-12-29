@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.web.dao.ProcessBaseMapper;
 import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.ProcessBase;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 
@@ -63,6 +65,16 @@ ProcessBaseService {
 	public List<BaseVO> selectList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<HistoricTaskVO> findFinishedTaskInstancesDiy(Map map) {
+		return processBaseMapper.findFinishedTaskInstancesDiy(map);
+	}
+
+	@Override
+	public void insertHistoricTask(HistoricTaskVO historicTaskVO) {
+		 processBaseMapper.insertHistoricTask(historicTaskVO);
 	}
 
 

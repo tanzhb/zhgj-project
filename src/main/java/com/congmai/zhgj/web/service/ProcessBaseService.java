@@ -1,9 +1,14 @@
 package com.congmai.zhgj.web.service;
 
+import java.util.List;
+import java.util.Map;
+
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseAdvance;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.ProcessBase;
+import com.congmai.zhgj.web.model.User;
 
 /**
  * 
@@ -16,4 +21,8 @@ import com.congmai.zhgj.web.model.ProcessBase;
 public interface ProcessBaseService extends GenericService<BaseVO, String> {
 
 	ProcessBase selectBaseById(String id);
+
+	List<HistoricTaskVO> findFinishedTaskInstancesDiy(Map map);
+
+	void insertHistoricTask(HistoricTaskVO historicTaskVO);
 }

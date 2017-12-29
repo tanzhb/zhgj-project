@@ -64,6 +64,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
@@ -242,7 +243,7 @@ public class ProcessServiceImp implements IProcessService{
      */
     protected ProcessDefinition getProcessDefinition(String processDefinitionId) {
         ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
-        logger.info(processDefinition.getVersion());
+//        logger.info(processDefinition.getVersion());
         return processDefinition;
     }
     
@@ -837,5 +838,34 @@ public class ProcessServiceImp implements IProcessService{
         //最后要设置null，就是这么做，还没研究为什么
         this.identityService.setAuthenticatedUserId(null);
         return processInstanceId;
+	}
+
+	@Override
+	public List<BaseVO> findFinishedTaskInstancesDiy(User user, String businessType) {
+
+//		HistoricTaskInstanceQuery historQuery = historyService.createHistoricTaskInstanceQuery().taskAssignee(user.getUserId().toString()).finished();
+//    	List<HistoricTaskInstance> list = historQuery.orderByHistoricTaskInstanceEndTime().desc().list();
+		
+		Map map = new HashMap<String, String>();
+		map.put("userId", user.getUserId());
+//		map.put("businessType", businessType); businessType与ProcessDefinition 需一致
+		
+    	List<HistoricTaskVO> list = this.processBaseService.findFinishedTaskInstancesDiy(map);
+    	List<BaseVO> taskList = new ArrayList<BaseVO>();
+    	for(HistoricTaskVO hst : list){
+    		String processInstanceId = hst.getProcessInstanceId();
+    		List<HistoricVariableInstance> listVar = this.historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+			for(HistoricVariableInstance var : listVar){
+				if("serializable".equals(var.getVariableTypeName()) && "entity".equals(var.getVariableName())){
+					BaseVO base = (BaseVO) var.getValue();
+					base.setHistoricTaskVO(hst);
+					base.setProcessDefinition(getProcessDefinition(hst.getProcessDefId()));
+					taskList.add(base);
+					break;
+				}
+			}
+    	}
+		return taskList;
+	
 	}
 }

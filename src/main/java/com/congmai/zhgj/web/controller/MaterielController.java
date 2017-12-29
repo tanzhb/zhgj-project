@@ -401,11 +401,12 @@ public class MaterielController {
      * @param parent(若有值，则查询该分类下的物料)
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
      * @param type 销售订单选择物料，筛选有供应商的物料
+     * @param supplyComId 物料关联供应商
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type) {
+    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type,String supplyComId) {
     	//MaterielExample m =new MaterielExample();
     	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
@@ -436,7 +437,11 @@ public class MaterielController {
         	}
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
-        	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
+        	if(supplyComId!=null){
+        		comIds = new ArrayList<String>();
+        		comIds.add(supplyComId);
+        		criteria.andSupplyComIdIn(comIds);
+        	}else if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
         		criteria.andBuyComIdIn(comIds);

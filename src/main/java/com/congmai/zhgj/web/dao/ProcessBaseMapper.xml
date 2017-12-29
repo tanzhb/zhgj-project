@@ -202,4 +202,34 @@
       status = #{status,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  
+  <select id="findFinishedTaskInstancesDiy" resultType="com.congmai.zhgj.web.model.HistoricTaskVO" parameterType="java.util.Map" >
+  SELECT DISTINCT
+		RES.PROC_INST_ID_ as processInstanceId,
+		RES.ID_ as taskId,
+		RES.START_TIME_ as startTime,
+		RES.CLAIM_TIME_ as claimTime,
+		RES.END_TIME_ as endTime,
+		RES.DELETE_REASON_ as deleteReason,
+        RES.PROC_DEF_ID_ as processDefId
+	FROM
+		ACT_HI_TASKINST RES
+	WHERE
+		RES.ASSIGNEE_ = #{userId,jdbcType=INTEGER}
+	AND RES.END_TIME_ IS NOT NULL
+	<if test="businessType != null" >
+       AND UPPER(RES.PROC_DEF_ID_) LIKE CONCAT('%',UPPER(#{businessType,jdbcType=VARCHAR}),'%')
+     </if>
+	ORDER BY
+		RES.END_TIME_ DESC
+	</select>
+	
+	<insert id="insertHistoricTask" parameterType="com.congmai.zhgj.web.model.HistoricTaskVO" >
+    insert into ACT_HI_TASKINST (ID_, PROC_INST_ID_, PROC_DEF_ID_,START_TIME_, 
+      END_TIME_, CLAIM_TIME_, DELETE_REASON_,ASSIGNEE_
+      )
+    values (#{taskId,jdbcType=VARCHAR}, #{processInstanceId,jdbcType=VARCHAR}, #{processDefId,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{claimTime,jdbcType=TIMESTAMP}, #{deleteReason,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
+      )
+  </insert>
 </mapper>

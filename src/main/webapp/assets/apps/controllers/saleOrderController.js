@@ -486,7 +486,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 										}else if(row.status==3){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
+											if(row.contract.contractType=='销售订单'){
+												return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';
+											}else{
+												return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
+											}
 										}else{
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}
@@ -3982,15 +3986,34 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        							}
 		        						},
 		        						{
-		        							mData : 'deleteReason'
+		        							mData : 'deleteReason',
+	        								mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return data
+		        								} else
+		        									return '';
+		        							}
 		        						},
 		        						{
-		        							mData : 'version'
+		        							mData : 'version',
+	        								mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return data
+		        								} else
+		        									return '';
+		        							}
 		        						},
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+		        								if(isNull(row.version)){
+		        									return ''
+		        									/*return "<a href='javascript:void(0);' ng-click=\"userCancelOrderApply('"+row.processInstanceId+"')\">取消</a>";*/
+		        								}else{
+		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+		        								}
 		        							}
 		        						}
 		        						]
@@ -4497,14 +4520,60 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	      $scope.deliveryAdd= function(serialNum) {
 		 	    	  $state.go('addDelivery',{oprateType:"forSaleOrder",orderSerialNum:serialNum});
 		 	       }
-		 	     //设置
+		 	     //设置默认框架或委托方
 		 	      $scope.setEntrustParty= function(obj) {
-		 	    	 for(var i=0;i<$scope.customers.length;i++){
+		 	    	//订单采购商变化时
+			 	    	if($scope.contract.contractType=='销售订单'){
+			 	    		orderService.findDefaultFrame("sale","order",$scope.saleOrder.buyComId).then(
+			 	          		function(data){
+				 	   	        	if(isNull(data)){
+				 	   	        		return;
+				 	   	        	}else{
+				 	   	        		orderService.getFrameInfo(data.id).then(
+						          		     function(data){//加载页面对象
+						          		    	$scope.saleOrder.frameSerial = data.contract.id;
+						          		    	$scope.saleOrder.frame=data.contract;
+						          		    	$scope.clauseAfterSales=data.clauseAfterSales;
+						          		    	$scope.clauseAdvance=data.clauseAdvance;
+						          		    	$scope.clauseCheckAccept=data.clauseCheckAccept;
+						          		    	$scope.clauseDelivery=data.clauseDelivery;
+						          		    	$scope.clauseSettlement=data.clauseSettlement;
+						          		    	if(!isNull(data.clauseSettlement)){
+						          		    		$scope.clauseSettlement.CSD = [{}]
+						          		    		$scope.clauseSettlement.CSD=data.clauseSettlement.clauseSettlementDetails;
+						          		    		if(!isNull(data.clauseSettlement.clauseSettlementDetails)){
+						          		    			_index = data.clauseSettlement.clauseSettlementDetails.length;
+						          		    		}
+						          		    	}else{
+						          		    		$scope.clauseSettlement = {}
+						          		    	}
+						          		    	if(isNull($scope.clauseSettlement.otherAmount)){
+						          		    		$scope.clauseSettlement.otherAmount = 0;
+						          		    	}
+						    					
+						          		    	$scope.saleOrder.contractContent = data.contract.contractContent
+						                    	$scope.initContractContent();
+						          		     },
+						          		     function(error){
+						          		         $scope.error = error;
+						          		     }
+						          		 )
+				 	   	        	}
+			 	   	        },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		     }
+			 	   	     	);
+			 	    	 }
+		 	    	  
+		 	    	  
+		 	    	  for(var i=0;i<$scope.customers.length;i++){
 		 	    		 if($scope.saleOrder.buyComId == $scope.customers[i].comId){
 		 	    			$scope.saleOrder.entrustParty = $scope.customers[i].comName
 		 	    			return;
 		 	    		 }
 		 	    	 }
+		 	    	 
 		 	       }
 		 	     $scope.jumpToUrl= function(judgeString) {
 		 	    	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
@@ -4526,7 +4595,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	 	/** ************关联框架协议 start*************** */
 		        $scope.selectFrame = function() {
 					 $('#addFrame').modal('show');// 删除成功后关闭模态框
-					 loadFrameTable();
+					 if(FrameTable){
+				 		FrameTable.ajax.url(ctx+"/rest/order/findFrameList?type=buy&selectFor=order&comId="+$scope.saleOrder.buyComId).load()
+	    			}else{
+	    				loadFrameTable();
+	    			}
 				 };
 		        
 		        // 确认选择开始***************************************
@@ -4621,7 +4694,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	                pageLength: 5,//每页显示数量
 		 	                processing: true,//loading等待框
 //		 	                serverSide: true,
-		 	                ajax:"rest/order/findFrameList?type=sale&selectFor=order",//加载数据中
+		 	                ajax:"rest/order/findFrameList?type=buy&selectFor=order&comId="+$scope.saleOrder.buyComId,//加载数据中
 		 	                "aoColumns": [
 										{ mData: 'id'},
 										{ mData: 'contractNum' },

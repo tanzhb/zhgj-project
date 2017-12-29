@@ -58,7 +58,7 @@ public class BaseVO implements Serializable{
 	public final static String SALEPRICE = "salePrice";	//销售价格
 	public final static String OUTINVOICE = "outInvoice";	//销项票
 	
-	
+	private HistoricTaskVO historicTaskVO;
 	// 申请人id
 	//private Integer user_id;
 	
@@ -258,6 +258,14 @@ public class BaseVO implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public HistoricTaskVO getHistoricTaskVO() {
+		return historicTaskVO;
+	}
+
+	public void setHistoricTaskVO(HistoricTaskVO historicTaskVO) {
+		this.historicTaskVO = historicTaskVO;
 	}
 	
 	

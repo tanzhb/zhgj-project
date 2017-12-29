@@ -528,5 +528,43 @@ angular.module('MetronicApp').service('orderService',
 						        });
 						        return deferred.promise;//返回承诺
 						  },
+						  //获取默认框架
+						  findDefaultFrame : function(type,selectFor,comId){
+						        var deferred = $q.defer();  
+						        $http.get("rest/order/findDefaultFrame", {params:{type:type,selectFor:selectFor,comId:comId}})
+						        .success(function (data) {  
+						            // 如果连接成功，延时返回给调用者  
+						            deferred.resolve(data);  
+						        })  
+						            .error(function () {  
+						                deferred.reject('连接服务器出错！');  
+						            })  
+						        return deferred.promise;  
+						          
+						    },
+							//用户取消订单申请
+						    userCancelOrderApply : function(processInstanceId) {
+								var deferred = $q.defer();
+								$http.post("rest/order/userCancelOrderApply", processInstanceId
+								).success(function (data) {
+					                // 如果连接成功，延时返回给调用者
+					                deferred.resolve(data);
+					            }).error(function () {
+				                    deferred.reject('连接服务器出错！');
+				                })
+								return deferred.promise;
+							},
+							//用户取消框架申请
+						    userCancelFrameApply : function(processInstanceId) {
+								var deferred = $q.defer();
+								$http.post("rest/order/userCancelFrameApply", processInstanceId
+								).success(function (data) {
+					                // 如果连接成功，延时返回给调用者
+					                deferred.resolve(data);
+					            }).error(function () {
+				                    deferred.reject('连接服务器出错！');
+				                })
+								return deferred.promise;
+							}
 		}
 		} ]);
