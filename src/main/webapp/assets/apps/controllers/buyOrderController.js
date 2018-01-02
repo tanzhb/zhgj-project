@@ -3379,8 +3379,24 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       $scope.clearNoNum = function(obj,attr){
 			    	 //把非数字的都替换掉
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
+			    	 if(!isNaN(obj[attr])&&obj[attr]!=0){
+			    		 $scope.getUnitPrice(obj);//根据数量获得指导单价
+			    	 }
 		    	 }
-
+		       $scope.getUnitPrice=function(obj){
+		    	   var params={};
+		    	  // obj. materiel.unitPrice
+		    	   params.materielSerial=obj.materielSerial;//物料流水
+		    	   params.supplyComId=$scope.buyOrder.supplyComId;//供应商
+		    	   params.number=obj.amount;//销售数量
+		    	   var promise = orderService.getUnitPrice(params);
+		   		promise.then(function(data){
+		   		 obj. materiel.unitPrice=data;
+		   		},function(data){
+		   			//调用承诺接口reject();
+		   		});
+		    	   
+		       }
 		       
 		     //更新订单金额数据
 		     $scope.updateOrderAmount = function(obj,attr){

@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -74,6 +75,7 @@ import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
@@ -82,6 +84,7 @@ import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
@@ -96,10 +99,12 @@ import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -157,6 +162,10 @@ public class OrderController {
     private CompanyService companyService;
     @Resource
     private StockService stockService;
+    @Resource
+    private PriceListService  priceListService;
+    @Resource
+    private LadderPriceService  ladderPriceService;
     
     
 	//销售订单
@@ -2717,4 +2726,57 @@ public class OrderController {
     	ContractVO contractVO = (ContractVO) this.runtimeService.getVariable(pi.getId(), "entity");
 		cancelFrameApply(contractVO.getSerialNum());
     }
+    /**
+     * 获取采购/销售订单物料价格
+     */
+	@RequestMapping(value = "/getUnitPrice", method = RequestMethod.POST)
+	@ResponseBody
+	public String getUnitPrice(@RequestBody String params) {
+		PriceList priceList = json2PriceList(params);
+		PriceList priceList1 = null;
+		String price = "";
+		if (!StringUtils.isEmpty(priceList.getBuyComId())) {
+			priceList1 = priceListService.getPriceListInfo(
+					priceList.getBuyComId(), priceList.getMaterielSerial(),
+					"salePrice");
+		} else if (!StringUtils.isEmpty(priceList.getSupplyComId())) {
+			priceList1 = priceListService.getPriceListInfo(
+					priceList.getSupplyComId(), priceList.getMaterielSerial(),
+					"buyPrice");
+		}
+		if (priceList1 != null) {
+			price = priceList1.getPrice();
+			if ("1".equals(priceList1.getIsLadderPrice())) {
+				List<LadderPrice> list = ladderPriceService
+						.selectListByPriceSerial(priceList1.getSerialNum());// 获取阶梯价格
+				if (!CollectionUtils.isEmpty(list)) {
+					for (LadderPrice lp : list) {
+						if (new BigDecimal(priceList1.getNumber())
+								.compareTo(new BigDecimal(lp.getCountStart())) > -1
+								&& new BigDecimal(priceList1.getNumber())
+										.compareTo(new BigDecimal(lp
+												.getCountStart())) <= 0) {
+							price = lp.getPrice();
+							break;
+						}
+
+					}
+
+				}
+
+			}
+		}
+		return price;
+	}
+	private PriceList json2PriceList(String params) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		PriceList priceList = new PriceList();
+		try {
+			priceList = objectMapper.readValue(params, PriceList.class);
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return priceList;
+	}
 }

@@ -1156,7 +1156,7 @@ margin-right: 20px;
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
 			                          </td>
 			                          <td>  
-			                          		<input style="padding:6px 3px" type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')"  >
+			                          	<input style="padding:6px 3px" type="text"  name="amount{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].amount" ng-keyup="clearNoNum(orderMateriel[$index],'amount')"   >
                                       		<p class="form-control-static" ng-hide="orderMaterielInput{{$index}}"> 当前库存：{{_orderMateriel.materiel.stockCount}} </p>
                                       		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.amount}} </p>
 			                          </td>

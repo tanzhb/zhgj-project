@@ -565,6 +565,17 @@ angular.module('MetronicApp').service('orderService',
 				                    deferred.reject('连接服务器出错！');
 				                })
 								return deferred.promise;
+							},
+							getUnitPrice:function(params) {//获取订单物料价格
+								var deferred = $q.defer();
+								$http.post("rest/order/getUnitPrice", JSON.stringify(params)
+								).success(function (data) {
+					                // 如果连接成功，延时返回给调用者
+					                deferred.resolve(data);
+					            }).error(function () {
+				                    deferred.reject('连接服务器出错！');
+				                })
+								return deferred.promise;
 							}
 		}
 		} ]);

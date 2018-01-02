@@ -131,6 +131,16 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 		}
 		return  priceLists;
 	}
+	@Override
+	public PriceList getPriceListInfo(String comId, String materielSerial,String priceType) {
+		Map<String,Object>map=new HashMap<String,Object>();
+		map.put("priceType", priceType);
+		map.put("materielSerial", materielSerial);
+		map.put("comId", comId);
+		PriceList priceList=priceListMapper.getGuideUnitPrice(map);
+		return priceList;
+	}
+	
 	
 	}
 	

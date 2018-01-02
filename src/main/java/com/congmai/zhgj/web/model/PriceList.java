@@ -80,6 +80,9 @@ public class PriceList extends BaseVO{
     
     private String buyComName;
     
+    private   String number;//订单数量
+    
+    
     private String comNum;//企业编号
     
     private String comName;//企业名称
@@ -383,6 +386,14 @@ public class PriceList extends BaseVO{
 
 	public void setProcessBase(ProcessBase processBase) {
 		this.processBase = processBase;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public void setNumber(String number) {
+		this.number = number;
 	}
 	
 }
