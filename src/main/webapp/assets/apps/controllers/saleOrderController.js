@@ -2463,6 +2463,9 @@ var e = $("#form_clauseSettlement"),
     $scope.editClauseSettlement  = function() {// 进入编辑结算条款
     	$scope.clauseSettlementInput = false;
 	    $scope.clauseSettlementShow = false;
+		if($scope.clauseSettlement.CSD.length==0){
+			$scope.addCSD();
+		}
     };
 		   	   
     
@@ -2472,16 +2475,33 @@ var e = $("#form_clauseSettlement"),
      */
    $scope.addCSD = function(){
    	if($scope.clauseSettlement.CSD){}else{$scope.clauseSettlement.CSD =[{}]}
-	    
    	$scope.clauseSettlement.CSD[_index] = {};
 	    $scope.clauseSettlement.CSD[_index].deliveryRate = 100 - $scope._totalRate();
 	    $scope.clauseSettlement.CSD[_index].deliveryAmount = ($scope.totalOrderAmount()*$scope.clauseSettlement.CSD[_index].deliveryRate/100).toFixed(2);
 	    $scope.clauseSettlement.CSD[_index].billingAmount =  Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount());
 	    $scope.clauseSettlement.CSD[_index].unbilledAmount = 0;
-	    
 	   _index++;
+	  
    };
-   
+   $scope.addDefaultLine = function(index){
+	   var flag=false;
+	   if($scope.clauseSettlement.CSD[index].paymentType=='预付款'){
+		   for(var i in $scope.clauseSettlement.CSD){
+			   if($scope.clauseSettlement.CSD[i].paymentType=='尾款'){
+				   flag=true;
+				   return;
+			   }
+		   }
+		   $scope.clauseSettlement.CSD[_index] = {};
+		    $scope.clauseSettlement.CSD[_index].deliveryRate = 100 - $scope._totalRate();
+		    $scope.clauseSettlement.CSD[_index].deliveryAmount = ($scope.totalOrderAmount()*$scope.clauseSettlement.CSD[_index].deliveryRate/100).toFixed(2);
+		    $scope.clauseSettlement.CSD[_index].billingAmount =  Number($scope._totaldeliveryAmount()) - Number($scope._totalbillingAmount());
+		    $scope.clauseSettlement.CSD[_index].unbilledAmount = 0;
+		    $scope.clauseSettlement.CSD[_index].paymentType='尾款';
+		    _index++;
+	   }
+	   
+   }
    
    $scope._totalRate  = function() {//计算总的支付比例
       	var totalRate = 0;
@@ -4594,8 +4614,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	     $scope.jumpToUrl= function(judgeString) {
 		 	    	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
 		 	     }
-		 		$scope.showSX=function(judgeString){
+		 		$scope.showSX=function(judgeString,index){
 		 			debugger;
+		 			if(index==undefined){
 		 			if(judgeString=='f'){
 		 				if($scope.showSXf!='1'){
 		 					$scope.showSXf='1';
@@ -4603,7 +4624,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 					$scope.showSXf='0';
 		 				}
 		 			}
-		 		
+		 		}else{
+		 			var val="showSXf"+index;
+		 			if($scope[val]!=true){
+		 				$scope[val]=true;
+	 				}else{
+	 					$scope[val]=false;
+	 				}
+		 		}
 		 		}
 		 		
 
@@ -4746,4 +4774,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	        };
 		 	   
 		 	       /** *************关联框架协议  end*************** */
+		 	       $scope.repeatDoneSelect = function(){
+				    		   $('select[name="paymentType"]').selectpicker({
+				                    showSubtext: true,
+				                    size : 5
+				                });
+				    			$('select[name="paymentType"]').selectpicker('refresh');//刷新插件
+			       };
 }]);

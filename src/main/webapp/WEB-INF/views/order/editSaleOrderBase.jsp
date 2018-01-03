@@ -1216,11 +1216,11 @@ margin-right: 20px;
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.lastDeliveryDate}} </p>
 			                          </td>
 			                          <td>  
-			                          		<select  ng-if="$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+			                          		<select  ng-if="$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
 	                                              <!--  <option value=""></option> -->
 	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
 	                                         </select>
-	                                         <select  ng-if="!$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
+	                                         <select  ng-if="!$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
 	                                              <!--  <option value=""></option> -->
 	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
 	                                         </select>
@@ -1230,16 +1230,18 @@ margin-right: 20px;
                                       <td>
                                       <div style="width:100px">
                                       	<span ng-hide="orderMaterielInput{{$index}}">
-                                       		<!-- &nbsp;&nbsp;&nbsp;&nbsp;
-                                        	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)"><i class="fa fa-save"></i></a> -->
+                                       		&nbsp;&nbsp;&nbsp;&nbsp;
+                                        	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)"><i class="fa fa-save" title="保存"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
-                                        	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"></i></a>
+                                        	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"  title="取消"></i></a>
+                                        	&nbsp;&nbsp;&nbsp;
+                                        	<a  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"  title="删除" ></i></a>
                                         </span>
                                         <span  ng-show="operation_o{{$index}}&&noShow">
                                         	&nbsp;&nbsp;&nbsp;&nbsp;
-                                        	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel)"><i class="fa fa-edit"></i></a>
+                                        	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel)"><i class="fa fa-edit"  title="编辑"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
-                                        	<a ng-show="orderMaterielShow{{$index}}"  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"></i></a>
+                                        	<a ng-show="orderMaterielShow{{$index}}"  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"  title="删除" ></i></a>
                                        	</span>
                                        	</div>
                                       </td>
@@ -1369,17 +1371,18 @@ margin-right: 20px;
                   </div>
 				</form>
 				<form id="form_sample_3"   >
-			         <div class="table-scrollable">
+			         <div class="table">
                           <table class="table table-bordered table-hover">
                               <thead>
                                  <tr>
                                      <th style="width:150px">支付类型</th>
                                      <th style="width:150px">支付节点</th>
+                                     <th style="width:150px">开票方式</th>
                                      <th style="width:70px">账期（天）</th>
                                      <th style="width:50px">支付比率%</th>
                                      <th style="width:150px">支付金额{{arithmeticAllDeliveryAmount()}}</th>
                                      <th style="width:150px">支付方式</th>
-                                     <th style="width:150px">开票方式</th>
+                                    <!--  <th style="width:150px">开票方式</th> -->
 <!--                                      <th style="width:150px">开票金额</th>
                                      <th style="width:150px">未开金额</th> -->
                                      <th style="width:150px">备注</th>
@@ -1387,32 +1390,66 @@ margin-right: 20px;
                                  </tr>
                              </thead>
                               <tbody>
-                                  <tr ng-repeat="_CSD in clauseSettlement.CSD track by $index" ng-mouseover="showOperation('csd',$index)" ng-mouseleave="hideOperation('csd',$index)">
+                                  <tr ng-repeat="_CSD in clauseSettlement.CSD track by $index" ng-mouseover="showOperation('csd',$index)" ng-mouseleave="hideOperation('csd',$index)"   repeat-done="repeatDoneSelect($index)">
                                       <td>
-			                                <select  id="paymentType[$index]" name="paymentType" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentType"  >
+                                        	<div class="" >
+													<div class="input-group"  >
+                                      <input type="text" name="paymentType"
+															class="form-control"
+															ng-model="clauseSettlement.CSD[$index].paymentType"    ng-show="!showSXf{{$index}}&&!clauseSettlementShow"  ng-change="addDefaultLine($index)" />
+															<div  ng-show="showSXf{{$index}}">
+							<select  id="paymentType[$index]"   data-live-search="true" data-size=""  name="paymentType" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentType"  ng-change="addDefaultLine($index)">
                                               <option value=""></option>
                                              	<option value="预付款" >预付款</option>
                                                <option value="中期款" >中期款</option>
                                                <option value="尾款" >尾款</option>
                                                <option value="全款" >全款</option>
                                              </select>
+														</div>
+															<span ng-hide="clauseSettlementInput"   class="input-group-btn" ng-click="showSX('f',$index)"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-show="!showSXf{{$index}}">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-show="showSXf{{$index}}">
+																	输入
+																</button>
+															</span>
+															</div></div>
+			                               <!--  <select  id="paymentType[$index]"   data-live-search="true" data-size=""  name="paymentType" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentType"  >
+                                              <option value=""></option>
+                                             	<option value="预付款" >预付款</option>
+                                               <option value="中期款" >中期款</option>
+                                               <option value="尾款" >尾款</option>
+                                               <option value="全款" >全款</option>
+                                             </select> -->
 			                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentType}} </p>
 			                          </td>
 			                          <td>
                                       		<select  id="deliveryNode[$index]" name="deliveryNode" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryNode"  >
 			                                	<option value=""></option>
                                              	<option value="合同签订" >合同签订</option>
-                                              <option value="提货前" >提货前</option>
+                                             <!--  <option value="提货前" >提货前</option>
                                               <option value="发货后" >发货后</option>
                                               <option value="收货后" >收货后</option>
-                                              <option value="验收后" >验收后</option>
+                                              <option value="验收后" >验收后</option> -->
+                                              <option value="发货前" >发货前</option>
                                               <option value="入库后" >入库后</option>
-                                              <option value="出库后" >出库后</option>
-                                              <option value="质保期满" >质保期满</option>
+                                             <!--  <option value="出库后" >出库后</option>
+                                              <option value="质保期满" >质保期满</option> -->
                                               <option value="收到委托方付款后" >收到委托方付款后</option>
+                                              <option value="其它" >其它</option>
                                                </select>
 			                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryNode}} </p>
 			                          </td>
+			                           <td>
+                                     		<select  id="billingMethod[$index]" name="billingMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingMethod"  >
+		                                <option value=""></option>
+                                            	<option value="先票后款" >先票后款</option>
+                                              <option value="先款后票" >先款后票</option>
+                                              </select>
+		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
+		                          </td>
                                       <td>
                                       		<input type="text" id="accountPeriod[$index]" name="accountPeriod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].accountPeriod" 
                                       		 ng-keyup="clearNoNum(clauseSettlement.CSD[$index],'accountPeriod')" >
@@ -1441,14 +1478,7 @@ margin-right: 20px;
                                               </select>
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.paymentMethod}} </p>
 		                          </td>
-		                          <td>
-                                     		<select  id="billingMethod[$index]" name="billingMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingMethod"  >
-		                                <option value=""></option>
-                                            	<option value="先票后款" >先票后款</option>
-                                              <option value="先款后票" >先款后票</option>
-                                              </select>
-		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.billingMethod}} </p>
-		                          </td>
+		                         
 		                          <!-- <td>
                                      		<input type="text" id="billingAmount[$index]" name="billingAmount" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].billingAmount"  
                                      		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'billingAmount');_arithmeticUnbilledAmount(this)">
