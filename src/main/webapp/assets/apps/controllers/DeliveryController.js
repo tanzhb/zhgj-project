@@ -384,8 +384,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             messages: {
             	batchNum:{required:"批次号不能为空！"},
             	manufactureDate:{required:"生产日期不能为空！"},
-            	deliverCount:{required:"发货数量不能为空！",digits:"只能是正整数！"},
-            	deliverCount1:{required:"发货数量不能为空！",digits:"只能是正整数！"},
+            	deliverCount:{required:"发货数量不能为0！",digits:"只能是正整数！"},
+            	deliverCount1:{required:"发货数量不能为0！",digits:"只能是正整数！"},
             },
             rules: {
             	batchNum:{
@@ -531,7 +531,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		for (var i=0;i < $scope.deliveryMaterielE.length;i++){
 			var deliveryMateriel=$scope.deliveryMaterielE[i];
 			if(isNull(deliveryMateriel.deliverCount)){
-				toastr.error("发货数量不能为空！");	
+				toastr.error("发货数量不能为0！");	
 				return;
 			}
 			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
@@ -2949,7 +2949,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             focusInvalid: !1,
             ignore: "",
             messages: {
-            	deliverCount:{required:"发货数量不能为空！",digits:"发货数量必须为数字！"},
+            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
             },
             rules: {
             	deliverCount: {
