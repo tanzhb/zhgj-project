@@ -596,6 +596,8 @@
 																<option ng-repeat="item in comContacts"
 																value="{{item.contactName}}">{{item.contactName}}</option>
 														</select>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.contact}}</p>
 													</div>
 												</div>
 											</div>
@@ -615,7 +617,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">付款银行 <span
+													<label class="control-label bold">收款银行 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control" id="bank" name="bank"  ng-change="changeValue()"

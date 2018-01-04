@@ -30,7 +30,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
          }*/
 		 
-		 if($state.current.name=="addPay"){
+		 if($state.current.name=="addPay"||$state.current.name=="addPayForBuyOrder"){
 			 loadMainTable1();
 				$scope.span =false;
 				$scope.input = true;
@@ -54,11 +54,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			}
 					    }
 			
-			}else if($state.current.name=="applyPay"){
+			}else if($state.current.name=="applyPay"||$state.current.name=="applyPayForBuyOrder"){
 				$scope.input=false;
 				$scope.span =true;
 				 $scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	//在审批页面加载评论
-			}else if($state.current.name=="viewPay"){
+			}else if($state.current.name=="viewPay"||$state.current.name=="viewPayForBuyOrder"){
 				$scope.input=false;
 				$scope.span =true;
 				$scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	

@@ -34,6 +34,7 @@
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission> --%>
 		<li><a data-target="#tab_15_3" data-toggle="tab">收货计划</a></li>
+		<li><a data-target="#tab_15_4" data-toggle="tab">付款计划</a></li>
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
@@ -351,7 +352,190 @@
 				</div>
 			</div>
         </div>
-        <!-- 收货计划---end -->
+        <!-- 付款计划---end -->
+        <div class="tab-pane" id="tab_15_4">
+        	<div class="row">
+	<div class="col-md-12">
+
+		<script type="text/javascript">
+
+		function MyCtrl($rootScope, $scope, $location,$stateParams) {
+			  $scope.jumpToUrl = function(path) {
+				  $location.path(path);
+				  initPageBar($rootScope, path);
+			  };
+			}
+		
+		</script>
+
+		<!-- BEGIN EXAMPLE TABLE PORTLET-->
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">付款列表</span>
+				</div>
+				<div class="actions" ng-controller='MyCtrl' id="buttons">
+				<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPayForBuyOrder')"><i class="fa fa-plus"></i> 添加</label>
+									
+				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
+									
+									
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
+									
+				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				</div>
+			</div>
+
+			<div id="delUsersModal" class="modal fade" tabindex="-1"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title">确认</h4>
+						</div>
+						<div class="modal-body">
+							<p>是否删除已选条目?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-dismiss="modal"
+								class="btn dark btn-outline">取消</button>
+							<button type="button" ng-click="confirmDel()" class="btn green">确定
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="portlet-body">
+			
+					<div class="tabbable-custom ">
+						<ul class="nav nav-tabs " id="accountPayableTab">
+							<li class="active"><a href="#applyPay" data-toggle="tab"
+								ng-click="toApplyPay()"> 待申请 </a></li>
+							<li><a href="#daibanPay" data-toggle="tab" ng-click="toDaibanPay()">待办流程<dbQuantity1/> </a></li>
+							<li><a href="#yibanPay" data-toggle="tab" ng-click="toYibanPay()">
+									已办流程 </a></li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane active" id="applyPay">
+								<table
+									class="table table-striped table-bordered table-hover table-checkable order-column"
+									id="sample_4">
+									<thead>
+										<tr>
+											<!-- <th style="text-align: center"><input name="select_all"
+												value="1" id="example-select-all" type="checkbox" /></th> -->
+												
+											<th>
+                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                     <input type="checkbox" class="group-checkable" data-set="#sample_4 .checkboxes" />
+                                                     <span></span>
+                                                 </label>
+                                             </th>
+												
+							<th style="white-space: nowrap;">应付帐单号</th>
+							<th style="white-space: nowrap;">付款类型</th>
+							<th style="white-space: nowrap;">币种</th>
+							<th style="white-space: nowrap;">应付金额</th>
+							<th style="white-space: nowrap;">应付日期</th>
+							<th style="white-space: nowrap;">收款方</th>
+							<th style="white-space: nowrap;">实付日期</th>
+							<th style="white-space: nowrap;">实付金额</th>
+							<th style="white-space: nowrap;">是否开票</th>
+							<th style="white-space: nowrap;">状态</th>
+							<th style="white-space: nowrap;">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+							<div class="tab-pane" id="daibanPay">
+								<div class="row">
+									<div class="col-md-12">
+				
+										<!-- BEGIN EXAMPLE TABLE PORTLET-->
+										<div class="portlet box green">
+											<div class="portlet-title" style="height:50px"></div>
+				
+											<div class="portlet-body">
+												<table class="table table-striped table-bordered table-hover table-checkable order-column"
+													id="dbTableForPay">
+													<thead>
+														<tr>
+															<!-- <th style="text-align: center"><input name="select_all"
+																value="1" id="example-select-all" type="checkbox" /></th> -->
+																
+															 <th>
+			                                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+			                                                        <input type="checkbox" class="group-checkable" data-set="#dbTableForPay .checkboxes" />
+			                                                        <span></span>
+			                                                    </label>
+			                                                </th>
+															
+															<th style="white-space: nowrap;">任务状态</th>
+															<th style="white-space: nowrap;">申请人</th>
+															<th style="white-space: nowrap;">标题</th>
+															<th style="white-space: nowrap;">当前节点</th>
+															<th style="white-space: nowrap;">负责人</th>
+															<th style="white-space: nowrap;">任务创建时间</th>
+															<th style="white-space: nowrap;">流程状态</th>
+														</tr>
+													</thead>
+													<tbody>				
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<!-- END EXAMPLE TABLE PORTLET-->
+									</div>
+								</div>
+							</div>
+							<div class="tab-pane" id="yibanPay">
+								<div class="row">
+									<div class="col-md-12">
+				
+										<!-- BEGIN EXAMPLE TABLE PORTLET-->
+										<div class="portlet box green">
+											<div class="portlet-title" style="height:50px"></div>
+				
+											<div class="portlet-body">
+												<table class="table table-striped table-bordered table-hover"
+													id="ybTableForPay">
+													<thead>
+														<tr>
+																														
+															<th>申请人</th>
+															<th>标题</th>
+															<th>任务开始时间</th>
+															<th>任务签收时间</th>
+															<th>任务结束时间 </th>
+															<th>流程结束原因</th>
+															<th>流程版本号</th>
+															<th>操作</th>
+														</tr>
+													</thead>
+													<tbody>				
+													</tbody>
+												</table>
+											</div>
+										</div>
+										<!-- END EXAMPLE TABLE PORTLET-->
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+			</div>
+		</div>
+		<!-- END EXAMPLE TABLE PORTLET-->
+	</div>
+</div>
+        </div>
+        <!-- 付款计划---end -->
  </div>
  </div>
  <!-- 删除订单modal 开始 -->
