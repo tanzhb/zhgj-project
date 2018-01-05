@@ -106,7 +106,7 @@
 						<ul class="nav nav-tabs " id="accountPayableTab">
 							<li class="active"><a href="#apply" data-toggle="tab"
 								ng-click="toApply()"> 待申请 </a></li>
-							<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">待办流程<dbQuantity></dbQuantity> </a></li>
+							<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">待办流程<dbQuantity1/> </a></li>
 							<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
 									已办流程<ybQuantity></ybQuantity> </a></li>
 						</ul>

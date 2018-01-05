@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
@@ -47,11 +48,14 @@ import com.congmai.zhgj.core.util.Page;
 import com.congmai.zhgj.core.util.ProcessDefinitionCache;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.WorkflowUtils;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
 import com.congmai.zhgj.web.service.activiti.WorkflowService;
@@ -85,6 +89,8 @@ public class ProcessAction {
 	
 	@Autowired
 	private WorkflowDeployService workflowProcessDefinitionService;
+	@Resource
+    private ProcessBaseService processBaseService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -447,6 +453,10 @@ public class ProcessAction {
 			
 			
 			if(revokeFlag == 0){
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("chexiaoApply"));//撤销	
+				processBaseService.updateHistoricTask(historicTaskVO);
 				result = "撤销任务成功！";
 			}else if(revokeFlag == 1){
 				result = "撤销任务失败 - [ 此审批流程已结束! ]";

@@ -75,6 +75,7 @@ import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
@@ -99,6 +100,7 @@ import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.InvoiceService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
@@ -166,6 +168,8 @@ public class OrderController {
     private PriceListService  priceListService;
     @Resource
     private LadderPriceService  ladderPriceService;
+    @Resource
+    private InvoiceService  invoiceService;
     
     
 	//销售订单
@@ -695,7 +699,7 @@ public class OrderController {
 				   orderInfo = orderService.selectById(orderInfo.getSerialNum());
 				   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
 			}else{
-				cancelApply(orderInfo.getSerialNum());
+				cancelApply(orderInfo.getSerialNum(),taskId);
 			}
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
@@ -722,8 +726,13 @@ public class OrderController {
 	 * @Description (取消申请)
 	 * @param serialNum
 	 */
-	private void cancelApply(String serialNum) {
+	private void cancelApply(String serialNum,String taskId) {
 		this.processBaseService.delete(serialNum);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+		HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+		historicTaskVO.setTaskId(taskId);
+		historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+		processBaseService.updateHistoricTask(historicTaskVO);
 		OrderInfo m = new OrderInfo();
 		m.setStatus("0");//取消申请订单回到审批前状态
 		m.setSerialNum(serialNum);
@@ -732,6 +741,7 @@ public class OrderController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		m.setUpdater(currenLoginName);
 		orderService.updateStatus(m);
+		
 	}
 	
 	
@@ -740,16 +750,63 @@ public class OrderController {
 	 * @Description (取消申请)
 	 * @param serialNum
 	 */
-	private void cancelFrameApply(String id) {
+	private void cancelFrameApply(String id,String taskId) {
 		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
 		ContractVO m = new ContractVO();
-		m.setStatus("0");//取消申请订单回到审批前状态
+		m.setStatus("0");//取消申请框架回到审批前状态
 		m.setId(id);
 		m.setUpdateTime(new Date());
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		m.setUpdater(currenLoginName);
 		contractService.update(m);
+	}
+	/**
+	 * 
+	 * @Description (取消申请)
+	 * @param serialNum
+	 */
+	private void cancelPriceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+		PriceList p = new PriceList();
+		p.setStatus("0");//取消申请价格回到审批前状态
+		p.setSerialNum(id);
+		p.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		p.setUpdater(currenLoginName);
+		priceListService.update(p);
+	}
+	/**
+	 * 
+	 * @Description (取消发票)
+	 * @param serialNum
+	 */
+	private void cancelInvoiceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+				Invoice i= new Invoice();
+		i .setStatus("0");//取消申请价格回到审批前状态
+		i.setSerialNum(id);
+		i.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		i.setUpdater(currenLoginName);
+		invoiceService.update(i);
 	}
     /**
      * 
@@ -2620,7 +2677,7 @@ public class OrderController {
 			if(reApply){
 		      
 	        }else{
-	        	cancelFrameApply(contract.getId());
+	        	cancelFrameApply(contract.getId(),taskId);
 	        }
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
@@ -2708,23 +2765,43 @@ public class OrderController {
     /**
      * 用户取消订单申请
      */
-    @RequestMapping(value = "/userCancelOrderApply", method = RequestMethod.POST)
-    @ResponseBody
-    public void userCancelOrderApply(@RequestBody String processInstanceId) {
+    @RequestMapping(value = "/userCancelOrderApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public void userCancelOrderApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
     	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
 		OrderInfo orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
-		cancelApply(orderInfo.getSerialNum());
+		cancelApply(orderInfo.getSerialNum(),taskId);
     }
     
     /**
      * 用户取消框架申请
      */
-    @RequestMapping(value = "/userCancelFrameApply", method = RequestMethod.POST)
-    @ResponseBody
-    public void userCancelFrameApply(@RequestBody String processInstanceId) {
+    @RequestMapping(value = "/userCancelFrameApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelFrameApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
     	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
     	ContractVO contractVO = (ContractVO) this.runtimeService.getVariable(pi.getId(), "entity");
-		cancelFrameApply(contractVO.getSerialNum());
+		cancelFrameApply(contractVO.getSerialNum(),taskId);
+    }
+    /**
+     * 用户取消价格申请
+     */
+    @RequestMapping(value = "/userCancelPriceApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelPriceApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	PriceList priceList = (PriceList) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelPriceApply(priceList.getSerialNum(),taskId);
+    }
+    /**
+     * 用户取消发票(销项票)申请
+     */
+    @RequestMapping(value = "/userCancelInvoiceApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelInvoiceApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	Invoice invoice = (Invoice) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelInvoiceApply(invoice.getSerialNum(),taskId);
     }
     /**
      * 获取采购/销售订单物料价格

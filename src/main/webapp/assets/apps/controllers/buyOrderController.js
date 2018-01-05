@@ -660,7 +660,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status==2){
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
 										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
-									}else if(Number(row.materielCount)>=Number(row.deliveryCount)){
+									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
 										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
@@ -3901,11 +3901,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								if(isNull(row.version)){
-		        									return ''
-		        									/*return "<a href='javascript:void(0);' ng-click=\"userCancelOrderApply('"+row.processInstanceId+"')\">取消</a>";*/
-		        								}else{
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable','buyOrder')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
 		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+		        								}else{
+		        									return '';
 		        								}
 		        								
 		        							}
@@ -3952,7 +3955,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	$scope.addCompany = function(){
 		$state.go("companyAdd");
 	}
-	
+
 	/**
 	 * 加载仓库数据
 	 */
@@ -4731,19 +4734,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	    	 }
 		 	      }
 		 	      
-		 	      ////用户取消订单申请
-//		 	     $scope.userCancelOrderApply = function(processInstanceId){
-//			        	orderService.userCancelOrderApply(processInstanceId).then(
-//			          		     function(data){
-//			          		    	toastr.success('订单申请取消成功！！');
-//		          		    		$('#endTaskTable').DataTable().ajax.reload();
-//			          		     },
-//			          		     function(error){
-//			          		         $scope.error = error;
-//			          		         toastr.error('数据保存出错！');
-//			          		     }
-//			          		 );
-//			        }
+		 	     
 		 	     $scope.repeatDoneSelect = function(){
 		    		   $('select[name="paymentType"]').selectpicker({
 		                    showSubtext: true,
@@ -5174,7 +5165,16 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 								{
 									mData : 'revoke',
 									mRender : function(data,type,row,meta) {
-										return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','ybTable')\">撤销</a>";
+										if(isNull(row.version)&&isNull(row.deleteReason)){
+        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','ybTableForPay','payForBuyTable')\">取消申请</a>";
+        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+        									return '';
+        								}else if(row.deleteReason!='已撤销'){
+        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','ybTableForPay')\">撤销</a>";
+        								}else{
+        									return '';
+        								}
+										
 									}
 								}
 								]

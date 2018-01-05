@@ -2216,7 +2216,16 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        						{
 							        							mData : 'revoke',
 							        							mRender : function(data,type,row,meta) {
-							        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskOutInvoiceTable')\">撤销</a>";
+							        								if(isNull(row.version)&&isNull(row.deleteReason)){
+							        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskOutInvoiceTable','outInvoice')\">取消申请</a>";
+							        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+							        									return '';
+							        								}else if(row.deleteReason!='已撤销'){
+							        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskOutInvoiceTable')\">撤销</a>";
+							        								}else{
+							        									return '';
+							        								}
+							        								
 							        							}
 							        						}
 							        						]

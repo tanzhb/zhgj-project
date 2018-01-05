@@ -39,12 +39,17 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.DeliveryTransport;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceBillingRecord;
 import com.congmai.zhgj.web.model.Materiel;
@@ -607,6 +612,15 @@ public class InvoiceController {
 			variables.put("entity", invoice);
 			variables.put("isPass", isPass);
 			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			//发送消息
+			if(isPass){
+			        //申请消息
+				invoice = invoiceService.selectById(invoice.getSerialNum());
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(invoice,MessageConstants.APPLY_OUT_INVOICE));
+				   
+			}else{
+				cancelInvoiceApply(invoice.getSerialNum(),taskId);
+			}
 			
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
@@ -681,4 +695,25 @@ public class InvoiceController {
         	}
     	return flag;
     }
+    /**
+	 * 
+	 * @Description (取消发票)
+	 * @param serialNum
+	 */
+	private void cancelInvoiceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+				Invoice i= new Invoice();
+		i .setStatus("0");//取消申请价格回到审批前状态
+		i.setSerialNum(id);
+		i.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		i.setUpdater(currenLoginName);
+		invoiceService.update(i);
+	}
 }

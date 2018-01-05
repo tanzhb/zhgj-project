@@ -373,7 +373,7 @@
 			<div class="portlet-title">
 				<div class="caption">
 					<i class="fa fa-globe font-green"></i>
-					<span class="caption-subject font-green bold uppercase">付款列表</span>
+					<span class="caption-subject font-green bold uppercase">付款计划列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl' id="buttons">
 				<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
