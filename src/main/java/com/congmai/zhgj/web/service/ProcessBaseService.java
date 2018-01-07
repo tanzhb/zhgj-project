@@ -25,4 +25,5 @@ public interface ProcessBaseService extends GenericService<BaseVO, String> {
 	List<HistoricTaskVO> findFinishedTaskInstancesDiy(Map map);
 
 	void insertHistoricTask(HistoricTaskVO historicTaskVO);
+	void updateHistoricTask(HistoricTaskVO historicTaskVO);
 }

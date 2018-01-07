@@ -175,6 +175,8 @@ public class OrderInfo extends BaseVO {
 
     private String payAmount;//付款金额
     
+    private String receiveCount;//实际入库数量
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -595,6 +597,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setFrame(ContractVO frame) {
 		this.frame = frame;
+	}
+
+	public String getReceiveCount() {
+		return receiveCount;
+	}
+
+	public void setReceiveCount(String receiveCount) {
+		this.receiveCount = receiveCount;
 	}
 
 	

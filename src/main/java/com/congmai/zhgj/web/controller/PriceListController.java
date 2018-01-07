@@ -43,14 +43,18 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -728,6 +732,19 @@ public class PriceListController {
 				variables.put("entity", priceList);
 				variables.put("reApply", reApply);
 				this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+				//发送消息
+				if(reApply){
+				        //申请消息
+					priceList = priceListService.selectById(priceList.getSerialNum());
+					if("buyPrice".equals(priceList.getPriceType())){
+						EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(priceList,MessageConstants.APPLY_BUY_PRICE));
+					}else if("salePrice".equals(priceList.getPriceType())){
+						EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(priceList,MessageConstants.APPLY_SALE_PRICE));
+					}
+					   
+				}else{
+					cancelPriceApply(priceList.getSerialNum(),taskId);
+				}
 				
 			} catch (ActivitiObjectNotFoundException e) {
 //				message.setStatus(Boolean.FALSE);
@@ -748,4 +765,25 @@ public class PriceListController {
 			
 	    	return result;
 	    }
+		/**
+		 * 
+		 * @Description (取消申请)
+		 * @param serialNum
+		 */
+		private void cancelPriceApply(String id,String taskId) {
+			this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+			//更新已办tab里面的deleteReason 更新为'取消申请'
+					HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+					historicTaskVO.setTaskId(taskId);
+					historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+					processBaseService.updateHistoricTask(historicTaskVO);
+			PriceList p = new PriceList();
+			p.setStatus("0");//取消申请价格回到审批前状态
+			p.setSerialNum(id);
+			p.setUpdateTime(new Date());
+			Subject currentUser = SecurityUtils.getSubject();
+			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+			p.setUpdater(currenLoginName);
+			priceListService.update(p);
+		}
 }

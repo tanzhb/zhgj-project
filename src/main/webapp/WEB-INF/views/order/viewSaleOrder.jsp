@@ -36,7 +36,7 @@
 					<jsp:include  page="viewSaleOrderBase.jsp"/>
 					
 		            <div class="portlet-title">
-			               <div class="tools">
+			               <div class="tools"   ng-hide="hideAllBtn">
 			               		<button ng-if="saleOrder.status==55" type="button" ng-click="submitPage()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">接收</button>
 			               		<button ng-if="saleOrder.orderType =='委托销售'&&(saleOrder.orderSerial ==''||saleOrder.orderSerial ==null)" type="button" ng-click="saleGenerateBuy()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">分解采购</button>
 			               		<button ng-if="saleOrder.orderType =='自主销售'&&(saleOrder.orderSerial ==''||saleOrder.orderSerial ==null)" type="button" ng-click="saleGenerateProcurementPlan()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">分解采购</button>

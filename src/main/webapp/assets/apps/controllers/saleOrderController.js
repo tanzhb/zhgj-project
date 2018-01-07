@@ -348,8 +348,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	    $scope.saleOrderShow = false;
     };
     
-    $scope.viewSaleOrder = function(serialNum){
-    	$state.go("viewSaleOrder",{serialNum:serialNum});
+    $scope.viewSaleOrder = function(serialNum,businessType){
+    	$state.go("viewSaleOrder",{serialNum:serialNum,businessType:businessType});
     }
     
     $scope.goContract = function(serialNum){
@@ -522,46 +522,48 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'targets' : 3,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (isNull(data)?'0':data)+'</br>'
+								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
 								if(isNull(row.deliveryCount)||row.deliveryCount==0){
-									htm = (isNull(data)?'0':data)+'（已发 0）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'0':data)+'（已发 '+row.deliveryCount+'）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发 '+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}
                     			if(row.deliverStatus=="0"||row.deliverStatus==null){
                     				if(row.status==2){
-										return htm + '<span >待发货</span>';
+										return htm + '<span style="color:#999">待发货</span>';
 									}else{
-										return htm + '<span >未开始</span>';
+										return htm + '<span  style="color:#999">未开始</span>';
 									}
 								}else if(row.deliverStatus=="1"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}else if(row.deliverStatus=="2"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="4"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
 								}else if(row.deliverStatus=="6"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+                    			//	return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+									return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="7"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+                    				//return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+									return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="8"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
 								}else if(row.deliverStatus=="9"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
 								}else if(row.deliverStatus=="11"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="12"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="13"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
 								}else if(row.deliverStatus=="88"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待收货</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待收货</span>';
 								}else{
-									return htm + '<span>未开始</span>';
+									return htm + '<span  style="color:#999">未开始</span>';
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -571,27 +573,27 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (isNull(data)?'0':data)+'</br>'
+								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
 								if(isNull(row.payAmount)||row.payAmount==0){
-									htm = (isNull(data)?'0':data)+'（已付 0）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'0':data)+'（已付 '+row.payAmount+'）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">'+row.payAmount+'</span>' +'）'+'</br>'
 								}
 
                     			if(row.payStatus=="0"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
 								}else if(row.payStatus=="1"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
 								}else if(row.payStatus=="2"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
 								}else if(row.payStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
 								}else if(row.payStatus=="4"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
 								}else if(row.payStatus=="5"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
 								}else{
-									return htm + '<span >未付款</span>';
+									return htm + '<span  style="color:#999">未付款</span>';
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -639,6 +641,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								var clickhtm = ''
 								if(row.status==55){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';
+								} else if(row.status==0){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a><br/>';
+									
 								}else if(row.processBase!=""&&row.processBase!=null){
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 										return clickhtm + '';
@@ -651,7 +656,16 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 											if(isNull(row.deliveryCount)||row.deliveryCount==0){
 												return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 											}else if(Number(row.materielCount)>Number(row.deliveryCount)){
-												return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+												/*	+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'*/
+													+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+													}
+											}else if(Number(row.materielCount)==Number(row.deliveryCount)){
+												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+													/*+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>';*/
+													}
 											}else{
 												return clickhtm + '';
 											}
@@ -1185,6 +1199,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    		||$state.current.name=="submitSaleApply"
           		    			||$state.current.name=="approvalSaleApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
+          		    		if($state.current.name=="viewSaleOrder"&&$stateParams.businessType!=undefined){
+          		    			$scope.hideAllBtn=true;
+          		    			
+          		    		}
           		    	}
           		    	
           		    	$scope.contract=data.contract;
@@ -3632,18 +3650,31 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			});
 			}
 			//********审批流程start****************//
-		       $scope.submitSaleApply  = function() {// 进入申请审批页面
-		        	if(table.rows('.active').data().length != 1){
-		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
-		    		}else{
-		    			var processBase = table.row('.active').data().processBase;
-		    			var status = table.row('.active').data().status;
-		    			if(status == 55){
-		    				showToastr('toast-top-center', 'warning', '未接收订单，不能进行流程申请！')
-		    			}else if(processBase != null){
-		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
-		    		}     	
+		       $scope.submitSaleApply  = function(serialNum,materielCount,status,processBase) {// 进入申请审批页面
+		    	   
+		    	   if(serialNum==undefined){
+		    		 	if(table.rows('.active').data().length != 1){
+			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+			    		}else{
+			    			var materielCount= table.row('.active').data().materielCount;
+			    			  if(materielCount==null){
+					    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
+					    		   return;
+					    	   }
+			    			var processBase = table.row('.active').data().processBase;
+			    			 if(processBase != null){
+			    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+			    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
+			    		}  
+		    	   }else{
+		    		   if(materielCount=='null'){
+			    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
+			    		   return;
+			    	   }
+		    		   if(processBase!='null'){
+		    			   showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+		    		   }else  $state.go('submitSaleApply',{serialNum:serialNum});
+		    	   }
 		        };
 		        
 		        
@@ -3861,6 +3892,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        										}
 		        									},
 		        									{
+		        										mData : 'num'
+		        									},
+		        									{
+		        										mData : 'comName'
+		        									},
+		        									{
 		        										mData : 'userName'
 		        									},
 		        									{
@@ -3934,6 +3971,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								"<span></span></label>";
 		        							
 		        	                    	}
+		        	                    },
+		        	                    {
+		        	                    	'targets' : 2,
+		        	                    	'searchable' : false,
+		        	                    	'orderable' : false,
+		        	                    	'className' : 'dt-body-center',
+		        	                    	'render' : function(data,type, full, meta) {
+		        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+		        							
+		        	                    	},
+		        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+	        									 $compile(td)($scope);
+	        							       }
 		        	                    } 
 		        	                    ]
 
@@ -3956,7 +4006,28 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	
 		        	
 		        }
-
+		        $scope.viewSaleOrderApply=function(taskId,assign){//点击订单编号跳转至审批办理页面
+		        	if(assign==''){
+		        		claimTask(taskId, 'dbTable');
+		        	}
+		        	orderService
+					.getAuditInfos(taskId)
+					.then(
+							function(result) {													
+								var comments = ""//添加评论
+									for (var i=0;i<result.commentList.length;i++){
+										comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+										+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+									}
+									if(result.actionType == 'audit'){//审批流程
+										$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+									}else{
+										$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+									}
+								}
+					);
+		        }
 		        function showYbTable(){
 		        	var endTaskTable = $("#endTaskTable").DataTable(
 		        			{
@@ -3999,6 +4070,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								return "订单申请";
 		        							}
 		        						},
+		        						{
+    										mData : 'num'
+    									},
+    									{
+    										mData : 'comName'
+    									},
 		        						{
 		        							mData : 'userName'
 		        						},
@@ -4048,7 +4125,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								} else
 		        									return '';
 		        							}
-		        						},
+		        						}/*,
 		        						{
 		        							mData : 'version',
 	        								mRender : function(
@@ -4058,19 +4135,38 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								} else
 		        									return '';
 		        							}
-		        						},
+		        						}*/,
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								if(isNull(row.version)){
-		        									return ''
-		        									/*return "<a href='javascript:void(0);' ng-click=\"userCancelOrderApply('"+row.processInstanceId+"')\">取消</a>";*/
-		        								}else{
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable','saleOrder')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
 		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+		        								}else{
+		        									return '';
 		        								}
 		        							}
 		        						}
-		        						]
+		        						],
+		        						'aoColumnDefs': [
+		        			        	                    {
+		        			        	                    	'targets' : 1,
+		        			        	                    	'searchable' : false,
+		        			        	                    	'orderable' : false,
+		        			        	                    	'className' : 'dt-body-center',
+		        			        	                    	'render' : function(data,type, full, meta) {
+		        			        	                    		
+		        			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        			        							
+		        			        	                    	},
+		        			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+		        		        									 $compile(td)($scope);
+		        		        							       }
+		        			        	                    } 
+		        			        	                    ]
 
 		        			})
 		         return endTaskTable;

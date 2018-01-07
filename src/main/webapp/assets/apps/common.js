@@ -623,9 +623,14 @@ angular.module('MetronicApp')
 
 
 /*根据页面不同，导航栏做相应变动*/
-function initPageBar($rootScope, path){
+function initPageBar($rootScope, path,judgeString){
 	if(path == 'addPay'){
 		$("#loadPageBar").innerHTML = "<li><a ui-sref='paymentRecordC'>付款</a> <i class='fa fa-angle-right'></i></li><li><a>新增付款1</a></li>";
+	}else if(path == 'addPayForBuyOrder'){
+		$("#loadPageBar").innerHTML = "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增付款计划</a></li>";
 	}
 }
 

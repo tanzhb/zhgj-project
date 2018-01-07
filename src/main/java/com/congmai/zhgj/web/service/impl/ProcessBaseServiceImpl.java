@@ -77,5 +77,11 @@ ProcessBaseService {
 		 processBaseMapper.insertHistoricTask(historicTaskVO);
 	}
 
+	@Override
+	public void updateHistoricTask(HistoricTaskVO historicTaskVO) {
+		 processBaseMapper.updateHistoricTask(historicTaskVO);
+		
+	}
+
 
 }

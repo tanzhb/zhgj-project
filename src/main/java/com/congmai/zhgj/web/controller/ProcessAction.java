@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
@@ -47,11 +48,16 @@ import com.congmai.zhgj.core.util.Page;
 import com.congmai.zhgj.core.util.ProcessDefinitionCache;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.WorkflowUtils;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
 import com.congmai.zhgj.web.service.activiti.WorkflowService;
@@ -85,6 +91,10 @@ public class ProcessAction {
 	
 	@Autowired
 	private WorkflowDeployService workflowProcessDefinitionService;
+	@Resource
+    private ProcessBaseService processBaseService;
+	@Resource
+    private OrderService  orderService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -210,7 +220,16 @@ public class ProcessAction {
 			map.put("title", base.getTitle());
 			map.put("taskId", base.getTask().getId());
 			map.put("taskName", base.getTask().getName());
-			map.put("createTime", base.getTask().getCreateTime());
+			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
 				User u = this.userService.selectById(new Integer(assign));
@@ -314,6 +333,17 @@ public class ProcessAction {
     		if(base.getProcessDefinition()!=null){
     			map.put("version", base.getProcessDefinition().getVersion());
     		}
+    		if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				map.put("serialNum", o==null?"":o.getSerialNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
     		
 //    		jsonList.add(map);
     		if(!"All".equals(businessType)){
@@ -447,6 +477,10 @@ public class ProcessAction {
 			
 			
 			if(revokeFlag == 0){
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("chexiaoApply"));//撤销	
+				processBaseService.updateHistoricTask(historicTaskVO);
 				result = "撤销任务成功！";
 			}else if(revokeFlag == 1){
 				result = "撤销任务失败 - [ 此审批流程已结束! ]";

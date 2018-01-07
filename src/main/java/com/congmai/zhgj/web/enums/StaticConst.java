@@ -68,7 +68,11 @@ public enum StaticConst {
 	
 	CAIGOU("caigou","采购"),
 	
-	XIAOSHOU("xiaoshou","销售");
+	XIAOSHOU("xiaoshou","销售"),
+	
+	QUXIAOAPPLY("quxiaoApply","已取消申请"),
+	
+	CHEXIAOAPPLY("chexiaoApply","已撤销");
 	
 	
 	

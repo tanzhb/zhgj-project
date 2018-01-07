@@ -22,7 +22,7 @@
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<shiro:hasPermission name="zhgj:takeDeliveryPlan:*">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">入库计划</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">入库通知</a>
 		</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:stockInRecord:*">
@@ -38,7 +38,7 @@
 				<div class="tabbable-custom">
 					<ul class="nav nav-tabs" id="takeDelivery_tab">
 						<li class="active"><a data-target="#tab_25_1"
-							data-toggle="tab">入库计划</a></li>
+							data-toggle="tab">入库通知</a></li>
 						<li><a data-target="#tab_25_2" data-toggle="tab"
 							ng-click="toDaiban()">待办<dbQuantity/></a></li>
 						<li><a data-target="#tab_25_3" data-toggle="tab"
@@ -90,7 +90,7 @@
 															data-set="#takeDeliveryTable .checkboxes" /> <span></span>
 													</label></th>
 													<!-- <th>收货单编号</th> -->
-													<th>入库计划号</th>
+													<th>入库通知单号</th>
 													<th>入库类型</th>
 													<th>关联采购单号</th>
 													<th>供应商</th>

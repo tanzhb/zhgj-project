@@ -232,4 +232,13 @@
       #{endTime,jdbcType=TIMESTAMP}, #{claimTime,jdbcType=TIMESTAMP}, #{deleteReason,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}
       )
   </insert>
+  <update id="updateHistoricTask" parameterType="com.congmai.zhgj.web.model.HistoricTaskVO" >
+      update ACT_HI_TASKINST
+    <set >
+      <if test="deleteReason != null" >
+        DELETE_REASON_ = #{deleteReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID_= #{taskId,jdbcType=VARCHAR}
+  </update>
 </mapper>

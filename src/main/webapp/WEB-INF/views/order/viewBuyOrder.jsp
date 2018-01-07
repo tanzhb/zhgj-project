@@ -42,7 +42,7 @@
 					<jsp:include  page="viewBuyOrderBase.jsp"/>
 					
 		            <div class="portlet-title">
-			               <div class="tools">
+			               <div class="tools"  ng-hide="hideAllBtn">
 			               		<button type="button" ng-if = "buyOrder.status==0" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">提交供方确认</button>
 			               		<button type="button" ng-if = "buyOrder.status==77" ng-click="pingTaiSubmit()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">重新提交确认</button>
 			               		<button type="button" ng-if = "buyOrder.status==77" ng-click="pingTaiConfirmed()" ng-hide="orderStatusInput" class="btn blue btn-circle  btn-sm">确认</button>

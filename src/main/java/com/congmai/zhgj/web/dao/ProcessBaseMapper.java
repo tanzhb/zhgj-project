@@ -24,4 +24,5 @@ public interface ProcessBaseMapper {
 	List<HistoricTaskVO> findFinishedTaskInstancesDiy(Map map);
 
 	void insertHistoricTask(HistoricTaskVO historicTaskVO);
+	void updateHistoricTask(HistoricTaskVO historicTaskVO);
 }

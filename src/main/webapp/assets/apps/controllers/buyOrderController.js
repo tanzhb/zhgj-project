@@ -1,6 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','takeDeliveryService','FileUploader', function($rootScope, $scope, settings,orderService,$filter,$state,$stateParams,$compile,$location,materielService,takeDeliveryService,FileUploader) {
+angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$scope', 'settings','orderService','PayService','$filter',
+    '$state',"$stateParams",'$compile','$location','materielService','takeDeliveryService','FileUploader', function($rootScope, $scope, settings,orderService,PayService,$filter,$state,$stateParams,$compile,$location,materielService,takeDeliveryService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -13,6 +13,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         	loadMainTable();// 加载订单列表(普通订单)
 //        	loadMainFramTable();// 框架订单列表
         	loadTakeDelieryTable();// 收货计划列表
+        	loadPayRecordTable();
         	//***************************************流程处理相关start
         	var dbtable;//待办table
 			var endTaskTable;//已办table
@@ -23,6 +24,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
 				$('#orderTab a[href="#yiban"]').tab('show');
 				showYbTable();
+			}else if($stateParams.tabHref == '3'){//首页已办列表传过来的参数
+				$('#accountPayableTab a[href="#daibanPay"]').tab('show');
+				showYbTablePay();
+			}else if($stateParams.tabHref == '4'){//首页待办列表传过来的参数
+				$('#accountPayableTab a[href="#yibanPay"]').tab('show');
+				showDbTablePay();
 			}else{//从菜单进入
 				$('#orderTab a[href="#apply"]').tab('show');
 			}
@@ -375,8 +382,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	    $scope.buyOrderShow = false;
     };
     
-    $scope.viewBuyOrder = function(serialNum){
-    	$state.go("viewBuyOrder",{serialNum:serialNum});
+    $scope.viewBuyOrder = function(serialNum,businessType){
+    	$state.go("viewBuyOrder",{serialNum:serialNum,businessType:businessType});
     }
     $scope.goContract = function(serialNum){
     	$state.go("userContract",{});
@@ -518,44 +525,51 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 3,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (isNull(data)?'0':data)+'</br>'
-								if(isNull(row.deliveryCount)||row.deliveryCount==0){
-									htm = (isNull(data)?'0':data)+'（已发 0）</br>'
+								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
+								/*if(isNull(row.deliveryCount)||row.deliveryCount==0){
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'0':data)+'（已发 '+row.deliveryCount+'）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
+								}*/
+								if(isNull(row.receiveCount)||row.receiveCount==0){
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+								}else{
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}
                     			if(row.deliverStatus==null||row.deliverStatus=="0"){
                     				if(row.status==2){
-										return htm + '<span >待发货</span>';
+										return htm + '<span style="color:#999" >待发货</span>';
 									}else{
-										return htm + '<span >未开始</span>';
+										return htm + '<span style="color:#999">未开始</span>';
 									}
 								}else if(row.deliverStatus=="1"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发货</span>';
 								}/*else if(row.deliverStatus=="2"){
                     				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已收货</span>';
 								}*/else if(row.deliverStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="4"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已出库</span>';
 								}else if(row.deliverStatus=="5"){
-                    				return htm + '<span style="color:green" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已入库</span>';
 								}else if(row.deliverStatus=="6"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+                    				//return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待清关</span>';
+									return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="7"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+                    				//return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待报关</span>';
+									return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="8"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
 								}else if(row.deliverStatus=="9"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待检验</span>';
 								}else if(row.deliverStatus=="11"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待入库</span>';
 								}else if(row.deliverStatus=="12"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">待出库</span>';
 								}else if(row.deliverStatus=="13"){
-                    				return htm + '<span style="color:#fcb95b" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已报关</span>';
 								}else{
-									return htm + '<span>未开始</span>';
+									return htm + '<span  style="color:#999">未开始</span>';
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -566,27 +580,27 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
-								var htm = (isNull(data)?'0':data)+'</br>'
+								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
 								if(isNull(row.payAmount)||row.payAmount==0){
-									htm = (isNull(data)?'0':data)+'（已付 0）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'0':data)+'（已付 '+row.payAmount+'）</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付 '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
 								}
 								
                     			if(row.payStatus=="0"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
 								}else if(row.payStatus=="1"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已付款</span>';
 								}else if(row.payStatus=="2"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已收款</span>';
 								}else if(row.payStatus=="3"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">开票中</span>';
 								}else if(row.payStatus=="4"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已开票</span>';
 								}else if(row.payStatus=="5"){
-                    				return htm + '<span style="color:green" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
+                    				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">已收票</span>';
 								}else{
-									return htm + '<span >未付款</span>';
+									return htm + '<span style="color:#999">未付款</span>';
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -633,8 +647,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var clickhtm = ''
 								if(row.status==0){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a><br/>'
-									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a>'
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.orderAmount+'\')">申请</a><br/>'
+									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>'
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -649,15 +663,19 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        		}else{
 	                        			return clickhtm + '';
 	                        		}
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\')">申请</a>'
 								}else if(row.status==2){
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
 										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
-									}else if(Number(row.materielCount)>=Number(row.deliveryCount)){
+									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
 										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
+											}
+									}else if(Number(row.materielCount)==Number(row.deliveryCount)){
+										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											}
 									}else{
 										return clickhtm + '';
@@ -1183,6 +1201,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    		||$state.current.name=="submitBuyApply"
           		    			||$state.current.name=="approvalBuyApply"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
+          		    		if($state.current.name=="viewBuyOrder"&&$stateParams.businessType!=undefined){
+          		    			$scope.hideAllBtn=true;
+          		    			
+          		    		}
           		    	}
           		    	
           		    	$scope.contract=data.contract;
@@ -3457,7 +3479,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
-		       $scope.submitBuyApply  = function(serialNum) {// 进入申请审批页面
+		       $scope.submitBuyApply  = function(serialNum,orderAmount) {// 进入申请审批页面
+		    	   if(orderAmount=='null'){
+		    		   showToastr('toast-top-center', 'warning', '该采购订单没有采购物料，不能发起流程申请！');
+		    		   return;
+		    	   }
 		    	   if(!isNull(serialNum)){//列表操作栏按钮进入审批申请
 		    			$state.go('submitBuyApply',{serialNum:serialNum});
 		    		}else if(!isNull($scope.buyOrder)&&!isNull($scope.buyOrder.serialNum)){//详情页面进入审批
@@ -3693,6 +3719,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        										}
 		        									},
 		        									{
+		        										mData : 'num'
+		        									},
+		        									{
+		        										mData : 'comName'
+		        									},
+		        									{
 		        										mData : 'userName'
 		        									},
 		        									{
@@ -3766,6 +3798,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								"<span></span></label>";
 		        							
 		        	                    	}
+		        	                    },
+		        	                    {
+		        	                    	'targets' : 2,
+		        	                    	'searchable' : false,
+		        	                    	'orderable' : false,
+		        	                    	'className' : 'dt-body-center',
+		        	                    	'render' : function(data,type, full, meta) {
+		        								return '<a href="javascript:void(0);" ng-click="viewBuyOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+		        							
+		        	                    	},
+		        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+	        									 $compile(td)($scope);
+	        							       }
 		        	                    } 
 		        	                    ]
 
@@ -3788,7 +3833,27 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	
 		        	
 		        }
-
+		        $scope.viewBuyOrderApply=function(taskId,assign){//点击订单编号跳转至审批办理页面
+		        	if(assign==''){
+		        		claimTask(taskId, 'dbTable');
+		        	}
+		        	orderService
+					.getAuditInfos(taskId)
+					.then(
+							function(result) {													
+								var comments = ""//添加评论
+									for (var i=0;i<result.commentList.length;i++){
+										comments += "<tr><td>" + result.commentList[i].userName  + "</td><td>" 
+										+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"  
+										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+									}
+									if(result.actionType == 'audit'){//审批流程
+										$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+									}else{
+										$state.go('editBuyApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+									}
+								})
+		        }
 		        function showYbTable(){
 		        	var endTaskTable = $("#endTaskTable").DataTable(
 		        			{
@@ -3831,6 +3896,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								return "订单申请";
 		        							}
 		        						},
+		        						{
+    										mData : 'num'
+    									},
+    									{
+    										mData : 'comName'
+    									},
 		        						{
 		        							mData : 'userName'
 		        						},
@@ -3881,7 +3952,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        									return '';
 		        							}
 		        						},
-		        						{
+		        						/*{
 		        							mData : 'version',
 	        								mRender : function(
 		        									data) {
@@ -3890,20 +3961,39 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        								} else
 		        									return '';
 		        							}
-		        						},
+		        						},*/
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								if(isNull(row.version)){
-		        									return ''
-		        									/*return "<a href='javascript:void(0);' ng-click=\"userCancelOrderApply('"+row.processInstanceId+"')\">取消</a>";*/
-		        								}else{
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable','buyOrder')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
 		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskTable')\">撤销</a>";
+		        								}else{
+		        									return '';
 		        								}
 		        								
 		        							}
 		        						}
-		        						]
+		        						],
+		        						'aoColumnDefs': [
+		        	                    {
+		        	                    	'targets' : 1,
+		        	                    	'searchable' : false,
+		        	                    	'orderable' : false,
+		        	                    	'className' : 'dt-body-center',
+		        	                    	'render' : function(data,type, full, meta) {
+		        	                    		
+		        								return '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        							
+		        	                    	},
+		        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+	        									 $compile(td)($scope);
+	        							       }
+		        	                    } 
+		        	                    ]
 
 		        			})
 		         return endTaskTable;
@@ -3945,7 +4035,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	$scope.addCompany = function(){
 		$state.go("companyAdd");
 	}
-	
+
 	/**
 	 * 加载仓库数据
 	 */
@@ -4326,8 +4416,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        }
 	        
 	        
-	        $scope.pingTaiSubmit  = function(serialNum) {// 平台提交给供应商
-	        	
+	        $scope.pingTaiSubmit  = function(serialNum,orderAmount) {// 平台提交给供应商
+	        	  if(orderAmount=='null'){
+		    		   showToastr('toast-top-center', 'warning', '该采购订单没有采购物料，不能提交！');
+		    		   return;
+		    	   }
 	        	$scope.submitOrder = {}
 	        	if(!isNull(serialNum)){//列表操作栏按钮提交
 	        		$scope.submitOrder.serialNum = serialNum;
@@ -4724,19 +4817,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	    	 }
 		 	      }
 		 	      
-		 	      ////用户取消订单申请
-//		 	     $scope.userCancelOrderApply = function(processInstanceId){
-//			        	orderService.userCancelOrderApply(processInstanceId).then(
-//			          		     function(data){
-//			          		    	toastr.success('订单申请取消成功！！');
-//		          		    		$('#endTaskTable').DataTable().ajax.reload();
-//			          		     },
-//			          		     function(error){
-//			          		         $scope.error = error;
-//			          		         toastr.error('数据保存出错！');
-//			          		     }
-//			          		 );
-//			        }
+		 	     
 		 	     $scope.repeatDoneSelect = function(){
 		    		   $('select[name="paymentType"]').selectpicker({
 		                    showSubtext: true,
@@ -4744,6 +4825,763 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                });
 		    			$('select[name="paymentType"]').selectpicker('refresh');//刷新插件
 	       };
+	       //付款列表
+	   	var tablePay;
+//		var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
+		var loadPayRecordTable = function() {
+			var a = 0;
+			tablePay = $("#sample_4").DataTable(
+						{
+							language : {
+								aria : {
+									sortAscending : ": 以升序排列此列",
+									sortDescending : ": 以降序排列此列"
+								},
+								emptyTable : "空表",
+								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+								infoEmpty : "没有数据",
+								infoFiltered : "(从 _MAX_ 条数据中检索)",
+								lengthMenu : "每页显示 _MENU_ 条数据",
+								search : "查询:",
+								zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+								paginate : {
+									"sFirst" : "首页",
+									"sPrevious" : "前一页",
+									"sNext" : "后一页",
+									"sLast" : "尾页"
+								}
+							},
+							order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+							bRetrieve : true,
+							// searching: true,//是否过滤检索
+							// ordering: true,//是否排序
+							lengthMenu : [
+							              [ 5, 10, 15,15, 30, -1 ],
+							              [ 5, 10, 15, 15,30, "All" ] ],
+							              pageLength : 10,// 每页显示数量
+							              processing : true,// loading等待框
+							              // serverSide: true,
+							              ajax: "rest/pay/findAllPaymentRecord",//加载数据
+							              "aoColumns": [
+							                            { mData: 'serialNum',
+							                            	mRender : function(
+																	data,
+																	type,
+																	row,
+																	meta) {
+																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																		"<input type='checkbox' class='checkboxes' value='1' />" +
+																		"<span></span></label>";
+															}
+							                            },
+							                            { mData: 'paymentNum' },//paymentType
+							                            { mData: 'paymentType' },//paymentType
+							                            { mData: 'applyCurrency' },
+							                            { mData: 'applyPaymentAmount' },
+							                            { mData: 'playPaymentDate' },
+							                            { mData: 'supplyComId'},
+							                            { mData: 'paymentDate'},
+							                            { mData: 'paymentAmount'},
+							                            { mData: 'isBill',
+							                            	mRender:function(data){
+							                            		if(data=='0'){
+							                            				return '否';
+							                            		}else{
+							                            			return "是";
+							                            		}
+							                            	}
+							                            	},
+							                            { mData: 'status',
+							                            	mRender:function(data){
+							                            		if(data!=""&&data!=null){
+							                            			if(data=='0'){
+							                            				return '未审批';
+							                            			}else if(data=='1'){
+							                            				return '部分核销';
+							                            			}else if(data=='2'){
+							                            				return '已完成';
+							                            			}else if(data=='PENDING'){
+							                            				return '审批中';
+							                            			}else if(data=='WAITING_FOR_APPROVAL'){
+							                            				return '待审批';					                            				
+																	}else if(data=='APPROVAL_SUCCESS'){
+																		return '审批成功';
+																	}else if(data=='APPROVAL_FAILED'){
+																		return '审批失败';
+																	}
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	}
+							                            },{ mData: 'status'
+							                            	},
+							                            ],
+							                            'aoColumnDefs': [ {
+							                            	'targets' : 0,
+							                            	'searchable' : false,
+							                            	'orderable' : false,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,type, full, meta) {
+							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            	}
+							                            } ,
+							                            {
+							                            	'targets' : 1,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		return '<a  data-toggle="modal" ng-click="jumpToGetPayInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            },
+							                            {
+							                            	'targets' : 5,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		if(data==null||data==''){
+							                            			return row.applyDate;
+							                            		}else{
+							                            			return data;
+							                            		}
+							                            	},
+							                            },
+							                            {
+							                            	'targets' : 11,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            	if(row.status=='1'){
+							                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+							                            		}else{
+							                            			return '';	
+							                            		}
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            }
+							                            ]
+														}).on('order.dt',
+							                            		function() {
+							                            })
+							                            
+							                            $("#sample_4").find(".group-checkable").change(function() {
+												            var e = jQuery(this).attr("data-set"),
+												            t = jQuery(this).is(":checked");
+												            jQuery(e).each(function() {
+												                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+												            })
+												        }),
+												        $("#sample_4").on("change", "tbody tr .checkboxes",
+												        function() {
+												            $(this).parents("tr").toggleClass("active")
+												        })
+		}
+		// 待办流程
+		var dbTablePay;	
+		$scope.toDaibanPay = function() {
+			$('#accountPayableTab a[href="#daibanPay"]').tab('show');
+			
+			$("#buttons").hide();
+			// 构建datatables开始***************************************
+			if(dbTablePay == undefined){
+				dbTablePay = showDbTablePay();
+			}else $("#dbTableForPay").DataTable().ajax.reload();
+											
+			// 构建datatables结束***************************************
+			//dbTable.ajax.reload();
+		};
+		// 已办流程
+		var ybTablePay;
+		$scope.toYibanPay = function() {
+			$('#accountPayableTab a[href="#yibanPay"]').tab('show');
+			
+			if(ybTablePay == undefined){
+				ybTablePay = showYbTablePay();
+			}else $("#ybTableForPay").DataTable().ajax.reload();
+			
+			$("#buttons").hide();
+		};
+		
+		//审批通过
+		$scope.apPass = function() {	   
+		    var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+					"isPass":true, "taskId":$("#taskId").val()};
+		    var _url = ctx + "rest/pay/complete";
+		    doAuditPay(_url, mydata);
+		    $state.go('buyOrder',{tabHref:4});//返回到待办列表
+			
+		};
+		//审批不通过
+		$scope.apUnPass = function() {
+			var mydata={"serialNum":$("#serialNum").val(),"content":$("#content").val(),
+					"isPass":false, "taskId":$("#taskId").val()};
+			var _url = ctx + "rest/pay/complete";
+			doAuditPay(_url, mydata);
+			$state.go('buyOrder',{tabHref:4});//返回到待办列表
+			
+		};
+		//返回待办列表
+		$scope.backDbList = function() {
+			$state.go('buyOrder',{tabHref:4});//返回待办列表
+		};
+		//返回申请列表
+		$scope.backApplyList = function() {
+			$state.go('buyOrder',{tabHref:3});//返回申请列表
+		};
+		
+		//重新申请
+		$scope.apApplyAngain = function() {		
+			if($('#form_sample_1').valid()){
+				var fd = new FormData();
+				fd.append('serialNum',$scope.pay.serialNum);
+				fd.append('paymentType',$scope.pay.paymentType);
+				fd.append('paymentNum',$scope.pay.paymentNum); 
+				fd.append('orderSerial',$scope.pay.orderSerial); 
+				if(supplyComId!=null){
+					fd.append('supplyComId',supplyComId);
+				}else{
+					fd.append('supplyComId',$scope.pay.supplyComId);
+				}
+				fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
+				fd.append('applyCurrency',$scope.pay.applyCurrency);
+				fd.append('playPaymentDate',$scope.pay.playPaymentDate);
+				fd.append('payType',$scope.pay.payType);
+				fd.append('paymentNode',$scope.pay.paymentNode);
+				fd.append('nodeNum',$scope.pay.nodeNum);
+				fd.append('billStyle',"先款后票"); 
+				fd.append('isBill',$("input[name='isBill']:checked").val());
+				fd.append('applyDate',$scope.pay.applyDate);
+				fd.append('applicant',$scope.pay.applicant);
+				fd.append('applyDept',$scope.pay.applyDept);
+				fd.append('remark',$scope.pay.remark);
+				
+				fd.append('payee',$scope.pay.payee);
+				fd.append('contact',$scope.pay.contact);
+				fd.append('contactNum',$scope.pay.contactNum);
+				fd.append('bank',$scope.pay.bank);
+				fd.append('accountName',$scope.pay.accountName);
+				fd.append('accountNumber',$scope.pay.accountNumber);
+				fd.append('reason',$scope.pay.reason);
+				$http({
+					method:'POST',
+					url:ctx + "rest/pay/modifyApplyAp",
+					params:{'taskId':$("#taskId").val(), 'reApply':true},
+					data: fd,
+					headers: {'Content-Type':undefined}
+				})   
+				.success( function ( data )
+						{
+					$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+					$("#dbTable").DataTable().ajax.reload();
+					showToastr('toast-bottom-right', 'success', data);
+					$scope.pay= data;
+					$scope.span = true;
+					$scope.input = false;
+					$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+						});
+			}
+		};
+		$scope.changeValue=function(){//选择付款银行
+			for(var i in  $scope.comFinances){
+				if($scope.comFinances[i].openingBank==$scope.paymentRecord.bank){
+					$scope.paymentRecord.accountName=$scope.comFinances[i].accountName;
+					$scope.paymentRecord.accountNumber=$scope.comFinances[i].accountNumber;
+					return;
+				}
+			}
+			$scope.paymentRecord.accountName='';
+			$scope.paymentRecord.accountNumber='';
+		}
+		//取消申请
+		$scope.apCancelApply = function() {		
+			if($('#form_sample_1').valid()){
+				var fd = new FormData();
+				fd.append('serialNum',$scope.pay.serialNum);
+				fd.append('paymentType',$scope.pay.paymentType);
+				fd.append('paymentNum',$scope.pay.paymentNum); 
+				fd.append('orderSerial',$scope.pay.orderSerial); 
+				if(supplyComId!=null){
+					fd.append('supplyComId',supplyComId);
+				}else{
+					fd.append('supplyComId',$scope.pay.supplyComId);
+				}
+				fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
+				fd.append('applyCurrency',$scope.pay.applyCurrency);
+				fd.append('playPaymentDate',$scope.pay.playPaymentDate);
+				fd.append('payType',$scope.pay.payType);
+				fd.append('paymentNode',$scope.pay.paymentNode);
+				fd.append('nodeNum',$scope.pay.nodeNum);
+				fd.append('billStyle',"先款后票"); 
+				fd.append('isBill',$("input[name='isBill']:checked").val());
+				fd.append('applyDate',$scope.pay.applyDate);
+				fd.append('applicant',$scope.pay.applicant);
+				fd.append('applyDept',$scope.pay.applyDept);
+				fd.append('remark',$scope.pay.remark);
+				
+				fd.append('payee',$scope.pay.payee);
+				fd.append('contact',$scope.pay.contact);
+				fd.append('contactNum',$scope.pay.contactNum);
+				fd.append('bank',$scope.pay.bank);
+				fd.append('accountName',$scope.pay.accountName);
+				fd.append('accountNumber',$scope.pay.accountNumber);
+				fd.append('reason',$scope.pay.reason);
+				$http({
+					method:'POST',
+					url:ctx + "rest/pay/modifyApplyAp",
+					params:{'taskId':$("#taskId").val(), 'reApply':false},
+					data: fd,
+					headers: {'Content-Type':undefined}
+				})   
+				.success( function ( data )
+						{
+					$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
+					$("#dbTable").DataTable().ajax.reload();
+					showToastr('toast-bottom-right', 'success', data);
+					$scope.pay= data;
+					$scope.span = true;
+					$scope.input = false;
+					$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+					
+						});
+			}
+		};
+		
+		//办结待办流程
+		function doAuditPay(_url, mydata){
+	        $.ajax( {
+		        url : _url,
+		        dataType:"text",
+		        type: 'POST',
+		        data : mydata,
+		        success : function(data) {
+		        	$("#dbTableForPay").DataTable().ajax.reload();
+		        	showToastr('toast-bottom-right', 'success', data);
+		        }
+		     });
+		}
+		function showYbTablePay(){
+			var ybTablePay = $("#ybTableForPay").DataTable(
+					{
+						language : {
+							aria : {
+								sortAscending : ": 以升序排列此列",
+								sortDescending : ": 以降序排列此列"
+							},
+							emptyTable : "空表",
+							info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+							infoEmpty : "没有数据",
+							infoFiltered : "(从 _MAX_ 条数据中检索)",
+							lengthMenu : "每页显示 _MENU_ 条数据",
+							search : "查询:",
+							zeroRecords : "抱歉， 没有找到！",
+							paginate : {
+								"sFirst" : "首页",
+								"sPrevious" : "前一页",
+								"sNext" : "后一页",
+								"sLast" : "尾页"
+							}
+						},
+						order : [ [ 5, "desc" ] ],// 默认排序列及排序方式
+						bRetrieve : true,
+						lengthMenu : [
+								[ 5, 10, 15, 30, -1 ],
+								[ 5, 10, 15, 30,
+										"All" ] ],
+						pageLength : 10,// 每页显示数量
+						processing : true,// loading等待框
+
+						ajax : ctx
+								+ "/rest/processAction/endTask/"  + 'accountPayable',// 加载已办列表数据
+
+						"aoColumns" : [
+//								{ mData: 'taskId'},
+								{
+									mData : 'userName'
+								},
+								{
+									mData : 'title'
+								},
+								{
+									mData : 'startTime',
+									mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										return timeStamp2String(data);
+									}
+								},
+								{
+									mData : 'claimTime',
+									mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if(data != null){
+				                			return timeStamp2String(data);
+				                		}else{
+				                			return "无需签收";
+				                		}
+									}
+								},
+								{
+									mData : 'endTime',
+									mRender : function(
+											data) {
+										if (data != null) {
+											return timeStamp2String(data);
+										} else
+											return '';
+									}
+								},
+								{
+									mData : 'deleteReason'
+								},
+								{
+									mData : 'version'
+								},
+								{
+									mData : 'revoke',
+									mRender : function(data,type,row,meta) {
+										if(isNull(row.version)&&isNull(row.deleteReason)){
+        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','ybTableForPay','payForBuyTable')\">取消申请</a>";
+        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+        									return '';
+        								}else if(row.deleteReason!='已撤销'){
+        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','ybTableForPay')\">撤销</a>";
+        								}else{
+        									return '';
+        								}
+										
+									}
+								}
+								]
+
+					})
+		 return ybTablePay;
+		}
+		function showDbTablePay(){
+			
+			var t = $("#dbTableForPay")
+			.DataTable(
+					{
+						language : {
+							aria : {
+								sortAscending : ": 以升序排列此列",
+								sortDescending : ": 以降序排列此列"
+							},
+							emptyTable : "空表",
+							info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+							infoEmpty : "没有数据",
+							infoFiltered : "(从 _MAX_ 条数据中检索)",
+							lengthMenu : "每页显示 _MENU_ 条数据",
+							search : "查询:",
+							zeroRecords : "抱歉， 没有找到！",
+							paginate : {
+								"sFirst" : "首页",
+								"sPrevious" : "前一页",
+								"sNext" : "后一页",
+								"sLast" : "尾页"
+							}
+						},
+
+						buttons : [
+								{
+									text : "办理",
+									className : "btn default",
+									action: function(e, dt, node, config) { 
+										if(t.rows('.active').data().length != 1){
+											showToastr('toast-top-center', 'warning', '请选择一条任务进行办理！')
+										} else {
+											if(t.row('.active').data().assign == ''){
+												showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+											}else{
+												var taskId=t.row('.active').data().taskId;
+													PayService
+													.getAuditInfos(taskId)
+													.then(
+															function(result) {													
+																
+																var comments = ""//添加评论
+																for (var i=0;i<result.commentList.length;i++){
+																	comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+																	+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+																	+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+																}
+																
+																if(result.actionType == 'audit'){//审批流程																
+																	$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments});
+																}else{//result.actionType == 'modify' 更改流程
+																	$state.go('editAuditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments});
+																}
+																
+																
+																
+																
+																
+															},
+															function(errResponse) {
+																toastr.warning("申请失败！");
+																console
+																		.error('Error while apply ap');
+															}
+			
+													);
+											
+											}
+											
+											
+											
+										}
+										
+										
+									}
+								},
+								{
+									text : "签收",
+									className : "btn default",
+									action: function(e, dt, node, config) { 
+										if(t.rows('.active').data().length != 1){
+											
+											toastr.warning('请选择一条任务进行签收！');return;									
+										} else {
+											
+											if(t.row('.active').data().assign != ''){
+												toastr.warning('该任务已签收！');return;
+											}else
+												claimTask(t.row('.active').data().taskId, 'dbTable');
+										}						
+									}
+								}/*,
+								{
+									text : "转办",
+									className : "btn default"
+								},
+								{
+									text : "委派",
+									className : "btn default"
+								},
+								{
+									text : "跳转",
+									className : "btn default"
+								}*/ ],
+						dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+						order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
+
+						bRetrieve : true,
+						lengthMenu : [
+								[ 5, 10, 15, 30, -1 ],
+								[ 5, 10, 15, 30,
+										"All" ] ],
+						pageLength : 10,// 每页显示数量
+						processing : true,// loading等待框
+
+						ajax : ctx
+								+ "/rest/processAction/todoTask/" + 'accountPayable',// 加载待办列表数据
+
+						"aoColumns" : [
+						              { mData: 'taskId',
+										mRender : function(
+												data,
+												type,
+												row,
+												meta) {
+											return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+													"<input type='checkbox' class='checkboxes' value='1' />" +
+													"<span></span></label>";
+										}
+						             },
+								{
+									mData : 'assign',
+									mRender : function(
+											data) {
+										if (data == '') {
+											return "待签收";
+										} else {
+											return "待办理";
+										}
+									}
+								},
+								{
+									mData : 'userName'
+								},
+								{
+									mData : 'title'
+								},
+								{
+									mData : 'taskName',
+									mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										return "<a class='trace' onclick=\"graphTrace('"
+												+ row.processInstanceId + "','" + ctx 
+												+ "')\" id='diagram' href='javascript:;' pid='"
+												+ row.id
+												+ "' pdid='"
+												+ row.processDefinitionId
+												+ "' title='see'>"
+												+ data
+												+ "</a>";
+									}
+								},
+								{
+									mData : 'owner',
+									mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if (data != ''
+												&& data != row.assign) {
+											return row.assign
+													+ " (原执行人："
+													+ data
+													+ ")";
+										} else {
+											return row.assign;
+										}
+									}
+								},
+								{
+									mData : 'createTime',
+									mRender : function(
+											data) {
+										if (data != null) {
+											return timeStamp2String(data);
+										} else
+											return '';
+									}
+								},
+								{
+									mData : 'suspended',
+									mRender : function(
+											data) {
+										if (data) {
+											return "已挂起";
+										} else {
+											return "正常";
+										}
+									}
+								} ],
+							'aoColumnDefs': [ {
+		                    	'targets' : 0,
+		                    	'searchable' : false,
+		                    	'orderable' : false,
+		                    	'className' : 'dt-body-center',
+		                    	'render' : function(data,type, full, meta) {
+		                    		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+		                    	}
+		                    } 
+		                    ]
+
+					})
+					
+					$("#dbTableForPay").find(".group-checkable").change(function() {
+			            var e = jQuery(this).attr("data-set"),
+			            t = jQuery(this).is(":checked");
+			            jQuery(e).each(function() {
+			                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+			            })
+			        }),
+			        $("#dbTableForPay").on("change", "tbody tr .checkboxes",
+			        function() {
+			            $(this).parents("tr").toggleClass("active")
+			        })
+
+
+					
+					return t;
+		}
+		$scope.toApplyPay = function() {
+			$("#buttons").show();
+		};
+		//跳转到详情页面
+		$scope.jumpToGetPayInfo  = function(serialNum) {
+	    	$state.go('viewPayForBuyOrder',{serialNum:serialNum});
+	    }; 
+	    //流程申请
+	    $scope.jumpToApplyPay  = function() {    	
+	    	if(tablePay.rows('.active').data().length != 1){
+				showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+			}else{
+				var status = tablePay.row('.active').data().status;
+				if(status != '0'){
+					showToastr('toast-top-center', 'warning', '该付款计划已发起流程审批，不能再次申请！')
+				}else $state.go('applyPayForBuyOrder',{serialNum:tablePay.row('.active').data().serialNum});
+			}     	
+	    }; 
+	    $scope.jumpToEdit  = function() {    	
+	    	if(tablePay.rows('.active').data().length != 1){
+				showToastr('toast-top-center', 'warning', '请选择一条任务进行修改！')
+			}else{
+				var status = tablePay.row('.active').data().status;
+				if(status != '0'){
+					showToastr('toast-top-center', 'warning', '该付款计划已发起流程审批，不能再次修改！')
+				}else $state.go('addPayForBuyOrder',{serialNum:tablePay.row('.active').data().serialNum});
+			}     	
+	    }; 
+		//删除
+		$scope.del = function() {
+			if(tablePay.rows('.active').data().length == 0){
+				showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
+			} else {
+				var ap = tablePay.rows('.active').data();
+				var ids = '';
+				for(i=0;i<ap.length;i++){
+					if(ap[i].status != '0'){
+						showToastr('toast-top-center', 'warning', '所选数据已经申请流程审批，不能删除！');
+						return;
+					}
+					
+					if(ids == ''){
+						ids = ap[i].serialNum;
+					}else ids = ids +','+ ap[i].serialNum;
+					
+				}
+				
+				$('#delUsersModal').modal('show');// 打开确认删除模态框
+
+				$scope.confirmDel = function() {										
+					PayService.delPaymentRecord(ids).then(
+							function(data) {
+								$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
+								$(".modal-backdrop").remove();
+								toastr.success("删除成功！");
+								$("#sample_4 ").DataTable().ajax.reload();
+							},
+							function(errResponse) {
+								/*console.error('Error while deleting Users');*/
+							}
+
+					);
+				}
+			}								
+		};
+	  //启动流程
+		$scope.applyAp = function() {
+			PayService
+					.applyAp($('#reason').val(), $stateParams.serialNum)
+					.then(
+							function(data) {
+								toastr.success("申请成功！");
+								
+							},
+							function(errResponse) {
+								toastr.warning("申请失败！");
+								console
+										.error('Error while apply ap');
+							}
+
+					);
+			$("#sample_4 ").DataTable().ajax.reload();
+		};
 }]);
 
 
