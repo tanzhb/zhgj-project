@@ -3232,6 +3232,24 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	          		 );
 	        };
 	        
+	        $scope.saleGenerateProcurementPlan  = function() {// 分解订单
+	        	if(!isNull($scope.saleOrder.orderSerial)){
+	        		toastr.info('已有对应采购计划，不能再次分解！');
+	        		return;
+	        	}
+	        	orderService.saleGenerateProcurementPlan($scope.saleOrder.serialNum).then(
+	          		     function(data){
+	          		    	$scope.saleOrder = data
+	          		    	toastr.info('订单分解成功！');
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
+	        };
+	        
+	        
 	        $scope.cancelOrderStatus  = function() {//隐藏编辑备注及提交
 	        	$scope.orderStatusShow = true;
 	        	$scope.orderStatusInput = true;
