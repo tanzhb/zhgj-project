@@ -52,9 +52,11 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
@@ -91,6 +93,8 @@ public class ProcessAction {
 	private WorkflowDeployService workflowProcessDefinitionService;
 	@Resource
     private ProcessBaseService processBaseService;
+	@Resource
+    private OrderService  orderService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -216,7 +220,16 @@ public class ProcessAction {
 			map.put("title", base.getTitle());
 			map.put("taskId", base.getTask().getId());
 			map.put("taskName", base.getTask().getName());
-			map.put("createTime", base.getTask().getCreateTime());
+			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
 				User u = this.userService.selectById(new Integer(assign));
@@ -320,6 +333,17 @@ public class ProcessAction {
     		if(base.getProcessDefinition()!=null){
     			map.put("version", base.getProcessDefinition().getVersion());
     		}
+    		if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				map.put("serialNum", o==null?"":o.getSerialNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
     		
 //    		jsonList.add(map);
     		if(!"All".equals(businessType)){

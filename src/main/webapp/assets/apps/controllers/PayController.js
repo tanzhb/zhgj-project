@@ -1086,7 +1086,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 		$('#accountPayableTab a[href="#yiban"]').tab('show');
 		
 		if(ybTable == undefined){
-			ybTable = ();
+			ybTable = showYbTable();
 		}else $("#ybTable").DataTable().ajax.reload();
 		
 		$("#buttons").hide();

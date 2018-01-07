@@ -141,11 +141,13 @@
 	                                            </label>
 	                                        </th>
 											<th style="white-space: nowrap;">任务状态</th>
+											<th style="white-space: nowrap;">采购订单号</th>
+											<th style="white-space: nowrap;">供应商</th>
 											<th style="white-space: nowrap;">申请人</th>
-											<th style="white-space: nowrap;">标题</th>
+											<th style="white-space: nowrap;">申请原因</th>
 											<th style="white-space: nowrap;">当前节点</th>
 											<th style="white-space: nowrap;">负责人</th>
-											<th style="white-space: nowrap;">任务创建时间</th>
+											<th style="white-space: nowrap;">申请时间</th>
 											<th style="white-space: nowrap;">流程状态</th>
 											</tr>
 										</thead>
@@ -169,13 +171,14 @@
 										<thead>
 											<tr>
 												<th>单据类型</th>
+												<th>采购订单号</th>
+												<th>供应商</th>
 												<th>申请人</th>
-												<th>标题</th>
-												<th>任务开始时间</th>
-												<th>任务签收时间</th>
-												<th>任务结束时间 </th>
-												<th>流程结束原因</th>
-												<th>流程版本号</th>
+												<th>申请原因</th>
+												<th>申请时间</th>
+												<th>审批节点</th>
+												<th>审批完成日期 </th>
+												<th>审批失败原因</th>
 												<th>操作</th>
 											</tr>
 										</thead>

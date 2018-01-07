@@ -13,7 +13,7 @@
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<shiro:hasPermission name="zhgj:deliveryPlan:*">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">出库计划</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">出库通知</a>
 		</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:stockOutRecord:*">
@@ -103,7 +103,7 @@
 															id="example-select-all" /> <span></span>
 													</label></th>
 
-													<th style="white-space: nowrap;">出库计划号</th>
+													<th style="white-space: nowrap;">出库通知单号</th>
 													<th style="white-space: nowrap;">出库类型</th>
 													<th style="white-space: nowrap;">关联销售单号</th>
 													<th style="white-space: nowrap;">采购商</th>

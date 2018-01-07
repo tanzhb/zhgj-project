@@ -1289,7 +1289,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 查看采购订单
         .state('viewBuyOrder', {
-            url: "/viewBuyOrder?:serialNum",
+            url: "/viewBuyOrder?:serialNum&:businessType",
             templateUrl: "rest/page/viewBuyOrder",
             data: {pageTitle: '查看采购订单'},
             controller: "buyOrderController",
@@ -1364,7 +1364,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 查看销售订单
         .state('viewSaleOrder', {
-            url: "/viewSaleOrder?:serialNum",
+            url: "/viewSaleOrder?:serialNum&:businessType",
             templateUrl: "rest/page/viewSaleOrder",
             data: {pageTitle: '查看销售订单'},
             controller: "saleOrderController",
