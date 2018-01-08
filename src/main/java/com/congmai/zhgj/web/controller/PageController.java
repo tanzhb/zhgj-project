@@ -250,6 +250,14 @@ public class PageController {
     }
     
     /**
+     * 新增采购计划
+     */
+    @RequestMapping("/addProcurementPlan")
+    public String addProcurementPlan(String serialNum,String view,String numCode) {
+        return "procurementPlan/addProcurementPlan";
+    }
+    
+    /**
      * 新增采购框架
      */
     @RequestMapping("/addBuyFrame")
@@ -276,6 +284,14 @@ public class PageController {
     @RequestMapping("/viewBuyOrder")
     public String viewBuyOrder(String serialNum) {
         return "order/viewBuyOrder";
+    }
+    
+    /**
+     * 查看采购计划
+     */
+    @RequestMapping("/viewProcurementPlan")
+    public String viewProcurementPlan(String serialNum) {
+        return "procurementPlan/viewProcurementPlan";
     }
     /**
      * 查看采购框架
@@ -432,6 +448,14 @@ public class PageController {
     @RequestMapping("/buyOrder")
     public String buyOrder() {
         return "order/buyOrder";
+    }
+    
+    /**
+     * 采购计划
+     */
+    @RequestMapping("/procurementPlan")
+    public String procurementPlan() {
+        return "procurementPlan/procurementPlan";
     }
     
     /**

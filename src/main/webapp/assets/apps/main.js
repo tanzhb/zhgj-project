@@ -1066,6 +1066,42 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        //采购计划
+        .state('procurementPlan', {
+            url: "/procurementPlan?:tabHref",
+            templateUrl: "rest/page/procurementPlan",
+            data: {pageTitle: '采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/procurementPlanService.js',
+                            'assets/apps/controllers/procurementPlanController.js'
+//                            'assets/apps/service/TakeDeliveryService.js',
+                          //流程申请
+//							'assets/global/css/dialog.css',
+//							'assets/global/css/easyui.css',
+//							'assets/global/css/datagrid.css',
+//							'assets/global/css/jquery.qtip.min.css',
+//				         
+//							'assets/global/plugins/jquery.easyui.min.js',
+//							'assets/global/plugins/jquery.qtip.min.js',
+//							'assets/global/plugins/jquery.outerhtml.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
         //采购框架
         .state('buyFrame', {
             url: "/buyFrame?:tabHref",
@@ -1260,6 +1296,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 新增采购计划
+        .state('addProcurementPlan', {
+            url: "/addProcurementPlan?:serialNum&:view",
+            templateUrl: "rest/page/addProcurementPlan",
+            data: {pageTitle: '新增采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+//				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/procurementPlanService.js',
+				'assets/apps/controllers/procurementPlanController.js'
+                      ]
+                    });
+                }]
+            }
+        })
         // 新增采购框架
         .state('addBuyFrame', {
             url: "/addBuyFrame?:serialNum&:view",
@@ -1320,6 +1383,42 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/global/plugins/jquery.easyui.min.js',
 				'assets/global/plugins/jquery.qtip.min.js',
 				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 查看采购计划
+        .state('viewProcurementPlan', {
+            url: "/viewProcurementPlan?:serialNum",
+            templateUrl: "rest/page/viewProcurementPlan",
+            data: {pageTitle: '查看采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/procurementPlanService.js',
+				'assets/apps/controllers/procurementPlanController.js'
+	        	
+	        	//流程申请
+//				'assets/global/css/dialog.css',
+//				'assets/global/css/easyui.css',
+//				'assets/global/css/datagrid.css',
+//				'assets/global/css/jquery.qtip.min.css',
+//	         
+//				'assets/global/plugins/jquery.easyui.min.js',
+//				'assets/global/plugins/jquery.qtip.min.js',
+//				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -4447,6 +4546,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单列表</a></li>";					 
+			   }else if('procurementPlan' == toState.name){//采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划列表</a></li>";					 
 			   }else if('buyFrame' == toState.name){//采购框架
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
@@ -4474,6 +4577,13 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改采购订单</a></li>";
 						 } else html += "<li><a>新增采购订单</a></li>";
+			   }else if('addProcurementPlan' == toState.name){//新增采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='procurementPlan'>采购计划列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改采购计划</a></li>";
+						 } else html += "<li><a>新增采购计划</a></li>";
 			   }else if('addBuyFrame' == toState.name){//新增采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
@@ -4500,6 +4610,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看采购订单</a></li>";
+			   }else if('viewProcurementPlan' == toState.name){//查看采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='procurementPlan'>采购计划列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看采购计划</a></li>";
 			   }else if('viewBuyFrame' == toState.name){//查看采购框架
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
