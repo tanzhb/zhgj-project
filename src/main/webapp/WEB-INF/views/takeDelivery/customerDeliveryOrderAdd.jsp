@@ -418,7 +418,7 @@
 									</div>
 									<!--/row-->
 						
-									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;" ng-show="showTransport">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="transportType">运输方式</label>
@@ -462,7 +462,7 @@
 										<!--/span-->
 									</div>
 									<!--/row-->
-									<div class="row">
+									<div class="row"  ng-show="showTransport">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="dtContact">联系人</label>

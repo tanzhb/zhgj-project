@@ -385,7 +385,7 @@
 				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
 									
 									
-				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPay()"> <i class="fa fa-minus"></i> 删除</label>
 									
 				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>

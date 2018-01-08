@@ -908,6 +908,30 @@
 										</div>
 										<div class="col-md-4">
 										<div class="form-group">
+													<label class="control-label bold">采购订单号</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.order.orderNum}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+										<div class="col-md-4"  ng-show="stockInOutRecord.order.orderType=='委托采购'">
+										<div class="form-group">
+													<label class="control-label bold">关联项目单号</label>
+													<div class="">
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-hide="span">
+															{{stockInOutRecord.order.projectNum}}</p>
+													</div>
+
+												</div>
+                                            
+										</div>
+										<div class="col-md-4">
+										<div class="form-group">
 													<label class="control-label bold">入库类型</label>
 													<div class="">
 														<div class="form-control-focus"></div>
@@ -918,7 +942,13 @@
 												</div>
                                             
 										</div>
-										<div class="col-md-4">
+										
+										
+										
+									</div>
+									<!--/row-->
+									<div class="row"   ng-if="oprateType==undefined">
+									<div class="col-md-4">
 										<div class="form-group">
 													<label class="control-label bold">入库日期</label>
 													<div class="">
@@ -930,11 +960,6 @@
 												</div>
                                             
 										</div>
-										
-										
-									</div>
-									<!--/row-->
-									<div class="row"   ng-if="oprateType==undefined">
 										<div class="col-md-4">
 										<div class="form-group">
 													<label class="control-label bold">入库仓库</label>
@@ -973,9 +998,9 @@
 										<!--/span-->
 									
 										<!--/span-->
-									</div>
+									<!-- </div> -->
 									<!--/row-->
-									<div class="row"   ng-if="oprateType==undefined">
+									<!-- <div class="row"   ng-if="oprateType==undefined"> -->
 									<div class="col-md-4">
 									
                                                   <div class="form-group">

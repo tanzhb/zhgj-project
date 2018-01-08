@@ -24,6 +24,13 @@
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
     <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
   </resultMap>
   <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -49,6 +56,14 @@
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
     <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -79,6 +94,13 @@
     <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
     <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -145,7 +167,8 @@
     <sql id="Base_Column_List" >
    	 serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount,materielCount
+    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount,materielCount,
+    transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -196,7 +219,8 @@
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
       inOutType, shipperOrReceiver, inOutFlag, 
-      packageType, packageSpecifications, packageCount,materielCount
+      packageType, packageSpecifications, packageCount,materielCount,
+      transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
@@ -204,7 +228,10 @@
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR},
-       #{packageCount,jdbcType=VARCHAR},#{materielCount,jdbcType=VARCHAR}
+       #{packageCount,jdbcType=VARCHAR},#{materielCount,jdbcType=VARCHAR},
+       #{transportType,jdbcType=VARCHAR},#{transport,jdbcType=VARCHAR},
+       #{shipNumber,jdbcType=VARCHAR},#{transportContact,jdbcType=VARCHAR},
+       #{transportContactNum,jdbcType=VARCHAR},#{transportRemark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -270,8 +297,29 @@
       <if test="packageSpecifications != null" >
         packageSpecifications,
       </if>
-      <if test="packageCount != null" >
+       <if test="packageCount != null" >
         packageCount,
+      </if>
+      <if test="materielCount != null" >
+        materielCount,
+      </if>
+      <if test="transportType != null" >
+        transportType,
+      </if>
+      <if test="transport != null" >
+        transport,
+      </if>
+      <if test="shipNumber != null" >
+        shipNumber,
+      </if>
+      <if test="transportContact != null" >
+        transportContact,
+      </if>
+      <if test="transportContactNum != null" >
+        transportContactNum,
+      </if>
+      <if test="transportRemark != null" >
+        transportRemark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -340,6 +388,24 @@
       </if>
       <if test="materielCount != null" >
         #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null" >
+        #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="transport != null" >
+        #{transport,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+        #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContact != null" >
+        #{transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContactNum != null" >
+        #{transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="transportRemark != null" >
+        #{transportRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -418,6 +484,24 @@
        <if test="record.materielCount != null" >
         materielCount = #{record.materielCount,jdbcType=VARCHAR},
       </if>
+      <if test="record.transportType != null" >
+      transportType = #{record.transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transport != null" >
+      transport = #{record.transport,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipNumber != null" >
+      shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportContact != null" >
+      transportContact = #{record.transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportContactNum != null" >
+      transportContactNum = #{record.transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportRemark != null" >
+      transportRemark = #{record.transportRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -446,7 +530,13 @@
       packageType = #{record.packageType,jdbcType=VARCHAR},
       packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
       packageCount = #{record.packageCount,jdbcType=VARCHAR},
-      materielCount= #{record.materielCount,jdbcType=VARCHAR}
+      materielCount= #{record.materielCount,jdbcType=VARCHAR},
+       transportType = #{record.transportType,jdbcType=VARCHAR},
+      transport = #{record.transport,jdbcType=VARCHAR},
+      shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      transportContact = #{record.transportContact,jdbcType=VARCHAR},
+      transportContactNum = #{record.transportContactNum,jdbcType=VARCHAR},
+      transportRemark= #{record.transportRemark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -515,7 +605,25 @@
         packageCount = #{packageCount,jdbcType=VARCHAR},
       </if>
        <if test="materielCount != null" >
-       materielCount= #{record.materielCount,jdbcType=VARCHAR}
+       materielCount= #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null" >
+      transportType = #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="transport != null" >
+      transportType = #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+      shipNumber = #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContact != null" >
+      transportContact = #{transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContactNum != null" >
+      transportContactNum = #{transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="transportRemark != null" >
+      transportRemark = #{transportRemark,jdbcType=VARCHAR}
       </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}

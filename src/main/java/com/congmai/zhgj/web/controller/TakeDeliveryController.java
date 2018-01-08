@@ -314,6 +314,9 @@ public class TakeDeliveryController {
     		}
     	}
     	StockInOutRecord sr=takeDeliveryService.findStockInSerialNum(serialNum);//根据收货流水查入库单记录
+    	String orderSerial=delivery.getOrderSerial();//获取订单流水
+    	OrderInfo o=orderService.selectById(orderSerial);
+    	sr.setOrder(o);
     	delivery.setStockInOutRecord(sr);
     	return delivery;
     }
@@ -743,6 +746,9 @@ public class TakeDeliveryController {
     			totalDeliveryCount=totalDeliveryCount.add(new BigDecimal(dm.getDeliverCount()));
     		}
     	}
+    	String orderSerial=delivery.getOrderSerial();//获取订单流水
+    	OrderInfo o=orderService.selectById(orderSerial);
+    	stockInOutRecord.setOrder(o);
     	map.put("stockInOutRecord", stockInOutRecord);
     	map.put("totalDeliveryCount", totalDeliveryCount);
     	map.put("deliver", delivery);
