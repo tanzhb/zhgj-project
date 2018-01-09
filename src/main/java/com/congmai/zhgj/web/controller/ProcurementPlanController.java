@@ -509,7 +509,7 @@ public class ProcurementPlanController {
     
     /**
 	 * 
-	 * @Description 销售订单生成采购订单
+	 * @Description 采购计划生成采购订单
 	 * @param ids
 	 * @return
 	 */

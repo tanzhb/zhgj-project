@@ -1201,7 +1201,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 										if(row.status==1){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已审批</span>';//待签合同
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';//已签合同
 										}else{
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}

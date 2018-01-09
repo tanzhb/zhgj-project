@@ -466,7 +466,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 											if(row.contract.contractType=='销售订单'){
 												return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';
 											}else{
-												return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
+												return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';//已签合同
 											}
 										}else{
 											return clickhtm + '';

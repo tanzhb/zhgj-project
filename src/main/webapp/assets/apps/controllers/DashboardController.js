@@ -41,6 +41,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
+		}else if(actionName=="inToBuyToSale"){
+			$state.go("saleOrder");
 		}
 	}
 	

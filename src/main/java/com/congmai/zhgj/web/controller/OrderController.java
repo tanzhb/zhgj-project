@@ -50,6 +50,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -608,7 +609,10 @@ public class OrderController {
     			
     			this.orderService.updateStatus(oi);
     			//自主销售订单审批完成，分解BOM
-        		saleGenerateProcurementPlan(order.getSerialNum());
+    			if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
+    				saleGenerateProcurementPlan(order.getSerialNum());
+	    		}
+        		
     		}
     		
     		
@@ -2247,13 +2251,19 @@ public class OrderController {
 	    			pMateriel.setBuyCount(o.getAmount());
 	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 	    			
+	    			
 	    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-	    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+	    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
 	    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
 	    			pMateriel.setCreator(currenLoginName);
 	    			pMateriel.setUpdater(currenLoginName);
 	    			pMateriel.setCreateTime(new Date());
 	    			pMateriel.setUpdateTime(new Date());
+	    			
+	    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+	    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+	    			}
+	    			
 	    			newMaterielList.add(pMateriel);
 		    	}else{
 		    		
@@ -2270,12 +2280,16 @@ public class OrderController {
 		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
 		    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 		    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-		    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+		    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
 		    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
 		    			pMateriel.setCreator(currenLoginName);
 		    			pMateriel.setUpdater(currenLoginName);
 		    			pMateriel.setCreateTime(new Date());
 		    			pMateriel.setUpdateTime(new Date());
+		    			
+		    			if(b.getMateriel()!=null&& !CollectionUtils.isEmpty(b.getMateriel().getSupplyMateriels())){
+		    				pMateriel.setSupplyMaterielSerial((b.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+		    			}
 		    			newMaterielList.add(pMateriel);
 		    		}
 		    	}
@@ -2288,12 +2302,15 @@ public class OrderController {
     			pMateriel.setBuyCount(o.getAmount());
     			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
     			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
     			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
     			pMateriel.setCreator(currenLoginName);
     			pMateriel.setUpdater(currenLoginName);
     			pMateriel.setCreateTime(new Date());
     			pMateriel.setUpdateTime(new Date());
+    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+    			}
     			newMaterielList.add(pMateriel);
 	    	}
 			
