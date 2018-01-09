@@ -505,11 +505,13 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
-        			if("1".equals(takeDeliveryParams.getRecord())){
+        			if("1".equals(takeDeliveryParams.getRecord().getStatus())){
         			//入库消息  to 采购
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
         			//入库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
+        			//入库完成的采购订单，通知关联的销售订单制单人
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY_TO_SALE));
         			}
         		}else{
         		/*	takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/

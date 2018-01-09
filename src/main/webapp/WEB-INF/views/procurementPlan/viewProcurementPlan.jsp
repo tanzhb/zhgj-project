@@ -17,7 +17,7 @@
 					
 		            <div class="portlet-title">
 			               <div class="tools">
-			               		<button ng-if="procurementPlan.status == 0" type="button" ng-click="procurementPlanGenerateBuy()"  class="btn blue btn-circle  btn-sm">分解采购</button>
+			               		<button ng-if="procurementPlan.status == 0" type="button" ng-click="procurementPlanGenerateBuy()"  class="btn blue btn-circle  btn-sm">发布采购</button>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>
 					</div>

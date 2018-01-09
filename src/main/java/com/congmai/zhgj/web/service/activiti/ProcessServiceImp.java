@@ -484,7 +484,7 @@ public class ProcessServiceImp implements IProcessService{
 	 * 完成任务
 	 */
 	@Override
-	public void complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception{
+	public String complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception{
 		Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
 		// 根据任务查询流程实例
     	String processInstanceId = task.getProcessInstanceId();
@@ -506,10 +506,12 @@ public class ProcessServiceImp implements IProcessService{
 		// 完成委派任务
     	if(DelegationState.PENDING == task.getDelegationState()){
     		this.taskService.resolveTask(taskId, variables);
-    		return;
+    		return task.getTaskDefinitionKey();
     	}
     	//正常完成任务
 		this.taskService.complete(taskId, variables);
+		
+		return task.getTaskDefinitionKey();
 	}
 
 	@Override

@@ -509,7 +509,7 @@ public class ProcurementPlanController {
     
     /**
 	 * 
-	 * @Description 销售订单生成采购订单
+	 * @Description 采购计划生成采购订单
 	 * @param ids
 	 * @return
 	 */
@@ -550,11 +550,15 @@ public class ProcurementPlanController {
     			String temp = orderService.getNumCode("PO");
     			newOrderInfo.setOrderNum(temp);
     			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
-//    			newOrderInfo.setOrderSerial(orderInfo.getOrderNum());//
+    			newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());//
+    			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购
     			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
+    			newOrderInfo.setOrderDate(new Date());
+    			newOrderInfo.setRate("17");
+    			newOrderInfo.setCurrency("人民币");
     			
     			newOrderInfo.setCreator(currenLoginName);
     			newOrderInfo.setUpdater(currenLoginName);

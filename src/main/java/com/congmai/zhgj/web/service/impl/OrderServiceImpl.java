@@ -485,6 +485,11 @@ public int pingTaiSubmit(OrderInfo orderInfo) {
 	return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 }
 
+@Override
+public OrderInfo selectByOrderNum(String orderNum) {
+	return OrderInfoMapper.selectByOrderNum(orderNum);
+}
+
 
 	
 

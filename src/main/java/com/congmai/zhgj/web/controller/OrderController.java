@@ -51,6 +51,7 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -574,16 +575,18 @@ public class OrderController {
     		}else{
     			order.setStatus(BaseVO.PENDING);					//审批中
     		}
-    		// 完成任务
-    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
-    		
+    		// 完成任务，返回当前节点定义
+    		String taskDefinitionKey = this.processService.complete(taskId, content, user.getUserId().toString(), variables);
     		
     		ProcessInstance pi = null;
     		if(completeFlag){
     			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
     			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
     			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-    			if(BeanUtils.isBlank(pi)){
+    			/*if(BeanUtils.isBlank(pi)){
+    				order.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}*/
+    			if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
     				order.setStatus(BaseVO.APPROVAL_SUCCESS);
     			}
     		}
@@ -605,14 +608,20 @@ public class OrderController {
     	    		}else if(StaticConst.getInfo("saleOrder").equals(contract.getContractType())){//销售订单
     	    			oi.setStatus("2");//跳过合同签订
     	    		}else if(StaticConst.getInfo("buyContract").equals(contract.getContractType())){//采购合同
-    	    			oi.setStatus("3");//跳过合同签订
+    	    			oi.setStatus("2");//不在合同签订了
     	    		}else if(StaticConst.getInfo("saleContract").equals(contract.getContractType())){//销售合同
-    	    			oi.setStatus("1");//跳过合同签订
+    	    			oi.setStatus("2");//不在合同签订了
     	    		}
     	    	}
     			
     			this.orderService.updateStatus(oi);
+    			//自主销售订单审批完成，分解BOM
+    			if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
+    				saleGenerateProcurementPlan(order.getSerialNum());
+	    		}
+        		
     		}
+    		
     		
     		order.setProcessInstanceId(processInstanceId);
     		//发送消息
@@ -620,16 +629,16 @@ public class OrderController {
     			//采购订单驳回消息
     		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_BUY_ORDER));
     		}else{
-    			if(BeanUtils.isBlank(pi)){
+    			//给中间审批人发消息
+				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
+				//给制单人发送消息
+				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
+    			/*if(BeanUtils.isBlank(pi)){*/
+				if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
     				//采购订单审核通过消息
         		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
         		    //采购订单待确认（发给供应商）
         		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
-    			}else{
-    				//给中间审批人发消息
-    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
-    				//给制单人发送消息
-    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
     			}
     		}
     		result = "任务办理完成！";
@@ -1256,6 +1265,7 @@ public class OrderController {
 	    		contract.setUpdater(currenLoginName);
 	    		contract.setCreateTime(new Date());
 	    		contract.setUpdateTime(new Date());
+	    		contract.setStatus(ContractVO.WAIT_SIGN);
 
 	    		orderService.insertContract(contract);
 	    	}else{//更新
@@ -2065,6 +2075,7 @@ public class OrderController {
     				newcontract.setUpdater(currenLoginName);
     				newcontract.setCreateTime(new Date());
     				newcontract.setUpdateTime(new Date());
+    				newcontract.setStatus(ContractVO.WAIT_SIGN);
     				
     				contractService.insertContract(newcontract);
     			}
@@ -2247,13 +2258,19 @@ public class OrderController {
 	    			pMateriel.setBuyCount(o.getAmount());
 	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 	    			
+	    			
 	    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-	    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+	    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
 	    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
 	    			pMateriel.setCreator(currenLoginName);
 	    			pMateriel.setUpdater(currenLoginName);
 	    			pMateriel.setCreateTime(new Date());
 	    			pMateriel.setUpdateTime(new Date());
+	    			
+	    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+	    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+	    			}
+	    			
 	    			newMaterielList.add(pMateriel);
 		    	}else{
 		    		
@@ -2270,12 +2287,16 @@ public class OrderController {
 		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
 		    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 		    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-		    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+		    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
 		    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
 		    			pMateriel.setCreator(currenLoginName);
 		    			pMateriel.setUpdater(currenLoginName);
 		    			pMateriel.setCreateTime(new Date());
 		    			pMateriel.setUpdateTime(new Date());
+		    			
+		    			if(b.getMateriel()!=null&& !CollectionUtils.isEmpty(b.getMateriel().getSupplyMateriels())){
+		    				pMateriel.setSupplyMaterielSerial((b.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+		    			}
 		    			newMaterielList.add(pMateriel);
 		    		}
 		    	}
@@ -2288,12 +2309,15 @@ public class OrderController {
     			pMateriel.setBuyCount(o.getAmount());
     			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
     			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
-    			pMateriel.setDeliveryDate(o.getDeliveryDate());
+    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
     			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
     			pMateriel.setCreator(currenLoginName);
     			pMateriel.setUpdater(currenLoginName);
     			pMateriel.setCreateTime(new Date());
     			pMateriel.setUpdateTime(new Date());
+    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+    			}
     			newMaterielList.add(pMateriel);
 	    	}
 			
@@ -2400,6 +2424,7 @@ public class OrderController {
 			newcontract.setUpdater(currenLoginName);
 			newcontract.setCreateTime(new Date());
 			newcontract.setUpdateTime(new Date());
+			newcontract.setStatus(ContractVO.WAIT_SIGN);
 			
 			contractService.insertContract(newcontract);
 		}

@@ -279,10 +279,10 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
                                      
                                       <p ng-if="buyOrder.status==3"  
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                      
                                  </div>
                                  
@@ -400,10 +400,10 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
                                      
                                       <p ng-if="buyOrder.status==3"  
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                  </div>
                                  
                              </div>
@@ -441,10 +441,10 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
                                      
                                       <p ng-if="buyOrder.status==3"  
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                  </div>
                                  
                              </div>
@@ -593,10 +593,10 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(buyOrder.processBase.processInstanceId)" style="color:#fcb95b"> 未通过 </p>
                                      
                                       <p ng-if="buyOrder.status==3"  
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 待签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:#fcb95b"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="buyOrder.status==2"   
-                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已签合同 </p>
+                                     ng-click="viewOrderLog(buyOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                  </div>
                                  
                              </div>

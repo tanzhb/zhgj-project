@@ -140,6 +140,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			inToBuyMessage(event);
 		}else if(MessageConstants.IN_TO_SALE.equals(event.getAction())){ //入库完成（to供应）
 			inToSaleMessage(event);
+		}else if(MessageConstants.IN_TO_BUY_TO_SALE.equals(event.getAction())){ //入库完成（to采购）
+			inToBuyToSaleMessage(event);
 		}else if(MessageConstants.SHOUKUAN.equals(event.getAction())){ //收款（to供应）
 			shoukuanMessage(event);
 		}else if(MessageConstants.FUKUAN.equals(event.getAction())){ //付款（to采购）
@@ -1105,6 +1107,59 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 
 	}
 
+	
+	/**
+	 * 
+	 * @Description (入库 to 采购通知关联的销售订单制单人)
+	 * @param event
+	 */
+	private void inToBuyToSaleMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
+
+				Properties properties = new Properties();
+				TakeDelivery takeDelivery = takeDeliveryService.selectById(params.getRecord().getTakeDeliverSerial());
+				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
+				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
+					count += Integer.parseInt(dm.getStockCount());
+				}
+				User u = null;
+				if(StringUtils.isNotEmpty(order.getOrderSerial())){ //发给采购对应销售订单
+					Message messageVO = this.createMessage(event,user);
+					OrderInfo saleOrder = orderService.selectByOrderNum(order.getOrderSerial());
+					if(saleOrder!=null&&saleOrder.getMaker()!=null){
+						u = userService.selectByUsername(order.getMaker());
+						if(u!=null){
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY_TO_SALE); //收货消息
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_SALE_ORDER);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							properties.put("paramer_g", order.getOrderSerial());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
+
+	}
+	
 	private void inToSaleMessage(SendMessageEvent event) {
 		try {
 			initService();

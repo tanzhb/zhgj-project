@@ -214,6 +214,7 @@ margin-right: 20px;
 		                          <td>  
 		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="procurementPlanMateriel[$index].buyCount" ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount')" >
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.buyCount}} </p>
+                                     		<p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p>
 		                          </td>
 		                          <td>  
 		                          		<select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="procurementPlanMateriel[$index].supplyMaterielSerial" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
