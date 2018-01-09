@@ -17,7 +17,8 @@
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">收货信息</a>
 						</li> -->
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
-						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+						<li class="bold"  ng-if="oprateType==undefined"  ><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+						<li class="bold"  ng-if="oprateType!=undefined"  ><a data-target="#tab_1_5" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>						
@@ -945,9 +946,9 @@
 										
 										
 										
-									</div>
+									<!-- </div> -->
 									<!--/row-->
-									<div class="row"   ng-if="oprateType==undefined">
+									<!-- <div class="row"   ng-if="oprateType==undefined"> -->
 									<div class="col-md-4">
 										<div class="form-group">
 													<label class="control-label bold">入库日期</label>
@@ -1075,7 +1076,7 @@
 										<!--/span-->
 									</div>
 							</div>
-							<div class="tab-pane fade" id="tab_1_4"  ng-if="oprateType!=undefined"><!--  采购订单列表收货计划物料列表-->
+							<div class="tab-pane fade" id="tab_1_5"  ><!--  采购订单列表收货计划物料列表-->
 		<div class="portlet-body">
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
@@ -1094,7 +1095,7 @@
 				</div>
 				<div class="col-md-6 col-sm-6">
 					<div id="sample_5_filter" style="text-align: right;">
-						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"   
 							class="form-control input-sm input-small input-inline"
 							placeholder="" aria-controls="sample_5"></label>
 					</div>
@@ -1218,7 +1219,7 @@
 			
 		</div>
 	</div>
-	<div class="tab-pane fade" id="tab_1_4"  ng-if="oprateType==undefined"><!--  入库计划列表收货计划物料列表-->
+	<div class="tab-pane fade" id="tab_1_4"  ><!--  入库计划列表收货计划物料列表-->
 		<div class="portlet-body">
 			<div class="row">
 				<div class="col-md-6 col-sm-6">
@@ -1237,7 +1238,7 @@
 				</div>
 				<div class="col-md-6 col-sm-6">
 					<div id="sample_5_filter" style="text-align: right;">
-						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"    
 							class="form-control input-sm input-small input-inline"
 							placeholder="" aria-controls="sample_5"></label>
 					</div>

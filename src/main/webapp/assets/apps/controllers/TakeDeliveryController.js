@@ -2969,13 +2969,13 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		  	 
 		  	 $scope.createFilterList = function(){
 		  		 $scope.filterDeliveryMateriel = [];
-		  		if($scope.deliver.deliveryMateriels.length>0&&$scope.queryStr&&!isNull($scope.queryStr)){
+		  		if($scope.deliver.deliveryMateriels.length>0&&!isNull($scope.queryStr)){
 		  			for(var i = 0;i < $scope.deliver.deliveryMateriels.length;i++){// data.data为选择的标准物料
-		  				if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielNum.indexOf($scope.queryStr)>=0){
+		  				if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielNum!=null&&($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielNum.indexOf($scope.queryStr)>=0){
 		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
-		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielName.indexOf($scope.queryStr)>=0){
+		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielName!=null&&($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.materielName.indexOf($scope.queryStr)>=0){
 		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
-		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.specifications.indexOf($scope.queryStr)>=0){
+		  				}else if(($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.specifications!=null&&($scope.deliver.deliveryMateriels)[i].orderMateriel.materiel.specifications.indexOf($scope.queryStr)>=0){
 		  					$scope.filterDeliveryMateriel.push(angular.copy(($scope.deliver.deliveryMateriels)[i]));
 		  				}
 		  			}
