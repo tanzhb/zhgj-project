@@ -280,7 +280,7 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已签合同 </p>
@@ -415,7 +415,7 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已签合同 </p>
@@ -458,7 +458,7 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已签合同 </p>
@@ -627,7 +627,7 @@ margin-right: 20px;
                                      ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已签合同 </p>

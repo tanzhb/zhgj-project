@@ -220,6 +220,7 @@ public class ProcessAction {
 			map.put("title", base.getTitle());
 			map.put("taskId", base.getTask().getId());
 			map.put("taskName", base.getTask().getName());
+			map.put("createTime", base.getTask().getCreateTime());
 			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
 				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
 				map.put("num", o==null?"":o.getOrderNum());

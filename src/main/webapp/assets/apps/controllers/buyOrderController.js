@@ -438,7 +438,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                               { mData: 'orderAmount' },
                               /*{ mData: 'deliveryMode' },*/
                               { mData: 'orderType' },
-                              { mData: 'saleApplySerial' },
+                              { mData: 'demandPlanSerial' },
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
                               { mData: 'status' },
@@ -469,7 +469,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 											return clickhtm + '<span ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" style="color:#fcb95b">审核中</span>';
 										}else if(row.processBase.status=="APPROVAL_SUCCESS"){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已审批</span>';//待签合同
 										}else if(row.processBase.status=="APPROVAL_FAILED"){
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:red">未通过</span>';
 										}else{
@@ -486,7 +486,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已签合同</span>';
 									}
 								}else if(row.status==3){
-									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已审批</span>';//待签合同
 								}else if(row.status=="66"){
                     				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待供方确认</span>';
 								}else if(row.status=="77"){
@@ -616,6 +616,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 6,
 							'render' : function(data,
 									type, row, meta) {
+								if(isNull(data)){
+									return "--"
+								}else{
+									return data
+								}
+							}
+						}/*, {
+							'targets' : 6,
+							'render' : function(data,
+									type, row, meta) {
 								if(isNull(row.contract)||isNull(row.contract.contractNum)){
 									return ""
 								}else{
@@ -625,7 +635,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						}, {
+						}*/, {
 							'targets' : 7,
 							'render' : function(data,
 									type, row, meta) {

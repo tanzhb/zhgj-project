@@ -83,7 +83,7 @@ public interface IProcessService {
      * @param userid
      * @param completeFlag
      */
-    public void complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception;
+    public String complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception;
     
     /**
      * 撤销任务

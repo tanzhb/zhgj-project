@@ -46,7 +46,7 @@
     SELECT
 	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
-    a.versionNO,ifNull(b.status,a.status) as status
+    a.versionNO,a.status as status
 	FROM
 	contract a
 	LEFT JOIN orderInfo b ON a.serialNum=b.contractSerial
