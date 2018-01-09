@@ -75,7 +75,7 @@
                               		<i class="fa fa-save"></i>保存 </button>
                       			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
-                            </div>
+                            </div><br/><br/>
                         </div>
                         <div class="portlet-body form">
 								<div class="form-body">
@@ -276,6 +276,101 @@
 										</div>
 										<!--/span-->
 									</div>
+											<div class="row"     style="border-top:1px solid #dddddd;padding-top: 20px;"  >
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">运输方式</label>
+													<div class="">
+														<!-- <input type="text" class="form-control" name="transportType"
+													ng-model="deliveryTransport.transportType" ng-show="input" /> -->
+														<select class="form-control" id="transportType"
+															name="transportType" ng-model="record.transportType"
+															ng-hide="deliverAdd">
+															<option value="水路运输">水路运输</option>
+															<option value="铁路运输">铁路运输</option>
+															<option value="公路运输">公路运输</option>
+															<option value="铁路运输">铁路运输</option>
+														</select>
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.transportType}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">运输方<!-- <span
+														class="required" aria-required="true"> * </span> --></label>
+													<div class="">
+														<input type="text" class="form-control" name="transport"  
+															ng-model="record.transport" ng-hide="deliverAdd" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.transport}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">运单号 <!-- <span
+														class="required" aria-required="true"> * </span> --></label>
+													<div class="">
+														<input type="text" class="form-control" name="shipNumber"
+															ng-model="record.shipNumber" ng-hide="deliverAdd" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.shipNumber}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+										</div>
+										<div class="row"  >
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">联系人</label>
+													<div class="">
+														<input type="text" class="form-control"
+															name="transportContact" ng-hide="deliverAdd"
+															ng-model="record.transportContact" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.transportContact}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">联系电话</label>
+													<div class="">
+														<input type="text" class="form-control"
+															name="transportContactNum" ng-hide="deliverAdd"
+															ng-model="record.transportContactNum" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.transportContactNum}}</p>
+													</div>
+
+												</div>
+											</div>
+											<!--/span-->
+											<div class="col-md-4">
+												<div class="form-group">
+													<label class="control-label bold">备注</label>
+													<div class="">
+														<input type="text" class="form-control" name="transportRemark"
+															ng-hide="deliverAdd"  ng-model="record.transportRemark" />
+														<div class="form-control-focus"></div>
+														<p class="form-control-static" ng-show="deliverView">
+															{{record.transportRemark}}</p>
+													</div>
+												</div>
+											</div>
+											<!--/span-->
+										</div>
 								</div>
          				</div>
          					</div>

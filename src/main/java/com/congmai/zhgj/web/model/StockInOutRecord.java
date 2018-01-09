@@ -84,6 +84,18 @@ public class StockInOutRecord {
 	    private String outWarehouseName;
 	    
 	    private String materielCount;//出入库数量
+	    //发货计划运输信息挪至出库
+	    private String transportType;//运输方式
+
+	    private String transport;//运输方
+
+	    private String shipNumber;//运单号
+	    
+	    private String  transportContact;//联系人
+	    
+	    private String transportContactNum;//联系电话
+	    
+	    private String transportRemark;//备注
 
 
 		public int getPageSize() {
@@ -364,6 +376,54 @@ public class StockInOutRecord {
 
 		public void setMaterielCount(String materielCount) {
 			this.materielCount = materielCount;
+		}
+
+		public String getTransportType() {
+			return transportType;
+		}
+
+		public String getTransport() {
+			return transport;
+		}
+
+		public String getShipNumber() {
+			return shipNumber;
+		}
+
+		public String getTransportContact() {
+			return transportContact;
+		}
+
+		public String getTransportContactNum() {
+			return transportContactNum;
+		}
+
+		public String getTransportRemark() {
+			return transportRemark;
+		}
+
+		public void setTransportType(String transportType) {
+			this.transportType = transportType;
+		}
+
+		public void setTransport(String transport) {
+			this.transport = transport;
+		}
+
+		public void setShipNumber(String shipNumber) {
+			this.shipNumber = shipNumber;
+		}
+
+		public void setTransportContact(String transportContact) {
+			this.transportContact = transportContact;
+		}
+
+		public void setTransportContactNum(String transportContactNum) {
+			this.transportContactNum = transportContactNum;
+		}
+
+		public void setTransportRemark(String transportRemark) {
+			this.transportRemark = transportRemark;
 		}
 
 	

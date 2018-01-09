@@ -1110,8 +1110,10 @@ margin-right: 20px;
 									<th ng-if="saleOrder.orderType!='自主销售'">供应商</th>
 									<th><span style="display:inline-block;width:100px;">销售数量</span></th>
 									<th>指导单价</th>
-									<th><span style="display:inline-block;width:100px;">含税单价</span></th>
-									<th><span style="display:inline-block;width:150px;">不含税单价</span></th>
+									<!-- <th><span style="display:inline-block;width:100px;">含税单价</span></th>
+									 -->
+									<th>含税单价</th>
+									<th><span style="display:inline-block;width:100px;">不含税单价</span></th>
 									<th>币种</th>
 									<th  ng-if="saleOrder.tradeType =='外贸'">退税率</th>
 									<th  ng-if="saleOrder.tradeType !='外贸'">税率</th>
@@ -1164,7 +1166,7 @@ margin-right: 20px;
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 			                          </td>
 			                          <td>  
-			                          		<input style="padding:6px 3px" type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
+			                          		<input style="padding:6px 3px;width:80px" type="text"  name="orderRateUnit{{$index}}" class="form-control" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].orderRateUnit" 
 			                          		 ng-keyup="" ng-change="clearNoNumPoint(orderMateriel[$index],'orderRateUnit');_arithmeticUnitPrice(_orderMateriel)">
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}" ng-if="_orderMateriel.materiel.unitPrice!=_orderMateriel.orderRateUnit" style="color:red"> {{_orderMateriel.orderRateUnit}} </p>
                                      			<p class="form-control-static" ng-show="orderMaterielShow{{$index}}" ng-if="_orderMateriel.materiel.unitPrice==_orderMateriel.orderRateUnit"> {{_orderMateriel.orderRateUnit}} </p>
@@ -1225,6 +1227,7 @@ margin-right: 20px;
 	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
 	                                         </select>
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
+	                                     		<p class="form-control-static" ng-show="orderMaterielEdit{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
 			                          </td>
                                       
                                       <td>
@@ -1239,7 +1242,7 @@ margin-right: 20px;
                                         </span>
                                         <span  ng-show="operation_o{{$index}}&&noShow">
                                         	&nbsp;&nbsp;&nbsp;&nbsp;
-                                        	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel)"><i class="fa fa-edit"  title="编辑"></i></a>
+                                        	<a ng-show="orderMaterielShow{{$index}}"   ng-click="editOrderMateriel(_orderMateriel,$index)"><i class="fa fa-edit"  title="编辑"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
                                         	<a ng-show="orderMaterielShow{{$index}}"  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"  title="删除" ></i></a>
                                        	</span>

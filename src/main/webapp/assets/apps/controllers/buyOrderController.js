@@ -532,9 +532,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}*/
 								if(isNull(row.receiveCount)||row.receiveCount==0){
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\')">已收</a>'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\')">已收</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}
                     			if(row.deliverStatus==null||row.deliverStatus=="0"){
                     				if(row.status==2){
@@ -1822,6 +1822,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 /*						console.log(data.data);*/
 						$scope["orderMaterielInput"+index] = true;
 						$scope["orderMaterielShow"+index] = true;
+						$scope["orderMaterielEdit"+index] =false;
 						$(".alert-danger").hide();
 					} else {
 						$(".modal-backdrop").remove();
@@ -1846,6 +1847,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	// .show_materiels = false;
 	        	$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
+				$scope["orderMaterielEdit"+index] = false;
 	        	for(var i=0;i<$scope.copyMateriels.length;i++){
 	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum){ // 如果是以保存的物料，回滚
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)] = $scope.copyMateriels[i];
@@ -1871,6 +1873,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = true;
 					$scope["orderMaterielShow"+i] = true;
+					$scope["orderMaterielEdit"+i] = false;
 	        	}
 	        }; 
 	        
@@ -1883,6 +1886,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = false;
 					$scope["orderMaterielShow"+i] = false;
+					$scope["orderMaterielEdit"+i] = true;
 	        	}
 	        }; 
 	        //选择第一个，设置后面的数据
@@ -1943,6 +1947,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		if(materiel.serialNum == $scope.orderMateriel[i].serialNum){
 	        			$scope["orderMaterielInput"+i] = false;
 	        			$scope["orderMaterielShow"+i] = false;
+	        			$scope["orderMaterielEdit"+i] = true;
 	        		}
 	        	}
 	        	
@@ -5538,7 +5543,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			}     	
 	    }; 
 		//删除
-		$scope.del = function() {
+		$scope.delPay = function() {
 			if(tablePay.rows('.active').data().length == 0){
 				showToastr('toast-top-center', 'warning', '未勾选要删除数据！')
 			} else {

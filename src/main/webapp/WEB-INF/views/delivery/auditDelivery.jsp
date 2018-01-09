@@ -427,10 +427,10 @@
 						</div>
 
 
-						<div class="portlet-title">
+						<div class="portlet-title"  ng-show="showTransport">
 							<div class="caption">运输信息</div>
 						</div>
-						<div class="portlet-body form">
+						<div class="portlet-body form"  ng-show="showTransport">
 							<!-- BEGIN FORM-->
 							<div class="form-body">
 								<div class="alert alert-danger display-hide">
