@@ -128,7 +128,14 @@
     select
     	comId,comName,comNum
     from company
-   		where delFlg = 0 and comType= #{comType}
+   		where delFlg = 0 
+   		
+   		and (comType = #{comType} 
+   		<if test="comType==1||comType==2">    
+     	  or comType = 9
+    	</if>
+    	) 
+   		
    		<if test="searchKey!=null and searchKey!=''">
    		 	and comName like CONCAT('%',#{searchKey},'%')
    		</if>

@@ -250,14 +250,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getSuppliers().then(
      		     function(data){
      		    	$scope.suppliers=data.data;
-     		    	setTimeout(function () {
+     		    	/*setTimeout(function () {
             			$('select[name="supplyComId"]').selectpicker({
                             showSubtext: true,
                             size : 5
                         });
             			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
             			
-                    }, 100);
+                    }, 100);*/
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -274,14 +274,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getBuys().then(
      		     function(data){
      		    	$scope.buys=data.data;
-     		   	setTimeout(function () {
+     		   	/*setTimeout(function () {
         			$('select[name="buyComId"]').selectpicker({
                         showSubtext: true,
                         size : 5
                     });
         			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
         			
-                }, 100);
+                }, 100);*/
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -1472,7 +1472,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   		       }
 	   	    };
 	   	    $scope.repeatDone = function(judgeString){
-	   	    	debugger;
+	   	    	/*debugger;
 	   	    	if(judgeString=='buy'){
 		    		   $('select[name="buyComId"]').selectpicker({
 		                    showSubtext: true,
@@ -1485,7 +1485,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		                    size : 5
 		                });
 		    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
-		    	   }
+		    	   }*/
 	       };
 	       
 	   	    $scope.multiselectInit = function(){
