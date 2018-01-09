@@ -789,7 +789,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
    	 var  inRecordTable,tableUrl,type,tableId;// 核销弹框
      var loadInRecordTable = function(serialNum,count) {
     	 tableId="select_sample_inRecord";
-    	 $scope.totaInRecordCount=count;
+    	 $scope.totaIInRecordCount=count;
     	 type="buy";
    	  tableUrl="rest/order/getRecordList?serialNum="+serialNum+"&type="+type;
               a = 0;

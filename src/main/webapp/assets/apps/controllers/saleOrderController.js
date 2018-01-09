@@ -417,7 +417,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                             { mData: 'stockInOutRecord.inOutType' },
                             { mData: 'orderMateriel'},
                             { mData: 'orderMateriel'},
-                            { mData: 'delivery.deliverDate' },
+                            { mData: 'deliverDate' },
                             { mData: 'deliverCount' },
                             { mData: 'stockInOutRecord.stockDate' },
                             { mData: 'stockCount' },
