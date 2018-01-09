@@ -611,7 +611,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 		String deliverySerial = stockInOutRecord.getDeliverSerial();
 		old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
-		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+		//clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
 		BigDecimal totalOutCount=BigDecimal.ZERO;
 		if("1".equals(record.getStatus())){
 		//自动生成报关单
@@ -651,7 +651,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				/*createStock(materiel,new StockExample(),currenLoginName);*/
 			}
 		}
-		OrderInfo order=orderService.selectById(orderInfo.getOrderSerial());
+		OrderInfo order=orderService.selectById(old_delivery.getOrderSerial());
 		if(StringUtil.isNotEmpty(order.getReceiveCount())){
 			totalOutCount=totalOutCount.add(new BigDecimal(order.getReceiveCount()));
 		}
@@ -663,6 +663,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String orderString = old_delivery.getOrderSerial();
 		String nodeString = ClauseSettlementDetail.CKH;
 		contractService.findPaymentNode(orderString, nodeString);	
+		}else{
+			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+			for(DeliveryMateriel materiel : materiels){
+				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+			}
 		}
 		//更新入库记录
 		record.setUpdater(currenLoginName);

@@ -3032,7 +3032,7 @@ public class OrderController {
 			 StockInOutRecord record=new StockInOutRecord();
 			 record.setPageIndex(0);
 			 record.setPageSize(-1);
-			 //record.setOrderSerial(serialNum);
+			 record.setOrderSerial(serialNum);
 			 Page<DeliveryMateriel> takeDeliverys=null;
 			 if(user != null&&"sale".equals(type)){
 				 String comId = userCompanyService.getUserComId(user.getUserId().toString());

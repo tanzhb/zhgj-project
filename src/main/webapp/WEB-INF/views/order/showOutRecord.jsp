@@ -32,7 +32,7 @@
 	                    </thead>
 	                    <tbody>
 	                    </tbody>
-	                   <tfoot><tr><td/><td/><td>合计:</td><td>{{totaOutRecordCount}}</td><!-- <td/> --><td/></tr></tfoot>
+	                   <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaOutRecordCount}}</td><td/><td/></tr></tfoot>
 	                </table>
 	            </div>
 	           

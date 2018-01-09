@@ -33,7 +33,7 @@
 	                    </thead>
 	                    <tbody>
 	                    </tbody>
-	                    <tfoot><tr><td/><td/><td>合计:</td><td>{{totalnRecordCount}}</td><!-- <td/> --><td/></tr></tfoot>
+	                    <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaIInRecordCount}}</td><td/><td/></tr></tfoot>
 	                </table>
 	            </div>
 	            
