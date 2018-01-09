@@ -2038,16 +2038,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 									}
 								},
 								{
-									mData : 'claimTime',
+									mData : 'currentPointUserName',
 									mRender : function(
 											data,
 											type,
 											row,
 											meta) {
 										if(data != null){
-				                			return timeStamp2String(data);
+				                			return data;
 				                		}else{
-				                			return "无需签收";
+				                			return "";
 				                		}
 									}
 								},
@@ -3179,9 +3179,9 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                                 { mData: 'materiel'},
                                 { mData: 'stockInOutRecord.stockDate' },
                                 { mData: 'stockCount' },
-                                { mData: 'orderNum' },
+                               /* { mData: 'orderNum' },
                                 { mData: 'stockInOutRecord.shipperOrReceiver' },
-                                { mData: 'delivery' },
+                                { mData: 'delivery' },*/
                                 { mData: 'stockInOutRecord.status' }
                           ],
                  'aoColumnDefs' : [ {
@@ -3237,7 +3237,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
   									return data.specifications;
   								}
   							}
-  						},{
+  						}/*,{
   							'targets' : 7,
   							'render' : function(data,
   									type, row, meta) {
@@ -3258,7 +3258,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	
   							}
   						},{
-  							'targets' : 9,
+  							'targets' : 7,
   							'render' : function(data,
   									type, row, meta) {
   									if(isNull(data)||isNull(data.deliverNum)){
@@ -3267,8 +3267,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	  								return data.deliverNum;
 	
   							}
-  						},{
-  							'targets' : 10,
+  						}*/,{
+  							'targets' : 7,
   							'render' : function(data,
   									type, row, meta) {
   								if(data=="0"){

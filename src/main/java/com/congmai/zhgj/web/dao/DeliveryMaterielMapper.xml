@@ -54,6 +54,8 @@
 	<result column="stockInUnqualifiedCount" property="stockInUnqualifiedCount" jdbcType="VARCHAR" />
 	<result column="stockInCheckRemark" property="stockInCheckRemark" jdbcType="VARCHAR" />
 	<result column="orderNum" property="orderNum" jdbcType="VARCHAR" />
+	<result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
+	    <result column="deliverDate" property="deliverDate" jdbcType="TIMESTAMP" />
     <association column="orderMaterielSerial" property="orderMateriel" select="com.congmai.zhgj.web.dao.OrderMaterielMapper.selectByPrimaryKey" ></association>
     <association column="materielSerial" property="materiel" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
     <association column="supplyMaterielSerial" property="supplyMateriel" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
@@ -668,7 +670,8 @@
 		IFNULL(dm.orderMaterielSerial,dm2.orderMaterielSerial) as orderMaterielSerial,
 		IFNULL(dm.supplyMaterielSerial,dm2.supplyMaterielSerial) as supplyMaterielSerial,
    		s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial,s.shipperOrReceiver,s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum,s.docNum, 
-    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.buyComId,o.orderNum as orderNum
+    	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.buyComId,o.orderNum as orderNum,
+    	dm.deliverCount as deliverCount,d.deliverDate as deliverDate
     from stockInOutRecord s
     left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial and dm.stockInOutRecordSerial is null and dm.delFlg = 0
@@ -679,6 +682,9 @@
     </if>
       <if test="status != null" >
       and  s.status= #{status,jdbcType=VARCHAR}
+    </if>
+     <if test="orderSerial != null" >
+      and  o.serialNum= #{orderSerial,jdbcType=VARCHAR}
     </if>
     <if test="orderByClause != null" >
       order by ${orderByClause}
@@ -695,7 +701,7 @@
 		IFNULL(dm.supplyMaterielSerial,dm2.supplyMaterielSerial) as supplyMaterielSerial,
    		s.serialNum as s_serialNum, s.deliverSerial, s.takeDeliverSerial,s.shipperOrReceiver,s.inOutNum,s.inOutType,s.stockDate, s.operator, s.contactNum,s.docNum, 
     	s.status, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime, d.supplyComId,d.deliverNum,o.orderNum,o.supplyComId as buyComId,o.orderNum as orderNum,td.serialNum as takeDeliverSerial,
-    	m.serialNum  as materielSerial
+    	m.serialNum  as materielSerial,dm.deliverCount as deliverCount,d.deliverDate as deliverDate
     from stockInOutRecord s
     left join takeDelivery td on td.serialNum = s.takeDeliverSerial
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
@@ -718,7 +724,9 @@
       <if test="status != null" >
       and  s.status= #{status,jdbcType=VARCHAR}
     </if>
-    
+    <if test="orderSerial != null" >
+      and  o.serialNum= #{orderSerial,jdbcType=VARCHAR}
+    </if>
     <if test="comId != null" >
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
       </if>

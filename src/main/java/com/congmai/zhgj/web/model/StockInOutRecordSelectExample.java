@@ -20,9 +20,19 @@ public class StockInOutRecordSelectExample {
     
     private String status;//用于查询该公司的物料出入库记录
     
+    private String orderSerial;//用于查询该公司的物料出入库记录
     
     
-    public String getComId() {
+    
+    public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial;
+	}
+
+	public String getComId() {
 		return comId;
 	}
 

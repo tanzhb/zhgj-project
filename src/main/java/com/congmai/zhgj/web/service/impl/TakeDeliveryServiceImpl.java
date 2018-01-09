@@ -557,11 +557,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		
 		List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+		BigDecimal  totalOutCount=BigDecimal.ZERO;
 		for(DeliveryMateriel materiel : materiels){
 			DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
-			
+			totalOutCount=totalOutCount.add(new  BigDecimal(materiel.getStockCount()) );
 			if(!CollectionUtils.isEmpty(materiel.getStockInBatchs())){
 				//先删除原来的入库批次信息
 				StockInBatchExample se=new StockInBatchExample();
@@ -582,7 +583,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			createStock(materiel,new StockExample(),currenLoginName);
 			}
 		}
-		
+		//更新入库数量(订单)
+		if("1".equals(record.getStatus())){
+			OrderInfo o=orderService.selectById(old_delivery.getOrderSerial());
+			if(StringUtil.isNotEmpty(o.getReceiveCount())){
+				totalOutCount=totalOutCount.add(new BigDecimal(o.getReceiveCount()));
+			}
+			o.setReceiveCount(totalOutCount.toString());
+			orderService.update(o);
+			}
 		
 		
 	}
@@ -603,6 +612,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String deliverySerial = stockInOutRecord.getDeliverSerial();
 		old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
 		clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+		BigDecimal totalOutCount=BigDecimal.ZERO;
 		if("1".equals(record.getStatus())){
 		//自动生成报关单
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
@@ -618,6 +628,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+				totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
 			}
 		createCustomsDeclarationForm(deliverySerial,currenLoginName);
 		//更新订单状态待报关
@@ -636,9 +647,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
 				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+				totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
 				/*createStock(materiel,new StockExample(),currenLoginName);*/
 			}
 		}
+		OrderInfo order=orderService.selectById(orderInfo.getOrderSerial());
+		if(StringUtil.isNotEmpty(order.getReceiveCount())){
+			totalOutCount=totalOutCount.add(new BigDecimal(order.getReceiveCount()));
+		}
+		orderInfo.setReceiveCount(totalOutCount.toString());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		delivery2Mapper.updateByPrimaryKeySelective(d);
 		takeDeliveryMapper.updateByPrimaryKeySelective(td);

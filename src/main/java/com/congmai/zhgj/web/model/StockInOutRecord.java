@@ -96,6 +96,10 @@ public class StockInOutRecord {
 	    private String transportContactNum;//联系电话
 	    
 	    private String transportRemark;//备注
+	    
+	    private String orderSerial;//订单流水
+	    
+	    
 
 
 		public int getPageSize() {
@@ -424,6 +428,14 @@ public class StockInOutRecord {
 
 		public void setTransportRemark(String transportRemark) {
 			this.transportRemark = transportRemark;
+		}
+
+		public String getOrderSerial() {
+			return orderSerial;
+		}
+
+		public void setOrderSerial(String orderSerial) {
+			this.orderSerial = orderSerial;
 		}
 
 	

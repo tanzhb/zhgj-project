@@ -95,6 +95,7 @@ public class DeliveryMateriel {
 	private List<RelationFile> files;
 	private String outCount="0";//入库批次出库数量(针对出库批次弹框)
 	private  String orderNum;//订单编号
+	private Date deliverDate;
 	
 	private String deliveryAttachFile;
 	private List<RelationFile> deliveryFiles;
@@ -590,6 +591,14 @@ public class DeliveryMateriel {
 
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
+	}
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
 	}
 
 	

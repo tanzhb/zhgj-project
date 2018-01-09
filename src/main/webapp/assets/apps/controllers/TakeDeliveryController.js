@@ -1513,9 +1513,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		                                  { mData: 'orderMateriel'},
 	  		                                  { mData: 'stockInOutRecord.stockDate' },
 	  		                                  { mData: 'stockCount' },
-	  		                                  { mData: 'orderNum' },//batchNum
+	  		                                 /* { mData: 'orderNum' },//batchNum
 	  		                                  { mData: 'stockInOutRecord.shipperOrReceiver' },
-	  		                                  { mData: 'delivery' },
+	  		                                  { mData: 'delivery' },*/
 	  		                                  { mData: 'stockInOutRecord.status' }
 	  		                            ],
 	  		                   'aoColumnDefs' : [ {
@@ -1594,7 +1594,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  	  								return data;
 	  		  	
 	  		    							}
-	  		    						}*/,{
+	  		    						},{
 	  		    							'targets' : 9,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
@@ -1604,8 +1604,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  		  	  								return data.deliverNum;
 	  		  	
 	  		    							}
-	  		    						},{
-	  		    							'targets' : 10,
+	  		    						}*/,{
+	  		    							'targets' : 7,
 	  		    							'render' : function(data,
 	  		    									type, row, meta) {
 	  		    								if(data=="0"){

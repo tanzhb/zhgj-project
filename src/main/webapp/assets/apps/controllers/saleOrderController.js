@@ -358,6 +358,113 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     $scope.viewGraphTrace = function(processInstanceId){
     	graphTrace(processInstanceId,ctx);
     }
+    
+    $scope.showOutRecord=function(serialNum,count){
+		$('#OutRecordInfo').modal('show');//显示弹框
+		loadOutRecordTable(serialNum,count);
+	}
+    
+	 var  outRecordTable,tableUrl,type,tableId;// 核销弹框
+ var loadOutRecordTable = function(serialNum,count) {
+	 tableId="select_sample_outRecord";
+	 $scope.totaOutRecordCount=count;
+	 type="sale";
+	  tableUrl="rest/order/getRecordList?serialNum="+serialNum+"&type="+type;
+          a = 0;
+          App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+         if(outRecordTable!=undefined){
+       	  outRecordTable.destroy(); 
+	 	    	 }
+       
+         outRecordTable = $("#"+tableId)
+			.DataTable({
+              language: {
+                  aria: {
+                      sortAscending: ": 以升序排列此列",
+                      sortDescending: ": 以降序排列此列"
+                  },
+                  emptyTable: "空表",
+                  info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                  infoEmpty: "没有数据",
+                  //infoFiltered: "(filtered1 from _MAX_ total entries)",
+                  lengthMenu: "每页显示 _MENU_ 条数据",
+                  search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+                  zeroRecords: "抱歉， 没有找到！",
+                  paginate: {
+                      "sFirst": "首页",
+                      "sPrevious": "前一页",
+                      "sNext": "后一页",
+                      "sLast": "尾页"
+                   }
+              },
+/*                fixedHeader: {//固定表头、表底
+                  header: !0,
+                  footer: !0,
+                  headerOffset: a
+              },*/
+              order: [[1, "desc"]],//默认排序列及排序方式
+              searching: true,//是否过滤检索
+              ordering:  true,//是否排序
+            /* destroy:true,*/
+              lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+              pageLength: 5,//每页显示数量
+              processing: true,//loading等待框
+//              autoWidth:true,  
+//              serverSide: true,
+              ajax: tableUrl,//加载数据中 
+              "aoColumns": [
+                            { mData: 'stockInOutRecord.inOutNum' },
+                            { mData: 'stockInOutRecord.inOutType' },
+                            { mData: 'orderMateriel'},
+                            { mData: 'orderMateriel'},
+                            { mData: 'delivery.deliverDate' },
+                            { mData: 'deliverCount' },
+                            { mData: 'stockInOutRecord.stockDate' },
+                            { mData: 'stockCount' },
+                            { mData: 'stockInOutRecord.outWarehouseName' },
+                            { mData: 'stockInOutRecord.operator' }
+                      ],
+             'aoColumnDefs' : [{
+					'targets' : 0,
+					'sWidth': "10%",
+					'render' : function(data,
+							type, row, meta) {
+							return data;
+					}
+				},{
+					'targets' : 2,
+					'render' : function(data,
+							type, row, meta) {
+						
+						if(data==null){
+							return "";
+						}else if(data.materiel!=null){
+							return data.materiel.materielName;
+						}
+						
+					}
+				},{
+					'targets' : 3,
+					'render' : function(data,
+							type, row, meta) {
+						if(data==null){
+							return "";
+							
+						}else{
+							return data.materiel.specifications;
+						}
+					}
+				}],
+						//stateSave:false,
+						"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+		                	 // CalTotaOutRecordCount();
+		                   }
+
+          });
+		   return outRecordTable;
+         
+        
+      };
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=platformOrder";
     var loadMainTable = function() {
@@ -529,9 +636,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发 '+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}*/
 								if(isNull(row.receiveCount)||row.receiveCount==0){
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\')">已发</a>'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\',\'0\')">已发</a>'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\')">已发</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\',\''+row.receiveCount+'\')">已发</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}
                     			if(row.deliverStatus=="0"||row.deliverStatus==null){
                     				if(row.status==2){
@@ -646,7 +753,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								var clickhtm = ''
 								if(row.status==55){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';
-								} else if(row.status==0){
+								} else if(row.status==0&&(row.processBase==null)){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a><br/>';
 									
 								}else if(row.processBase!=""&&row.processBase!=null){
@@ -3676,7 +3783,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					    	   }
 			    			var processBase = table.row('.active').data().processBase;
 			    			 if(processBase != null){
-			    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+			    				showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
 			    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
 			    		}  
 		    	   }else{
@@ -3685,7 +3792,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    		   return;
 			    	   }
 		    		   if(processBase!='null'){
-		    			   showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
+		    			   showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
 		    		   }else  $state.go('submitSaleApply',{serialNum:serialNum});
 		    	   }
 		        };
@@ -4106,16 +4213,16 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        							}
 		        						},
 		        						{
-		        							mData : 'claimTime',
+		        							mData : 'currentPointUserName',//claimTime
 		        							mRender : function(
 		        									data,
 		        									type,
 		        									row,
 		        									meta) {
 		        								if(data != null){
-		        		                			return timeStamp2String(data);
+		        		                			return data;
 		        		                		}else{
-		        		                			return "无需签收";
+		        		                			return "";
 		        		                		}
 		        							}
 		        						},

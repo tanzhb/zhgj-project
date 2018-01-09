@@ -568,3 +568,4 @@
 <!-- 导入订单modal 开始 -->
 <jsp:include  page="importOrder.jsp"/>
 <jsp:include  page="viewOperateLog.jsp"/>
+<jsp:include page="showOutRecord.jsp"/>

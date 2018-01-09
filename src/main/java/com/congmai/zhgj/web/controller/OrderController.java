@@ -48,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
@@ -75,11 +76,13 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractFile;
 import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -90,6 +93,7 @@ import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
@@ -102,6 +106,7 @@ import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.InvoiceService;
@@ -176,6 +181,8 @@ public class OrderController {
     private LadderPriceService  ladderPriceService;
     @Resource
     private InvoiceService  invoiceService;
+    @Autowired
+	private DeliveryMaterielService deliveryMaterielService;
     
     
 	//销售订单
@@ -2988,4 +2995,33 @@ public class OrderController {
 		}
 		return priceList;
 	}
+	 /**
+		 * @Description (获取采购订单/销售订单出入库记录)
+		 * @param serialNum 订单流水
+		 * @param type 采购/销售
+		 * @return
+		 */
+		@RequestMapping(value="/getRecordList",method=RequestMethod.GET)
+		 public ResponseEntity<Map<String,Object>> getRecordList(String serialNum,String type) {
+			 User user = UserUtil.getUserFromSession();
+			 StockInOutRecord record=new StockInOutRecord();
+			 record.setPageIndex(0);
+			 record.setPageSize(-1);
+			 //record.setOrderSerial(serialNum);
+			 Page<DeliveryMateriel> takeDeliverys=null;
+			 if(user != null&&"sale".equals(type)){
+				 String comId = userCompanyService.getUserComId(user.getUserId().toString());
+				 record.setSupplyComId(comId);
+				 takeDeliverys= deliveryMaterielService.selectListByExample(record,"out","1");
+			 }else{
+				 takeDeliverys=deliveryMaterielService.selectListByExample(record,"in","1");
+			 }
+			 // 封装datatables数据返回到前台
+			 Map<String,Object> pageMap = new HashMap<String,Object>();
+			 pageMap.put("draw", 1);
+			 pageMap.put("recordsTotal", takeDeliverys==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("recordsFiltered", takeDeliverys==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("data", takeDeliverys.getResult());
+			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+		 }
 }
