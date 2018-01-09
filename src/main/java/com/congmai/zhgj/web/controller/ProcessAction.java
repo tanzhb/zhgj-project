@@ -55,6 +55,7 @@ import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.ActRuTaskService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
@@ -95,6 +96,8 @@ public class ProcessAction {
     private ProcessBaseService processBaseService;
 	@Resource
     private OrderService  orderService;
+	 @Autowired
+	    private ActRuTaskService actRuTaskService ;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -331,6 +334,8 @@ public class ProcessAction {
     		map.put("claimTime", base.getHistoricTaskVO().getClaimTime());
     		map.put("endTime", base.getHistoricTaskVO().getEndTime());
     		map.put("deleteReason", base.getHistoricTaskVO().getDeleteReason());
+    		User auditUser = actRuTaskService.getAuditUserByProcessInstanceId(base.getHistoricTaskVO().getProcessInstanceId());//获取接收者
+    		map.put("currentPointUserName", auditUser==null?null:auditUser.getUserName());//审批节点显示
     		if(base.getProcessDefinition()!=null){
     			map.put("version", base.getProcessDefinition().getVersion());
     		}

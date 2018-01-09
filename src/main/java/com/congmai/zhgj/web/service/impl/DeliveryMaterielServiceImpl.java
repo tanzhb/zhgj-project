@@ -86,6 +86,7 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 		}
     	example.setComId(comId);
+    	example.setOrderSerial(record.getOrderSerial());
     	if(!StringUtils.isEmpty(status)){
     		example.setStatus(status);
     	}else{
