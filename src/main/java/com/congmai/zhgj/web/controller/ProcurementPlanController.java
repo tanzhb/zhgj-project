@@ -261,7 +261,7 @@ public class ProcurementPlanController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	procurementPlanMateriel = procurementPlanMaterielService.selectById(procurementPlanMateriel.getSerialNum());
@@ -320,7 +320,7 @@ public class ProcurementPlanController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return materiel;
@@ -341,7 +341,7 @@ public class ProcurementPlanController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		
     	}
     	return flag;

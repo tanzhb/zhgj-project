@@ -852,7 +852,7 @@ public class MaterielController {
 				}
     		}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			//20180110 qhzhao System.out.println(e.getMessage());
 		}
     	
     	return list;
@@ -884,7 +884,7 @@ public class MaterielController {
     		
     		
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			//20180110 qhzhao System.out.println(e.getMessage());
 		}
     	
     	return list;

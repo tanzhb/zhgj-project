@@ -147,7 +147,7 @@ public class StockInOutController {
     			}
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<StockInOutCheck>(stockInOutCheck, HttpStatus.OK);
     }
@@ -169,7 +169,7 @@ public class StockInOutController {
     			 flag="1";
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<String>(flag, HttpStatus.OK);
     }

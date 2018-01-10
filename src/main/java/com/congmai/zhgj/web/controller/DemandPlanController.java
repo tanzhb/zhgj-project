@@ -100,7 +100,7 @@ public class DemandPlanController {
 			searchKey = URLDecoder.decode(searchKey, "UTF-8");
 			demandPlan.setSearchKey(searchKey);
 		} catch (Exception e) {
-			System.out.println(this.getClass()+"----------"+e.getMessage());
+			//20180110 qhzhao System.out.println(this.getClass()+"----------"+e.getMessage());
 		}*/
     	Page<DemandPlan> demandPlans = demandPlanService.getListByCondition(demandPlan, demandPlan.getPageIndex(), 5);
 		return demandPlans;
@@ -168,7 +168,7 @@ public class DemandPlanController {
         		
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}*/
     	return "demandPlan/demandPlanView";
@@ -294,16 +294,16 @@ public class DemandPlanController {
 			   demandPlanMateriel = objectMapper.readValue(params.substring(7),DemandPlanMateriel.class);
 			} catch (JsonParseException e) {
 				// TODO Auto-generated catch block
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
 				// TODO Auto-generated catch block
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
 		    	// TODO Auto-generated catch block
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
 
     	List<DemandPlanMateriel> demandPlanMateriels = demandPlanMaterielService.getListByCondition(demandPlanMateriel,1, 99999999).getResult();

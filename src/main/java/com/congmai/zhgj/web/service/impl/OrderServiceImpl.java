@@ -263,7 +263,12 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 			OrderInfoExample m=new OrderInfoExample();
 			Criteria c=m.createCriteria();
 			c.andDelFlgEqualTo("0");
-			c.andOrderNumEqualTo(num);
+			if(!StringUtils.isEmpty(num)){
+				c.andOrderNumEqualTo(num);
+			}else {
+				flag = false;
+				return flag;
+			}
 			if(!StringUtils.isEmpty(serialNum)){
 				c.andSerialNumNotEqualTo(serialNum);
 			}

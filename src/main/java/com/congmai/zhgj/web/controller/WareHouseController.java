@@ -117,7 +117,7 @@ public class WareHouseController {
     			warehouseService.update(warehouse);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	Company com =companyService.selectOne(warehouse.getOwner());
     	if(com!=null){
@@ -332,7 +332,7 @@ public class WareHouseController {
     			warehousepositionService.update(warehouseposition);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	List <Warehouseposition>warehousepositions=warehousepositionService.selectList(warehouseposition.getWarehouseSerial());
 		return new ResponseEntity<List>(warehousepositions, HttpStatus.OK);

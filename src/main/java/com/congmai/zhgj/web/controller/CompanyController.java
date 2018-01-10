@@ -166,13 +166,13 @@ public class CompanyController {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
 		 company.setPageIndex(dataTablesParams.getStart());
 		 company.setPageSize(dataTablesParams.getLength());*/
@@ -333,7 +333,7 @@ public class CompanyController {
         		
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return company;
@@ -364,7 +364,7 @@ public class CompanyController {
         				flag = "1"; //合法
         	}
 		} catch (Exception e) {
-			System.out.println(this.getClass()+"----------"+e.getMessage());
+			//20180110 qhzhao System.out.println(this.getClass()+"----------"+e.getMessage());
 		}
     	
     	return flag;
@@ -383,7 +383,7 @@ public class CompanyController {
     		companyService.deleteCompany(comId);
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -407,7 +407,7 @@ public class CompanyController {
     		companyService.deleteBatch(comIdList);
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -439,7 +439,7 @@ public class CompanyController {
             
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
  
@@ -477,7 +477,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
      	return companyContacts;
@@ -500,7 +500,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -536,7 +536,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
     	return companyAddresses;
@@ -559,7 +559,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -594,7 +594,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
     	return companyFinances;
@@ -617,7 +617,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -799,7 +799,7 @@ public class CompanyController {
         				flag = "1"; //合法
         	}
 		} catch (Exception e) {
-			System.out.println(this.getClass()+"----------"+e.getMessage());
+			//20180110 qhzhao System.out.println(this.getClass()+"----------"+e.getMessage());
 		}
     	
     	return flag;
@@ -848,7 +848,7 @@ public class CompanyController {
         		flag = "1";
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	map.put("flag", flag);

@@ -209,7 +209,7 @@ public class OperateLogAop{
 //                logger.info("不记录日志信息");
             }
         } catch (Exception e1) {
-            e1.printStackTrace();
+//            e1.printStackTrace();
         }
     }
          
@@ -244,7 +244,7 @@ public class OperateLogAop{
             	 // 将属性的首字符大写，方便构造get，set方法  
                 name = name.substring(0, 1).toUpperCase() + name.substring(1);  
                 // 如果type是类类型，则前面包含"class "，后面跟类名  
-                System.out.println("属性为：" + name);  
+//                System.out.println("属性为：" + name);  
                 Method m = obj.getClass().getMethod("get" + name);  
                 // 调用getter方法获取属性值  
                 value = (String) m.invoke(obj);  

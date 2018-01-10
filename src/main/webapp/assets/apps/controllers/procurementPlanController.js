@@ -203,52 +203,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     	
     }; 	
     
-    $scope.autoSave  = function() {
-    		$rootScope.judgeIsExist("order",$scope.procurementPlan.orderNum, $scope.procurementPlan.serialNum,function(result){
-    			var 	isExist = result;
-    		if(isExist){
-    			toastr.error('订单编号重复！');
-    		}else{
-    			if($state.current.name=="addProcurementPlan"&&$scope.procurementPlanInput != true&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
-    	    		if($scope.procurementPlan.orderDate=='') {// 日期为空的处理
-    	    			$scope.procurementPlan.orderDate=null;
-    	    		}
-	    			// 如果平台修改了双方已确认的订单，需重新提交
-	    			if(!isNull($scope.procurementPlan.serialNum)&&$scope.procurementPlan.status =='1'){
-	    				$scope.procurementPlan.status = 0;
-	    			}
-		    		procurementPlanService.save($scope.procurementPlan).then(
-			        		     function(data){
-			        		    	$scope.procurementPlan = data;
-			        		    	$scope.contract.orderSerial = data.serialNum;
-			        		    	$scope.contract.comId = $scope.procurementPlan.supplyComId;
-			        		    	if($scope.contract.contractType=='采购订单'){
-			        		    		$scope.contract.contractNum = null;
-			        		    	}
-			 	   	    		procurementPlanService.saveContract($scope.contract).then(
-			 	   	       		     function(data){
-			 	   	       		    	toastr.success('订单自动保存成功！');
-			 	   	       		    	$scope.contract = data.data;
-			 	   	       		     },
-			 	   	       		     function(error){
-			 	   	       		    	toastr.error('订单自动保存出错！');
-			 	   	       		         $scope.error = error;
-			 	   	       		     }
-			 	   	       		 	);
-			        		     },
-			        		     function(error){
-			        		         $scope.error = error;
-			        		         toastr.error('订单自动保存出错！');
-			        		     }
-			        		 );
-    			}
-    		}
-    	});
-		if($state.current.name=="addProcurementPlan"){
-			setTimeout($scope.autoSave, 300000);
-		}
-    	
-    };
+    $scope.autoSave  = function() {};
     
     $scope.cancelPage  = function() {// 取消编辑
     	$state.go("procurementPlan");

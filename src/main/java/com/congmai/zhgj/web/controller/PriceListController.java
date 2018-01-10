@@ -170,7 +170,7 @@ public class PriceListController {
     			ladderPriceService.insertLadderPrices(ladderPrices,currenLoginName);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	if("buyPrice".equals(priceList.getPriceType())){
     		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
@@ -297,7 +297,7 @@ public class PriceListController {
             
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
  
@@ -327,7 +327,7 @@ public class PriceListController {
             }
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
  

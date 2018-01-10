@@ -181,7 +181,7 @@ public class PurchaseForecastController {
 		String filePath = getClasspath()+"uploadAttachFiles/";
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
+		//20180110 qhzhao System.out.println(fileName);
 		return fileName;
 	}
 
@@ -204,7 +204,7 @@ public class PurchaseForecastController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}
@@ -466,7 +466,7 @@ public class PurchaseForecastController {
 
 		/* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
 		        File file=new File(path); 
-		        System.out.println(file.length());
+		        //20180110 qhzhao System.out.println(file.length());
 		        HttpHeaders headers = new HttpHeaders();    
 		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
 		        headers.setContentDispositionFormData("attachment", fileName); 

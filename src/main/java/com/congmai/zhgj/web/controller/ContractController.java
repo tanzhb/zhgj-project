@@ -325,7 +325,7 @@ public class ContractController {
 		/*String filePath = env.getProperty("upload_path");
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);*/
+		//20180110 qhzhao System.out.println(fileName);*/
 		
 		String filename = "";
 		try {
@@ -340,9 +340,9 @@ public class ContractController {
 			}
 			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
 			file.transferTo(dst); // 创建文件并将上传文件复制过去
-			System.out.println("上传文件----------"+filename);
+			//20180110 qhzhao System.out.println("上传文件----------"+filename);
 		} catch (Exception e) {
-			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			//20180110 qhzhao System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
 			filename="";
 		}
 		return filename;
@@ -367,7 +367,7 @@ public class ContractController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}
@@ -639,7 +639,7 @@ public class ContractController {
 
 		/* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
 		        File file=new File(path); 
-		        System.out.println(file.length());
+		        //20180110 qhzhao System.out.println(file.length());
 		        HttpHeaders headers = new HttpHeaders();    
 		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
 		        headers.setContentDispositionFormData("attachment", fileName); 

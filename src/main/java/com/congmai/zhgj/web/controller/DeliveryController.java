@@ -678,7 +678,7 @@ public class DeliveryController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	deliveryMateriel =deliveryService.selectDeliveryMaterielById(deliveryMateriel.getSerialNum());
@@ -796,7 +796,7 @@ public class DeliveryController {
    		
    		
    	}catch(Exception e){
-   		System.out.println(e.getMessage());
+   		//20180110 qhzhao System.out.println(e.getMessage());
    		
    	}
 	   
@@ -1483,7 +1483,7 @@ public class DeliveryController {
 		String filePath = getClasspath()+"uploadAttachFiles/";
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
+		//20180110 qhzhao System.out.println(fileName);
 		return fileName;
 	}
 
@@ -1506,7 +1506,7 @@ public class DeliveryController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}

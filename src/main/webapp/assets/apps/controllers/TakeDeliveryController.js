@@ -1058,6 +1058,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    										}debugger;
 	  	  	  								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';*/
 	    								/*return '<a href="javascript:void(0);" ng-click="stockInView(\''+row.inOutSerial+'\')">'+data+'</a>';*/
+	    								if(data==null) return '';
 	    								return '<a href="javascript:void(0);" ng-click="takeDeliveryView(\''+row.takeDelivery.serialNum+'\')">'+data+'</a>';
 	    							},
 	    							"createdCell": function (td, cellData, rowData, row, col) {
