@@ -3868,7 +3868,101 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	//********合同内容操作end ****************//   
 		      //********审批流程列表****************//
 		        function showDbTable(){
-		        	
+		        	var tableButtons = 
+		        		[{
+							text : "办理",
+							className : "btn default",
+							action: function(e, dt, node, config) { 
+								
+								var ids = '';
+								table.$('input[type="checkbox"]').each(function() {
+									if ($.contains(document, this)) {											
+										if (this.checked) {
+											// 将选中数据id放入ids中
+											if (ids == '') {
+												ids = this.value;
+											} else
+												ids = 'more';
+										}
+									}
+								});
+								
+								if(ids==''){
+									toastr.warning('请选择一个办理！');return;
+								}else if(ids=='more'){
+									toastr.warning('只能选择一个办理！');return;
+								} else {
+									if(table.row('.active').data().assign == ''){
+										showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+										return;
+									}
+									orderService
+									.getAuditInfos(ids)
+									.then(
+											function(result) {													
+												var comments = ""//添加评论
+    												for (var i=0;i<result.commentList.length;i++){
+    													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+    													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+    													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+    												}
+    												if(result.actionType == 'audit'){//审批流程
+    													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+    												}else{
+    													$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+    												}
+    											},
+											function(errResponse) {
+    												toastr.warning("办理失败！");
+    												console.error('Error while apply ap');
+    											}
+
+									);
+								}
+							}
+						},
+						{
+							text : "签收",
+							className : "btn default",
+							action: function(e, dt, node, config) { 
+								var ids = '';
+								table.$('input[type="checkbox"]').each(function() {
+									if ($.contains(document, this)) {											
+										if (this.checked) {
+											// 将选中数据id放入ids中
+											if (ids == '') {
+												ids = this.value;
+											} else
+												ids = 'more';
+										}
+									}
+								});
+								
+								if(ids==''){
+									toastr.warning('请选择一个签收！');return;
+								}else if(ids=='more'){
+									toastr.warning('只能选择一个签收！');return;
+								} else {
+									claimTask(ids, 'dbTable');
+								}
+								
+							}
+						}/*,
+						{
+							text : "转办",
+							className : "btn default"
+						},
+						{
+							text : "委派",
+							className : "btn default"
+						},
+						{
+							text : "跳转",
+							className : "btn default"
+						}*/ ];
+		        	if($rootScope.userName=='sunsir'){
+		        		tableButtons = []
+		        	}
 		        	var table = $("#dbTable")
 		        	.DataTable(
 		        			{
@@ -3892,98 +3986,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        					}
 		        				},
 
-		        				buttons : [
-		        						{
-		        							text : "办理",
-		        							className : "btn default",
-		        							action: function(e, dt, node, config) { 
-		        								
-		        								var ids = '';
-		        								table.$('input[type="checkbox"]').each(function() {
-		        									if ($.contains(document, this)) {											
-		        										if (this.checked) {
-		        											// 将选中数据id放入ids中
-		        											if (ids == '') {
-		        												ids = this.value;
-		        											} else
-		        												ids = 'more';
-		        										}
-		        									}
-		        								});
-		        								
-		        								if(ids==''){
-		        									toastr.warning('请选择一个办理！');return;
-		        								}else if(ids=='more'){
-		        									toastr.warning('只能选择一个办理！');return;
-		        								} else {
-		        									if(table.row('.active').data().assign == ''){
-		    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
-		    											return;
-		    										}
-		        									orderService
-		        									.getAuditInfos(ids)
-													.then(
-															function(result) {													
-		        												var comments = ""//添加评论
-			        												for (var i=0;i<result.commentList.length;i++){
-			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
-			        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
-			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
-			        												}
-			        												if(result.actionType == 'audit'){//审批流程
-			        													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
-			        												}else{
-			        													$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
-			        												}
-			        											},
-															function(errResponse) {
-			        												toastr.warning("办理失败！");
-			        												console.error('Error while apply ap');
-			        											}
-			
-													);
-		        								}
-		        							}
-		        						},
-		        						{
-		        							text : "签收",
-		        							className : "btn default",
-		        							action: function(e, dt, node, config) { 
-		        								var ids = '';
-		        								table.$('input[type="checkbox"]').each(function() {
-		        									if ($.contains(document, this)) {											
-		        										if (this.checked) {
-		        											// 将选中数据id放入ids中
-		        											if (ids == '') {
-		        												ids = this.value;
-		        											} else
-		        												ids = 'more';
-		        										}
-		        									}
-		        								});
-		        								
-		        								if(ids==''){
-		        									toastr.warning('请选择一个签收！');return;
-		        								}else if(ids=='more'){
-		        									toastr.warning('只能选择一个签收！');return;
-		        								} else {
-		        									claimTask(ids, 'dbTable');
-		        								}
-		        								
-		        							}
-		        						}/*,
-		        						{
-		        							text : "转办",
-		        							className : "btn default"
-		        						},
-		        						{
-		        							text : "委派",
-		        							className : "btn default"
-		        						},
-		        						{
-		        							text : "跳转",
-		        							className : "btn default"
-		        						}*/ ],
+		        				buttons : tableButtons,
 		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
 		        				order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
 
@@ -4098,6 +4101,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	                    	'orderable' : false,
 		        	                    	'className' : 'dt-body-center',
 		        	                    	'render' : function(data,type, full, meta) {
+		        	                    		if($rootScope.userName=='sunsir'){
+		        	                    			return data
+		        	        		        	}
 		        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
 		        							
 		        	                    	},
