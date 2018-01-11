@@ -91,7 +91,7 @@ jQuery.validator.addMethod("isPhone", function(value,element) {
 	  var tel = /^\d{3,4}-?\d{7,9}$/;
 	  return this.optional(element) || (tel.test(value) || mobile.test(value));
 
-	}, "请正确填写您的联系电话"); 
+	}, "请正确填写您的联系电话/手机号"); 
 
 jQuery.validator.addMethod("minNumber",function(value, element){
     var returnVal = true;
@@ -623,9 +623,14 @@ angular.module('MetronicApp')
 
 
 /*根据页面不同，导航栏做相应变动*/
-function initPageBar($rootScope, path){
+function initPageBar($rootScope, path,judgeString){
 	if(path == 'addPay'){
 		$("#loadPageBar").innerHTML = "<li><a ui-sref='paymentRecordC'>付款</a> <i class='fa fa-angle-right'></i></li><li><a>新增付款1</a></li>";
+	}else if(path == 'addPayForBuyOrder'){
+		$("#loadPageBar").innerHTML = "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增付款计划</a></li>";
 	}
 }
 
@@ -654,12 +659,40 @@ function getWSPath_web1() {
     
     return pathName;
 }
+//为空判断
+var diySortFlag = function(str) {
+	if (str == "" || str == undefined)
+		return 999;
+	if(str.indexOf("待")>-1){
+		return 1;
+	}else if(str.indexOf("中")>-1){
+		return 2;
+	}else if(str.indexOf("未")>-1){
+		return 3;
+	}else if(str.indexOf("已")>-1){
+		return 4;
+	}else {
+		return 999;
+	}
+}
 
-
-$(function(){
+//返回小的
+var returnMin = function(d1,d2) {
+	if(d1>d2){
+		return d2
+	}else{
+		return d1
+	}
+}
+var goBackPage = function(){
+	window.history.back(-1);
+}
+/*$(function(){
 	var rootPath=getWSPath_web1();
      $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
          $("#avatar").attr("src",rootPath+"rest/fileOperate/downloadFile?fileName="+data.avatar);
          $("#usernameOfUserInfo").html(data.displayName);
        }});
-})
+})*/
+
+

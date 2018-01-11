@@ -97,8 +97,8 @@ angular
 											{
 												language : {
 													aria : {
-														sortAscending : ": activate to sort column ascending",
-														sortDescending : ": activate to sort column descending"
+														sortAscending : ": 以升序排列此列",
+														sortDescending : ": 以降序排列此列"
 													},
 													emptyTable : "空表",
 													info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -154,11 +154,11 @@ angular
 													}, {
 														mData : 'specifications'
 													},{
-														mData : 'belongWarehouseNumZijian'
+														mData : 'belongWarehouseNameZijian'//belongWarehouseNumZijian 所属仓库数
 													}, {
 														mData : 'currentAmount'
 													}, {
-														mData : 'averrageWhAge'
+														mData : 'firstInDateZijian'//averrageWhAge
 													}, {
 														mData : 'preSaleAmount'
 													},{
@@ -200,6 +200,32 @@ angular
 														 $compile(td)($scope);
 												    }
 												},{
+													'targets' : 5,
+													'render' : function(data,
+															type, row, meta) {
+				 	    								if(data==''||data==null){
+				 	    									return "";
+				 	    								}else if(count(data,',')<=1){
+				 	    									return  data ;
+				 	    								}else if(count(data,',')>1){
+				 	    									return  '<span title="仓库名称:'+data+'">'+data.substring(0,data.indexOf(','))+".........."+'</span>' ;
+				 	    								}
+													},"createdCell": function (td, cellData, rowData, row, col) {
+														 $compile(td)($scope);
+												    }
+												},{
+													'targets' : 7,
+													'render' : function(data,
+															type, row, meta) {
+				 	    								if(data==''||data==null){
+				 	    									return "";
+				 	    								}else{
+				 	    									debugger;
+				 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+				 	    								}
+														
+													}
+												},{
 													'targets' : 11,
 													'render' : function(data,
 															type, row, meta) {
@@ -240,8 +266,8 @@ angular
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -297,11 +323,11 @@ angular
 										}, {
 											mData : 'specifications'
 										},{
-											mData : 'belongWarehouseNumDaiguan'
+											mData : 'belongWarehouseNameDaiguan'
 										}, {
 											mData : 'currentAmount'
 										}, {
-											mData : 'averrageWhAge'
+											mData : 'firstInDateDaiguan'
 										}, {
 											mData : 'preSaleAmount'
 										},{
@@ -342,6 +368,32 @@ angular
 										},"createdCell": function (td, cellData, rowData, row, col) {
 											 $compile(td)($scope);
 									    }
+									},{
+										'targets' : 5,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else if(count(data,',')<=1){
+	 	    									return  data ;
+	 	    								}else if(count(data,',')>1){
+	 	    									return  '<span title="仓库名称:'+data+'">'+data.substring(0,data.indexOf(','))+".........."+'</span>' ;
+	 	    								}
+										},"createdCell": function (td, cellData, rowData, row, col) {
+											 $compile(td)($scope);
+									    }
+									},{
+										'targets' : 7,
+										'render' : function(data,
+												type, row, meta) {
+	 	    								if(data==''||data==null){
+	 	    									return "";
+	 	    								}else{
+	 	    									debugger;
+	 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+	 	    								}
+											
+										}
 									},{
 										'targets' : 11,
 										'render' : function(data,
@@ -389,8 +441,8 @@ angular
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -430,8 +482,8 @@ angular
 	  		                                          { mData: 'batchNum' },
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'stockCount' },
-	 	  		                                      { mData: 'warehouse' },
-		  		                                      { mData: 'position' },
+	 	  		                                      { mData: 'warehouseName' },
+		  		                                      { mData: 'positionNum' },
 		  		                                       { mData: 'remark' }//备注
                                                      
 			  		                            ],
@@ -446,7 +498,7 @@ angular
 		 	    								}
 												
 											}
-										},{
+										}/*,{
 											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
@@ -468,7 +520,7 @@ angular
 		 	    								}
 												
 											}
-										} ],
+										} */],
 
 								})
 				// 构建datatables结束***************************************
@@ -504,8 +556,8 @@ angular
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -548,11 +600,11 @@ angular
 			  		                                    { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.inOutType' },
                                                         { mData: 'stockInOutRecord.inOutNum' },
-                                                        { mData: 'stockInOutRecord.inOutType' },
+                                                        { mData: 'batchNum' },
                                                         { mData: 'stockInOutRecord.stockDate' },
                                                         { mData: 'stockCount' },
-			  		                                  { mData: 'warehouse' },
-			  		                                  { mData: 'position' },
+			  		                                  { mData: 'warehouseName' },
+			  		                                  { mData: 'positionNum' },
 			  		                                  { mData: 'remark' }//备注
 			  		                            ],
 			  		                   'aoColumnDefs' : [{
@@ -577,7 +629,7 @@ angular
 		 	    								}
 												
 											}
-										},{
+										}/*,{
 											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
@@ -599,7 +651,7 @@ angular
 		 	    								}
 												
 											}
-										}],
+										}*/],
 
 								})
 				// 构建datatables结束***************************************
@@ -620,8 +672,8 @@ angular
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -772,36 +824,49 @@ angular
 								$scope.saveStock= function() {
 									debugger;
 									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
-										if($scope.manageType.indexOf('zijian')>-1){
-											$scope.stock.manageType='1';
-												$scope.stock.materielOwner='';
-										}else if($scope.manageType.indexOf('jinwai')>-1){
-											$scope.stock.manageType='2';
-										}else if($scope.manageType.indexOf('jinwai')>-1){
-											$scope.stock.manageType='3';
-										}
-										$scope.stock.serviceParty='';
-										$scope.stock.materielSerial=$("#materielSerial").val();
-										StockService
-										.saveStock($scope.stock)
-										.then(
-												function(data) {debugger;
-													$('#addStockModal').modal(
-															'hide');// 保存成功后关闭模态框
-													toastr.success("保存库存数据成功！");
-													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.stock = data;
-								        			$scope.stockView = true;
-								        			$scope.stockAdd = true;
-								        			$scope.stockEdit = false;
-								        			$(".alert-danger").hide();
-												},
-												function(errResponse) {
-													toastr.warning("保存失败！");
-													console
-															.error('Error while creating User');
+										 $rootScope.judgeIsExist("stock",$scope.stock.stockNum, $scope.stock.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			 toastr.error('库存编号重复！');
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			if($scope.manageType.indexOf('zijian')>-1){
+													$scope.stock.manageType='1';
+														$scope.stock.materielOwner='';
+												}else if($scope.manageType.indexOf('jinwai')>-1){
+													$scope.stock.manageType='2';
+												}else if($scope.manageType.indexOf('jinwai')>-1){
+													$scope.stock.manageType='3';
 												}
-										);
+												$scope.stock.serviceParty='';
+												$scope.stock.materielSerial=$("#materielSerial").val();
+												StockService
+												.saveStock($scope.stock)
+												.then(
+														function(data) {debugger;
+															$('#addStockModal').modal(
+																	'hide');// 保存成功后关闭模态框
+															toastr.success("保存库存数据成功！");
+															handle.unblockUI();
+															// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+															$scope.stock = data;
+										        			$scope.stockView = true;
+										        			$scope.stockAdd = true;
+										        			$scope.stockEdit = false;
+										        			$(".alert-danger").hide();
+														},
+														function(errResponse) {
+															toastr.warning("保存失败！");
+															console
+																	.error('Error while creating User');
+														}
+												);
+								    		}
+								    		
+								    		});
+									
 									}
 							};	
 							// 添加库存结束***************************************
@@ -892,15 +957,15 @@ angular
 					 	    			.DataTable({
 					 	                    language: {
 					 	                        aria: {
-					 	                            sortAscending: ": activate to sort column ascending",
-					 	                            sortDescending: ": activate to sort column descending"
+					 	                            sortAscending: ": 以升序排列此列",
+					 	                            sortDescending: ": 以降序排列此列"
 					 	                        },
 					 	                        emptyTable: "空表",
 					 	                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 					 	                        infoEmpty: "没有数据",
 					 	                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
 					 	                        lengthMenu: "每页显示 _MENU_ 条数据",
-					 	                        search: "查询:",
+					 	                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 					 	                        zeroRecords: "抱歉， 没有找到！",
 					 	                        paginate: {
 					 	                            "sFirst": "首页",
@@ -1085,6 +1150,11 @@ angular
 						        	},function(data){
 						        		//调用承诺接口reject();
 						        	});
+							}
+							function count(str,char){//统计逗号出现的次数
+							 var str=str;
+							 var num=(str.split(char)).length-1;
+							 return num;
 							}
 							 function getStockInfo(serialNum){//查看库区
 						    	   if(!handle.isNull(serialNum)){

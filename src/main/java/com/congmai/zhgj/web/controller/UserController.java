@@ -168,7 +168,7 @@ public class UserController {
 		        //保存操作日志
 		        operateLogService.insert(valueReturn);
 			} catch (Exception e) {
-				System.out.println("Session已失效！");
+				//20180110 qhzhao System.out.println("Session已失效！");
 				e.printStackTrace();
 			}
 			
@@ -268,7 +268,7 @@ public class UserController {
 		    Company company=userService.getUserCompanyInfo(user.getUserId());
 		    user.setCompany(company);
 		} catch (Exception e) {
-			System.out.println("Session已失效！");
+			//20180110 qhzhao System.out.println("Session已失效！");
 			e.printStackTrace();
 		}
 	    
@@ -410,7 +410,7 @@ public class UserController {
 		
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
+		//20180110 qhzhao System.out.println(fileName);
 		return fileName;
 	}
 
@@ -433,7 +433,7 @@ public class UserController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}

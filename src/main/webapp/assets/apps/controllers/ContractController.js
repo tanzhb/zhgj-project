@@ -12,6 +12,14 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 		loadMainTable();
 		loadMainTable1();
 		loadMainTable2();
+		
+		initTabClass();
+		
+		if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+			$('#contract_tab a[data-target="#tab_15_2"]').tab('show');
+ 		 }else if($stateParams.tabHref == '2'){
+ 			$('#contract_tab a[data-target="#tab_15_3"]').tab('show');
+ 		 }
 		debugger;
 	if($state.current.name=="addUserContract"){
 		 $rootScope.setNumCode("CA",function(newCode){//
@@ -27,26 +35,91 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
     }
 	});
 	
+	var initTabClass = function(){
+		var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+			$(liobj).addClass("active");
+//			$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
+			$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+			
+//			methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
+			methodName = '';
+			try{
+				methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+			}catch(e){ 
+//				alert(methodName+"()不存在！"); 
+			}
+			function m(methodName){ 
+				//初始化this.func属性, 
+				this.func = function(){}; 
+				try{ 
+				//这里用eval方法，把我们传进来的这个方法名所代表的方法当作一个对象来赋值给method1的func属性。 
+				//如果找不到methodName这个对应的对象,则eval方法会抛异常 
+					this.func = eval(methodName); 
+				}catch(e){ 
+//					alert(methodName+"()不存在！"); 
+				} 
+			} 
+			try{
+				var c = new m(methodName); 
+				c.func(); 
+			}catch(e){ 
+//				alert(methodName+"()不存在！"); 
+			} 
+	}
 	
 	//修改
-	$scope.jumpToEdit = function() {
+	$scope.jumpToEdit = function(tab) {
 		var ids = '';
-		// Iterate over all checkboxes in the table
-		table.$('input[type="checkbox"]').each(
-				function() {
-					// If checkbox exist in DOM
-					if ($.contains(document, this)) {
-						// If checkbox is checked
-						if (this.checked) {
-							// 将选中数据id放入ids中
-							if (ids == '') {
-								ids = this.value;
-							} else{
-								ids = "more"
+		if(tab==1){
+			table.$('input[type="checkbox"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
 							}
 						}
-					}
-				});
+					});
+		}else if(tab==2){
+			table1.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+		}else if(tab==3){
+			table2.$('input[type="radio"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else{
+									ids = "more"
+								}
+							}
+						}
+					});
+		}
+		
 		if(ids==''){
 			toastr.warning('请选择一个合同！');return;
 		}else if(ids=='more'){
@@ -59,44 +132,54 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	//添加合同
 	$scope.saveUserContract = function() {
 		if($('#form_sample_1').valid()){//表单验证通过则执行添加功能
-		var fd = new FormData();
-		if($("input[name='files']").length){
-			var files = document.querySelector('input[name="files"]').files[0];
-			fd.append("files", files);
-		}
-        
-		if($("input[name='file']").length){
-        var file = document.querySelector('input[name="file"]').files[0];
-        fd.append("files", file);
-		}
-		
-		if($("input[id='id']").length){
-		fd.append('id', $("#id").val()); 
-		}
-		fd.append('contractNum',$scope.contractVO.contractNum); 
-        fd.append('contractType',$scope.contractVO.contractType); 
-        fd.append('firstParty',$scope.contractVO.firstParty); 
-        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-        fd.append('secondParty',$scope.contractVO.secondParty); 
-        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
-        fd.append('startDate',$scope.contractVO.startDate); 
-        fd.append('endDate',$scope.contractVO.endDate); 
-        fd.append('signDate',$scope.contractVO.signDate); 
-        fd.append('remark',$scope.contractVO.remark);
-        fd.append('signerAddress',$scope.contractVO.signerAddress);
-         $http({
-        	  method:'POST',
-              url:"rest/contract/saveUserContract",
-              data: fd,
-              headers: {'Content-Type':undefined}
-               })   
-              .success( function ( response )
-                       {
-                       //上传成功的操作
-            	  toastr.success("保存合同数据成功！");
-				  $state.go('userContract');
-                       });
+			
+			 $rootScope.judgeIsExist("contract",$scope.contractVO.contractNum, $scope.contractVO.id,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			toastr.error('合同编号重复！');
+	    			return;
+	    		}else{
+	    			var fd = new FormData();
+	    			if($("input[name='files']").length){
+	    				var files = document.querySelector('input[name="files"]').files[0];
+	    				fd.append("files", files);
+	    			}
+	    	        
+	    			if($("input[name='file']").length){
+	    	        var file = document.querySelector('input[name="file"]').files[0];
+	    	        fd.append("files", file);
+	    			}
+	    			
+	    			fd.append('id',$scope.contractVO.id); 
+	    			fd.append('contractNum',$scope.contractVO.contractNum); 
+	    	        fd.append('contractType',$scope.contractVO.contractType); 
+	    	        fd.append('firstParty',$scope.contractVO.firstParty); 
+	    	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	    	        fd.append('secondParty',$scope.contractVO.secondParty); 
+	    	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	    	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	    	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
+	    	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
+	    	        fd.append('signDate',$scope.contractVO.signDate); 
+	    	        fd.append('remark',$scope.contractVO.remark);
+	    	        fd.append('signerAddress',$scope.contractVO.signerAddress);
+	    	         $http({
+	    	        	  method:'POST',
+	    	              url:"rest/contract/saveUserContract",
+	    	              data: fd,
+	    	              headers: {'Content-Type':undefined}
+	    	               })   
+	    	              .success( function ( response )
+	    	                       {
+	    	                       //上传成功的操作
+	    	            	  toastr.success("保存合同数据成功！");
+	    	            	  $scope.goback();
+	    	                       });
+	    		}
+	    		
+	    		});
+	
 		}
 	};
 	
@@ -109,14 +192,14 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	        fd.append("files", file);
 			}
 			fd.append('id',$scope.contractVO.id); 
-			fd.append('orderSerial',$scope.contractVO.orderSerial); 
+			if($scope.contractVO.orderSerial)fd.append('orderSerial',$scope.contractVO.orderSerial); 
 			fd.append('contractNum',$scope.contractVO.contractNum); 
 	        fd.append('contractType',$scope.contractVO.contractType); 
-	        fd.append('firstParty',$scope.contractVO.firstParty); 
-	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
-	        fd.append('secondParty',$scope.contractVO.secondParty); 
-	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	        if($scope.contractVO.firstParty)fd.append('firstParty',$scope.contractVO.firstParty); 
+	        if($scope.contractVO.firstPartySigner)fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	        if($scope.contractVO.secondParty)fd.append('secondParty',$scope.contractVO.secondParty); 
+	        if($scope.contractVO.secondPartySigner)fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	        if($scope.contractVO.otherPartyContractNum)fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
 	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
 	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
 	        fd.append('signDate',$scope.contractVO.signDate); 
@@ -132,7 +215,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	                       {
 	                       //上传成功的操作
 	            	  toastr.success("签订合同数据成功！");
-					  $state.go('userContract');
+	            	  $scope.goback();
 	                       });
 			}
 		};
@@ -140,7 +223,18 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	
 	//返回按钮
 	$scope.goback=function(){
-		$state.go('userContract');
+		if(isNull($scope.contractVO)||isNull($scope.contractVO.contractType)){
+			$state.go('userContract');
+		}else{
+			if($scope.contractVO.contractType == '采购合同'){
+				$state.go('userContract',{tabHref:2});
+			}else if($scope.contractVO.contractType == '销售合同'){
+				$state.go('userContract',{tabHref:1});
+			}else{
+				$state.go('userContract');
+			}
+		}
+		
 	}
 	
 	//打印
@@ -165,9 +259,11 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 					if($state.current.name=="saleOrderSign"){//签订合同
 						if($stateParams.type=="buy"){
 							$scope.contractVO.firstParty="中航能科（上海）能源科技有限公司";
-								$scope.contractVO.secondParty=$stateParams.comId;
+				//	$scope.contractVO.secondParty=$stateParams.comId;
+							$scope.contractVO.secondParty=data.comName;
 						}else if($stateParams.type=="sale"){
-							$scope.contractVO.firstParty=$stateParams.comId;
+							//$scope.contractVO.firstParty=$stateParams.comId;
+							$scope.contractVO.firstParty=data.comName;
 							$scope.contractVO.secondParty="中航能科（上海）能源科技有限公司";
 						}
 						
@@ -175,7 +271,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 					}
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     	
@@ -264,8 +360,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 						{
 							language : {
 								aria : {
-									sortAscending : ": activate to sort column ascending",
-									sortDescending : ": activate to sort column descending"
+									sortAscending : ": 以升序排列此列",
+									sortDescending : ": 以降序排列此列"
 								},
 								emptyTable : "空表",
 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -351,8 +447,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 						{
 							language : {
 								aria : {
-									sortAscending : ": activate to sort column ascending",
-									sortDescending : ": activate to sort column descending"
+									sortAscending : ": 以升序排列此列",
+									sortDescending : ": 以降序排列此列"
 								},
 								emptyTable : "空表",
 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -495,8 +591,8 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 						{
 							language : {
 								aria : {
-									sortAscending : ": activate to sort column ascending",
-									sortDescending : ": activate to sort column descending"
+									sortAscending : ": 以升序排列此列",
+									sortDescending : ": 以降序排列此列"
 								},
 								emptyTable : "空表",
 								info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -553,7 +649,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 							                            				return '待审批';
 							                            			}else if(data=='2'){
 							                            				return '已签订';
-							                            			}else if(data=='3'||data=='1'){
+							                            			}else if(data=='3'){
 							                            				return '待签订';
 							                            			}else{
 							                            				return '已签订';
@@ -626,7 +722,7 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 			}
 			var status = table2.row('.active').data().status;
 			var comId= table2.row('.active').data().comId;
-			if(status!='3'&&status!='1'){
+			if(status!='3'){
 				toastr.warning('只能签订状态为‘待签订’的合同！');return;
 			}
 			

@@ -23,12 +23,16 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
+    <shiro:hasPermission name="zhgj:incomeBill:*">
         <li  id="in" >
             <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showin')">进项票</a>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:ticket:*">
         <li  id="out">
             <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showout')">销项票</a>
         </li>
+        </shiro:hasPermission>
     </ul>
     <div class="tab-content">
     	<!-- 进项票列表---START -->
@@ -42,10 +46,9 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-				<shiro:hasPermission name="incomeBill:edit">
+				
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('in')">
 	                                              <i class="fa fa-plus"></i> 确认</label>
-				 </shiro:hasPermission> 
 				<shiro:hasPermission name="incomeBill:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('in')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
@@ -192,29 +195,31 @@
 				</div> -->
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
-				<shiro:hasPermission name="incomeBill:edit">
+		
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="confirmInvoice('out')">
 	                                              <i class="fa fa-plus"></i> 确认</label>
-				 </shiro:hasPermission> 
+	
+				 
 				 <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitInvoiceApply('out')"> <i class="glyphicon glyphicon-play"></i> 申请</label>
-				 <shiro:hasPermission name="incomeBill:add">
+										
+				 <shiro:hasPermission name="ticket:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addInvoice('out')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
 	                                              </shiro:hasPermission>
-	                                               <shiro:hasPermission name="incomeBill:edit">
+	                                               <shiro:hasPermission name="ticket:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditInvoicePage('out')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 	                                              </shiro:hasPermission>
-	                                               <shiro:hasPermission name="incomeBill:delete">
+	                                               <shiro:hasPermission name="ticket:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delInvoice('out')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
 	                                              </shiro:hasPermission>
-	                                               <shiro:hasPermission name="incomeBill:import">
+	                                               <shiro:hasPermission name="ticket:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
 	                                              </shiro:hasPermission>
-	                                               <shiro:hasPermission name="incomeBill:export">
+	                                               <shiro:hasPermission name="ticket:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportInvoice('out')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 	                                              </shiro:hasPermission>

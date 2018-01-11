@@ -56,9 +56,10 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			 promise.then(function(data){
 				 debugger;
 				$scope.customsForm=data.customsForm;
+				$scope.customsForm.totalTax=Number(data.customsForm.customsAmount)+Number(data.customsForm.addedTax);
 				$scope.file=data.file;
 				_fileIndex=$scope.file.length;
-				loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial);//加载物料信息列表
+				loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial,$scope.customsFormType);//加载物料信息列表
 				
 			 });
 		 }
@@ -121,15 +122,15 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -155,6 +156,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                               { mData: 'customsFormNum' },
                               { mData: 'playArrivalDate' },
                               { mData: 'port' },
+                              { mData: 'buyOrderNum' },
                               { mData: 'deliverNum' },
                               { mData: 'deliverAmount' ,
 									mRender:function(data){
@@ -209,7 +211,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                     		  $compile(td)($scope);
                     	  }
                       },{
-                      	  'targets' : 12,
+                      	  'targets' : 13,
                     	  'render' : function(data,
                     			  type, row, meta) {
                     		  if(data!=""&&data!=null){
@@ -294,15 +296,15 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -328,6 +330,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
                                   { mData: 'customsFormNum' },
                                   { mData: 'playArrivalDate' },
                                   { mData: 'port' },
+                                  { mData: 'buyOrderNum' },
                                   { mData: 'deliverNum' },
                                   { mData: 'deliverAmount',
 										mRender:function(data){
@@ -382,7 +385,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     	                    		  $compile(td)($scope);
     	                    	  }
     	                      },{
-    	                      	  'targets' : 12,
+    	                      	  'targets' : 13,
     	                    	  'render' : function(data,
     	                    			  type, row, meta) {
     	                    		  if(data!=""&&data!=null){
@@ -471,8 +474,8 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -608,17 +611,17 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 								$scope.customsForm.buyOrderNum = delivery.orderNum;
 								$scope.customsForm.orderSerial = delivery.orderSerial;
 							
-							loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial);//加载物料列表
+							loadMaterielTable($scope.customsForm.orderSerial,$scope.customsForm.deliverSerial,$scope.customsFormType);//加载物料列表
 							
 							$("#takeDeliveryInfo").modal('hide'); 
 						}
 						
 			  		}
 					var  materielTable;
-					function loadMaterielTable(orderSerial,deliverSerial){
+					function loadMaterielTable(orderSerial,deliverSerial,customsFormType){
 						var a = 0;
 						debugger;
-						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial;
+						tableAjaxUrl= "rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial+"&customsFormType="+customsFormType;
 						 if(materielTable!=undefined){
 							 materielTable.destroy();
 						/*	 materielTable.ajax.reload();*/
@@ -639,8 +642,8 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 								{
 									language : {
 										aria : {
-											sortAscending : ": activate to sort column ascending",
-											sortDescending : ": activate to sort column descending"
+											sortAscending : ": 以升序排列此列",
+											sortDescending : ": 以降序排列此列"
 										},
 										emptyTable : "空表",
 										info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -693,7 +696,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 													},{
 														mData : 'unit'
 													}, {
-														mData : 'amount'
+														mData : 'deliverCount'//amount
 													},{
 														mData : 'orderUnitPrice',
 														mRender:function(data){
@@ -729,6 +732,7 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 													  $scope.customsForm.deliverAmount=data.deliverAmount;
 								  					  $scope.customsForm.addedTax=data.addedTax;
 								  					  $scope.customsForm.customsAmount=data.customsAmount;
+								  					  $scope.customsForm.totalTax=data.customsAmount+data.addedTax;
 								  					  $scope.customsForm.port=data.port;
 								  					  $scope.customsForm.shipNumber=data.shipNumber;
 								  					  $scope.customsForm.playArrivalDate=data.playArrivalDate;
@@ -990,31 +994,48 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			$scope.customsForm.status='1';
 		}
 		if($('#customsForm').valid()){
-		customsFormService.saveCustomsForm($scope.customsForm)
-		 .then(
-				 function(data) {
-					 debugger;
-					 if(judgeString=="clearance"){
-						 toastr.success("保存清关单成功！");
-					 }else  if(judgeString=="declaration"){
-						 toastr.success("保存报关单成功！");
-					 }else  if(judgeString.indexOf("clearance")>-1&&judgeString.indexOf('confirm')>-1){
-						 toastr.success("确认清关成功！");
-					 }else  if(judgeString=="declaration"&&judgeString.indexOf('confirm')>-1){
-						 toastr.success("确认报关成功！");
+			 $rootScope.judgeIsExist("customsForm",$scope.customsForm.customsFormNum, $scope.customsForm.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 if(judgeString.indexOf("clearance")>-1){
+	    				 toastr.error('清关单号重复！');
+					 }else  if(judgeString.indexOf("declaration")>-1){
+						 toastr.error('报关单号重复！');
 					 }
-					 $scope.customsForm =data;
-					 $scope.customsFormEdit =true;
-					 $scope.customsFormView =true;
-					 $scope.customsFormAdd =true;
-					 $(".alert-danger").hide();
-				 },
-				 function(errResponse) {
-					 toastr.warning("保存错误！");
-					 console
-					 .error('Error while creating User');
-				 }
-		 );
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			customsFormService.saveCustomsForm($scope.customsForm)
+	    			 .then(
+	    					 function(data) {
+	    						 debugger;
+	    						 if(judgeString=="clearance"){
+	    							 toastr.success("保存清关单成功！");
+	    						 }else  if(judgeString=="declaration"){
+	    							 toastr.success("保存报关单成功！");
+	    						 }else  if(judgeString.indexOf("clearance")>-1&&judgeString.indexOf('confirm')>-1){
+	    							 toastr.success("确认清关成功！");
+	    						 }else  if(judgeString=="declaration"&&judgeString.indexOf('confirm')>-1){
+	    							 toastr.success("确认报关成功！");
+	    						 }
+	    						 handle.unblockUI();
+	    						 $scope.customsForm =data;
+	    						 $scope.customsFormEdit =true;
+	    						 $scope.customsFormView =true;
+	    						 $scope.customsFormAdd =true;
+	    						 $(".alert-danger").hide();
+	    					 },
+	    					 function(errResponse) {
+	    						 toastr.warning("保存错误！");
+	    						 console
+	    						 .error('Error while creating User');
+	    					 }
+	    			 );
+	    		}
+	    		
+	    		});
+	
 		}
 	 }
 	function doSomthing(){

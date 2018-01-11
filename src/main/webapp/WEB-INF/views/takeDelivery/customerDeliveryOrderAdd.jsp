@@ -48,15 +48,15 @@
 				<div class="portlet light ">
 				 <ul class="nav nav-tabs" >
 					<li class="dropdown pull-right tabdrop" >
-                      <!--  <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="delivery.status=='0'||delivery.status==undefined">
-                              <i class="fa fa-check"></i> 确认提货 </button> -->
+                       <button class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="deliver.status=='0'||deliver.status==undefined">
+                              <i class="fa fa-check"></i> 确认提货 </button>
                               <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
                               <i class="fa fa-check"></i> 保存 </button>
                               <button ng-click="editDeliveryInfo()" type="button"   ng-show="deliverView"   class="btn purple  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 编辑 </button>
                        <button   ng-hide="deliverAdd" class="btn defualt  btn-sm btn-circle" ng-click="cancelTakeDelivery()" onclick="return false;">
                               <i class="fa fa-mail-reply"></i> 取消 </button>
-                                
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 					</li>
 					<li class="active bold">
                   	<a data-target="#tab_1_1" data-toggle="tab">发货信息</a>
@@ -253,7 +253,7 @@
 									</div>
 									<!--/row-->
 									
-									<div class="row">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="dWarehouseSerial">发货仓库<!--  <span  ng-hide="deliverAdd"  class="required"> * </span> --></label>
@@ -274,12 +274,68 @@
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" > 发货地址<span  ng-hide="deliverAdd"  class="required"> * </span></label>
-                                                    <div class="">
+                                                <!--     <div class="">
                                                         <input type="text" class="form-control" id="deliverAddress"  name="deliverAddress" ng-model="deliver.deliverAddress" ng-hide="deliverAdd" >
+                                                         </div> -->
+                                                      <!--    	<div class=""   ng-if="showSXf!='1'">
+													<div class="input-group"  ng-if="showSXf!='1'">
+															<input type="text" name="deliverAddress"
+															class="form-control" ng-model="deliver.deliverAddress"
+															ng-hide="deliverAdd"   ng-if="showSXf!='1'"/>
+															<span ng-hide="deliverAdd" class="input-group-btn" ng-click="showSX('f')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button" >
+																	筛选
+																</button>
+															</span>
+														</div>
+														</div>
+														<div class="" ng-show="showSXf=='1'">
+														<select class="form-control"  id="deliverAddress"  data-live-search="true" data-size=""  
+															name="deliverAddress"
+															ng-model="deliver.deliverAddress" 
+															ng-hide="deliverAdd">
+															<option ng-repeat="item in companyAddressesf"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														<span ng-show="inputDeliveryInfo" class="input-group-btn" ng-click="showSX()"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  >
+																	<i class="fa fa-search"></i>筛选
+																</button>
+															</span>
+														</div> -->
+															  	<div class="" >
+													<div class="input-group"  >
+													<input type="text" name="deliverAddress"
+															class="form-control"
+															ng-model="deliver.deliverAddress"    ng-if="showSXf!='1'"   ng-hide="deliverAdd"/>
+															<div  ng-show="showSXf=='1'">
+																<select class="form-control"   data-live-search="true" data-size=""  ng-hide="deliverAdd"
+															name="deliverAddress1"
+															ng-model="deliver.deliverAddress"
+															 >
+															<option ng-repeat="item in companyAddressesf"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														</div>
+															<span ng-hide="deliverAdd"  class="input-group-btn" ng-click="showSX('f')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXf!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXf=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
+														</div>
                                                         <div class="form-control-focus"> </div> 
                                                          <!-- <input type="text" class="form-control"  value="{{deliver.warehouseName}}" disabled="disabled"> -->
                                                          <p class="control-label left"   ng-show="deliverView" >{{deliver.deliverAddress}}</p>
-                                                    </div>
+                                                   
                                             </div>
 										</div>
 										<!--/span-->
@@ -306,7 +362,7 @@
 	                                                        <option  ng-repeat="warehouse in warehouseLists" value="{{warehouse.serialNum}}">{{warehouse.warehouseName}}</option>
 	                                                    </select>
 	                                                    </div>
-                                                         <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverAddress}}</p>
+                                                         <p class="control-label left" ng-show="deliverView">{{deliver.takeDeliverWarehouseName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -315,12 +371,36 @@
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" >收货地址<span  ng-hide="deliverAdd"  class="required"> * </span></label>
-                                                    <div class="">
-                                                       <input type="text" class="form-control" id="takeDeliverAddress"  name="takeDeliverAddress" ng-model="takeDeliver.takeDeliverAddress" ng-hide="deliverAdd" >
+                                                    	<div class="" >
+													<div class="input-group"  >
+													<input type="text" name="takeDeliverAddress"
+															class="form-control"
+															ng-model="takeDeliver.takeDeliverAddress"   ng-if="showSXs!='1'"   ng-hide="deliverAdd"/>
+															<div  ng-show="showSXs=='1'">
+																<select class="form-control"  id="takeDeliverAddress"  data-live-search="true" data-size=""  
+															name="takeDeliverAddress1"
+															ng-model="takeDeliver.takeDeliverAddress" 
+															 >
+															<option ng-repeat="item in companyAddressess"
+																value="{{item.address}}">{{item.address}}</option>
+															<option value=""></option>
+														</select>
+														</div>
+															<span ng-hide="deliverAdd"  class="input-group-btn" ng-click="showSX('s')"
+																style="vertical-align: top;">
+																<button class="btn default" type="button"  ng-if="showSXs!='1'">
+																	筛选
+																</button>
+																	<button class="btn default" type="button"  ng-if="showSXs=='1'">
+																	输入
+																</button>
+															</span>
+														</div>
+														</div>
                                                         <div class="form-control-focus"> </div>
                                                        <!--  <input type="text" class="form-control" value="{{takeDeliver.warehouseName}}" disabled="disabled"> -->
                                                          <p class="control-label left"  ng-show="deliverView">{{takeDeliver.takeDeliverAddress}}</p>
-                                                    </div>
+                                                    
                                             </div>
 										</div>
 										<!--/span-->
@@ -338,7 +418,7 @@
 									</div>
 									<!--/row-->
 						
-									<div class="row">
+									<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;" ng-show="showTransport">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="transportType">运输方式</label>
@@ -382,7 +462,7 @@
 										<!--/span-->
 									</div>
 									<!--/row-->
-									<div class="row">
+									<div class="row"  ng-show="showTransport">
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="dtContact">联系人</label>
@@ -452,7 +532,7 @@
 													<!-- 	<th style="min-width: 120px;" rowspan="2">批次号<span
 															class="required2"> * </span></th> -->
 													<!-- 	<th style="min-width: 120px;" rowspan="2">生产日期</th> -->
-														<th colspan="4"
+														<th colspan="5"
 															style="text-align: center; min-width: 100px;">发货</th>
 														<!-- <th colspan="3"  style="text-align: center;min-width: 100px;">收货</th> -->
 														<!-- <th colspan="3"  style="text-align: center;">检验</th>
@@ -461,6 +541,7 @@
 													</tr>
 													<tr>
 														<th>订单数量</th>
+														<th>未发数量</th>
 														<th>发货数量<span class="required2"> * </span></th>
 														<th>附件</th>
 														<th style="min-width: 120px;">备注</th>
@@ -497,9 +578,10 @@
 															ng-model="materiel.manufactureDate" placeholder="">
 															<span class="help-block"></span></td> -->
 														<td><span class="help-block"></span>{{materiel.amount}}</td><!-- ng-init="orderMateriels[$index].deliverCount=materiel.amount" -->
+														<td><span class="help-block"></span>{{materiel.amount-materiel.deliveredCount}}</td>
 														<td class="form-group"><input type="text"
 															class="form-control" id="deliverCount{{$index}}"
-															name="deliverCount" data-ordercount="{{materiel.amount}}"    ng-init="orderMateriels[$index].deliverCount=materiel.amount"  
+															name="deliverCount" data-ordercount="{{materiel.amount}}"    ng-init="orderMateriels[$index].deliverCount=materiel.amount-materiel.deliveredCount"  
 															 ng-if="deliver.serialNum==null||deliver.serialNum==undefined"
 															ng-model="orderMateriels[$index].deliverCount"
 															ng-hide="deliverAdd"/>
@@ -532,6 +614,7 @@
 														<td>{{calcTotalNum()}}{{materielCount}}</td>
 														<td></td>
 														<td>{{totalAmount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliverCount}}</td>
 														<td></td>
 														<td></td>

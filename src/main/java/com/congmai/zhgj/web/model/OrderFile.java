@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class OrderFile {
     private String serialNum;
 
@@ -15,6 +19,7 @@ public class OrderFile {
 
     private String uploader;
 
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date uploadDate;
 
     private String delFlg;
@@ -76,7 +81,7 @@ public class OrderFile {
     public void setUploader(String uploader) {
         this.uploader = uploader == null ? null : uploader.trim();
     }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getUploadDate() {
         return uploadDate;
     }

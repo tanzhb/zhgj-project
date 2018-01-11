@@ -47,13 +47,13 @@
 							<div class="col-md-12">
 								<ul class="media-list">
 									<li class="media" style="border-bottom: 1px #F2F2F2 solid;">
-										<a class="pull-left" href="javascript:;"> <img
+										<a class="pull-left" href="javascript:;"><img
 											class="todo-userpic" src="assets/pages/img/avatars/team1.jpg"
 											width="27px" height="27px">
 									</a>
 										<div class="media-body todo-comment">
 											<p class="todo-comment-p">
-												<font ng-if="notice.readFlg==null">未读</font> <font
+												<font ng-if="notice.readFlg==null" style="color: #f36a5a;">未读</font> <font
 													ng-if="notice.readFlg==1">已读</font>
 											</p>
 											<p class="todo-comment-head">

@@ -33,6 +33,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.LadderPrice;
@@ -116,7 +117,7 @@ public class WareHouseController {
     			warehouseService.update(warehouse);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	Company com =companyService.selectOne(warehouse.getOwner());
     	if(com!=null){
@@ -244,6 +245,9 @@ public class WareHouseController {
     public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
     		List<Warehouse> warehouseList = warehouseService.selectList();
+    		for(Warehouse w:warehouseList){
+    		w.setOwner("pingtai".equals(w.getOwner())?StaticConst.getInfo("comName"):companyService.selectById(w.getOwner()).getComName());	
+    		}
     		dataMap.put("warehouseList",warehouseList);
     		ExcelUtil.export(request, response, dataMap, "warehouse", "仓库信息");
     }
@@ -328,7 +332,7 @@ public class WareHouseController {
     			warehousepositionService.update(warehouseposition);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	List <Warehouseposition>warehousepositions=warehousepositionService.selectList(warehouseposition.getWarehouseSerial());
 		return new ResponseEntity<List>(warehousepositions, HttpStatus.OK);

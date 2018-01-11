@@ -29,10 +29,12 @@ public class CustomsForm {
     private Date playArrivalDate;
 
     private String port;
+    
+    private OrderInfo  orderInfo;
 
     private String remark;
 
-    private String status;
+    private String status;//当报关单状态为2时显示已付款状态 ;当报关单状态为1为已确认未付款
 
     private String delFlg;
 
@@ -46,7 +48,7 @@ public class CustomsForm {
     
     private  String deliverNum;//发货单号
     
-    private  String buyOrderNum;//采购单号
+    private  String buyOrderNum;//采购单号(采购单号/销售单号清报关列表显示)
     
     private  String agentUnit;//代理报关/清关单位
     
@@ -237,5 +239,15 @@ public class CustomsForm {
 	public void setFiles(List<RelationFile> files) {
 		this.files = files;
 	}
+
+	public OrderInfo getOrderInfo() {
+		return orderInfo;
+	}
+
+	public void setOrderInfo(OrderInfo orderInfo) {
+		this.orderInfo = orderInfo;
+	}
+
+	
     
 }

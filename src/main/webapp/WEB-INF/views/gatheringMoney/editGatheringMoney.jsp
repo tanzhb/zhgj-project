@@ -32,13 +32,16 @@
 								data-toggle="tab">收款信息</a></li>
 							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a>
 							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件信息</a>
+							<li class="dropdown pull-right tabdrop">
+								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+							</li>														
 							</li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
 								<div class="portlet-title" style="min-height: 48px;">
 									<div class="tools" style="float: right" id="noprintdiv">
-										<button type="submit" ng-click="editBasicInfo()"
+										<button type="submit" ng-click="editBasicInfo('receive')"
 											class="btn green  btn-circle  btn-sm" ng-show="input">
 											<i class="fa fa-save"></i> 保存
 										</button>

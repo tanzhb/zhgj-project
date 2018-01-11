@@ -66,7 +66,7 @@ public class SolrSearchController {
 //	            query.setFacetMissing(false);//不统计null的值
 //	            query.setFacetMinCount(1);// 设置返回的数据中每个分组的数据最小值，比如设置为1，则统计数量最小为1，不然不显示
 //	            List<FacetField> facets = qResponse.getFacetFields();//返回的facet列表
-//	            System.out.println();
+//	            //20180110 qhzhao System.out.println();
 	            
 	            
 	            
@@ -146,7 +146,7 @@ public class SolrSearchController {
 	            	List<Count> counts = ff.getValues();
 	            	List lt = new ArrayList();
 	            	 for (Count count : counts) {
-	            	        System.out.println(count.getName() + ":" + count.getCount());
+	            	        //20180110 qhzhao System.out.println(count.getName() + ":" + count.getCount());
 	            	        lt.add(count.getName() + ":" + count.getCount());
 	            	    }
 	            	

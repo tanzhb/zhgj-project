@@ -593,7 +593,7 @@
         <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
         </foreach>
-    </delete>
+        </delete>
     <select id="selectByPriceType" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
     select
       distinct
@@ -601,5 +601,20 @@
     from priceList
     where priceType=#{priceType} and priceId=#{priceId}
   
+  </select>
+  <!-- 获取物料指导价格 -->
+  <select id="getGuideUnitPrice"   resultMap ="BaseResultMap"   parameterType="java.util.HashMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from priceList
+    where priceType=#{priceType}  and materielSerial=#{materielSerial} and delFlg=0 and isLatestVersion=1
+ and priceEffectiveDate&lt;#{NOW()}
+ and  priceExpirationDate&gt;=#{NOW()}
+    <if test="priceType=='buyPrice'">
+    and supplyComId=#{comId} 
+    </if>
+    <if test="priceType=='salePrice'">
+    and buyComId=#{comId} 
+    </if>
   </select>
 </mapper>

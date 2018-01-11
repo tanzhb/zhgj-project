@@ -4,6 +4,9 @@ import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.CategoryExample;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderInfoExample;
 
 /**
  * 
@@ -26,4 +29,6 @@ public interface CategoryService extends GenericService<Category, String> {
 	 * @param parent(包含父节点id)
 	 */
 	public int selectMaxSortByParentId(String parentId);
+	
+    List<Category> selectList(CategoryExample m);
 }

@@ -14,5 +14,6 @@ public interface PriceListService extends GenericService<PriceList, String>{
 	 PriceList getPriceListInfoByPriceId(String priceId);//获取最新价格
 	 void updateVersion(PriceList priceList);//将之前是否最新版本值置为0
 	 List<PriceList> getAllPriceListInfoByPriceIdOrPriceType(String priceId,String priceType);//获取所有价格
+	 PriceList getPriceListInfo(String  comId,String materielSerial,String priceType);//获取物料最新价格(且处在有效期以内)
 	
 }

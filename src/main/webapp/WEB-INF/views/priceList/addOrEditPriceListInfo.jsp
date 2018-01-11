@@ -43,6 +43,9 @@
 				<div class="portlet light ">
                         <div class="portlet-title" >
                             <div class="caption"><span ng-if="buyOrSale.indexOf('buy')>-1">采购</span><span ng-if="buyOrSale.indexOf('sale')>-1">销售</span>价格信息</div><!--   -->
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions" ng-if="buyOrSale.indexOf('view')<0">
                                 <button  ng-show="priceListView"   class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -213,10 +216,10 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                               <div class="form-group">
-                                                    <label class="control-label bold" for="rate"> <span class="required"> * </span>税率 :</label>
+                                                    <label class="control-label bold" for="rate"> <span class="required"> * </span>税率(%) :</label>
                                                     <div class="">
                                                                        <input type="text"  class="form-control" placeholder=""  id="rate" name ="rate"  ng-show="priceListAdd" 
-												ng-model="priceList.rate">
+												ng-model="priceList.rate"  ng-keyup="clearNoNumPoint(priceList,'inclusivePrice')">
                                                                          <div class="form-control-focus"></div>
                                                                         <!--   <span class="help-block">请输入百分比数</span> -->
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.rate}}</p> 
@@ -226,25 +229,25 @@
                                                             <!--/span-->
                                                         </div>
                                                          <div class="row">
-                                                            <div class="col-md-6">
-                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>单价 :</label>
+                                                          <div class="col-md-6">
+                                                           <div class="form-group">
+                                                    <label class="control-label bold" for="inclusiveprice"> <span class="required"> * </span>含税价格 :</label>
                                                     <div class="">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
-												ng-model="priceList.unitPrice">
+                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
+												ng-model="priceList.inclusivePrice"   ng-keyup="clearNoNumPoint(priceList,'inclusivePrice')">
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           <div class="col-md-6">
-                                                           <div class="form-group">
-                                                    <label class="control-label bold" for="inclusiveprice"> <!-- <span class="required"> * </span> -->含税价格 :</label>
+                                                            <div class="col-md-6">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="priceList"><!--  <span class="required"> * </span> -->不含税单价 :</label>
                                                     <div class="">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
-												ng-model="priceList.inclusivePrice" >
+                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
+												ng-model="priceList.unitPrice"   disabled="disabled"><!-- ng-keyup="clearNoNumPoint(priceList,'unitPrice')" -->
 												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -254,8 +257,8 @@
                                                            <div class="form-group">
                                                    <label class="control-label bold" for="topprice"> 最高限价 :</label>
                                                     <div class="">
-                                                                           <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"   onkeyup="isNumberWithTwo(this)"   ng-show="priceListAdd" 
-												ng-model="priceList.topPrice"/>
+                                                                           <input type="text"  class="form-control" placeholder=""  id="topPrice" name ="topPrice"    ng-show="priceListAdd" 
+												ng-model="priceList.topPrice"  ng-keyup="clearNoNumPoint(priceList,'topPrice')"/>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.topPrice |currency:'￥'}}</p>
                                                                     </div>
@@ -265,8 +268,8 @@
                                                            <div class="form-group">
                                                     <label class="control-label bold" for="floorprice"> 最低限价 :</label>
                                                     <div class="">
-                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"   onkeyup="isNumberWithTwo(this)"  data-topprice="{{priceList.topPrice}}"  
-												ng-model="priceList.floorPrice" />
+                                                                        <input type="text"   class="form-control" placeholder=""  id="floorPrice" name ="floorPrice"  ng-show="priceListAdd"    data-topprice="{{priceList.topPrice}}"  
+												ng-model="priceList.floorPrice"   ng-keyup="clearNoNumPoint(priceList,'floorPrice')" />
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.floorPrice |currency:'￥'}}</p>
                                                                     </div>
@@ -279,7 +282,14 @@
                                                     <label class="control-label bold" for="isLadderPrice"> 是否阶梯单价 :</label>
                                                     <div class="">
                                                                          <div class="icheck-inline"  ng-show="priceListAdd"   >
-                                                                                <label  ><input type="checkbox"     id="isLadderPriceCheck"   ng-model="priceList.isLadderPrice"  name ="isLadderPrice"  class="icheck"    ng-checked="priceList.isLadderPrice=='1'">是 </label>
+                                                                         <input type="radio" ng-model="priceList.isLadderPrice"
+																name="isLadderPrice"
+																ng-checked="priceList.isLadderPrice=='1'" value="1">
+															是 <input type="radio" ng-model="priceList.isLadderPrice"
+																name="isLadderPrice"
+																ng-checked="priceList.isLadderPrice!='1'" value="0">
+															否
+                                                                                <!-- <label  ><input type="radio"     id="isLadderPriceCheck"   ng-model="priceList.isLadderPrice"  name ="isLadderPrice"      ng-checked="priceList.isLadderPrice=='1'">是 </label> -->
                                                                         </div>
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView"   ng-if="priceList.isLadderPrice=='1'">是</p>
@@ -288,7 +298,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                           <div class="col-md-6"  ng-if="isChecked">
+                                                           <div class="col-md-6"  ng-if="priceList.isLadderPrice=='1'">
                                                            <div class="form-group">
                                                     <label class="control-label bold" for="ladderType"><span class="required"> * </span> 阶梯类型 :</label>
                                                     <div class="">
@@ -304,7 +314,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-			                         <div class="row"  ng-show="isChecked">
+			                         <div class="row"  ng-show="priceList.isLadderPrice=='1'">
                                                          <div class="portlet-title">
                             <div class="actions"  style="float: right;">
                              
@@ -358,7 +368,7 @@
 											<div class="form-group">
 											<div class="col-md-5"> 含税价格 :</div>
 												<div class="col-md-7 input-icon right">
-													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice" name="inclusivePrice"   id="inclusivePrice"
+													<input  ng-hide="ladderpriceAdd" type="text" ng-model="ladderprice.inclusivePrice"   id="inclusivePrice"
 														class="form-control" placeholder="">
 														<div class="form-control-focus"> </div>
 														<label   ng-show="ladderpriceView"  class="c_edit" >{{ladderprice.inclusivePrice |currency:'￥'}}</label>
@@ -459,7 +469,7 @@
          				</div>
          				     </div>
 
-  <div class="portlet-title"><!-- 使用采购商 START -->
+ <!--  <div class="portlet-title">使用采购商 START
                             <div class="caption">使用采购商</div>
                             <div class="actions">
                             </div>
@@ -469,14 +479,15 @@
                                         <table class="table table-bordered table-hover"  >
                                             <thead>
                                                 <tr>
-                                                    <th>客户编号</th>
-                                                    <th>客户名称</th>
+                                                    <th class="col-md-1">客户编号</th>
+                                                    <th class="col-md-1">客户名称</th>
+                                                    <th class="col-md-1">备注</th>
                                                   
                                                 </tr>
                                             </thead>
                                             <tbody  ng-if="buyComs.length==0">
 			                                             	<tr>
-			                                                    <td colspan="2" align="center" >暂无数据</td>
+			                                                    <td colspan="3" align="center" >暂无数据</td>
 			                                                </tr>
 			                                </tbody>
                                             <tbody ng-repeat="buycom in buyComs">
@@ -487,8 +498,129 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div><!-- 使用采购商 END-->
-				
+                                </div>使用采购商 END -->
+                                
+              <!--     	<div id="tab_1_6"  ng-if="buyOrSale.indexOf('buy')>-1">
+						采购商 start
+				          <div class="portlet-title" style="min-height: 48px;">
+				          <div class="caption">采购商</div>
+				               <div class="tools" style="float:right">
+				               	 	<button type="submit" ng-click="savePriceCom()" ng-show="buyComInfoInput" class="btn green  btn-circle  btn-sm">
+				                  		<i class="fa fa-save"></i> 保存 </button>
+				                  <button ng-click="cancelPriceCom()" type="button" ng-show="buyComInfoInput" class="btn defualt  btn-circle  btn-sm">
+				                  		<i class="fa fa-undo"></i> 取消 </button>
+				                  <button ng-click="editPriceCom()" type="button" ng-hide="buyComsInfoShowBtn" class="btn purple  btn-circle  btn-sm">
+				                  		<i class="fa fa-edit"></i> 编辑 </button>
+				                </div>
+				            </div>
+				           <div class="portlet-body form">
+							     <form id="form_sample_6" >
+							         <div>
+				                          <table class="table table-bordered table-hover">
+				                              <thead>
+				                                  <tr>
+				                                      <th >采购商名称</th>
+				                                      <th >采购商编号</th>
+														<th >备注</th>
+														<th >操作</th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                  <tr ng-repeat="buyCom in priceComs track by $index" ng-mouseover="showOperation('buyCom',$index)" ng-mouseleave="hideOperation('buyCom',$index)" >
+							                          <td>
+						                                 	<div ng-show="buyComInfoInput">
+							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId"    ng-change="changeValue('buy',$index)"  class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="priceComs[$index].comSerial"  >
+					                                              	<option ng-repeat="_buy in customers" value="{{_buy.comId}}" repeat-done="repeatDone()"   >{{_buy.comName}}</option>
+					                                             </select>suppliers
+				                                             </div>
+							                                <p class="form-control-static" ng-show="buyComsInfoShow"> {{buyCom.comName}} </p>
+							                          </td>
+							                            <td>
+							                            <input type="text" class="form-control"  ng-show="buyComInfoInput"  ng-model="priceComs[$index].comNum"  disabled="disabled"/>
+					                                      <p class="form-control-static"  ng-show="buyComsInfoShow"> {{buyCom.comNum}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyremark[$index]" name="buyremark" class="form-control" ng-show="buyComInfoInput" ng-model="priceComs[$index].remark" >
+					                                      <p class="form-control-static" ng-show="buyComsInfoShow"> {{buyCom.remark}} </p>
+				                                      </td>
+				                                      <td ng-hide="operation_buy{{$index}}">
+				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-show="buyComInfoInput" ng-click="deleteRepeatForCom($index)">
+				                                    			<i class="fa fa-close"></i> 
+				                             				</a>
+				                                      </td>
+				                                  </tr>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-show="buyComInfoInput" ng-click="addRepeatForCom()"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+				                  		</div>
+				                  </form>
+				          </div>
+				          采购商 end
+						</div>              
+				<div id="tab_1_6"  ng-if="buyOrSale.indexOf('sale')>-1">
+						供应商 start
+				          <div class="portlet-title" style="min-height: 48px;">
+				          <div class="caption">供应商</div>
+				               <div class="tools" style="float:right">
+				               	 	<button type="submit" ng-click="savePriceCom()" ng-show="buyComInfoInput" class="btn green  btn-circle  btn-sm">
+				                  		<i class="fa fa-save"></i> 保存 </button>
+				                  <button ng-click="cancelPriceCom()" type="button" ng-show="buyComInfoInput" class="btn defualt  btn-circle  btn-sm">
+				                  		<i class="fa fa-undo"></i> 取消 </button>
+				                  <button ng-click="editPriceCom()" type="button" ng-hide="buyComsInfoShow" class="btn purple  btn-circle  btn-sm">
+				                  		<i class="fa fa-edit"></i> 编辑 </button>
+				                </div>
+				            </div>
+				           <div class="portlet-body form">
+							     <form id="form_sample_6" >
+							         <div > class="table-scrollable"
+				                          <table class="table table-bordered table-hover">
+				                              <thead>
+				                                  <tr>
+				                                      <th >供应商名称</th>
+				                                      <th >供应商编号</th>
+														<th >备注</th>
+														<th >操作</th>
+				                                  </tr>
+				                              </thead>
+				                              <tbody>
+				                                  <tr ng-repeat="buyCom in priceComs track by $index" ng-mouseover="showOperation('buyCom',$index)" ng-mouseleave="hideOperation('buyCom',$index)" >
+							                          <td>
+						                                 	<div ng-show="buyComInfoInput">
+							                                 	<select class="form-control" id="buyComId[$index]" name="buyComId"    ng-change="changeValue('supply',$index)"  class="bs-select form-control diySelectCss" data-live-search="true" data-size="8"  ng-model="priceComs[$index].comSerial"  >
+					                                              	<option ng-repeat="_buy in suppliers" value="{{_buy.comId}}" repeat-done="repeatDone()">{{_buy.comName}}</option>
+					                                             </select>
+				                                             </div>
+							                                <p class="form-control-static" ng-show="buyComsInfoShow"> {{buyCom.comName}} </p>
+							                          </td>
+							                            <td>
+					                                      <p class="form-control-static" > {{buyCom.comNum}} </p>
+				                                      </td>
+				                                      <td>
+					                                      <input type="text"  id="buyremark[$index]" name="buyremark" class="form-control" ng-show="buyComInfoInput" ng-model="priceComs[$index].remark" >
+					                                      <p class="form-control-static" ng-show="buyComsInfoShow"> {{buyCom.remark}} </p>
+				                                      </td>
+				                                      <td ng-show="operation_buy{{$index}}">
+				                                      	<a href="javascript:;"  class="btn red btn-sm" ng-show="buyComsInfoShow" ng-click="deleteRepeatForCom($index)">
+				                                    			<i class="fa fa-close"></i> 
+				                             				</a>
+				                                      </td>
+				                                  </tr>
+				                              </tbody>
+				                          </table>
+				                      </div>
+				                      <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-show="buyComInfoInput" ng-click="addRepeatForCom()"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+				                  		</div>
+				                  </form>
+				          </div>
+				          供应商 end
+						</div>     -->
                     <div class="portlet-title"><!-- 价格日志START-->
                             <div class="caption">价格日志</div>
                             <div class="actions">

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<configuration status="info">  
+    <Properties>  
+        <Property name="LOG_HOME">${sys:catalina.base}/logs</Property>  
+        <Property name="APP_LOG_HOME">${LOG_HOME}/zhgj</Property>  
+    </Properties>  
+  
+    <Appenders>  
+        <Console name="Console" target="SYSTEM_OUT">  
+            <!-- 控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch) -->  
+            <!-- <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"   
+                /> -->  
+            <!-- 输出日志的格式 -->  
+            <PatternLayout  
+                pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M - %msg%xEx%n" />  
+        </Console>  
+        <RollingRandomAccessFile name="uas_appender"  
+            immediateFlush="true" fileName="${APP_LOG_HOME}/zhgj.log"  
+            filePattern="${APP_LOG_HOME}/zhgj.log.%d{yyyy-MM-dd}.gz">  
+            <!-- %d{yyyy-MM-dd HH:mm:ss, SSS} : 日志生产时间 %p : 日志输出格式 %c : logger的名称   
+                %m : 日志内容，即 logger.info("message") %n : 换行符 %C : Java类名 %L : 日志输出所在行数 %M   
+                : 日志输出所在方法名 hostName : 本地机器名 hostAddress : 本地ip地址 -->  
+            <PatternLayout>  
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M --  
+                    %msg%xEx%n</pattern>  
+            </PatternLayout>  
+            <Policies>  
+                <TimeBasedTriggeringPolicy interval="1"  
+                    modulate="true" />  
+            </Policies>  
+            <!-- 最多备份30天以内的日志，此处为策略限制，Delete中可以按自己需要用正则表达式编写 -->  
+            <!-- DefaultRolloverStrategy字段中加入max=“30”经测试是配合SizeBasedTriggeringPolicy限制%i的存在数量，并没有发现是网上流传的是最多保存多少个文件的限制，也或许是我写的有问题 -->  
+            <DefaultRolloverStrategy>  
+                <Delete basePath="${APP_LOG_HOME}" maxDepth="1">  
+                    <IfFileName glob="uas.log.*.gz" />  
+                    <IfLastModified age="30d" />  
+                </Delete>  
+            </DefaultRolloverStrategy>  
+        </RollingRandomAccessFile>  
+    </Appenders>  
+  
+    <Loggers>  
+        <logger name="org.spring" level="error" additivity="false">  
+            <AppenderRef ref="Console" />  
+            <AppenderRef ref="uas_appender" />  
+        </logger>  
+        <logger name="org.springframework" level="error" additivity="false">  
+            <AppenderRef ref="Console" />  
+            <AppenderRef ref="uas_appender" />  
+        </logger>  
+        <logger name="org.apache.zookeeper" level="error" additivity="false">  
+            <AppenderRef ref="Console" />  
+            <AppenderRef ref="uas_appender" />  
+        </logger>  
+        <logger name="com.alibaba.dubbo" level="error" additivity="false">  
+            <AppenderRef ref="Console" />  
+            <AppenderRef ref="uas_appender" />  
+        </logger>  
+        <logger name="xx.xx.xx" level="info" additivity="false">  
+            <AppenderRef ref="Console" />  
+            <appender-ref ref="uas_appender" />  
+        </logger>  
+        <!-- <root level="info">  
+            <appender-ref ref="Console" />  
+            <appender-ref ref="uas_appender" />  
+            <appender-ref ref="Console"/>,<appender-ref ref="log"/>
+        </root>   -->
+    </Loggers>  
+  
+</configuration>  

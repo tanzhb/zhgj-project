@@ -57,7 +57,52 @@ public class Stock {
 	
 	private String materielOwnerName;// 物权方名称
 	
+	private String maxWhAge;// 最高库龄
 	
+	private String belongWarehouseNameZijian;// 所在仓库名称自建库存
+
+	private String belongWarehouseNameDaiguan;// 所在仓库名称自建库存
+	
+
+	private String countInAmountZijian;// 累计入库数量自建库存
+
+	private String countInAmountDaiguan;// 累计入库数量代管库存
+
+	private String countOutAmountZijian;// 累计出库数量自建库存
+
+	private String countOutAmountDaiguan;// 累计出库数量代管库存
+
+	private String lastInDateZijian;// 最后入库日期自建库存
+
+	private String lastInDateDaiguan;// 最后入库日期代管库存
+
+	private String lastOutDateZijian;// 最后出库日期自建库存
+
+	private String lastOutDateDaiguan;// 最后出库日期代管库存
+
+	private String stockCost;// 库存成本
+
+	private String relationSaleNumZijian;// 关联销售单号数量自建库存
+
+	private String relationSaleNumDaiguan;// 关联销售单号数量代管库存
+
+	private String relationBuyNumZijian;// 关联采购单号数量自建库存
+
+	private String relationBuyNumDaiguan;// 关联采购单号数量代管库存
+
+	private String riskGrade;// 风险等级
+
+	private String status;// 状态
+
+	private String materielName;
+
+	private String specifications;
+
+	private String materielNum;
+	
+	private String firstInDateZijian;// 最早入库日期自建库存
+
+	private String firstInDateDaiguan;// 最早入库日期代管库存
 
 	public String getBelongWarehouseNumZijian() {
 		return belongWarehouseNumZijian;
@@ -170,42 +215,6 @@ public class Stock {
 	public void setRelationBuyNumDaiguan(String relationBuyNumDaiguan) {
 		this.relationBuyNumDaiguan = relationBuyNumDaiguan;
 	}
-
-	private String countInAmountZijian;// 累计入库数量自建库存
-
-	private String countInAmountDaiguan;// 累计入库数量代管库存
-
-	private String countOutAmountZijian;// 累计出库数量自建库存
-
-	private String countOutAmountDaiguan;// 累计出库数量代管库存
-
-	private String lastInDateZijian;// 最后入库日期自建库存
-
-	private String lastInDateDaiguan;// 最后入库日期代管库存
-
-	private String lastOutDateZijian;// 最后出库日期自建库存
-
-	private String lastOutDateDaiguan;// 最后出库日期代管库存
-
-	private String stockCost;// 库存成本
-
-	private String relationSaleNumZijian;// 关联销售单号数量自建库存
-
-	private String relationSaleNumDaiguan;// 关联销售单号数量代管库存
-
-	private String relationBuyNumZijian;// 关联采购单号数量自建库存
-
-	private String relationBuyNumDaiguan;// 关联采购单号数量代管库存
-
-	private String riskGrade;// 风险等级
-
-	private String status;// 状态
-
-	private String materielName;
-
-	private String specifications;
-
-	private String materielNum;
 
 	public String getSerialNum() {
 		return serialNum;
@@ -423,6 +432,46 @@ public class Stock {
 
 	public void setMaterielOwnerName(String materielOwnerName) {
 		this.materielOwnerName = materielOwnerName;
+	}
+
+	public String getMaxWhAge() {
+		return maxWhAge;
+	}
+
+	public String getBelongWarehouseNameZijian() {
+		return belongWarehouseNameZijian;
+	}
+
+	public String getBelongWarehouseNameDaiguan() {
+		return belongWarehouseNameDaiguan;
+	}
+
+	public void setMaxWhAge(String maxWhAge) {
+		this.maxWhAge = maxWhAge;
+	}
+
+	public void setBelongWarehouseNameZijian(String belongWarehouseNameZijian) {
+		this.belongWarehouseNameZijian = belongWarehouseNameZijian;
+	}
+
+	public void setBelongWarehouseNameDaiguan(String belongWarehouseNameDaiguan) {
+		this.belongWarehouseNameDaiguan = belongWarehouseNameDaiguan;
+	}
+
+	public String getFirstInDateZijian() {
+		return firstInDateZijian;
+	}
+
+	public String getFirstInDateDaiguan() {
+		return firstInDateDaiguan;
+	}
+
+	public void setFirstInDateZijian(String firstInDateZijian) {
+		this.firstInDateZijian = firstInDateZijian;
+	}
+
+	public void setFirstInDateDaiguan(String firstInDateDaiguan) {
+		this.firstInDateDaiguan = firstInDateDaiguan;
 	}
 	
 }

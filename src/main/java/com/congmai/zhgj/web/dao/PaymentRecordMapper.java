@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 
-public interface PaymentRecordMapper extends GenericDao<PaymentRecord, String>{
+public interface PaymentRecordMapper extends GenericDao<PaymentRecord, String> {
     int countByExample(PaymentRecordExample example);
 
     int deleteByExample(PaymentRecordExample example);
@@ -26,8 +26,6 @@ public interface PaymentRecordMapper extends GenericDao<PaymentRecord, String>{
     int updateByExampleSelective(@Param("record") PaymentRecord record, @Param("example") PaymentRecordExample example);
 
     int updateByExample(@Param("record") PaymentRecord record, @Param("example") PaymentRecordExample example);
-
-    int updateByPrimaryKeySelective(PaymentRecord record);
 
     int updateByPrimaryKey(PaymentRecord record);
 }

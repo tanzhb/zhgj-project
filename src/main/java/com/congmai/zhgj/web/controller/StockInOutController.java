@@ -126,11 +126,19 @@ public class StockInOutController {
     		if("1".equals(stockInOutCheck.getStatus())){
     			StockInOutCheck check = stockInOutCheckService.selectById(stockInOutCheck.getSerialNum());
     			if("checkout".equals(stockInOutCheck.getTakeDeliverSerial())){ //出库检验
+    				Delivery delivery = new Delivery();
+    				delivery.setSerialNum(stockInOutCheck.getDeliverSerial());
+    				delivery.setStatus("2");//待出库
+    				deliveryService.updateDelivery(delivery);
     				//出库检验消息  to 采购
     				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.OUT_CHECK_TO_BUY));
     				//出库检验消息  to 供应
     				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.OUT_CHECK_TO_SALE));
     			}else if("checkin".equals(stockInOutCheck.getDeliverSerial())){
+    				TakeDelivery takeDelivery = new TakeDelivery();
+    				takeDelivery.setSerialNum(stockInOutCheck.getTakeDeliverSerial());
+    				takeDelivery.setStatus("3");//待入库
+    				takeDeliveryService.updateTakeDelivery(takeDelivery);
     				//入库检验消息  to 采购
     				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.IN_CHECK_TO_BUY));
     				//入库检验消息  to 供应
@@ -139,7 +147,7 @@ public class StockInOutController {
     			}
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<StockInOutCheck>(stockInOutCheck, HttpStatus.OK);
     }
@@ -161,7 +169,7 @@ public class StockInOutController {
     			 flag="1";
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<String>(flag, HttpStatus.OK);
     }

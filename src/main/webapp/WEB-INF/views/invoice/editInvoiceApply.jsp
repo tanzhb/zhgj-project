@@ -39,7 +39,7 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="editInvoiceBase.jsp"/>
+					<jsp:include  page="addOrEditInvoiceInfo.jsp"/>
       			</div>
       			   <div class="row">
 						<div class="col-md-12">
@@ -47,15 +47,16 @@
 								<div class="portlet box green">
 	                                <div class="portlet-title">
 	                                    <div class="caption">
-	                                        <i class="fa fa-globe"></i>评论 </div>
+	                                        <i class="fa fa-globe"></i> 流程审批 </div>
 	                                </div>
 	                                <div class="portlet-body">
 	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
 	                                        <thead>
 	                                            <tr>
-	                                                <th>评论人</th>
-	                                                <th>评论时间</th>
-	                                                <th>评论内容</th>
+	                                                <th> 审批人 </th>
+	                                                <th> 岗位 </th>
+	                                                <th> 审批时间 </th>
+	                                                <th> 审批意见</th>
 	                                            </tr>
 	                                        </thead>
 	                                        <tbody id = "comment_audit">	

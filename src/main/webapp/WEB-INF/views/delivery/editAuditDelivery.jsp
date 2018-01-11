@@ -44,7 +44,7 @@
 	              		</li>
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a>
 						</li>
-						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>
+						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li> -->
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">收货信息</a></li>
 					</ul>
 					<div class="tab-content">
@@ -620,7 +620,7 @@
 								<input type="text" name="" class="form-control" ng-model="delivery.userId" ng-show="true" /> -->
 													
 								<div class="row">
-									<div class="form-group form-md-line-input">
+									<div class="form-group">
 										<label class="col-md-1 control-label bold" for="form_control_1">我的意见:</label>
 										<div class="col-md-10">
 											<textarea class="form-control" ng-model="delivery.reason"
@@ -733,25 +733,23 @@
 					<div class="row">
 							<div class="portlet box green">
 								<div class="portlet-title">
-									<div class="caption">
-										<i class="fa fa-globe"></i>评论
-									</div>
-								</div>
-								<div class="portlet-body">
-									<table
-										class="table table-striped table-bordered table-hover order-column"
-										id="pinglun">
-										<thead>
-											<tr>
-												<th>评论人</th>
-												<th>评论时间</th>
-												<th>评论内容</th>
-											</tr>
-										</thead>
-										<tbody id="comment_audit">
-										</tbody>
-									</table>
-								</div>
+	                                    <div class="caption">
+	                                        <i class="fa fa-globe"></i> 流程审批 </div>
+	                                </div>
+	                                <div class="portlet-body">
+	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                        <thead>
+	                                            <tr>
+	                                                <th> 审批人 </th>
+	                                                <th> 岗位 </th>
+	                                                <th> 审批时间 </th>
+	                                                <th> 审批意见</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody id = "comment_audit">	
+                                            </tbody>
+	                                    </table>
+	                                </div>
 							</div>
 						</div>
 				</div>

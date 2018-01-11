@@ -139,13 +139,13 @@ public class NoticeContoller {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
 		 company.setPageIndex(dataTablesParams.getStart());
 		 company.setPageSize(dataTablesParams.getLength());*/
@@ -301,7 +301,7 @@ public class NoticeContoller {
     			noticeService.deleteBatch(serialNumArray,UserUtil.getUserFromSession().getUserName());
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		flag = "1";
     	}
     	return flag;
@@ -321,7 +321,7 @@ public class NoticeContoller {
     			noticeService.deleteNoticeShare(serialNum,UserUtil.getUserFromSession().getUserId().toString());
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		flag = "1";
     	}
     	return flag;
@@ -341,7 +341,7 @@ public class NoticeContoller {
     			noticeService.readNoticeShare(serialNum,UserUtil.getUserFromSession().getUserId().toString());
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		flag = "1";
     	}
     	return flag;

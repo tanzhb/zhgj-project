@@ -44,6 +44,9 @@
 				<div class="portlet light ">
                         <div class="portlet-title">
                             <div class="caption">仓库信息</div>
+                            <div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                             <div class="actions">
                                 <button  ng-show="warehouseView"    class="btn purple  btn-sm btn-circle" ng-click="editWarehouse()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
@@ -255,18 +258,18 @@
 					class="table table-striped  table-hover table-header-fixed">
 					<thead>
 						<tr>
-							<th >仓库区位编码</th>
-							<th>仓库区位名称 </th>
-                            <th> 存储属性</th>
-                            <th>最大行数</th>
-                            <th>列数</th>
-                            <th>层数 </th>
-                            <th> 存储类型 </th>
-                            <th>存储方式 </th>
-                            <th> 默认长宽高 </th>
-                            <th> 默认容积 </th>
-                            <th> 默认承重 </th>
-                            <th> 操作 </th>
+							<th class="col-md-1">仓库区位编码</th>
+							<th class="col-md-1">仓库区位名称 </th>
+                            <th class="col-md-1"> 存储属性</th>
+                            <th class="col-md-1">最大行数</th>
+                            <th  class="col-md-1">列数</th>
+                            <th class="col-md-1">层数 </th>
+                            <th class="col-md-1"> 存储类型 </th>
+                            <th  class="col-md-1">存储方式 </th>
+                            <th  class="col-md-1" > 默认长宽高 </th>
+                            <th class="col-md-1" > 默认容积 </th>
+                            <th class="col-md-1"> 默认承重 </th>
+                            <th class="col-md-1"> 操作 </th>
 						</tr>
 					</thead>
 					<tbody>
@@ -280,7 +283,7 @@
 											<div class="form-group">
 												<div class="col-md-12 input-icon right">
 												 <input  type="hidden"    id="serialNum{{$index}}"      value="{{warehouseposition.serialNum}}" />
-													<input  type="text"   ng-model="warehouseposition.positionNum"     name="positionNum"    id="positionNum{{$index}}"     ng-hide="warehousepositionAdd{{$index}}"       
+													<input  type="text"   ng-model="warehouseposition.positionNum"      id="positionNum{{$index}}"     ng-hide="warehousepositionAdd{{$index}}"       
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
 														<label   ng-show="warehousepositionView{{$index}}"  class="c_edit" >{{warehouseposition.positionNum}}</label>
@@ -289,7 +292,7 @@
 										</div>
 						<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-12 input-icon right" style="margin-left:45px">
+												<div class="col-md-12 input-icon right" >
 													<input  type="text"   ng-model="warehouseposition.positionName"    name="positionName"   id="positionName{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -299,7 +302,7 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<div class="col-md-12 input-icon right"  style="margin-left:90px">
+												<div class="col-md-12 input-icon right"  >
 													<input  type="text" ng-model="warehouseposition.storageAttribute" name="storageAttribute"    id="storageAttribute{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -309,7 +312,7 @@
 										</div>
 									<div class="col-md-1">
 											<div class="form-group">
-												<div class="  input-icon right"  style="margin-left:110px">
+												<div class=" col-md-12 input-icon right"  >
 													<input  type="text" ng-model="warehouseposition.maxRows" name="maxRows"    id="maxRows{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -319,7 +322,7 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<div class="  input-icon right" style="margin-left:100px">
+												<div class="col-md-12 input-icon right">
 													<input  type="text" ng-model="warehouseposition.maxCols" name="maxCols"  id="maxCols{{$index}}"   ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>
@@ -329,7 +332,7 @@
 										</div>
 										<div class="col-md-1">
 											<div class="form-group">
-												<div class="  input-icon right"  style="margin-left:50px">
+												<div class="col-md-12 input-icon right"  >
 													<input  type="text" ng-model="warehouseposition.maxLayers" name="maxLayers"   id="maxLayers{{$index}}"  ng-hide="warehousepositionAdd{{$index}}"
 														class="form-control" placeholder=""> <span
 														class="help-block"></span>

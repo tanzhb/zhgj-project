@@ -55,15 +55,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
               table = $("#select_sample_2").DataTable({
                   language: {
                       aria: {
-                          sortAscending: ": activate to sort column ascending",
-                          sortDescending: ": activate to sort column descending"
+                          sortAscending: ": 以升序排列此列",
+                          sortDescending: ": 以降序排列此列"
                       },
                       emptyTable: "空表",
                       info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                       infoEmpty: "没有数据",
                       //infoFiltered: "(filtered1 from _MAX_ total entries)",
                       lengthMenu: "每页显示 _MENU_ 条数据",
-                      search: "查询:",
+                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                       zeroRecords: "抱歉， 没有找到！",
                       paginate: {
                           "sFirst": "首页",
@@ -189,15 +189,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
                    d_table = $("#demand_plan_date").DataTable({
                        language: {
                            aria: {
-                               sortAscending: ": activate to sort column ascending",
-                               sortDescending: ": activate to sort column descending"
+                               sortAscending: ": 以升序排列此列",
+                               sortDescending: ": 以降序排列此列"
                            },
                            emptyTable: "空表",
                            info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                            infoEmpty: "没有数据",
                            //infoFiltered: "(filtered1 from _MAX_ total entries)",
                            lengthMenu: "每页显示 _MENU_ 条数据",
-                           search: "查询:",
+                           search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                            zeroRecords: "抱歉， 没有找到！",
                            paginate: {
                                "sFirst": "首页",
@@ -589,38 +589,49 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	         */
 			$scope.saveDemandPlan = function() {
 				if($('#demandPlanForm').valid()){
-					handle.blockUI();
-					$scope.demandPlan.createTime = null;
-					$scope.demandPlan.updateTime = null;
-					var promise = demandPlanService
-							.saveDemandPlan($scope.demandPlan);
-					promise.then(function(data) {
-						if (!handle.isNull(data.data)) {
-							$(".modal-backdrop").remove();
-							toastr.success("保存成功");
-							handle.unblockUI();
-							//$scope.demandPlan = data.data;
-							viewDemandPlan(data.data.serialNum);
-							console.log(data.data);	
-							$scope.demandPlanView = true;
-							$scope.demandPlanAdd = true;
-							$scope.demandPlanEdit = false;
-							$(".alert-danger").hide();
-							$location.search({"serialNum":data.data.serialNum,view:"1"});
-						} else {
-							$(".modal-backdrop").remove();
-							handle.unblockUI();
-							toastr.error("保存失败！请联系管理员");
-							console.log(data);
-						}
+					 $rootScope.judgeIsExist("demandPlan",$scope.demandPlan.demandPlanNum, $scope.demandPlan.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			toastr.error('需求计划编号重复！');
+			    			return;
+			    		}else{
+			    			handle.blockUI();
+							$scope.demandPlan.createTime = null;
+							$scope.demandPlan.updateTime = null;
+							var promise = demandPlanService
+									.saveDemandPlan($scope.demandPlan);
+							promise.then(function(data) {
+								if (!handle.isNull(data.data)) {
+									$(".modal-backdrop").remove();
+									toastr.success("保存成功");
+									handle.unblockUI();
+									//$scope.demandPlan = data.data;
+									viewDemandPlan(data.data.serialNum);
+									console.log(data.data);	
+									$scope.demandPlanView = true;
+									$scope.demandPlanAdd = true;
+									$scope.demandPlanEdit = false;
+									$(".alert-danger").hide();
+									$location.search({"serialNum":data.data.serialNum,view:"1"});
+								} else {
+									$(".modal-backdrop").remove();
+									handle.unblockUI();
+									toastr.error("保存失败！请联系管理员");
+									console.log(data);
+								}
 
-					}, function(data) {
-						// 调用承诺接口reject();
-						$(".modal-backdrop").remove();
-						handle.unblockUI();
-						toastr.error("保存失败！请联系管理员");
-						console.log(data);
-					});
+							}, function(data) {
+								// 调用承诺接口reject();
+								$(".modal-backdrop").remove();
+								handle.unblockUI();
+								toastr.error("保存失败！请联系管理员");
+								console.log(data);
+							});
+			    		}
+			    		
+			    		});
+				
 				}
 			}; 
 			
@@ -1133,15 +1144,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	   			.DataTable({
 	                   language: {
 	                       aria: {
-	                           sortAscending: ": activate to sort column ascending",
-	                           sortDescending: ": activate to sort column descending"
+	                           sortAscending: ": 以升序排列此列",
+	                           sortDescending: ": 以降序排列此列"
 	                       },
 	                       emptyTable: "空表",
 	                       info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	                       infoEmpty: "没有数据",
 	                       // infoFiltered: "(filtered1 from _MAX_ total entries)",
 	                       lengthMenu: "每页显示 _MENU_ 条数据",
-	                       search: "查询:",
+	                       search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	                       zeroRecords: "抱歉， 没有找到！",
 	                       paginate: {
 	                           "sFirst": "首页",
@@ -1188,9 +1199,9 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 										return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 									}else if(row.processBase.status=="APPROVAL_SUCCESS"){
 										if(row.status==1){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待签合同</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已审批</span>';//待签合同
 										}else if(row.status==2){
-											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
+											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';//已签合同
 										}else{
 											return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 										}
@@ -1358,8 +1369,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	           e.dataTable({
 	               language: {
 	                   aria: {
-	                       sortAscending: ": activate to sort column ascending",
-	                       sortDescending: ": activate to sort column descending"
+	                       sortAscending: ": 以升序排列此列",
+	                       sortDescending: ": 以降序排列此列"
 	                   },
 	                   emptyTable: "No data available in table",
 	                   info: "Showing _START_ to _END_ of _TOTAL_ entries",

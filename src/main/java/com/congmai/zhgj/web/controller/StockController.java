@@ -17,9 +17,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,32 +30,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
-import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
-import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
-import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
-import com.congmai.zhgj.web.model.PriceList;
-import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.Stock;
-import com.congmai.zhgj.web.model.StockExample;
-import com.congmai.zhgj.web.model.StockInBatch;
-import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockOutBatch;
+import com.congmai.zhgj.web.model.StockOutBatchExample;
 import com.congmai.zhgj.web.model.User;
-import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.service.CompanyService;
-import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
-import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
@@ -136,7 +125,7 @@ public class StockController {
     			stockService.update(stock);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	Materiel m=materielService.selectById(stock.getMaterielSerial());
 		stock.setMaterielName(m.getMaterielName());
@@ -364,13 +353,25 @@ public class StockController {
 		  * @return
 		  */
 		 @RequestMapping(value="stockInBatchList",method=RequestMethod.GET)
-		 public ResponseEntity<Map<String,Object>> stockInBatchList(String serialNum,String orderSerial) {
+		 public ResponseEntity<Map<String,Object>> stockInBatchList(String serialNum,String orderSerial,String  dmSerialNum) {
 			 //借用DeliveryMateriel bean
 			 List<DeliveryMateriel> stockInBatchList=new  ArrayList<DeliveryMateriel>();
 			 if(StringUtils.isEmpty(orderSerial)){//查询入库批次记录
 				 stockInBatchList=stockService.getStockInBatchList(serialNum);
 			 }else{//出库选择入库批次记录(根据物权方及基本物料)
-				 stockInBatchList=stockService.getStockInBatchListByMaterielOwn(serialNum,orderSerial);
+				 stockInBatchList=stockService.getStockInBatchListByMaterielOwn(serialNum,orderSerial);//dmSerialNum发货物料流水
+				 if(org.apache.commons.lang3.StringUtils.isNotBlank(dmSerialNum)){//获取出库批次
+					 List<StockOutBatch>soblist=stockService.getStockOutBatchListByDmSerialNum(dmSerialNum);
+					 for(int i=0;i<soblist.size();i++){
+						 String stockInBatchSerial=soblist.get(i).getStockInBatchSerial();
+						 for(DeliveryMateriel d:stockInBatchList){
+							 if(stockInBatchSerial.equals(d.getSerialNum())){//入库批次流水相同
+								 d.setOutCount(soblist.get(i).getOutCount());
+							 }
+						 }
+						 
+					 }
+				 }
 			 }
 			
 				 

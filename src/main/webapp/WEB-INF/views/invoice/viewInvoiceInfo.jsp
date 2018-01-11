@@ -37,13 +37,23 @@
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
         <div class="portlet bordered">
             <div class="portlet-body">
+            	<ul class="nav nav-tabs">
+		<li class="active bold">
+               		<a data-target="#tab_1_1" data-toggle="tab"><span ng-if="inOrOut.indexOf('in')>-1" >进项票</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票</span>详情</a>
+           		</li>
+		<li class="bold" ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
+		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>		
+	</ul>
 				<div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption"><span ng-if="inOrOut.indexOf('in')>-1" >进项票</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票</span>详情</div>
+                       <!--  <div class="portlet-title">
+                            <div class="caption"></div>
                             <div class="actions">
-                                           
+                                     <span ng-if="inOrOut.indexOf('in')>-1" >进项票</span><span  ng-if="inOrOut.indexOf('out')>-1">销项票</span>详情       
                             </div>
-                        </div>
+                        </div> -->
             
                        
                          <div class="tab-content">
@@ -481,16 +491,78 @@
                                                         </div> 
 								</div>
 							
-         				</div></div></div> 
+         				</div></div>
+         					<div class="tab-pane" id="tab_1_2"  >
+	<!-- 物料信息start-->
+      <div class="portlet-body"  >
+				<table  ng-if="inOrOut.indexOf('in')>-1"
+					class="table table-striped table-bordered table-hover "
+					id="sample_inm">
+					<thead>
+						<tr>
+						
+							<td style="text-align: center">物料编号</td>
+                              <td style="text-align: center">物料名称</td>
+                               <td  style="text-align: center">规格型号</td>
+                                <td  style="text-align: center">单位</td>
+                                <td  style="text-align: center">订单数量</td>
+                                <td  style="text-align: center">未收数量</td>
+                                 <td   style="text-align: center">收票数量</td>
+                                <td  style="text-align: center">含税单价</td>
+                                  <td   style="text-align: center">金额</td>
+                                  <td   style="text-align: center">操作</td>
+						</tr>
+					</thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
+				</table>
+				<table   ng-if="inOrOut.indexOf('out')>-1"
+					class="table table-striped table-bordered table-hover "
+					id="sample_outm">
+					<thead>
+						<tr>
+							<td style="text-align: center;" >物料编号</td>
+                              <td style="text-align: center">物料名称</td>
+                              <td  style="text-align: center">规格型号</td>
+                              <td  style="text-align: center">单位</td>
+                              <td  style="text-align: center">订单数量</td>
+                              <td  style="text-align: center">可开数量</td>
+                              <td   style="text-align: center">开票数量</td>
+                              <td  style="text-align: center">含税单价</td>
+                              <td   style="text-align: center">金额</td>
+                              <td    style="text-align: center">操作</td>
+						</tr>
+					</thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div>
+         <!-- 物料信息 end-->
+	</div>
+         				</div> 
          				
-         				 	 <div class="portlet-title"><!-- 物料信息START -->
+         				 	<!--  <div class="portlet-title">物料信息START
                             <div class="caption">物料信息</div>
                             <div class="actions">
                             </div>
-                        </div>
+                        </div> -->
                       
                                 
-			<div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1"><!-- 进项票物料信息   -->
+			<!-- <div class="portlet-body"  ng-if="inOrOut.indexOf('in')>-1">进项票物料信息  
 				<table
 					class="table table-striped table-bordered table-hover "
 					id="sample_inm">
@@ -519,8 +591,35 @@
 						</tr>
 					</tfoot>
 				</table>
-			</div>
-			<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1"><!-- 销项票物料信息--  -->
+					<table   ng-if="inOrOut.indexOf('out')>-1"
+					class="table table-striped table-bordered table-hover "
+					id="sample_outm">
+					<thead>
+						<tr>
+							<td style="text-align: center;" >物料编号</td>
+                              <td style="text-align: center">物料名称</td>
+                              <td  style="text-align: center">规格型号</td>
+                              <td  style="text-align: center">单位</td>
+                              <td  style="text-align: center">订单数量</td>
+                              <td  style="text-align: center">可开数量</td>
+                              <td   style="text-align: center">开票数量</td>
+                              <td  style="text-align: center">含税单价</td>
+                              <td   style="text-align: center">金额</td>
+                              <td    style="text-align: center">操作</td>
+						</tr>
+					</thead>
+					
+					<tbody>
+					</tbody>
+					<tfoot>
+					<tr>
+							<td colspan="4">合计</td>
+                              <td colspan="6">小写: {{invoice.billOrReceiptMoney |currency:'￥'}} 大写:{{invoice.capitalMoney}}</td>
+						</tr>
+					</tfoot>
+				</table>
+			</div> -->
+	<!-- 		<div class="portlet-body"  ng-if="inOrOut.indexOf('out')>-1">销项票物料信息-- 
 				<table
 					class="table table-striped table-bordered table-hover "
 					id="sample_outm">
@@ -548,7 +647,7 @@
 						</tr>
 					</tfoot>
 				</table>
-			</div>
+			</div> -->
 				</div>
 				
         </div>

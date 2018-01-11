@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,6 +40,7 @@ import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BuyMateriel;
 import com.congmai.zhgj.web.model.BuyMaterielExample;
 import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.CategoryExample;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyCode;
 import com.congmai.zhgj.web.model.JsonTreeData;
@@ -56,6 +58,7 @@ import com.congmai.zhgj.web.service.CategoryService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
@@ -95,6 +98,8 @@ public class MaterielController {
     @Resource
     private CompanyService companyService;
     
+    @Resource
+    private StockService stockService;
     
     /**
      * 保存物料
@@ -395,12 +400,13 @@ public class MaterielController {
      * @Description 查询物料列表//全部查询，或根据父节点查询
      * @param parent(若有值，则查询该分类下的物料)
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
-     * @param type
+     * @param type 销售订单选择物料，筛选有供应商的物料
+     * @param supplyComId 物料关联供应商
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type) {
+    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type,String supplyComId) {
     	//MaterielExample m =new MaterielExample();
     	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
@@ -431,7 +437,11 @@ public class MaterielController {
         	}
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
-        	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
+        	if(supplyComId!=null){
+        		comIds = new ArrayList<String>();
+        		comIds.add(supplyComId);
+        		criteria.andSupplyComIdIn(comIds);
+        	}else if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
         		criteria.andBuyComIdIn(comIds);
@@ -690,6 +700,25 @@ public class MaterielController {
 	    	criteria3.andDelFlgEqualTo("0");
 	    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
 	    	map.put("buyMateriel", buyMateriel);
+	    	
+	    	//转换物料功能分类
+	    	if(materiel.getMaterielAttribute()!=null){
+	    		String[] attributes = materiel.getMaterielAttribute().split(",");
+	    		CategoryExample ex = new CategoryExample();
+	    		com.congmai.zhgj.web.model.CategoryExample.Criteria criteria1 =  ex.createCriteria();
+	    		criteria1.andCategoryIdIn(Arrays.asList(attributes));
+	        	List<Category> list = categoryService.selectList(ex);
+	        	if(list!=null){
+	        		for (int i = 0; i < list.size(); i++) {
+	        			if(i==0){
+	        				materiel.setMaterielAttributeName(list.get(i).getCategoryName());
+	        			}else{
+	        				materiel.setMaterielAttributeName(materiel.getMaterielAttributeName()+','+list.get(i).getCategoryName());
+	        			}
+					}
+	        	}
+	    	}
+	    	
     	}
     	return map;
 	}
@@ -778,7 +807,7 @@ public class MaterielController {
 							materiel.setPalletWeight(row.get(24).toString());
 							materiel.setRemark(row.get(25).toString());
 
-							insertNew(materiel);
+							/*insertNew(materiel);*/
 						}catch(Exception  e){
 							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
 						}
@@ -808,8 +837,22 @@ public class MaterielController {
     	List<SupplyMateriel> list = null;
     	try {
     		list = supplyMaterielService.chooseMateriel(ids);
+    		if(list!=null){
+    			for (int i = 0; i < list.size(); i++) {//设置所选基本物料的自建库存数量
+    				if(list.get(i).getMateriel()!=null){
+    					Materiel m = list.get(i).getMateriel();
+    					String inCountString = stockService.getCountInAmountForZijian(m.getSerialNum());
+        				String outCountString = stockService.getCountOutAmountForZijian(m.getSerialNum());
+        				m.setStockCount(
+        						(Integer.parseInt(inCountString==null?"0":inCountString)
+        								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+    				}
+    				
+					
+				}
+    		}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			//20180110 qhzhao System.out.println(e.getMessage());
 		}
     	
     	return list;
@@ -822,14 +865,26 @@ public class MaterielController {
      * @param ids
      * @return
      */
-    @RequestMapping(value="chooseBasicMateriels",method=RequestMethod.POST)
+    @RequestMapping(value="chooseBasicMateriels")
     @ResponseBody
-    public List<Materiel> chooseBasicMateriels(@RequestBody String ids){
+    public List<Materiel> chooseBasicMateriels(String ids,String comId){
     	List<Materiel> list = null;
     	try {
     		list = materielService.chooseMateriel(ids);
+    		if(list!=null){
+    			for (int i = 0; i < list.size(); i++) {//设置所选物料的自建库存数量
+    				String inCountString = stockService.getCountInAmountForZijian(list.get(i).getSerialNum());
+    				String outCountString = stockService.getCountOutAmountForZijian(list.get(i).getSerialNum());
+    				list.get(i).setStockCount(
+    						(Integer.parseInt(inCountString==null?"0":inCountString)
+    								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+					
+				}
+    		}
+    		
+    		
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			//20180110 qhzhao System.out.println(e.getMessage());
 		}
     	
     	return list;

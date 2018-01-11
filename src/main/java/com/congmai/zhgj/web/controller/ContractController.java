@@ -240,13 +240,17 @@ public class ContractController {
 
 			//给各自的文件字段赋值文件名
 			contractVO.setSignContract(signContract);
+			contractVO.setStatus(ContractVO.SIGN);
 
 			contractService.signSaleContract(contractVO);
 			
-			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("updater", currenLoginName);
-			map.put("serialNum", contractVO.getOrderSerial());
-			contractService.updateOrderAfterSign(map);
+			if(contractVO.getOrderSerial()!=null){
+				Map<String,Object> map=new HashMap<String,Object>();
+				map.put("updater", currenLoginName);
+				map.put("serialNum", contractVO.getOrderSerial());
+				contractService.updateOrderAfterSign(map);
+			}
+			
 
 
 		HttpHeaders headers = new HttpHeaders();
@@ -318,11 +322,30 @@ public class ContractController {
 	 * @return
 	 */
 	public String uploadFile(MultipartFile file){
-		String filePath = env.getProperty("upload_path");
+		/*String filePath = env.getProperty("upload_path");
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
-		return fileName;
+		//20180110 qhzhao System.out.println(fileName);*/
+		
+		String filename = "";
+		try {
+			String path = env.getProperty("upload_path");
+			String fileName = file.getOriginalFilename();
+			/*String prefix = "." + fileName.substring(fileName.lastIndexOf(".") + 1);*/
+			filename = ApplicationUtils.random32UUID() +"_"+ fileName;
+			File dst = null;
+			File uploadDir = new File(path); // 创建上传目录
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs(); // 如果不存在则创建upload目录
+			}
+			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
+			file.transferTo(dst); // 创建文件并将上传文件复制过去
+			//20180110 qhzhao System.out.println("上传文件----------"+filename);
+		} catch (Exception e) {
+			//20180110 qhzhao System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			filename="";
+		}
+		return filename;
 	}
 
 
@@ -344,7 +367,7 @@ public class ContractController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}
@@ -616,7 +639,7 @@ public class ContractController {
 
 		/* String path="D:\\userUploadFile\\Files\\" + "D2E2589B23CA4B0EA9035DA9FC7E4BB2.xlsx";  
 		        File file=new File(path); 
-		        System.out.println(file.length());
+		        //20180110 qhzhao System.out.println(file.length());
 		        HttpHeaders headers = new HttpHeaders();    
 		        String fileName=new String("你好.xlsx".getBytes("UTF-8"),"iso-8859-1");//为了解决中文名称乱码问题  
 		        headers.setContentDispositionFormData("attachment", fileName); 

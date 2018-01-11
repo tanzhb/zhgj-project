@@ -11,8 +11,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.json.JSONObject;
-
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.IdentityService;
@@ -26,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,15 +45,14 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
-import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.Delivery;
-import com.congmai.zhgj.web.model.DeliveryExample;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
@@ -65,18 +61,19 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
-import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutRecord;
-import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
-import com.congmai.zhgj.web.model.Warehouseposition;import com.congmai.zhgj.web.model.WarehousepositionExample;
+import com.congmai.zhgj.web.model.Warehouseposition;
+import com.congmai.zhgj.web.model.WarehousepositionExample;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
@@ -153,8 +150,8 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private DeliveryService  deliveryService;
-	
-	
+	@Autowired
+	private StockInOutRecordMapper stockInOutRecordMapper;  
 	@RequestMapping("takeDeliveryManage")
 	public String takeDeliveryManage() {
 		
@@ -182,13 +179,13 @@ public class TakeDeliveryController {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}*/
     	takeDelivery.setPageIndex(0);
     	takeDelivery.setPageSize(-1);
@@ -309,6 +306,12 @@ public class TakeDeliveryController {
     			deliveryMaterielVO.setDeliveryAttachFile(deliveryAttachFile);
     			deliveryMaterielVO.setDeliveryFiles(deliveryFiles);
     		}
+    		StockInOutRecord sr=takeDeliveryService.findStockInSerialNum(serialNum);//根据收货流水查入库单记录
+        	if(delivery.getOrderSerial()!=null&&sr!=null){
+        		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+        		sr.setOrder(o);
+        		delivery.setStockInOutRecord(sr);
+        	}
     	}
     	
     	return delivery;
@@ -328,16 +331,60 @@ public class TakeDeliveryController {
     	 ObjectMapper objectMapper = new ObjectMapper();
     	 objectMapper.configure(org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
   	   		TakeDeliveryParams  takeDeliveryParams = null;
+  	   	Map<String, Object>map1 =new HashMap<String, Object>();
+  	  String  takeDeliverAddress="";
 		   try {
 			   //JSONObject a = JSONObject.fromObject(params);
 			  // takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+			   takeDeliverAddress=takeDeliveryParams.getTakeDelivery().getTakeDeliverAddress();
 			} catch (Exception e) {
 		    	logger.warn(e.getMessage(), e);
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		//保存/更新前判断发货数量
+        		OrderInfo o=orderService.selectById(takeDeliveryParams.getDelivery().getOrderSerial());
+        		  Boolean flags=false;//还可以发
+        		  Boolean isDel=false;//是否删除发货单
+        			String  deliveryCount=o.getDeliveryCount();//订单已发数量
+        			String  materielCount=o.getMaterielCount();//订单总数量
+        			  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+        			  BigDecimal materielCount1=new BigDecimal(materielCount);
+        			  if(deliveryCount1.compareTo(materielCount1)>=0){
+        				  flags=true;
+        				  isDel=true;//提示删除当前发货单
+        				  map1.put("isDel", isDel);
+        				  map1.put("flag", flags);
+        				  return map1;
+        			  }else{
+        				  map1.put("isDel", isDel);
+        			  }
+        				OrderMaterielExample m =new OrderMaterielExample();
+        		    	//and 条件1
+        		    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+        		    	criteria.andDelFlgEqualTo("0");
+        		    	criteria.andOrderSerialEqualTo(takeDeliveryParams.getDelivery().getOrderSerial());
+        		    	m.setOrderByClause(" sort asc");
+        		    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);//获取最新的已发
+        		    	List<DeliveryMateriel> deliveryMateriels=takeDeliveryParams.getDeliveryMateriels();//当前需要保存的发货物料
+        		  	  for(DeliveryMateriel deliveryMateriel: deliveryMateriels){
+        				  for(OrderMateriel vo:orderMateriel){
+        					  if(deliveryMateriel.getOrderMaterielSerial().equals(vo.getSerialNum())){//两个订单物料流水相同时
+        						  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+        						  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+        						  if(deliverCount.compareTo(canDeliverCount)>0){
+        							  flags=true;
+        							  deliveryMateriel.setDeliveredCount(vo.getDeliveredCount());//更新成最新的已发数量
+        							  deliveryMateriel.setDeliverCount("0");//发货数量置为0
+        							  map1.put("deliveryMateriels", orderMateriel);//重新将最新的发货数据传到前台
+        							  map1.put("flag", flags);
+        							  return map1;
+        						  }
+        					  }
+        				  }
+        			  }
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getTakeDelivery().getSerialNum())){
         			takeDeliveryParams = this.getTakeDeliveryData(takeDeliveryParams,currenLoginName);
         			takeDeliveryService.updateTakeDelivery(takeDeliveryParams.getDelivery(),takeDeliveryParams.getTakeDelivery(),takeDeliveryParams.getDeliveryTransport(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName);
@@ -350,9 +397,13 @@ public class TakeDeliveryController {
         		logger.warn(e.getMessage(), e);
         		return null;
         	}
-        	Map<String, Object>map1 =new HashMap<String, Object>();
         	//deliver.warehouseSerial
+        	if(!StringUtils.isEmpty(takeDeliveryParams.getTakeDelivery().getWarehouseSerial())){
+        		String takeDeliverWarehouseName=warehouseService.selectOne(takeDeliveryParams.getTakeDelivery().getWarehouseSerial()).getWarehouseName();
+        		takeDeliveryParams.getDelivery().setTakeDeliverWarehouseName(takeDeliverWarehouseName);
+        	}
         	map1.put("delivery", takeDeliveryParams.getDelivery());
+        	takeDeliveryParams.getTakeDelivery().setTakeDeliverAddress(takeDeliverAddress);
         	map1.put("takeDelivery", takeDeliveryParams.getTakeDelivery());
         	map1.put("deliveryTransport", takeDeliveryParams.getDeliveryTransport());
     	return map1;
@@ -448,7 +499,7 @@ public class TakeDeliveryController {
 		   try {
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
@@ -456,13 +507,16 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
-        			
+        			if("1".equals(takeDeliveryParams.getRecord().getStatus())){
         			//入库消息  to 采购
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
         			//入库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
+        			//入库完成的采购订单，通知关联的销售订单制单人
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY_TO_SALE));
+        			}
         		}else{
-        			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
+        		/*	takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         		}
         		flag = "1";
@@ -492,11 +546,12 @@ public class TakeDeliveryController {
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){//确认出库
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.updateStockOutData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),takeDeliveryParams.getStockOutMateriels(),currenLoginName,"out");
-        			
+        			if("1".equals(takeDeliveryParams.getRecord().getStatus())){
         			//出库消息  to 采购
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_BUY));
         			//出库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_SALE));
+        			}
         		}else{
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.insertStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"out");
@@ -630,6 +685,33 @@ public class TakeDeliveryController {
     	return takeDeliveryService.findStockInSerialNum(serialNum);
     }
     
+    
+    /**
+     * @Description (查找进行中代发货单)
+     * @param orderSerialNum
+     * @return
+     */
+    @RequestMapping(value="getDoingTakeDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public Delivery getDoingTakeDelivery(@RequestBody String orderSerialNum) {
+    	TakeDeliverySelectExample example = new TakeDeliverySelectExample();
+		example.setPageIndex(0);
+		example.setPageSize(-1);
+		Criteria c2 =  example.createCriteria();
+		c2.andStatusEqualTo("0");//状态为初始，只能是代发货
+		c2.andDeliverTypeEqualTo("代发货");
+		c2.andDelFlgEqualTo("0");
+		c2.andDeliverBuyComIdIsNull();
+		c2.andOrderEqualTo(orderSerialNum);
+		
+		List<Delivery> takeDeliverys = takeDeliveryMapper.selectListByExample(example);
+		if(CollectionUtils.isNotEmpty(takeDeliverys)){
+			return takeDeliverys.get(0);
+		}else{
+			return null;
+		}
+    	
+    }
     /**
      * @Description (发货流水查找出库记录流水号)
      * @param serialNum
@@ -662,9 +744,11 @@ public class TakeDeliveryController {
     			totalDeliveryCount=totalDeliveryCount.add(new BigDecimal(dm.getDeliverCount()));
     		}
     	}
+    	String orderSerial=delivery.getOrderSerial();//获取订单流水
+    	OrderInfo o=orderService.selectById(orderSerial);
+    	stockInOutRecord.setOrder(o);
     	map.put("stockInOutRecord", stockInOutRecord);
     	map.put("totalDeliveryCount", totalDeliveryCount);
-    	map.put("stockInOutRecord", stockInOutRecord);
     	map.put("deliver", delivery);
     	return map;
     }
@@ -691,17 +775,17 @@ public class TakeDeliveryController {
 				   JSONObject a = JSONObject.fromObject(params);
 				   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 				} catch (JsonParseException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (JsonMappingException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (IOException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (Exception e) {
-			    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				}*/
 		 record.setPageIndex(0);
 		 record.setPageSize(-1);
-	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"in");
+	 	Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"in","1");
 	 	//List<Company> companys = companyService.selectByPage(company).getResult();
 			// 封装datatables数据返回到前台
 			Map<String,Object> pageMap = new HashMap<String,Object>();
@@ -733,13 +817,13 @@ public class TakeDeliveryController {
 				   JSONObject a = JSONObject.fromObject(params);
 				   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 				} catch (JsonParseException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (JsonMappingException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (IOException e) {
-					System.out.println(this.getClass()+"---------"+ e.getMessage());
+					//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				} catch (Exception e) {
-			    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+			    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 				}*/
 		 record.setPageIndex(0);
 		 record.setPageSize(-1);
@@ -749,7 +833,7 @@ public class TakeDeliveryController {
 		 if(user != null){
 			 String comId = userCompanyService.getUserComId(user.getUserId().toString());
 			 record.setSupplyComId(comId);
-			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out");
+			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out","1");
 			 //List<Company> companys = companyService.selectByPage(company).getResult();
 			 // 封装datatables数据返回到前台
 			 pageMap.put("draw", 1);
@@ -794,7 +878,7 @@ public class TakeDeliveryController {
 	    		StockInOutRecord record = new StockInOutRecord();
 	    		record.setPageIndex(0);
 	    		record.setPageSize(-1);
-	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in").getResult();
+	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in","1").getResult();
 	    		dataMap.put("stockInList",stockInList);
 	    		ExcelUtil.export(request, response, dataMap, "stockIn", "入库记录");
 	    }
@@ -810,7 +894,7 @@ public class TakeDeliveryController {
 	    	StockInOutRecord record = new StockInOutRecord();
 	    	record.setPageIndex(0);
 	    	record.setPageSize(-1);
-	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out").getResult();
+	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out","1").getResult();
 	    	dataMap.put("stockOutList",stockOutList);
 	    	ExcelUtil.export(request, response, dataMap, "stockOut", "出库记录");
 	    }
@@ -889,8 +973,9 @@ public class TakeDeliveryController {
         	 }
         	return deliveryMateriels;
     	}else if(StringUtils.isNotBlank(stockSerial)){
+    		StockInOutRecord sr=stockInOutRecordMapper.selectByPrimaryKey(stockSerial);
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
-        	example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerial);
+        	example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(org.springframework.util.StringUtils.isEmpty(sr.getTakeDeliverSerial())?sr.getDeliverSerial():sr.getTakeDeliverSerial());
         	return deliveryMaterielService.selectByExample(example);
     	}
     	return null;
@@ -902,7 +987,8 @@ public class TakeDeliveryController {
     	if(StringUtils.isNotBlank(deliverySerialNum)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
     		example.createCriteria().andDelFlgEqualTo("0").andDeliverSerialEqualTo(deliverySerialNum);
-    		return deliveryMaterielService.selectByExampleForStockIn(example);
+    		List<DeliveryMateriel>list=deliveryMaterielService.selectByExampleForStockIn(example);
+    		return list;
     	}else if(StringUtils.isNotBlank(stockSerialNum)){
     		DeliveryMaterielExample example = new DeliveryMaterielExample();
     		example.createCriteria().andDelFlgEqualTo("0").andStockInOutRecordSerialEqualTo(stockSerialNum);
@@ -1295,17 +1381,56 @@ public class TakeDeliveryController {
 		return takeDeliveryParams;
 	}
 	 /* *//**
-     * @Description (确认代发货/采购商确认提货)
+     * @Description (确认代发货)
      * @param request
      * @return
      */
   @RequestMapping(value="/confirmDelivery",method=RequestMethod.POST)
   @ResponseBody
-  public String confirmDelivery(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
-    	String flag = "0"; //默认失败
+  public Map<String, Object> confirmDelivery(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	String flags1 = "0"; //默认失败
+    	Map<String, Object>map1=new HashMap<String, Object>();
+    	Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(serialNum);
+    	//保存/更新前判断发货数量
+		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+		  Boolean flags=false;//还可以发
+		  Boolean isDel=false;//是否删除发货单
+			String  deliveryCount=o.getDeliveryCount();//订单已发数量
+			String  materielCount=o.getMaterielCount();//订单总数量
+			  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+			  BigDecimal materielCount1=new BigDecimal(materielCount);
+			  if(deliveryCount1.compareTo(materielCount1)>=0){
+				  flags=true;
+				  isDel=true;//提示删除当前发货单
+				  map1.put("isDel", isDel);
+				  map1.put("flag", flags);
+				  return map1;
+			  }else{
+				  map1.put("isDel", isDel);
+			  }
+				OrderMaterielExample m =new OrderMaterielExample();
+		    	//and 条件1
+		    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andDelFlgEqualTo("0");
+		    	criteria.andOrderSerialEqualTo(delivery.getOrderSerial());
+		    	m.setOrderByClause(" sort asc");
+		    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);//获取最新的已发
+		    	List<DeliveryMaterielVO> deliveryMateriels=deliveryService.selectListForDetail(delivery.getSerialNum());
+		  	  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels){
+				  for(OrderMateriel vo:orderMateriel){
+					  if(deliveryMateriel.getOrderMaterielSerial().equals(vo.getSerialNum())){//两个订单物料流水相同时
+						  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+						  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+						  if(deliverCount.compareTo(canDeliverCount)>0){
+							  flags=true;
+							  map1.put("flag", flags);
+							  return map1;
+						  }
+					  }
+				  }
+			  }
     	try{
     		if(StringUtils.isNotEmpty(serialNum)){
-    			Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(serialNum);
     			delivery.setStatus("1");
     			TakeDelivery takeDelivery = new TakeDelivery();
     			takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
@@ -1316,9 +1441,10 @@ public class TakeDeliveryController {
     		}
     	}catch(Exception e){
     		logger.warn(e.getMessage(), e);
-    		flag = "1";
+    		flags1 = "1";
     	}
-    	return flag;
+    	map1.put("flags1", flags1);
+    	return map1;
  }
 
 }

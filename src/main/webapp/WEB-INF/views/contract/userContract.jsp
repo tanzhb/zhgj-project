@@ -1,14 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <div class="tabbable-line">
-	<ul class="nav nav-tabs" id="statement_tab">
+	<ul class="nav nav-tabs" id="contract_tab">
+	<shiro:hasPermission name="zhgj:saleContract">
 		<li><a data-target="#tab_15_2" data-toggle="tab">销售合同</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:buyContract">
 		<li><a data-target="#tab_15_3" data-toggle="tab">采购合同</a></li>
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:otherContract">
+		<li class=""><a data-target="#tab_15_1" data-toggle="tab">其他合同</a>
 		</li>
+		</shiro:hasPermission>
 	</ul>
 	<div class="tab-content">
-		<div class="tab-pane active" id="tab_15_1">
+		<div class="tab-pane" id="tab_15_1">
 			<div class="row">
 				<div class="col-md-12">
 
@@ -31,9 +38,10 @@
 							<div class="actions" ng-controller='MyCtrl'>
 								<label class="btn btn-transparent green btn-circle btn-sm"
 									ng-click="jumpToUrl('addUserContract')"><i
-									class="fa fa-plus"></i> 添加</label> <label
+									class="fa fa-plus"></i> 添加</label> 
+								<label
 									class="btn btn-transparent purple btn-circle btn-sm"
-									ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改
+									ng-click="jumpToEdit(1)"> <i class="fa fa-edit"></i>修改
 								</label> <label class="btn btn-transparent red btn-circle btn-sm"
 									ng-click="del()"> <i class="fa fa-minus"></i> 删除
 								</label> <label
@@ -119,6 +127,9 @@
 									class="btn btn-transparent green btn-outline btn-circle btn-sm"
 									data-toggle="modal" ng-click="saleOrderSign()"><i
 									class="fa fa-pencil"></i>签订</label>
+							<label
+									class="btn btn-transparent purple btn-circle btn-sm"
+									ng-click="jumpToEdit(2)"> <i class="fa fa-edit"></i>修改</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportSaleContract()"> <i
@@ -213,6 +224,9 @@
 									class="btn btn-transparent green btn-outline btn-circle btn-sm"
 									data-toggle="modal" ng-click="buyOrderSign()"><i
 									class="fa fa-pencil"></i>签订</label>
+									<label
+									class="btn btn-transparent purple btn-circle btn-sm"
+									ng-click="jumpToEdit(3)"> <i class="fa fa-edit"></i>修改</label>
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportBuyContract()"> <i
@@ -423,23 +437,28 @@
 				<div class="row" style="line-height: 60px;">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">电子合同</label> <label
+							<label class="control-label col-md-5">电子合同</label> 
+							<!-- <label
 								class="control-label col-md-7"> <a
 								title="{{contractVO.electronicContract}}"
 								ng-click="download(contractVO.electronicContract)">
 									{{contractVO.electronicContract|limitTo:10}}... </a>
-							</label>
-
+							</label> -->
+							<label ng-if="contractVO.electronicContract==null||contractVO.electronicContract==''" class="c_edit" >未上传附件</label>
+						    <label ng-if="contractVO.electronicContract!=null&&contractVO.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="download(contractVO.electronicContract)">{{contractVO.electronicContract.substring(contractVO.electronicContract.indexOf("_")+1)}}</a></label>
 						</div>
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label class="control-label col-md-5">签字合同</label> <label
+							<label class="control-label col-md-5">签字合同</label> 
+							<!-- <label
 								class="control-label col-md-7"> <a
 								title="{{contractVO.signContract}}"
 								ng-click="download(contractVO.signContract)">
 									{{contractVO.signContract|limitTo:10}}... </a>
-							</label>
+							</label> -->
+							<label ng-if="contractVO.signContract==null||contractVO.signContract==''" class="c_edit" >未上传附件</label>
+						    <label ng-if="contractVO.signContract!=null&&contractVO.signContract!=''" class="c_edit" ><a href="javascript:;" ng-click="download(contractVO.signContract)">{{contractVO.signContract.substring(contractVO.signContract.indexOf("_")+1)}}</a></label>
 
 						</div>
 					</div>

@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,8 +27,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
+import org.hibernate.id.GUIDGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.http.HttpStatus;
@@ -43,8 +48,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -54,6 +61,8 @@ import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
+import com.congmai.zhgj.web.model.BOMMateriel;
+import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
@@ -65,8 +74,16 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.ContractFile;
+import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.Invoice;
+import com.congmai.zhgj.web.model.LadderPrice;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -74,6 +91,10 @@ import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PriceList;
+import com.congmai.zhgj.web.model.ProcurementPlan;
+import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
@@ -84,14 +105,22 @@ import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.InvoiceService;
+import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
+import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
+import com.congmai.zhgj.web.service.ProcurementPlanService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
 
@@ -132,6 +161,8 @@ public class OrderController {
     @Resource
     private OrderFileService orderFileService;
     @Resource
+    private ContractFileService contractFileService;
+    @Resource
     private ClauseFrameworkService clauseFrameworkService;
     @Resource
     private UserCompanyService userCompanyService;
@@ -143,6 +174,16 @@ public class OrderController {
     private DemandPlanMaterielService demandPlanMaterielService;
     @Resource
     private CompanyService companyService;
+    @Resource
+    private StockService stockService;
+    @Resource
+    private PriceListService  priceListService;
+    @Resource
+    private LadderPriceService  ladderPriceService;
+    @Resource
+    private InvoiceService  invoiceService;
+    @Autowired
+	private DeliveryMaterielService deliveryMaterielService;
     
     
 	//销售订单
@@ -340,6 +381,7 @@ public class OrderController {
     	String flag = "0"; //默认失败
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
+    	orderInfo.setStatus("1");//在未确认状态提交申请的订单，设置为已确认
     	orderService.updateStatus(orderInfo);//更新备注
     	
 		//启动订单审批测试流程-start
@@ -355,7 +397,20 @@ public class OrderController {
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		try {
+			OrderInfo orderInfo2 = orderService.selectById(orderInfo.getSerialNum());
+			orderInfo.setSupplyComId(orderInfo2.getSupplyComId());
 			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(orderInfo.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
 //                message.setStatus(Boolean.TRUE);
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
@@ -412,6 +467,17 @@ public class OrderController {
 		orderInfo.setBusinessKey(businessKey);
 		try {
 			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(orderInfo.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
 //                message.setStatus(Boolean.TRUE);
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
@@ -450,20 +516,26 @@ public class OrderController {
     public @ResponseBody Map<String, Object> toApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
     	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
 		// 根据任务查询流程实例
-    	String processInstanceId = task.getProcessInstanceId();
-		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-		OrderInfo orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
-		orderInfo.setTask(task);
-		orderInfo.setProcessInstanceId(processInstanceId);
-		List<CommentVO> commentList = this.processService.getComments(processInstanceId);
-		String taskDefinitionKey = task.getTaskDefinitionKey();
-		logger.info("taskDefinitionKey: "+taskDefinitionKey);
-		String result = null;
-		if("modifyApply".equals(taskDefinitionKey)){
-			result = "modify";
-		}else{
-			result = "audit";
-		}
+    	OrderInfo orderInfo = new OrderInfo();
+    	List<CommentVO> commentList = new ArrayList<CommentVO>();
+    	String result = null;
+    	if(task!=null){
+    		String processInstanceId = task.getProcessInstanceId();
+    		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    		orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
+    		orderInfo.setTask(task);
+    		orderInfo.setProcessInstanceId(processInstanceId);
+    		commentList = this.processService.getComments(processInstanceId);
+    		String taskDefinitionKey = task.getTaskDefinitionKey();
+    		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+    		
+    		if("modifyApply".equals(taskDefinitionKey)){
+    			result = "modify";
+    		}else{
+    			result = "audit";
+    		}
+    	}
+    	
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("actionType", result);
 		map.put("orderInfo", orderInfo);
@@ -509,16 +581,18 @@ public class OrderController {
     		}else{
     			order.setStatus(BaseVO.PENDING);					//审批中
     		}
-    		// 完成任务
-    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
-    		
+    		// 完成任务，返回当前节点定义
+    		String taskDefinitionKey = this.processService.complete(taskId, content, user.getUserId().toString(), variables);
     		
     		ProcessInstance pi = null;
     		if(completeFlag){
     			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
     			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
     			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-    			if(BeanUtils.isBlank(pi)){
+    			/*if(BeanUtils.isBlank(pi)){
+    				order.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}*/
+    			if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
     				order.setStatus(BaseVO.APPROVAL_SUCCESS);
     			}
     		}
@@ -528,13 +602,32 @@ public class OrderController {
     		if(BaseVO.APPROVAL_SUCCESS.equals(order.getStatus())){//订单完成，需更新状态为1(订单待接收)
     			OrderInfo oi = new OrderInfo();
     			oi.setSerialNum(order.getSerialNum());
-    			if(oi.getSupplyComId()==null){
-    				oi.setStatus("3");
-    			}else{
-    				oi.setStatus("1");
-    			}
+    			
+    			//获取合同信息
+    	    	ContractVO contract = null;
+    			if(StringUtils.isNotEmpty(order.getContractSerial())){
+    	    		contract=contractService.selectConbtractById(order.getContractSerial());
+    	    	}
+    	    	if(contract!=null){
+    	    		if(StaticConst.getInfo("buyOrder").equals(contract.getContractType())){//采购订单
+    	    			oi.setStatus("2");//跳过合同签订
+    	    		}else if(StaticConst.getInfo("saleOrder").equals(contract.getContractType())){//销售订单
+    	    			oi.setStatus("2");//跳过合同签订
+    	    		}else if(StaticConst.getInfo("buyContract").equals(contract.getContractType())){//采购合同
+    	    			oi.setStatus("2");//不在合同签订了
+    	    		}else if(StaticConst.getInfo("saleContract").equals(contract.getContractType())){//销售合同
+    	    			oi.setStatus("2");//不在合同签订了
+    	    		}
+    	    	}
+    			
     			this.orderService.updateStatus(oi);
+    			//自主销售订单审批完成，分解BOM
+    			if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
+    				saleGenerateProcurementPlan(order.getSerialNum());
+	    		}
+        		
     		}
+    		
     		
     		order.setProcessInstanceId(processInstanceId);
     		//发送消息
@@ -542,16 +635,16 @@ public class OrderController {
     			//采购订单驳回消息
     		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_BUY_ORDER));
     		}else{
-    			if(BeanUtils.isBlank(pi)){
+    			//给中间审批人发消息
+				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
+				//给制单人发送消息
+				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
+    			/*if(BeanUtils.isBlank(pi)){*/
+				if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
     				//采购订单审核通过消息
         		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
         		    //采购订单待确认（发给供应商）
         		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
-    			}else{
-    				//给中间审批人发消息
-    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
-    				//给制单人发送消息
-    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
     			}
     		}
     		result = "任务办理完成！";
@@ -633,6 +726,8 @@ public class OrderController {
 			        //申请消息
 				   orderInfo = orderService.selectById(orderInfo.getSerialNum());
 				   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_BUY_ORDER));
+			}else{
+				cancelApply(orderInfo.getSerialNum(),taskId);
 			}
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
@@ -653,6 +748,94 @@ public class OrderController {
 		
     	return result;
     }
+
+	/**
+	 * 
+	 * @Description (取消申请)
+	 * @param serialNum
+	 */
+	private void cancelApply(String serialNum,String taskId) {
+		this.processBaseService.delete(serialNum);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+		HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+		historicTaskVO.setTaskId(taskId);
+		historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+		processBaseService.updateHistoricTask(historicTaskVO);
+		OrderInfo m = new OrderInfo();
+		m.setStatus("0");//取消申请订单回到审批前状态
+		m.setSerialNum(serialNum);
+		m.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		m.setUpdater(currenLoginName);
+		orderService.updateStatus(m);
+		
+	}
+	
+	
+	/**
+	 * 
+	 * @Description (取消申请)
+	 * @param serialNum
+	 */
+	private void cancelFrameApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+		ContractVO m = new ContractVO();
+		m.setStatus("0");//取消申请框架回到审批前状态
+		m.setId(id);
+		m.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		m.setUpdater(currenLoginName);
+		contractService.update(m);
+	}
+	/**
+	 * 
+	 * @Description (取消申请)
+	 * @param serialNum
+	 */
+	private void cancelPriceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+		PriceList p = new PriceList();
+		p.setStatus("0");//取消申请价格回到审批前状态
+		p.setSerialNum(id);
+		p.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		p.setUpdater(currenLoginName);
+		priceListService.update(p);
+	}
+	/**
+	 * 
+	 * @Description (取消发票)
+	 * @param serialNum
+	 */
+	private void cancelInvoiceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+				Invoice i= new Invoice();
+		i .setStatus("0");//取消申请价格回到审批前状态
+		i.setSerialNum(id);
+		i.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		i.setUpdater(currenLoginName);
+		invoiceService.update(i);
+	}
     /**
      * 
      * @Description (各类订单列表查询)
@@ -717,6 +900,81 @@ public class OrderController {
     }
 
     /**
+     * 
+     * @Description (各类框架列表查询)
+     * @param type（只分为销售：sale，采购:buy两种）
+     * @param selectFor(自定义参数值，用于控制生成查询sql)
+     * @return
+     */
+    @RequestMapping("/findFrameList")
+    @ResponseBody
+    public ResponseEntity<Map> findFrameList(String type,String selectFor,String comId) {
+    	List<ContractVO> contractList = new ArrayList<ContractVO>();
+    	
+    	ContractVO parm =new ContractVO();
+    	if(SALEORDER.equals(type)){//查找公司销售订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_SALEFRAME.getInfo());
+    	}else if(BUYORDER.equals(type)){//查找公司采购订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_BUYFRAME.getInfo());
+    	}
+    	
+    	parm.setStatus(selectFor);
+    	if(comId==null){
+    		User user = UserUtil.getUserFromSession();
+        	if(user!=null){
+    			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    		}
+    	}
+    	parm.setComId(comId);
+    	contractList = contractService.selectList(parm);
+    	
+    	//封装datatables数据返回到前台
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", contractList==null?0:contractList.size());
+		pageMap.put("recordsFiltered", contractList==null?0:contractList.size());
+		pageMap.put("data", contractList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+    }
+    
+    /**
+     * 
+     * @Description (各类框架列表查询)
+     * @param type（只分为销售：sale，采购:buy两种）
+     * @param selectFor(自定义参数值，用于控制生成查询sql)
+     * @return
+     */
+    @RequestMapping("/findDefaultFrame")
+    @ResponseBody
+    public ContractVO findDefaultFrame(String type,String selectFor,String comId) {
+    	List<ContractVO> contractList = new ArrayList<ContractVO>();
+    	
+    	ContractVO parm =new ContractVO();
+    	if(SALEORDER.equals(type)){//查找公司销售订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_SALEFRAME.getInfo());
+    	}else if(BUYORDER.equals(type)){//查找公司采购订单
+    		parm.setContractType(StaticConst.CONTRACT_TYPE_BUYFRAME.getInfo());
+    	}
+    	
+    	parm.setStatus(selectFor);
+    	if(comId==null){
+    		User user = UserUtil.getUserFromSession();
+        	if(user!=null){
+    			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    		}
+    	}
+    	parm.setComId(comId);
+    	contractList = contractService.selectList(parm);
+    	if(CollectionUtils.isEmpty(contractList)){
+    		return null;
+    	}else{
+    		return contractList.get(0);
+    	}
+    	
+		
+    }
+    /**
 	 * 
 	 * @Description 批量删除订单
 	 * @param ids
@@ -756,20 +1014,38 @@ public class OrderController {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
     	map.put("orderInfo", orderInfo);
+    	List<OrderMateriel> orderMateriel=null;
     	
-    	OrderMaterielExample m =new OrderMaterielExample();
+   	OrderMaterielExample m =new OrderMaterielExample();
     	//and 条件1
     	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
     	criteria.andDelFlgEqualTo("0");
     	criteria.andOrderSerialEqualTo(serialNum);
     	m.setOrderByClause(" sort asc");
-    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	orderMateriel = orderMaterielService.selectList(m);
+    	
+    	if(orderMateriel!=null){
+			for (int i = 0; i < orderMateriel.size(); i++) {//设置所选基本物料的自建库存数量
+				if(orderMateriel.get(i).getMateriel()!=null){
+					Materiel m1 = orderMateriel.get(i).getMateriel();
+					String inCountString = stockService.getCountInAmountForZijian(m1.getSerialNum());
+    				String outCountString = stockService.getCountOutAmountForZijian(m1.getSerialNum());
+    				m1.setStockCount(
+    						(Integer.parseInt(inCountString==null?"0":inCountString)
+    								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+				}
+				
+				
+			}
+		}
     	map.put("orderMateriel", orderMateriel);
     	
     	//获取合同信息
     	ContractVO contract = null;
 		if(StringUtils.isNotEmpty(orderInfo.getContractSerial())){
     		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}else{
+    		map.put("clauseDelivery", null);
     	}
     	map.put("contract", contract);
     	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
@@ -811,6 +1087,54 @@ public class OrderController {
 	
 	
 	/**
+	 * 
+	 * @Description 获取框架协议信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getFrameInfo")
+	@ResponseBody
+	public Map getFrameInfo(String serialNum) {
+		Map<String, Object> map = new HashMap<String, Object>();
+    	//获取合同信息
+    	ContractVO contract=contractService.selectConbtractById(serialNum);
+    	map.put("contract", contract);
+    	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    		//获取合同条款信息
+    		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
+    		map.put("clauseAfterSales", clauseAfterSales);
+    		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
+    		map.put("clauseAdvance", clauseAdvance);
+    		ClauseCheckAccept clauseCheckAccept = clauseCheckAcceptService.selectByContractId(contract.getId());
+    		map.put("clauseCheckAccept", clauseCheckAccept);
+    		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		map.put("clauseDelivery", clauseDelivery);
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		map.put("clauseSettlement", clauseSettlement);
+    		
+        	//查询框架合同
+//        	if(StaticConst.getInfo("framContract").equals(contract.getContractType())){//如果是框架合同
+//        		ClauseFrameworkExample mf =new ClauseFrameworkExample();
+//    	    	com.congmai.zhgj.web.model.ClauseFrameworkExample.Criteria criteriaf =  mf.createCriteria();
+//    	    	criteriaf.andContractSerialEqualTo(contract.getId());
+//    	    	criteriaf.andDelFlgEqualTo("0");
+//    	    	List<ClauseFramework> ClauseFramework = clauseFrameworkService.selectList(mf);
+//    	    	map.put("ClauseFramework", ClauseFramework);
+//        	}
+    	}
+    	
+//    	获取合同附件
+    	ContractFileExample om =new ContractFileExample();
+    	com.congmai.zhgj.web.model.ContractFileExample.Criteria criteria2 =  om.createCriteria();
+    	criteria2.andContractSerialEqualTo(serialNum);
+    	criteria2.andDelFlgEqualTo("0");
+    	List<ContractFile> file = contractFileService.selectList(om);
+    	map.put("file", file);
+    	
+    	return map;
+	}
+	
+	/**
      * @Description (保存订单物料信息)
      * @param request
      * @return
@@ -839,7 +1163,7 @@ public class OrderController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	orderMateriel = orderMaterielService.selectById(orderMateriel.getSerialNum());
@@ -898,7 +1222,7 @@ public class OrderController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return materiel;
@@ -919,7 +1243,7 @@ public class OrderController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		
     	}
     	return flag;
@@ -933,24 +1257,76 @@ public class OrderController {
 	 */
 	@RequestMapping(value = "/saveContract", method = RequestMethod.POST)
 	@ResponseBody
-	public ContractVO saveContract(@RequestBody ContractVO contract, HttpServletRequest request) {
-		if(contract.getId()==null||contract.getId().isEmpty()){//新增
-			contract.setId(ApplicationUtils.random32UUID());
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setCreator(currenLoginName);
-    		contract.setUpdater(currenLoginName);
-    		contract.setCreateTime(new Date());
-    		contract.setUpdateTime(new Date());
+	public ContractVO saveContract(@RequestBody String params, HttpServletRequest request) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+			if(contract.getId()==null||contract.getId().isEmpty()){//新增
+				contract.setId(ApplicationUtils.random32UUID());
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setCreator(currenLoginName);
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setCreateTime(new Date());
+	    		contract.setUpdateTime(new Date());
+	    		contract.setStatus(ContractVO.WAIT_SIGN);
 
-    		orderService.insertContract(contract);
-    	}else{//更新
-    		Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		contract.setUpdater(currenLoginName);
-    		contract.setUpdateTime(new Date());
-    		orderService.updateContract(contract);
-    	}
+	    		orderService.insertContract(contract);
+	    	}else{//更新
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setUpdateTime(new Date());
+	    		orderService.updateContract(contract);
+	    	}
+			contract = contractService.selectConbtractById(contract.getId());
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
+		return contract;
+	}
+	
+	
+	/**
+	 * 保存框架
+	 * @param contract（框架对象）
+	 * @param request（http 请求对象）
+	 * @return 操作结果
+	 */
+	@RequestMapping(value = "/saveFrame", method = RequestMethod.POST)
+	@ResponseBody
+	public ContractVO saveFrame(@RequestBody String params, HttpServletRequest request) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+			if(contract.getId()==null||contract.getId().isEmpty()){//新增
+				contract.setId(ApplicationUtils.random32UUID());
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setSigner(currenLoginName);
+	    		contract.setCreator(currenLoginName);
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setCreateTime(new Date());
+	    		contract.setUpdateTime(new Date());
+	    		contract.setStatus(ContractVO.INIT);
+	    		orderService.insertContract(contract);
+	    	}else{//更新
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		contract.setUpdater(currenLoginName);
+	    		contract.setUpdateTime(new Date());
+	    		contractService.update(contract);
+	    	}
+			contract = contractService.selectConbtractById(contract.getId());
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		return contract;
 	}
     
@@ -1166,6 +1542,43 @@ public class OrderController {
 		    	}
 		    	//填充File******↑↑↑↑↑↑********
 		    	orderFileService.betchInsertOrderFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
+    
+    /**
+     * 
+     * @Description 保存合同附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveFrameFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveFrameFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, ContractFile.class);  
+        List<ContractFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(ContractFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setUploadDate(new Date());
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	contractFileService.betchInsertContractFiles(file);
 		    	//数据插入******↑↑↑↑↑↑********
 	        }
 		} catch (Exception e) {
@@ -1411,7 +1824,6 @@ public class OrderController {
     @RequestMapping("/findOrderLog")
     @ResponseBody
     public ResponseEntity<Map> findOrderLog(String serialNum) {
-    	//MaterielExample m =new MaterielExample();
     	OperateLogExample m =new OperateLogExample();
     	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
     	
@@ -1669,6 +2081,7 @@ public class OrderController {
     				newcontract.setUpdater(currenLoginName);
     				newcontract.setCreateTime(new Date());
     				newcontract.setUpdateTime(new Date());
+    				newcontract.setStatus(ContractVO.WAIT_SIGN);
     				
     				contractService.insertContract(newcontract);
     			}
@@ -1788,4 +2201,858 @@ public class OrderController {
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
 		return orderInfo;
 	}
+	
+	
+	@Resource
+    private ProcurementPlanService procurementPlanService;
+    @Resource
+    private ProcurementPlanMaterielService procurementPlanMaterielService;
+    
+    @Resource
+    private com.congmai.zhgj.web.service.BOMMaterielService BOMMaterielService;
+	/**
+	 * 
+	 * @Description 销售订单生成采购计划
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/saleGenerateProcurementPlan")
+	@ResponseBody
+	public OrderInfo saleGenerateProcurementPlan(String serialNum) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		OrderInfo orderInfo = orderService.selectById(serialNum);
+    	
+    	OrderMaterielExample m =new OrderMaterielExample();
+    	//and 条件1
+    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+    	criteria.andDelFlgEqualTo("0");
+    	criteria.andOrderSerialEqualTo(serialNum);
+    	m.setOrderByClause(" sort asc");
+    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	
+    	String numCode = getNumCode("PL");//生成的采购单号
+    	
+		String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购计划流水号
+		ProcurementPlan newProcurementPlan = new ProcurementPlan();
+		newProcurementPlan.setSerialNum(newSerialNum);//设置新的流水号
+		
+		newProcurementPlan.setProcurementPlanNum(numCode);
+		newProcurementPlan.setSaleOrderSerial(serialNum);
+		newProcurementPlan.setCreator(currenLoginName);
+		newProcurementPlan.setUpdater(currenLoginName);
+		newProcurementPlan.setCreateTime(new Date());
+		newProcurementPlan.setUpdateTime(new Date());
+		newProcurementPlan.setStatus("0");
+		
+		List<ProcurementPlanMateriel> newMaterielList = new ArrayList<ProcurementPlanMateriel>();//生成新的采购订单物料
+		Double materielCount = 0D;
+		for(OrderMateriel o:orderMateriel){
+			
+			if("1".equals(o.getMateriel().getIsBOM())){//如果是bom物料
+		    	BOMMaterielExample m1 =new BOMMaterielExample();
+		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria1 =  m1.createCriteria();
+		    	criteria1.andBomMaterielSerialEqualTo(o.getMateriel().getSerialNum());
+		    	List<BOMMateriel> BOM = BOMMaterielService.selectList(m1);
+		    	if(CollectionUtils.isEmpty(BOM)){
+		    		ProcurementPlanMateriel pMateriel = new ProcurementPlanMateriel();
+	    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
+	    			pMateriel.setMaterielSerial(o.getMaterielSerial());//采购订单物料为标准物料
+	    			pMateriel.setProcurementPlanSerial(newSerialNum);
+	    			pMateriel.setPlanCount(o.getAmount());
+	    			pMateriel.setBuyCount(o.getAmount());
+	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
+	    			
+	    			
+	    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
+	    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
+	    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
+	    			pMateriel.setCreator(currenLoginName);
+	    			pMateriel.setUpdater(currenLoginName);
+	    			pMateriel.setCreateTime(new Date());
+	    			pMateriel.setUpdateTime(new Date());
+	    			
+	    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+	    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+	    			}
+	    			
+	    			newMaterielList.add(pMateriel);
+		    	}else{
+		    		
+		    		for(BOMMateriel b:BOM){
+		    			ProcurementPlanMateriel pMateriel = new ProcurementPlanMateriel();
+		    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
+		    			pMateriel.setMaterielSerial(b.getMaterielSerial());//采购订单物料为标准物料
+		    			pMateriel.setProcurementPlanSerial(newSerialNum);
+		    			pMateriel.setPlanCount(
+		    					String.valueOf(Double.parseDouble(o.getAmount()==null?"0":o.getAmount())
+		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
+		    			pMateriel.setBuyCount(
+		    					String.valueOf(Double.parseDouble(o.getAmount()==null?"0":o.getAmount())
+		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
+		    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
+		    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
+		    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
+		    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
+		    			pMateriel.setCreator(currenLoginName);
+		    			pMateriel.setUpdater(currenLoginName);
+		    			pMateriel.setCreateTime(new Date());
+		    			pMateriel.setUpdateTime(new Date());
+		    			
+		    			if(b.getMateriel()!=null&& !CollectionUtils.isEmpty(b.getMateriel().getSupplyMateriels())){
+		    				pMateriel.setSupplyMaterielSerial((b.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+		    			}
+		    			newMaterielList.add(pMateriel);
+		    		}
+		    	}
+	    	}else{
+	    		ProcurementPlanMateriel pMateriel = new ProcurementPlanMateriel();
+    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
+    			pMateriel.setMaterielSerial(o.getMaterielSerial());//采购订单物料为标准物料
+    			pMateriel.setProcurementPlanSerial(newSerialNum);
+    			pMateriel.setPlanCount(o.getAmount());
+    			pMateriel.setBuyCount(o.getAmount());
+    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
+    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
+    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
+    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
+    			pMateriel.setCreator(currenLoginName);
+    			pMateriel.setUpdater(currenLoginName);
+    			pMateriel.setCreateTime(new Date());
+    			pMateriel.setUpdateTime(new Date());
+    			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
+    				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
+    			}
+    			newMaterielList.add(pMateriel);
+	    	}
+			
+			
+		}
+		newProcurementPlan.setBuyCount(String.valueOf(materielCount));
+		procurementPlanService.insert(newProcurementPlan);
+		procurementPlanMaterielService.betchInsertProcurementPlanMateriel(newMaterielList);//插入新的订单物料
+	
+    		
+		OrderInfo updateOrderInfo = new OrderInfo();//修改销售订单的关联采购订单号
+		updateOrderInfo.setSerialNum(serialNum);
+		updateOrderInfo.setOrderSerial(numCode);
+		orderService.updateOrderRelation(updateOrderInfo);
+    	
+    	orderInfo = orderService.selectById(orderInfo.getSerialNum());
+		return orderInfo;
+	}
+	/**
+	 * 
+	 * @Description 复制订单
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/copyOrderInfo")
+	@ResponseBody
+	public void copyOrderInfo(String serialNum) {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		
+		OrderInfo orderInfo = orderService.selectById(serialNum);
+    	
+    	OrderMaterielExample m =new OrderMaterielExample();
+    	//and 条件1
+    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+    	criteria.andDelFlgEqualTo("0");
+    	criteria.andOrderSerialEqualTo(serialNum);
+    	m.setOrderByClause(" sort asc");
+    	List<OrderMateriel> orderMateriel = orderMaterielService.selectList(m);
+    	
+		String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购订单流水号
+		String newContractSerialNum = ApplicationUtils.random32UUID();//生成新的采购合同流水号
+		OrderInfo newOrderInfo = new OrderInfo();//生成新的采购订单
+		beanCopier.copy(orderInfo, newOrderInfo, null);
+		newOrderInfo.setSerialNum(newSerialNum);//设置新的流水号
+		newOrderInfo.setStatus("0");
+		String comId = null;
+    	User user = UserUtil.getUserFromSession();
+    	if(user!=null){
+			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+			if(comId!=null){//采购商新建订单
+				newOrderInfo.setStatus(OrderInfo.CUSTOMER);
+			}
+		}
+    	String temp = getNumCode("SO");
+    	if(newOrderInfo.getSupplyComId()!=null){
+    		temp = getNumCode("PO");
+    	}
+		
+		newOrderInfo.setOrderNum(temp);
+		newOrderInfo.setContractSerial(newContractSerialNum);
+		newOrderInfo.setCreator(currenLoginName);
+		newOrderInfo.setUpdater(currenLoginName);
+		newOrderInfo.setMaker(currenLoginName);
+		newOrderInfo.setCreateTime(new Date());
+		newOrderInfo.setUpdateTime(new Date());
+		newOrderInfo.setMakeDate(new Date());
+		newOrderInfo.setDeliveryCount(null);
+		newOrderInfo.setPayAmount(null);
+		newOrderInfo.setDemandPlanSerial(null);
+		newOrderInfo.setSaleApplySerial(null);
+		newOrderInfo.setOrderSerial(null);
+		newOrderInfo.setDeliverStatus(null);
+		newOrderInfo.setPayStatus(null);
+		newOrderInfo.setBillStatus(null);
+		
+		orderService.insert(newOrderInfo);
+		List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
+		for(OrderMateriel o:orderMateriel){
+			o.setSerialNum(ApplicationUtils.random32UUID());
+			o.setOrderSerial(newSerialNum);
+    		o.setCreator(currenLoginName);
+			o.setUpdater(currenLoginName);
+			o.setCreateTime(new Date());
+			o.setUpdateTime(new Date());
+			o.setDemandPlanMaterielSerial(null);
+			newMaterielList.add(o);
+		}
+		orderMaterielService.betchInsertOrderMateriel(newMaterielList);//插入新的订单物料
+
+		//获取合同信息
+    	ContractVO contract = null;
+		if(StringUtils.isNotEmpty(orderInfo.getContractSerial())){
+    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}
+		if(contract!=null){
+			ContractVO newcontract = new ContractVO();
+			beanContractVOCopier.copy(contract, newcontract, null);
+			newcontract.setId(newContractSerialNum);
+//			newcontract.setComId(supplyComId);
+			newcontract.setContractNum(getNumCode("CA"));
+//			newcontract.setContractType(StaticConst.getInfo("buyContract"));//设置合同类型为采购合同
+			newcontract.setCreator(currenLoginName);
+			newcontract.setUpdater(currenLoginName);
+			newcontract.setCreateTime(new Date());
+			newcontract.setUpdateTime(new Date());
+			newcontract.setStatus(ContractVO.WAIT_SIGN);
+			
+			contractService.insertContract(newcontract);
+		}
+
+    	if(contract!=null&&StringUtils.isNotEmpty(contract.getId())){
+    		//获取合同条款信息
+    		ClauseAfterSales clauseAfterSales = clauseAfterSalesService.selectByContractId(contract.getId());
+    		if(clauseAfterSales!=null){
+    			clauseAfterSales.setSerialNum(ApplicationUtils.random32UUID());
+    			clauseAfterSales.setContractSerial(newContractSerialNum);
+        		clauseAfterSales.setCreator(currenLoginName);
+        		clauseAfterSales.setUpdater(currenLoginName);
+        		clauseAfterSales.setCreateTime(new Date());
+        		clauseAfterSales.setUpdateTime(new Date());
+        		clauseAfterSalesService.insert(clauseAfterSales);
+    		}
+    			
+    		ClauseAdvance clauseAdvance = clauseAdvanceService.selectByContractId(contract.getId());
+    		if(clauseAdvance!=null){
+    			clauseAdvance.setSerialNum(ApplicationUtils.random32UUID());
+    			clauseAdvance.setContractSerial(newContractSerialNum);
+        		clauseAdvance.setCreator(currenLoginName);
+        		clauseAdvance.setUpdater(currenLoginName);
+        		clauseAdvance.setCreateTime(new Date());
+        		clauseAdvance.setUpdateTime(new Date());
+        		clauseAdvanceService.insert(clauseAdvance);
+    		}
+    		ClauseCheckAccept clauseCheckAccept = clauseCheckAcceptService.selectByContractId(contract.getId());
+    		if(clauseCheckAccept!=null){
+    			clauseCheckAccept.setSerialNum(ApplicationUtils.random32UUID());
+    			clauseCheckAccept.setContractSerial(newContractSerialNum);
+        		clauseCheckAccept.setCreator(currenLoginName);
+        		clauseCheckAccept.setUpdater(currenLoginName);
+        		clauseCheckAccept.setCreateTime(new Date());
+        		clauseCheckAccept.setUpdateTime(new Date());
+        		clauseCheckAcceptService.insert(clauseCheckAccept);
+    		}
+    		ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		if(clauseDelivery!=null){
+    			clauseDelivery.setSerialNum(ApplicationUtils.random32UUID());
+    			clauseDelivery.setContractSerial(newContractSerialNum);
+        		clauseDelivery.setCreator(currenLoginName);
+        		clauseDelivery.setUpdater(currenLoginName);
+        		clauseDelivery.setCreateTime(new Date());
+        		clauseDelivery.setUpdateTime(new Date());
+
+        		clauseDeliveryService.insert(clauseDelivery);
+    		}
+    		
+    		ClauseSettlement clauseSettlement = clauseSettlementService.selectByContractId(contract.getId());
+    		if(clauseSettlement!=null){
+    			clauseSettlement.setSerialNum(ApplicationUtils.random32UUID());
+    			clauseSettlement.setContractSerial(newContractSerialNum);
+        		clauseSettlement.setCreator(currenLoginName);
+        		clauseSettlement.setUpdater(currenLoginName);
+        		clauseSettlement.setCreateTime(new Date());
+        		clauseSettlement.setUpdateTime(new Date());
+
+        		clauseSettlementService.insert(clauseSettlement);
+        		
+        		List<ClauseSettlementDetail> clauseSettlementDetail = clauseSettlement.getClauseSettlementDetails();
+				if(!CollectionUtils.isEmpty(clauseSettlementDetail)){
+			    	for(ClauseSettlementDetail f:clauseSettlementDetail){
+			    		f.setSerialNum(ApplicationUtils.random32UUID());
+			    		f.setClauseSettlementSerial(clauseSettlement.getSerialNum());
+			    		f.setCreator(currenLoginName);
+		    			f.setUpdater(currenLoginName);
+		    			f.setCreateTime(new Date());
+		    			f.setUpdateTime(new Date());
+			    	}
+			    	clauseSettlementDetailService.betchInsertClauseSettlementDetails(clauseSettlementDetail);
+			    	//数据插入******↑↑↑↑↑↑********
+		        }
+    		}
+    	}
+	}
+	
+	
+	/**
+     * 
+     * @Description (启动采购框架流程)
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/startBuyFrameProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public String startBuyFrameProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e1) {
+			return flag;
+		} 
+		String remarkString = contract.getRemark();
+		contract.setRemark(null);
+    	contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+    	contractService.update(contract);
+    	
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		contract.setUserId(user.getUserId());
+		contract.setUser_name(user.getUserName());
+		contract.setTitle(user.getUserName()+" 的采购框架申请");
+		contract.setBusinessType(BaseVO.BUYFRAME); 			//业务类型：采购框架
+		contract.setStatus(BaseVO.PENDING);					//审批中
+		contract.setApplyDate(new Date());
+		contract.setReason(remarkString);
+		contract.setSerialNum(contract.getId());
+    	processBaseService.insert(contract);
+    	
+    	
+		String businessKey = contract.getId().toString();
+		contract.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startBuyFramerProcess(contract);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(contract.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    
+		    flag = "1";
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+		return flag;
+	}
+    
+    
+    /**
+     * 
+     * @Description (启动销售框架流程)
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/startSaleFrameProcess", method = RequestMethod.POST)
+    @ResponseBody
+    public String startSaleFrameProcess(@RequestBody String params) {
+    	String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e1) {
+			return flag;
+		}
+		
+		String remarkString = contract.getRemark();
+		contract.setRemark(null);
+    	contract.setStatus(contract.APPING);//在未确认状态提交申请的订单，设置为已确认
+    	contractService.update(contract);
+    	
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		contract.setUserId(user.getUserId());
+		contract.setUser_name(user.getUserName());
+		contract.setTitle(user.getUserName()+" 的销售框架申请");
+		contract.setBusinessType(BaseVO.SALEFRAME); 			//业务类型：销售框架
+		contract.setStatus(BaseVO.PENDING);					//审批中
+		contract.setApplyDate(new Date());
+		contract.setReason(remarkString);
+		contract.setSerialNum(contract.getId());
+    	processBaseService.insert(contract);
+		String businessKey = contract.getId().toString();
+		contract.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startSaleFramerProcess(contract);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(contract.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    flag = "1";
+		} catch (ActivitiException e) {
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
+		} catch (Exception e) {
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
+		}
+        //启动订单审批测试流程-end
+		return flag;
+	}
+    
+    
+    /**
+     * 审批框架协议流程
+     * @param taskId
+     * @param model
+     * @return
+     * @throws NumberFormatException
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:toApproval") 	//*代表 经理、总监、人力
+    @RequestMapping(value = "/toFrameApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+    public @ResponseBody Map<String, Object> toFrameApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
+    	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
+		// 根据任务查询流程实例
+    	String processInstanceId = task.getProcessInstanceId();
+		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		ContractVO contract = (ContractVO) this.runtimeService.getVariable(pi.getId(), "entity");
+		contract.setTask(task);
+		contract.setProcessInstanceId(processInstanceId);
+		List<CommentVO> commentList = this.processService.getComments(processInstanceId);
+		String taskDefinitionKey = task.getTaskDefinitionKey();
+		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+		String result = null;
+		if("modifyApply".equals(taskDefinitionKey)){
+			result = "modify";
+		}else{
+			result = "audit";
+		}
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("actionType", result);
+		map.put("contract", contract);
+		map.put("commentList", commentList);
+    	return map;
+    }
+    
+    
+    /**
+     * 完成任务
+     * @param content
+     * @param completeFlag
+     * @param taskId
+     * @param redirectAttributes
+     * @param session
+     * @return
+     * @throws Exception
+     */
+//	@RequiresPermissions("user:order:complate")  //数据库中权限字符串为user:*:complate， 通配符*匹配到order所以有权限操作 
+    @RequestMapping(value = "/complateFrame/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public String complateFrame(
+    		@RequestParam("frameId") String id,
+    		@RequestParam("content") String content,
+    		@RequestParam("processInstanceId") String processInstanceId,
+    		@RequestParam("completeFlag") Boolean completeFlag,
+    		@PathVariable("taskId") String taskId, 
+    		RedirectAttributes redirectAttributes) throws Exception{
+    	User user = UserUtil.getUserFromSession();
+    	String result = "";
+    	try {
+    		ContractVO contract = this.contractService.selectConbtractById(id);
+    		ContractVO baseContract = (ContractVO) this.runtimeService.getVariable(processInstanceId, "entity");
+    		Map<String, Object> variables = new HashMap<String, Object>();
+    		variables.put("isPass", completeFlag);
+    		if(!completeFlag){
+    			baseContract.setTitle(baseContract.getUser_name()+" 的订单申请失败,需修改后重新提交！");
+    			contract.setStatus(BaseVO.APPROVAL_FAILED);
+    			variables.put("entity", baseContract);
+    			
+    			
+    	
+    		}else{
+    			contract.setStatus(BaseVO.PENDING);					//审批中
+    		}
+    		// 完成任务
+    		this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+    		
+    		
+    		ProcessInstance pi = null;
+    		if(completeFlag){
+    			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+    			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+    			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    			if(BeanUtils.isBlank(pi)){
+    				contract.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}
+    		}
+    		contract.setSerialNum(contract.getId());
+    		this.processBaseService.update(contract);
+    		
+    		if(BaseVO.APPROVAL_SUCCESS.equals(contract.getStatus())){//订单完成，需更新状态为1(订单待接收)
+    			ContractVO c = new ContractVO();
+    			c.setId(contract.getId());
+    			/*if(StaticConst.getInfo("saleFrame").equals(c.getContractType())){//销售框架
+    				c.setStatus("1");
+    			}else if(StaticConst.getInfo("buyFrame").equals(c.getContractType())){//采购订单
+    				c.setStatus("3");
+    			}*/
+    			c.setStatus("3");
+    			this.contractService.update(c);
+    		}
+    		
+    		contract.setProcessInstanceId(processInstanceId);
+    		//发送消息
+
+    		result = "任务办理完成！";
+		} catch (ActivitiObjectNotFoundException e) {
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		return result;
+    }
+	
+    
+    /**
+	 * 调整订单申请
+	 * @param vacation
+	 * @param taskId
+	 * @param processInstanceId
+	 * @param reApply
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+//	@RequiresPermissions("user:vacation:modify")
+	@RequestMapping(value = "/modifyFrame/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+	public String modifyFrame(
+			@PathVariable("taskId") String taskId,
+			@RequestParam("processInstanceId") String processInstanceId,
+			@RequestParam("reApply") Boolean reApply,
+			@RequestParam("frameId") String id,
+			@RequestParam("reason") String reason,
+			@RequestParam("frameType") String frameType) throws Exception{
+		String result = "";
+		User user = UserUtil.getUserFromSession();
+
+		ContractVO contract = new ContractVO();
+		contract.setId(id);
+		
+        Map<String, Object> variables = new HashMap<String, Object>();
+        contract.setUserId(user.getUserId());
+        contract.setUser_name(user.getUserName());
+        if(BaseVO.SALEFRAME.equals(frameType)){
+        	contract.setBusinessType(BaseVO.SALEFRAME);
+        }else{
+        	contract.setBusinessType(BaseVO.BUYFRAME);
+        }
+        
+        contract.setApplyDate(new Date());
+        contract.setBusinessKey(id);
+        contract.setProcessInstanceId(processInstanceId);
+        String content = "";
+        if(reApply){
+        	//修改订单申请
+        	if(BaseVO.SALEFRAME.equals(frameType)){
+        		contract.setTitle(user.getUserName()+" 的销售框架申请！");
+            }else{
+            	contract.setTitle(user.getUserName()+" 的采购框架申请！");
+            }
+        	
+        	contract.setStatus(BaseVO.PENDING);
+	        content = "重新申请";
+	        result = "任务办理完成，订单申请已重新提交！";
+	        
+	      
+        }else{
+        	contract.setTitle(user.getUserName()+" 的订单申请已取消！");
+        	contract.setStatus(BaseVO.APPROVAL_FAILED);
+        	content = "取消申请";
+        	result = "任务办理完成，已经取消您的框架协议申请！";
+        }
+        try {
+        	contract.setSerialNum(contract.getId());
+    		this.processBaseService.update(contract);
+			variables.put("entity", contract);
+			variables.put("reApply", reApply);
+			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			
+			if(reApply){
+		      
+	        }else{
+	        	cancelFrameApply(contract.getId(),taskId);
+	        }
+		} catch (ActivitiObjectNotFoundException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务不存在，请联系管理员！");
+			result = "此任务不存在，请联系管理员！";
+			throw e;
+		} catch (ActivitiException e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("此任务正在协办，您不能办理此任务！");
+			result = "此任务正在协办，您不能办理此任务！";
+			throw e;
+		} catch (Exception e) {
+//			message.setStatus(Boolean.FALSE);
+//			message.setMessage("任务办理失败，请联系管理员！");
+			result = "任务办理失败，请联系管理员！";
+			throw e;
+		}
+		
+    	return result;
+    }
+	
+    
+    /**
+     * 供应商确认框架
+     */
+    @RequestMapping(value = "/supplyConfirmedFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO supplyConfirmedFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		return contract;
+    }
+
+	private ContractVO jaon2Contract(String params){
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		ContractVO contract = new ContractVO();
+		try {
+			contract = objectMapper.readValue(params, ContractVO.class);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return contract;
+	}
+    
+    
+    /**
+     * 平台提交框架
+     */
+    @RequestMapping(value = "/pingTaiSubmitFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO pingTaiSubmitFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		return contract;
+    }
+    
+    /**
+     * 平台接收框架协议
+     */
+    @RequestMapping(value = "/reciveFrame", method = RequestMethod.POST)
+    @ResponseBody
+    public ContractVO reciveFrame(@RequestBody String params) {
+    	ContractVO contract = jaon2Contract(params);
+    	Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		contract.setUpdater(currenLoginName);
+		contract.setUpdateTime(new Date());
+		contractService.update(contract);
+		
+		return contract;
+    }
+    
+    
+    
+    /**
+     * 用户取消订单申请
+     */
+    @RequestMapping(value = "/userCancelOrderApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public void userCancelOrderApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+		OrderInfo orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelApply(orderInfo.getSerialNum(),taskId);
+    }
+    
+    /**
+     * 用户取消框架申请
+     */
+    @RequestMapping(value = "/userCancelFrameApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelFrameApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	ContractVO contractVO = (ContractVO) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelFrameApply(contractVO.getSerialNum(),taskId);
+    }
+    /**
+     * 用户取消价格申请
+     */
+    @RequestMapping(value = "/userCancelPriceApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelPriceApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	PriceList priceList = (PriceList) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelPriceApply(priceList.getSerialNum(),taskId);
+    }
+    /**
+     * 用户取消发票(销项票)申请
+     */
+    @RequestMapping(value = "/userCancelInvoiceApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+   	@ResponseBody
+    public void userCancelInvoiceApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	Invoice invoice = (Invoice) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelInvoiceApply(invoice.getSerialNum(),taskId);
+    }
+    /**
+     * 获取采购/销售订单物料价格
+     */
+	@RequestMapping(value = "/getUnitPrice", method = RequestMethod.POST)
+	@ResponseBody
+	public String getUnitPrice(@RequestBody String params) {
+		PriceList priceList = json2PriceList(params);
+		PriceList priceList1 = null;
+		String price = "";
+		if (!StringUtils.isEmpty(priceList.getBuyComId())) {
+			priceList1 = priceListService.getPriceListInfo(
+					priceList.getBuyComId(), priceList.getMaterielSerial(),
+					"salePrice");
+		} else if (!StringUtils.isEmpty(priceList.getSupplyComId())) {
+			priceList1 = priceListService.getPriceListInfo(
+					priceList.getSupplyComId(), priceList.getMaterielSerial(),
+					"buyPrice");
+		}
+		if (priceList1 != null) {
+			price = priceList1.getPrice();
+			if ("1".equals(priceList1.getIsLadderPrice())) {
+				List<LadderPrice> list = ladderPriceService
+						.selectListByPriceSerial(priceList1.getSerialNum());// 获取阶梯价格
+				if (!CollectionUtils.isEmpty(list)) {
+					for (LadderPrice lp : list) {
+						if (new BigDecimal(priceList1.getNumber())
+								.compareTo(new BigDecimal(lp.getCountStart())) > -1
+								&& new BigDecimal(priceList1.getNumber())
+										.compareTo(new BigDecimal(lp
+												.getCountStart())) <= 0) {
+							price = lp.getPrice();
+							break;
+						}
+
+					}
+
+				}
+
+			}
+		}
+		return price;
+	}
+	private PriceList json2PriceList(String params) {
+		params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		PriceList priceList = new PriceList();
+		try {
+			priceList = objectMapper.readValue(params, PriceList.class);
+		}catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return priceList;
+	}
+	 /**
+		 * @Description (获取采购订单/销售订单出入库记录)
+		 * @param serialNum 订单流水
+		 * @param type 采购/销售
+		 * @return
+		 */
+		@RequestMapping(value="/getRecordList",method=RequestMethod.GET)
+		 public ResponseEntity<Map<String,Object>> getRecordList(String serialNum,String type) {
+			 User user = UserUtil.getUserFromSession();
+			 StockInOutRecord record=new StockInOutRecord();
+			 record.setPageIndex(0);
+			 record.setPageSize(-1);
+			 record.setOrderSerial(serialNum);
+			 Page<DeliveryMateriel> takeDeliverys=null;
+			 if(user != null&&"sale".equals(type)){
+				 String comId = userCompanyService.getUserComId(user.getUserId().toString());
+				 record.setSupplyComId(comId);
+				 takeDeliverys= deliveryMaterielService.selectListByExample(record,"out","1");
+			 }else{
+				 takeDeliverys=deliveryMaterielService.selectListByExample(record,"in","1");
+			 }
+			 // 封装datatables数据返回到前台
+			 Map<String,Object> pageMap = new HashMap<String,Object>();
+			 pageMap.put("draw", 1);
+			 pageMap.put("recordsTotal", takeDeliverys==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("recordsFiltered", takeDeliverys==null?0:takeDeliverys.getTotalCount());
+			 pageMap.put("data", takeDeliverys.getResult());
+			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+		 }
 }

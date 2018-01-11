@@ -9,6 +9,8 @@ import org.activiti.engine.runtime.ProcessInstance;
 
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -82,7 +84,7 @@ public interface IProcessService {
      * @param userid
      * @param completeFlag
      */
-    public void complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception;
+    public String complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception;
     
     /**
      * 撤销任务
@@ -218,5 +220,14 @@ public interface IProcessService {
      * @throws Exception
      */
 	public String startInvoice(Invoice invoice);
+
+	public String startBuyFramerProcess(ContractVO contract);
+
+	public String startSaleFramerProcess(ContractVO contract);
+	//发货计划流程
+	public String startDeliveryPlanProcess(DeliveryVO deliveryVo);
+
+	//自定义已办任务查询
+	public List<BaseVO> findFinishedTaskInstancesDiy(User user, String businessType);
 
 }

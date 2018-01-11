@@ -57,17 +57,25 @@ angular
 									 			$scope.inOrOut=$stateParams.inOrOut;
 									 			getStockInOutCheckInfo($stateParams.inOrOut);//查看出入库检验详情页面
 								 		}else{
-									 			if($stateParams.inOrOut=='showOut'){
+								 			initTabClass();
+								 			
+								 				if($stateParams.inOrOut=='showOut'){
 									 				debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
+									 				$("#tab_in").removeClass("active");
+									 				$("#tab_out").addClass("active");
 									 				loadStockInOutCheckTable('outcheck');
 									 				//加载入库检验列表
 									 			}else{
 									 				$("#in").addClass("active");
 									 				$("#out").removeClass("active");
+									 				$("#tab_in").addClass("active");
+									 				$("#tab_out").removeClass("active")
 									 				loadStockInOutCheckTable('incheck');//加载入库检验列表
 									 			}
+								 			
+								 			
 										 		}
 											
 												// set default layout mode
@@ -75,7 +83,37 @@ angular
 												$rootScope.settings.layout.pageBodySolid = false;
 												$rootScope.settings.layout.pageSidebarClosed = false;
 											});
-							
+							var initTabClass = function(){
+								var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+									$(liobj).addClass("active");
+//									$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
+									$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+									
+//									methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
+									methodName = '';
+									try{
+										methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+									}catch(e){ 
+//										alert(methodName+"()不存在！"); 
+									}
+									function m(methodName){ 
+										//初始化this.func属性, 
+										this.func = function(){}; 
+										try{ 
+										//这里用eval方法，把我们传进来的这个方法名所代表的方法当作一个对象来赋值给method1的func属性。 
+										//如果找不到methodName这个对应的对象,则eval方法会抛异常 
+											this.func = eval(methodName); 
+										}catch(e){ 
+//											alert(methodName+"()不存在！"); 
+										} 
+									} 
+									try{
+										var c = new m(methodName); 
+										c.func(); 
+									}catch(e){ 
+//										alert(methodName+"()不存在！"); 
+									} 
+							}
 							//初始化toastr开始
 							toastr.options = {
 									"closeButton" : true,
@@ -121,8 +159,8 @@ angular
 											{
 												language : {
 													aria : {
-														sortAscending : ": activate to sort column ascending",
-														sortDescending : ": activate to sort column descending"
+														sortAscending : ": 以升序排列此列",
+														sortDescending : ": 以降序排列此列"
 													},
 													emptyTable : "空表",
 													info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -241,8 +279,8 @@ angular
 													{
 														language : {
 															aria : {
-																sortAscending : ": activate to sort column ascending",
-																sortDescending : ": activate to sort column descending"
+																sortAscending : ": 以升序排列此列",
+																sortDescending : ": 以降序排列此列"
 															},
 															emptyTable : "空表",
 															info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -500,8 +538,19 @@ angular
 									debugger;
 									$scope.stockInOutCheck.deliverSerial=$("#deliverSerial").val();
 									$scope.stockInOutCheck.takeDeliverSerial=$("#takeDeliverSerial").val();
-									if($('#stockInOutCheckForm').valid()){//表单验证通过则执行添加功能
-										 judgeIsExist ();
+									if($('#stockInOutCheckForm').valid()){
+										 $rootScope.judgeIsExist("check",$scope.stockInOutCheck.checkNum, $scope.stockInOutCheck.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			 toastr.error('检验单号重复！');
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			 judgeIsExist ();
+								    		}
+								    		});//表单验证通过则执行添加功能
+									
 									}
 							};	
 							// 添加检验结束***************************************
@@ -612,6 +661,7 @@ angular
 											        			$scope.stockInOutCheckAdd = true;
 											        			$scope.stockInOutCheckEdit = true;
 											        			$(".alert-danger").hide();
+											        			handle.unblockUI();
 											        			if(judgeString=='checkin'){toastr.success("确认入库检验成功！");
 																}else{toastr.success("确认出库检验成功！");
 															}
@@ -819,15 +869,15 @@ angular
 					 	    			.DataTable({
 					 	                    language: {
 					 	                        aria: {
-					 	                            sortAscending: ": activate to sort column ascending",
-					 	                            sortDescending: ": activate to sort column descending"
+					 	                            sortAscending: ": 以升序排列此列",
+					 	                            sortDescending: ": 以降序排列此列"
 					 	                        },
 					 	                        emptyTable: "空表",
 					 	                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 					 	                        infoEmpty: "没有数据",
 					 	                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
 					 	                        lengthMenu: "每页显示 _MENU_ 条数据",
-					 	                        search: "查询:",
+					 	                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 					 	                        zeroRecords: "抱歉， 没有找到！",
 					 	                        paginate: {
 					 	                            "sFirst": "首页",
@@ -909,8 +959,8 @@ angular
 												{
 													language : {
 														aria : {
-															sortAscending : ": activate to sort column ascending",
-															sortDescending : ": activate to sort column descending"
+															sortAscending : ": 以升序排列此列",
+															sortDescending : ": 以降序排列此列"
 														},
 														emptyTable : "空表",
 														info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",

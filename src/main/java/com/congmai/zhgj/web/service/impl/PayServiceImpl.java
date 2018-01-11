@@ -1,6 +1,8 @@
 package com.congmai.zhgj.web.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,15 +14,21 @@ import org.springframework.util.CollectionUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.web.dao.MemoRecordMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
+import com.congmai.zhgj.web.dao.PaymentRecordMapper;
+import com.congmai.zhgj.web.dao.VerificationRecordMapper;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.MaterielFile;
 import com.congmai.zhgj.web.model.MaterielFileExample;
+import com.congmai.zhgj.web.model.MemoRecord;
+import com.congmai.zhgj.web.model.MemoRecordExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
@@ -28,6 +36,8 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
+import com.congmai.zhgj.web.model.VerificationRecord;
+import com.congmai.zhgj.web.model.VerificationRecordExample;
 import com.congmai.zhgj.web.service.PayService;
 
 /**
@@ -45,6 +55,12 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	private PayMapper payMapper;
 	@Resource
 	private OrderInfoMapper orderInfoMapper;
+	@Resource
+	private VerificationRecordMapper verificationRecordMapper;
+	@Resource
+	private MemoRecordMapper memoRecordMapper;
+	@Resource
+	private PaymentRecordMapper paymentRecordMapper;
 	
 
 	@Override
@@ -176,6 +192,9 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		if(paymentRecord!=null){
 			OrderInfo orderInfo = new OrderInfo();
 			orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+			//设置订单付款金额，用于更新
+			OrderInfo o=orderInfoMapper.selectByPrimaryKey(paymentRecord.getOrderSerial());
+			orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
 			orderInfo.setPayStatus(OrderInfo.RECIVE);//已收款
 			orderInfo.setUpdateTime(new Date());
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
@@ -319,8 +338,127 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	public void updateOrderStatus(PaymentRecord paymentRecord) {
 		OrderInfo orderInfo = new OrderInfo();
 		orderInfo.setSerialNum(paymentRecord.getOrderSerial());
+		//设置订单付款金额，用于更新
+		OrderInfo o=orderInfoMapper.selectByPrimaryKey(paymentRecord.getOrderSerial());
+		orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
 		orderInfo.setPayStatus(OrderInfo.PAY);//已付款
 		orderInfo.setUpdateTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 	}
+
+	@Override
+	public List<MemoRecord> findReceiveMemoRecord(String userId) {
+		MemoRecordExample mre=new MemoRecordExample();
+		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+		c.andDelFlgEqualTo("0").andBuyComIdIsNotNull();
+		return memoRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public List<VerificationRecord> findVerificationRecord(String serialNum) {
+		VerificationRecordExample mre=new VerificationRecordExample();
+		com.congmai.zhgj.web.model.VerificationRecordExample.Criteria c=mre.createCriteria();
+		c.andReceiveMemoSerialEqualTo(serialNum);
+		return verificationRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public void delMemoRecord(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		memoRecordMapper.delMemoRecord(idList);
+	}
+
+	@Override
+	public List<MemoRecord> findPayMemoRecord(String userId) {
+		MemoRecordExample mre=new MemoRecordExample();
+		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+		c.andDelFlgEqualTo("0").andSupplyComIdIsNotNull();
+		return memoRecordMapper.selectByExample(mre);
+	}
+
+	@Override
+	public void insertMemoRecord(MemoRecord ids) {
+		memoRecordMapper.insert(ids);
+	}
+
+	@Override
+	public void updateMemoRecord(MemoRecord ids) {
+		memoRecordMapper.updateByPrimaryKey(ids);
+		
+	}
+
+	@Override
+	public MemoRecord selectMemoRecordById(String serialNum) {
+		return memoRecordMapper.selectByPrimaryKey(serialNum);
+	}
+
+	@Override
+	public List<PaymentRecord> findPaymentRecord(String comId, String type) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("type", type);
+		map.put("comId", comId);
+		return payMapper.findPaymentRecord(map);
+	}
+
+	@Override
+	public List<MemoRecord> findMemoRecord(String comId, String type) {
+		Map<String,Object> map=new HashMap<String,Object>();
+		map.put("type", type);
+		map.put("comId", comId);
+		return payMapper.findMemoRecord(map);
+	}
+
+	@Override
+	public Boolean insertVerificateData(List<VerificationRecord> list,String currenLoginName,String serialNum) {
+		BigDecimal totalVerificationMoneyAmount=BigDecimal.ZERO;//此次水单被核销总金额
+		if(!CollectionUtils.isEmpty(list)){
+			for(VerificationRecord v:list){
+				v.setSerialNum(ApplicationUtils.random32UUID());
+				v.setCreateTime(new Date());
+				v.setDelFlg("0");
+				v.setCreator(currenLoginName);
+				verificationRecordMapper.insert(v);//保存核销记录
+				totalVerificationMoneyAmount=totalVerificationMoneyAmount.add(new BigDecimal (v.getMoneyAmount()));
+				PaymentRecord pr=paymentRecordMapper.selectByPrimaryKey(v.getPaymentRecordSerial());
+				BigDecimal paymentAmount=new BigDecimal(pr.getPaymentAmount()==null?"0":pr.getPaymentAmount()).add(new BigDecimal(v.getMoneyAmount()));//收付款单当前已付金额
+				PaymentRecord paymentRecord=new PaymentRecord();
+				paymentRecord.setSerialNum(v.getPaymentRecordSerial());
+				if(paymentAmount.compareTo(new BigDecimal(pr.getApplyPaymentAmount()))>-1){
+					pr.setStatus("2");//应收付款账单核销完了,更新为已核销
+					pr.setPaymentAmount(pr.getApplyPaymentAmount());
+				}else{
+					pr.setPaymentAmount(paymentAmount.toString());
+					pr.setStatus("1");
+				}
+				payMapper.updatePaymentRecord(pr);
+				
+			}
+			MemoRecord mr=memoRecordMapper.selectByPrimaryKey(serialNum);
+			BigDecimal nowVerificationMoneyAmount=new BigDecimal(mr.getVerificationMoneyAmount()).add(totalVerificationMoneyAmount);
+			MemoRecord memoRecord=new MemoRecord();
+			memoRecord.setSerialNum(serialNum);
+			if(nowVerificationMoneyAmount.compareTo(new BigDecimal(mr.getMoneyAmount()))>-1){//此水单已核销完毕
+				memoRecord.setStatus("2");//收付款水单核销完了,更新为已核销
+				memoRecord.setVerificationMoneyAmount(mr.getMoneyAmount());
+			}else{
+				memoRecord.setVerificationMoneyAmount(nowVerificationMoneyAmount.toString());
+				memoRecord.setStatus("1");
+			}
+			memoRecordMapper.updateByPrimaryKeySelective(memoRecord);
+		}
+		
+		
+		return true;
+	}
+
+	@Override
+	public List<VerificationRecord> findVerificationRecordByPaymentRecordSerial(
+			String serialNum) {
+		VerificationRecordExample mre=new VerificationRecordExample();
+		com.congmai.zhgj.web.model.VerificationRecordExample.Criteria c=mre.createCriteria();
+		c.andPaymentRecordSerialEqualTo(serialNum);
+		return verificationRecordMapper.selectByExampleForPaymentRecord(mre);
+	}
+
+	
 }

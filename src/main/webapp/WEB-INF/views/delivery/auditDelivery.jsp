@@ -427,10 +427,10 @@
 						</div>
 
 
-						<div class="portlet-title">
+						<div class="portlet-title"  ng-show="showTransport">
 							<div class="caption">运输信息</div>
 						</div>
-						<div class="portlet-body form">
+						<div class="portlet-body form"  ng-show="showTransport">
 							<!-- BEGIN FORM-->
 							<div class="form-body">
 								<div class="alert alert-danger display-hide">
@@ -728,28 +728,29 @@
 					<div class="row">
 							<div class="portlet box green">
 	                             <div class="portlet-title">
-	                                 <div class="caption">
-	                                     <i class="fa fa-globe"></i>评论 </div>
-	                             </div>
-	                             <div class="portlet-body">
-	                                 <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
-	                                     <thead>
-	                                         <tr>
-	                                             <th>评论人</th>
-	                                             <th>评论时间</th>
-	                                             <th>评论内容</th>
-	                                         </tr>
-	                                     </thead>
-	                                     <tbody id = "comment_audit">	
-	                                        </tbody>
-	                                 </table>
-	                             </div>
+	                                    <div class="caption">
+	                                        <i class="fa fa-globe"></i> 流程审批 </div>
+	                                </div>
+	                                <div class="portlet-body">
+	                                    <table class="table table-striped table-bordered table-hover order-column" id="pinglun">
+	                                        <thead>
+	                                            <tr>
+	                                                <th> 审批人 </th>
+	                                                <th> 岗位 </th>
+	                                                <th> 审批时间 </th>
+	                                                <th> 审批意见</th>
+	                                            </tr>
+	                                        </thead>
+	                                        <tbody id = "comment_audit">	
+                                            </tbody>
+	                                    </table>
+	                                </div>
 	                         </div>
 						 </div>
 						
 					
 						<div class="row">
-							<div class="form-group form-md-line-input">
+							<div class="form-group">
 								<label class="col-md-1 control-label" for="form_control_1">我的意见:</label>
 								<div class="col-md-11">
 									<textarea class="form-control" ng-model="content"

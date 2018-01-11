@@ -10,7 +10,10 @@
            		</li>
 		<li class="bold" ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">公司信息</a></li>
 		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_3" data-toggle="tab">账户安全</a></li>
-		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_4" data-toggle="tab">操作日志</a></li>			
+		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_4" data-toggle="tab">操作日志</a></li>		
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>	
 	</ul>
 			<!-- <div class="portlet-title">
 				<div class="caption">
@@ -66,8 +69,8 @@
 			</br></br></br></br></br>
 			<div class="portlet-body">{{userInfo.userName}}个人用户</div>
 			<div class="portlet-body">
-				管理权限：
-				   <span ng-if="userInfo.groupId=='2'">总监</span> 
+				管理权限：{{userInfo.department}}
+				   <!-- <span ng-if="userInfo.groupId=='2'">总监</span> 
 				   <span ng-if="userInfo.groupId=='3'">员工</span> 
 				   <span ng-if="userInfo.groupId=='4'">财务</span> 
 				   <span ng-if="userInfo.groupId=='5'">人事</span> 
@@ -78,7 +81,7 @@
 				   <span ng-if="userInfo.groupId=='13'">财务部</span> 
 				   <span ng-if="userInfo.groupId=='14'">仓储部</span> 
 				   <span ng-if="userInfo.groupId=='15'">供应商</span> 
-				   <span ng-if="userInfo.groupId=='17'">评审</span> 
+				   <span ng-if="userInfo.groupId=='17'">评审</span>  -->
 				&nbsp;&nbsp;&nbsp; <!-- <i class="fa fa-edit"
 					ng-click="editSignContract($event)"></i> -->
 
@@ -139,7 +142,11 @@
 								<tr>
 									<td style="width: 20%;"><span class="required"
 										style="color: red;" aria-required="true"> * </span>手机</td>
-									<td style="width: 80%;">{{userInfo.cellPhone}}</td>
+									<td style="width: 80%;" class="form-group">
+									<input type="text" class="form-control" ng-model="userInfo.cellPhone"
+										 name="cellPhone" ng-show="input" />
+									<p class="form-control-static" ng-show="span"> {{userInfo.cellPhone}}</p>
+										</td>
 								</tr>
 								<tr>
 									<td style="width: 20%;">电话</td>
@@ -167,7 +174,11 @@
 								<tr>
 									<td style="width: 20%;"><span class="required"
 										style="color: red;" aria-required="true"> * </span>邮箱</td>
-									<td style="width: 80%;">{{userInfo.email}}</td>
+									<td style="width: 80%;" class="form-group">
+									<input type="text" class="form-control" ng-model="userInfo.email"
+										 name="email" ng-show="input" />
+									<p class="form-control-static" ng-show="span"> {{userInfo.email}}</p>
+										</td>
 								</tr>
 							</tbody>
 						</table>

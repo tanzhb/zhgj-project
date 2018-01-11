@@ -69,6 +69,9 @@ angular
 							        	else $('#modifyVacationModal').modal('hide');
 							        	table.ajax.reload();
 							        	showToastr('toast-bottom-right', 'success', data);
+							        },
+							        error : function(data) {
+							        	toastr.error('连接服务器出错,请登录重试！');
 							        }
 							     });
 							}
@@ -159,8 +162,8 @@ function showDbTable(){
 			{
 				language : {
 					aria : {
-						sortAscending : ": activate to sort column ascending",
-						sortDescending : ": activate to sort column descending"
+						sortAscending : ": 以升序排列此列",
+						sortDescending : ": 以降序排列此列"
 					},
 					emptyTable : "空表",
 					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -217,7 +220,7 @@ function showDbTable(){
 							className : "btn default"
 						}*/ ],
 				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+				order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
 
 				bRetrieve : true,
 				lengthMenu : [
@@ -350,8 +353,8 @@ function showYbTable(){
 			{
 				language : {
 					aria : {
-						sortAscending : ": activate to sort column ascending",
-						sortDescending : ": activate to sort column descending"
+						sortAscending : ": 以升序排列此列",
+						sortDescending : ": 以降序排列此列"
 					},
 					emptyTable : "空表",
 					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -367,7 +370,7 @@ function showYbTable(){
 						"sLast" : "尾页"
 					}
 				},
-				order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+				order : [ [ 5, "asc" ] ],// 默认排序列及排序方式
 				bRetrieve : true,
 				lengthMenu : [
 						[ 5, 10, 15, 30, -1 ],
@@ -467,6 +470,7 @@ function handleTask(assign, taskId, processInstanceId){
 				var comments = ""//添加评论
 				for (var i=0;i<result.commentList.length;i++){
 					comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+					+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 					+ timeStamp2String2(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 				}
 				

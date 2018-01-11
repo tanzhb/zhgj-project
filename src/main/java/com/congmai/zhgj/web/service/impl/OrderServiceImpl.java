@@ -20,12 +20,15 @@ import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DemandPlanMapper;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.dao.MemoRecordMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.PayMapper;
 import com.congmai.zhgj.web.dao.PaymentRecordMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
+import com.congmai.zhgj.web.dao.ProcurementPlanMapper;
 import com.congmai.zhgj.web.dao.StatementMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.WarehouseMapper;
 import com.congmai.zhgj.web.model.Company;
@@ -42,6 +45,8 @@ import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.MemoRecord;
+import com.congmai.zhgj.web.model.MemoRecordExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -49,12 +54,16 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PaymentRecordExample;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
+import com.congmai.zhgj.web.model.ProcurementPlan;
+import com.congmai.zhgj.web.model.ProcurementPlanExample;
 import com.congmai.zhgj.web.model.Statement;
 import com.congmai.zhgj.web.model.StatementExample;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutCheckExample;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.OrderInfoExample.Criteria;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -105,6 +114,16 @@ public class OrderServiceImpl implements OrderService {
   	
   	@Resource
   	private CustomsFormMapper     customsFormMapper;
+  	
+  	@Resource
+  	private 	StockInOutRecordMapper     stockInOutRecordMapper;
+	@Resource
+  	private 	MemoRecordMapper     memoRecordMapper;
+	@Resource
+  	private ProcurementPlanMapper procurementPlanMapper;
+	
+	
+  	
   	
   	
   	
@@ -244,7 +263,12 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 			OrderInfoExample m=new OrderInfoExample();
 			Criteria c=m.createCriteria();
 			c.andDelFlgEqualTo("0");
-			c.andOrderNumEqualTo(num);
+			if(!StringUtils.isEmpty(num)){
+				c.andOrderNumEqualTo(num);
+			}else {
+				flag = false;
+				return flag;
+			}
 			if(!StringUtils.isEmpty(serialNum)){
 				c.andSerialNumNotEqualTo(serialNum);
 			}
@@ -338,7 +362,7 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 				c.setId(serialNum);
 			}
 			String count=contractMapper.checkNum(c);
-			if(!"0".equals(count)){
+			if("0".equals(count)){
 				flag=false;
 			}
 		}else if("demandPlan".equals(codeType)){//需求计划
@@ -414,8 +438,43 @@ public Boolean  isExist(String codeType, String num,String serialNum) {
 			if(CollectionUtils.isEmpty(list)){
 				flag=false;
 			}
+		}else if("record".equals(codeType)){//出入库计划
+			StockInOutRecordExample soe=new StockInOutRecordExample();
+			com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c=soe.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andInOutNumEqualTo(num);
+			if(!StringUtils.isEmpty(serialNum)){
+				c.andSerialNumNotEqualTo(serialNum);
+			}
+			List<StockInOutRecord>list=stockInOutRecordMapper.selectByExample(soe);
+			if(CollectionUtils.isEmpty(list)){
+				flag=false;
+			}
+		}else if("payOrReceiveMemo".equals(codeType)){//收付款水单
+			MemoRecordExample  mre=new MemoRecordExample();
+			com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andMemoNumEqualTo(num);
+			if(!StringUtils.isEmpty(serialNum)){
+				c.andSerialNumNotEqualTo(serialNum);
+			}
+			List<MemoRecord>list=memoRecordMapper.selectByExample(mre);
+			if(CollectionUtils.isEmpty(list)){
+				flag=false;
+			}
+		}else if("procurementPlan".equals(codeType)){//采购计划
+			ProcurementPlanExample  mre=new ProcurementPlanExample();
+			com.congmai.zhgj.web.model.ProcurementPlanExample.Criteria c=mre.createCriteria();
+			c.andDelFlgEqualTo("0");
+			c.andProcurementPlanNumEqualTo(num);
+			if(!StringUtils.isEmpty(serialNum)){
+				c.andSerialNumNotEqualTo(serialNum);
+			}
+			List<ProcurementPlan>list=procurementPlanMapper.selectByExample(mre);
+			if(CollectionUtils.isEmpty(list)){
+				flag=false;
+			}
 		}
-		
 		return flag;
 	}
 
@@ -429,6 +488,11 @@ public int supplyConfirmed(OrderInfo orderInfo) {
 @OperationLog(operateType = "update" ,operationDesc = "平台提交订单" ,objectSerial= "{serialNum}")
 public int pingTaiSubmit(OrderInfo orderInfo) {
 	return OrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+}
+
+@Override
+public OrderInfo selectByOrderNum(String orderNum) {
+	return OrderInfoMapper.selectByOrderNum(orderNum);
 }
 
 

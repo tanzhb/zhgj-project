@@ -15,7 +15,7 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
       		    	$scope.userInfo=data;
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     };

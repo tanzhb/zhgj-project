@@ -62,5 +62,7 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 
 
 	int pingTaiSubmit(OrderInfo orderInfo);
+	
+	OrderInfo selectByOrderNum(String orderNum);
 
 }

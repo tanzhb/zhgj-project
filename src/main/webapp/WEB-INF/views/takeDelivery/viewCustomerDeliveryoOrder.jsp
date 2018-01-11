@@ -17,6 +17,9 @@
 						</li> -->
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+						<li class="dropdown pull-right tabdrop">
+							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+						</li>						
 					</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
@@ -235,7 +238,7 @@
 									</div>
 								</div>
 
-								<div class="portlet-body form">
+								<div class="portlet-body form"  style="border-top:1px solid #dddddd;">
 									<!-- BEGIN FORM-->
 									<div class="form-body">
 										<div class="row">
@@ -475,7 +478,7 @@
 											/span
 										</div>
 										/row -->
-											<div class="row">
+											<div class="row" style="border-top:1px solid #dddddd;padding-top: 20px;" ng-show="showTransport">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">运输方式</label>
@@ -526,7 +529,7 @@
 											</div>
 											<!--/span-->
 										</div>
-										<div class="row">
+										<div class="row"  ng-show="showTransport">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">联系人</label>
@@ -980,12 +983,14 @@
 						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
 							<th colspan="5" style="text-align: center;">入库</th> -->
 							<th rowspan="2">状态</th>
+							<th rowspan="2">备注</th>
 						</tr>
 						<tr>
 							<th>订单数量</th>
+							<th>未发数量</th>
 							<th>发货数量</th>
 							<th>附件</th>
-							<th>备注</th>
+							<!-- <th>备注</th> -->
 							<!-- <th>实收数量</th>
 							<th>拒收数量</th>
 							<th>附件</th>
@@ -1009,9 +1014,13 @@
 							<td>{{materiel.orderMateriel.materiel.unit}}</td>
 							<!-- <td>{{materiel.manufactureDate}}</td> -->
 							<td>{{materiel.orderMateriel.amount}}</td>
+							<td>{{materiel.orderMateriel.amount-materiel.deliveredCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
+							</td>
+							<td>
+	                              
 							</td>
 							<td>{{materiel.remark}}</td>
 						<!-- 	<td>{{materiel.acceptCount}}</td>
@@ -1042,6 +1051,7 @@
 														<td></td>
 														<td> {{materielCount}}</td>
 														<td>{{totalOrderCount}}</td>
+														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
 														<td></td>

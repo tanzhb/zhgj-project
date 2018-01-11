@@ -72,7 +72,7 @@ public class MessageConstants {
 	/*========================需求计划相关消息End==============================*/
 	
 	/*========================价格目录相关消息Start==============================*/
-	//5
+	
 	/*========================价格目录相关消息End==============================*/
 	
 	/*========================仓库管理相关消息Start==============================*/
@@ -136,6 +136,12 @@ public class MessageConstants {
 	 * 出库完成消息(发给供应)
 	 */
 	public static final String OUT_TO_SALE = "outToSale";
+	
+	/**
+	 * 入库完成消息(入库完成的采购订单，通知关联的销售订单制单人)
+	 */
+	public static final String IN_TO_BUY_TO_SALE = "inToBuyToSale";
+	
 	/*===========出入库相关消息End====================*/
 	
 	
@@ -193,6 +199,11 @@ public class MessageConstants {
 	 * 采购订单被确认消息URL
 	 */
 	public static final String URL_BE_CONFIRM_BUY_ORDER = "buyOrder";
+	
+	/**
+	 * 销售订单URL
+	 */
+	public static final String URL_SALE_ORDER = "saleOrder";
 	
 	
 	/*========================销售订单相关消息Start==============================*/
@@ -356,8 +367,23 @@ public class MessageConstants {
 	/*========================需求计划相关消息End==============================*/
 	
 	/*========================价格目录相关消息Start==============================*/
-	//5
+	/**
+	 * 采购价格申请消息
+	 */
+	public static final String APPLY_BUY_PRICE = "applyBuyPrice";
+	/**
+	 * 销售价格申请消息
+	 */
+	public static final String APPLY_SALE_PRICE = "applySalePrice";
+	
 	/*========================价格目录相关消息End==============================*/
+	/*========================销项票相关消息Start==============================*/
+	/**
+	 * 销项票申请消息
+	 */
+	public static final String APPLY_OUT_INVOICE = "applyOutInvoice";
+	
+	/*========================销项票相关消息End==============================*/
 	
 	/*========================仓库管理相关消息Start==============================*/
 	//6
@@ -404,6 +430,13 @@ public class MessageConstants {
 	 * 出库完成消息(发给供应)
 	 */
 	public static final String TEMP_OUT_TO_SALE = "94";
+	
+	/**
+	 * 入库完成消息(发给采购通知关联的销售订单制单人)
+	 */
+	public static final String TEMP_IN_TO_BUY_TO_SALE = "95";
+	
+	
 	/*===========出入库相关消息End===========*/
 	
 	

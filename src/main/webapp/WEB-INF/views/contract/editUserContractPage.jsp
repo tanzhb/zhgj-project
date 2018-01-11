@@ -31,7 +31,7 @@
 						<ul class="nav nav-tabs">
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" ng-click="goback()" class="btn default">
-									<i class="fa fa-reply"></i>取消
+									<i class="fa fa-reply"></i>返回
 								</button>
 								<button type="button" ng-click="saveUserContract()"
 									class="btn blue">
@@ -56,9 +56,7 @@
 													<label class="control-label bold">合同编号<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<input type="text" id="contractNum" name="contractNum"
-															class="form-control" ng-model="contractVO.contractNum" />
-														<div class="form-control-focus"></div>
+														{{contractVO.contractNum}}
 													</div>
 												</div>
 											</div>
@@ -69,13 +67,7 @@
 													<label class="control-label bold">合同类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control"
-															ng-model="contractVO.contractType" id="contractType"
-															name="contractType">
-															<option value="">合同类型</option>
-															<option value="服务合同">服务合同</option>
-															<option value="其他合同">其他合同</option>
-														</select>
+														{{contractVO.contractType}}
 													</div>
 												</div>
 											</div>
@@ -235,7 +227,7 @@
 																ng-hide="true"> <a
 																title="{{contractVO.electronicContract}}"
 																ng-click="download(contractVO.electronicContract)">
-																{{contractVO.electronicContract}} </a> <i class="fa fa-edit"
+																{{contractVO.electronicContract.substring(contractVO.electronicContract.indexOf("_")+1)}} </a> <i class="fa fa-edit"
 																style="margin-top: 0px;"
 																ng-click="editElectronicContract($event)"></i>
 
@@ -261,7 +253,7 @@
 																ng-hide="true"> <a
 																title="{{contractVO.signContract}}"
 																ng-click="download(contractVO.signContract)">
-																{{contractVO.signContract}} </a> <i class="fa fa-edit"
+																{{contractVO.signContract.substring(contractVO.signContract.indexOf("_")+1)}} </a> <i class="fa fa-edit"
 																style="margin-top: 0px;"
 																ng-click="editSignContract($event)"></i>
 														</div>

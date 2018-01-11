@@ -1,3 +1,4 @@
+
 package com.congmai.zhgj.web.controller;
 
 import java.util.HashMap;
@@ -171,6 +172,14 @@ public class PageController {
     }
     
     /**
+     * 新增销售框架
+     */
+    @RequestMapping("/addSaleFrame")
+    public String addSaleFrame(String serialNum,String view) {
+        return "frame/addSaleFrame";
+    }
+    
+    /**
      * 客户端新增订单
      */
     @RequestMapping("/addCustomerOrder")
@@ -200,11 +209,27 @@ public class PageController {
     }
     
     /**
+     * 销售框架
+     */
+    @RequestMapping("/saleFrame")
+    public String saleFrame() {
+        return "frame/saleFrame";
+    }
+    
+    /**
      * 客户端订单
      */
     @RequestMapping("/customerOrder")
     public String customerOrder() {
         return "order/customerOrder";
+    }
+    
+    /**
+     * 客户端框架协议
+     */
+    @RequestMapping("/customerFrame")
+    public String customerFrame() {
+        return "frame/customerFrame";
     }
     
     /**
@@ -224,13 +249,34 @@ public class PageController {
         return "order/addBuyOrder";
     }
     
+    /**
+     * 新增采购计划
+     */
+    @RequestMapping("/addProcurementPlan")
+    public String addProcurementPlan(String serialNum,String view,String numCode) {
+        return "procurementPlan/addProcurementPlan";
+    }
     
+    /**
+     * 新增采购框架
+     */
+    @RequestMapping("/addBuyFrame")
+    public String addBuyFrame(String serialNum,String view,String numCode) {
+        return "frame/addBuyFrame";
+    }
     /**
      * 修改平台采购订单
      */
     @RequestMapping("/addSupplyOrder")
     public String addSupplyOrder(String serialNum,String view,String numCode) {
         return "order/addSupplyOrder";
+    }
+    /**
+     * 修改平台采购框架
+     */
+    @RequestMapping("/addSupplyFrame")
+    public String addSupplyFrame(String serialNum,String view,String numCode) {
+        return "frame/addSupplyFrame";
     }
     /**
      * 查看采购订单
@@ -241,11 +287,32 @@ public class PageController {
     }
     
     /**
+     * 查看采购计划
+     */
+    @RequestMapping("/viewProcurementPlan")
+    public String viewProcurementPlan(String serialNum) {
+        return "procurementPlan/viewProcurementPlan";
+    }
+    /**
+     * 查看采购框架
+     */
+    @RequestMapping("/viewBuyFrame")
+    public String viewBuyFrame(String serialNum) {
+        return "frame/viewBuyFrame";
+    }
+    /**
      * 查看销售订单
      */
     @RequestMapping("/viewSaleOrder")
     public String viewSaleOrder(String serialNum) {
         return "order/viewSaleOrder";
+    }
+    /**
+     * 查看销售框架
+     */
+    @RequestMapping("/viewSaleFrame")
+    public String viewSaleFrame(String serialNum) {
+        return "frame/viewSaleFrame";
     }
     
     /**
@@ -256,6 +323,13 @@ public class PageController {
         return "order/viewCustomerOrder";
     }
     
+    /**
+     * 客户端查看框架协议
+     */
+    @RequestMapping("/viewCustomerFrame")
+    public String viewCustomerFrame(String serialNum) {
+        return "frame/viewCustomerFrame";
+    }
     
     /**
      * 供应商查看订单
@@ -263,6 +337,14 @@ public class PageController {
     @RequestMapping("/viewSupplyOrder")
     public String viewSupplyOrder(String serialNum) {
         return "order/viewSupplyOrder";
+    }
+    
+    /**
+     * 供应商查看框架协议
+     */
+    @RequestMapping("/viewSupplyFrame")
+    public String viewSupplyFrame(String serialNum) {
+        return "frame/viewSupplyFrame";
     }
     
     /**
@@ -314,11 +396,74 @@ public class PageController {
     }
     
     /**
+     * 采购框架提交申请
+     */
+    @RequestMapping("/submitBuyFrameApply")
+    public String submitBuyFrameApply(String serialNum,String view) {
+        return "frame/submitBuyFrameApply";
+    }
+    
+    /**
+     * 销售框架提交申请
+     */
+    @RequestMapping("/submitSaleFrameApply")
+    public String submitSaleFrameApply(String serialNum,String view) {
+        return "frame/submitSaleFrameApply";
+    }
+    
+    /**
+     * 审批采购框架
+     */
+    @RequestMapping("/approvalBuyFrameApply")
+    public String approvalBuyFrameApply(String serialNum,String view) {
+        return "frame/approvalBuyFrameApply";
+    }
+    
+    /**
+     * 审批销售框架
+     */
+    @RequestMapping("/approvalSaleFrameApply")
+    public String approvalSaleFrameApply(String serialNum,String view) {
+        return "frame/approvalSaleFrameApply";
+    }
+    
+    /**
+     * 重新编辑采购框架申请
+     */
+    @RequestMapping("/editBuyFrameApply")
+    public String editBuyFrameApply(String serialNum,String view) {
+        return "frame/editBuyFrameApply";
+    }
+    
+    /**
+     * 重新编辑销售框架申请
+     */
+    @RequestMapping("/editSaleFrameApply")
+    public String editSaleFrameApply(String serialNum,String view) {
+        return "frame/editSaleFrameApply";
+    }
+    /**
      * 采购订单
      */
     @RequestMapping("/buyOrder")
     public String buyOrder() {
         return "order/buyOrder";
+    }
+    
+    /**
+     * 采购计划
+     */
+    @RequestMapping("/procurementPlan")
+    public String procurementPlan() {
+        return "procurementPlan/procurementPlan";
+    }
+    
+    /**
+     * 采购框架
+     */
+    @RequestMapping("/buyFrame")
+    public String buyFrame() {
+        return "frame/buyFrame";
     }
     
     /**
@@ -329,6 +474,13 @@ public class PageController {
         return "order/supplyOrder";
     }
     
+    /**
+     * 供应商的框架协议
+     */
+    @RequestMapping("/supplyFrame")
+    public String supplyFrame() {
+        return "frame/supplyFrame";
+    }
     /**
      * 新增客户对账单
      */
@@ -572,4 +724,75 @@ public class PageController {
     public String accountSecurity(){
     	return "user/accountSecurity";
     }
+    /**
+     * 收款水单详情页面
+     * @return 收款水单详情页面url
+     */
+    @RequestMapping("/viewReceiveMemo")
+    public String viewReceiveMemo() {
+        return "receivePayMemo/viewReceiveMemo";
+    }
+    /**
+     * 添加/修改收款水单页面
+     * @return 添加/修改收款水单页面url
+     */
+    @RequestMapping("/addReceiveMemo")
+    public String addReceiveMemo() {
+        return "receivePayMemo/addReceiveMemo";
+    }
+    /**
+     * 收款水单列表页面
+     * @return 收款水单列表页面url
+     */
+    @RequestMapping("/receiveMemo")
+    public String receiveMemoRecord() {
+        return "receivePayMemo/receiveMemoRecord";
+    }
+    /**
+     * 付款水单详情页面
+     * @return 付款水单详情页面url
+     */
+    @RequestMapping("/viewMemoPay")
+    public String viewPayMemo() {
+        return "receivePayMemo/viewMemoPay";
+    }
+    /**
+     * 添加/修改付款水单页面
+     * @return 添加/修改付款水单页面url
+     */
+    @RequestMapping("/addPayMemo")
+    public String addPayMemo() {
+        return "receivePayMemo/addPayMemo";
+    }
+    /**
+     * 付款水单列表页面
+     * @return 付款水单列表页面url
+     */
+    @RequestMapping("/payMemo")
+    public String payMemoRecord() {
+        return "receivePayMemo/payMemoRecord";
+    }
+    /**
+     * 发货计划提交申请
+     */
+    @RequestMapping("/submitDeliveryPlanApply")
+    public String submitDeliveryPlanApply() {
+        return "delivery/submitDeliveryPlanApply";
+    }
+    
+    /**
+     * 审批发货计划
+     */
+    @RequestMapping("/approvalDeliveryPlanApply")
+    public String approvalDeliveryPlanApply() {
+        return "delivery/approvalDeliveryPlanApply";
+    }
+    
+    /**
+     * 重新编辑发货计划申请
+     */
+    @RequestMapping("/editDeliveryPlanApply")
+    public String editDeliveryPlanApply() {
+        return "delivery/editDeliveryPlanApply";
+    }    
 }

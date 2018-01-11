@@ -60,6 +60,8 @@ public class TakeDelivery extends BaseVO implements Serializable{
     public static final String WAIT_Cearance = "7"; //待清关
     public static final String COMPLETE_Cearance = "8"; //已清关
     
+    public static final String COMPLETE_TAKEDELIVERY= "9"; //已收货
+    
 /*    private String processInstanceId;
     
     private String status;

@@ -4,10 +4,10 @@
     
     <!--添加应付款  -->
     <insert id="insertPaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
-    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,paymentType,orderSerial,applyPaymentAmount,billStyle,paymentDate,
+    INSERT INTO paymentRecord(serialNum,paymentNum,supplyComId,buyComId,paymentType,orderSerial,applyPaymentAmount,billStyle,billType,accountPeriod,deliveryRate,paymentDate,customsFormSerial,
     applyCurrency,playPaymentDate,payType,paymentNode,nodeNum,applyDept,payee,contact,contactNum,bank,accountName,accountNumber,
     isBill,applyDate,applicant,remark,status,creator,createTime,updater,updateTime) 
-    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{paymentType},#{orderSerial},#{applyPaymentAmount},#{billStyle},#{paymentDate},
+    VALUES(#{serialNum},#{paymentNum},#{supplyComId},#{buyComId},#{paymentType},#{orderSerial},#{applyPaymentAmount},#{billStyle},#{billType},#{accountPeriod},#{deliveryRate},#{paymentDate},#{customsFormSerial},
     #{applyCurrency},#{playPaymentDate},#{payType},#{paymentNode},#{nodeNum},#{applyDept},#{payee},#{contact},#{contactNum},#{bank},#{accountName},#{accountNumber},
     #{isBill},#{applyDate},#{applicant},#{remark},'0',#{creator},NOW(),#{creator},NOW())
     </insert>
@@ -42,7 +42,7 @@
     <!--查询结算条款列表  -->
    <select id="selectClauseSettlementDetailList2" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ClauseSettlementDetail">
     SELECT
-	c.paymentType,c.deliveryNode
+	c.paymentType,c.deliveryNode,c.deliveryRate,c.deliveryAmount,c.accountPeriod,c.billingMethod,a.currency  as paymentMethod
 	FROM
 	orderInfo a 
 	LEFT JOIN clauseSettlement b ON a.contractSerial=b.contractSerial 
@@ -66,7 +66,7 @@
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.applyDate
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -82,7 +82,7 @@
     <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
 	 SELECT
 	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status
+	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.payee,a.isBill,a.applyDate
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -96,10 +96,11 @@
     <!--通过id查询收付款详情  -->
     <select id="selectPayById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
      SELECT
-	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,b.serialNum AS orderSerial,a.supplyComId,a.buyComId,
+	a.serialNum,a.paymentNum,a.paymentType,b.orderNum,a.orderSerial,a.supplyComId,a.buyComId,
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
-	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,
-    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId
+	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,a.paymentAmount,a.paymentDate,
+    a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId,a.billType,b.orderDate,a.accountPeriod,.b.orderAmount,b.orderNum,a.deliveryRate,
+    a.customsFormSerial
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -170,11 +171,12 @@
     <update id="updatePaymentRecord" parameterType="com.congmai.zhgj.web.model.PaymentRecord">
     UPDATE
 	paymentRecord
-	SET
+ SET
 	paymentType=#{paymentType},
 	paymentNum=#{paymentNum},
 	orderSerial=#{orderSerial},
 	supplyComId=#{supplyComId},
+	buyComId=#{buyComId},
 	applyPaymentAmount=#{applyPaymentAmount},
 	applyCurrency=#{applyCurrency},
 	playPaymentDate=#{playPaymentDate},
@@ -182,6 +184,11 @@
 	paymentNode=#{paymentNode},
 	nodeNum=#{nodeNum},
 	billStyle=#{billStyle},
+	billType=#{billType},
+	accountPeriod=#{accountPeriod},
+	paymentAmount=#{paymentAmount},
+	deliveryRate=#{deliveryRate},
+	customsFormSerial=#{customsFormSerial},
 	isBill=#{isBill},
 	applyDate=#{applyDate},
 	applicant=#{applicant},
@@ -199,6 +206,7 @@
 	userId=#{userId},
 	<if test="status != null" >
 	status=#{status},
+	paymentDate=NOW(),
 	</if>
 	updateTime=NOW()
 	WHERE
@@ -250,4 +258,35 @@
     <update id="confirmGatheringMoney" parameterType="java.util.HashMap">
     UPDATE paymentRecord SET status='1',updater=#{updater},updateTime=NOW() WHERE serialNum=#{serialNum}
     </update>
+    <!--查找水单对应的应收付款账单  -->
+    <select id="findPaymentRecord" parameterType="java.util.HashMap" resultType="com.congmai.zhgj.web.model.PaymentRecord">
+	 SELECT
+	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
+	a.supplyComId, a.buyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.payee,a.isBill,a.applyDate
+	FROM
+	paymentRecord a
+	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
+	WHERE a.delFlg='0'  and a.status!=2
+	<if test="type=='receive'">
+	and  a.buyComId=#{comId}
+	</if>
+	<if test="type=='pay'">
+	and  a.supplyComId=#{comId}
+	</if>
+    </select>
+      <!--查找应收付款账单对应的收付款水单 -->
+    <select id="findMemoRecord" parameterType="java.util.HashMap" resultType="com.congmai.zhgj.web.model.MemoRecord">
+	 SELECT
+	m.serialNum, m.memoNum,m.supplyComId, m.buyComId, m.verificationMoneyAmount,m.moneyAmount, 
+    m.currency, m.paymentDate, m.paymentStyle
+	FROM
+	memorecord m
+	WHERE m.delFlg='0' and m.status!=2
+	<if test="type=='receive'">
+	and  m.buyComId=#{comId}
+	</if>
+	<if test="type=='pay'">
+	and  m.supplyComId=#{comId}
+	</if>
+    </select>
 </mapper>

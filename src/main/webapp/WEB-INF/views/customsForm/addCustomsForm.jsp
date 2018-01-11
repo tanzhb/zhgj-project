@@ -46,6 +46,9 @@
            		</li>
 		<li class="bold" ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">物料信息</a></li>
 		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>
 	</ul>
 				<div class="portlet light ">
                         <!-- <div class="portlet-title" >
@@ -112,7 +115,7 @@
                                                                 <label class="control-label bold" for=""> <span class="required"> * </span><span   ng-if="customsFormType.indexOf('clearance')>-1" >关联收货计划单号 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1">关联发货计划单号 :</span></label>
                                                                     <div class="">
                                                                      <div class="input-group" data-toggle="modal" data-target="#takeDeliveryInfo" onclick="return false;">
-	                                                        <input id="deliverNum"   name="deliverNum" type="text" class="form-control" ng-model="customsForm.deliverNum" readonly="readonly"  ng-hide="customsFormAdd"  >
+	                                                        <input id="deliverNum"   name="deliverNum" type="text" class="form-control" ng-model="customsForm.deliverNum"  ng-hide="customsFormAdd"  ><!--  readonly="readonly" -->
 	                                                        <span class="input-group-btn" style="vertical-align: top;" ng-hide="customsFormView">
 	                                                            <button class="btn default" type="button">
 	                                                                <i class="fa fa-search"></i>
@@ -177,6 +180,17 @@
                                                         </div>
                                                         <!--/row-->
                                                         <div class="row">
+                                                        <div class="col-md-4">
+                                                             <div class="form-group ">
+                                                    <label class="control-label bold" for="address"> 税额合计:</label>
+                                                    <div class="">
+                                                                        <input type="text" class="form-control"   id="totalTax" name ="totalTax"  ng-hide="customsFormAdd"  readonly="readonly"
+												ng-model="customsForm.totalTax" > 
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="customsFormView">{{customsForm.customsAmount+customsForm.addedTax|currency:''}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-4">
                                                             <div class="form-group">
                                                     <label class="control-label bold" for=""> 到港日期 :</label>
@@ -199,7 +213,11 @@
                                                                 </div>
                                                                 </div>
                                                             </div>
-                                                             <div class="col-md-4">
+                                                             
+                                                            <!--/span-->
+                                                        </div>
+                                                         <div class="row">
+                                                            <div class="col-md-4">
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="">海关单位 :</label>
                                                      <div class="">
@@ -210,9 +228,6 @@
                                                                 </div>
                                                                 </div>
                                                             </div>
-                                                            <!--/span-->
-                                                        </div>
-                                                         <div class="row">
                                                             <div class="col-md-4">
                                                             <div class="form-group">
                                                     <label class="control-label bold" for=""> <span   ng-if="customsFormType.indexOf('clearance')>-1" >代理清关单位 :</span> <span  ng-if="customsFormType.indexOf('declaration')>-1"><span class="required"> * </span>代理报关单位 :</span></label>
@@ -278,7 +293,7 @@
 					</tbody>
 					<tfoot><tr>
 					<td colspan="3">合计</td>
-                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}}</td>
+                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
                               </tr></tfoot>
 				</table>
 			</div>
@@ -312,7 +327,7 @@
 					</tbody>
 					<tfoot><tr>
 					<td colspan="3">合计</td>
-                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}}</td>
+                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
                               </tr></tfoot>
 				</table>
 			</div>

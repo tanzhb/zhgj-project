@@ -1,5 +1,6 @@
 <%@ page language="java" import="java.util.*" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <head>
 	<meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
 </head>
@@ -26,16 +27,20 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
+    	<shiro:hasPermission name="zhgj:stockInCheck:*">
         <li  id="in" >
             <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showIn')">入库检验</a>
         </li>
+        </shiro:hasPermission>
+        <shiro:hasPermission name="zhgj:stockOutCheck:*">
         <li  id="out">
             <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showOut')">出库检验</a>
         </li>
+        </shiro:hasPermission>
     </ul>
     <div class="tab-content">
     	<!-- 入库检验列表---START -->
-        <div class="tab-pane active" id="tab_in">
+        <div class="tab-pane" id="tab_in">
         <!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet light">
 			<div class="portlet-title">
@@ -206,7 +211,7 @@
 							<th>检验编号 </th>
                             <th> 收货单号</th>
                             <th>采购订单号</th>
-                            <th>物料</th>
+                            <th>收货数量</th>
                             <th>合格数量 </th>
                             <th> 不合格数量</th>
                             <th>检验日期</th>

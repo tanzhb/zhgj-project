@@ -22,7 +22,7 @@
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<shiro:hasPermission name="zhgj:takeDeliveryPlan:*">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">入库计划</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">入库通知</a>
 		</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:stockInRecord:*">
@@ -38,7 +38,7 @@
 				<div class="tabbable-custom">
 					<ul class="nav nav-tabs" id="takeDelivery_tab">
 						<li class="active"><a data-target="#tab_25_1"
-							data-toggle="tab">入库计划</a></li>
+							data-toggle="tab">入库通知</a></li>
 						<li><a data-target="#tab_25_2" data-toggle="tab"
 							ng-click="toDaiban()">待办<dbQuantity/></a></li>
 						<li><a data-target="#tab_25_3" data-toggle="tab"
@@ -90,18 +90,18 @@
 															data-set="#takeDeliveryTable .checkboxes" /> <span></span>
 													</label></th>
 													<!-- <th>收货单编号</th> -->
-													<th>发货单编号</th>
-													<th>订单编号</th>
-													<th>发货方</th>
-													<th>物料</th>
+													<th>入库通知单号</th>
+													<th>入库类型</th>
+													<th>关联采购单号</th>
+													<th>供应商</th>
 													<th>包装数量</th>
-													<th>使用包装</th>
-													<th>发货地点</th>
+													<th>物料数量</th>
 													<th>发货日期</th>
-													<th>运输方式</th>
-													<th>收货/提货点</th>
+													<th>预计到货日期</th><!-- 运输方式 -->
+													<th>收货地址</th><!-- 发货/提货地址 -->
 													<th>备注</th>
 													<th>状态</th>
+													<th>操作</th>
 												</tr>
 											</thead>
 											<tbody>
@@ -272,15 +272,15 @@
 												<input type="checkbox" class="group-checkable"
 												data-set="#stockInTable .checkboxes" /> <span></span>
 										</label></th>
-										<th>入库明细号</th>
+										<th>入库单号</th>
 										<th>入库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
 										<th>入库日期</th>
 										<th>入库数量</th>
-										<th>关联批次号</th>
+										<!-- <th>采购订单号</th>
 										<th>供应商</th>
-										<th>关联单据</th>
+										<th>收货计划单号</th> -->
 										<th>状态</th>
 									</tr>
 								</thead>

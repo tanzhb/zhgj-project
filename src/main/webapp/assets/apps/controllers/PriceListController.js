@@ -29,7 +29,9 @@ angular
 							 if($stateParams.buyOrSale.length<=4){
 								 debugger;
 								 $scope.ladderprices=[{}];
-								 _index = 0; 
+								 $scope.priceComs=[{}];
+								 _index = 0; //阶梯价格
+								 _index_com = 0; //采购商/供应商
 								// $scope.priceList.isLadderPrice="0";
 								 getPriceListInfo($stateParams.buyOrSale);
 								 $scope.isChecked=false;
@@ -45,16 +47,19 @@ angular
 								 $scope.ladderpriceAdd=true;
 								 $scope.ladderpriceView=true;
 								 $scope.ladderpriceEdit=false;//隐藏取消
+								 $scope.buyComsInfoShow=true;
 							 }
 							
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
+								 initCustomersForCom();
 								 $rootScope.setNumCode("PI",function(newCode){//
 						    			//$scope.company={};
 					        			$scope.priceList.priceNum= newCode;//采购价格编号
 					        		});
 							 }else{
 								 initCustomers(); 
+								 initSuppliersForCom();
 								 $rootScope.setNumCode("SI",function(newCode){//
 						    			//$scope.company={};
 									 $scope.priceList.priceNum= newCode;//销售价格编号
@@ -67,6 +72,8 @@ angular
 
 						 }else if($location.path()=="/priceList"){
 				 			debugger;
+				 			initTabClass();
+				 			
 				 			if($stateParams.buyOrSale=='sale'){
 				 				debugger;
 				 				$("#buy").removeClass("active");
@@ -92,13 +99,15 @@ angular
 						 $scope.processInstanceId=$stateParams.processInstanceId;
 						var comments =$stateParams.comments;
 						 if(comments == ""||comments == null){
-	    						$("#comment_audit").html( "<tr><td colspan='3' align='center'>无内容</td></tr>");
+	    						$("#comment_audit").html( "<tr><td colspan='4' align='center'>无内容</td></tr>");
 	    					}else{ $("#comment_audit").html(comments);}
 						 if($location.path()=="/editPriceApply"){
 							 if($stateParams.buyOrSale.indexOf("buy")>-1){
 								 initSuppliers();
+								 initCustomersForCom();
 							 }else{
 								 initCustomers(); 
+								 initSuppliersForCom();
 							 }
 							 $scope.priceListView =false;
 							 $scope.priceListAdd =true ;
@@ -150,6 +159,38 @@ angular
 					 $scope.$apply();
 				 });
 			 }
+			 
+			 var initTabClass = function(){
+					var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+						$(liobj).addClass("active");
+//						$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
+						$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+						
+//						methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
+						methodName = '';
+						try{
+							methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+						}catch(e){ 
+//							alert(methodName+"()不存在！"); 
+						}
+						function m(methodName){ 
+							//初始化this.func属性, 
+							this.func = function(){}; 
+							try{ 
+							//这里用eval方法，把我们传进来的这个方法名所代表的方法当作一个对象来赋值给method1的func属性。 
+							//如果找不到methodName这个对应的对象,则eval方法会抛异常 
+								this.func = eval(methodName); 
+							}catch(e){ 
+//								alert(methodName+"()不存在！"); 
+							} 
+						} 
+						try{
+							var c = new m(methodName); 
+							c.func(); 
+						}catch(e){ 
+//							alert(methodName+"()不存在！"); 
+						} 
+				}
 	/*		 // 构建datatables开始***************************************
 			 var tableAjaxUrl = "rest/priceList/getPriceList";
 			 var table;
@@ -172,8 +213,8 @@ angular
 						 {
 							 language : {
 								 aria : {
-									 sortAscending : ": activate to sort column ascending",
-									 sortDescending : ": activate to sort column descending"
+									 sortAscending : ": 以升序排列此列",
+									 sortDescending : ": 以降序排列此列"
 								 },
 								 emptyTable : "空表",
 								 info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -383,8 +424,8 @@ function loadPriceListBuyTable(){
 										{
 											language : {
 												aria : {
-													sortAscending : ": activate to sort column ascending",
-													sortDescending : ": activate to sort column descending"
+													sortAscending : ": 以升序排列此列",
+													sortDescending : ": 以降序排列此列"
 												},
 												emptyTable : "空表",
 												info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -601,8 +642,8 @@ function loadPriceListSaleTable(){
 			{
 				language : {
 					aria : {
-						sortAscending : ": activate to sort column ascending",
-						sortDescending : ": activate to sort column descending"
+						sortAscending : ": 以升序排列此列",
+						sortDescending : ": 以降序排列此列"
 					},
 					emptyTable : "空表",
 					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -714,7 +755,25 @@ function loadPriceListSaleTable(){
 		                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 		                            		}
 		                            	}
-		                            }],
+		                            }/*,
+		                            { mData: 'processBase',//操作
+		                            	mRender:function(data,
+		    									type, row, meta){
+		                            		if(data!=""&&data!=null){
+		                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"||data.status=="APPROVAL_SUCCESS"||ata.status=="APPROVAL_FAILED"){
+		    										return '';
+		    									}else{
+		    										return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo('sale',\''+row.serialNum+'\')">申请</a>';
+		    									}
+		                            		}else{
+		                            			return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo('sale',\''+row.serialNum+'\')">申请</a>';
+		                            		}
+		                            	},
+		                            	"createdCell": function (td, cellData, rowData, row, col) {
+			                            		$compile(td)($scope);
+			                            	}
+		                            }*/
+		                            ],
 	                              'aoColumnDefs' : [ {
 	                            	  'targets' : 0,
 	                            	  'searchable' : false,
@@ -840,25 +899,37 @@ function loadPriceListSaleTable(){
 					 }else{
 						 $scope.priceList.priceType='salePrice';
 					 }
-					 priceListService.savePriceList($scope.priceList)
-					 .then(
-							 function(data) {
-								 debugger;
-								 toastr.success("保存价格数据成功！");
-								 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
-								 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
-								 $scope.priceList =data;
-								 $scope.priceListView =true;
-								 $scope.priceListAdd =false;
-								 $scope.priceListEdit =true;
-								 $(".alert-danger").hide();
-							 },
-							 function(errResponse) {
-								 toastr.warning("保存错误！");
-								 console
-								 .error('Error while creating User');
-							 }
-					 );
+					 
+					 $rootScope.judgeIsExist("price",$scope.priceList.priceNum, $scope.priceList.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			toastr.error('价格编号重复！');
+			    			return;
+			    		}else{
+			    			 priceListService.savePriceList($scope.priceList)
+							 .then(
+									 function(data) {
+										 debugger;
+										 toastr.success("保存价格数据成功！");
+										 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
+										 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
+										 $scope.priceList =data;
+										 $scope.priceListView =true;
+										 $scope.priceListAdd =false;
+										 $scope.priceListEdit =true;
+										 $(".alert-danger").hide();
+									 },
+									 function(errResponse) {
+										 toastr.warning("保存错误！");
+										 console
+										 .error('Error while creating User');
+									 }
+							 );
+			    		}
+			    		
+			    		});
+					
 				 }
 			 };	
 			 // 删除价格开始***************************************							
@@ -1020,10 +1091,10 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
 						toastr.warning("只能包含小数点和数字,且只能有两位小数");
-						$("#inclusivePrice").focus();
+						/*$("#inclusivePrice").focus();*/
 						}
 					return this.optional(element) || Number($(element).data("unitprice")) == NaN?false:(Number($(element).data("unitprice"))-value<= 0);
-				}, "单价不能超过含税价格");
+				}, "不含税单价不能超过含税价格");
 			 jQuery.validator.addMethod("toppriceNumCheck", function (value, element) {//最低价最高价判断
 	    			debugger;
 					$(element).removeData();
@@ -1034,7 +1105,7 @@ function loadPriceListSaleTable(){
 					$(element).removeData();
 					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
 						toastr.warning("只能包含小数点和数字,且只能有两位小数");
-						$("#inclusivePrice").focus();
+						/*$("#inclusivePrice").focus();*/
 						}
 					return this.optional(element) || Number($(element).data("ladderprice")) == NaN?false:(Number($(element).data("ladderprice"))-value<= 0);
 				}, "梯度单价不能超过梯度含税价格");
@@ -1062,13 +1133,128 @@ function loadPriceListSaleTable(){
 					 $scope.ladderprices[_index] = {};
 				 }
 			 };
-
+			 $scope. changeValue=function(judgeString,index){//选中企业为编号赋值
+				 var  comSerials=new Array();
+				 if($scope.comSerials==undefined){
+					 $scope.comSerials=comSerials;
+				 }else{
+					 comSerials= $scope.comSerials;
+					 for(var  i=0;i<comSerials.length;i++){
+						 if(comSerials[i]==$scope.priceComs[index].comSerial){
+							 toastr.warning("该采购商已经存在,请重新选择!");
+							 return;
+						 }
+					 }
+				 }
+				 if(judgeString=='buy'){
+					 for( var i in $scope.customers){
+						 if($scope.customers[i].comId==$scope.priceComs[index].comSerial){
+							 $scope.priceComs[index].comNum=$scope.customers[i].comNum;
+							 $scope.priceComs[index].comName=$scope.customers[i].comName;
+							 comSerials.push($scope.priceComs[index].comSerial);
+							 $scope.comSerials=comSerials;
+							/* $scope.copycustomers=angular.copy($scope.customers);
+							 delete  $scope.copycustomers[i];
+							 $scope.customers= $scope.copycustomers;*/
+							 break;
+						 }
+					 }
+				}else if(judgeString=='supply'){
+						 for( var i in $scope.suppliers){
+							 if($scope.suppliers[i].comId==$scope.priceComs[index].comSerial){
+								 $scope.priceComs[index].comNum=$scope.suppliers[i].comNum;
+								 $scope.priceComs[index].comName=$scope.suppliers[i].comName;
+								 comSerials.push($scope.priceComs[index].comSerial);
+								 $scope.comSerials=comSerials;
+								/* $scope.copysuppliers=angular.copy($scope.suppliers);
+								 delete  $scope.copysuppliers[i];
+								 delete  $scope.suppliers[i];
+								 $scope.suppliers= $scope.copysuppliers;*/
+								
+								 break;
+							 }
+					 }
+					 
+				 }
+			 }
+			 
+			 $scope.editPriceCom=function(){//编辑采供应商
+				 $scope.buyComInfoInput=true;
+				 $scope.buyComsInfoShow=false;
+				 $scope.buyComsInfoShowBtn=true;
+			 }
+			 $scope.cancelPriceCom=function(){//取消编辑采供应商
+				 $scope.buyComInfoInput=false;
+				 $scope.buyComsInfoShow=true;
+				 $scope.buyComsInfoShowBtn=false;
+			 }
+			 $scope. savePriceCom=function(){//保存采供应商
+				 if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+					 toastr.warning("您的价格信息还未保存！");
+					 return;
+				 }else{
+					 for(var i=0;i<$scope.priceComs.length;i++){
+						 $scope.priceComs[i].priceSerial = $scope.priceList.serialNum;//附上价格流水号
+					 }
+					 handle.blockUI();
+					 var promise = priceListService.savePriceComs($scope.priceComs);
+					 promise.then(function(data){
+						 if(!handle.isNull(data)){
+							 toastr.success("保存成功");
+							 debugger;
+							 handle.unblockUI();
+							 $scope.priceComs = data.data;
+							 $scope.buyComsInfoShowBtn =false;
+							 $scope.buyComsInfoShow =true;
+							 $scope.buyComInfoInput =false;
+						 }else{
+							 toastr.error("保存失败！");
+							 handle.unblockUI();
+						 }
+					 },function(data){
+						 handle.unblockUI();
+						 toastr.error("保存失败！");
+						 console.log(data);
+					 });
+				 }
+			 }
+			 
+			 //采购商/供应商加一行
+			 $scope.addRepeatForCom = function(){
+				 if(handle.isNull($scope.priceList)||handle.isNull($scope.priceList.serialNum)){
+					 toastr.warning("您的价格信息还未保存");
+					 return;
+				 }else{
+					 _index_com++;
+					 $scope.priceComs[_index_com] = {};
+				 }
+			 };
+			   $scope.clearNoNumPoint = function(obj,attr){
+			    	 //先把非数字的都替换掉，除了数字和.
+			    	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
+			    	 //必须保证第一个为数字而不是.
+			    	 obj[attr] = obj[attr].replace(/^\./g,"");
+			    	 //保证只有出现一个.而没有多个.
+			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
+			    	 //保证.只出现一次，而不能出现两次以上
+			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+			    	 if(attr=='inclusivePrice'&&$scope.priceList.rate!=undefined){
+	                       var inclusivePrice=$scope.priceList.inclusivePrice;
+			    		 $scope.priceList.unitPrice=inclusivePrice*(1-$scope.priceList.rate/100);
+			    	 }
+		    	 }
 			 /**
 			  * 阶梯价格删除一行
 			  */
 			 $scope.deleteRepeat = function(){
 				 $scope.ladderprices.splice(_index,1);
 				 _index--;
+			 };
+			 /**采购商/供应商删除一行
+			  */
+			 $scope.deleteRepeatForCom = function(){
+				 $scope.priceComs.splice(_index_com,1);
+				 _index_com--;
 			 };
 
 			 /**
@@ -1148,15 +1334,15 @@ function loadPriceListSaleTable(){
 				 .DataTable({
 					 language: {
 						 aria: {
-							 sortAscending: ": activate to sort column ascending",
-							 sortDescending: ": activate to sort column descending"
+							 sortAscending: ": 以升序排列此列",
+							 sortDescending: ": 以降序排列此列"
 						 },
 						 emptyTable: "空表",
 						 info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 						 infoEmpty: "没有数据",
 						 //infoFiltered: "(filtered1 from _MAX_ total entries)",
 						 lengthMenu: "每页显示 _MENU_ 条数据",
-						 search: "查询:",
+						 search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 						 zeroRecords: "抱歉， 没有找到！",
 						 paginate: {
 							 "sFirst": "首页",
@@ -1349,8 +1535,9 @@ function loadPriceListSaleTable(){
 							 $scope.priceList = data.priceList;
 							 $scope.ladderprices=data.ladderPrices;
 							 _index=data.ladderPrices.length-1;
+							 _index_com=data.priceComs.length-1;
 							 $scope.priceLists=data.priceLists;
-							 $scope.buyComs=data.buyList;
+							 $scope.priceComs=data.priceComs;
 							 if($scope.priceList.isLadderPrice=='1'){
 								 $('#isLadderPriceCheck').iCheck('check'); 
 								 $scope.isChecked=true;
@@ -1419,7 +1606,7 @@ function loadPriceListSaleTable(){
 				var initSuppliers = function(){
 					var promise = orderService.initSuppliers();
 			        	promise.then(function(data){
-			        		$scope.coms = data.data;
+			        		$scope.suppliers = data.data;
 			        		setTimeout(function () {
 			        			$("#supplyComId").selectpicker({
 			                        showSubtext: true
@@ -1432,7 +1619,28 @@ function loadPriceListSaleTable(){
 			        		//调用承诺接口reject();
 			        	});
 				}
-				
+				 /**
+				 * 加载供应商数据
+				 */
+				var initSuppliersForCom = function(){
+					var promise = orderService.initSuppliers();
+			        	promise.then(function(data){
+			        		$scope.suppliers = data.data;
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
+				 /**
+				 * 加载采购商(客户)数据
+				 */
+				var initCustomersForCom = function(){
+					var promise = orderService.initCustomers();
+			        	promise.then(function(data){
+			        		$scope.customers = data.data;
+			        	},function(data){
+			        		//调用承诺接口reject();
+			        	});
+				}
 				 /**
 				 * 加载采购商(客户)数据
 				 */
@@ -1527,8 +1735,8 @@ function loadPriceListSaleTable(){
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -1580,6 +1788,7 @@ function loadPriceListSaleTable(){
 		        												var comments = ""//添加评论
 			        												for (var i=0;i<result.commentList.length;i++){
 			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 			        												}
 			        												if(result.actionType == 'audit'){//审批流程
@@ -1814,6 +2023,9 @@ function loadPriceListSaleTable(){
 		    	        success : function(data) {
 		    	        	showToastr('toast-bottom-right', 'success', data);
 		    	        	$scope.cancelPage();
+		    	        },
+		    	        error : function(data) {
+		    	        	toastr.error('连接服务器出错,请登录重试！');
 		    	        }
 		    	     });
 		    	}
@@ -1858,8 +2070,8 @@ function loadPriceListSaleTable(){
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -1912,14 +2124,14 @@ function loadPriceListSaleTable(){
 		        							}
 		        						},
 		        						{
-		        							mData : 'claimTime',
+		        							mData : 'currentPointUserName',//claimTime
 		        							mRender : function(
 		        									data,
 		        									type,
 		        									row,
 		        									meta) {
 		        								if(data != null){
-		        		                			return timeStamp2String(data);
+		        		                			return data;
 		        		                		}else{
 		        		                			return "无需签收";
 		        		                		}
@@ -1944,7 +2156,16 @@ function loadPriceListSaleTable(){
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskBuyPriceTable')\">撤销</a>";
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskBuyPriceTable','buyPrice')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
+		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskBuyPriceTable')\">撤销</a>";
+		        								}else{
+		        									return '';
+		        								}
+		        								
 		        							}
 		        						}
 		        						]
@@ -1959,8 +2180,8 @@ function loadPriceListSaleTable(){
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -2012,6 +2233,7 @@ function loadPriceListSaleTable(){
 		        												var comments = ""//添加评论
 			        												for (var i=0;i<result.commentList.length;i++){
 			        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+			        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
 			        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 			        												}
 			        												if(result.actionType == 'audit'){//审批流程
@@ -2198,8 +2420,8 @@ function loadPriceListSaleTable(){
 		        			{
 		        				language : {
 		        					aria : {
-		        						sortAscending : ": activate to sort column ascending",
-		        						sortDescending : ": activate to sort column descending"
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
 		        					},
 		        					emptyTable : "空表",
 		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -2252,16 +2474,16 @@ function loadPriceListSaleTable(){
 		        							}
 		        						},
 		        						{
-		        							mData : 'claimTime',
+		        							mData : 'currentPointUserName',
 		        							mRender : function(
 		        									data,
 		        									type,
 		        									row,
 		        									meta) {
 		        								if(data != null){
-		        		                			return timeStamp2String(data);
+		        		                			return data;
 		        		                		}else{
-		        		                			return "无需签收";
+		        		                			return "";
 		        		                		}
 		        							}
 		        						},
@@ -2284,7 +2506,16 @@ function loadPriceListSaleTable(){
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
-		        								return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskSalePriceTable')\">撤销</a>";
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskSalePriceTable','salePrice')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
+		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskSalePriceTable')\">撤销</a>";
+		        								}else{
+		        									return '';
+		        								}
+		        								
 		        							}
 		        						}
 		        						]

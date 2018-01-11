@@ -55,7 +55,9 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错！');
+	     });
 	}
 	$rootScope.judgeIsExist = function(codeType,num,serialNum,callback){
 		var deferred = $q.defer();
@@ -67,11 +69,21 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 		})
 		return deferred.promise.then(function(data){
 			callback(data);
-		});
+		},function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
+	
+	var rootPath=getWSPath_web1();
+    $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
+        $("#avatar").attr("src",rootPath+"rest/fileOperate/downloadFile?fileName="+data.avatar);
+        $("#usernameOfUserInfo").html(data.displayName);
+        $rootScope.userName = data.userName;
+      }});
+    
 	return settings;
 } ]);
-
+var webSocket;
 /* Setup App Main Controller */
 MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 		function($scope, $rootScope, $compile) {
@@ -83,7 +95,6 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 				WebSocketInit();
 			});
 			
-			var webSocket;
 			function WebSocketInit(){
 				if(!webSocket){
 					if ('WebSocket' in window) {
@@ -99,6 +110,10 @@ MetronicApp.controller('AppController', [ '$scope', '$rootScope','$compile',
 				};
 				webSocket.onopen = function(event) {
 					console.log('webSocket is open!');
+					//webSocket.send('Hello Server!');
+				};
+				webSocket.onclose = function(event) {
+					console.log('webSocket is close!');
 					//webSocket.send('Hello Server!');
 				};
 				webSocket.onmessage = function(event) {
@@ -413,7 +428,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        'assets/apps/scripts/angular-file-upload.min.js',
 	        	'assets/apps/service/materielService.js',
 	        	'assets/apps/directive/CompanyDirective.js',
-				'assets/apps/controllers/materielController.js'/*,
+				'assets/apps/controllers/materielController.js',
+				
+				'assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css',
+				'assets/global/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js',
+				'assets/pages/scripts/components-bootstrap-multiselect.min.js'
+				
+				/*,
 				'assets/pages/scripts/jquery.jqprint-0.3.js'*/
                       ]
                     });
@@ -485,6 +506,71 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        //销售框架
+        .state('saleFrame', {
+            url: "/saleFrame?:tabHref",
+            templateUrl: "rest/page/saleFrame",
+            data: {pageTitle: '销售框架'},
+            controller: "saleFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/orderService.js',
+                            'assets/apps/controllers/saleFrameController.js',
+                            'assets/apps/service/DeliveryService.js',
+                            'assets/apps/service/CommonService.js',
+                          //流程申请
+							'assets/global/css/dialog.css',
+							'assets/global/css/easyui.css',
+							'assets/global/css/datagrid.css',
+							'assets/global/css/jquery.qtip.min.css',
+				         
+							'assets/global/plugins/jquery.easyui.min.js',
+							'assets/global/plugins/jquery.qtip.min.js',
+							'assets/global/plugins/jquery.outerhtml.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        // 新增销售框架
+        .state('addSaleFrame', {
+            url: "/addSaleFrame?:serialNum&:view",
+            templateUrl: "rest/page/addSaleFrame",
+            params:{"materiels":null,"demandPlanSerial":null,"buyComId":null},
+            data: {pageTitle: '新增销售框架'},
+            controller: "saleFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleFrameController.js',
+	        	'assets/apps/service/CommonService.js'
+                      ]
+                    });
+                }]
+            }
+        })
         //订单(客户端)
         .state('customerOrder', {
             url: "/customerOrder?:tabHref",
@@ -505,6 +591,43 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
                             'assets/apps/controllers/customerOrderController.js',
+                            'assets/apps/service/CommonService.js',
+                            'assets/apps/service/TakeDeliveryService.js',
+                            'assets/apps/service/DeliveryService.js',
+                          //流程申请
+							'assets/global/css/dialog.css',
+							'assets/global/css/easyui.css',
+							'assets/global/css/datagrid.css',
+							'assets/global/css/jquery.qtip.min.css',
+				         
+							'assets/global/plugins/jquery.easyui.min.js',
+							'assets/global/plugins/jquery.qtip.min.js',
+							'assets/global/plugins/jquery.outerhtml.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        //框架协议(客户端)
+        .state('customerFrame', {
+            url: "/customerFrame?:tabHref",
+            templateUrl: "rest/page/customerFrame",
+            data: {pageTitle: '订单'},
+            controller: "customerFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/orderService.js',
+                            'assets/apps/controllers/customerFrameController.js',
                             'assets/apps/service/CommonService.js',
                             'assets/apps/service/TakeDeliveryService.js',
                             'assets/apps/service/DeliveryService.js',
@@ -634,7 +757,56 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/customerOrderController.js',
 				 'assets/apps/service/TakeDeliveryService.js',
-				 'assets/apps/service/DeliveryService.js'
+				 'assets/apps/service/DeliveryService.js',
+				 
+				//流程申请
+					'assets/global/css/dialog.css',
+					'assets/global/css/easyui.css',
+					'assets/global/css/datagrid.css',
+					'assets/global/css/jquery.qtip.min.css',
+		         
+					'assets/global/plugins/jquery.easyui.min.js',
+					'assets/global/plugins/jquery.qtip.min.js',
+					'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 查看(客户端)框架协议
+        .state('viewCustomerFrame', {
+            url: "/viewCustomerFrame?:serialNum",
+            templateUrl: "rest/page/viewCustomerFrame",
+            data: {pageTitle: '查看框架协议'},
+            controller: "customerFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/CommonService.js',
+				'assets/apps/controllers/customerFrameController.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+				 'assets/apps/service/DeliveryService.js',
+				 
+				//流程申请
+					'assets/global/css/dialog.css',
+					'assets/global/css/easyui.css',
+					'assets/global/css/datagrid.css',
+					'assets/global/css/jquery.qtip.min.css',
+		         
+					'assets/global/plugins/jquery.easyui.min.js',
+					'assets/global/plugins/jquery.qtip.min.js',
+					'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -663,6 +835,15 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -691,7 +872,16 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -720,7 +910,129 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 申请销售框架
+        .state('submitSaleFrameApply', {
+            url: "/submitSaleFrameApply?:serialNum&:view",
+            templateUrl: "rest/page/submitSaleFrameApply",
+            data: {pageTitle: '申请销售框架'},
+            controller: "saleFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleFrameController.js',
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 审批销售框架 
+        .state('approvalSaleFrameApply', {
+            url: "/approvalSaleFrameApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalSaleFrameApply",
+            data: {pageTitle: '审批销售框架'},
+            controller: "saleFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleFrameController.js',
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 重新编辑采购框架申请
+        .state('editSaleFrameApply', {
+            url: "/editSaleFrameApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editSaleFrameApply",
+            data: {pageTitle: '重新编辑框架协议'},
+            controller: "saleOrderController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleFrameController.js',
+	        	'assets/apps/service/CommonService.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -746,6 +1058,78 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/orderService.js',
                             'assets/apps/controllers/buyOrderController.js',
+                            'assets/apps/service/TakeDeliveryService.js',
+                            'assets/apps/service/PayService.js',
+                          //流程申请
+							'assets/global/css/dialog.css',
+							'assets/global/css/easyui.css',
+							'assets/global/css/datagrid.css',
+							'assets/global/css/jquery.qtip.min.css',
+				         
+							'assets/global/plugins/jquery.easyui.min.js',
+							'assets/global/plugins/jquery.qtip.min.js',
+							'assets/global/plugins/jquery.outerhtml.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        //采购计划
+        .state('procurementPlan', {
+            url: "/procurementPlan?:tabHref",
+            templateUrl: "rest/page/procurementPlan",
+            data: {pageTitle: '采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/procurementPlanService.js',
+                            'assets/apps/controllers/procurementPlanController.js'
+//                            'assets/apps/service/TakeDeliveryService.js',
+                          //流程申请
+//							'assets/global/css/dialog.css',
+//							'assets/global/css/easyui.css',
+//							'assets/global/css/datagrid.css',
+//							'assets/global/css/jquery.qtip.min.css',
+//				         
+//							'assets/global/plugins/jquery.easyui.min.js',
+//							'assets/global/plugins/jquery.qtip.min.js',
+//							'assets/global/plugins/jquery.outerhtml.js'
+                        ]
+                    });
+                }]
+            }
+        })
+        
+        //采购框架
+        .state('buyFrame', {
+            url: "/buyFrame?:tabHref",
+            templateUrl: "rest/page/buyFrame",
+            data: {pageTitle: '采购框架'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/orderService.js',
+                            'assets/apps/controllers/buyFrameController.js',
                             'assets/apps/service/TakeDeliveryService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
@@ -811,7 +1195,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
-        
+        //供应商订单列表
+        .state('supplyFrame', {
+            url: "/supplyFrame?:tabHref",
+            templateUrl: "rest/page/supplyFrame",
+            data: {pageTitle: '框架协议'},
+            controller: "supplyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+							'assets/global/plugins/datatables/datatables.min.css',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+							'assets/global/plugins/datatables/datatables.all.min.js',
+							'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+							'assets/apps/scripts/angular-file-upload.min.js',
+							'assets/apps/service/materielService.js',
+                            'assets/apps/service/orderService.js',
+                            'assets/apps/service/DeliveryService.js',
+                            'assets/apps/controllers/supplyFrameController.js',
+                          
+                        ]
+                    });
+                }]
+            }
+        })
         // 供应商修改平台采购订单
         .state('addSupplyOrder', {
             url: "/addSupplyOrder?:serialNum&:view",
@@ -839,6 +1249,33 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        // 供应商修改平台采购框架
+        .state('addSupplyFrame', {
+            url: "/addSupplyFrame?:serialNum&:view",
+            templateUrl: "rest/page/addSupplyFrame",
+            data: {pageTitle: '新增采购框架'},
+            controller: "supplyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/supplyFrameController.js'
+                      ]
+                    });
+                }]
+            }
+        })
         // 新增采购订单
         .state('addBuyOrder', {
             url: "/addBuyOrder?:serialNum&:view",
@@ -860,7 +1297,62 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/buyOrderController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 新增采购计划
+        .state('addProcurementPlan', {
+            url: "/addProcurementPlan?:serialNum&:view",
+            templateUrl: "rest/page/addProcurementPlan",
+            data: {pageTitle: '新增采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+//				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/procurementPlanService.js',
+				'assets/apps/controllers/procurementPlanController.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 新增采购框架
+        .state('addBuyFrame', {
+            url: "/addBuyFrame?:serialNum&:view",
+            templateUrl: "rest/page/addBuyFrame",
+            data: {pageTitle: '新增采购框架'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyFrameController.js'
                       ]
                     });
                 }]
@@ -868,9 +1360,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 查看采购订单
         .state('viewBuyOrder', {
-            url: "/viewBuyOrder?:serialNum",
+            url: "/viewBuyOrder?:serialNum&:businessType",
             templateUrl: "rest/page/viewBuyOrder",
-            data: {pageTitle: '新增采购订单'},
+            data: {pageTitle: '查看采购订单'},
             controller: "buyOrderController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -887,7 +1379,91 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/buyOrderController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 查看采购计划
+        .state('viewProcurementPlan', {
+            url: "/viewProcurementPlan?:serialNum",
+            templateUrl: "rest/page/viewProcurementPlan",
+            data: {pageTitle: '查看采购计划'},
+            controller: "procurementPlanController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/procurementPlanService.js',
+				'assets/apps/controllers/procurementPlanController.js'
+	        	
+	        	//流程申请
+//				'assets/global/css/dialog.css',
+//				'assets/global/css/easyui.css',
+//				'assets/global/css/datagrid.css',
+//				'assets/global/css/jquery.qtip.min.css',
+//	         
+//				'assets/global/plugins/jquery.easyui.min.js',
+//				'assets/global/plugins/jquery.qtip.min.js',
+//				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 查看采购框架
+        .state('viewBuyFrame', {
+            url: "/viewBuyFrame?:serialNum",
+            templateUrl: "rest/page/viewBuyFrame",
+            data: {pageTitle: '查看采购框架'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyFrameController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -895,7 +1471,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 查看销售订单
         .state('viewSaleOrder', {
-            url: "/viewSaleOrder?:serialNum",
+            url: "/viewSaleOrder?:serialNum&:businessType",
             templateUrl: "rest/page/viewSaleOrder",
             data: {pageTitle: '查看销售订单'},
             controller: "saleOrderController",
@@ -915,18 +1491,65 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/CommonService.js',
 	        	'assets/apps/service/DeliveryService.js',
-				'assets/apps/controllers/saleOrderController.js'
+				'assets/apps/controllers/saleOrderController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
             }
         })
-        
+        // 查看销售框架
+        .state('viewSaleFrame', {
+            url: "/viewSaleFrame?:serialNum",
+            templateUrl: "rest/page/viewSaleFrame",
+            data: {pageTitle: '查看销售框架'},
+            controller: "saleFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleFrameController.js',
+	        	
+	        	//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
         // 供应商查看订单
         .state('viewSupplyOrder', {
             url: "/viewSupplyOrder?:serialNum",
             templateUrl: "rest/page/viewSupplyOrder",
-            data: {pageTitle: '新增采购订单'},
+            data: {pageTitle: '查看订单'},
             controller: "supplyOrderController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {
@@ -943,7 +1566,53 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
-				'assets/apps/controllers/supplyOrderController.js'
+				'assets/apps/controllers/supplyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        // 供应商查看框架协议
+        .state('viewSupplyFrame', {
+            url: "/viewSupplyFrame?:serialNum",
+            templateUrl: "rest/page/viewSupplyFrame",
+            data: {pageTitle: '查看框架协议'},
+            controller: "supplyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/supplyFrameController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -971,7 +1640,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -999,7 +1678,17 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -1027,7 +1716,127 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/orderService.js',
-				'assets/apps/controllers/buyOrderController.js'
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/buyOrderController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 采购框架发起申请
+        .state('submitBuyFrameApply', {
+            url: "/submitBuyFrameApply?:serialNum&:view",
+            templateUrl: "rest/page/submitBuyFrameApply",
+            data: {pageTitle: '采购框架申请'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyFrameController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 审批采购框架
+        .state('approvalBuyFrameApply', {
+            url: "/approvalBuyFrameApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalBuyFrameApply",
+            data: {pageTitle: '审批采购框架'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyFrameController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 重新编辑采购框架申请
+        .state('editBuyFrameApply', {
+            url: "/editBuyFrameApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editBuyFrameApply",
+            data: {pageTitle: '重新编辑框架协议'},
+            controller: "buyFrameController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+				 'assets/apps/service/TakeDeliveryService.js',
+	        	'assets/apps/service/orderService.js',
+				'assets/apps/controllers/buyFrameController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
                       ]
                     });
                 }]
@@ -1163,7 +1972,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	}
         })
 	    .state('userContract', {
-	            url: "/userContract",
+	            url: "/userContract:tabHref",
 	            templateUrl:"rest/page/userContract",
 	            data: {pageTitle: '合同管理'},
 	            controller: "ContractController",
@@ -1376,7 +2185,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/apps/service/orderService.js',
 	        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
-	        				        'assets/apps/scripts/FileUploader.js'
+	        				        'assets/apps/scripts/FileUploader.js',
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/global/plugins/datatables/datatables.min.css', 
 	        				        ]
 	        			});
 	        		}]
@@ -1468,6 +2279,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
@@ -1485,7 +2297,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    		}]
 		    	}	        
 		    }) .state('takeDeliveryAdd', {
-		    	url: "/takeDeliveryAdd?:serialNum&:type",
+		    	url: "/takeDeliveryAdd?:serialNum&:type&:orderSerialNum",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryAdd",
 		    	data: {pageTitle: '新增代发货'},
 		    	reload:true, 
@@ -1501,6 +2313,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1511,7 +2324,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    	}
 		    }) 
 		    .state('takeDeliveryView', {
-		    	url: "/takeDeliveryView?:serialNum&:oprateType",
+		    	url: "/takeDeliveryView?:serialNum&:oprateType&:inOutSerial",
 		    	templateUrl: "rest/takeDelivery/takeDeliveryView",
 		    	data: {pageTitle: '查看收货详情'},
 		    	reload:true, 
@@ -1526,6 +2339,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1551,6 +2365,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/orderService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 		    				        'assets/apps/scripts/angular-file-upload-shim.min.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 	        				        'assets/apps/scripts/FileUploader.js',
@@ -1574,6 +2389,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
@@ -1595,6 +2411,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/apps/controllers/TakeDeliveryController.js',
 		    				        'assets/apps/service/TakeDeliveryService.js',
 		    				        'assets/apps/service/CommonService.js',
+		    				        'assets/apps/service/DeliveryService.js',
 	        				        'assets/apps/scripts/angular-file-upload.min.js',
 		    				        'assets/apps/service/orderService.js'
 		    				        ]
@@ -2122,7 +2939,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })  
 		    
 		    .state('addDelivery', {
-            url: "/addDelivery:oprateType",
+            url: "/addDelivery:oprateType&:orderSerialNum",
             templateUrl: "rest/delivery/addDelivery",
             data: {pageTitle: '新增发货'},
             controller: "DeliveryController",
@@ -2390,6 +3207,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 					  'assets/global/plugins/bootbox/bootbox.min.js',
 			        'assets/apps/service/InvoiceService.js',
 					'assets/apps/controllers/InvoiceController.js',
+					 'assets/apps/service/CommonService.js',
 					'assets/apps/scripts/angular-file-upload-shim.min.js',
                 	'assets/apps/scripts/angular-file-upload.min.js',
                 	'assets/global/css/dialog.css',
@@ -2406,7 +3224,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         .state('addOrEditInvoice', {//发票新建编辑
-        	url: "/addOrEditInvoice?:inOrOut",
+        	url: "/addOrEditInvoice?:inOrOut&:orderSerialNum",
         	templateUrl: "rest/invoice/addOrEditInvoice",
         	data: {pageTitle: '新建发票信息'},
         	reload:true, 
@@ -2421,6 +3239,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         				        'assets/global/plugins/datatables/datatables.all.min.js',
         				        'assets/apps/service/InvoiceService.js',
         						'assets/apps/controllers/InvoiceController.js',
+        						 'assets/apps/service/CommonService.js',
         						 'assets/apps/scripts/pageHandle.js',
         						 'assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css',
          				        'assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
@@ -2435,7 +3254,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	}	        
         })
         
-        .state('invoiceView', {//出入库检验查看
+        .state('invoiceView', {//发票查看
 	        	url: "/invoiceView?:inOrOut",
 	        	templateUrl: "rest/invoice/viewInvoice",
 	        	data: {pageTitle: '发票详情'},
@@ -2451,9 +3270,13 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        				        'assets/global/plugins/datatables/datatables.all.min.js',
 	        				        'assets/apps/service/InvoiceService.js',
 	        						'assets/apps/controllers/InvoiceController.js',
+	        						 'assets/apps/service/CommonService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css',
-	        				        'assets/pages/scripts/table-datatables-scroller.min.js'
+	        				        'assets/pages/scripts/table-datatables-scroller.min.js' ,
+	        				        'assets/apps/scripts/angular-file-upload-shim.min.js',
+	        				        'assets/apps/scripts/angular-file-upload.min.js',
+	        				        'assets/apps/scripts/FileUploader.js'
 	        				        ]
 	        			});
 	        		}]
@@ -2478,7 +3301,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
-				'assets/apps/controllers/InvoiceController.js'
+				'assets/apps/controllers/InvoiceController.js',
+				 'assets/apps/service/CommonService.js'
 	        	
                       ]
                     });
@@ -2506,6 +3330,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/InvoiceController.js'
 	        	
                       ]
@@ -2534,6 +3359,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/InvoiceService.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/InvoiceController.js'
 	        	
                       ]
@@ -2543,7 +3369,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 
         .state('addPay', {
-            url: "/addPay",
+            url: "/addPay?:serialNum&:orderSerialNum",
             templateUrl: "rest/page/addPay",
             data: {pageTitle: '新增付款'},
             controller: "PayController",
@@ -2563,6 +3389,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2572,7 +3400,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('viewPay', {
-            url: "/viewPay:serialNum",
+            url: "/viewPay?:serialNum",
             templateUrl: "rest/page/viewPay",
             data: {pageTitle: '付款详情'},
             controller: "PayController",
@@ -2593,6 +3421,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2602,7 +3432,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         
         .state('applyPay', {
-            url: "/applyPay:serialNum",
+            url: "/applyPay?:serialNum",
             templateUrl: "rest/page/applyPay",
             data: {pageTitle: '应付款申请'},
             controller: "PayController",
@@ -2623,6 +3453,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2654,6 +3486,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2685,6 +3519,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/scripts/pageHandle.js',
 								'assets/apps/service/PayService.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2716,6 +3552,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 								'assets/apps/service/PayService.js',
 							    'assets/apps/scripts/angular-file-upload.min.js',
 								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
 								'assets/apps/controllers/app.js',
 								'assets/apps/controllers/uploadPhoto.js',
 				
@@ -2757,6 +3595,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 	        	'assets/apps/service/PayService.js',
 				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2767,7 +3607,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         
         .state('addGatheringMoney', {
-            url: "/addGatheringMoney",
+            url: "/addGatheringMoney:serialNum",
             templateUrl: "rest/page/addGatheringMoney",
             data: {pageTitle: '新增收款'},
             controller: "GatheringMoneyController",
@@ -2797,7 +3637,10 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			    'assets/apps/scripts/FileUploader.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/ReceiveMemoService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2838,6 +3681,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 			    'assets/apps/controllers/GatheringMoneyController.js',
+			    'assets/apps/service/ReceiveMemoService.js',
+			    'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js',
                       ]
@@ -2877,6 +3722,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				  'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -2895,7 +3742,9 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                     return $ocLazyLoad.load({
                         name: 'MetronicApp',
                         insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
-                        files: [                             
+                        files: [     
+					'assets/apps/controllers/app.js',
+					'assets/apps/controllers/uploadPhoto.js',
 					'assets/global/plugins/datatables/datatables.min.css',
 					'assets/apps/css/special.css',
 					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
@@ -2907,9 +3756,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 			        'assets/apps/service/UserInfoService.js',
 					'assets/apps/controllers/UserInfoController.js',
 					'assets/apps/service/CompanyInfoService.js',
-					 'assets/apps/service/AccountSecurityService.js',
-					'assets/apps/controllers/app.js',
-					'assets/apps/controllers/uploadPhoto.js'
+					 'assets/apps/service/AccountSecurityService.js'
 					]
                     });
                 }]
@@ -2991,6 +3838,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/GatheringMoneyService.js',
 				'assets/apps/controllers/GatheringMoneyController.js',
+				 'assets/apps/service/CommonService.js',
 				'assets/apps/controllers/app.js',
 				'assets/apps/controllers/uploadPhoto.js'
                       ]
@@ -3102,12 +3950,534 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+         .state('addReceiveMemo', {
+            url: "/addReceiveMemo?:serialNum",
+            templateUrl: "rest/page/addReceiveMemo",
+            data: {pageTitle: '新增收款水单'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         
         
+        .state('receiveMemo', {
+            url: "/receiveMemo",
+            templateUrl: "rest/page/receiveMemo",
+            data: {pageTitle: '收款水单列表'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+			    'assets/apps/controllers/ReceiveMemoController.js',
+			    'assets/apps/service/CommonService.js',
+			    'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        
+        .state('viewReceiveMemo', {
+            url: "/viewReceiveMemo:serialNum&:type",
+            templateUrl: "rest/page/viewReceiveMemo",
+            data: {pageTitle: '收款水单详情'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+          .state('addPayMemo', {
+            url: "/addPayMemo?:serialNum",
+            templateUrl: "rest/page/addPayMemo",
+            data: {pageTitle: '新增付款水单'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('payMemo', {
+            url: "/payMemo",
+            templateUrl: "rest/page/payMemo",
+            data: {pageTitle: '付款水单列表'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+			
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+			    'assets/apps/controllers/ReceiveMemoController.js',
+			    'assets/apps/service/CommonService.js',
+			    'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('viewMemoPay', {
+            url: "/viewMemoPay?:serialNum&:type",
+            templateUrl: "rest/page/viewMemoPay",
+            data: {pageTitle: '付款水单详情'},
+            controller: "ReceiveMemoController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/ReceiveMemoController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/orderService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+          .state('addPayForBuyOrder', {
+            url: "/addPayForBuyOrder?:serialNum&:orderSerialNum",
+            templateUrl: "rest/page/addPay",
+            data: {pageTitle: '新增付款'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+	        	'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('viewPayForBuyOrder', {
+            url: "/viewPayForBuyOrder?:serialNum",
+            templateUrl: "rest/page/viewPay",
+            data: {pageTitle: '付款详情'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/PayService.js',
+				'assets/apps/controllers/PayController.js',
+				 'assets/apps/service/CommonService.js',
+				 'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('applyPayForBuyOrder', {
+            url: "/applyPayForBuyOrder?:serialNum",
+            templateUrl: "rest/page/applyPay",
+            data: {pageTitle: '应付款申请'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('auditPayForBuyOrder', {
+            url: "/auditPay",
+            templateUrl: "rest/page/auditPay",
+            data: {pageTitle: '应付款审批'},
+            params:{"serialNum":null,"taskId":null, "comments":null},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        .state('editAuditPayForBuyOrder', {
+            url: "/editAuditPay",
+            templateUrl: "rest/page/editAuditPay",
+            data: {pageTitle: '调整应付款申请'},
+            params:{"serialNum":null,"taskId":null, "comments":null},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								/*'assets/apps/css/special.css',*/
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/angular-file-upload-shim.min.js',
+								'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/scripts/FileUploader.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        
+         .state('paymentRecordCForBuyOrder', {
+            url: "/paymentRecordC?tabHref",
+            templateUrl: "rest/page/paymentRecord",
+            data: {pageTitle: '付款列表'},
+            controller: "PayController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+								'assets/global/plugins/datatables/datatables.min.css',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+								
+								
+								'assets/global/scripts/datatable.js',
+								//'assets/global/plugins/datatables/datatables.min.js',
+								'assets/global/plugins/datatables/datatables.all.min.js',
+								'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+								'assets/apps/scripts/pageHandle.js',
+								'assets/apps/service/PayService.js',
+							    'assets/apps/scripts/angular-file-upload.min.js',
+								'assets/apps/controllers/PayController.js',
+								 'assets/apps/service/CommonService.js',
+								 'assets/apps/service/ReceiveMemoService.js',
+								'assets/apps/controllers/app.js',
+								'assets/apps/controllers/uploadPhoto.js',
+				
+				
+								//流程申请
+								'assets/global/css/dialog.css',
+								'assets/global/css/easyui.css',
+								'assets/global/css/datagrid.css',
+								'assets/global/css/jquery.qtip.min.css',
+					         
+								'assets/global/plugins/jquery.easyui.min.js',
+								'assets/global/plugins/jquery.qtip.min.js',
+								'assets/global/plugins/jquery.outerhtml.js',
+                      ]
+                    });
+                }]
+            }
+        })
+        
+        // 申请发货计划
+        .state('submitDeliveryPlanApply', {
+            url: "/submitDeliveryPlanApply?:serialNum&:view",
+            templateUrl: "rest/page/submitDeliveryPlanApply",
+            data: {pageTitle: '申请发货计划'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 审批发货计划
+        .state('approvalDeliveryPlanApply', {
+            url: "/approvalDeliveryPlanApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalDeliveryPlanApply",
+            data: {pageTitle: '审批发货计划'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+	        	
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 重新编辑发货计划
+        .state('editDeliveryPlanApply', {
+            url: "/editDeliveryPlanApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editDeliveryPlanApply",
+            data: {pageTitle: '重新编辑订单'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
         }]);
 
 
-
+//禁止模板缓存  
+MetronicApp.run(function($rootScope, $templateCache) {  
+    $rootScope.$on('$routeChangeStart', function(event, next, current) {  
+        if (typeof(current) !== 'undefined'){  
+            $templateCache.remove(current.templateUrl);  
+        }  
+    });  
+}); 
 //js获取项目根路径，如： http://localhost:8083/uimcardprj
 function getRootPath(){
     //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
@@ -3129,6 +4499,8 @@ MetronicApp.run([ "$rootScope", "settings", "$state",
 			$rootScope.$settings = settings; // state to be accessed from
 												// view
 		} ]);
+
+
 
 MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$http', '$q', function ($rootScope, $window, $location, $log, $compile, $http, $q) {
 	//路由转换成功后
@@ -3218,10 +4590,25 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改销售订单</a></li>";
 						 } else html += "<li><a>新增销售订单</a></li>";
+			   }else if('saleFrame' == toState.name){//销售框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架列表</a></li>";					 
+			   }else if('addSaleFrame' == toState.name){//新增销售框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleFrame'>销售框架列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改销售框架</a></li>";
+						 } else html += "<li><a>新增销售框架</a></li>";
 			   }else if('customerOrder' == toState.name){//（客户端）订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>订单列表</a></li>";					 
+			   }else if('customerFrame' == toState.name){//（客户端）框架协议
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议列表</a></li>";					 
 			   }else if('addCustomerOrder' == toState.name){//新增（客户端）订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3245,6 +4632,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='customerOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看订单</a></li>";
+			   }else if('viewCustomerFrame' == toState.name){//查看（客户端）框架协议
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='customerFrame'>框架协议列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看框架协议</a></li>";
 			   }else if('submitSaleApply' == toState.name){//销售订单发起申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3260,18 +4652,49 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>重新发起订单申请</a></li>";
+			   }else if('submitSaleFrameApply' == toState.name){//销售框架发起申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleFrame'>销售框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>销售框架申请</a></li>";
+			   }else if('approvalSaleFrameApply' == toState.name){//销售框架审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleFrame'>销售框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>销售框架审批</a></li>";
+			   }else if('editSaleFrameApply' == toState.name){//重新编辑销售框架申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleFrame'>销售框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>重新发起框架协议申请</a></li>";
 			   }else if('buyOrder' == toState.name){//采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单列表</a></li>";					 
+			   }else if('procurementPlan' == toState.name){//采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划列表</a></li>";					 
+			   }else if('buyFrame' == toState.name){//采购框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架列表</a></li>";					 
 			   }else if('operateLog' == toState.name){//操作日志
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>个人中心</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>操作日志</a></li>";					 
-			   }else if('supplyOrder' == toState.name){//采购订单
+			   }else if('supplyOrder' == toState.name){//供应商--订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>订单列表</a></li>";					 
+			   }else if('supplyFrame' == toState.name){//供应商--框架协议
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议列表</a></li>";					 
+			   }else if('buyFrame' == toState.name){//采购商--框架协议
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议列表</a></li>";					 
 			   }else if('addBuyOrder' == toState.name){//新增采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3279,6 +4702,20 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改采购订单</a></li>";
 						 } else html += "<li><a>新增采购订单</a></li>";
+			   }else if('addProcurementPlan' == toState.name){//新增采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='procurementPlan'>采购计划列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改采购计划</a></li>";
+						 } else html += "<li><a>新增采购计划</a></li>";
+			   }else if('addBuyFrame' == toState.name){//新增采购订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改框架订单</a></li>";
+						 } else html += "<li><a>新增框架订单</a></li>";
 			   }else if('addSupplyOrder' == toState.name){//供应商修改平台采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3286,16 +4723,48 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		if(toParams.serialNum != undefined){
 							 html += "<li><a>修改订单</a></li>";
 						 } else html += "<li><a>新增订单</a></li>";
+			   }else if('addSupplyFrame' == toState.name){//供应商修改平台采购框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyFrame'>框架协议</a><i class='fa fa-angle-right'></i></li>";
+				 		if(toParams.serialNum != undefined){
+							 html += "<li><a>修改框架协议</a></li>";
+						 } else html += "<li><a>新增框架协议</a></li>";
 			   }else if('viewBuyOrder' == toState.name){//查看采购订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看采购订单</a></li>";
+			   }else if('viewProcurementPlan' == toState.name){//查看采购计划
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购计划</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='procurementPlan'>采购计划列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看采购计划</a></li>";
+			   }else if('viewBuyFrame' == toState.name){//查看采购框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看采购框架</a></li>";
+			   }else if('viewSaleOrder' == toState.name){//查看销售订单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看销售订单</a></li>";
+			   }else if('viewSaleOrder' == toState.name){//查看销售框架
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleFrame'>销售框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看销售框架</a></li>";
 			   }else if('viewSupplyOrder' == toState.name){//查看供应商订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='supplyOrder'>订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看订单</a></li>";
+			   }else if('viewSupplyFrame' == toState.name){//查看供应商框架协议
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>框架协议</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='supplyFrame'>框架协议列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看框架协议</a></li>";
 			   }else if('submitBuyApply' == toState.name){//采购订单发起申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3311,6 +4780,21 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>重新发起订单申请</a></li>";
+			   }else if('submitBuyFrameApply' == toState.name){//采购框架发起申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>采购框架申请</a></li>";
+			   }else if('approvalBuyFrameApply' == toState.name){//采购框架审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>采购框架审批</a></li>";
+			   }else if('editBuyFrameApply' == toState.name){//重新编辑采购框架申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购框架</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyFrame'>采购框架列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>重新发起框架协议申请</a></li>";
 			   }else if('purchaseForecast' == toState.name){//采购预测
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
@@ -3579,10 +5063,17 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
 				   "<li><a>应付款</a></li>";				   
 			   }else if('addPay' == toState.name){//新增应付款
+				   if(toParams.judgeString!='buyOrder'){
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a ui-sref='paymentRecordC'>应付款</a> <i class='fa fa-angle-right'></i></li>" + 
-					 		"<li><a>新增应付款</a></li>";					 
+					 		"<li><a>新增应付款</a></li>";	
+				   }else{
+					   html= "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a></li><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>新增付款计划</a></li>"
+				   }
 			   }else if('editPay' == toState.name){//修改应付款
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
@@ -3715,6 +5206,75 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						 html += "<li><a>采购订单</a><i class='fa fa-angle-right'></i></li><li><li><a ui-sref='customsClearanceForm'>清关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看清关单</a></li>";
 					 } else html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li><li><a ui-sref='customsDeclarationForm'>报关单列表</a><i class='fa fa-angle-right'></i></li><li><a>查看报关单</a></li>";
 				 	
+			   }else if('receiveMemo' == toState.name){//收款水单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收款水单</a></li>";				   
+			   }else if('addReceiveMemo' == toState.name){//新增收款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='receiveMemo'>收款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增收款水单</a></li>";					 
+			   }else if('viewReceiveMemo' == toState.name){//查看收款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='receiveMemo'>收款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看收款水单</a></li>";					 
+			   }else if('payMemo' == toState.name){//付款水单
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>付款水单</a></li>";				   
+			   }else if('addPayMemo' == toState.name){//新增付款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+					 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>新增付款水单</a></li>";					 
+			   }else if('viewMemoPay' == toState.name){//查看付款水单
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>收付款</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a ui-sref='payMemo'>付款水单</a> <i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>查看付款水单</a></li>";					 
+			   }else if('paymentRecordCForBuyOrder' == toState.name){//应付款
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>收付款</a><i class='fa fa-angle-right'></i></li>" +
+				   "<li><a>应付款</a></li>";				   
+			   }else if('addPayForBuyOrder' == toState.name){//新增应付款
+					 html= "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>新增付款计划</a></li>"	
+			   }else if('viewPayForBuyOrder' == toState.name){//查看应付款
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>查看付款计划</a></li>"								 
+			   }else if('applyPayForBuyOrder' == toState.name){//应付款申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>申请付款计划</a></li>"						 
+			   }else if('auditPayForBuyOrder' == toState.name){//应付款审批
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>付款计划审批</a></li>"					 
+			   }else if('editAuditPayForBuyOrder' == toState.name){//调整应付款申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>调整付款计划申请</a></li>"					 
+			   }else if('submitDeliveryPlanApply' == toState.name){//发货审批申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"+
+					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>发货计划申请</a></li>";
+			   }else if('approvalDeliveryPlanApply' == toState.name){//发货审批
+				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+			 		"<li><a>发货计划审批</a></li>";				 
+			   }else if('editDeliveryPlanApply' == toState.name){//调整发货审批申请
+				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+			 		"<li><a>调整发货计划申请</a></li>";							 
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	
@@ -3736,7 +5296,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						getEndTaskLength('paymentRecordC', 'accountPayable');
 					}else if('buyOrder' == toState.name){
 						getTodoTaskLength('buyOrder', 'buyOrder');
-						getEndTaskLength('buyOrder', 'buyOrder');					
+						getEndTaskLength('buyOrder', 'buyOrder');	
+						getTodoTaskLength('buyOrder', 'accountPayable');
+						getEndTaskLength('buyOrder', 'accountPayable');
+					}else if('buyFrame' == toState.name){
+						getTodoTaskLength('buyFrame', 'buyFrame');
+						getEndTaskLength('buyFrame', 'buyFrame');					
+					}else if('saleFrame' == toState.name){
+						getTodoTaskLength('saleFrame', 'saleFrame');
+						getEndTaskLength('saleFrame', 'saleFrame');					
 					}else if('takeDelivery' == toState.name){ //收货
 						getTodoTaskLength('takeDelivery', 'takeDelivery');
 						getEndTaskLength('takeDelivery', 'takeDelivery');
@@ -3773,8 +5341,14 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	$rootScope.businessMessageSize = data; 
-	    });
+	    	if(data.length>20){
+	    		window.location = ctx + "/rest/page/login";
+	    	}else{
+	    		$rootScope.businessMessageSize = data; 
+	    	}
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 	function showBusinessMessageSizeCount(){
@@ -3786,8 +5360,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	$rootScope.noticeCount = data; 
-	    });
+	    	if(data.length>20){
+	    		window.location = ctx + "/rest/page/login";
+	    	}else{
+	    		$rootScope.noticeCount = data; 
+	    	}
+	    	
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 	}
 	function showSystemMessageSizeCount(){
 		var deferred = $q.defer();
@@ -3799,7 +5380,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    })
 	    return deferred.promise.then(function(data){
 	    	$rootScope.systemMessageSize = data; 
-	    });
+	    },function(error){
+	         toastr.error('连接服务器出错,请登录重试！');
+	     });
 		
 	}
 			function getTodoTaskLength(route, workflowType){
@@ -3811,13 +5394,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			        deferred.reject('连接服务器出错！');  
 			    })
 			    return deferred.promise.then(function(data){
-			    	if(workflowType=='salePrice'){
+			    	if(workflowType=='salePrice'||workflowType=='accountPayable'){
 			    		$rootScope.dbsLength1 = data; 
 			    	}else{
 			    		$rootScope.dbsLength = data; 
 			    	}
 			    	 //调用承诺接口resolove()
-			    });
+			    },function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 
 			function getEndTaskLength(route, workflowType){
@@ -3830,13 +5415,15 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				    deferred.reject('连接服务器出错！');  
 				})
 				return deferred.promise.then(function(data){
-					if(workflowType=='salePrice'){
+					if(workflowType=='salePrice'||workflowType=='accountPayable'){
 						$rootScope.ybsLength1 = data;
 			    	}else{
 			    		$rootScope.ybsLength = data;
 			    	}
 					
-				});
+				},function(error){
+			         toastr.error('连接服务器出错,请登录重试！');
+			     });
 			}
 			
 }]); 

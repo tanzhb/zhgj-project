@@ -6,337 +6,350 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class Delivery {
-    private String serialNum;
+	private String serialNum;
 
-    private String deliverNum;
-    
-    private String deliverType;
+	private String deliverNum;
 
-    private String orderSerial;
-    
-    private String docNum; //单据号
+	private String deliverType;
 
-    private String supplyComId;
-    
-    private String buyComId; //采购商Id
+	private String orderSerial;
 
-    private String shipper;
+	private String docNum; // 单据号
 
-    private String receiver;
+	private String supplyComId;
 
-    private Date makeDate;
+	private String buyComId; // 采购商Id
 
-    private String maker;
+	private String shipper;
 
-    private String remark;
+	private String receiver;
 
-    private String status;
+	private Date makeDate;
 
-    private String approval;
+	private String maker;
 
-    private Date approvalDate;
+	private String remark;
 
-    private String warehouseSerial;
+	private String status;
 
-    private String materielCount;
+	private String approval;
 
-    private Date deliverDate;
+	private Date approvalDate;
 
-    private String packageCount;
+	private String warehouseSerial;
 
-    private String materielWeight;
+	private String materielCount;
 
-    private String packageType;
+	private Date deliverDate;
 
-    private String packageSpecifications;
+	private String packageCount;
 
-    private String serviceMoney;
+	private String materielWeight;
 
-    private String deliverer;
+	private String packageType;
 
-    private String contactNum;
+	private String packageSpecifications;
 
-    private String deliverRemark;
-    
-    private String processInstanceId;
-    
-    private String deliverAddress;
+	private String serviceMoney;
 
-    private String reason;
+	private String deliverer;
 
-    private Integer userId;
+	private String contactNum;
 
-    private String delFlg;
+	private String deliverRemark;
 
-    private String creator;
+	private String processInstanceId;
 
-    private Date createTime;
+	private String deliverAddress;
 
-    private String updater;
+	private String reason;
 
-    private Date updateTime;
-    
-    private String takeDeliverSerial;
-    
-    private String warehouseName;//发货仓库名称
-    
-  //发货数量合计
-  		private String materielTotalCount;
-    
-    //冗余字段
-    
-    private List<DeliveryMateriel> deliveryMateriels;
-    
-    private DeliveryTransport deliveryTransport;
-    
-    private TakeDelivery takeDelivery;
-    
-    private Warehouse warehouse;
-    
-    private int pageIndex;
-    
-    private int pageSize;
-    
-    private String supplyName;
-    
-    private String buyName;
-    
-    private String shipperName;
-    
-    private String receiverName;
-    
-    private String orderNum;
-    
-    private String orderAmount;//订单金额
-    
+	private Integer userId;
 
+	private String delFlg;
 
-    public String getSerialNum() {
-        return serialNum;
-    }
+	private String creator;
 
-    public void setSerialNum(String serialNum) {
-        this.serialNum = serialNum == null ? null : serialNum.trim();
-    }
+	private Date createTime;
 
-    public String getDeliverNum() {
-        return deliverNum;
-    }
+	private String updater;
 
-    public void setDeliverNum(String deliverNum) {
-        this.deliverNum = deliverNum == null ? null : deliverNum.trim();
-    }
+	private Date updateTime;
 
-    public String getOrderSerial() {
-        return orderSerial;
-    }
+	private String takeDeliverSerial;
 
-    public void setOrderSerial(String orderSerial) {
-        this.orderSerial = orderSerial == null ? null : orderSerial.trim();
-    }
+	private String warehouseName;// 发货仓库名称
 
-    public String getSupplyComId() {
-        return supplyComId;
-    }
+	// 发货数量合计
+	private String materielTotalCount;
 
-    public void setSupplyComId(String supplyComId) {
-        this.supplyComId = supplyComId == null ? null : supplyComId.trim();
-    }
+	// 冗余字段
 
-    public String getShipper() {
-        return shipper;
-    }
+	private List<DeliveryMateriel> deliveryMateriels;
 
-    public void setShipper(String shipper) {
-        this.shipper = shipper == null ? null : shipper.trim();
-    }
+	private DeliveryTransport deliveryTransport;
 
-    public String getReceiver() {
-        return receiver;
-    }
+	private TakeDelivery takeDelivery;
 
-    public void setReceiver(String receiver) {
-        this.receiver = receiver == null ? null : receiver.trim();
-    }
+	private Warehouse warehouse;
 
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getMakeDate() {
-        return makeDate;
-    }
-
-    public void setMakeDate(Date makeDate) {
-        this.makeDate = makeDate;
-    }
-
-    public String getMaker() {
-        return maker;
-    }
-
-    public void setMaker(String maker) {
-        this.maker = maker == null ? null : maker.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status == null ? null : status.trim();
-    }
-
-    public String getApproval() {
-        return approval;
-    }
-
-    public void setApproval(String approval) {
-        this.approval = approval == null ? null : approval.trim();
-    }
-
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getApprovalDate() {
-        return approvalDate;
-    }
-
-    public void setApprovalDate(Date approvalDate) {
-        this.approvalDate = approvalDate;
-    }
-
-    public String getWarehouseSerial() {
-        return warehouseSerial;
-    }
-
-    public void setWarehouseSerial(String warehouseSerial) {
-        this.warehouseSerial = warehouseSerial == null ? null : warehouseSerial.trim();
-    }
-
-    public String getMaterielCount() {
-        return materielCount;
-    }
-
-    public void setMaterielCount(String materielCount) {
-        this.materielCount = materielCount == null ? null : materielCount.trim();
-    }
-
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getDeliverDate() {
-        return deliverDate;
-    }
-
-    public void setDeliverDate(Date deliverDate) {
-        this.deliverDate = deliverDate;
-    }
-
-    public String getPackageCount() {
-        return packageCount;
-    }
-
-    public void setPackageCount(String packageCount) {
-        this.packageCount = packageCount == null ? null : packageCount.trim();
-    }
-
-    public String getMaterielWeight() {
-        return materielWeight;
-    }
-
-    public void setMaterielWeight(String materielWeight) {
-        this.materielWeight = materielWeight == null ? null : materielWeight.trim();
-    }
-
-    public String getPackageType() {
-        return packageType;
-    }
-
-    public void setPackageType(String packageType) {
-        this.packageType = packageType == null ? null : packageType.trim();
-    }
-
-    public String getPackageSpecifications() {
-        return packageSpecifications;
-    }
-
-    public void setPackageSpecifications(String packageSpecifications) {
-        this.packageSpecifications = packageSpecifications == null ? null : packageSpecifications.trim();
-    }
-
-    public String getServiceMoney() {
-        return serviceMoney;
-    }
-
-    public void setServiceMoney(String serviceMoney) {
-        this.serviceMoney = serviceMoney == null ? null : serviceMoney.trim();
-    }
-
-    public String getDeliverer() {
-        return deliverer;
-    }
-
-    public void setDeliverer(String deliverer) {
-        this.deliverer = deliverer == null ? null : deliverer.trim();
-    }
-
-    public String getContactNum() {
-        return contactNum;
-    }
-
-    public void setContactNum(String contactNum) {
-        this.contactNum = contactNum == null ? null : contactNum.trim();
-    }
-
-    public String getDeliverRemark() {
-        return deliverRemark;
-    }
-
-    public void setDeliverRemark(String deliverRemark) {
-        this.deliverRemark = deliverRemark == null ? null : deliverRemark.trim();
-    }
-
-    public String getDelFlg() {
-        return delFlg;
-    }
-
-    public void setDelFlg(String delFlg) {
-        this.delFlg = delFlg == null ? null : delFlg.trim();
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator == null ? null : creator.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater == null ? null : updater.trim();
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+	private int pageIndex;
+
+	private int pageSize;
+
+	private String supplyName;
+
+	private String buyName;
+
+	private String shipperName;
+
+	private String receiverName;
+
+	private String orderNum;
+
+	private String orderAmount;// 订单金额
+
+	private String inOutSerial;// 出入库计划列表出入库计划流水
+	private String inOutNum;// 出入库计划列表出入库计划单号
+	private String inOutType;// 出入库计划列表出入库类型
+	private String inOutRemark;// 出入库计划列表备注
+	private String inOutPackageCount;// 出入库计划列表包装数量
+	private    StockInOutRecord  stockInOutRecord;//出入库记录
+	private String takeDeliverAddress;//收货地址
+	
+	private String takeDeliverWarehouseName;// 收货仓库名称
+
+	public String getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(String serialNum) {
+		this.serialNum = serialNum == null ? null : serialNum.trim();
+	}
+
+	public String getDeliverNum() {
+		return deliverNum;
+	}
+
+	public void setDeliverNum(String deliverNum) {
+		this.deliverNum = deliverNum == null ? null : deliverNum.trim();
+	}
+
+	public String getOrderSerial() {
+		return orderSerial;
+	}
+
+	public void setOrderSerial(String orderSerial) {
+		this.orderSerial = orderSerial == null ? null : orderSerial.trim();
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId == null ? null : supplyComId.trim();
+	}
+
+	public String getShipper() {
+		return shipper;
+	}
+
+	public void setShipper(String shipper) {
+		this.shipper = shipper == null ? null : shipper.trim();
+	}
+
+	public String getReceiver() {
+		return receiver;
+	}
+
+	public void setReceiver(String receiver) {
+		this.receiver = receiver == null ? null : receiver.trim();
+	}
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+	public Date getMakeDate() {
+		return makeDate;
+	}
+
+	public void setMakeDate(Date makeDate) {
+		this.makeDate = makeDate;
+	}
+
+	public String getMaker() {
+		return maker;
+	}
+
+	public void setMaker(String maker) {
+		this.maker = maker == null ? null : maker.trim();
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark == null ? null : remark.trim();
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status == null ? null : status.trim();
+	}
+
+	public String getApproval() {
+		return approval;
+	}
+
+	public void setApproval(String approval) {
+		this.approval = approval == null ? null : approval.trim();
+	}
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+	public Date getApprovalDate() {
+		return approvalDate;
+	}
+
+	public void setApprovalDate(Date approvalDate) {
+		this.approvalDate = approvalDate;
+	}
+
+	public String getWarehouseSerial() {
+		return warehouseSerial;
+	}
+
+	public void setWarehouseSerial(String warehouseSerial) {
+		this.warehouseSerial = warehouseSerial == null ? null : warehouseSerial
+				.trim();
+	}
+
+	public String getMaterielCount() {
+		return materielCount;
+	}
+
+	public void setMaterielCount(String materielCount) {
+		this.materielCount = materielCount == null ? null : materielCount
+				.trim();
+	}
+
+	@JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
+	}
+
+	public String getPackageCount() {
+		return packageCount;
+	}
+
+	public void setPackageCount(String packageCount) {
+		this.packageCount = packageCount == null ? null : packageCount.trim();
+	}
+
+	public String getMaterielWeight() {
+		return materielWeight;
+	}
+
+	public void setMaterielWeight(String materielWeight) {
+		this.materielWeight = materielWeight == null ? null : materielWeight
+				.trim();
+	}
+
+	public String getPackageType() {
+		return packageType;
+	}
+
+	public void setPackageType(String packageType) {
+		this.packageType = packageType == null ? null : packageType.trim();
+	}
+
+	public String getPackageSpecifications() {
+		return packageSpecifications;
+	}
+
+	public void setPackageSpecifications(String packageSpecifications) {
+		this.packageSpecifications = packageSpecifications == null ? null
+				: packageSpecifications.trim();
+	}
+
+	public String getServiceMoney() {
+		return serviceMoney;
+	}
+
+	public void setServiceMoney(String serviceMoney) {
+		this.serviceMoney = serviceMoney == null ? null : serviceMoney.trim();
+	}
+
+	public String getDeliverer() {
+		return deliverer;
+	}
+
+	public void setDeliverer(String deliverer) {
+		this.deliverer = deliverer == null ? null : deliverer.trim();
+	}
+
+	public String getContactNum() {
+		return contactNum;
+	}
+
+	public void setContactNum(String contactNum) {
+		this.contactNum = contactNum == null ? null : contactNum.trim();
+	}
+
+	public String getDeliverRemark() {
+		return deliverRemark;
+	}
+
+	public void setDeliverRemark(String deliverRemark) {
+		this.deliverRemark = deliverRemark == null ? null : deliverRemark
+				.trim();
+	}
+
+	public String getDelFlg() {
+		return delFlg;
+	}
+
+	public void setDelFlg(String delFlg) {
+		this.delFlg = delFlg == null ? null : delFlg.trim();
+	}
+
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator == null ? null : creator.trim();
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getUpdater() {
+		return updater;
+	}
+
+	public void setUpdater(String updater) {
+		this.updater = updater == null ? null : updater.trim();
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
 
 	public int getPageIndex() {
 		return pageIndex;
@@ -377,7 +390,6 @@ public class Delivery {
 	public void setTakeDelivery(TakeDelivery takeDelivery) {
 		this.takeDelivery = takeDelivery;
 	}
-
 
 	public String getOrderNum() {
 		return orderNum;
@@ -514,6 +526,69 @@ public class Delivery {
 	public void setMaterielTotalCount(String materielTotalCount) {
 		this.materielTotalCount = materielTotalCount;
 	}
+
+	public String getInOutNum() {
+		return inOutNum;
+	}
+
+	public void setInOutNum(String inOutNum) {
+		this.inOutNum = inOutNum;
+	}
+
+	public String getInOutType() {
+		return inOutType;
+	}
+
+	public void setInOutType(String inOutType) {
+		this.inOutType = inOutType;
+	}
+
+	public String getInOutRemark() {
+		return inOutRemark;
+	}
+
+	public void setInOutRemark(String inOutRemark) {
+		this.inOutRemark = inOutRemark;
+	}
+
+	public String getInOutPackageCount() {
+		return inOutPackageCount;
+	}
+
+	public void setInOutPackageCount(String inOutPackageCount) {
+		this.inOutPackageCount = inOutPackageCount;
+	}
+
+	public String getInOutSerial() {
+		return inOutSerial;
+	}
+
+	public void setInOutSerial(String inOutSerial) {
+		this.inOutSerial = inOutSerial;
+	}
+
+	public StockInOutRecord getStockInOutRecord() {
+		return stockInOutRecord;
+	}
+
+	public void setStockInOutRecord(StockInOutRecord stockInOutRecord) {
+		this.stockInOutRecord = stockInOutRecord;
+	}
+
+	public String getTakeDeliverAddress() {
+		return takeDeliverAddress;
+	}
+
+	public void setTakeDeliverAddress(String takeDeliverAddress) {
+		this.takeDeliverAddress = takeDeliverAddress;
+	}
+
+	public String getTakeDeliverWarehouseName() {
+		return takeDeliverWarehouseName;
+	}
+
+	public void setTakeDeliverWarehouseName(String takeDeliverWarehouseName) {
+		this.takeDeliverWarehouseName = takeDeliverWarehouseName;
+	}
 	
-    
 }

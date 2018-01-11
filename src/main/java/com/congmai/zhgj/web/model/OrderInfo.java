@@ -14,6 +14,8 @@ public class OrderInfo extends BaseVO {
 	
 	//已发货
 	public static final String DELIVER = "1";
+	
+	public static final String WAIT_TAKEDELIVER= "88";//销售订单待收货
 	//已收货
 	public static final String TAKEDELIVER = "2";
 	//已检验
@@ -66,13 +68,15 @@ public class OrderInfo extends BaseVO {
 	
 	public static final String WAIT_SUPPLY_CONFIRMED= "66";//平台提交待供应商确认
 	
-	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台确认
+	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台
 	
 	private String serialNum;
 
     private String contractSerial;
     
     private ContractVO contract;
+    
+    private ContractVO frame;//框架协议
 
     private String supplyComId;
 
@@ -99,6 +103,8 @@ public class OrderInfo extends BaseVO {
     private String settlementClause;
 
     private String orderSerial;
+    
+    private String frameSerial;
 
     private String deliveryMode;
     
@@ -164,7 +170,13 @@ public class OrderInfo extends BaseVO {
     private String unPayOrReceiptMoney;//未付/未收金额(发票里面用);
     
     private  String unBillOrReceiptMoney;//未开票/收票金额(发票里面用);
+    
+    private String deliveryCount;//发货数量
 
+    private String payAmount;//付款金额
+    
+    private String receiveCount;//实际入库数量
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -554,7 +566,46 @@ public class OrderInfo extends BaseVO {
 	public void setProjectNum(String projectNum) {
 		this.projectNum = projectNum;
 	}
-	
+
+	public String getDeliveryCount() {
+		return deliveryCount;
+	}
+
+	public void setDeliveryCount(String deliveryCount) {
+		this.deliveryCount = deliveryCount;
+	}
+
+	public String getPayAmount() {
+		return payAmount;
+	}
+
+	public void setPayAmount(String payAmount) {
+		this.payAmount = payAmount;
+	}
+
+	public String getFrameSerial() {
+		return frameSerial;
+	}
+
+	public void setFrameSerial(String frameSerial) {
+		this.frameSerial = frameSerial;
+	}
+
+	public ContractVO getFrame() {
+		return frame;
+	}
+
+	public void setFrame(ContractVO frame) {
+		this.frame = frame;
+	}
+
+	public String getReceiveCount() {
+		return receiveCount;
+	}
+
+	public void setReceiveCount(String receiveCount) {
+		this.receiveCount = receiveCount;
+	}
 
 	
 }

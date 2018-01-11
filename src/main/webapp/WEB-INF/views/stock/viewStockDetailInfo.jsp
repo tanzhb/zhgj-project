@@ -27,6 +27,9 @@ margin-right: 20px;
 		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_3" data-toggle="tab">入库记录</a></li>
 		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_4" data-toggle="tab">出库记录</a></li>			
 		<li class="bold" ng-hide="tab_1_5Hide"><a data-target="#tab_1_5" data-toggle="tab">盘点记录</a></li>
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>		
 	</ul>
 <div class="tab-content" style="min-height: 300px;">
 	<div class="tab-pane fade active in" id="tab_1_1">
@@ -319,7 +322,7 @@ margin-right: 20px;
 							<th>入库明细号</th>
                             <th> 入库类型</th>
                             <th> 关联单据</th>
-                            <th>商品采购批次号 </th>
+                            <th>物料批次号 </th>
                             <th>入库日期</th>
                             <th>入库数量</th>
                             <th>仓库 </th>
@@ -347,7 +350,7 @@ margin-right: 20px;
 							<th  style="text-align: center">出库明细号</th>
                             <th style="text-align: center"> 出库类型</th>
                             <th style="text-align: center"> 关联单据</th>
-                            <th  style="text-align: center">商品采购批次号 </th>
+                            <th  style="text-align: center">物料批次号 </th>
                             <th style="text-align: center">出库日期</th>
                             <th style="text-align: center">出库数量</th>
                             <th style="text-align: center">仓库 </th>

@@ -15,13 +15,20 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
+import com.congmai.zhgj.web.dao.StockInBatchMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
+import com.congmai.zhgj.web.dao.StockOutBatchMapper;
+import com.congmai.zhgj.web.dao.WarehouseMapper;
+import com.congmai.zhgj.web.dao.WarehousepositionMapper;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
+import com.congmai.zhgj.web.model.StockOutBatchExample;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.model.StockInBatch;
+import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.service.StockService;
 
 /**
@@ -41,6 +48,16 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	 
 	 @Resource
 	    private DeliveryMaterielMapper deliveryMaterielMapper;
+	 
+	 @Resource
+	    private StockOutBatchMapper stockOutBatchMapper;
+	 @Resource
+	    private WarehouseMapper  warehouseMapper;
+	 @Resource
+	    private WarehousepositionMapper  warehousepositionMapper;
+	 @Resource
+	    private StockInBatchMapper  stockInBatchMapper;
+	 
 
 	@Override
 	public GenericDao<Stock, String> getDao() {
@@ -118,6 +135,37 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 				deliverMateriels = deliverMaterielsTwo;
 			}
 		}
+		for(DeliveryMateriel d:deliverMateriels){
+			List<StockInBatch> stockInBatchs=d.getStockInBatchs();
+			String  batchNum="";
+			String  warehouseName="";
+			String  positionNum="";
+			String   warehouseSerial="";//仓库流水
+			String   positionSerial="";//库区流水
+			if(CollectionUtils.isNotEmpty(stockInBatchs)&&stockInBatchs.size()>0){
+				for(int i=0;i<stockInBatchs.size();i++){
+					StockInBatch s=stockInBatchs.get(i);
+						batchNum=batchNum.concat(s.getBatchNum());
+						if(!(warehouseSerial.indexOf(s.getWarehouseSerial())>-1)){
+							warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
+							warehouseSerial=warehouseSerial.concat(s.getWarehouseSerial());
+						}
+						if(!(positionSerial.indexOf(s.getPositionSerial())>-1)){
+							positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+							positionSerial=warehouseSerial.concat(s.getPositionSerial());
+						}
+					if(i!=stockInBatchs.size()-1){
+						batchNum=batchNum.concat(";");
+						warehouseName=warehouseName.concat(";");
+						positionNum=positionNum.concat(";");
+					}
+			}
+				d.setBatchNum(batchNum);
+				d.setPositionNum(positionNum);
+				d.setWarehouseName(warehouseName);
+				}
+				
+			}
 		return deliverMateriels;
 	}
 
@@ -135,6 +183,37 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 			}
 		}
 		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
+		for(DeliveryMateriel d:deliveryMateriels){
+			List<StockOutBatch> stockOutMateriels=d.getStockOutMateriels();
+			String  batchNum="";
+			String  warehouseName="";
+			String  positionNum="";
+			String   warehouseSerial="";//仓库流水
+			String   positionSerial="";//库区流水
+			if(CollectionUtils.isNotEmpty(stockOutMateriels)&&stockOutMateriels.size()>0){
+				for(int i=0;i<stockOutMateriels.size();i++){
+					StockInBatch s=stockInBatchMapper.selectByPrimaryKey(stockOutMateriels.get(i).getStockInBatchSerial());
+						batchNum=batchNum.concat(s.getBatchNum());
+						if(!(warehouseSerial.indexOf(s.getWarehouseSerial())>-1)){
+							warehouseName=warehouseName.concat(warehouseMapper.selectByPrimaryKey(s.getWarehouseSerial()).getWarehouseName());
+							warehouseSerial=warehouseSerial.concat(s.getWarehouseSerial());
+						}
+						if(!(positionSerial.indexOf(s.getPositionSerial())>-1)){
+							positionNum=positionNum.concat(warehousepositionMapper.selectByPrimaryKey(s.getPositionSerial()).getPositionNum());
+							positionSerial=warehouseSerial.concat(s.getPositionSerial());
+						}
+					if(i!=stockOutMateriels.size()-1){
+						batchNum=batchNum.concat(";");
+						warehouseName=warehouseName.concat(";");
+						positionNum=positionNum.concat(";");
+					}
+			}
+				d.setBatchNum(batchNum);
+				d.setPositionNum(positionNum);
+				d.setWarehouseName(warehouseName);
+				}
+				
+			}
 		return deliveryMateriels;
 	}
 
@@ -208,6 +287,16 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		m.put("serialNum", serialNum);
 		m.put("orderSerial", orderSerial);
 		return deliveryMaterielMapper.getStockInBatchListByMaterielOwn(m);
+	}
+
+	@Override
+	public List<StockOutBatch> getStockOutBatchListByDmSerialNum(
+			String serialNum) {
+		StockOutBatchExample se =new StockOutBatchExample();
+		 com.congmai.zhgj.web.model.StockOutBatchExample.Criteria c=se.createCriteria();
+		 c.andStockOutMaterielSerialEqualTo(serialNum);
+		 List<StockOutBatch>list=stockOutBatchMapper.selectByExample(se);
+		return list;
 	}
    
 	

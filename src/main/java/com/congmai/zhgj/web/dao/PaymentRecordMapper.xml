@@ -16,7 +16,10 @@
     <result column="payType" property="payType" jdbcType="VARCHAR" />
     <result column="nodeNum" property="nodeNum" jdbcType="VARCHAR" />
     <result column="billStyle" property="billStyle" jdbcType="VARCHAR" />
+    <result column="customsFormSerial" property="customsFormSerial" jdbcType="VARCHAR" />
     <result column="invoiceSerial" property="invoiceSerial" jdbcType="VARCHAR" />
+    <result column="deliveryRate" property="deliveryRate" jdbcType="VARCHAR" />
+    <result column="accountPeriod" property="accountPeriod" jdbcType="VARCHAR" />
     <result column="billType" property="billType" jdbcType="VARCHAR" />
     <result column="isBill" property="isBill" jdbcType="VARCHAR" />
     <result column="applyDept" property="applyDept" jdbcType="VARCHAR" />
@@ -109,11 +112,11 @@
   <sql id="Base_Column_List" >
     serialNum, paymentNum, supplyComId, buyComId, paymentType, paymentPlanSerial, orderSerial, 
     applyPaymentAmount, applyCurrency, playPaymentDate, paymentNode, payType, nodeNum, 
-    billStyle, invoiceSerial, billType, isBill, applyDept, applyDate, applicant, payee, 
-    contact, contactNum, bank, accountName, accountNumber, paymentDate, paymentAmount, 
-    paymentStyle, bankList, payer, payRemark, approver, approvalDate, paymentVoucher, 
-    remark, status, delFlg, creator, createTime, updater, updateTime, processInstanceId, 
-    reason, userId
+    billStyle, customsFormSerial, invoiceSerial, deliveryRate, accountPeriod, billType, 
+    isBill, applyDept, applyDate, applicant, payee, contact, contactNum, bank, accountName, 
+    accountNumber, paymentDate, paymentAmount, paymentStyle, bankList, payer, payRemark, 
+    approver, approvalDate, paymentVoucher, remark, status, delFlg, creator, createTime, 
+    updater, updateTime, processInstanceId, reason, userId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" >
     select
@@ -121,7 +124,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from paymentRecord
+    from paymentrecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -132,25 +135,26 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from paymentRecord
+    from paymentrecord
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from paymentRecord
+    delete from paymentrecord
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" >
-    delete from paymentRecord
+    delete from paymentrecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    insert into paymentRecord (serialNum, paymentNum, supplyComId, 
+    insert into paymentrecord (serialNum, paymentNum, supplyComId, 
       buyComId, paymentType, paymentPlanSerial, 
       orderSerial, applyPaymentAmount, applyCurrency, 
       playPaymentDate, paymentNode, payType, 
-      nodeNum, billStyle, invoiceSerial, 
+      nodeNum, billStyle, customsFormSerial, 
+      invoiceSerial, deliveryRate, accountPeriod, 
       billType, isBill, applyDept, 
       applyDate, applicant, payee, 
       contact, contactNum, bank, 
@@ -166,7 +170,8 @@
       #{buyComId,jdbcType=VARCHAR}, #{paymentType,jdbcType=VARCHAR}, #{paymentPlanSerial,jdbcType=VARCHAR}, 
       #{orderSerial,jdbcType=VARCHAR}, #{applyPaymentAmount,jdbcType=VARCHAR}, #{applyCurrency,jdbcType=VARCHAR}, 
       #{playPaymentDate,jdbcType=DATE}, #{paymentNode,jdbcType=VARCHAR}, #{payType,jdbcType=VARCHAR}, 
-      #{nodeNum,jdbcType=VARCHAR}, #{billStyle,jdbcType=VARCHAR}, #{invoiceSerial,jdbcType=VARCHAR}, 
+      #{nodeNum,jdbcType=VARCHAR}, #{billStyle,jdbcType=VARCHAR}, #{customsFormSerial,jdbcType=VARCHAR}, 
+      #{invoiceSerial,jdbcType=VARCHAR}, #{deliveryRate,jdbcType=VARCHAR}, #{accountPeriod,jdbcType=VARCHAR}, 
       #{billType,jdbcType=VARCHAR}, #{isBill,jdbcType=VARCHAR}, #{applyDept,jdbcType=VARCHAR}, 
       #{applyDate,jdbcType=DATE}, #{applicant,jdbcType=VARCHAR}, #{payee,jdbcType=VARCHAR}, 
       #{contact,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{bank,jdbcType=VARCHAR}, 
@@ -180,7 +185,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    insert into paymentRecord
+    insert into paymentrecord
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
@@ -224,8 +229,17 @@
       <if test="billStyle != null" >
         billStyle,
       </if>
+      <if test="customsFormSerial != null" >
+        customsFormSerial,
+      </if>
       <if test="invoiceSerial != null" >
         invoiceSerial,
+      </if>
+      <if test="deliveryRate != null" >
+        deliveryRate,
+      </if>
+      <if test="accountPeriod != null" >
+        accountPeriod,
       </if>
       <if test="billType != null" >
         billType,
@@ -361,8 +375,17 @@
       <if test="billStyle != null" >
         #{billStyle,jdbcType=VARCHAR},
       </if>
+      <if test="customsFormSerial != null" >
+        #{customsFormSerial,jdbcType=VARCHAR},
+      </if>
       <if test="invoiceSerial != null" >
         #{invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryRate != null" >
+        #{deliveryRate,jdbcType=VARCHAR},
+      </if>
+      <if test="accountPeriod != null" >
+        #{accountPeriod,jdbcType=VARCHAR},
       </if>
       <if test="billType != null" >
         #{billType,jdbcType=VARCHAR},
@@ -457,13 +480,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" resultType="java.lang.Integer" >
-    select count(*) from paymentRecord
+    select count(*) from paymentrecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update paymentRecord
+    update paymentrecord
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
@@ -507,8 +530,17 @@
       <if test="record.billStyle != null" >
         billStyle = #{record.billStyle,jdbcType=VARCHAR},
       </if>
+      <if test="record.customsFormSerial != null" >
+        customsFormSerial = #{record.customsFormSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.invoiceSerial != null" >
         invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryRate != null" >
+        deliveryRate = #{record.deliveryRate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accountPeriod != null" >
+        accountPeriod = #{record.accountPeriod,jdbcType=VARCHAR},
       </if>
       <if test="record.billType != null" >
         billType = #{record.billType,jdbcType=VARCHAR},
@@ -606,7 +638,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update paymentRecord
+    update paymentrecord
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       paymentNum = #{record.paymentNum,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
@@ -621,7 +653,10 @@
       payType = #{record.payType,jdbcType=VARCHAR},
       nodeNum = #{record.nodeNum,jdbcType=VARCHAR},
       billStyle = #{record.billStyle,jdbcType=VARCHAR},
+      customsFormSerial = #{record.customsFormSerial,jdbcType=VARCHAR},
       invoiceSerial = #{record.invoiceSerial,jdbcType=VARCHAR},
+      deliveryRate = #{record.deliveryRate,jdbcType=VARCHAR},
+      accountPeriod = #{record.accountPeriod,jdbcType=VARCHAR},
       billType = #{record.billType,jdbcType=VARCHAR},
       isBill = #{record.isBill,jdbcType=VARCHAR},
       applyDept = #{record.applyDept,jdbcType=VARCHAR},
@@ -657,7 +692,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    update paymentRecord
+    update paymentrecord
     <set >
       <if test="paymentNum != null" >
         paymentNum = #{paymentNum,jdbcType=VARCHAR},
@@ -698,8 +733,17 @@
       <if test="billStyle != null" >
         billStyle = #{billStyle,jdbcType=VARCHAR},
       </if>
+      <if test="customsFormSerial != null" >
+        customsFormSerial = #{customsFormSerial,jdbcType=VARCHAR},
+      </if>
       <if test="invoiceSerial != null" >
         invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryRate != null" >
+        deliveryRate = #{deliveryRate,jdbcType=VARCHAR},
+      </if>
+      <if test="accountPeriod != null" >
+        accountPeriod = #{accountPeriod,jdbcType=VARCHAR},
       </if>
       <if test="billType != null" >
         billType = #{billType,jdbcType=VARCHAR},
@@ -795,7 +839,7 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    update paymentRecord
+    update paymentrecord
     set paymentNum = #{paymentNum,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       buyComId = #{buyComId,jdbcType=VARCHAR},
@@ -809,7 +853,10 @@
       payType = #{payType,jdbcType=VARCHAR},
       nodeNum = #{nodeNum,jdbcType=VARCHAR},
       billStyle = #{billStyle,jdbcType=VARCHAR},
+      customsFormSerial = #{customsFormSerial,jdbcType=VARCHAR},
       invoiceSerial = #{invoiceSerial,jdbcType=VARCHAR},
+      deliveryRate = #{deliveryRate,jdbcType=VARCHAR},
+      accountPeriod = #{accountPeriod,jdbcType=VARCHAR},
       billType = #{billType,jdbcType=VARCHAR},
       isBill = #{isBill,jdbcType=VARCHAR},
       applyDept = #{applyDept,jdbcType=VARCHAR},

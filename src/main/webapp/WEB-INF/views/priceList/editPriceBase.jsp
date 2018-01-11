@@ -6,6 +6,9 @@
 	<div class="tab-pane fade active in" id="tab_1_1">
 	<div class="portlet-title" style="min-height: 30px;">
               <div class="tools" style="float:right" id="noprintdiv">
+              				<div class="actions" >
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                            </div>
                         	<button  ng-show="priceListView"   class="btn purple  btn-sm btn-circle " ng-click="editPriceList()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-hide="priceListEdit"   class="btn defualt  btn-sm btn-circle" ng-click="cancelEditPriceList()">
@@ -173,10 +176,10 @@
                                                             <!--/span-->
                                                             <div class="col-md-6">
                                                               <div class="form-group">
-                                                    <label class="control-label bold" for="rate"> <span class="required"> * </span>税率 :</label>
+                                                    <label class="control-label bold" for="rate"> <span class="required"> * </span>税率(%):</label>
                                                     <div class="">
                                                                        <input type="text"  class="form-control" placeholder=""  id="rate" name ="rate"  ng-show="priceListAdd" 
-												ng-model="priceList.rate">
+												ng-model="priceList.rate"  ng-keyup="clearNoNumPoint(priceList,'inclusivePrice')">
                                                                          <div class="form-control-focus"></div>
                                                                         <!--   <span class="help-block">请输入百分比数</span> -->
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.rate}}</p> 
@@ -186,25 +189,26 @@
                                                             <!--/span-->
                                                         </div>
                                                          <div class="row">
-                                                            <div class="col-md-6">
-                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="priceList"> <span class="required"> * </span>单价 :</label>
-                                                    <div class="">
-                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
-												ng-model="priceList.unitPrice">
-												<div class="form-control-focus"> </div>
-                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                           <div class="col-md-6">
+                                                          <div class="col-md-6">
                                                            <div class="form-group">
                                                     <label class="control-label bold" for="inclusiveprice"> <!-- <span class="required"> * </span> -->含税价格 :</label>
                                                     <div class="">
                                                                         <input type="text"   class="form-control" placeholder=""  id="inclusivePrice"    data-unitprice="{{priceList.unitPrice}}"   name ="inclusivePrice"  ng-show="priceListAdd" 
-												ng-model="priceList.inclusivePrice" >
+												ng-model="priceList.inclusivePrice"   ng-keyup="clearNoNumPoint(priceList,'inclusivePrice')">
 												<div class="form-control-focus"> </div>
                                                                         <p class="control-label left" ng-show="priceListView">{{priceList.inclusivePrice |currency:'￥'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="priceList"> 不含税单价 :</label>
+                                                    <div class="">
+                                                                        <input type="text"  class="form-control" placeholder=""  id="unitPrice" name ="unitPrice"  ng-show="priceListAdd" 
+												ng-model="priceList.unitPrice" disabled="disabled">
+												
+												<div class="form-control-focus"> </div>
+                                                                        <p class="control-label left" ng-show="priceListView">{{priceList.unitPrice |currency:'￥'}}</p>
                                                                     </div>
                                                                 </div>
                                                             </div>

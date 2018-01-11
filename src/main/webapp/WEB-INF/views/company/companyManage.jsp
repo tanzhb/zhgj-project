@@ -21,10 +21,16 @@
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="statement_tab">
+	<shiro:hasPermission name="zhgj:buyCompany">
 		<li   id="buy"  ng-hide="isNotSupply"><a  ng-click="showCompany('buy')">采购商</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:supplyCompany">
 		<li  id="supply"  ng-hide="isNotBuy"><a ng-click="showCompany('supply')">供应商</a></li>
+		</shiro:hasPermission>
+		<shiro:hasPermission name="zhgj:otherCompany">
 		<li   id="other"  ng-hide="isNotOther"><a  ng-click="showCompany('other')">其他 </a>
 		</li>
+		</shiro:hasPermission>
 	</ul>
 <div class="row">
 	<div class="col-md-12">
@@ -150,7 +156,8 @@
 					<li><a class="bold" data-target="#tab_1_4" data-toggle="tab">联系方式</a></li>
 					<li  ng-hide="isNotBuy" ng-if="type=='buy'"><a class="bold" data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
 					<li  ng-hide="isNotSupply"  ng-if="type=='supply'"><a class="bold" data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
-					<li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li>
+					<!-- <li><a class="bold" data-target="#tab_1_7" data-toggle="tab">企业管理员</a></li> -->
+					<li><a class="bold" data-target="#tab_1_8" data-toggle="tab">管理信息</a></li>
 					
 				</ul>
 				<div class="tab-content">
@@ -485,6 +492,67 @@
 							<!-- END SAMPLE TABLE PORTLET-->
 						</div>
 					</div>
+					<div class="tab-pane fade" id="tab_1_8">
+						         <div class="portlet light">
+                          <div class="portlet-body form">
+                             <!--  BEGIN FORM -->
+                              <form class="" >
+                                  <div class="form-body">
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商简称：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static">{{companyManage.comShortName}}</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5  bold">维护人员：</label>
+                                                  <div class="col-md-7">
+                                                     <a href="javascript:;" style="margin:0px 5px 2px 0px;text-transform:none" class="btn btn-xs green"    ng-repeat="data in companyManage.users"  >
+                           {{data.userName}}
+                    </a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                         <!--  /span -->
+                                      </div>
+                                      <!-- /row -->
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商分类：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static" ng-if="companyManage.type=='1'">一级供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.type=='2'">二级供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.type=='3'">三级供应商</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                          <div class="col-md-6">
+                                              <div class="form-group">
+                                                  <label class="control-label col-md-5 bold">供应商等级：</label>
+                                                  <div class="col-md-7">
+                                                      <p class="form-control-static"  ng-if="companyManage.grade=='1'">合格供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.grade=='2'">预警供应商</p>
+													<p class="form-control-static"  ng-if="companyManage.grade=='3'">淘汰供应商</p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                          <!-- /span -->
+                                      </div>
+                                   <!--    /row -->
+                                      
+                                  </div>
+                              </form>
+                             <!--  END FORM -->
+                          </div>
+                      </div>
+					</div>
 					<div class="tab-pane fade" id="tab_1_2">
 						<!-- START SAMPLE TABLE PORTLET-->
 						<div class="">
@@ -512,7 +580,8 @@
 													无</td>
 												<td
 													ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
-													<div id="img" style="display: none;"><div><img alt="" style="width:100%;height:100%;" src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{companyQualification.qualificatioImage}}"></div></div>  
+													<div id="img" style="display: none;"><div><%-- <img alt="" style="width:100%;height:100%;" 
+													src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{companyQualification.qualificatioImage}}"> --%></div></div>  
 													<a href="javascript:;"
 													ng-click="downloadFile(companyQualification)" >{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
 												</td>

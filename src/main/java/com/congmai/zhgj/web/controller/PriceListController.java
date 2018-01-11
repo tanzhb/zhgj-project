@@ -43,17 +43,22 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.PriceCom;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
@@ -62,6 +67,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.PriceComService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -96,6 +102,8 @@ public class PriceListController {
 	 private ProcessBaseService processBaseService;
 	 @Autowired
 	 protected RuntimeService runtimeService;
+	  @Autowired
+		private PriceComService  priceComService;
     
     
     /**
@@ -162,7 +170,7 @@ public class PriceListController {
     			ladderPriceService.insertLadderPrices(ladderPrices,currenLoginName);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	if("buyPrice".equals(priceList.getPriceType())){
     		priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
@@ -240,10 +248,11 @@ public class PriceListController {
     		priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
     	}
     	map.put("priceList", priceList);
-    	map.put("ladderPrices", ladderPriceService.selectListByPriceSerial(serialNum));
+    	map.put("ladderPrices", ladderPriceService.selectListByPriceSerial(serialNum.substring(0, 32)));
     	map.put("priceLists", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), null));//价格历史版本信息
-    	map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商
-    }
+    	/*map.put("buyList", priceListService.getAllPriceListInfoByPriceIdOrPriceType(priceList.getPriceId(), "salePrice"));//获取历史价格中使用的采购商*/ 
+    	map.put("priceComs", priceComService.selectListByPriceSerial(serialNum.substring(0, 32)));
+   }
     	}
     	map.put("supplyCom", companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null));
     	map.put("buyCom", companyService.selectCompanyByComType(ComType.BUYER.getValue(), null));
@@ -288,11 +297,41 @@ public class PriceListController {
             
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
  
     	return ladderPrices;
+    }
+    
+    /**
+     * @Description (保存或修改价格中的采供应商信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="savePriceComs",method=RequestMethod.POST)
+    @ResponseBody
+    public List<PriceCom> savePriceComs(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+    	List<PriceCom> priceComs = null;
+	   	try{
+	   		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		params = params.replace("\\", "");
+    		ObjectMapper objectMapper = new ObjectMapper();  
+            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, PriceCom.class);  
+            priceComs = objectMapper.readValue(params, javaType);
+            if(!CollectionUtils.isEmpty(priceComs)){
+            	priceComService.deleteByPriceSerial(priceComs.get(0).getPriceSerial());
+            	priceComs=priceComService.insertPriceComs(priceComs,currenLoginName);
+            }
+    		flag = "1";
+    	}catch(Exception e){
+    		//20180110 qhzhao System.out.println(e.getMessage());
+    		return null;
+    	}
+ 
+    	return priceComs;
     }
     /**
 	 * 
@@ -693,6 +732,19 @@ public class PriceListController {
 				variables.put("entity", priceList);
 				variables.put("reApply", reApply);
 				this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+				//发送消息
+				if(reApply){
+				        //申请消息
+					priceList = priceListService.selectById(priceList.getSerialNum());
+					if("buyPrice".equals(priceList.getPriceType())){
+						EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(priceList,MessageConstants.APPLY_BUY_PRICE));
+					}else if("salePrice".equals(priceList.getPriceType())){
+						EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(priceList,MessageConstants.APPLY_SALE_PRICE));
+					}
+					   
+				}else{
+					cancelPriceApply(priceList.getSerialNum(),taskId);
+				}
 				
 			} catch (ActivitiObjectNotFoundException e) {
 //				message.setStatus(Boolean.FALSE);
@@ -713,4 +765,25 @@ public class PriceListController {
 			
 	    	return result;
 	    }
+		/**
+		 * 
+		 * @Description (取消申请)
+		 * @param serialNum
+		 */
+		private void cancelPriceApply(String id,String taskId) {
+			this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+			//更新已办tab里面的deleteReason 更新为'取消申请'
+					HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+					historicTaskVO.setTaskId(taskId);
+					historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+					processBaseService.updateHistoricTask(historicTaskVO);
+			PriceList p = new PriceList();
+			p.setStatus("0");//取消申请价格回到审批前状态
+			p.setSerialNum(id);
+			p.setUpdateTime(new Date());
+			Subject currentUser = SecurityUtils.getSubject();
+			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+			p.setUpdater(currenLoginName);
+			priceListService.update(p);
+		}
 }

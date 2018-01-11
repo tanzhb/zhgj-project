@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -38,19 +39,26 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyFinance;
 import com.congmai.zhgj.web.model.DeliveryTransport;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceBillingRecord;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.ProcessBase;
+import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.VerificationRecord;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
@@ -158,20 +166,16 @@ public class InvoiceController {
     		}else{
     			invoiceService.update(invoice);
     			if("2".equals(invoice.getStatus())){
-    				OrderInfo orderInfo=new OrderInfo();
     				if(StringUtils.isEmpty(invoice.getSupplyComId())){
-    					invoiceService.confirmInvoiceOut(invoice,orderInfo);
-    					//orderInfo.setBillStatus(OrderInfo.BILL);
+    					invoiceService.confirmInvoiceOut(invoice);
     				}else{
-    					invoiceService.confirmInvoiceIn(invoice,orderInfo);
-    					//orderInfo.setBillStatus(OrderInfo.RECIVEBILL);
+    					invoiceService.confirmInvoiceIn(invoice);
     				}
-    				//orderService.updateStatus(orderInfo);
     			}
     		}
     		
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<Invoice>(invoice, HttpStatus.OK);
     }
@@ -193,7 +197,7 @@ public class InvoiceController {
     			 flag="1";
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<String>(flag, HttpStatus.OK);
     }*/
@@ -295,16 +299,17 @@ public class InvoiceController {
 		Company company=null;
 		String  payOrReceiptMoney=null;
 		String  billOrReceiptMoney=null;
-		List<CompanyFinance> companyFinanceList=null;
+		List<CompanyFinance> companyFinanceList=new ArrayList<CompanyFinance>();
 		Map<String, Object> map = new HashMap<String, Object>();
 		if(serialNum.indexOf("in")>-1){//进项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
+			company=companyService.selectById(orderInfo.getSupplyComId());
 			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
 			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else if(serialNum.indexOf("out")>-1){//销项票
 			orderInfo = orderService.selectById(serialNum.substring(0, 32));
 			company=companyService.selectById(orderInfo.getBuyComId());
-			//companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
+			companyFinanceList=companyFinanceService.selectListByComId(company.getComId());
 			 payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
 			 billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
 		}else{
@@ -316,8 +321,7 @@ public class InvoiceController {
 		orderInfo.setUnPayOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(payOrReceiptMoney)).toString() );
 		map.put("orderInfo", orderInfo);
 		map.put("company",company);
-		map.put("companyFinanceList",companyFinanceList);
-    	
+		 map.put("companyFinanceList",companyFinanceList);
     	return map;
 	}
 	/**
@@ -325,9 +329,9 @@ public class InvoiceController {
      * 
      */
     @RequestMapping(value = "/getMaterielList")
-    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial) {
+    public ResponseEntity<Map> getMaterielList(HttpServletRequest request, String  orderSerial,String deliverSerial,String customsFormType) {
     	
-		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial);
+		List<Materiel> materiels = materielService.selectMaterielByOrderSerial(orderSerial.substring(0, 32),orderSerial,deliverSerial,customsFormType);
 		/*OrderInfo orderInfo=orderService.selectById(orderSerial.substring(0, 32));*/
 		DeliveryTransport dt=new  DeliveryTransport();
 		BigDecimal deliverAmount=BigDecimal.ZERO;//deliverAmount发货金额
@@ -338,16 +342,20 @@ public class InvoiceController {
 			 for(Materiel materiel:materiels){
 					materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
 					if(!StringUtils.isEmpty(materiel.getRate())){//	税额
-						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 						addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
 					}
 					if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
-						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+						materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 						customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
 					}
-					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+					materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getDeliverCount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 					deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
 				}
+		}else{
+			for(Materiel materiel:materiels){
+				materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+			}
 		}
 	
 		// 封装datatables数据返回到前台
@@ -379,7 +387,7 @@ public class InvoiceController {
        		}
        		
        	}catch(Exception e){
-       		System.out.println(e.getMessage());
+       		//20180110 qhzhao System.out.println(e.getMessage());
        	}
    		return new ResponseEntity<InvoiceBillingRecord>(invoiceBillingRecord, HttpStatus.OK);
        }
@@ -604,6 +612,15 @@ public class InvoiceController {
 			variables.put("entity", invoice);
 			variables.put("isPass", isPass);
 			this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+			//发送消息
+			if(isPass){
+			        //申请消息
+				invoice = invoiceService.selectById(invoice.getSerialNum());
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(invoice,MessageConstants.APPLY_OUT_INVOICE));
+				   
+			}else{
+				cancelInvoiceApply(invoice.getSerialNum(),taskId);
+			}
 			
 		} catch (ActivitiObjectNotFoundException e) {
 //			message.setStatus(Boolean.FALSE);
@@ -653,4 +670,50 @@ public class InvoiceController {
 		}
     	return result;
     }
+	   /**
+     * @Description (保存物料收开票记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveAllInvoiceBillingRecordInfo",method=RequestMethod.POST)
+    @ResponseBody
+    public String saveAllInvoiceBillingRecordInfo(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+  	   	  	TakeDeliveryParams  takeDeliveryParams = null;
+			takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
+        	try{
+        	Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		List<InvoiceBillingRecord>invoiceBillingRecords=takeDeliveryParams.getInvoiceBillingRecords();
+        		Boolean falg=invoiceService.insertAllInvoiceBillingRecordInfo(invoiceBillingRecords, currenLoginName, invoiceBillingRecords.get(0).getInvoiceSerial());
+        		if(falg){
+        			flag = "1";
+        		}
+        	}catch(Exception e){
+        		logger.warn(e.getMessage(), e);
+        		return null;
+        	}
+    	return flag;
+    }
+    /**
+	 * 
+	 * @Description (取消发票)
+	 * @param serialNum
+	 */
+	private void cancelInvoiceApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+				Invoice i= new Invoice();
+		i .setStatus("0");//取消申请价格回到审批前状态
+		i.setSerialNum(id);
+		i.setUpdateTime(new Date());
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		i.setUpdater(currenLoginName);
+		invoiceService.update(i);
+	}
 }

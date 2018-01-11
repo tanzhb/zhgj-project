@@ -36,6 +36,8 @@ public class StockOutBatch {
     private String updater;
 
     private Date updateTime;
+    
+    private String batchNum;//入库批次号
 
     public String getSerialNum() {
         return serialNum;
@@ -139,6 +141,14 @@ public class StockOutBatch {
 
 	public void setStockInBatchSerial(String stockInBatchSerial) {
 		this.stockInBatchSerial = stockInBatchSerial;
+	}
+
+	public String getBatchNum() {
+		return batchNum;
+	}
+
+	public void setBatchNum(String batchNum) {
+		this.batchNum = batchNum;
 	}
     
 }

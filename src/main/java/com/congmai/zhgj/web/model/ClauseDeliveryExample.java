@@ -245,6 +245,76 @@ public class ClauseDeliveryExample {
             return (Criteria) this;
         }
 
+        public Criteria andDeliveryModeIsNull() {
+            addCriterion("deliveryMode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeIsNotNull() {
+            addCriterion("deliveryMode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeEqualTo(String value) {
+            addCriterion("deliveryMode =", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeNotEqualTo(String value) {
+            addCriterion("deliveryMode <>", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeGreaterThan(String value) {
+            addCriterion("deliveryMode >", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeGreaterThanOrEqualTo(String value) {
+            addCriterion("deliveryMode >=", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeLessThan(String value) {
+            addCriterion("deliveryMode <", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeLessThanOrEqualTo(String value) {
+            addCriterion("deliveryMode <=", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeLike(String value) {
+            addCriterion("deliveryMode like", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeNotLike(String value) {
+            addCriterion("deliveryMode not like", value, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeIn(List<String> values) {
+            addCriterion("deliveryMode in", values, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeNotIn(List<String> values) {
+            addCriterion("deliveryMode not in", values, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeBetween(String value1, String value2) {
+            addCriterion("deliveryMode between", value1, value2, "deliveryMode");
+            return (Criteria) this;
+        }
+
+        public Criteria andDeliveryModeNotBetween(String value1, String value2) {
+            addCriterion("deliveryMode not between", value1, value2, "deliveryMode");
+            return (Criteria) this;
+        }
+
         public Criteria andTransportTypeIsNull() {
             addCriterion("transportType is null");
             return (Criteria) this;
@@ -452,6 +522,76 @@ public class ClauseDeliveryExample {
 
         public Criteria andSpecificationsNotBetween(String value1, String value2) {
             addCriterion("specifications not between", value1, value2, "specifications");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressIsNull() {
+            addCriterion("warehouseAddress is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressIsNotNull() {
+            addCriterion("warehouseAddress is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressEqualTo(String value) {
+            addCriterion("warehouseAddress =", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressNotEqualTo(String value) {
+            addCriterion("warehouseAddress <>", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressGreaterThan(String value) {
+            addCriterion("warehouseAddress >", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("warehouseAddress >=", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressLessThan(String value) {
+            addCriterion("warehouseAddress <", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressLessThanOrEqualTo(String value) {
+            addCriterion("warehouseAddress <=", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressLike(String value) {
+            addCriterion("warehouseAddress like", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressNotLike(String value) {
+            addCriterion("warehouseAddress not like", value, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressIn(List<String> values) {
+            addCriterion("warehouseAddress in", values, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressNotIn(List<String> values) {
+            addCriterion("warehouseAddress not in", values, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressBetween(String value1, String value2) {
+            addCriterion("warehouseAddress between", value1, value2, "warehouseAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andWarehouseAddressNotBetween(String value1, String value2) {
+            addCriterion("warehouseAddress not between", value1, value2, "warehouseAddress");
             return (Criteria) this;
         }
 

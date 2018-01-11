@@ -14,13 +14,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
  * @Date 2017年7月31日 下午2:52:03
  * @version 1.0.0
  */
-public class ContractVO {
+public class ContractVO  extends BaseVO {
+	/**
+	 * @Field @serialVersionUID : TODO(这里用一句话描述这个类的作用)
+	 */
+	private static final long serialVersionUID = -9026226685732898427L;
+
+
 	//id
     private String id;
 
-    //供应商
-    private String comId;
 
+    private String comId;
+    private String comName;
     //合同编号
     private String contractNum;
 
@@ -85,7 +91,7 @@ public class ContractVO {
     //最新版本（1是0否）
     private String isLatestVersion;
     
-    //物料状态
+    //状态
     private String status;
     
     //删除标志（1是0否）
@@ -129,6 +135,29 @@ public class ContractVO {
     
     
     private String orderNum;
+    
+    //框架协议状态
+    
+	public static final String WAIT_SUPPLY_CONFIRMED= "66";//平台提交待供应商确认
+	
+	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台
+	
+	public static final String WAIT_SIGN= "3";//待签合同
+	
+	public static final String SIGN= "2";//已签合同
+	
+	public static final String INIT= "0";//初始状态
+	
+	public static final String APPING= "1";//已确认待审批、审批中
+	
+    //框架协议内容
+    private String contractContent;
+    
+    private String seller;
+    
+    private String serialNum;
+    
+    private ProcessBase processBase;
     
 	public String getId() {
 		return id;
@@ -436,4 +465,47 @@ public class ContractVO {
 	public void setOrderNum(String orderNum) {
 		this.orderNum = orderNum;
 	}
+
+	public String getContractContent() {
+		return contractContent;
+	}
+
+	public void setContractContent(String contractContent) {
+		this.contractContent = contractContent;
+	}
+
+	public String getSeller() {
+		return seller;
+	}
+
+	public void setSeller(String seller) {
+		this.seller = seller;
+	}
+
+	public String getComName() {
+		return comName;
+	}
+
+	public void setComName(String comName) {
+		this.comName = comName;
+	}
+
+	public String getSerialNum() {
+		return serialNum;
+	}
+
+	public void setSerialNum(String serialNum) {
+		this.serialNum = serialNum;
+	}
+
+	public ProcessBase getProcessBase() {
+		return processBase;
+	}
+
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
+	}
+
+	
+	
 }

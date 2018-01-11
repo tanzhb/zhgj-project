@@ -32,6 +32,9 @@ margin-right: 20px;
 		<li class="bold" ng-hide="tab_1_6Hide"><a data-target="#tab_1_8" data-toggle="tab">售后条款</a></li>
 		<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
 		<!-- <li class="bold"><a data-target="#tab_1_10" data-toggle="tab">备注</a></li> -->
+		<li class="dropdown pull-right tabdrop">
+			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+		</li>		
 		
 	</ul>
 <div class="tab-content">
@@ -80,28 +83,46 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         <div class="col-md-8">
+                         <div class="col-md-8"  ng-show="contract.contractType=='销售合同'">
                              <div class="form-group ">
                                  <label class="control-label col-md-3  bold">合同内容：</label>
                                  <div class="control-label col-md-9">
                                  <div class="btn-group">
                                      <div class="clearfix">
                                           <div class="btn-group" data-toggle="buttons">
-                                              <label class="btn btn-default  btn-default-margin" id="tab_1_1Id" ng-click="changeContentStatus(1)">
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_1Id" ng-hide = "tab_1_1label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 物料清单 </label> 
-                                              <!-- <label class="btn btn-default  btn-default-margin" id="tab_1_2Id" ng-click="changeContentStatus(2)">
+                                              <!-- <label class="btn btn-default  btn-default-margin" id="tab_1_2Id" ng-hide = "tab_1_2label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 垫资条款 </label>  -->
-                                              <label class="btn btn-default  btn-default-margin" id="tab_1_3Id" ng-click="changeContentStatus(3)">
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_3Id" ng-hide = "tab_1_3label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 结算条款 </label> 
-                                              <label class="btn btn-default  btn-default-margin" id="tab_1_4Id" ng-click="changeContentStatus(4)">
+                                              <label class="btn btn-default  btn-default-margin" id="tab_1_4Id" ng-hide = "tab_1_4label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 交付条款 </label> 
-                                              <label class="btn btn-default btn-default-margin" id="tab_1_5Id" ng-click="changeContentStatus(5)">
+                                              <label class="btn btn-default btn-default-margin" id="tab_1_5Id" ng-hide = "tab_1_5label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 验收条款 </label>
-                                              <label class="btn btn-default" id="tab_1_6Id" ng-click="changeContentStatus(6)">
+                                              <label class="btn btn-default" id="tab_1_6Id" ng-hide = "tab_1_6label">
                                                   <input type="checkbox" class="toggle"> <i class="fa fa-check"></i> 售后条款 </label> 
                                           </div>
                                       </div>
                                  </div>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5  bold">框架协议编号：</label>
+                                 <div class="control-label  col-md-7 ">
+                                     <p> {{customerOrder.frame.contractNum}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-show="contract.contractType=='销售订单'">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">协议有效期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p >{{customerOrder.frame.startDate}}~{{customerOrder.frame.endDate}} </p>
                                  </div>
                                  
                              </div>
@@ -206,7 +227,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
@@ -215,7 +236,16 @@ margin-right: 20px;
                          </div>
                      </div>
                      <div class="row">
-                        	<div class="col-md-4">
+                     	<div class="col-md-4" ng-if="contract.contractType!='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">电子合同：</label>
+                                 <div class="control-label col-md-7">
+                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
+                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
+                                 </div>
+                             </div>
+                         </div>
+                        	<div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                               <div class="form-group ">
                                  <label class="control-label col-md-5 bold">采购合同号：</label>
                                   <div class="control-label col-md-7">
@@ -223,6 +253,16 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
+                          
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">合同签订日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{contract.signDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                           <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
@@ -237,16 +277,16 @@ margin-right: 20px;
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
                                      <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                                                           
                                      <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:red"> 未通过 </p>
                                      
                                      <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
@@ -304,14 +344,14 @@ margin-right: 20px;
                          <!--/span-->
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">结算汇率：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.exchangeRate}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                           <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label col-md-5 bold">制单人：</label>
@@ -334,14 +374,23 @@ margin-right: 20px;
                      <div class="row">
                         <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
                                  
                              </div>
                          </div>
-                         <div class="col-md-4">
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">电子合同：</label>
+                                 <div class="control-label col-md-7">
+                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
+                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4"  ng-if="contract.contractType!='销售订单'">
                               <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售合同号：</label>
                                   <div class="control-label col-md-7">
@@ -349,6 +398,49 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
+                          <div class="col-md-4" ng-if="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">备注：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{customerOrder.orderRemark}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                     	<div class="col-md-4" ng-if="contract.contractType=='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">状态：</label>
+                                 <div class="control-label col-md-7">
+                                     <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
+                                     
+                                     <p ng-if="customerOrder.status==1"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
+                                     
+                                     <p ng-if="customerOrder.status==2"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
+                                     
+                                     <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
+                                    ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:red"> 未通过 </p>
+                                     
+                                     <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         <!--/span-->
+                     </div>
+                     <div class="row"  ng-if="contract.contractType!='销售订单'">
+                      	<div class="col-md-4" >
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">合同签订日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{contract.signDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                           <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
@@ -358,25 +450,21 @@ margin-right: 20px;
                                  
                              </div>
                          </div>
-                         
-                         <!--/span-->
-                     </div>
-                     <div class="row">
                      	<div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
                                      <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
+                                    ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:red"> 未通过 </p>
                                      
                                      <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
@@ -469,7 +557,7 @@ margin-right: 20px;
                          <!--/span-->
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售日期：</label>
+                                 <label class="control-label col-md-5 bold">下单日期：</label>
                                  <div class="control-label col-md-7">
                                      <p  > {{customerOrder.orderDate}} </p>
                                  </div>
@@ -494,7 +582,16 @@ margin-right: 20px;
                          /span
                      </div> -->
                      <div class="row">
-                        <div class="col-md-4">
+                     	<div class="col-md-4" ng-if="contract.contractType!='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">电子合同：</label>
+                                 <div class="control-label col-md-7">
+                                     <label ng-if="contract.electronicContract==null||contract.electronicContract==''" class="c_edit" >未上传附件</label>
+                                     <label ng-if="contract.electronicContract!=null&&contract.electronicContract!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(contract.electronicContract)">{{contract.electronicContract.substring(contract.electronicContract.indexOf("_")+1)}}</a></label>
+                                 </div>
+                             </div>
+                         </div>
+                        <div class="col-md-4" ng-if="contract.contractType!='销售订单'">
                               <div class="form-group ">
                                  <label class="control-label col-md-5 bold">销售合同号：</label>
                                   <div class="control-label col-md-7">
@@ -502,6 +599,16 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
+                          
+                         <div class="col-md-4" ng-if="contract.contractType!='销售订单'">
+                             <div class="form-group ">
+                                <label class="control-label col-md-5 bold">合同签订日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{contract.signDate}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
                           <div class="col-md-4">
                              <div class="form-group ">
                                 <label class="control-label col-md-5 bold">备注：</label>
@@ -517,16 +624,16 @@ margin-right: 20px;
                                 <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
                                      <p ng-if="customerOrder.processBase.status=='PENDING'||customerOrder.processBase.status=='WAITING_FOR_APPROVAL'"  
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:#fcb95b"> 审核中 </p>
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:#fcb95b"> 审核中 </p>
                                      
                                      <p ng-if="customerOrder.status==1"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 待签合同 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 待签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.status==2"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已确认 </p>
+                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:green"> 已审批<!-- 已签合同 --> </p>
                                      
                                      <p ng-if="customerOrder.processBase.status=='APPROVAL_FAILED'"   
-                                     ng-click="viewOrderLog(customerOrder.serialNum)" style="color:red"> 未通过 </p>
+                                     ng-click="viewGraphTrace(customerOrder.processBase.processInstanceId)" style="color:red"> 未通过 </p>
                                      
                                      <p ng-if="customerOrder.processBase==null&&customerOrder.status==0"   
                                      ng-click="viewOrderLog(customerOrder.serialNum)" > 未发布 </p>
@@ -785,11 +892,11 @@ margin-right: 20px;
                                   <tr>
 									<th>商品编号</th>
 									<th ng-if="customerOrder.tradeType =='外贸'">海关编码</th>
-									<th>供应商商品编号</th>
+									<th ng-if="customerOrder.orderType!='自主销售'">供应商商品编号</th>
 									<th>物料名称</th>
 									<th>规格型号</th>
 									<th>单位</th>
-									<th>供应商</th>
+									<th ng-if="customerOrder.orderType!='自主销售'">供应商</th>
 									<th>采购数量</th>
 									<th>指导单价</th>
 									<th>含税单价</th>
@@ -809,7 +916,7 @@ margin-right: 20px;
 									<th>含税金额</th>
 									<th>交付日期</th>
 									<th>最晚交付日期</th>
-									<th>交付/提货地点</th>
+									<th>交付地址</th>
                                   </tr>
                               </thead>
                               <tbody>
@@ -821,7 +928,7 @@ margin-right: 20px;
 			                          <td ng-if="customerOrder.tradeType =='外贸'">
 			                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>
 			                          </td>
-			                          <td>
+			                          <td ng-if="customerOrder.orderType!='自主销售'">
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supplyMaterielNum}} </p>
 			                          </td>
 			                          <td>
@@ -833,7 +940,7 @@ margin-right: 20px;
 			                          <td>
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unit}} </p>
 			                          </td>
-			                          <td>
+			                          <td ng-if="customerOrder.orderType!='自主销售'">
 			                                <p class="form-control-static" > {{_orderMateriel.supplyMateriel.supply.comName}} </p>
 			                          </td>
 			                          <td>  
@@ -843,7 +950,8 @@ margin-right: 20px;
                                       		<p class="form-control-static" > {{_orderMateriel.materiel.unitPrice}} </p>
 			                          </td>
 			                          <td>  
-                                      		<p class="form-control-static"> {{_orderMateriel.orderRateUnit}} </p>
+                                    		<p class="form-control-static" ng-if="_orderMateriel.materiel.unitPrice!=_orderMateriel.orderRateUnit" style="color:red"> {{_orderMateriel.orderRateUnit}} </p>
+                                     		<p class="form-control-static" ng-if="_orderMateriel.materiel.unitPrice==_orderMateriel.orderRateUnit"> {{_orderMateriel.orderRateUnit}} </p>
 			                          </td>
 			                          <td>  
                                       		<p class="form-control-static" > {{format2Thousands(_orderMateriel.orderUnitPrice)}} </p>
@@ -888,13 +996,13 @@ margin-right: 20px;
                                       
                                   </tr>
                                   <tr>
-									<th></th>
+									<th ng-if="customerOrder.orderType!='自主销售'"></th>
 									<th ng-if="customerOrder.tradeType =='外贸'"></th>
 									<th clase="bold">合计：</th>
 									<th clase="bold">{{totalCount()}}</th>
 									<th></th>
 									<th></th>
-									<th>{{totalSupply()}}</th>
+									<th ng-if="customerOrder.orderType!='自主销售'">{{totalSupply()}}</th>
 									<th>{{totalMaterielCount()}}</th>
 									<th></th>
 									<th></th>

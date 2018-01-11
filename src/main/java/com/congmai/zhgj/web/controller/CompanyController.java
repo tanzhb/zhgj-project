@@ -35,13 +35,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.ComType;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
@@ -49,17 +52,42 @@ import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyExample.Criteria;
+import com.congmai.zhgj.web.model.Category;
+import com.congmai.zhgj.web.model.ClauseAdvance;
+import com.congmai.zhgj.web.model.ClauseAfterSales;
+import com.congmai.zhgj.web.model.ClauseCheckAccept;
+import com.congmai.zhgj.web.model.ClauseDelivery;
+import com.congmai.zhgj.web.model.ClauseFramework;
+import com.congmai.zhgj.web.model.ClauseFrameworkExample;
+import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CompanyFinanceExample;
+import com.congmai.zhgj.web.model.CompanyManage;
 import com.congmai.zhgj.web.model.CompanyQualification;
+import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DataTablesParams;
+import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
+import com.congmai.zhgj.web.model.OrderFile;
+import com.congmai.zhgj.web.model.OrderFileExample;
+import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.SupplyBuyVO;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
+import com.congmai.zhgj.web.service.CompanyManageService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.congmai.zhgj.web.service.UserService;
+import com.congmai.zhgj.web.service.WarehouseService;
 
 
 /**
@@ -86,6 +114,12 @@ public class CompanyController {
 	private UserCompanyService userCompanyService;
 	@Autowired
 	private CompanyAddressService companyAddressService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private CompanyManageService companyManageService;
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	  /**
      * @Description (企业信息首页)
@@ -132,13 +166,13 @@ public class CompanyController {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
 		 company.setPageIndex(dataTablesParams.getStart());
 		 company.setPageSize(dataTablesParams.getLength());*/
@@ -198,6 +232,7 @@ public class CompanyController {
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
     	map.put("comManagers", null);
+    	map.put("companyManage", CollectionUtils.isEmpty(companyManageService.selectListByComId(comId))?null:companyManageService.selectListByComId(comId).get(0));
     	company.setPageIndex(0);
 		 company.setPageSize(-1);
 		 if("1".equals(company.getComType())){
@@ -237,6 +272,7 @@ public class CompanyController {
      	map.put("companyQualifications", companyQualificationService.selectListByComId(comId));
     	map.put("companyContacts", companyContactService.selectListByComId(comId));
     	map.put("companyAddresses", companyAddressService.selectListByComId(comId));
+    	map.put("companyManage", CollectionUtils.isEmpty(companyManageService.selectListByComId(comId))?null:companyManageService.selectListByComId(comId).get(0));
     	return "company/companyView";
     }
     
@@ -256,8 +292,13 @@ public class CompanyController {
 
         	try{
         		String isExist = checkComNumIsExist(company.getComId(),company.getComNum());
+        		String isExist1 = checkComNameIsExist(company.getComId(),company.getComName());
         		if("2".equals(isExist)){
         			company.setComNum("isExist");
+        			return company;
+        		}
+        		if("2".equals(isExist1)){
+        			company.setComName("isExist");
         			return company;
         		}
         		if(StringUtils.isEmpty(company.getComId())){
@@ -292,7 +333,7 @@ public class CompanyController {
         		
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return company;
@@ -323,7 +364,7 @@ public class CompanyController {
         				flag = "1"; //合法
         	}
 		} catch (Exception e) {
-			System.out.println(this.getClass()+"----------"+e.getMessage());
+			//20180110 qhzhao System.out.println(this.getClass()+"----------"+e.getMessage());
 		}
     	
     	return flag;
@@ -342,7 +383,7 @@ public class CompanyController {
     		companyService.deleteCompany(comId);
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -366,7 +407,7 @@ public class CompanyController {
     		companyService.deleteBatch(comIdList);
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -398,7 +439,7 @@ public class CompanyController {
             
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
  
@@ -436,7 +477,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
      	return companyContacts;
@@ -459,7 +500,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -495,7 +536,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
     	return companyAddresses;
@@ -518,7 +559,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -553,7 +594,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
     	return companyFinances;
@@ -576,7 +617,7 @@ public class CompanyController {
     		
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	return flag;
     }
@@ -660,7 +701,7 @@ public class CompanyController {
 				}
 			}, 2);
 				
-				companyService.insertBatch(companyList);
+//				companyService.insertBatch(companyList);
 			
 			map.put("data", "success");
 		} catch (Exception e1) {
@@ -733,6 +774,162 @@ public class CompanyController {
     	
     	return companyService.selectAll();
     }
+    /**
+     * @Description (检查企业名称唯一性)
+     * @param comNum
+     * @param comId
+     * @return
+     */
+    @RequestMapping("checkComNameIsExist")
+    @ResponseBody
+    public String checkComNameIsExist(String comId,String comName){
+    	String flag  = "0"; //默认失败
+    	try {
+    		CompanyExample example = new CompanyExample();
+        	Criteria criteria = example.createCriteria();
+        	criteria.andDelFlgEqualTo("0");
+        	criteria.andComNameEqualTo(comName);
+        	if(StringUtils.isNotEmpty(comId)){
+        		criteria.andComIdNotEqualTo(comId);
+        	}
+        	int count = companyService.countCompanybySelective(example);
+        	if(count > 0){
+        				flag = "2"; //存在重复
+        	}else{
+        				flag = "1"; //合法
+        	}
+		} catch (Exception e) {
+			//20180110 qhzhao System.out.println(this.getClass()+"----------"+e.getMessage());
+		}
+    	
+    	return flag;
+    }
+    /**
+     * 
+     * @Description 查询用户
+     * @param type(采购商/供应商)
+     * @return
+     */
+    @RequestMapping("/findUserList")
+    @ResponseBody
+    public ResponseEntity<Map> findUserList(String type) {
+    	List<User>userList=userService.selectUserList(type);
+		Map pageMap = new HashMap();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal", userList==null?0:userList.size());
+		pageMap.put("recordsFiltered", userList==null?0:userList.size());
+		pageMap.put("data", userList);
+		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 
+    }
+    /**
+     * @Description (保存管理信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveCompanyManage",method=RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object>  saveCompanyManage(@RequestBody CompanyManage companyManage,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+    	Subject currentUser = SecurityUtils.getSubject();
+    	String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    	Map<String, Object> map=new HashMap<String, Object>();
+        	try{
+        		if(org.springframework.util.StringUtils.isEmpty(companyManage.getSerialNum())){
+        			companyManage.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			companyManage.setCreator(currenLoginName);
+        			companyManageService.insert(companyManage);
+        		}else{
+        			companyManage.setUpdater(currenLoginName);
+        			companyManageService.update(companyManage);
+        		}
+        		List<CompanyManage>list=companyManageService.selectListByComId(companyManage.getComId());
+        		map.put("companyManage", list.get(0));
+        		flag = "1";
+        		
+        	}catch(Exception e){
+        		//20180110 qhzhao System.out.println(e.getMessage());
+        		return null;
+        	}
+        	map.put("flag", flag);
+    	return map;
+    }
+    /**
+     * 
+     * @Description 保存企业业务关系
+     * @param params
+     * @return 
+     */
+    @RequestMapping(value = "/saveCompanyRelation", method = RequestMethod.POST)
+    @ResponseBody
+    public List<Company> saveCompanyRelation(@RequestBody String params) {
+    	params = params.replace("\\", "");
+        List<Company> comList = null;
+		try {
+			comList = JSON.parseArray(params, Company.class);
+	    	if(!CollectionUtils.isEmpty(comList)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		String comId=comList.get(0).getCreator();
+		    	companyService.deleteSupplyBuy(comId);//先删除所有业务关系
+		    	Company com=companyService.selectById(comList.get(0).getCreator());
+		    	String comType=com.getComType();
+	    		for(Company f:comList){
+	    			SupplyBuyVO svo=new SupplyBuyVO();
+	    			svo.setSerialNum(ApplicationUtils.random32UUID());
+	    			if("1".equals(comType)){
+	    				svo.setBuyId(null);
+	    				svo.setSupplyId(f.getComId());
+	    			}else if("2".equals(comType)){
+	    				svo.setBuyId(f.getComId());
+	    				svo.setSupplyId(null);
+	    			}
+	    			svo.setCreateId(comId);
+	    			svo.setCreator(currenLoginName);
+	    			svo.setUpdater(currenLoginName);
+	    			svo.setCreateTime(new Date());
+	    			svo.setUpdateTime(new Date());
+	    			companyService.insertSupplyBuy(svo);
+		    	}
+	        }else{
+	        	/*String createComId=	comList.get(0).getCreator();
+	        	supplybuy*/
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+    	return comList;
+    	
+    }
+    
+    /**
+     * @Description (获取平台公司仓库)
+     * @param request
+     * @return
+     */
+    @RequestMapping("initPtWarehouseAddress")
+    @ResponseBody
+    public List<Warehouse> getPtWarehouseAddress(HttpServletRequest request) {
+    	WarehouseExample we=new WarehouseExample();
+    	com.congmai.zhgj.web.model.WarehouseExample.Criteria c=we.createCriteria();
+    	c.andDelFlgEqualTo("0").andOwnerEqualTo("pingtai");
+    	return warehouseService.selectWarehouseList(we);
+    }
+    /**
+	 * 
+	 * @Description 获取订单信息
+	 * @param ids
+	 * @return
+	 */
+	@RequestMapping(value = "/getComFinances",method = RequestMethod.POST)
+	@ResponseBody
+	public List<CompanyFinance> getComFinances(@RequestBody String comId) {
+		List<CompanyFinance>list=new ArrayList<CompanyFinance>();
+		if(!StringUtil.isEmpty(comId)){
+			list=companyFinanceService.selectListByComId(comId);
+		}
+    	return list;
+	}
 }
 

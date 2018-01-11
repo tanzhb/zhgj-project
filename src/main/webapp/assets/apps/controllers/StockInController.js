@@ -7,7 +7,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    	// initialize core components
 		    handle = new pageHandle();
 	    	App.initAjax();
-	    	handle.datePickersInit();
+	    	//handle.datePickersInit();
+	    	$scope.datepickerInit();
 	    	if($location.path()=="/stockInAdd"||$location.path()=="/stockIn"){
 	    		$scope.serialNums =[];
 	    		initWarehouse('pt',null);
@@ -20,12 +21,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    			stockInInfo($stateParams.serialNum);
 	    		}else{
 	    			$rootScope.setNumCode("IN",function(newCode){//
-    		 			$scope.record.inOutNum= newCode;//入库单号 
     		 		});
 	    		}
-	    		if($scope.record.stockDate==''){
-		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd');
-		    	}
+	    		
 	    	}else{
 	    			stockInInfo($stateParams.serialNum);
 	    			
@@ -40,7 +38,25 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	 });
 	 
 	 
-
+	  $scope.datepickerInit = function(scope){
+		   $('.date-picker-time').datetimepicker({
+				rtl: App.isRTL(),
+				orientation: "bottom",
+				autoclose: true,
+				todayHighlight: true,
+				//dateFormat:"yyyy-mm-dd HH:mm:ss",
+				dateFormat:"yyyy-mm-dd hh:ii:ss",
+				language: "zh-CN",
+				showMeridian: 1/*,
+				step: 1,
+				stepSecond: 1,
+				dateFormat:'yyyy-mm-dd',
+				showSecond: true, //显示秒
+				timeFormat: 'HH:mm:ss',//格式化时间
+				 showSecond: true*/
+			
+	   	})
+	  };
 	 	
 	 	var countWarehouseAndPosition = function() {
 	 		if($scope.takeDeliveryMateriels != undefined){
@@ -110,8 +126,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			/**
 			 * 加载库区数据
 			 */
-			 $scope.getPositions = function(materiel){
-				 if($scope["warehouseName"+materiel.serialNum]==undefined){
+			 $scope.getPositions = function(materiel,index){
+			/*	 if($scope["warehouseName"+materiel.serialNum]==undefined){
 					 $scope["warehouseName"+materiel.serialNum]=null;
 				 }else{
 					 delete $scope["warehouseName"+materiel.serialNum];
@@ -125,20 +141,22 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							 warehouseNames=warehouseNames.concat($scope["warehouseName"+arraySerialNums[i]]);
 						 }
 						}
-					 $scope.warehouseNames=warehouseNames;
+					 $scope.warehouseNames=warehouseNames;*/
+				// warehouseNames.push($('option[class="'+materiel.warehouseSerial+index+'"]:selected').text());
 				var promise = takeDeliveryService.getPositions(materiel.warehouseSerial);
 				promise.then(function(data){
 					//$scope.warehousePositions = data.data;
 					materiel.warehousePositons = data.data;
-					 countWarehouseAndPosition();
+					// countWarehouseAndPosition();
 				},function(data){
 					//调用承诺接口reject();
 				});
 			}
 			 
 			 //选中第一个物料仓库时触发
-			 $scope.getPositionsAndSelectedAll =function(materiel){
+			 $scope.getPositionsAndSelectedAll =function(materiel,index){
 				 $scope.getPositions(materiel);
+				// warehouseNames.push($('option[class="'+materiel.warehouseSerial+index+'"]:selected').text());//记录下仓库名称
 				 for(var i in $scope.takeDeliveryMateriels){
 					 if(i>0){
 						 $scope.takeDeliveryMateriels[i].warehouseSerial = materiel.warehouseSerial;
@@ -182,18 +200,43 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         		promise.then(function(data){
         			$scope.takeDeliveryMateriels = data.data;
         			var deliveryMaterielSerialNums=new Array()
-        		
+        			var array=new Array();
     				for(var i in data.data){
     					if(data.data[i].supplyMateriel!=null){
         					$scope.takeDeliveryMateriels[i].orderMateriel = data.data[i].supplyMateriel;
         					delete $scope.takeDeliveryMateriels[i].supplyMateriel;
     					}
-    					if(data.data[i].serialNum!=null){
+    					if(data.data[i].serialNum!=null&&data.data[i].deliverCount!=0){
     						deliveryMaterielSerialNums.push(data.data[i].serialNum);
+    						array.push(data.data[i]);
     					}
     				}
         			$scope.deliveryMaterielSerialNums=deliveryMaterielSerialNums;//把所有发货物料流水存到该数组
+        			$scope.takeDeliveryMateriels=array;
         			countWarehouseAndPosition();
+        			var totalOrderCount=0, totalDeliveryCount=0;
+	        		var  totalQualifiedCount=0,totalStockInCount=0;
+	        		for(var i in $scope.takeDeliveryMateriels ){
+	        			if($scope.takeDeliveryMateriels[i].orderMateriel!=null){
+	        			/*	$scope.orderMateriels[i].materiel = $scope.takeDeliveryMateriels[i].orderMateriel.materiel;
+		        			$scope.orderMateriels[i].amount = $scope.takeDeliveryMateriels[i].orderMateriel.amount;
+		        			$scope.orderMateriels[i].serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+		        			$scope.orderMateriels[i].orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMateriel.serialNum;*/
+		        			totalOrderCount=totalOrderCount+Number( $scope.takeDeliveryMateriels[i].orderMateriel.amount);
+		        			totalDeliveryCount=totalDeliveryCount+Number( $scope.takeDeliveryMateriels[i].deliverCount);
+		        			if($scope.oprateType==undefined){//出库计划详情物料tab展示合格总数,出库总数,未出总数
+		        				totalQualifiedCount=totalQualifiedCount+Number($scope.takeDeliveryMateriels[i].stockInQualifiedCount);
+		        				totalStockInCount=totalStockInCount+Number( $scope.takeDeliveryMateriels[i].stockInCount);
+			        		}
+	        			}
+	        		}
+	        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
+	        		$scope.totalOrderCount=totalOrderCount;//订单总数
+	        		if($scope.oprateType==undefined){//出库计划详情物料tab展示合格总数,出库总数,未出总数
+	        			$scope.totalQualifiedCount=totalQualifiedCount;//合格总数
+		        		$scope.totalStockInCount=totalStockInCount;//入库总数
+		        		$scope.totalUnstockInCount=totalDeliveryCount-totalStockInCount;//未入总数
+	        		}
         			//$scope.deliver.materielCount = data.orderMateriel.length;
         			if($location.path()=="/stockInAdd"&&!isNull($scope.record)&&!isNull($scope.record.serialNum)){ //入库编辑时
         				for(var i in data.data){
@@ -209,77 +252,92 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	        /**
 	         * 确认入库
 	         */
-			$scope.saveStockIn = function() {
+			$scope.saveStockIn = function(judgeString) {
 				if($('#stockInForm').valid()){
-					handle.blockUI();
-					var params = {};
-					params.record = $scope.record;
-					params.record.deliverSerial = "";
-					params.deliveryMateriels = [];
-					var param;
-					for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
-						param = {};
-						if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
-							toastr.warning("生产批次未填写！");
-							handle.unblockUI();
-		     				return false;
-						}else{
-							param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
-						}
-					param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
-//						param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
-//						param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
-//						param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;
-//						param.deliverRemark = $scope.takeDeliveryMateriels[i].deliverRemark;
-//						param.acceptCount = $scope.takeDeliveryMateriels[i].acceptCount;
-//						param.refuseCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].acceptCount;
-//						param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
-						
-						
-						param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
-						if(!isNull($scope.takeDeliveryMateriels[i].acceptCount)){
-							param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-							param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockCount;
+					 $rootScope.judgeIsExist("record",$scope.record.inOutNum, $scope.record.serialNum,function(result){
+			    			var 	isExist = result;
+			    		debugger;
+			    		if(isExist){
+			    			 toastr.error('入库单号重复！');
+			    			return;
+			    		}else{
+			    			handle.blockUI();
+							var params = {};
+									if(judgeString=='save'){
+										$scope.record.status='0';	
+									}else{
+										$scope.record.status='1';
+									}
+							params.record = $scope.record;
+							params.record.deliverSerial = "";
+							params.deliveryMateriels = [];
+							var param;
+							for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
+								param = {};
+								if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
+									toastr.warning("生产批次未填写！");
+									handle.unblockUI();
+				     				return false;
+								}else{
+									param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
+								}
+							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
+//								param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
+//								param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
+//								param.deliverCount = $scope.takeDeliveryMateriels[i].deliverCount;
+//								param.deliverRemark = $scope.takeDeliveryMateriels[i].deliverRemark;
+//								param.acceptCount = $scope.takeDeliveryMateriels[i].acceptCount;
+//								param.refuseCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].acceptCount;
+//								param.takeRemark = $scope.takeDeliveryMateriels[i].takeRemark;
+								
+								
+								param.stockCount = $scope.takeDeliveryMateriels[i].stockInCount;
+								if(!isNull($scope.takeDeliveryMateriels[i].acceptCount)){
+									param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
+									param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockInCount;
+									
+								}else{//
+									debugger;
+									param.deliverSerial = params.record.takeDeliverSerial;
+									param.unstockCount = 0;
+									if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
+										//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
+										param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
+									}else{
+										//param.orderMaterielSerial = '';
+										params.record.takeDeliverSerial = '';
+										param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
+									}
+								}
+								param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+								param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
+								param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
+								params.deliveryMateriels.push(param);
+							}
 							
-						}else{//
-							debugger;
-							param.deliverSerial = params.record.takeDeliverSerial;
-							param.unstockCount = 0;
-							if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
-								//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
-								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
-							}else{
-								//param.orderMaterielSerial = '';
-								params.record.takeDeliverSerial = '';
-								param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
-							}
-						}
-						param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
-						param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
-						param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
-						params.deliveryMateriels.push(param);
-					}
-					
-					var promise = takeDeliveryService
-							.saveStockInData(params);
-					promise.then(function(data) {
-						if(data.data == "1"){
-							if(isNull($scope.record.serialNum)||$state.current.name=="stockIn"){
-								toastr.success("入库成功！");
-							}else{
-								toastr.success("修改成功！");
-							}
-							$state.go("takeDelivery");
-						}else{
-							toastr.error("入库失败！请联系管理员");
-						}
-						handle.unblockUI();
-					}, function(data) {
-						// 调用承诺接口reject();
-						handle.unblockUI();
-						toastr.error("入库失败！请联系管理员");
-						console.log(data);
-					});
+							var promise = takeDeliveryService
+									.saveStockInData(params);
+							promise.then(function(data) {
+								if(data.data == "1"){
+									if(judgeString=='save'){
+										toastr.success("保存成功！");
+									}else{
+										toastr.success("入库成功！");
+									}
+									$state.go("takeDelivery");
+								}else{
+									toastr.error("入库失败！请联系管理员");
+								}
+								handle.unblockUI();
+							}, function(data) {
+								// 调用承诺接口reject();
+								handle.unblockUI();
+								toastr.error("入库失败！请联系管理员");
+								console.log(data);
+							});
+			    		}
+			    		
+			    		});
 				}
 			}; 
 			
@@ -294,6 +352,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			 * 获得仓库名
 			 */
 			$scope.getWarehouseName = function(type){
+				debugger;
 				for(var i in $scope.warehouses){
 					if(type=="deliver"){
 						if($scope.warehouses[i].serialNum == $scope.deliver.warehouseSerial){
@@ -333,6 +392,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         			}else{
         				$scope.otherMode=true;
         			}
+        			if($scope.record.stockDate==null){
+    		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    		    	}
         			if(data.data.deliver!=null&&data.data.deliver.takeDelivery!=null){  //当贸易入库时
         				$scope.record.takeDeliverNum = data.data.deliver.takeDelivery.takeDeliverNum;
             			$scope.record.shipperOrReceiver = data.data.deliver.shipper;
@@ -341,7 +403,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockInAdd"||$location.path()=="/stockIn")){//入库编辑或入库时时
             				$scope.deliverSerial = data.data.deliver.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.deliver);
-            				$scope.record.inOutType = '贸易';
+            				$scope.record.inOutType = '采购';
             				/*if(data.data.deliver.orderSerial!=null){
             					$scope.record.orderNum = data.data.deliver.orderNum; //关联订单号
             				}*/
@@ -415,8 +477,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					            	inOutNum:{required:"入库单号不能为空！"},
 					            	takeDeliverSerial:{required:"收货单号不能为空！"},
 					            	stockDate:{required:"入库日期不能为空！"},
+					            	inOutType:{required:"入库类型不能为空！"},
 					            	/*operator:{required:"操作员不能为空！"},*/
-					            	contactNum:{required:"联系方式不能为空！"},
+					            	contactNum:{required:"联系方式不正确！"},
 					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"}
 					            	//positionSerial:{required:"库区不能为空！"}
@@ -448,6 +511,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                contactNum: {
 					                	//required: !0,
 					                	isPhone: !0
+					                },
+					                inOutType:{
+					                	required: !0
 					                }
 					            },
 					            invalidHandler: function(e, t) {
@@ -512,15 +578,15 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 		                t_table = $("#takeDelivery").DataTable({
 		                    language: {
 		                        aria: {
-		                            sortAscending: ": activate to sort column ascending",
-		                            sortDescending: ": activate to sort column descending"
+		                            sortAscending: ": 以升序排列此列",
+		                            sortDescending: ": 以降序排列此列"
 		                        },
 		                        emptyTable: "空表",
 		                        info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 		                        infoEmpty: "没有数据",
 		                        //infoFiltered: "(filtered1 from _MAX_ total entries)",
 		                        lengthMenu: "每页显示 _MENU_ 条数据",
-		                        search: "查询:",
+		                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 		                        zeroRecords: "抱歉， 没有找到！",
 		                        paginate: {
 		                            "sFirst": "首页",
@@ -747,15 +813,15 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 				              m_table = $("#select_sample_2").DataTable({
 				                  language: {
 				                      aria: {
-				                          sortAscending: ": activate to sort column ascending",
-				                          sortDescending: ": activate to sort column descending"
+				                          sortAscending: ": 以升序排列此列",
+				                          sortDescending: ": 以降序排列此列"
 				                      },
 				                      emptyTable: "空表",
 				                      info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 				                      infoEmpty: "没有数据",
 				                      //infoFiltered: "(filtered1 from _MAX_ total entries)",
 				                      lengthMenu: "每页显示 _MENU_ 条数据",
-				                      search: "查询:",
+				                      search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 				                      zeroRecords: "抱歉， 没有找到！",
 				                      paginate: {
 				                          "sFirst": "首页",
@@ -1098,17 +1164,18 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							/** *************入库物料明细可检索化  end*************** */
 							 
 	 /** *************入库物料批次操作  start*************** */
-	 var stockInBatchMateriel;//当前入库物料
-							 
+	 var stockInBatchMateriel,index,warehouseNames;//当前入库物料
 	/**
 	  * 显示填入批次窗口
 	  * materiel 入库物料
 	  * 
 	  */
-	$scope.showStockBatch=function(materiel){
+	$scope.showStockBatch=function(materiel,indexori){
 		$('#stockBatchInfo').modal('show');//显示批次弹框
 		$scope.stockInBatchs = angular.copy(materiel.stockInBatchs)//暂存入库批次
 		stockInBatchMateriel = materiel;
+		index=indexori;
+		
   	}
 							 
 							 
@@ -1169,8 +1236,28 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
     		   toastr.warning("入库数量不能大于发货数量！");
  				return false;
     	   }
-    	   stockInBatchMateriel.stockCount = $scope.totalCount()
+    	   var  beforeStockInCount=stockInBatchMateriel.stockInCount;
+    	   stockInBatchMateriel.stockInCount = $scope.totalCount();
+    	   stockInBatchMateriel.stockCount = $scope.totalCount();
     	   stockInBatchMateriel.stockInBatchs = $scope.stockInBatchs;
+    	  var  warehouseNames=new Array();
+    	   for(var i=0;i<$scope.stockInBatchs.length;i++){
+    		   warehouseNames.push($('option[class="'+$scope.stockInBatchs[i].warehouseSerial+'"]:first').text());
+    	   }
+    	   $scope.warehouseNames=warehouseNames;
+    	   unique(warehouseNames,"warehouseName");
+    	  
+    	   if($scope.record.materielCount==undefined){
+    		   $scope.record.materielCount=0;
+    	   }
+    	   var beforedata=  $scope.record.materielCount;//之前的入库总数
+    	   if(beforeStockInCount==null){
+    		   $scope.record.materielCount+=stockInBatchMateriel.stockInCount;
+    	   }else{
+    		   $scope.record.materielCount= $scope.record.materielCount-beforeStockInCount+Number(stockInBatchMateriel.stockInCount);
+    	   }
+    	   $scope.totalStockInCount=$scope.record.materielCount;
+    	   $scope.totalUnstockInCount=$scope.totalDeliveryCount-$scope.totalStockInCount;
     	   $('#stockBatchInfo').modal('hide');//显示批次弹框
        }
        

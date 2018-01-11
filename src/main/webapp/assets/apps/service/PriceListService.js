@@ -10,7 +10,8 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
         deleteLadderPrice:deleteLadderPrice,
         getLadderPriceInfo:getLadderPriceInfo,
         startPriceProcess:startPriceProcess,
-        getAuditInfos:getAuditInfos
+        getAuditInfos:getAuditInfos,
+        savePriceComs:savePriceComs
         
     };
 
@@ -88,7 +89,22 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
         });
         return deferred.promise;//返回承诺
 	};
-	
+	  /**
+	 * 保存采供应商信息
+	 */
+    function savePriceComs (priceComs){
+		var deferred = $q.defer();
+		var params = {};  
+	    params = JSON.stringify(priceComs); 
+		$http.post("rest/priceList/savePriceComs",  
+				params//传整个表单数据  
+    	).then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+	};
 	/**
 	 * 删除阶梯价格信息
 	 */

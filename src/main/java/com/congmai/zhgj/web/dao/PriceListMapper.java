@@ -33,5 +33,6 @@ public interface PriceListMapper extends GenericDao<PriceList, String>{
     int updateByPrimaryKey(PriceList record);
     int deletePriceList(List<String>serialNums);
     List<PriceList> selectByPriceType(Map<String,String>map);
+    PriceList getGuideUnitPrice(Map<String,Object> map);
     
 }

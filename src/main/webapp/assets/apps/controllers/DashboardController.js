@@ -41,6 +41,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
+		}else if(actionName=="inToBuyToSale"){
+			$state.go("saleOrder");
 		}
 	}
 	
@@ -103,6 +105,10 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					workflowName = "收货流程";
 				}else if(workflowType == 'myNotice'){
 					workflowName = "公告流程";
+				}else if(workflowType == 'buyFrame'){
+					workflowName = "采购框架流程";
+				}else if(workflowType == 'saleFrame'){
+					workflowName = "销售框架流程";
 				}else{
 					workflowName = "未命名";
 				}
@@ -147,6 +153,10 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					workflowName = "收货流程";
 				}else if(workflowType == 'myNotice'){
 					workflowName = "公告流程";
+				}else if(workflowType == 'buyFrame'){
+					workflowName = "采购框架流程";
+				}else if(workflowType == 'saleFrame'){
+					workflowName = "销售框架流程";
 				}else{
 					workflowName = "未命名";
 				}

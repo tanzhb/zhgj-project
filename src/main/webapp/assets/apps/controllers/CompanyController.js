@@ -13,15 +13,20 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		_index = 0; 
 	    		$scope.companyQualifications =[{}];
 	    		handle.datePickersInit();
+	    		initCustomers();
+	    		initSuppliers();
 	    		getCompanyInfo($stateParams.comId);
 	    		//qualificationFormValid();
 	    		validatorInit();
+	    		if(isNull($stateParams.comId)){
 	    		$rootScope.setNumCode("C",function(newCode){//
 	    			$scope.company={};
         			$scope.company.comNum= newCode;//企业编码
         		});
-	    		
+	    		}
 	 		}else{
+	 			initTabClass();
+	 			
 	 			//createTable(15,1,true);
 	 			loadCompanyTable($stateParams.type);
 	 			//loadTable($stateParams.type);
@@ -37,9 +42,41 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    	$rootScope.settings.layout.pageContentWhite = true;
 	        $rootScope.settings.layout.pageBodySolid = false;
 	        $rootScope.settings.layout.pageSidebarClosed = false;
-	        console.log("------------->"+$scope.company);
+	       // console.log("------------->"+$scope.company);
 	    	
 	 });
+	 
+	 var initTabClass = function(){
+			var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+				$(liobj).addClass("active");
+//				$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
+				$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+				
+//				methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
+				methodName = '';
+				try{
+					methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+				}catch(e){ 
+//					alert(methodName+"()不存在！"); 
+				}
+				function m(methodName){ 
+					//初始化this.func属性, 
+					this.func = function(){}; 
+					try{ 
+					//这里用eval方法，把我们传进来的这个方法名所代表的方法当作一个对象来赋值给method1的func属性。 
+					//如果找不到methodName这个对应的对象,则eval方法会抛异常 
+						this.func = eval(methodName); 
+					}catch(e){ 
+//						alert(methodName+"()不存在！"); 
+					} 
+				} 
+				try{
+					var c = new m(methodName); 
+					c.func(); 
+				}catch(e){ 
+//					alert(methodName+"()不存在！"); 
+				} 
+		}
 	  /**
 		 * 加载所有公司数据
 		 */
@@ -82,7 +119,88 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        		//调用承诺接口reject();
 	        	});
 		}
-		
+		/**
+		 * 加载供应商数据
+		 */
+		var initSuppliers = function(judgeString){
+			/*if(judgeString==undefined){
+			var promise = orderService.initSuppliers();
+	        	promise.then(function(data){
+	        		$scope.supplyCompanys = data.data;
+	        		setTimeout(function () {
+	        			$('select[name="supplyComId"]').selectpicker({
+	                        showSubtext: true,
+	                        size : 5
+	                    });
+	        			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+	        			
+	                }, 100);
+	        	},function(data){
+	        		//调用承诺接口reject();
+	        	});
+			}else{
+				$('select[name="supplyComId"]').selectpicker({
+                    showSubtext: true,
+                    size : 5
+                });
+    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+			}*/
+			var promise = orderService.initSuppliers();
+        	promise.then(function(data){
+        		$scope.supplyCompanys = data.data;
+        		setTimeout(function () {
+        			$('select[name="supplyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
+		}
+		   /**
+		 * 加载客户数据
+		 */
+		var initCustomers = function(judgeString){
+		/*	if(judgeString==undefined){
+			var promise = orderService.initCustomers();
+	        	promise.then(function(data){
+	        		$scope.buyCompanys = data.data;
+	        		setTimeout(function () {
+	        			$('select[name="buyComId"]').selectpicker({
+	                        showSubtext: true,
+	                        size : 5
+	                    });
+	        			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+	        			
+	                }, 100);
+	        	},function(data){
+	        		//调用承诺接口reject();
+	        	});
+			}else{
+				$('select[name="buyComId"]').selectpicker({
+                    showSubtext: true,
+                    size : 5
+                });
+    			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+			}*/
+			var promise = orderService.initCustomers();
+        	promise.then(function(data){
+        		$scope.buyCompanys = data.data;
+        		setTimeout(function () {
+        			$('select[name="buyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+        	},function(data){
+        		//调用承诺接口reject();
+        	});
+		}
 	 var validatorInit= function(){
 		 
 		 if ($.validator) {
@@ -214,8 +332,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 							{
 								language : {
 									aria : {
-										sortAscending : ": activate to sort column ascending",
-										sortDescending : ": activate to sort column descending"
+										sortAscending : ": 以升序排列此列",
+										sortDescending : ": 以降序排列此列"
 									},
 									emptyTable : "空表",
 									info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -572,6 +690,62 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				}
 			})   
 		}); 
+		
+		// 页面加载完成后调用，验证输入框
+		$scope.$watch('$viewContentLoaded', function() {  
+			var e = $("#companyAddressForm"),
+			r = $(".alert-danger", e),
+			i = $(".alert-success", e);
+			e.validate({
+				errorElement: "span",
+				errorClass: "help-block help-block-error",
+				focusInvalid: !1,
+				ignore: "",
+				messages: {
+					address:{required:"地址不能为空！"},
+					/*zipCode:{required:"邮编不能为空！"},*/
+					contactTel:{required:"联系电话不能为空！"},
+					mobileNum:{required:"手机不能为空！"}
+				},
+				rules: {
+					address: {
+						required: !0
+					},
+				/*	zipCode: {
+						required: !0
+					},*/
+					contactTel: {
+						required: !0,
+					isPhone: !0
+					},
+					mobileNum: {
+						required: !0,
+						isPhone: !0
+					}
+				},
+				invalidHandler: function(e, t) {
+					i.hide(),
+					r.show(),
+					App.scrollTo(r, -200)
+				},
+				errorPlacement: function(e, r) {
+					r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+				},
+				highlight: function(e) {
+					$(e).closest(".form-group").addClass("has-error")
+				},
+				unhighlight: function(e) {
+					$(e).closest(".form-group").removeClass("has-error")
+				},
+				success: function(e) {
+					e.closest(".form-group").removeClass("has-error")
+				},
+				submitHandler: function(e) {
+					i.show(),
+					r.hide()
+				}
+			})   
+		}); 
 		// 页面加载完成后调用，验证输入框
 		$scope.$watch('$viewContentLoaded', function() {  
 			 
@@ -586,7 +760,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				messages: {
 					openingBank:{required:"银行不能为空！"},
 					accountName:{required:"户名不能为空！"},
-					accountNumber:{required:"账号不能为空！",digits:"银行账号必须为数字！"}
+					accountNumber:{required:"账号不能为空！",creditcard:"请输入正确的银行账号！"}
 				},
 				rules: {
 					accountName: {
@@ -597,7 +771,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					},
 					accountNumber: {
 						required: !0,
-						digits:true
+						creditcard:true
 					}
 				},
 				invalidHandler: function(e, t) {
@@ -726,9 +900,42 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			$(".alert-danger").html("企业编号已存在！");
 	        			return;
 	        		}*/
-	        		handle.blockUI();
+	        		
 	        		$scope.company.createTime=null;
 	        		$scope.company.updateTime=null;
+	        		if(($scope.companyContacts==undefined||$scope.companyContacts.length==0)){
+	        			if($scope.companyContact1==undefined){
+	        				$(".alert-danger").html("联系方式中联系人至少有一个!");
+	    					$(".alert-danger").show();
+	    					return;
+	        			}
+	        			
+	        		}
+	        		if(($scope.companyAddresses==undefined||$scope.companyAddresses.length==0)){
+	        			if($scope.companyAddress1==undefined){
+	        				$(".alert-danger").html("联系方式中联系地址至少有一个!");
+	    					$(".alert-danger").show();
+	    					return;
+	        			}
+	        		}
+	        		
+	        		/*if($scope.companyManage==undefined){
+	        			$(".alert-danger").html("请输入管理信息!");
+    					$(".alert-danger").show();
+    					return;
+	        			}else{
+	        				if($scope.accendants==undefined){
+		        				$(".alert-danger").html("维护人员至少有一个!");
+		    					$(".alert-danger").show();
+		    					return;
+		        			}
+	        			}*/
+	        		if($scope.accendants==undefined){
+        				$(".alert-danger").html("维护人员至少有一个!");
+    					$(".alert-danger").show();
+    					return;
+        			}
+	        		handle.blockUI();
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
 	        			if(!handle.isNull(data.data)){
@@ -738,13 +945,18 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        					$(".alert-danger").show();
 	        					return;
 	        				}
+	        				if(data.data.comName=="isExist"){
+	        					handle.unblockUI();
+	        					$(".alert-danger").html("企业名称已存在！");
+	        					$(".alert-danger").show();
+	        					return;
+	        				}
 	        				$(".modal-backdrop").remove();
 		        			toastr.success("保存成功");
 		        			handle.unblockUI();
-		        			var company = data.data;debugger;
+		        			var company = data.data;
 		        			//$state.go('companyAdd',company,{reload:true});
-		        			//$scope.company = company
-		        		
+		        			$scope.company = company
 		        			getCompanyInfo(company.comId,"company");
 		        			console.log(data.data);
 		        			$scope.companyView = true;
@@ -755,6 +967,17 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			//$scope.saveCompanyQualification(true);
 		        			//$stateParams.comId = company.comId;
 		        			//$location.search('comId',company.comId);
+		        			if(flagAddress&&flagContact){
+		        			$scope.companyContact1.comId=company.comId;
+		        			$scope.companyAddress1.comId=company.comId;
+		        			$scope.companyContact=$scope.companyContact1;
+		        			$scope.companyAddress1=$scope.companyAddress1;
+		        			flagContact=false;
+		        			flagAddress=false;
+		        			 $scope.saveCompanyAddress();
+		        			 $scope.saveCompanyContact();
+		        			}
+		        			//$scope.saveCompanyManage();//保存管理信息
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();
@@ -904,6 +1127,9 @@ $scope.showCompany=function(judgeString){
 	       			$scope.companyQualificationView = true;
 	       			$scope.companyQualificationAdd = true;
 	       			$scope.companyQualificationEdit = false;
+	       			$scope.companyMAdd = true;
+	       			$scope.companyMView = true;
+	       			
 	        	}
 	        	//$scope.cancelCompanyQualification();
 	        };
@@ -1113,37 +1339,51 @@ $scope.showCompany=function(judgeString){
 	       /**
 	        * 保存联系人信息
 	        */
+	       var  flagContact,flagAddress;
 	       $scope.saveCompanyContact = function(){
-		    	if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+		    	if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagContact!=undefined){//handle.isNull($scope.company)||handle.isNull($scope.company.comId)
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		    	}else{
 		    		if(handle.isNull($scope.companyContact)){
-		    			$scope.companyContact = {}
+		    			$scope.companyContact = {};
 		    		}
-		    		$scope.companyContact.comId = $scope.company.comId;
+		    		if(flagContact==undefined&&($scope.companyContacts==undefined||$scope.companyContacts.length==0)){
+		    			flagContact=true;
+		    		}else{
+		    			flagContact=false;
+		    		}
+		    		if(!flagContact){
+		    			$scope.companyContact.comId = $scope.company.comId;
+		    		}
 		    		$scope.companyContact.createTime = null;
 		    		$scope.companyContact.updateTime = null;
 		    	}
 		    	if($('#contactForm').valid()){
-		    		console.log($scope.companyContact);
-		        	var promise = companyService.saveCompanyContact($scope.companyContact);
-		        	promise.then(function(data){
-		        		//$(".modal-backdrop").remove();
-		        		if(!handle.isNull(data.data)){
-			        		toastr.success("保存成功");
-			        		$("#contactor").modal("hide");
-			        		$scope.companyContact = {};
-			        		$scope.companyContacts = data.data;
-		        		}else{
-		        			$("#contactor").modal("hide");
-		        			toastr.error("保存失败！请联系管理员");
-		        		}
-		            },function(data){
-		               //调用承诺接口reject();
-		            	toastr.error("保存失败！请联系管理员");
-		            	console.log(data);
-		            });
+		    		if(!flagContact){//不是第一个
+		    			var promise = companyService.saveCompanyContact($scope.companyContact);
+			        	promise.then(function(data){
+			        		//$(".modal-backdrop").remove();
+			        		if(!handle.isNull(data.data)){
+				        		toastr.success("保存成功");
+				        		$("#contactor").modal("hide");
+				        		$scope.companyContact = {};
+				        		$scope.companyContacts = data.data;
+			        		}else{
+			        			$("#contactor").modal("hide");
+			        			toastr.error("保存失败！请联系管理员");
+			        		}
+			            },function(data){
+			               //调用承诺接口reject();
+			            	toastr.error("保存失败！请联系管理员");
+			            	console.log(data);
+			            });
+		    		}else{
+		    			$scope.companyContact1=$scope.companyContact;
+		    			 toastr.warning("第一条联系方式暂存!");
+		    			$("#contactor").modal("hide");
+		    		}
+		        	
 		    	}
 	    	    
 	       }
@@ -1153,7 +1393,7 @@ $scope.showCompany=function(judgeString){
 	        */
 	       $scope.addCompanyContact = function(){
 	    	   $scope.title = null;
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagContact!=undefined){
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
@@ -1183,6 +1423,10 @@ $scope.showCompany=function(judgeString){
 	        * 删除联系人信息
 	        */
 	       $scope.deleteCompanyContact = function(serialNum){
+	    	   if($scope.companyContacts.length==1){
+	    		   toastr.warning("请编辑此条信息,至少有一条联系人信息!");
+	    		   return;
+	    	   }
 	    	   handle.confirm("确定删除吗？",function(){
 	        		handle.blockUI();
 	        		var promise = companyService.deleteCompanyContact(serialNum);
@@ -1203,42 +1447,107 @@ $scope.showCompany=function(judgeString){
 	        		
 	        	});
 	       }
+	       /**
+	        * 保存企业管理信息
+	        */
+	       $scope.saveCompanyManageInfo = function(){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
+	    		   toastr.warning("您的企业信息还未保存");
+	    		   return;
+	    	   }else{
+	    		   if( $scope.accendants==undefined){
+	    			   toastr.warning("至少选择一个维护人员");
+		    		   return;
+	    		   }
+	    	   }
+	    	   if(true){
+	    		   var userId='';
+	    		   for(var i=0;i<$scope.accendants.length;i++){
+	    			   userId+=$scope.accendants[i].userId;
+	    			   if(i!=$scope.accendants.length-1){
+	    				   userId+=',';
+	    			   }
+	    		   }
+	    		   if($scope.companyManage==undefined){
+	    			   $scope.companyManage={};
+	    		   }
+	    		   $scope.companyManage.userId=userId;
+	    		   $scope.companyManage.comId=$scope.company.comId;
+	    		   $scope.companyManage.users=null;
+	    			   var promise = companyService.saveCompanyManage($scope.companyManage);
+		    		   promise.then(function(data){
+		    			   //$(".modal-backdrop").remove();
+		    			   if(data.data.flag=='1'){
+		    				   toastr.success("保存成功");
+		    				   $scope.companyManage= data.data.companyManage;
+		    				  $scope.companyMView=true;
+		    				   $scope.companyMAdd=true
+		    				   
+		    			   }else{
+		    				   toastr.error("保存失败！请联系管理员");
+		    			   }
+		    		   },function(data){
+		    			   //调用承诺接口reject();
+		    			   toastr.error("保存失败！请联系管理员");
+		    			   console.log(data);
+		    		   });
+	    		   
+	    	   }
+	       }
 	       
+	       $scope.editCompanyManageInfo=function(){
+	    	   $scope.companyMView=false;
+			   $scope.companyMAdd=false;
+			   
+	       }
 	       /***************************************************联系地址START*************************************************
 	       /**
 	        * 保存联系地址信息
 	        */
 	       $scope.saveCompanyAddress = function(){
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
 	    		   toastr.warning("您的企业信息还未保存");
 	    		   return;
 	    	   }else{
 	    		   if(handle.isNull($scope.companyAddress)){
-	    			   $scope.companyAddress = {}
+	    			   $scope.companyAddress = {};
 	    		   }
-	    		   $scope.companyAddress.comId = $scope.company.comId;
+	    		   if(flagAddress==undefined&&($scope.companyAddresses==undefined||$scope.companyAddresses.length==0)){
+	    			   flagAddress=true;
+	    		   }else{
+	    			   flagAddress=false;
+	    		   }
+	    		   if(!flagAddress){
+	    			   $scope.companyAddress.comId = $scope.company.comId;
+	    		   }
 	    		   $scope.companyAddress.createTime = null;
 	    		   $scope.companyAddress.updateTime = null;
 	    	   }
 	    	   if($('#companyAddressForm').valid()){
-	    		   console.log($scope.companyAddress);
-	    		   var promise = companyService.saveCompanyAddress($scope.companyAddress);
-	    		   promise.then(function(data){
-	    			   //$(".modal-backdrop").remove();
-	    			   if(!handle.isNull(data.data)){
-	    				   toastr.success("保存成功");
-	    				   $("#address").modal("hide");
-	    				   $scope.companyAddress = {};
-	    				   $scope.companyAddresses = data.data;
-	    			   }else{
-	    				   $("#address").modal("hide");
-	    				   toastr.error("保存失败！请联系管理员");
-	    			   }
-	    		   },function(data){
-	    			   //调用承诺接口reject();
-	    			   toastr.error("保存失败！请联系管理员");
-	    			   console.log(data);
-	    		   });
+	    		   if(!flagAddress){
+	    			   var promise = companyService.saveCompanyAddress($scope.companyAddress);
+		    		   promise.then(function(data){
+		    			   //$(".modal-backdrop").remove();
+		    			   if(!handle.isNull(data.data)){
+		    				   toastr.success("保存成功");
+		    				   $("#address").modal("hide");
+		    				   $scope.companyAddress = {};
+		    				   $scope.companyAddresses = data.data;
+		    			   }else{
+		    				   $("#address").modal("hide");
+		    				   toastr.error("保存失败！请联系管理员");
+		    			   }
+		    		   },function(data){
+		    			   //调用承诺接口reject();
+		    			   toastr.error("保存失败！请联系管理员");
+		    			   console.log(data);
+		    		   });
+	    		   }else{
+	    			   $scope.companyAddress1= $scope.companyAddress; 
+	    			   toastr.warning("第一条联系地址暂存!");
+	    			   $("#address").modal("hide");
+	    		   }
+	    		   
 	    	   }
 	    	   
 	       }
@@ -1248,7 +1557,7 @@ $scope.showCompany=function(judgeString){
 	        */
 	       $scope.addCompanyAddress = function(){
 	    	   $scope.title = null;
-	    	   if(handle.isNull($scope.company)||handle.isNull($scope.company.comId)){
+	    	   if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagAddress!=undefined){
 	    		   toastr.warning("您的企业信息还未保存");
 	    		   return;
 	    	   }else{
@@ -1278,6 +1587,10 @@ $scope.showCompany=function(judgeString){
 	        * 删除联系地址信息
 	        */
 	       $scope.deleteCompanyAddress = function(serialNum){
+	    	   if($scope.companyAddresses.length==1){
+	    		   toastr.warning("请编辑此条信息,至少有一条联系地址!");
+	    		   return;
+	    	   }
 	    	   handle.confirm("确定删除吗？",function(){
 	    		   handle.blockUI();
 	    		   var promise = companyService.deleteCompanyAddress(serialNum);
@@ -1441,8 +1754,23 @@ $scope.showCompany=function(judgeString){
 	       /**
 	        * 企业资质初始化日期控件
 	        */
-	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit("bottom");
+	       $scope.repeatDone = function(judgeString){
+	    	   if(judgeString==undefined){
+	    		   handle.datePickersInit("bottom");
+	    	   }else if(judgeString=='buy'){
+	    		   $('select[name="buyComId"]').selectpicker({
+	                    showSubtext: true,
+	                    size : 5
+	                });
+	    			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+	    	   }else if(judgeString=='supply'){
+	    		   $('select[name="supplyComId"]').selectpicker({
+	                    showSubtext: true,
+	                    size : 5
+	                });
+	    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+	    	   }
+	    	   
 	    	   //$("#qualificationForm").removeData("validator").removeData("unobtrusiveValidation");
 	    	 
 	    	   //$.validator.parse($("#qualificationForm"));
@@ -1521,6 +1849,10 @@ $scope.showCompany=function(judgeString){
 	    		   call =  "operation_f"+index;
 	    	   }else if(type=="address"){
 	    		   call =  "operation_a"+index;
+	    	   }else if(type=="_buyCompany"){
+	    		   call =  "operation_b"+index;
+	    	   }else if(type=="_supplyCompany"){
+	    		   call =  "operation_s"+index;
 	    	   }
 	    	   $scope[call] = true;
 	    	  // $scope.$apply();
@@ -1535,6 +1867,10 @@ $scope.showCompany=function(judgeString){
 	    		   call =  "operation_f"+index;
 	    	   }else if(type=="address"){
 	    		   call =  "operation_a"+index;
+	    	   }else if(type=="_buyCompany"){
+	    		   call =  "operation_b"+index;
+	    	   }else if(type=="_supplyCompany"){
+	    		   call =  "operation_s"+index;
 	    	   }
 	    	   $scope[call]= false;
 	    	   //$scope.$apply();
@@ -1567,9 +1903,21 @@ $scope.showCompany=function(judgeString){
 		 	        		$scope.companyFinances = data.data.companyFinances;
 		 	        		$scope.companyAddresses = data.data.companyAddresses;
 		 	        		$scope.comManagers = data.data.comManagers;
-		 	        		$scope.supplies = data.data.supplies;
-		 	        		$scope.buyComs = data.data.buyComs;
-		 	        		
+		 	        		if(data.data.companyManage!=null){
+		 	        			$scope.companyManage = data.data.companyManage;
+			 	        		$scope.accendants=$scope.companyManage.users;
+			 	        		$scope.users=$scope.companyManage.users;
+		 	        		}
+		 	        		if(!isNull(data.data.supplies)){
+		 	        			$scope.supplies = data.data.supplies;
+		 	        			supplyIndex = $scope.supplies.length;
+		 	        		}
+		 	        		if(!isNull(data.data.buyComs)){
+		 	        			$scope.buyComs = data.data.buyComs;
+		 	        			buyIndex = $scope.buyComs.length;
+		 	        		}
+		 	        		/*initCustomers();
+		 		    		initSuppliers();*/
 		 	        		data.data.comId = comId; //将企业id也放入数组，一边取消操作
 		 	        		if($scope.companyInfo!=undefined){
 		 	        			$scope.companyInfo.push(data.data); //将返回信息添加至checkbox选中数组
@@ -1707,21 +2055,43 @@ $scope.showCompany=function(judgeString){
 	        	$scope.basicInfo = false;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
+	        	$scope.comRelation = false;
 	        	$scope.$apply();
 	        }else if(activeTab=="资质信息"){
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = true;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
+	        	$scope.comRelation = false;
 	        	$scope.$apply();
 	        }else if(activeTab=="财务信息"){
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = true;
+	        	$scope.manage = false;
+	        	$scope.comRelation = false;
+	        	$scope.$apply();
+	        }else if(activeTab=="管理信息"){
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = false;
+	        	$scope.manage = true;
+	        	$scope.comRelation = false;
+	        	$scope.$apply();
+	        }else if(activeTab=="采购商"||activeTab=="供应商"){
+	        	$scope.basicInfo = true;
+	        	$scope.qualificationInfo = false;
+	        	$scope.billInfo = false;
+	        	$scope.manage = false;
+	        	$scope.comRelation = true;
 	        	$scope.$apply();
 	        }else{
 	        	$scope.basicInfo = true;
 	        	$scope.qualificationInfo = false;
 	        	$scope.billInfo = false;
+	        	$scope.manage = false;
+	        	$scope.comRelation = false;
 	        	$scope.$apply();
 	        }
 	     });
@@ -1747,8 +2117,334 @@ $scope.showCompany=function(judgeString){
 	    	   //console.log("==============>"+$scope.materielAllChecked);
 	    };
 	       
+	    $scope.addAccendant = function (){//添加维护人员
+	    	selectAccendant();
+    		$("#basicUserInfo").modal("show");
+		}
+      /** *************维护人员操作 start*************** */
+        var tableUser;
+        var selectAccendant = function() {
+        	if(tableUser!=undefined){
+        		tableUser.destroy();
+        	}
+                 a = 0;
+                 App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+                 tableUser = $("#select_sample_2").DataTable({
+                     language: {
+                         aria: {
+                             sortAscending: ": activate to sort column ascending",
+                             sortDescending: ": activate to sort column descending"
+                         },
+                         emptyTable: "空表",
+                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                         infoEmpty: "没有数据",
+                         // infoFiltered: "(filtered1 from _MAX_ total
+							// entries)",
+                         lengthMenu: "每页显示 _MENU_ 条数据",
+                         search: "查询:",processing:"加载中...",
+                         zeroRecords: "抱歉， 没有找到！",
+                         paginate: {
+                             "sFirst": "首页",
+                             "sPrevious": "前一页",
+                             "sNext": "后一页",
+                             "sLast": "尾页"
+                          }
+                     },
+     /*
+		 * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+		 */
+                     order: [[1, "desc"]],// 默认排序列及排序方式
+                     searching: true,// 是否过滤检索
+                     ordering:  true,// 是否排序
+                     lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+                     pageLength: 5,// 每页显示数量
+                     processing: true,// loading等待框
+// serverSide: true,
+                     ajax: "rest/company/findUserList",//查找所有用户
+                     "aoColumns": [
+                                   { mData: 'userId' },
+                                   { mData: 'userName' },
+                                   { mData: 'sex' },
+                                   { mData: 'department' },
+                                   { mData: 'position' }
+                             ],
+                    'aoColumnDefs' : [ {
+     							'targets' : 0,
+     							'searchable' : false,
+     							'orderable' : false,
+     							
+     							'render' : function(data,
+     									type, row, meta) {
+     	  								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.userId +"' ng-click='getCheckedIds(\""+data+"\",\""+row.userName+"\")' name='user_serial' value="+ row.userId +" />" +
+     									"<span></span></label>";
 
-	       
-	       
+     							},
+     							"createdCell": function (td, cellData, rowData, row, col) {
+     								 $compile(td)($scope);
+     						       }
+     						}/*,{
+     							'targets' : 1,
+     							'render' : function(data,
+     									type, row, meta) {
+     								var ClauseFrameworkIcon='';// ClauseFramework图标
+     								if(row.isCSD==1){
+     									ClauseFrameworkIcon = '<span class="label label-sm label-success">B</span> '
+     								}
+     								return ClauseFrameworkIcon + data;
+     							}
 
+     						}*/],	//stateSave:false,
+							"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+			                	   showDetail();
+			                   }
+
+                 }).on('order.dt',
+                         function() {
+                     console.log('排序');
+                 }).on('page.dt', 
+                 function () {
+               	  console.log('翻页');
+   	          }).on('draw.dt',function() {
+   	        	  checkedIdHandler();
+   	          });
+                 //全选操作
+                 $("#select_sample_2").find(".group-checkable").change(function() {
+      	            var e = jQuery(this).attr("data-set"),
+      	            t = jQuery(this).is(":checked");
+      	            jQuery(e).each(function() {
+      	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+      	            })
+      	        }),
+      	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
+      	        function() {
+      	            $(this).parents("tr").toggleClass("active")
+      	        })
+             };
+             /**
+       		 * 遍历checkbox,检查并处理已取消的元素
+       		 */
+       		function checkedIdHandler(){
+       			//获取选中用户ID
+       			tableUser.$('input[name="user_serial"]').each(function() { //遍历当前页的物料信息
+       					if ($.contains(document, this)) {
+       						if (this.checked) {
+       							if($scope.users.length>0){
+       								var flag = false;
+       								for(var i=0;i<$scope.users.length;i++){
+       									if($scope.users[i].userId == $(this).attr("id")){
+       										flag=true;
+       										break;
+       									}
+       									if(i==$scope.users.length-1&& flag==false){//不在选中数组内，checkbox清除选中状态
+       										$(this).attr("checked",false);
+       										$(this).data("checked",false);
+       									}
+       								}
+       							}else if($scope.users.length==0){//没有被选中的物料
+       								$(this).attr("checked",false);
+       								$(this).data("checked",false);
+       							}
+       						}
+       					}
+       			});
+       		}
+            /**
+      		 * checkbox点击事件（生成选中内容）
+      		 */
+      		$scope.getCheckedIds = function(userId,userName){
+      			var data={};
+      			data.userId = userId;
+      			data.userName = userName; //获取一行数据
+      			if($scope.users==undefined&&$scope.accendants==undefined	){
+      				$scope.users=[];
+      			}else{
+      				if($scope.accendants!=undefined){
+      					$scope.users=$scope.accendants;
+      				}
+      			for(var i=0;i<$scope.users.length;i++){
+  					if($scope.users[i].userId==userId){
+  						$scope.users.splice(i,1);
+  						$("#"+userId).attr("checked",false);
+  						$("#"+userId).data("checked",false);
+  						return;
+  					}
+      			}
+      		}
+      			if($("#"+userId).data("checked")||$("#"+userId).data("checked")==undefined){
+      				for(var i=0;i<$scope.users.length;i++){
+      					if($scope.users[i].userId==userId){
+      						$scope.users.splice(i,1);
+      						$("#"+userId).attr("checked",false);
+      						$("#"+userId).data("checked",false);
+      						break;
+      					}
+      				}
+      			}else{
+      				$scope.users.push(data);
+      				$("#"+userId).data("checked",true);
+      				$("#"+userId).attr("checked",true);
+      			}
+      			
+      		}
+      		$scope.confirmSelect=function(){
+      			if($scope.users==undefined){
+      				 toastr.warning("请至少选择一个用户");
+		    		 return;
+      			}
+      			$scope.accendants=$scope.users;
+      			$("#basicUserInfo").modal("hide");
+      		}
+      		 /**
+	 		 * 遍历checkbox将之前保存的维护人员情况展示出来
+	 		 */
+	 		function showDetail(){
+	 			//m_table.$('input[type="checkbox"]')
+	 			tableUser.$('input[type="checkbox"]').each(function() { //遍历所有checkbox
+	 				
+	 					if ($.contains(document, this)) {
+	 						 var users=$scope.accendants;
+	 						 if(users!=undefined){
+							 for(var i=0;i<users.length;i++){
+								  var userId=users[i].userId;
+								 if($(this).attr("id")==userId){
+									$("#"+userId).attr("checked",true);
+								 }
+							 }
+	 						 }
+	 					}
+	 			});
+	 		}
+	 	   $scope.cancelComRelation= function() {//取消编辑采购商/供应商信息
+	   	    	$scope.CompanyInfoInput = true;
+	   		    $scope.CompanyInfoShow = true;
+	   	    };
+	   	    
+	   	    $scope.editCompanyRelationInfo= function() {//进入编辑采购商/供应商信息
+	   	    	$scope.CompanyInfoInput = false;
+	   		    $scope.CompanyInfoShow = false;
+	   	    };
+	   	    /**
+	 	        * 采购商/供应商新增一行
+	 	        */
+	   	    $scope.addComRelation= function(judgeString){
+	   	    	debugger;
+	   	    	if($scope.company.comId==null||$scope.company.comId=='') {
+	   	    		toastr.error('请先保存基本信息！');return
+	   			}else if(judgeString=='supply'){//supplies
+	   		    	   if($scope.buyComs){}else{$scope.buyComs =[{}]}
+	   		    	   $scope.buyComs[buyIndex] = {};
+	   		    	   $scope.buyComs[buyIndex].creator=$scope.company.comId;
+	   		    	buyIndex++;
+	   		    	$scope.buyComs=angular.copy($scope.buyComs);
+	   		    	//initSuppliers('notnull');
+	   		       }else if(judgeString=='buy'){//supplies
+	   		    	   if($scope.supplies){}else{$scope.supplies =[{}]}
+	   		    	   $scope.supplies[supplyIndex] = {};
+	   		    	   $scope.supplies[supplyIndex].creator=$scope.company.comId;
+	   		    	supplyIndex++;
+	   		 	 // initCustomers('notnull');
+	   		       }
+	   	    };
+	   	    
+	   	 /**
+		   * 采购商/供应商删除一行
+		        */
+		       $scope.deleteComRelation = function(judgeString,index){
+		    	   if(judgeString=='supply'){
+	   		    	 $scope.buyComs.splice(index,1);
+	   		    	buyIndex--;
+	   		       }else if(judgeString=='buy'){
+	   		     $scope.supplies.splice(index,1);
+	   		      supplyIndex--;
+	   		       }
+		       };
+		       
+	   	    var  buyIndex =0,supplyIndex=0;
+	   	 $scope.saveCompanyRelationInfo = function(){
+	   		if($scope.company.comId==null||$scope.company.comId=='') {//企业信息为空时
+   	    		toastr.error('请先保存基本信息！');return
+   			}
+   	    	if($scope.company.comType==1){
+   	    		if(isNull($scope.buyComs)){
+   	    		toastr.error('至少有一条供应商企业信息');return
+   	    		}else{
+   	    			for(var i=0;i<$scope.buyComs.length;i++){
+   	    				if(isNull($scope.buyComs[i].comId)){
+   	    					toastr.error('供应商名称不能为空');return
+   	    				}
+   	    			}
+   	    			$scope.companyRelation=$scope.buyComs;
+   	    		}
+   	    	}
+   	    	if($scope.company.comType==2){
+   	    		if(isNull($scope.supplies)){
+   	   	    		toastr.error('至少有一条采购商企业信息');return
+   	   	    		}else{
+   	   	    		for(var i=0;i<$scope.supplies.length;i++){
+   	    				if(isNull($scope.supplies[i].comId)){
+   	    					toastr.error('采购商名称不能为空');return
+   	    				}
+   	    		}
+   	   	    	$scope.companyRelation=$scope.supplies;
+   	   	    }
+   	 }
+   	    	for(var i=0;i<$scope.companyRelation.length;i++){
+   	    		$scope.companyRelation[i].creator=$scope.company.comId;//creator为被绑企业id
+   	    	}
+   	    	companyService.saveCompanyRelation($scope.companyRelation).then(
+   	       		     function(data){
+   	       		    	toastr.success('数据保存成功！');
+   	       		  $scope.cancelComRelation();
+   	       		     },
+   	       		     function(error){
+   	       		    	toastr.error('数据保存出错！');
+   	       		         $scope.error = error;
+   	       		     }
+   	       		 );
+	   	 };
+	   	 $scope.fuzhi=function(judgeString,index){
+	   		 var count=0;
+	   		 if(judgeString=="buy"){
+	   			 var comId=$scope.buyComs[index].comId;////选中的comid
+	   			 for(var i=0;i<$scope.buyComs.length;i++){
+	   				 if(comId==$scope.buyComs[i].comId){
+	   					count++;
+	   				 }
+	   			 }
+	   			 if(count>1){
+	   			toastr.error('该企业已存在,重新选择！');
+					$scope.buyComs[index].comId='';
+					return;
+	   			 }
+	   			 for(var i=0;i<$scope.supplyCompanys.length;i++){
+	   				 if(comId==$scope.supplyCompanys[i].comId){
+	   					$scope.buyComs[index].comNum=$scope.supplyCompanys[i].comNum;
+	   					$scope.buyComs[index].comName=$scope.supplyCompanys[i].comName;
+	   					return;
+	   				 }
+	   			 }
+	   		 }else{
+	   			var comId=$scope.supplies[index].comId;
+	   			for(var i=0;i<$scope.supplies.length;i++){
+	   				 if(comId==$scope.supplies[i].comId){
+	   					count++;
+	   				 }
+	   			 }
+	   		 if(count>1){
+		   			toastr.error('该企业已存在,重新选择！');
+						$scope.supplies[index].comId='';
+						return;
+		   			 }
+	   			for(var i=0;i<$scope.buyCompanys.length;i++){
+	   				 if(comId==$scope.buyCompanys[i].comId){
+	   					$scope.supplies[index].comNum=$scope.buyCompanys[i].comNum;
+	   					$scope.supplies[index].comName=$scope.supplies[i].comName;
+	   					return;
+	   				 }
+	   			 }
+	   		 }
+	   		 
+	   	 }
+	   	 
 }]); 

@@ -179,6 +179,16 @@
                                                                       
                                                                 </div>
                                                             </div> 
+                                                             <div class="col-md-4"  >
+                                                                <div class="form-group">
+                                                    <label class="control-label bold" for=""><span class="required"> * </span> 联系人:</label>
+                                                    <div class="">
+                                                   
+                                                                         <p class="control-label left"     >{{invoice.contact}}</p> 
+                                                                    </div>
+                                                                      
+                                                                </div>
+                                                            </div>
                                                              <div class="col-md-4">
                                                                 <div class="form-group">
                                                     <label class="control-label bold" for=""><span class="required"> * </span> 联系电话 :</label>

@@ -184,6 +184,11 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	 
 	//发货数量合计
 		private String materielTotalCount;
+		private String inOutSerial;// 出入库计划列表出入库计划流水
+		private String inOutNum;// 出入库计划列表出入库计划单号
+		private String inOutType;// 出入库计划列表出入库类型
+		private String inOutRemark;// 出入库计划列表备注
+		private String inOutPackageCount;// 出入库计划列表包装数量
 	  
 	
 	  //0：待发货；3：待收货；4：已收货；5：部分收货'
@@ -200,6 +205,15 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    public static final String COMPLETE = "8"; //完成发货
 	    
 	    public static final String WAIT_IN_RECORD = "9"; //发货单待入库
+	    
+	    public static final String WAIT_TAKEDELIVER_DELIVERY=  "10"; //待收货
+	    
+	    public static final String TAKEDELIVER_DELIVERY=  "4"; //已收货
+	    
+	    private  Boolean  isDel;
+	    
+	    private  Boolean  flag;
+	    private  List<DeliveryMaterielVO> deliveryMateriels;
 	
 /*	// 业务类型
 	private String businessType;
@@ -678,6 +692,70 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setMaterielTotalCount(String materielTotalCount) {
 		this.materielTotalCount = materielTotalCount;
+	}
+
+	public String getInOutSerial() {
+		return inOutSerial;
+	}
+
+	public void setInOutSerial(String inOutSerial) {
+		this.inOutSerial = inOutSerial;
+	}
+
+	public String getInOutNum() {
+		return inOutNum;
+	}
+
+	public void setInOutNum(String inOutNum) {
+		this.inOutNum = inOutNum;
+	}
+
+	public String getInOutType() {
+		return inOutType;
+	}
+
+	public void setInOutType(String inOutType) {
+		this.inOutType = inOutType;
+	}
+
+	public String getInOutRemark() {
+		return inOutRemark;
+	}
+
+	public void setInOutRemark(String inOutRemark) {
+		this.inOutRemark = inOutRemark;
+	}
+
+	public String getInOutPackageCount() {
+		return inOutPackageCount;
+	}
+
+	public void setInOutPackageCount(String inOutPackageCount) {
+		this.inOutPackageCount = inOutPackageCount;
+	}
+
+	public Boolean getIsDel() {
+		return isDel;
+	}
+
+	public Boolean getFlag() {
+		return flag;
+	}
+
+	public void setIsDel(Boolean isDel) {
+		this.isDel = isDel;
+	}
+
+	public void setFlag(Boolean flag) {
+		this.flag = flag;
+	}
+
+	public List<DeliveryMaterielVO> getDeliveryMateriels() {
+		return deliveryMateriels;
+	}
+
+	public void setDeliveryMateriels(List<DeliveryMaterielVO> deliveryMateriels) {
+		this.deliveryMateriels = deliveryMateriels;
 	}
 
 /*	public String getBusinessType() {

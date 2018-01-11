@@ -15,17 +15,21 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
+import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.DeliveryMapper;
 import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.DeliveryTransportExample;
@@ -35,6 +39,7 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.ContractService;
@@ -55,6 +60,10 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	@Resource
 	private DeliveryMapper deliveryMapper;
 	
+	//收货的dao
+	@Resource
+	private TakeDeliveryMapper takeDeliveryMapper;
+	
 	@Resource
 	private CustomsFormMapper customsFormMapper;
 	
@@ -74,6 +83,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	private OrderService  orderService;
 	@Resource 
 	private ContractService contractService;
+	
+	@Resource
+	private Delivery2Mapper delivery2Mapper;
 
 	@Override
 	public GenericDao<DeliveryMaterielVO, String> getDao() {
@@ -402,7 +414,25 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 			//更新订单状态待清关
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(o.getSerialNum());
+			//设置订单发货数量，用于更新
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryMapper.selectListForDetail(serialNum);
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
 			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+			
+			//更新收货单状态
+			TakeDelivery takeDelivery = new TakeDelivery();
+			TakeDelivery temp = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+			takeDelivery.setSerialNum(temp.getSerialNum());
+			takeDelivery.setStatus(TakeDelivery.WAIT_Cearance);//收货单更新为待清关
+			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
+			
+			
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
 			
@@ -416,6 +446,8 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		Map<String,String>map=new HashMap<String,String>();
 		map.put("orderSerial", orderSerial);
 		map.put("invoiceSerial", null);
+		map.put("deliverySerial", deliverySerial);
+		map.put("isClearance", "1");//是否清关单
 		List<Materiel> materiels = materielMapper.selectMaterielByOrderSerial(map);
 		DeliveryTransportExample de=new DeliveryTransportExample();
 		com.congmai.zhgj.web.model.DeliveryTransportExample.Criteria  c=de.createCriteria();
@@ -432,14 +464,14 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		for(Materiel materiel:materiels){
 			materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
 			if(!StringUtils.isEmpty(materiel.getRate())){//	税额
-				materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+				materiel.setRateMoney(new BigDecimal(materiel.getRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 				addedTax=addedTax.add(new BigDecimal(materiel.getRateMoney()));
 			}
 			if(!StringUtils.isEmpty(materiel.getCustomsRate())){//关税额
-				materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getAmount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+				materiel.setCustomRateMoney(new BigDecimal(materiel.getCustomsRate()).multiply(new BigDecimal(materiel.getOrderUnitPrice())).multiply(new BigDecimal(materiel.getDeliverCount())).divide(new BigDecimal("100")).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 				customsAmount=customsAmount.add(new BigDecimal(materiel.getCustomRateMoney()));
 			}
-			materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getAmount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
+			materiel.setMaterielMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getDeliverCount())).setScale(2,BigDecimal.ROUND_HALF_UP ).toString());
 			deliverAmount=deliverAmount.add(new BigDecimal(materiel.getMaterielMoney()));
 		}
 		CustomsForm customsForm=new  CustomsForm();
@@ -511,5 +543,12 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	public String getDeliveryTotalCount(String serialNum) {
 		// TODO Auto-generated method stub
 		return deliveryMapper.selectTotalCountByDeliverSerial(serialNum);
+	}
+
+
+	@Override
+	public void updateDelivery(Delivery delivery) {
+		delivery2Mapper.updateByPrimaryKeySelective(delivery);
+		
 	}
 }

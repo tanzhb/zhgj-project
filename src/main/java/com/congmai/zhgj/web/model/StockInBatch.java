@@ -28,6 +28,14 @@ public class StockInBatch {
     private String batchNum;
     
     private String positionName;
+    
+    private Warehouse  warehouse;//仓库
+    
+    private Warehouseposition  warehouseposition;//库区
+    
+ private String  warehouseName;//仓库名称
+    
+    private String  positionNum;//库区编码
 
     public String getSerialNum() {
         return serialNum;
@@ -132,5 +140,39 @@ public class StockInBatch {
 	public void setPositionName(String positionName) {
 		this.positionName = positionName;
 	}
+
+	public Warehouse getWarehouse() {
+		return warehouse;
+	}
+
+	public Warehouseposition getWarehouseposition() {
+		return warehouseposition;
+	}
+
+	public void setWarehouse(Warehouse warehouse) {
+		this.warehouse = warehouse;
+	}
+
+	public void setWarehouseposition(Warehouseposition warehouseposition) {
+		this.warehouseposition = warehouseposition;
+	}
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public String getPositionNum() {
+		return positionNum;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+
+	public void setPositionNum(String positionNum) {
+		this.positionNum = positionNum;
+	}
+
+	
     
 }

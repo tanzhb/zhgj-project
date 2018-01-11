@@ -12,12 +12,16 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.model.MaterielSelectExample;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.service.MaterielService;
 
 /**
@@ -34,6 +38,8 @@ public class MaterielServiceImpl implements MaterielService {
     private MaterielMapper MaterielMapper;
     @Resource
     private InvoiceBillingRecordMapper invoiceBillingRecordMapper;
+    @Resource
+    private OrderInfoMapper orderInfoMapper;
     
 	@Override
 	public int insert(Materiel model) {
@@ -146,12 +152,21 @@ public class MaterielServiceImpl implements MaterielService {
 	}
 
 	@Override
-	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1) {
+	public List<Materiel> selectMaterielByOrderSerial(String orderSerial,String orderSerial1,String deliverSerial,String customsFormType) {
 		List<Materiel>materiels=null;
 		if(StringUtils.isNotEmpty(orderSerial)){
 			Map<String,String> map=new HashMap<String,String>();
 			map.put("orderSerial", orderSerial);
 			map.put("invoiceSerial", (orderSerial1==null||orderSerial1.length()<66)?null:orderSerial1.substring(34, 66));
+			map.put("deliverySerial", deliverSerial);
+			
+			if(StringUtil.isEmpty(customsFormType)){
+				OrderInfo o=orderInfoMapper.selectByPrimaryKey(orderSerial);
+				Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());
+				map.put("isClearance",createQG?"1":"0");
+			}else{
+				map.put("isClearance",customsFormType.indexOf("clearance")>-1?"1":"0");
+			}
 			materiels= MaterielMapper.selectMaterielByOrderSerial(map);
 			if(materiels!=null&&materiels.size()>0){
 				for(Materiel materiel:materiels){

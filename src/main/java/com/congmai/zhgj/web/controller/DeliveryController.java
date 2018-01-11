@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +60,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -75,8 +77,11 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.ClauseDelivery;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyAddress;
+import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
@@ -85,6 +90,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -95,17 +101,21 @@ import com.congmai.zhgj.web.model.RelationFileExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
+import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.OrderMaterielExample.Criteria;
+import com.congmai.zhgj.web.service.ClauseDeliveryService;
+import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -200,7 +210,13 @@ public class DeliveryController {
 	
 	@Resource
 	private CompanyService  companyservice;
-
+	
+	@Resource
+	private CompanyAddressService  companyAddressService;
+	  @Resource
+	    private ClauseDeliveryService clauseDeliveryService;
+	  @Resource
+	    private ProcessBaseService processBaseService;
 	
 	 /**
      * @Description (查询仓库列表)
@@ -263,7 +279,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
-    public ResponseEntity<Map> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
+    public ResponseEntity<Map<String,Object>> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -293,35 +309,35 @@ public class DeliveryController {
 		if("1".equals(noInit)){//不查询初始化状态的发货
 			query.setStatus("noInit");
 		}
-		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(query);
 		List<DeliveryVO> now=new ArrayList<DeliveryVO>();
 		if("clearance".equals(customsFormType)){
-			for(DeliveryVO deliveryVO:contractList){
+			for(DeliveryVO deliveryVO:deliveryList){
 				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
 				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("caigou"))>-1){
 					now.add(deliveryVO);
 				}
 				
 			}
-			contractList=now;
+			deliveryList=now;
 		}else if("declaration".equals(customsFormType)){
-			for(DeliveryVO deliveryVO:contractList){
+			for(DeliveryVO deliveryVO:deliveryList){
 				OrderInfo o=orderService.selectById(deliveryVO.getOrderSerial());
 				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&o.getOrderType().indexOf(StaticConst.getInfo("xiaoshou"))>-1){
 					now.add(deliveryVO);
 				}
 				
 			}
-			contractList=now;
+			deliveryList=now;
 		}
 
 		//封装datatables数据返回到前台
-		Map pageMap = new HashMap();
+		Map<String,Object> pageMap = new HashMap<String,Object>();
 		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal",contractList==null?0:contractList.size());
-		pageMap.put("recordsFiltered",contractList==null?0:contractList.size());
-		pageMap.put("data", contractList);
-		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+		pageMap.put("recordsTotal",deliveryList==null?0:deliveryList.size());
+		pageMap.put("recordsFiltered",deliveryList==null?0:deliveryList.size());
+		pageMap.put("data", deliveryList);
+		return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 	}
     
 
@@ -334,21 +350,62 @@ public class DeliveryController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/goDelivery", method = RequestMethod.GET)
-	public ResponseEntity<Void> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+	public ResponseEntity<Map<String,Object>> goDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+		//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
+		Map<String,Object> map=new HashMap<String,Object>();
+		Boolean  isDel=false;//是否删除当前发货单
+		 Boolean flag=false;//还可以发
+		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		String orderSerial=delivery.getOrderSerial();
+		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+		OrderInfo o=orderService.selectById(orderSerial);
+		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+		String  materielCount=o.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  map.put("isDel", isDel);
+			  map.put("flag", flag);
+			  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+		  }else{
+			  map.put("isDel", isDel);
+		  }
+		 
+		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+		deliveryMateriels1= deliveryService.selectListForDetail(serialNum);
+		if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+			String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels1 = deliveryService.selectListForDetail2(serialNum);	
+			}	
+		}
+		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+			  for(DeliveryMaterielVO vo:orderMateriels){
+				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+					  if(deliverCount.compareTo(canDeliverCount)>0){
+						  flag=true;
+						  map.put("flag", flag);
+						  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+					  }
+				  }
+			  }
+		  }
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
-		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("serialNum", serialNum);
 		map.put("updater", currenLoginName);
 		
-		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+	
 		TakeDelivery takeDelivery = new TakeDelivery();
 		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
 		
-		String orderSerial=delivery.getOrderSerial();
+		
 		map.put("orderSerial", orderSerial);
-		OrderInfo o=orderService.selectById(orderSerial);
 		map.put("orderInfo", o);
 		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
 		deliveryService.updateOrderWhenDeliveryComlete(map);
@@ -358,11 +415,21 @@ public class DeliveryController {
 			OrderInfo orderInfo=new OrderInfo();
 			orderInfo.setSerialNum(orderSerial);
 			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
+			//设置订单发货数量，用于更新
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
+			
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
 			delivery1.setStatus(DeliveryVO.COMPLETE);
 			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
-					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库检验单
+					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生检验单
 						//平台发货-->  需要检验 --> 生成出库检验单
 						StockInOutCheck stockInOutCheck=new StockInOutCheck();
 						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
@@ -447,8 +514,8 @@ public class DeliveryController {
 		
 		//发货消息
 		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
-		
-		return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+		 map.put("flag", flag);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
 	}
     
     
@@ -503,6 +570,16 @@ public class DeliveryController {
 	public Map getSaleOrderInfo(String serialNum,OrderInfo orderInfo) {
 		orderInfo = orderService.selectById(serialNum);
 		Map<String, Object> map = new HashMap<String, Object>();
+		ContractVO contract = null;
+		if(org.apache.commons.lang3.StringUtils.isNotEmpty(orderInfo.getContractSerial())){
+    		contract=contractService.selectConbtractById(orderInfo.getContractSerial());
+    	}
+		if(contract!=null&&org.apache.commons.lang3.StringUtils.isNotEmpty(contract.getId())){
+			ClauseDelivery clauseDelivery = clauseDeliveryService.selectByContractId(contract.getId());
+    		map.put("clauseDelivery", clauseDelivery);
+		}else{
+			map.put("clauseDelivery", null);
+		}
     	map.put("orderInfo", orderInfo);
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -605,7 +682,7 @@ public class DeliveryController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	deliveryMateriel =deliveryService.selectDeliveryMaterielById(deliveryMateriel.getSerialNum());
@@ -634,10 +711,45 @@ public class DeliveryController {
 	   
 	   params = params.replace("\\", "");
 	   List<DeliveryMaterielVO> deliveryMateriels;
+	   Map<String,Object> map =new HashMap<String,Object>();
 	   /*ObjectMapper objectMapper = new ObjectMapper();  
        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DeliveryMaterielVO.class);  
        deliveryMateriels = objectMapper.readValue(params, javaType);*/
 	  deliveryMateriels = JSON.parseArray(params, DeliveryMaterielVO.class);
+	  List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(deliveryMateriels.get(0).getOrderSerial());//取最新的数据判断
+	  Boolean flag=false;//还可以发
+	  Boolean isDel=false;//是否删除发货单
+		OrderInfo o=orderService.selectById(deliveryMateriels.get(0).getOrderSerial());
+		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+		String  materielCount=o.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  map.put("isDel", isDel);
+			  map.put("flag", flag);
+			  return map;
+		  }else{
+			  map.put("isDel", isDel);
+		  }
+	  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels){
+		  for(DeliveryMaterielVO vo:orderMateriels){
+			  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+				  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+				  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+				  if(deliverCount.compareTo(canDeliverCount)>0){
+					  flag=true;
+					  deliveryMateriel.setDeliveredCount(vo.getDeliveredCount());//更新成最新的已发数量
+					  deliveryMateriel.setDeliverCount("0");//发货数量置为0
+					  map.put("deliveryMateriels", deliveryMateriels);//重新将最新的发货数据传到前台
+					  map.put("flag", flag);
+					  return map;
+				  }
+			  }
+		  }
+	  }
+	  
 	   try{
    		Subject currentUser = SecurityUtils.getSubject();
    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -688,11 +800,10 @@ public class DeliveryController {
    		
    		
    	}catch(Exception e){
-   		System.out.println(e.getMessage());
+   		//20180110 qhzhao System.out.println(e.getMessage());
    		
    	}
 	   
-	   Map<String,Object>map=new HashMap<String,Object>();
 	   String  serialNum=deliveryMateriels.get(0).getDeliverSerial();
    	deliveryMateriels = deliveryService.selectListForDetail(serialNum);
 	if(deliveryMateriels.size()>0){
@@ -702,6 +813,7 @@ public class DeliveryController {
 		}	
 	}
 	   map.put("deliveryMateriels", deliveryMateriels);
+	   map.put("flag", flag);
 	   
 	   return map;
    }
@@ -843,23 +955,68 @@ public class DeliveryController {
     @RequestMapping(value="saveBasicInfo",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<DeliveryVO>  saveBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
+    	
+    	//保存前判断发货数量是否满足条件
+		Boolean  isDel=false;//是否删除当前发货单
+		 Boolean flag=false;//还可以发
+    	String orderSerial=delivery.getOrderSerial();
+    	DeliveryVO deliveryVO=new  DeliveryVO();
+		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+		OrderInfo orderInfo=orderService.selectById(orderSerial);
+		String  deliveryCount=orderInfo.getDeliveryCount();//订单已发数量
+		String  materielCount=orderInfo.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  deliveryVO.setFlag(flag);
+			  deliveryVO.setIsDel(isDel);
+			  return new ResponseEntity<DeliveryVO>(deliveryVO, HttpStatus.CREATED);
+		  }else{
+			  deliveryVO.setIsDel(isDel);
+		  }
+		 
+		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+		deliveryMateriels1= deliveryService.selectListForDetail(delivery.getSerialNum());
+		if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+			String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels1 = deliveryService.selectListForDetail2(delivery.getSerialNum());	
+			}	
+		}
+		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+			  for(DeliveryMaterielVO vo:orderMateriels){
+				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+					  if(deliverCount.compareTo(canDeliverCount)>0){
+						  flag=true;
+						  deliveryVO.setFlag(flag);
+						  deliveryVO.setDeliveryMateriels(deliveryMateriels1);
+						  return new ResponseEntity<DeliveryVO>(deliveryVO, HttpStatus.CREATED);
+					  }
+				  }
+			  }
+		  }
     	//保存基本信息第一部分
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-		String transportserialNum=delivery.getTransportserialNum();
-    	String takeDeliverSerialNum=delivery.getTakeDeliverSerialNum();
+		String transportserialNum=deliveryTransport.getDeliveryTransportSerialNum();
+    	String takeDeliverSerialNum=takeDeliveryVO.getTakeDeliveryVOSerialNum();
     	String deliverySerialNum=delivery.getSerialNum();
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
     	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(delivery.getSerialNum())){
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	delivery.setStatus("0");
     	deliverySerialNum=delivery.getSerialNum();
-		User user = UserUtil.getUserFromSession();
-    	String comId = null;
 		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
     	if(StringUtils.isEmpty(comId)){
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
+    		delivery.setStatus("00");//待申请
     		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
     		if(o!=null){
     			delivery.setBuyComId(o.getBuyComId());
@@ -877,7 +1034,7 @@ public class DeliveryController {
     	}
     	//保存基本信息第二部分
     	if("deliveryInfo".equals(delivery.getType())){
-    	if(StringUtils.isEmpty(deliveryTransport.getDeliveryTransportSerialNum())){
+    	if(StringUtils.isEmpty(transportserialNum)){
     	deliveryTransport.setSerialNum(ApplicationUtils.random32UUID());
     	deliveryTransport.setCreator(currenLoginName);
     	deliveryTransport.setDeliverSerial(deliverySerialNum);
@@ -889,7 +1046,7 @@ public class DeliveryController {
     	}}
     	//保存基本信息第三部分
     	if("deliveryInfo".equals(delivery.getType())){
-    	if(StringUtils.isEmpty(takeDeliveryVO.getTakeDeliveryVOSerialNum())){
+    	if(StringUtils.isEmpty(takeDeliverSerialNum)){
     	takeDeliveryVO.setSerialNum(ApplicationUtils.random32UUID());
     	takeDeliveryVO.setCreator(currenLoginName);
     	takeDeliveryVO.setDeliverSerial(deliverySerialNum);
@@ -959,9 +1116,9 @@ public class DeliveryController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/modifyApplyAp", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@RequestMapping(value = "/modifyDeliveryPlanApply", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 	@ResponseBody
-	public String modifyApplyAp(
+	public String modifyDeliveryPlanApply(
 			@RequestParam("taskId") String taskId,
 			@RequestParam("reApply") Boolean reApply,
 			@Valid DeliveryVO record) throws Exception{
@@ -1066,7 +1223,7 @@ public class DeliveryController {
 
 		List<DeliveryMaterielVO> deliveryMateriels=null;
 		deliveryMateriels = deliveryService.selectListForDetail(serialNum);
-		if(deliveryMateriels.size()>0){
+		if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
 			String materielNum=deliveryMateriels.get(0).getMaterielNum();
 			if(StringUtils.isEmpty(materielNum)){
 			deliveryMateriels = deliveryService.selectListForDetail2(serialNum);	
@@ -1097,47 +1254,69 @@ public class DeliveryController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/apply", method = RequestMethod.POST)
+	@RequestMapping(value = "/startDeliveryPlanProcess", method = RequestMethod.POST)
 	@ResponseBody
-	public String apply(@RequestBody JSONObject entity) throws Exception {
-		User user = UserUtil.getUserFromSession();
-		Map map = JSONObject.fromObject(entity);
-		String reason = (String) map.get("reason");
-		String serialNum = (String) map.get("serialNum");
-		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
-		delivery.setUserId(user.getUserId());
-		delivery.setUser_name(user.getUserName());
-		delivery.setUpdater(user.getUserName());
-		delivery.setTitle(user.getUserName()+"的发货申请");
-		delivery.setBusinessType(BaseVO.ACCOUNTDELIVERY);
-		delivery.setStatus(BaseVO.PENDING);
-		delivery.setApplyDate(new Date());
-		delivery.setBusinessKey(serialNum);
-		delivery.setReason(reason);
-
+	public String startDeliveryPlanProcess(@RequestBody String params) throws Exception {
+		String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		Delivery delivery = new Delivery();
 		try {
-			String processInstanceId = this.processService
-					.startAccountDeliveryable(delivery);
-			// message.setStatus(Boolean.TRUE);
-			// message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
-			logger.info("processInstanceId: " + processInstanceId);
+			delivery = objectMapper.readValue(params, Delivery.class);
+		} catch (Exception e1) {
+			return flag;
+		} 
+		delivery.setStatus(BaseVO.PENDING);
+		deliveryService.updateDelivery(delivery);//更新申请原因和状态
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		DeliveryVO deliveryVO = new DeliveryVO();
+		deliveryVO.setSerialNum(delivery.getSerialNum());
+		deliveryVO.setUserId(user.getUserId());
+		deliveryVO.setUser_name(user.getUserName());
+		deliveryVO.setTitle(user.getUserName()+" 的发货计划申请");
+		deliveryVO.setBusinessType(BaseVO.DELIVERY); 			//业务类型：发货计划
+		deliveryVO.setStatus(BaseVO.PENDING);					//审批中
+		deliveryVO.setApplyDate(new Date());
+    	processBaseService.insert(deliveryVO);
+		String businessKey = deliveryVO.getSerialNum().toString();
+		deliveryVO.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startDeliveryPlanProcess(deliveryVO);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(deliveryVO.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    
+		    flag = "1";
 		} catch (ActivitiException e) {
-			// message.setStatus(Boolean.FALSE);
-			if (e.getMessage().indexOf("no processes deployed with key") != -1) {
-				logger.warn("没有部署流程!", e);
-				// message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
-			} else {
-				logger.error("启动请假流程失败：", e);
-				// message.setMessage("启动请假流程失败，系统内部错误！");
-			}
-			throw e;
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
 		} catch (Exception e) {
-			logger.error("启动请假流程失败：", e);
-			// message.setStatus(Boolean.FALSE);
-			// message.setMessage("启动请假流程失败，系统内部错误！");
-			throw e;
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
 		}
-		return null;
+        //启动订单审批测试流程-end
+		return flag;
 	}
 	
 	
@@ -1151,10 +1330,6 @@ public class DeliveryController {
 		User user = UserUtil.getUserFromSession();
 		String result = "";
 		try {
-			/*PaymentRecord paymentRecord = this.payService
-					.selectPayById(serialNum);
-			PaymentRecord basePaymentRecord = (PaymentRecord) this.runtimeService
-					.getVariable(paymentRecord.getProcessInstanceId(), "entity");*/
 			
 			DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
 			
@@ -1171,7 +1346,7 @@ public class DeliveryController {
 			variables.put("isPass", completeFlag);
 			if (!completeFlag) {
 				baseDelivery.setTitle(baseDelivery.getUser_name()
-						+ " 的发货申请失败,需修改后重新提交！");
+						+ " 的发货计划申请失败,需修改后重新提交！");
 				delivery.setStatus(BaseVO.APPROVAL_FAILED);
 				variables.put("entity", baseDelivery);
 			}
@@ -1187,7 +1362,7 @@ public class DeliveryController {
 						.processInstanceId(delivery.getProcessInstanceId())
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
-					delivery.setStatus("3");
+					delivery.setStatus("0");//审批完成更新为待发货
 				}
 			}
 
@@ -1331,7 +1506,7 @@ public class DeliveryController {
 		String filePath = getClasspath()+"uploadAttachFiles/";
 		String randomName=UUID.randomUUID().toString().toUpperCase().replaceAll("-", ""); 
 		String fileName = fileUp(file, filePath,randomName);
-		System.out.println(fileName);
+		//20180110 qhzhao System.out.println(fileName);
 		return fileName;
 	}
 
@@ -1354,7 +1529,7 @@ public class DeliveryController {
 			copyFile(file.getInputStream(), filePath, fileName+extName).replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName+extName;
 	}
@@ -1522,4 +1697,86 @@ public class DeliveryController {
 
 
 	}
+	
+	/**
+	 * 确认收货
+	 * @param request（http 请求对象）
+	 * @param ucBuilder
+	 * @return 操作结果
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/goTakeDelivery", method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> goTakeDelivery(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+		String flags1="0";
+		Map<String,Object>map=new HashMap<String,Object>();
+		try{
+    		if(org.apache.commons.lang3.StringUtils.isNotEmpty(serialNum)){
+    			DeliveryVO delivery1=deliveryService.selectDetailById(serialNum);
+    			Delivery delivery=new Delivery();
+    			delivery.setStatus(DeliveryVO.TAKEDELIVER_DELIVERY);//已收货
+    			delivery.setSerialNum(serialNum);
+    			delivery.setUpdater(currenLoginName);
+    			deliveryService.updateDelivery(delivery);
+    			OrderInfo o=new OrderInfo();
+    			o.setSerialNum(delivery1.getOrderSerial());
+    			o.setDeliverStatus(OrderInfo.TAKEDELIVER);//已收货
+    			o.setUpdater(currenLoginName);
+    			orderService.updateStatus(o);
+    		/*TakeDelivery takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+    		TakeDelivery takeDelivery1=new TakeDelivery();
+    		takeDelivery1.setSerialNum(takeDelivery.getSerialNum());
+    		takeDelivery1.setStatus(TakeDelivery.COMPLETE_TAKEDELIVERY);//已收货
+    			takeDeliveryService.updateTakeDelivery(takeDelivery1);*/
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    		flags1 = "1";
+    	}
+		//收货消息
+		//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
+		 map.put("flag", flags1);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+	}
+	
+	 /**
+     * @Description (根据企业id找联系地址列表)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/getCompanyaddress", method = RequestMethod.POST)
+    public ResponseEntity<List<CompanyAddress>>  getCompanyaddressList(HttpServletRequest request,String  comId) {
+    	List<CompanyAddress> companyAddresss=null;
+    if("pt".equals(comId)){
+    	 comId=companyservice.selectComIdByComName(StaticConst.getInfo("comName"));
+    }
+    if(StringUtil.isEmpty(comId)){//供应商发货时
+    	User user = UserUtil.getUserFromSession();
+		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
+   }
+    companyAddresss = companyAddressService.selectListByComId(comId);
+		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
+	}
+    
+    /**
+     * @Description (查找进行中发货单)
+     * @param orderSerialNum
+     * @return
+     */
+    @RequestMapping(value="getDoingDelivery",method=RequestMethod.POST)
+    @ResponseBody
+    public DeliveryVO getDoingDelivery(@RequestBody String orderSerialNum) {
+
+		DeliveryVO query = new DeliveryVO();
+		query.setOrderSerial(orderSerialNum);
+		query.setStatus("isInit");
+		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(query);
+		if(!CollectionUtils.isEmpty(deliveryList)){
+			return deliveryList.get(0);
+		}else{
+			return null;
+		}
+    	
+    }
 }

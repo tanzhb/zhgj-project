@@ -10,6 +10,7 @@ import javax.annotation.Resource;
 
 import org.activiti.bpmn.BpmnAutoLayout;
 import org.activiti.bpmn.model.ActivitiListener;
+import org.activiti.bpmn.model.BaseElement;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.EndEvent;
 import org.activiti.bpmn.model.ExclusiveGateway;
@@ -58,9 +59,13 @@ import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.DeleteActiveTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.RevokeTaskCmd;
 import com.congmai.zhgj.web.activiti.processTask.taskCommand.StartActivityCmd;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
@@ -70,6 +75,7 @@ import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.IVacationService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
@@ -238,7 +244,7 @@ public class ProcessServiceImp implements IProcessService{
      */
     protected ProcessDefinition getProcessDefinition(String processDefinitionId) {
         ProcessDefinition processDefinition = this.repositoryService.createProcessDefinitionQuery().processDefinitionId(processDefinitionId).singleResult();
-        logger.info(processDefinition.getVersion());
+//        logger.info(processDefinition.getVersion());
         return processDefinition;
     }
     
@@ -297,6 +303,7 @@ public class ProcessServiceImp implements IProcessService{
 			vo.setContent(comment.getFullMessage());
 			vo.setTime(comment.getTime());
 			vo.setUserName(user.getUserName());
+			vo.setPosition(user.getPosition());
 			commnetList.add(vo);
 		}
     	return commnetList;
@@ -478,7 +485,7 @@ public class ProcessServiceImp implements IProcessService{
 	 * 完成任务
 	 */
 	@Override
-	public void complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception{
+	public String complete(String taskId, String content, String userid, Map<String, Object> variables) throws Exception{
 		Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
 		// 根据任务查询流程实例
     	String processInstanceId = task.getProcessInstanceId();
@@ -500,10 +507,12 @@ public class ProcessServiceImp implements IProcessService{
 		// 完成委派任务
     	if(DelegationState.PENDING == task.getDelegationState()){
     		this.taskService.resolveTask(taskId, variables);
-    		return;
+    		return task.getTaskDefinitionKey();
     	}
     	//正常完成任务
 		this.taskService.complete(taskId, variables);
+		
+		return task.getTaskDefinitionKey();
 	}
 
 	@Override
@@ -706,8 +715,19 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
-        String processInstanceId = processInstance.getId();
+        ProcessInstance processInstance;
+        if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
+        	if("4a6d7471644248dbb057298d141413ee".equals(orderInfo.getSupplyComId()))//如果是FT公司，走特殊流程
+        	{
+        		processInstance = runtimeService.startProcessInstanceByKey(Constants.FT_BUY_ORDER, businessKey, variables);
+        	}else{
+        		processInstance = runtimeService.startProcessInstanceByKey(Constants.FOREIGN_TRADE_ORDER, businessKey, variables);
+        	}
+        	
+		}else{
+			processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYORDER, businessKey, variables);
+		}
+		String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);
 
@@ -778,6 +798,92 @@ public class ProcessServiceImp implements IProcessService{
         String processInstanceId = processInstance.getId();
         invoice.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(invoice);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public String startBuyFramerProcess(ContractVO contract) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.BUYFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public String startSaleFramerProcess(ContractVO contract) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(contract.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", contract);
+
+        String businessKey = contract.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEFRAME, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		contract.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(contract);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	}
+
+	@Override
+	public List<BaseVO> findFinishedTaskInstancesDiy(User user, String businessType) {
+
+//		HistoricTaskInstanceQuery historQuery = historyService.createHistoricTaskInstanceQuery().taskAssignee(user.getUserId().toString()).finished();
+//    	List<HistoricTaskInstance> list = historQuery.orderByHistoricTaskInstanceEndTime().desc().list();
+		
+		Map map = new HashMap<String, String>();
+		map.put("userId", user.getUserId());
+//		map.put("businessType", businessType); businessType与ProcessDefinition 需一致
+		
+    	List<HistoricTaskVO> list = this.processBaseService.findFinishedTaskInstancesDiy(map);
+    	List<BaseVO> taskList = new ArrayList<BaseVO>();
+    	for(HistoricTaskVO hst : list){
+    		String processInstanceId = hst.getProcessInstanceId();
+    		List<HistoricVariableInstance> listVar = this.historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+			for(HistoricVariableInstance var : listVar){
+				if("serializable".equals(var.getVariableTypeName()) && "entity".equals(var.getVariableName())){
+					BaseVO base = (BaseVO) var.getValue();
+					base.setHistoricTaskVO(hst);
+					base.setProcessDefinition(getProcessDefinition(hst.getProcessDefId()));
+					taskList.add(base);
+					break;
+				}
+			}
+    	}
+		return taskList;
+	
+	}
+
+	@Override
+	public String startDeliveryPlanProcess(DeliveryVO deliveryVO) {
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(deliveryVO.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", deliveryVO);
+
+        String businessKey = deliveryVO.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.DELIVERY_KEY, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		deliveryVO.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(deliveryVO);
 
         logger.info("processInstanceId: "+processInstanceId);
         //最后要设置null，就是这么做，还没研究为什么

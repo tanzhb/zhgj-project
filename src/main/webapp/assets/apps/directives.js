@@ -139,7 +139,7 @@ MetronicApp.directive('dbquantity1', function() {
 MetronicApp.directive('ybquantity1', function() {  
     return {  
         restrict: 'E',  
-        /*template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength1}} </span>',*/
+        //template: '<span class="badge badge-danger" style="position: relative;top: -4px;"> {{ybsLength1}} </span>',
         template: '',
         scope:true,
         replace: true  

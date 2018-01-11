@@ -23,6 +23,16 @@ public enum StaticConst {
 	CONTRACT_TYPE_FRAM("framContract","框架合同"),
 	
 	CONTRACT_TYPE_BUY("buyContract","采购合同"),
+	
+	CONTRACT_TYPE_SALE("saleContract","销售合同"),
+	
+	CONTRACT_TYPE_BUYFRAME("buyFrame","采购框架"),
+	
+	CONTRACT_TYPE_BUYORDER("buyOrder","采购订单"),
+	
+	CONTRACT_TYPE_SALEFRAME("saleFrame","销售框架"),
+	
+	CONTRACT_TYPE_SALEORDER("saleOrder","销售订单"),
 	/**
 	 * @Field @PRICE_TYPE_BUY : TODO(采购价格)
 	 */
@@ -43,6 +53,10 @@ public enum StaticConst {
 	 * @Field @DAILIBUY : TODO(平台名称)
 	 */
 	DAILIBUY("dailiBuy","委托采购"),
+	
+	ZIZHUBUY("zizhuBuy","自主采购"),
+	
+	ZIZHUSALE("zizhuSale","自主销售"),
 	/**
 	 * @Field @DAILISALE : TODO(平台名称)
 	 */
@@ -56,7 +70,11 @@ public enum StaticConst {
 	
 	CAIGOU("caigou","采购"),
 	
-	XIAOSHOU("xiaoshou","销售");
+	XIAOSHOU("xiaoshou","销售"),
+	
+	QUXIAOAPPLY("quxiaoApply","已取消申请"),
+	
+	CHEXIAOAPPLY("chexiaoApply","已撤销");
 	
 	
 	

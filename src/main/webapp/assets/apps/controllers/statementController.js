@@ -127,7 +127,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 			statementService.getOrderAndPaymentRecords(supplyComId,buyComId,statementDate).then(
          		     function(data){//加载页面对象
          		    	 if(data.data.isExist==true){
-         		    		 toastr.warning("对账单已存在");
+         		    		// toastr.warning("对账单已存在");
          		    		$scope.orderList=[];
              		    	$scope.paymentList=[];
              		    	$scope.alreadyPaymentList=[];
@@ -194,22 +194,36 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	//供应商对账单
     $scope.saveSupplyStatement  = function() {
     	if($('#form_sample_1').valid()){
-    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
-    		statementService.save($scope.statement).then(
-       		     function(data){
-       		    	toastr.success('数据保存成功！');
-       		    	$state.go("supplyStatement");
-       		    	//$location.search({serialNum:data.serialNum,view:1});
-       		    	//$scope.statementInput = true;
-       			    //$scope.statementShow = true;
-       		     },
-       		     function(error){
-       		         $scope.error = error;
-       		         toastr.error('数据保存出错！');
-       		     }
-       		 );
+			 $rootScope.judgeIsExist("statement",$scope.statement.statementNum, $scope.statement.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 toastr.error('对账单号重复！');
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
+	        		statementService.save($scope.statement).then(
+	           		     function(data){
+	           		    	toastr.success('数据保存成功！');
+	           		    	handle.unblockUI();
+	           		    	$state.go("supplyStatement");
+	           		    	//$location.search({serialNum:data.serialNum,view:1});
+	           		    	//$scope.statementInput = true;
+	           			    //$scope.statementShow = true;
+	           		     },
+	           		     function(error){
+	           		         $scope.error = error;
+	           		         toastr.error('数据保存出错！');
+	           		     }
+	           		 );
+	    		}
+	    		
+	    		});
+
+    	
     	}
     }; 	
     
@@ -226,22 +240,35 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     //采购商对账单
     $scope.saveBuyStatement  = function() {
     	if($('#form_sample_2').valid()){
-    		$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
-    		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
-    		statementService.save($scope.statement).then(
-    				function(data){
-    					toastr.success('数据保存成功！');
-    					$state.go("buyStatement");
-    					//$location.search({serialNum:data.serialNum,view:1});
-    					//$scope.statementInput = true;
-    					//$scope.statementShow = true;
-    				},
-    				function(error){
-    					$scope.error = error;
-    					toastr.error('数据保存出错！');
-    				}
-    		);
+    		 $rootScope.judgeIsExist("statement",$scope.statement.statementNum, $scope.statement.serialNum,function(result){
+	    			var 	isExist = result;
+	    		debugger;
+	    		if(isExist){
+	    			 toastr.error('对账单号重复！');
+	    			return;
+	    		}else{
+	    			handle.blockUI();
+	    			$scope.statement.paymentAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.totalAmount = $scope.statement.nowAlreadyPay;
+	        		$scope.statement.deliveryAmount = $scope.statement.nowAlreadyPay;
+	        		statementService.save($scope.statement).then(
+	        				function(data){
+	        					toastr.success('数据保存成功！');
+	        					handle.unblockUI();
+	        					$state.go("buyStatement");
+	        					//$location.search({serialNum:data.serialNum,view:1});
+	        					//$scope.statementInput = true;
+	        					//$scope.statementShow = true;
+	        				},
+	        				function(error){
+	        					$scope.error = error;
+	        					toastr.error('数据保存出错！');
+	        				}
+	        		);
+	    		}
+	    		
+	    		});
+    	
     	}
     }; 	
     
@@ -271,15 +298,15 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     // infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -455,15 +482,15 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         // infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",

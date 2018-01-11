@@ -67,9 +67,12 @@ public class DeliveryMateriel {
     private Warehouse warehouse;
     
     private Warehouseposition position;
+ private String  warehouseName;
     
+    private String positionNum;
     private StockInOutRecord stockInOutRecord;
     
+    private String  deliveredCount;//已发数量
     private Delivery delivery;
     private String buyComId;//物权方comId
     private  String stockInSerialNum;
@@ -90,6 +93,9 @@ public class DeliveryMateriel {
     private String attachFile;
     private String currentStockAmount;//当前库存总数(基本物料)
 	private List<RelationFile> files;
+	private String outCount="0";//入库批次出库数量(针对出库批次弹框)
+	private  String orderNum;//订单编号
+	private Date deliverDate;
 	
 	private String deliveryAttachFile;
 	private List<RelationFile> deliveryFiles;
@@ -547,6 +553,55 @@ public class DeliveryMateriel {
 		this.materiel = materiel;
 	}
 
+	public String getOutCount() {
+		return outCount;
+	}
+
+	public void setOutCount(String outCount) {
+		this.outCount = outCount;
+	}
+
+	public String getDeliveredCount() {
+		return deliveredCount;
+	}
+
+	public void setDeliveredCount(String deliveredCount) {
+		this.deliveredCount = deliveredCount;
+	}
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public String getPositionNum() {
+		return positionNum;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+
+	public void setPositionNum(String positionNum) {
+		this.positionNum = positionNum;
+	}
+
+	public String getOrderNum() {
+		return orderNum;
+	}
+
+	public void setOrderNum(String orderNum) {
+		this.orderNum = orderNum;
+	}
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getDeliverDate() {
+		return deliverDate;
+	}
+
+	public void setDeliverDate(Date deliverDate) {
+		this.deliverDate = deliverDate;
+	}
+
+	
 	
     
     

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipInputStream;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.stream.XMLInputFactory;
@@ -47,11 +48,17 @@ import com.congmai.zhgj.core.util.Page;
 import com.congmai.zhgj.core.util.ProcessDefinitionCache;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.WorkflowUtils;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
+import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.ActRuTaskService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
 import com.congmai.zhgj.web.service.activiti.WorkflowService;
@@ -85,6 +92,12 @@ public class ProcessAction {
 	
 	@Autowired
 	private WorkflowDeployService workflowProcessDefinitionService;
+	@Resource
+    private ProcessBaseService processBaseService;
+	@Resource
+    private OrderService  orderService;
+	 @Autowired
+	    private ActRuTaskService actRuTaskService ;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -195,7 +208,7 @@ public class ProcessAction {
 		try {
 			userId = UserUtil.getUserFromSession().getUserId().toString();
 		} catch (Exception e) {
-			System.out.println("Session已失效！");
+			//20180110 qhzhao System.out.println("Session已失效！");
 			e.printStackTrace();
 		}
 		
@@ -211,6 +224,26 @@ public class ProcessAction {
 			map.put("taskId", base.getTask().getId());
 			map.put("taskName", base.getTask().getName());
 			map.put("createTime", base.getTask().getCreateTime());
+			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
+			if("d".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
 				User u = this.userService.selectById(new Integer(assign));
@@ -276,7 +309,7 @@ public class ProcessAction {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Session已失效！");
+			//20180110 qhzhao System.out.println("Session已失效！");
 			e.printStackTrace();
 		}
 		
@@ -297,20 +330,38 @@ public class ProcessAction {
     @ResponseBody
     public ResponseEntity<Map<String,Object>> findFinishedTaskInstances(@PathVariable("businessType") String businessType) throws Exception {
     	User user = UserUtil.getUserFromSession();
-    	List<BaseVO> taskList = this.processService.findFinishedTaskInstances(user);
+//    	if("All".equals(businessType))businessType=null;
+    	List<BaseVO> taskList = this.processService.findFinishedTaskInstancesDiy(user,businessType);
     	List<Object> jsonList=new ArrayList<Object>(); 
     	for(BaseVO base : taskList){
     		Map<String, Object> map = new HashMap<String, Object>();
     		map.put("businessType", base.getBusinessType());
     		map.put("userName", base.getUser_name());
     		map.put("title", base.getTitle());
-    		map.put("taskId", base.getHistoricTaskInstance().getId());
-    		map.put("processInstanceId", base.getHistoricTaskInstance().getProcessInstanceId());
-    		map.put("startTime", base.getHistoricTaskInstance().getStartTime());
-    		map.put("claimTime", base.getHistoricTaskInstance().getClaimTime());
-    		map.put("endTime", base.getHistoricTaskInstance().getEndTime());
-    		map.put("deleteReason", base.getHistoricTaskInstance().getDeleteReason());
-    		map.put("version", base.getProcessDefinition().getVersion());
+    		map.put("taskId", base.getHistoricTaskVO().getTaskId());
+    		map.put("processInstanceId", base.getHistoricTaskVO().getProcessInstanceId());
+    		map.put("startTime", base.getHistoricTaskVO().getStartTime());
+    		map.put("claimTime", base.getHistoricTaskVO().getClaimTime());
+    		map.put("endTime", base.getHistoricTaskVO().getEndTime());
+    		map.put("deleteReason", base.getHistoricTaskVO().getDeleteReason());
+    		User auditUser = actRuTaskService.getAuditUserByProcessInstanceId(base.getHistoricTaskVO().getProcessInstanceId());//获取接收者
+    		map.put("currentPointUserName", auditUser==null?null:auditUser.getUserName());//审批节点显示
+    		if(base.getProcessDefinition()!=null){
+    			map.put("version", base.getProcessDefinition().getVersion());
+    		}
+    		if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				map.put("serialNum", o==null?"":o.getSerialNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
+    		
+//    		jsonList.add(map);
     		if(!"All".equals(businessType)){
 				if(businessType.equals(base.getBusinessType())){//根据流程类型添加到已办事项
 					jsonList.add(map);
@@ -442,6 +493,10 @@ public class ProcessAction {
 			
 			
 			if(revokeFlag == 0){
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("chexiaoApply"));//撤销	
+				processBaseService.updateHistoricTask(historicTaskVO);
 				result = "撤销任务成功！";
 			}else if(revokeFlag == 1){
 				result = "撤销任务失败 - [ 此审批流程已结束! ]";

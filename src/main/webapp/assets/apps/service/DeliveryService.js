@@ -62,7 +62,13 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		
     		
     		getAttachFileInfo:getAttachFileInfo,
-    		findStockOutSerialNum:findStockOutSerialNum
+    		findStockOutSerialNum:findStockOutSerialNum,
+    		goTakeDelivery:goTakeDelivery,//确认收货
+    		//查询联系地址
+    		getCompanyaddressList:getCompanyaddressList,
+    		//获取进行中的发货单
+    		getDoingDelivery:getDoingDelivery,
+    		startDeliveryPlanProcess:startDeliveryPlanProcess
     };
 
     return factory;
@@ -548,6 +554,75 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
 			deferred.reject(err);//请求失败
 		});
 		return deferred.promise;//返回承诺
+	}
+    //确认收货
+    function goTakeDelivery(serialNum){
+    	var deferred = $q.defer();  
+
+        $http.get("rest/delivery/goTakeDelivery", {params:{serialNum:serialNum}})
+        .success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        }).error(function () {  
+            deferred.reject('连接服务器出错！');  
+        })  
+        return deferred.promise; 
+    }
+  //通过企业id找联系地址集合
+    function getCompanyaddressList(comId){
+        var deferred = $q.defer();  
+       /* $http.post("rest/delivery/getCompanyaddress",  
+        		comId//传企业comId
+     		).then(function success(result) {
+     			deferred.resolve(result);//请求成功
+     		}, function error(err) {
+     			deferred.reject(err);//请求失败
+     		});
+     		return deferred.promise;//返回承诺
+          */
+        $http({    
+            method: "POST",    
+            url: "rest/delivery/getCompanyaddress",
+            params: {  
+            	comId:comId
+            }  
+        }).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+   		
+        return deferred.promise;  
+    }
+    
+    
+    /**
+	 * 查找进行中发货单
+	 */
+    function getDoingDelivery(orderSerialNum){
+		var deferred = $q.defer();
+		$http.post("rest/delivery/getDoingDelivery",  
+				orderSerialNum//传收货流水号
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+    
+	//启动发货计划流程
+    function startDeliveryPlanProcess(delivery) {
+		var deferred = $q.defer();
+		$http.post("rest/delivery/startDeliveryPlanProcess", delivery
+		).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+		return deferred.promise;
 	}
 }]);
 

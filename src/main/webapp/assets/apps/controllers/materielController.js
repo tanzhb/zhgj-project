@@ -44,6 +44,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         		
         		//加载物料分类
             	$scope.queryCategoryListByParent('frist','0');
+            	
+            	//加载功能分类
+            	$scope.queryFunctionListByParent('1');
+            	setTimeout($scope.multiselectInit, 2000)
         	}
         	
         	if($stateParams.view==1){//切换为查看
@@ -104,6 +108,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     			toastr.error('物料编号重复！');
     			return;
     		}else{
+    			//物料属性转换
+    			if(!isNull($scope.materiel.materielAttribute)){
+    				$scope.materiel.materielAttribute = $scope.materiel.materielAttribute.toString();
+    			}
     			materielService.save($scope.materiel).then(
     	       		     function(data){
     	       		    	toastr.success('数据保存成功！');
@@ -242,6 +250,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getSuppliers().then(
      		     function(data){
      		    	$scope.suppliers=data.data;
+     		    	/*setTimeout(function () {
+            			$('select[name="supplyComId"]').selectpicker({
+                            showSubtext: true,
+                            size : 5
+                        });
+            			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+            			
+                    }, 100);*/
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -258,6 +274,14 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getBuys().then(
      		     function(data){
      		    	$scope.buys=data.data;
+     		   	/*setTimeout(function () {
+        			$('select[name="buyComId"]').selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+        			
+                }, 100);*/
      		     },
      		     function(error){
      		         $scope.error = error;
@@ -271,6 +295,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	materielService.getMaterielInfo(serialNum).then(
       		     function(data){
       		    	$scope.materiel=data.materiel;
+      		    	if(!isNull($scope.materiel.materielAttribute)){
+      		    		$scope.materiel.materielAttribute = $scope.materiel.materielAttribute.split(',');
+      		    	}
       		    	
       		    	if(!isNull(data.BOM)){
  	        			$scope.BOM = data.BOM;
@@ -335,6 +362,11 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		          		     }
     		        	 );
           	        	
+          	        	//加载功能分类
+                    	$scope.queryFunctionListByParent('1');
+                    	setTimeout($scope.multiselectInit, 2000)
+        				
+                    	
       		    		diyFormiCheck();//初始化checkbox控件
       	        		if($scope.materiel.isBOM=="1"){
       	        			$scope.BOMShow=true;
@@ -470,15 +502,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 			.DataTable({
                 language: {
                     aria: {
-                        sortAscending: ": activate to sort column ascending",
-                        sortDescending: ": activate to sort column descending"
+                        sortAscending: ": 以升序排列此列",
+                        sortDescending: ": 以降序排列此列"
                     },
                     emptyTable: "空表",
                     info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                     infoEmpty: "没有数据",
                     //infoFiltered: "(filtered1 from _MAX_ total entries)",
                     lengthMenu: "每页显示 _MENU_ 条数据",
-                    search: "查询:",
+                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                     zeroRecords: "抱歉， 没有找到！",
                     paginate: {
                         "sFirst": "首页",
@@ -878,15 +910,15 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     			.DataTable({
                     language: {
                         aria: {
-                            sortAscending: ": activate to sort column ascending",
-                            sortDescending: ": activate to sort column descending"
+                            sortAscending: ": 以升序排列此列",
+                            sortDescending: ": 以降序排列此列"
                         },
                         emptyTable: "空表",
                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
                         infoEmpty: "没有数据",
                         //infoFiltered: "(filtered1 from _MAX_ total entries)",
                         lengthMenu: "每页显示 _MENU_ 条数据",
-                        search: "查询:",
+                        search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
                         zeroRecords: "抱歉， 没有找到！",
                         paginate: {
                             "sFirst": "首页",
@@ -1439,10 +1471,28 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	   		    	   /*$('.bs-select').selectpicker();*/
 	   		       }
 	   	    };
-	   	    $scope.repeatDone = function(){
-//	   	    	$compile($("select[name='supplyComId']"))($scope);
-//	   	    	$("select[name='supplyComId']").selectpicker();
+	   	    $scope.repeatDone = function(judgeString){
+	   	    	/*debugger;
+	   	    	if(judgeString=='buy'){
+		    		   $('select[name="buyComId"]').selectpicker({
+		                    showSubtext: true,
+		                    size : 5
+		                });
+		    			$('select[name="buyComId"]').selectpicker('refresh');//刷新插件
+		    	   }else if(judgeString=='supply'){
+		    		   $('select[name="supplyComId"]').selectpicker({
+		                    showSubtext: true,
+		                    size : 5
+		                });
+		    			$('select[name="supplyComId"]').selectpicker('refresh');//刷新插件
+		    	   }*/
 	       };
+	       
+	   	    $scope.multiselectInit = function(){
+	   	    	$('#materielAttribute').multiselect();
+	       };
+	       
+	      
 	   	    
 	   	    /**
 		        * 供应商删除一行
@@ -1614,10 +1664,6 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		   		    	   /*$('.bs-select').selectpicker();*/
 		   		       }
 		   	    };
-		   	    $scope.repeatDone = function(){
-//		   	    	$compile($("select[name='buyComId']"))($scope);
-//		   	    	$("select[name='buyComId']").selectpicker();
-		       };
 		   	    
 		   	    /**
 			        * 采购商删除一行
@@ -1714,6 +1760,25 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 		        	}
 		        	$scope.queryCategoryListByParent(level,parentId);
 		        }
+		        
+		        
+		        $scope.queryFunctionListByParent = function(parentId){
+		        	materielService.queryCategoryListByParent(parentId).then(
+		        			function(data){
+		        				$scope.functionList = data;
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据查询出错！');
+		          		     }
+		        	 );
+		        	
+		        }
+		        
+		        $scope.selectFunction = function(id){
+		        	$scope.functionId = id;
+		        }
+		        
 		        $scope.queryCategoryListByParent = function(level,parentId){
 		        	if(level=="second"){
 		        		$scope.fristCategory = parentId;
@@ -1871,5 +1936,55 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         			}
 		        }
 		        
+		        
+		        $scope.addFunction = function(level){
+		        	$scope.category = {};
+		        	$scope.category.parentId = 1;
+		        	$('#addFunction').modal('show')
+		        }; 
+		        
+		        $scope.addFunctionConfirm = function(){
+		        	materielService.saveCategory($scope.category).then(
+		          		     function(data){
+		          		    	toastr.success('数据保存成功！');
+		          		    	$scope.category.categoryName = null;
+		          		    	if(isNull($scope.functionList)) $scope.functionList = [];
+		          		    	$scope.functionList.push(data);
+		          		    	$('#addFunction').modal('hide')
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+		        };
+		        
+		        $scope.deleteFunction = function(level){
+		        	$scope.category = {};
+		        	$scope.category.categoryId = $scope.functionId;
+		        	if($scope.category.categoryId == null){
+		        		$('#deleteFunction').modal('hide')
+		        		toastr.error('请选择要删除的功能分类！');
+		        		return
+		        	}
+		        	$('#deleteFunction').modal('show')
+		        	
+		        }; 
+		        
+		        $scope.deleteFunctionConfirm = function(){
+		        	materielService.deleteCategory($scope.category).then(
+		          		     function(data){
+		          		    	$scope.removeCategory($scope.functionList,data)
+		          		    	$scope.category.categoryId = null;
+		          		    	$('#deleteFunction').modal('hide')
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+		        	
+		        	
+		        };
 	      //********物料分类  end****************//
 }]);

@@ -13,7 +13,7 @@
 <div class="tabbable-line">
 	<ul class="nav nav-tabs" id="delivery_tab">
 		<shiro:hasPermission name="zhgj:deliveryPlan:*">
-		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">出库计划</a>
+		<li class="active"><a data-target="#tab_15_1" data-toggle="tab">出库通知</a>
 		</li>
 		</shiro:hasPermission>
 		<shiro:hasPermission name="zhgj:stockOutRecord:*">
@@ -103,17 +103,18 @@
 															id="example-select-all" /> <span></span>
 													</label></th>
 
-													<th style="white-space: nowrap;">发货单编号</th>
+													<th style="white-space: nowrap;">出库通知单号</th>
+													<th style="white-space: nowrap;">出库类型</th>
 													<th style="white-space: nowrap;">关联销售单号</th>
-													<th style="white-space: nowrap;">物料</th>
+													<th style="white-space: nowrap;">采购商</th>
 													<th style="white-space: nowrap;">包装数量</th>
-													<th style="white-space: nowrap;">收货方</th>
-													<th style="white-space: nowrap;">发货地点</th>
+													<th style="white-space: nowrap;">物料数量</th>
 													<th style="white-space: nowrap;">发货日期</th>
 													<th style="white-space: nowrap;">运输方式</th>
-													<th style="white-space: nowrap;">收货地点</th>
+													<th style="white-space: nowrap;">收货地址</th>
 													<th style="white-space: nowrap;">备注</th>
 													<th style="white-space: nowrap;">状态</th>
+													<th style="white-space: nowrap;">操作</th>
 													<!-- <th style="white-space: nowrap;"></th> -->
 												</tr>
 											</thead>
@@ -261,15 +262,15 @@
 				                                     <span></span>
 				                                 </label>
 										</th>
-										<th>出库明细号</th>
+										<th>出库单号</th>
 										<th>出库类型</th>
 										<th>商品名称</th>
 										<th>规格型号</th>
 										<th>出库日期</th>
 										<th>出库数量</th>
-										<th>关联批次号</th>
+										<!-- <th>销售订单号</th>
 										<th>收货方</th>
-										<th>关联单据号</th>
+										<th>发货计划单号</th> -->
 										<th>状态</th>
 									</tr>
 								</thead>

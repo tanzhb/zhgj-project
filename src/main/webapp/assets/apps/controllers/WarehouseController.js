@@ -93,8 +93,8 @@ angular
 											{
 												language : {
 													aria : {
-														sortAscending : ": activate to sort column ascending",
-														sortDescending : ": activate to sort column descending"
+														sortAscending : ": 以升序排列此列",
+														sortDescending : ": 以降序排列此列"
 													},
 													emptyTable : "空表",
 													info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
@@ -312,29 +312,42 @@ angular
 		        			$scope.warehouseAdd = true;
 		        			$scope.warehouseEdit = false;
 						}		
+						
 								$scope.saveWarehouse= function() {
 									debugger;
 									if($('#warehouseForm').valid()){//表单验证通过则执行添加功能
-										WarehouseService
-										.saveWarehouse($scope.warehouse)
-										.then(
-												function(data) {debugger;
-													$('#addWarehouseModal').modal(
-															'hide');// 保存成功后关闭模态框
-													toastr.success("保存仓库数据成功！");
-													// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
-													$scope.warehouse = data;
-								        			$scope.warehouseView = true;
-								        			$scope.warehouseAdd = true;
-								        			$scope.warehouseEdit = false;
-								        			$(".alert-danger").hide();
-												},
-												function(errResponse) {
-													toastr.warning("仓库名重复，请重新输入！");
-													console
-															.error('Error while creating User');
-												}
-										);
+										 $rootScope.judgeIsExist("warehouse",$scope.warehouse.warehouseNum, $scope.warehouse.serialNum,function(result){
+								    			var 	isExist = result;
+								    		debugger;
+								    		if(isExist){
+								    			toastr.error('仓库编号重复！');
+								    			return;
+								    		}else{
+								    			handle.blockUI();
+								    			WarehouseService
+												.saveWarehouse($scope.warehouse)
+												.then(
+														function(data) {debugger;
+															$('#addWarehouseModal').modal(
+																	'hide');// 保存成功后关闭模态框
+															toastr.success("保存仓库数据成功！");
+															// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+															$scope.warehouse = data;
+															handle.unblockUI();
+										        			$scope.warehouseView = true;
+										        			$scope.warehouseAdd = true;
+										        			$scope.warehouseEdit = false;
+										        			$(".alert-danger").hide();
+														},
+														function(errResponse) {
+															toastr.warning("仓库名重复，请重新输入！");
+															console
+																	.error('Error while creating User');
+														}
+												);
+								    		}
+										
+									})
 									}
 							};	
 							// 添加仓库结束***************************************
@@ -410,6 +423,10 @@ angular
 				 			    		 return;
 				 			    	}else{
 				 			    		 debugger;
+				 			    		if(isNull($("#positionNum"+index).val())){
+				 			    			toastr.warning("仓库区位编码不能为空！");
+					 			    		 return;
+										}
 				 			    		 var warehouseposition={};
 				 			    		warehouseposition.warehouseSerial=$scope.warehouse.serialNum;
 				 			    		warehouseposition.serialNum=$("#serialNum"+index).val();

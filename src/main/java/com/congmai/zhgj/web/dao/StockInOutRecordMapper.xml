@@ -2,57 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.StockInOutRecordMapper" >
   <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
     <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
     <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
-    <result column="operator" property="operator" jdbcType="VARCHAR" />
-    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
-    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
-  </resultMap>
-  <!-- 入库查询 -->
-  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
-    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
-    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
-    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
-    <result column="operator" property="operator" jdbcType="VARCHAR" />
-    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
-    <result column="status" property="status" jdbcType="VARCHAR" />
-    <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
-    <result column="creator" property="creator" jdbcType="VARCHAR" />
-    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="updater" property="updater" jdbcType="VARCHAR" />
-    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
-    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
-    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
-    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
-    <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
-  	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
-    <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
-  </resultMap>
-  <!-- 出库查询 -->
-  <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.StockInOutRecord" >
-    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
-    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
-    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
-     <result column="docNum" property="docNum" jdbcType="VARCHAR" />
-    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
-    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
     <result column="operator" property="operator" jdbcType="VARCHAR" />
     <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -63,8 +18,89 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
-    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
     <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+  </resultMap>
+  <!-- 入库查询 -->
+  <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
+ <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    
+    <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
+    <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
+  	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
+    <association property="positionCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countPositionByDeliverSerial" ></association>
+  </resultMap>
+  <!-- 出库查询 -->
+  <resultMap id="BaseResultMap3" type="com.congmai.zhgj.web.model.StockInOutRecord" >
+   <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="deliverSerial" property="deliverSerial" jdbcType="VARCHAR" />
+    <result column="takeDeliverSerial" property="takeDeliverSerial" jdbcType="VARCHAR" />
+    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="inOutFlag" property="inOutFlag" jdbcType="VARCHAR" />
+    <result column="packageType" property="packageType" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageCount" property="packageCount" jdbcType="VARCHAR" />
+    <result column="shipperOrReceiver" property="shipperOrReceiver" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
+    <result column="transportContactNum" property="transportContactNum" jdbcType="VARCHAR" />
+    <result column="transportContact" property="transportContact" jdbcType="VARCHAR" />
+    <result column="shipNumber" property="shipNumber" jdbcType="VARCHAR" />
+    <result column="transport" property="transport" jdbcType="VARCHAR" />
+    <result column="transportType" property="transportType" jdbcType="VARCHAR" />
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -129,9 +165,10 @@
     </where>
   </sql>
     <sql id="Base_Column_List" >
-   	serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
+   	 serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    shipperOrReceiver,inOutFlag
+    shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount,materielCount,
+    transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -181,14 +218,20 @@
       operator, contactNum, status, 
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
-      inOutType, shipperOrReceiver, inOutFlag
+      inOutType, shipperOrReceiver, inOutFlag, 
+      packageType, packageSpecifications, packageCount,materielCount,
+      transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
-      #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=DATE}, 
+      #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
       #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}
+      #{inOutType,jdbcType=VARCHAR}, #{shipperOrReceiver,jdbcType=VARCHAR}, #{inOutFlag,jdbcType=VARCHAR}, #{packageType,jdbcType=VARCHAR}, #{packageSpecifications,jdbcType=VARCHAR},
+       #{packageCount,jdbcType=VARCHAR},#{materielCount,jdbcType=VARCHAR},
+       #{transportType,jdbcType=VARCHAR},#{transport,jdbcType=VARCHAR},
+       #{shipNumber,jdbcType=VARCHAR},#{transportContact,jdbcType=VARCHAR},
+       #{transportContactNum,jdbcType=VARCHAR},#{transportRemark,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -248,6 +291,36 @@
       <if test="inOutFlag != null" >
         inOutFlag,
       </if>
+      <if test="packageType != null" >
+        packageType,
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications,
+      </if>
+       <if test="packageCount != null" >
+        packageCount,
+      </if>
+      <if test="materielCount != null" >
+        materielCount,
+      </if>
+      <if test="transportType != null" >
+        transportType,
+      </if>
+      <if test="transport != null" >
+        transport,
+      </if>
+      <if test="shipNumber != null" >
+        shipNumber,
+      </if>
+      <if test="transportContact != null" >
+        transportContact,
+      </if>
+      <if test="transportContactNum != null" >
+        transportContactNum,
+      </if>
+      <if test="transportRemark != null" >
+        transportRemark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -266,7 +339,7 @@
         #{inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="stockDate != null" >
-        #{stockDate,jdbcType=DATE},
+        #{stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         #{operator,jdbcType=VARCHAR},
@@ -304,6 +377,36 @@
       <if test="inOutFlag != null" >
         #{inOutFlag,jdbcType=VARCHAR},
       </if>
+      <if test="packageType != null" >
+        #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCount != null" >
+        #{packageCount,jdbcType=VARCHAR},
+      </if>
+      <if test="materielCount != null" >
+        #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null" >
+        #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="transport != null" >
+        #{transport,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+        #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContact != null" >
+        #{transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContactNum != null" >
+        #{transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="transportRemark != null" >
+        #{transportRemark,jdbcType=VARCHAR},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" resultType="java.lang.Integer" >
@@ -331,7 +434,7 @@
         inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="record.stockDate != null" >
-        stockDate = #{record.stockDate,jdbcType=DATE},
+        stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="record.operator != null" >
         operator = #{record.operator,jdbcType=VARCHAR},
@@ -369,6 +472,36 @@
       <if test="record.inOutFlag != null" >
         inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
       </if>
+      <if test="record.packageType != null" >
+        packageType = #{record.packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageSpecifications != null" >
+        packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="record.packageCount != null" >
+        packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      </if>
+       <if test="record.materielCount != null" >
+        materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportType != null" >
+      transportType = #{record.transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transport != null" >
+      transport = #{record.transport,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipNumber != null" >
+      shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportContact != null" >
+      transportContact = #{record.transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportContactNum != null" >
+      transportContactNum = #{record.transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportRemark != null" >
+      transportRemark = #{record.transportRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -376,12 +509,12 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update stockInOutRecord
-    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+   set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       deliverSerial = #{record.deliverSerial,jdbcType=VARCHAR},
       takeDeliverSerial = #{record.takeDeliverSerial,jdbcType=VARCHAR},
       docNum = #{record.docNum,jdbcType=VARCHAR},
       inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
-      stockDate = #{record.stockDate,jdbcType=DATE},
+      stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
       operator = #{record.operator,jdbcType=VARCHAR},
       contactNum = #{record.contactNum,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=VARCHAR},
@@ -393,14 +526,24 @@
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       inOutType = #{record.inOutType,jdbcType=VARCHAR},
       shipperOrReceiver = #{record.shipperOrReceiver,jdbcType=VARCHAR},
-      inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR}
+      inOutFlag = #{record.inOutFlag,jdbcType=VARCHAR},
+      packageType = #{record.packageType,jdbcType=VARCHAR},
+      packageSpecifications = #{record.packageSpecifications,jdbcType=VARCHAR},
+      packageCount = #{record.packageCount,jdbcType=VARCHAR},
+      materielCount= #{record.materielCount,jdbcType=VARCHAR},
+       transportType = #{record.transportType,jdbcType=VARCHAR},
+      transport = #{record.transport,jdbcType=VARCHAR},
+      shipNumber = #{record.shipNumber,jdbcType=VARCHAR},
+      transportContact = #{record.transportContact,jdbcType=VARCHAR},
+      transportContactNum = #{record.transportContactNum,jdbcType=VARCHAR},
+      transportRemark= #{record.transportRemark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
     update stockInOutRecord
-    <set >
+  <set >
       <if test="deliverSerial != null" >
         deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
       </if>
@@ -414,7 +557,7 @@
         inOutNum = #{inOutNum,jdbcType=VARCHAR},
       </if>
       <if test="stockDate != null" >
-        stockDate = #{stockDate,jdbcType=DATE},
+        stockDate = #{stockDate,jdbcType=TIMESTAMP},
       </if>
       <if test="operator != null" >
         operator = #{operator,jdbcType=VARCHAR},
@@ -452,36 +595,39 @@
       <if test="inOutFlag != null" >
         inOutFlag = #{inOutFlag,jdbcType=VARCHAR},
       </if>
+      <if test="packageType != null" >
+        packageType = #{packageType,jdbcType=VARCHAR},
+      </if>
+      <if test="packageSpecifications != null" >
+        packageSpecifications = #{packageSpecifications,jdbcType=VARCHAR},
+      </if>
+      <if test="packageCount != null" >
+        packageCount = #{packageCount,jdbcType=VARCHAR},
+      </if>
+       <if test="materielCount != null" >
+       materielCount= #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="transportType != null" >
+      transportType = #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="transport != null" >
+      transportType = #{transportType,jdbcType=VARCHAR},
+      </if>
+      <if test="shipNumber != null" >
+      shipNumber = #{shipNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContact != null" >
+      transportContact = #{transportContact,jdbcType=VARCHAR},
+      </if>
+      <if test="transportContactNum != null" >
+      transportContactNum = #{transportContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="transportRemark != null" >
+      transportRemark = #{transportRemark,jdbcType=VARCHAR}
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
-    update stockInOutRecord
-    set deliverSerial = #{deliverSerial,jdbcType=VARCHAR},
-      takeDeliverSerial = #{takeDeliverSerial,jdbcType=VARCHAR},
-      docNum = #{docNum,jdbcType=VARCHAR},
-      inOutNum = #{inOutNum,jdbcType=VARCHAR},
-      stockDate = #{stockDate,jdbcType=DATE},
-      operator = #{operator,jdbcType=VARCHAR},
-      contactNum = #{contactNum,jdbcType=VARCHAR},
-      status = #{status,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      delFlg = #{delFlg,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=VARCHAR},
-      createTime = #{createTime,jdbcType=TIMESTAMP},
-      updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      inOutType = #{inOutType,jdbcType=VARCHAR},
-      shipperOrReceiver = #{shipperOrReceiver,jdbcType=VARCHAR},
-      inOutFlag = #{inOutFlag,jdbcType=VARCHAR}
-    where serialNum = #{serialNum,jdbcType=VARCHAR}
-  </update>
-  <update id="deleteStockInOutRecord" parameterType="java.util.List">
-    	update  stockInOutRecord   set delFlg=1  where serialNum in
-        <foreach item="idList" collection="list" open="(" close=")" separator=",">
-            #{idList}
-        </foreach>
-    </update>
     <!--自建库存获取库存所在仓库数  -->
     <select id="getBelongWarehouseNumForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
 	<!-- select COUNT(DISTINCT warehouseSerial ) from deliveryMateriel where
@@ -496,13 +642,14 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 				stock.manageType = '1'
 				AND   o.orderType != '委托采购'
+				
 		)
 		
 		WHERE stock.serialNum = #{serialNum};
@@ -522,7 +669,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -555,7 +702,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -581,7 +728,7 @@ SELECT
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -613,7 +760,7 @@ SELECT
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -639,7 +786,7 @@ SELECT
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -669,7 +816,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -699,7 +846,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -737,7 +884,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -767,7 +914,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -794,13 +941,15 @@ SELECT td.serialNum FROM takeDelivery td, (
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
+	SELECT SUM(a.outCount ) from (
 	SELECT
-		SUM(sob.outCount) 
+			DISTINCT sob.serialNum,
+sob.outCount
 		FROM
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -810,7 +959,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				
 		)
 		
-		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -819,13 +968,15 @@ SELECT td.serialNum FROM takeDelivery td, (
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
+	SELECT SUM(a.outCount ) from (
 	  SELECT
-		SUM(sob.outCount) 
+	  	DISTINCT sob.serialNum,
+sob.outCount
 		FROM
 			stockoutbatch sob
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -843,7 +994,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR})a
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -866,14 +1017,16 @@ SELECT td.serialNum FROM takeDelivery td, (
 	)
 	)temp where temp.serialNum=dm.deliverSerial
 	) -->
-	  SELECT
-		SUM(sib.stockInCount)
+	SELECT SUM(a.stockInCount ) from (SELECT
+		DISTINCT sib.serialNum,
+sib.stockInCount
+
 		FROM
 			stockInbatch sib
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -882,7 +1035,8 @@ SELECT td.serialNum FROM takeDelivery td, (
 				AND o.orderType != '委托采购'
 		)
 		
-		WHERE stock.materielSerial  =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
+	  
      </select>
      <!--代管库存获取累计入库数量   -->
      <select id="countInAmountForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -905,14 +1059,16 @@ SELECT td.serialNum FROM takeDelivery td, (
 	)
 	)temp where temp.serialNum=dm.deliverSerial
 	) -->
+		SELECT SUM(a.stockInCount ) from (
 		  SELECT
-		SUM(sib.stockInCount)
+		DISTINCT sib.serialNum,
+sib.stockInCount
 		FROM
 			stockInbatch sib
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -930,7 +1086,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR})a
      </select>
      <!-- 自建库存获取库存出库记录-->
      <select id="getStockOutRecordForZijian"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
@@ -1041,5 +1197,152 @@ SELECT td.serialNum FROM takeDelivery td, (
 	WHERE
 	om.materielSerial = #{materielSerial,jdbcType=VARCHAR} and o.buyComId=#{materielOwner,jdbcType=VARCHAR})temp  where  temp.serialNum= td.deliverSerial
      )
+     </select>
+      <!--自建库存获取库存最早入库日期  -->
+    <select id="getFirstInDateForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
+	  SELECT
+		MIN(s.stockDate)
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+		stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum};
+    </select>
+     <!--代管库存获取库存最早入库日期  -->
+    <select id="getFirstInDateForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
+	
+	  SELECT
+		MIN(s.stockDate)
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum = #{serialNum};
+    </select>
+    <!--自建库存获取库存所在仓库名称  -->
+    <select id="getBelongWarehouseNameForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
+	   SELECT
+		GROUP_CONCAT(DISTINCT w.warehouseName)
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+				stock.manageType = '1'
+				AND   o.orderType != '委托采购'
+				
+		)
+		LEFT JOIN warehouse w  ON w.serialNum = sib.warehouseSerial
+		WHERE stock.serialNum = #{serialNum};
+    </select>
+    <!--代管库存获取库存所在仓库名称  -->
+    <select id="getBelongWarehouseNameForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
+	  SELECT
+		GROUP_CONCAT(DISTINCT w.warehouseName)
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+				stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		LEFT JOIN warehouse w  ON w.serialNum = sib.warehouseSerial
+		WHERE stock.serialNum = #{serialNum};
+    </select>
+    
+     <select id="getMaterielZiJianStock"  parameterType="java.lang.String"   resultType="java.lang.String">
+	
+select (
+SELECT IFNULL(SUM(a.stockInCount ),0) from (SELECT
+		DISTINCT sib.serialNum,
+			sib.stockInCount
+
+		FROM
+			stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND o.orderType != '委托采购'
+		)
+		
+		  WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+)a)
+	  -
+	(  
+	 SELECT IFNULL(SUM(a.outCount ),0) from (
+	SELECT
+			DISTINCT sob.serialNum,
+sob.outCount
+		FROM
+			stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+				
+		)
+		
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+)a)
      </select>
 </mapper>

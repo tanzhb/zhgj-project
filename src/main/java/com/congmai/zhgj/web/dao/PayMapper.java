@@ -8,6 +8,7 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.MemoRecord;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
@@ -162,4 +163,7 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
 	 * @return
 	 */
     public TakeDeliveryVO selectDateTypeTakeDelivery(String serialNum);
+    
+    public List<PaymentRecord> findPaymentRecord(Map<String,Object>map);//查找水单对应的应收付款账单
+	 public List<MemoRecord> findMemoRecord(Map<String,Object>map);//查找应收付款账单对应的收付款水单
 }

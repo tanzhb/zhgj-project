@@ -56,6 +56,8 @@ public class OrderMateriel {
     private Date updateTime;
     
     private String demandPlanMaterielSerial;
+    
+    private String  deliveredCount;//已发数量
 
     public String getSerialNum() {
         return serialNum;
@@ -248,6 +250,16 @@ public class OrderMateriel {
 	public void setSort(Integer sort) {
 		this.sort = sort;
 	}
+
+	public String getDeliveredCount() {
+		return deliveredCount;
+	}
+
+	public void setDeliveredCount(String deliveredCount) {
+		this.deliveredCount = deliveredCount;
+	}
+
+	
 
     
 }

@@ -107,13 +107,13 @@ public class PaymentRecordController {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}*/
     	//takeDelivery.setPageIndex(0);
     	//takeDelivery.setPageSize(-1);
@@ -150,13 +150,13 @@ public class PaymentRecordController {
 			   JSONObject a = JSONObject.fromObject(params);
 			   dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 			} catch (JsonParseException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (JsonMappingException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (IOException e) {
-				System.out.println(this.getClass()+"---------"+ e.getMessage());
+				//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}*/
     	//takeDelivery.setPageIndex(0);
     	//takeDelivery.setPageSize(-1);
@@ -257,7 +257,7 @@ public class PaymentRecordController {
 			  // takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
 			} catch (Exception e) {
-		    	System.out.println(this.getClass()+"---------"+ e.getMessage());
+		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
@@ -269,7 +269,7 @@ public class PaymentRecordController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return flag;
@@ -293,7 +293,7 @@ public class PaymentRecordController {
     		// takeDeliveryParams = objectMapper.readValue(params,TakeDeliveryParams.class);
     		takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
     	} catch (Exception e) {
-    		System.out.println(this.getClass()+"---------"+ e.getMessage());
+    		//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
     	}
     	try{
     		Subject currentUser = SecurityUtils.getSubject();
@@ -305,7 +305,7 @@ public class PaymentRecordController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		return null;
     	}
     	return flag;
@@ -327,7 +327,7 @@ public class PaymentRecordController {
     			//takeDeliveryService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		flag = "1";
     	}
     	return flag;
@@ -349,7 +349,7 @@ public class PaymentRecordController {
     			//takeDeliveryService.deleteBatch(serialNumArray);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		flag = "1";
     	}
     	return flag;

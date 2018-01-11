@@ -50,7 +50,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
       		    	$scope.userInfo=data;
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     }; 
@@ -67,7 +67,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
       		    	$("#usernameOfUserInfo").html($scope.userInfo.displayName);
       		     },
       		     function(error){
-      		         console.log("error")
+      		         toastr.error('连接服务器出错,请登录重试！');
       		     }
       		 );
     }; 
@@ -93,10 +93,12 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 		
 		fd.append('userId', $scope.userInfo.userId); 
 		fd.append('displayName',$scope.userInfo.displayName); 
-        fd.append('sex',$("input[name='sex']:checked").val()); 
-        fd.append('telephone',$scope.userInfo.telephone); 
-        fd.append('QQNum',$scope.userInfo.qqnum); 
-        fd.append('fax',$scope.userInfo.fax); 
+		if($("input[name='sex']:checked").val())fd.append('sex',$("input[name='sex']:checked").val()); 
+        if($scope.userInfo.telephone)fd.append('telephone',$scope.userInfo.telephone); 
+        if($scope.userInfo.qqnum)fd.append('QQNum',$scope.userInfo.qqnum); 
+        if($scope.userInfo.fax)fd.append('fax',$scope.userInfo.fax); 
+        fd.append('cellPhone',$scope.userInfo.cellPhone); 
+        fd.append('email',$scope.userInfo.email); 
          $http({
         	  method:'POST',
               url:"rest/user/updateUserInfo",
@@ -198,6 +200,13 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             return this.optional(element) || (phone.test(value));
            }, "请填写正确的固定电话");//可以自定义默认提示信息
         
+        jQuery.validator.addMethod("cellPhone", function(value, element) {
+            var length = value.length;
+            var phone = /^1[123456789]\d{9}/;
+            return this.optional(element) || (phone.test(value));
+           }, "请填写正确的手机号码");//可以自定义默认提示信息
+        
+        
         jQuery.validator.addMethod("isQq", function(value, element) {  
         	var qq=/^[1-9]\d{4,12}$/;
             return this.optional(element) ||(qq.test(value));       
@@ -218,6 +227,8 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
             	telephone:{isTel:"请填写正确的固定电话！",},
             	qqNum:{isQq:"请填写正确的QQ号码！",},
             	fax:{isTel:"请填写正确的传真号码！",},
+            	cellPhone:{required:"手机不能为空！",cellPhone:"请填写正确的手机号码！",},
+            	email:{required:"邮箱不能为空！",email:"请填写正确的邮箱地址！",},
                 payment: {
                     maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
                     minlength: jQuery.validator.format("At least {0} items must be selected")
@@ -232,10 +243,13 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
                 }
             },
             rules: {
-                userName:{required:true,},
-                telephone:{isTel:true,},
-                qqNum:{isQq:true,},
-                fax:{isTel:true,},
+                userName:{required:true},
+                telephone:{isTel:true},
+                qqNum:{isQq:true},
+                fax:{isTel:true},
+                cellPhone:{required:true,cellPhone:true},
+                email:{required:true,email:true}
+                
             },
             invalidHandler: function(e, t) {
                 i.hide(),
@@ -291,15 +305,15 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 				.DataTable({
 	                language: {
 	                    aria: {
-	                        sortAscending: ": activate to sort column ascending",
-	                        sortDescending: ": activate to sort column descending"
+	                        sortAscending: ": 以升序排列此列",
+	                        sortDescending: ": 以降序排列此列"
 	                    },
 	                    emptyTable: "空表",
 	                    info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
 	                    infoEmpty: "没有数据",
 	                    // infoFiltered: "(filtered1 from _MAX_ total entries)",
 	                    lengthMenu: "每页显示 _MENU_ 条数据",
-	                    search: "查询:",
+	                    search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
 	                    zeroRecords: "抱歉， 没有找到！",
 	                    paginate: {
 	                        "sFirst": "首页",
@@ -394,10 +408,12 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	    		CompanyInfoService.getCompanyInfo().then(
 	          		     function(data){
 	          		    	 debugger
+	          		    	$scope.company={};
 	          		    	 if(data==""){
-	          		    		$scope.company={};
 	          		    		$scope.company.comTypeName="";
 	          		    		return;
+	          		    	 }else{
+	          		    		$scope.company = data;
 	          		    	 }
 	          		    	/*$scope.company=data;*/
 	          		    	if(data.comType=='1'){
@@ -419,7 +435,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	          		    	}
 	          		     },
 	          		     function(error){
-	          		         console.log("error")
+	          		         toastr.error('连接服务器出错,请登录重试！');
 	          		     }
 	          		 );
 	        }; 
@@ -606,7 +622,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	          		    	$scope.userInfo=data;
 	          		     },
 	          		     function(error){
-	          		         console.log("error")
+	          		         toastr.error('连接服务器出错,请登录重试！');
 	          		     }
 	          		 );
 	        }; 

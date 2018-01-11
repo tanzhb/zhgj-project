@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.congmai.zhgj.web.dao.DeliveryMapper">
-    
+     <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.DeliveryMaterielVO" >
+<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+<!-- b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate -->
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="materielNum" property="materielNum" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DATE" />
+    <result column="orderMaterielSerialNum" property="orderMaterielSerialNum" jdbcType="VARCHAR"/>
+    <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR"/>
+    <association column="orderMaterielSerialNum" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  /><!-- 根订单物料流水查已发数量 -->
+  </resultMap>
+       <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.DeliveryMaterielVO" >
+<!--        a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,a.orderMaterielSerial as orderMaterielSerialNum,b.orderSerial,
+	a.acceptCount,a.refuseCount,a.takeRemark,f.status -->
+<id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+<!-- b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate -->
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
+     <result column="orderMaterielSerial" property="orderMaterielSerial" jdbcType="VARCHAR" />
+    <result column="materielNum" property="materielNum" jdbcType="VARCHAR" />
+     <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="batchNum" property="batchNum" jdbcType="VARCHAR" />
+     <result column="manufactureDate" property="manufactureDate" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" /> 
+    <result column="deliverCount" property="deliverCount" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" /> 
+    <result column="acceptCount" property="acceptCount" jdbcType="VARCHAR" />
+    <result column="refuseCount" property="refuseCount" jdbcType="VARCHAR" />
+     <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="orderMaterielSerialNum" property="orderMaterielSerialNum" jdbcType="VARCHAR"/>
+    <association column="orderMaterielSerialNum" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  /><!-- 根订单物料流水查已发数量 -->
+  </resultMap>
     <!--添加发货物料  -->
     <insert id="insertDeliveryMateriel" parameterType="com.congmai.zhgj.web.model.DeliveryMaterielVO">
     INSERT INTO deliveryMateriel
@@ -20,7 +56,7 @@
     (serialNum,orderSerial,deliverNum,deliverType,supplyComId,buyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
     materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
     (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{buyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
-    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
+    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),#{status})
     </insert>
     
     <!--更新基本信息  -->
@@ -110,20 +146,21 @@
     </update>
     
     <!--查询订单物料集合  -->
-    <select id="selectByExample" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
+    <select id="selectByExample"  resultMap="BaseResultMap"   parameterType="java.lang.String">
     SELECT
-	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate
+	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate,o.serialNum as  orderSerial
 	FROM
 	orderMateriel a
 	LEFT JOIN materiel b ON a.materielSerial=b.serialNum
-	WHERE orderSerial=#{serialNum}
+	LEFT JOIN orderInfo o ON a.orderSerial=o.serialNum
+	WHERE a.orderSerial=#{serialNum} and a.delFlg=0
     </select>
     
     <!--查询详情物料集合  -->
-    <select id="selectListForDetail" resultType="com.congmai.zhgj.web.model.DeliveryMaterielVO" parameterType="java.lang.String">
+    <select id="selectListForDetail" resultMap="BaseResultMap1" parameterType="java.lang.String">
     SELECT
 	a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
-	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
+	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,a.orderMaterielSerial as orderMaterielSerialNum,b.orderSerial,
 	a.acceptCount,a.refuseCount,a.takeRemark,f.status
 	FROM
 	deliveryMateriel a
@@ -133,6 +170,7 @@
 	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.deliverSerial=#{serialNum}
+	and a.delFlg = 0
     </select>
     
     <!--查询详情物料集合  -->
@@ -149,6 +187,7 @@
 	LEFT JOIN warehousePosition e ON a.positionSerial=e.serialNum
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.deliverSerial=#{serialNum}
+	and a.delFlg = 0
     </select>
     
     <!--查询详情  -->
@@ -192,9 +231,10 @@
    <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount, SUM(IFNULL(c.deliverCount,0)) AS materielTotalCount,a.packageCount,
-	a.receiver,(SELECT address FROM warehouse WHERE serialNum=a.warehouseSerial) AS deliveryAddress,a.status,
-	(SELECT address FROM warehouse WHERE serialNum=d.warehouseSerial) AS takeAddress,a.deliverDate,
-	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName
+	a.receiver,a.deliverAddress deliveryAddress,a.status,a.packageType,
+	d.takeDeliverAddress AS takeAddress,a.deliverDate,
+	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName,
+	sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial
 	FROM delivery a 
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	LEFT JOIN deliveryMateriel c ON a.serialNum=c.deliverSerial
@@ -202,6 +242,7 @@
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
 	LEFT JOIN  company   com1  ON  com1.comId=a.buyComId
+	left join stockinoutrecord  sr on  sr.deliverSerial=a.serialNum
 	WHERE a.delFlg='0' 
 	
 	<if test="supplyComId== null" >
@@ -209,6 +250,9 @@
     </if>
     <if test="status == 'noInit'" >
        AND a.status != 0
+    </if>
+    <if test="status == 'isInit'" >
+       AND a.status = 0
     </if>
 	  <if test="buyComId != null" >
        AND a.buyComId= #{buyComId} 
@@ -220,6 +264,10 @@
      <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 -->
        AND(( a.supplyComId is null  and a.buyComId is not null and  a.status != 0 ) or (a.status= 0 and a.deliverType!='采购商提货'  ))
     </if>
+    <if test="orderSerial != null" >
+       AND a.orderSerial= #{orderSerial} 
+    </if>
+    
 <!-- 	<if test="supplyComIds != null" >
         and a.supplyComId in
          <foreach item="item" index="index" collection="supplyComIds" open="(" separator="," close=")">  
@@ -409,5 +457,14 @@
 	deliveryMateriel a
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.deliverSerial=#{serialNum} and a.delFlg=0
+    </select>
+     <!-- 根订单物料流水查已发数量 -->
+    <select id="selectDeliveredCountByOmSerial" resultType="java.lang.String" parameterType="java.lang.String">
+    SELECT
+	IFNULL(SUM(a.deliverCount),0)
+	FROM
+	deliveryMateriel a
+	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
+	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  f.status!=0
     </select>
     </mapper>

@@ -31,6 +31,9 @@ public class BaseVO implements Serializable{
 	public final static String ACCOUNTDELIVERY = "accountDelivery";//发货
 	public final static String BUYORDER = "buyOrder";	//采购订单	
 	public final static String SALEORDER = "saleOrder";	//销售订单	
+	public final static String BUYFRAME = "buyFrame";	//采购框架	
+	public final static String SALEFRAME = "saleFrame";	//销售框架	
+	public final static String DELIVERY= "delivery";	//发货计划
 	// 待办任务标识
 	public final static String CANDIDATE = "candidate";
 	
@@ -56,7 +59,7 @@ public class BaseVO implements Serializable{
 	public final static String SALEPRICE = "salePrice";	//销售价格
 	public final static String OUTINVOICE = "outInvoice";	//销项票
 	
-	
+	private HistoricTaskVO historicTaskVO;
 	// 申请人id
 	//private Integer user_id;
 	
@@ -256,6 +259,14 @@ public class BaseVO implements Serializable{
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public HistoricTaskVO getHistoricTaskVO() {
+		return historicTaskVO;
+	}
+
+	public void setHistoricTaskVO(HistoricTaskVO historicTaskVO) {
+		this.historicTaskVO = historicTaskVO;
 	}
 	
 	

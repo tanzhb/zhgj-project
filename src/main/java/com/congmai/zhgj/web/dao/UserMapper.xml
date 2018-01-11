@@ -10,10 +10,14 @@
 		<result column="group_id" property="groupId" jdbcType="INTEGER" />
 		<result column="locked" property="locked" jdbcType="INTEGER" />
 		<result column="user_salt" property="userSalt" jdbcType="VARCHAR" />
+		<result column="position" property="position" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="VARCHAR" />
+		<result column="department" property="department" jdbcType="VARCHAR" />
+		
 	</resultMap>
 
 	<sql id="Base_Column_List">
-        user_id, user_name, user_pwd, reg_date, group_id, locked, user_salt
+        user_id, user_name, user_pwd, reg_date, group_id, locked, user_salt,position,sex,department
     </sql>
     <sql id="Example_Where_Clause">
         <where>
@@ -107,24 +111,26 @@
 
     <select id="getUserInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.User">
     SELECT
-	USER_ID AS userId,
-	USER_NAME AS userName,
-	displayName,
-	GROUP_ID AS groupId,
-	sex,
-	department,
-	position,
-	cellPhone,
-	telephone,
-	QQ AS QQNum,
-	weChatNum,
-	fax,
-	email,
-	avatar
+	T_USER.USER_ID AS userId,
+	T_USER.USER_NAME AS userName,
+	T_USER.displayName,
+	T_USER.GROUP_ID AS groupId,
+	T_USER.sex,
+	T_GROUP.NAME as department,
+	T_USER.position,
+	T_USER.cellPhone,
+	T_USER.telephone,
+	T_USER.QQ AS QQNum,
+	T_USER.weChatNum,
+	T_USER.fax,
+	T_USER.email,
+	T_USER.avatar
 	FROM
 	T_USER
+	left join T_GROUP on T_GROUP.GROUP_ID = T_USER.GROUP_ID
 	WHERE
 	USER_ID=#{userId}
+	
     </select>
     
     <select id="getUserCompanyInfo" parameterType="java.lang.Integer" resultType="com.congmai.zhgj.web.model.Company">
@@ -162,6 +168,12 @@
 	QQ=#{QQNum},
 	<if test="avatar!= null and avatar!=''">
     avatar=#{avatar},
+    </if>
+    <if test="cellPhone!= null and cellPhone!= ''">
+    cellPhone=#{cellPhone},
+    </if>
+    <if test="email!= null and email!= ''">
+    email=#{email},
     </if>
 	fax=#{fax}
 	WHERE
