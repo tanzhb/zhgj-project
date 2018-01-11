@@ -441,11 +441,11 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					'targets' : 3,
 					'render' : function(data,
 							type, row, meta) {
-						var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'</br>'
+						var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'</br>'
 						if(isNull(row.deliveryCount)||row.deliveryCount==0){
-							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'（已发'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'（已发'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 						}else{
-							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'（已发'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
+							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'（已发'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 						}
             			if(row.deliverStatus==null||row.deliverStatus=="0"){
             				if(row.status==2){
@@ -489,11 +489,11 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					'targets' : 4,
 					'render' : function(data,
 							type, row, meta) {
-						var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'</br>'
+						var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'</br>'
 						if(isNull(row.payAmount)||row.payAmount==0){
-							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'（已付 '+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'（已付 '+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 						}else{
-							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>')+'（已付 '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
+							htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>'+'</br>')+'（已付 '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
 						}
             			if(row.payStatus=="0"){
             				return htm + '<span style="color:#999" ng-click="viewPayLog(\''+row.serialNum+'\')">付款中</span>';
