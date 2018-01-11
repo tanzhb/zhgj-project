@@ -47,6 +47,8 @@ function userCancelApply(taskId,processInstanceId, endTaskTable,tableType){
 		val='userCancelPriceApply';
 	}else if(tableType=='outInvoice'){
 		val='userCancelInvoiceApply';
+	}else if(tableType=='delivery'){
+		val='userCancelDeliveryApply';
 	}
 	$.ajax( {
         url : "rest/order/"+val+"/" + taskId+"/"+processInstanceId,
@@ -80,6 +82,9 @@ function userCancelApply(taskId,processInstanceId, endTaskTable,tableType){
         	}else if(tableType=='outInvoice'){
         		data='销项票申请取消成功！';
         		$('#sample_out').DataTable().ajax.reload();
+        	}else if(tableType=='delivery'){
+        		data='发货申请取消成功！';
+        		$('#endTaskDeliveryPlanTable').DataTable().ajax.reload();
         	}
         	showToastr('toast-bottom-right', 'success', data)
         	$('#'+endTaskTable+'').DataTable().ajax.reload();

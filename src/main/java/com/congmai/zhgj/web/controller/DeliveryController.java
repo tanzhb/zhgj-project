@@ -120,6 +120,7 @@ import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 
 /**
@@ -1116,21 +1117,23 @@ public class DeliveryController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/modifyDeliveryPlanApply", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@RequestMapping(value = "/modifyDeliveryPlanApply/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 	@ResponseBody
-	public String modifyDeliveryPlanApply(
-			@RequestParam("taskId") String taskId,
+	public String modifyDeliveryPlanApply(@PathVariable("taskId") String taskId,
+			@RequestParam("processInstanceId") String processInstanceId,
 			@RequestParam("reApply") Boolean reApply,
-			@Valid DeliveryVO record) throws Exception{
+			@RequestParam("serialNum") String serialNum,
+			@RequestParam("reason") String reason) throws Exception{
 		
 		String result = "";
-		User user = UserUtil.getUserFromSession();		
+		User user = UserUtil.getUserFromSession();	
+		DeliveryVO record=new DeliveryVO();
 		record.setUserId(user.getUserId());
 		record.setUser_name(user.getUserName());
-		record.setBusinessType(BaseVO.ACCOUNTDELIVERY);
+		record.setBusinessType(BaseVO.DELIVERY);
 		record.setApplyDate(new Date());
-		record.setBusinessKey(record.getSerialNum());
-		record.setProcessInstanceId(record.getProcessInstanceId());
+		record.setBusinessKey(serialNum);
+		record.setProcessInstanceId(processInstanceId);
         Map<String, Object> variables = new HashMap<String, Object>();
         String content = "";
         if(reApply){
@@ -1138,42 +1141,20 @@ public class DeliveryController {
         	record.setTitle(user.getUserName()+" 的发货申请！");
         	record.setStatus(BaseVO.PENDING);
 	        content = "重新申请";
-	        //由userTask自动分配审批权限
-//	        if(vacation.getDays() <= 3){
-//            	variables.put("auditGroup", "manager");
-//            }else{
-//            	variables.put("auditGroup", "director");
-//            }
 	        result = "任务办理完成，发货申请已重新提交！";
         }else{
-        	record.setTitle(user.getUserName()+" 的应付款申请已取消！");
+        	record.setTitle(user.getUserName()+" 的发货申请已取消！");
         	record.setStatus(BaseVO.APPROVAL_FAILED);
         	content = "取消申请";
         	result = "任务办理完成，已经取消您的发货申请！";
         }
         try {
-        	//保存基本信息第一部分
-        	String transportserialNum=record.getTransportserialNum();
-        	String takeDeliverSerialNum=record.getTakeDeliverSerialNum();
-        	
-        	Subject currentUser = SecurityUtils.getSubject();
-    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-    		record.setUpdater(currenLoginName);
-        	deliveryService.updateBasicInfo(record);
-        	
-        	
-        	/*//保存基本信息第二部分
-        	deliveryTransport.setSerialNum(transportserialNum);
-        	deliveryTransport.setUpdater(currenLoginName);
-        	deliveryService.updateBasicInfoPartII(deliveryTransport);
-        	
-        	//保存基本信息第三部分
-        	takeDeliveryVO.setSerialNum(takeDeliverSerialNum);
-        	takeDeliveryVO.setUpdater(currenLoginName);
-        	deliveryService.updateBasicInfoPartIII(takeDeliveryVO);*/
-        	
         	//保存之后查询
-        	record=deliveryService.selectDetailById(record.getSerialNum());
+        	Delivery d=new Delivery();
+        	d.setSerialNum(serialNum);
+        	d.setStatus(record.getStatus());
+        	 deliveryService.updateDelivery(d);//更新状态
+        	/*record=deliveryService.selectDetailById(serialNum);*/
         	
 			variables.put("entity", record);
 			variables.put("reApply", reApply);
@@ -1267,7 +1248,7 @@ public class DeliveryController {
 			return flag;
 		} 
 		delivery.setStatus(BaseVO.PENDING);
-		deliveryService.updateDelivery(delivery);//更新申请原因和状态
+		
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		DeliveryVO deliveryVO = new DeliveryVO();
@@ -1299,6 +1280,8 @@ public class DeliveryController {
 		    logger.info("processInstanceId: "+processInstanceId);
 		    
 		    flag = "1";
+		    delivery.setProcessInstanceId(processInstanceId);
+		    deliveryService.updateDelivery(delivery);//更新申请原因和状态
 		} catch (ActivitiException e) {
 //            	message.setStatus(Boolean.FALSE);
 		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
@@ -1318,14 +1301,13 @@ public class DeliveryController {
         //启动订单审批测试流程-end
 		return flag;
 	}
-	
-	
-	@RequestMapping(value = "/complete", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@RequestMapping(value = "/complate/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 	@ResponseBody
 	public String complete(@RequestParam("serialNum") String serialNum,
 			@RequestParam("content") String content,
-			@RequestParam("isPass") Boolean completeFlag,
-			@RequestParam("taskId") String taskId,
+			@RequestParam("processInstanceId") String processInstanceId,
+			@RequestParam("completeFlag") Boolean completeFlag,
+			@PathVariable("taskId") String taskId,
 			RedirectAttributes redirectAttributes) throws Exception {
 		User user = UserUtil.getUserFromSession();
 		String result = "";

@@ -3432,6 +3432,55 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	          		 );
 	    		
 	        };
+	        //********审批流程end****************//  
+	        function doDelivery(_url, mydata, modal){
+	        	$.ajax( {
+	    	        url : _url,
+	    	        dataType:"text",
+	    	        type: 'POST',
+	    	        data : mydata,
+	    	        success : function(data) {
+	    	        	showToastr('toast-bottom-right', 'success', data);
+	    	        	$scope.cancelPage();
+	    	        },
+	    	        error : function(data) {
+	    	        	toastr.error('连接服务器出错,请登录重试！');
+	    	        }
+	    	     });
+	    	}
+	    	
+	    	//审批通过
+	    	$scope.deliverPass = function() {
+	    	    var mydata={"processInstanceId":$("#processInstanceId").val(),"serialNum":$scope.deliveryDetail.serialNum,"content":$("#content").val(),
+	    				"completeFlag":true};
+	    	    var _url = ctx + "rest/delivery/complate/" + $("#taskId").val();
+	    	    doDelivery(_url, mydata, 'audit');
+	    	};
+	    	//审批不通过
+	    	$scope.deliverUnPass = function() {
+	    		var mydata={"processInstanceId":$("#processInstanceId").val(),"serialNum":$scope.deliveryDetail.serialNum,"content":$("#content").val(),
+	    				"completeFlag":false};
+	    		var _url = ctx + "rest/delivery/complate/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'audit');
+	    	};
+	    	
+	    	//重新申请
+	    	$scope.replyDelivery = function() {
+	    	    var mydata={"processInstanceId":$("#processInstanceId").val(),
+	    				"reApply":true,"reason":$scope.delivery.reason,"serialNum":$scope.delivery.serialNum};
+	    		var _url = ctx + "rest/delivery/modifyDeliveryPlanApply/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'modify');
+	    	};
+	    	//取消申请
+	    	$scope.cancelApply = function() {
+	    		 var mydata={"processInstanceId":$("#processInstanceId").val(),
+		    				"reApply":true,"reason":$scope.delivery.reason,"serialNum":$scope.delivery.serialNum};
+	    		var _url = ctx + "rest/delivery/modifyDeliveryPlanApply/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'modify' );
+	    	};
+	    	 $scope.cancelPage  = function() {// 取消编辑
+		        	$state.go("saleOrder");
+		        };
 }]);
 
 

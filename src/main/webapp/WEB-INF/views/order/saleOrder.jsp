@@ -303,7 +303,7 @@
           <div class="portlet-body">
 			<div class="tabbable-custom ">
 			<ul class="nav nav-tabs " id="deliveryPlanTab">
-				<li class="active"><a href="#applyDeliveryPlan" data-toggle="tab"
+				<li class="active"><a  href="#applyDeliveryPlan" data-toggle="tab"  ng-click="toShowDeliveryPlan()"
 					>发货计划 </a></li>
 				<li><a href="#daibanDeliveryPlan" data-toggle="tab" ng-click="toDaibanDeliveryPlan()">
 						待办 <dbQuantity1/></a></li>
@@ -315,8 +315,8 @@
 			        <div class="portlet light">
 			            <div class="portlet-title">
 					<div class="actions" ><!-- ng-controller='MyCtrl' -->
-					<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label> -->
+					<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
 										class="fa fa-plus"></i> 添加
@@ -372,6 +372,8 @@
 								<div class="portlet-title"></div>
 	
 								<div class="portlet-body">
+								
+								
 									<table class="table table-striped table-bordered table-hover table-checkable order-column"
 										id="dbDeliveryPlanTable">
 										<thead>

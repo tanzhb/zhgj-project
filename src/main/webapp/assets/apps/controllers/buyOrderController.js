@@ -659,7 +659,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var clickhtm = ''
 								if(row.status==0){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a><br/>'
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>'
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
@@ -670,7 +670,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										}else if(row.processBase.status=="APPROVAL_FAILED"){
 											return clickhtm + '';
 										}else{
-											return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a>'
+											return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a>'
 										}
 	                        		}else{
 	                        			return clickhtm + '';
@@ -697,7 +697,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status=="66"){
 									return clickhtm + '';
 								}else if(row.status=="77"){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a><br/>'
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiConfirmed(\''+row.serialNum+'\')">确认</a>'
 								}else{
@@ -3612,13 +3612,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
-		       $scope.submitBuyApply  = function(serialNum,materielCount,status,processBase) {// 进入申请审批页面
-		    	   if(serialNum==undefined){
+		       $scope.submitBuyApply  = function(serialNum,materielCount) {// 进入申请审批页面
+		    	   if(serialNum==undefined){//从列表头上申请
 		    		 	if(table.rows('.active').data().length != 1){
 			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 			    		}else{
 			    			var materielCount= table.row('.active').data().materielCount;
-			    			  if(materielCount==null){
+			    			  if(materielCount==null||materielCount==0){
 					    		   showToastr('toast-top-center', 'warning', '该采购订单没有物料，不能发起流程申请！');
 					    		   return;
 					    	   }
@@ -3628,13 +3628,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
 			    		}  
 		    	   }else{
-		    		   if(materielCount=='null'){
-			    		   showToastr('toast-top-center', 'warning', '该采购订单没有物料，不能发起流程申请！');
-			    		   return;
-			    	   }
-		    		   if(processBase!='null'){
-		    			   showToastr('toast-top-center', 'warning', '该采购订单已发起流程审批，不能再次申请！')
-		    		   }else  $state.go('submitBuyApply',{serialNum:serialNum});
+		    		   if(serialNum=='view'){//详情申请
+		    			   if($scope.buyOrder.materielCount==0||$scope.buyOrder.materielCount==null){
+		    				   showToastr('toast-top-center', 'warning', '该采购订单没有物料，不能发起流程申请！');
+				    		   return;
+		    			   }else $state.go('submitBuyApply',{serialNum:$scope.buyOrder.serialNum});
+		    		   }else{//列表操作栏
+		    			   if(materielCount=='null'|| materielCount==0){
+				    		   showToastr('toast-top-center', 'warning', '该采购订单没有物料，不能发起流程申请！');
+				    		   return;
+				    	   }
+			    		   if(!isNull(processBase)){
+			    			   showToastr('toast-top-center', 'warning', '该采购订单已发起流程审批，不能再次申请！')
+			    		   }else  $state.go('submitBuyApply',{serialNum:serialNum});
+		    		   }
+		    		  
 		    	   }
 		        };
 		        

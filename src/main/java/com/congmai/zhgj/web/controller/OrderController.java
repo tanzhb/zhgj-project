@@ -77,7 +77,9 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractFile;
 import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
@@ -108,6 +110,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
+import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.InvoiceService;
@@ -184,6 +187,8 @@ public class OrderController {
     private InvoiceService  invoiceService;
     @Autowired
 	private DeliveryMaterielService deliveryMaterielService;
+    @Autowired
+	private DeliveryService deliveryService;
     
     
 	//销售订单
@@ -775,7 +780,7 @@ public class OrderController {
 	
 	/**
 	 * 
-	 * @Description (取消申请)
+	 * @Description (取消框架申请)
 	 * @param serialNum
 	 */
 	private void cancelFrameApply(String id,String taskId) {
@@ -796,7 +801,7 @@ public class OrderController {
 	}
 	/**
 	 * 
-	 * @Description (取消申请)
+	 * @Description (取消价格申请)
 	 * @param serialNum
 	 */
 	private void cancelPriceApply(String id,String taskId) {
@@ -835,6 +840,26 @@ public class OrderController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		i.setUpdater(currenLoginName);
 		invoiceService.update(i);
+	}
+	/**
+	 * 
+	 * @Description (取消发货)
+	 * @param serialNum
+	 */
+	private void cancelDeliveryApply(String id,String taskId) {
+		this.processBaseService.delete(id);//取消申请删除审批记录，才开重新审批
+		//更新已办tab里面的deleteReason 更新为'取消申请'
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(taskId);
+				historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+				processBaseService.updateHistoricTask(historicTaskVO);
+				Delivery d=new Delivery();
+	        	d.setSerialNum(id);
+	        	d.setStatus("00");
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		d.setUpdater(currenLoginName);
+		deliveryService.updateDelivery(d);//更新状态
 	}
     /**
      * 
@@ -2972,6 +2997,16 @@ public class OrderController {
     	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
     	Invoice invoice = (Invoice) this.runtimeService.getVariable(pi.getId(), "entity");
 		cancelInvoiceApply(invoice.getSerialNum(),taskId);
+    }
+    /**
+     * 用户取消发货申请
+     */
+    @RequestMapping(value = "/userCancelDeliveryApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@ResponseBody
+    public void userCancelDeliveryApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    	DeliveryVO deliveryVO = (DeliveryVO) this.runtimeService.getVariable(pi.getId(), "entity");
+		cancelDeliveryApply(deliveryVO.getSerialNum(),taskId);
     }
     /**
      * 获取采购/销售订单物料价格

@@ -51,11 +51,14 @@ import com.congmai.zhgj.core.util.WorkflowUtils;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.Delivery;
+import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ActRuTaskService;
+import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
@@ -98,6 +101,8 @@ public class ProcessAction {
     private OrderService  orderService;
 	 @Autowired
 	    private ActRuTaskService actRuTaskService ;
+	 @Resource
+	    private DeliveryService deliveryService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -234,15 +239,15 @@ public class ProcessAction {
 				}
 				
 			}
-			if("d".equals(businessType)||"saleOrder".equals(businessType)){
-				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
-				map.put("num", o==null?"":o.getOrderNum());
-				if("buyOrder".equals(businessType)){
-					map.put("comName", o==null?"":o.getSupplyName());
-				}else {
+			if("delivery".equals(businessType)){
+				DeliveryVO d=deliveryService.selectDetailById(base.getBusinessKey());//获取发货计划详情
+				map.put("num", d==null?"":d.getDeliverNum());
+				if(d!=null){
+					OrderInfo o=orderService.selectById(d.getOrderSerial());//获取订单详情
 					map.put("comName", o==null?"":o.getBuyName());
+				}else{
+					map.put("comName", "");
 				}
-				
 			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
@@ -360,7 +365,16 @@ public class ProcessAction {
 				}
 				
 			}
-    		
+    		if("delivery".equals(businessType)){
+				DeliveryVO d=deliveryService.selectDetailById(base.getBusinessKey());//获取发货计划详情
+				map.put("num", d==null?"":d.getDeliverNum());
+				if(d!=null){
+					OrderInfo o=orderService.selectById(d.getOrderSerial());//获取订单详情
+					map.put("comName", o==null?"":o.getBuyName());
+				}else{
+					map.put("comName", "");
+				}
+			}
 //    		jsonList.add(map);
     		if(!"All".equals(businessType)){
 				if(businessType.equals(base.getBusinessType())){//根据流程类型添加到已办事项
