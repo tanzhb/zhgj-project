@@ -516,20 +516,26 @@ public class OrderController {
     public @ResponseBody Map<String, Object> toApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
     	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
 		// 根据任务查询流程实例
-    	String processInstanceId = task.getProcessInstanceId();
-		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-		OrderInfo orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
-		orderInfo.setTask(task);
-		orderInfo.setProcessInstanceId(processInstanceId);
-		List<CommentVO> commentList = this.processService.getComments(processInstanceId);
-		String taskDefinitionKey = task.getTaskDefinitionKey();
-		logger.info("taskDefinitionKey: "+taskDefinitionKey);
-		String result = null;
-		if("modifyApply".equals(taskDefinitionKey)){
-			result = "modify";
-		}else{
-			result = "audit";
-		}
+    	OrderInfo orderInfo = new OrderInfo();
+    	List<CommentVO> commentList = new ArrayList<CommentVO>();
+    	String result = null;
+    	if(task!=null){
+    		String processInstanceId = task.getProcessInstanceId();
+    		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+    		orderInfo = (OrderInfo) this.runtimeService.getVariable(pi.getId(), "entity");
+    		orderInfo.setTask(task);
+    		orderInfo.setProcessInstanceId(processInstanceId);
+    		commentList = this.processService.getComments(processInstanceId);
+    		String taskDefinitionKey = task.getTaskDefinitionKey();
+    		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+    		
+    		if("modifyApply".equals(taskDefinitionKey)){
+    			result = "modify";
+    		}else{
+    			result = "audit";
+    		}
+    	}
+    	
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("actionType", result);
 		map.put("orderInfo", orderInfo);
@@ -1157,7 +1163,7 @@ public class OrderController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	orderMateriel = orderMaterielService.selectById(orderMateriel.getSerialNum());
@@ -1216,7 +1222,7 @@ public class OrderController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return materiel;
@@ -1237,7 +1243,7 @@ public class OrderController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		
     	}
     	return flag;

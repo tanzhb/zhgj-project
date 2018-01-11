@@ -64,9 +64,9 @@ public class FileOperateController {
 			}
 			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
 			uploadFile.transferTo(dst); // 创建文件并将上传文件复制过去
-			System.out.println("上传文件----------"+filename);
+			//20180110 qhzhao System.out.println("上传文件----------"+filename);
 		} catch (Exception e) {
-			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			//20180110 qhzhao System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
 			filename="";
 		}
 		Map m = new HashMap();
@@ -101,10 +101,10 @@ public class FileOperateController {
 			while ((k = fis.read(buffer)) > 0) {
 				response.getOutputStream().write(buffer, 0, k);
 			}
-//			System.out.println("下载文件------"+fileName);
+//			//20180110 qhzhao System.out.println("下载文件------"+fileName);
 			fis.close();
 		} catch (Exception e) {
-//			System.out.println("文件下载失败------"+fileName+"------Exception:"+e.getMessage());
+//			//20180110 qhzhao System.out.println("文件下载失败------"+fileName+"------Exception:"+e.getMessage());
 		}
 		
 		return null;

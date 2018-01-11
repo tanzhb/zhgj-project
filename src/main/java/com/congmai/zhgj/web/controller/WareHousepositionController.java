@@ -85,7 +85,7 @@ public class WareHousepositionController {
     			warehousepositionService.update(warehouseposition);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(ucBuilder.path("/warehouseposition/{id}")

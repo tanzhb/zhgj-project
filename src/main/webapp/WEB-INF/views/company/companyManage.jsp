@@ -580,7 +580,8 @@
 													无</td>
 												<td
 													ng-if="companyQualification.qualificatioImage!=null&&companyQualification.qualificatioImage!=''">
-													<div id="img" style="display: none;"><div><img alt="" style="width:100%;height:100%;" src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{companyQualification.qualificatioImage}}"></div></div>  
+													<div id="img" style="display: none;"><div><%-- <img alt="" style="width:100%;height:100%;" 
+													src="${pageContext.request.contextPath}/rest/fileOperate/downloadFile?fileName={{companyQualification.qualificatioImage}}"> --%></div></div>  
 													<a href="javascript:;"
 													ng-click="downloadFile(companyQualification)" >{{companyQualification.qualificatioImage.substring(companyQualification.qualificatioImage.indexOf("_")+1)}}</a>
 												</td>

@@ -175,7 +175,7 @@ public class InvoiceController {
     		}
     		
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<Invoice>(invoice, HttpStatus.OK);
     }
@@ -197,7 +197,7 @@ public class InvoiceController {
     			 flag="1";
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
 		return new ResponseEntity<String>(flag, HttpStatus.OK);
     }*/
@@ -387,7 +387,7 @@ public class InvoiceController {
        		}
        		
        	}catch(Exception e){
-       		System.out.println(e.getMessage());
+       		//20180110 qhzhao System.out.println(e.getMessage());
        	}
    		return new ResponseEntity<InvoiceBillingRecord>(invoiceBillingRecord, HttpStatus.OK);
        }

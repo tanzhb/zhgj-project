@@ -73,6 +73,14 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 	         toastr.error('连接服务器出错,请登录重试！');
 	     });
 	}
+	
+	var rootPath=getWSPath_web1();
+    $.ajax({ url: "rest/user/getUserInfo",method: "POST",  success: function(data){
+        $("#avatar").attr("src",rootPath+"rest/fileOperate/downloadFile?fileName="+data.avatar);
+        $("#usernameOfUserInfo").html(data.displayName);
+        $rootScope.userName = data.userName;
+      }});
+    
 	return settings;
 } ]);
 var webSocket;

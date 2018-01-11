@@ -94,7 +94,7 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">采购数量：</label>
                                  <div class="control-label col-md-7">
-                                     <p  ng-show="procurementPlanShow"> {{procurementPlan.buyCount}} </p>
+                                     <p  > {{procurementPlan.buyCount}} </p>
                                  </div>
                                  
                              </div>

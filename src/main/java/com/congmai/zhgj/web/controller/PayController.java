@@ -629,7 +629,7 @@ public class PayController {
 			clauseSettlement = payService.selectClauseDetail(clauseSettlement
 					.getSerialNum());
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			//20180110 qhzhao System.out.println(e.getMessage());
 			return null;
 		}
 		return new ResponseEntity<ClauseSettlement>(clauseSettlement,
@@ -706,7 +706,7 @@ public class PayController {
 		String randomName = UUID.randomUUID().toString().toUpperCase()
 				.replaceAll("-", "");
 		String fileName = fileUp(file, filePath, randomName);
-		System.out.println(fileName);
+		//20180110 qhzhao System.out.println(fileName);
 		return fileName;
 	}
 
@@ -734,7 +734,7 @@ public class PayController {
 					.replaceAll("-", "");
 
 		} catch (IOException e) {
-			System.out.println(e);
+			//20180110 qhzhao System.out.println(e);
 		}
 		return fileName + extName;
 	}
@@ -1025,9 +1025,9 @@ public class PayController {
 			}
 			dst = new File(uploadDir,filename); // 创建一个指向upload目录下的文件对象，文件名随机生成
 			file.transferTo(dst); // 创建文件并将上传文件复制过去
-			System.out.println("上传文件----------"+filename);
+			//20180110 qhzhao System.out.println("上传文件----------"+filename);
 		} catch (Exception e) {
-			System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
+			//20180110 qhzhao System.out.println("文件上传失败----------"+filename+"-------Exception:"+e.getMessage());
 			filename="";
 		}
 		return filename;

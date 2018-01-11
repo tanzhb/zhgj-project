@@ -61,6 +61,7 @@ import com.congmai.zhgj.web.model.ProcurementPlanExample;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.ProcurementPlanMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -261,7 +262,7 @@ public class ProcurementPlanController {
         		}
         		flag = "1";
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
         	procurementPlanMateriel = procurementPlanMaterielService.selectById(procurementPlanMateriel.getSerialNum());
@@ -320,7 +321,7 @@ public class ProcurementPlanController {
         		}
         		
         	}catch(Exception e){
-        		System.out.println(e.getMessage());
+        		//20180110 qhzhao System.out.println(e.getMessage());
         		return null;
         	}
     	return materiel;
@@ -341,7 +342,7 @@ public class ProcurementPlanController {
     		}
     		flag = "1";
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     		
     	}
     	return flag;
@@ -506,6 +507,9 @@ public class ProcurementPlanController {
     private OrderService orderService;
     @Resource
     private OrderMaterielService orderMaterielService;
+    @Resource
+    private ContractService contractService;
+    
     
     /**
 	 * 
@@ -543,13 +547,16 @@ public class ProcurementPlanController {
     	if(supplySet.size()>0){
     		for(String supplyComId : supplySet){//对于某一供应商生成采购订单
     			String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购订单流水号
+    			String newContractSerialNum = ApplicationUtils.random32UUID();//生成新的采购合同流水号
     			
     			OrderInfo newOrderInfo = new OrderInfo();//生成新的采购订单
+    			
     
     			newOrderInfo.setSerialNum(newSerialNum);//设置新的流水号
     			String temp = orderService.getNumCode("PO");
     			newOrderInfo.setOrderNum(temp);
     			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
+    			newOrderInfo.setContractSerial(newContractSerialNum);
     			newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());//
     			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
@@ -568,6 +575,20 @@ public class ProcurementPlanController {
     			newOrderInfo.setMakeDate(new Date());
     			newOrderInfo.setStatus("0");
     			orderService.insert(newOrderInfo);
+    			
+    			ContractVO newcontract = new ContractVO();
+				newcontract.setId(newContractSerialNum);
+				newcontract.setComId(supplyComId);
+				newcontract.setContractNum(orderService.getNumCode("CA"));
+				newcontract.setContractType(StaticConst.getInfo("buyContract"));//设置合同类型为采购合同
+				newcontract.setCreator(currenLoginName);
+				newcontract.setUpdater(currenLoginName);
+				newcontract.setCreateTime(new Date());
+				newcontract.setUpdateTime(new Date());
+				newcontract.setStatus(ContractVO.WAIT_SIGN);
+				
+				contractService.insertContract(newcontract);
+				
     			List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
     			Double materielCount = 0D;
     			for(ProcurementPlanMateriel o:procurementPlanMateriel){

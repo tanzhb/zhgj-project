@@ -8,7 +8,7 @@
      electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress,contractNumber
      ,contractContent,seller) 
                 VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},
-     #{electronicContract},#{signContract},   '1','0',  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber}
+     #{electronicContract},#{signContract},   '1',#{status},  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber}
      ,#{contractContent},#{seller})
     </insert>
     

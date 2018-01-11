@@ -125,7 +125,7 @@ public class StockController {
     			stockService.update(stock);
     		}
     	}catch(Exception e){
-    		System.out.println(e.getMessage());
+    		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	Materiel m=materielService.selectById(stock.getMaterielSerial());
 		stock.setMaterielName(m.getMaterielName());

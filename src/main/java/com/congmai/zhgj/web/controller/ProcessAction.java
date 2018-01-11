@@ -208,7 +208,7 @@ public class ProcessAction {
 		try {
 			userId = UserUtil.getUserFromSession().getUserId().toString();
 		} catch (Exception e) {
-			System.out.println("Session已失效！");
+			//20180110 qhzhao System.out.println("Session已失效！");
 			e.printStackTrace();
 		}
 		
@@ -309,7 +309,7 @@ public class ProcessAction {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("Session已失效！");
+			//20180110 qhzhao System.out.println("Session已失效！");
 			e.printStackTrace();
 		}
 		
