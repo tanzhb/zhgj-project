@@ -240,12 +240,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					if($scope.takeDeliveryMateriels){
 						for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 							param = {};
-							param.stockCount = $scope.takeDeliveryMateriels[i].stockCount;
+							param.stockCount = $scope.takeDeliveryMateriels[i].stockCount==null?0:$scope.takeDeliveryMateriels[i].stockCount;
 							//param.stockCount=$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum];
 							if(!isNull($scope.takeDeliveryMateriels[i].orderMateriel)){ //贸易出库
 								param.serialNum = $scope.takeDeliveryMateriels[i].serialNum;
-								$scope.takeDeliveryMateriels[i].stockCount=$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum];
-								param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-$scope.takeDeliveryMateriels[i].stockCount;
+								$scope.takeDeliveryMateriels[i].stockCount=$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum]==undefined?0:$scope['totalCount'+$scope.takeDeliveryMateriels[i].serialNum];
+								param.unstockCount = $scope.takeDeliveryMateriels[i].deliverCount-($scope.takeDeliveryMateriels[i].stockCount==null?0:$scope.takeDeliveryMateriels[i].stockCount);
 								param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;
 							}else{//其他出库
 								//param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].serialNum;
@@ -275,8 +275,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
 					
 					for(var i=0;i < deliveryMaterielSerialNums.length;i++){
-						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0&&$scope.takeDeliveryMateriels[i].currentStockAmount>=0){
-							toastr.warning("存在未选择出库批次的物料!");
+						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0&&$scope.takeDeliveryMateriels[i].currentStockAmount>0){
+							toastr.warning("存在库存不为0且未选择出库批次的物料!");
 							return;
 						}
 					}
@@ -298,17 +298,19 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						params.stockOutMateriels.push(param);
 					}
 					}else{
-						for(var i=0;i < $scope.takeDeliveryMateriels[m].stockOutMateriels.length;i++){
-							param = {};
-							var stockOutMateriel=$scope.takeDeliveryMateriels[m].stockOutMateriels[i];
-							param.stockOutSerial = $scope.record.serialNum;//出库单流水
-							param.stockInBatchSerial=stockOutMateriel.stockInBatchSerial;//入库物料流水
-							param.stockOutMaterielSerial=stockOutMateriel.stockOutMaterielSerial;//出库物料流水(发货物料流水)
-							param.outCount=stockOutMateriel.outCount;//出库数量
-							param.stockInSerial=stockOutMateriel.stockInSerial;//入库单流水
-							params.stockOutMateriels.push(param);
+						if($scope.takeDeliveryMateriels[m].stockOutMateriels.length!=0){//存在出库批次
+							for(var i=0;i < $scope.takeDeliveryMateriels[m].stockOutMateriels.length;i++){
+								param = {};
+								var stockOutMateriel=$scope.takeDeliveryMateriels[m].stockOutMateriels[i];
+								param.stockOutSerial = $scope.record.serialNum;//出库单流水
+								param.stockInBatchSerial=stockOutMateriel.stockInBatchSerial;//入库物料流水
+								param.stockOutMaterielSerial=stockOutMateriel.stockOutMaterielSerial;//出库物料流水(发货物料流水)
+								param.outCount=stockOutMateriel.outCount;//出库数量
+								param.stockInSerial=stockOutMateriel.stockInSerial;//入库单流水
+								params.stockOutMateriels.push(param);
+							}
 						}
-						//params.stockOutMateriels.push($scope.takeDeliveryMateriels[i].stockOutMateriels);
+						
 					}
 					}
 					handle.blockUI();

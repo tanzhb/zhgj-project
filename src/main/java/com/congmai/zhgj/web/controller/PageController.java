@@ -772,4 +772,27 @@ public class PageController {
     public String payMemoRecord() {
         return "receivePayMemo/payMemoRecord";
     }
+    /**
+     * 发货计划提交申请
+     */
+    @RequestMapping("/submitDeliveryPlanApply")
+    public String submitDeliveryPlanApply() {
+        return "delivery/submitDeliveryPlanApply";
+    }
+    
+    /**
+     * 审批发货计划
+     */
+    @RequestMapping("/approvalDeliveryPlanApply")
+    public String approvalDeliveryPlanApply() {
+        return "delivery/approvalDeliveryPlanApply";
+    }
+    
+    /**
+     * 重新编辑发货计划申请
+     */
+    @RequestMapping("/editDeliveryPlanApply")
+    public String editDeliveryPlanApply() {
+        return "delivery/editDeliveryPlanApply";
+    }    
 }

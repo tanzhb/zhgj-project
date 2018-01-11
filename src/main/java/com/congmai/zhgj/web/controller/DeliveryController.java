@@ -90,6 +90,7 @@ import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -114,6 +115,7 @@ import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -213,6 +215,8 @@ public class DeliveryController {
 	private CompanyAddressService  companyAddressService;
 	  @Resource
 	    private ClauseDeliveryService clauseDeliveryService;
+	  @Resource
+	    private ProcessBaseService processBaseService;
 	
 	 /**
      * @Description (查询仓库列表)
@@ -1001,17 +1005,18 @@ public class DeliveryController {
 		String transportserialNum=deliveryTransport.getDeliveryTransportSerialNum();
     	String takeDeliverSerialNum=takeDeliveryVO.getTakeDeliveryVOSerialNum();
     	String deliverySerialNum=delivery.getSerialNum();
+    	User user = UserUtil.getUserFromSession();
+    	String comId = null;
     	if("deliveryInfo".equals(delivery.getType())){
     	if(StringUtils.isEmpty(delivery.getSerialNum())){
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	delivery.setStatus("0");
     	deliverySerialNum=delivery.getSerialNum();
-		User user = UserUtil.getUserFromSession();
-    	String comId = null;
 		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
     	if(StringUtils.isEmpty(comId)){
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
+    		delivery.setStatus("00");//待申请
     		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
     		if(o!=null){
     			delivery.setBuyComId(o.getBuyComId());
@@ -1111,9 +1116,9 @@ public class DeliveryController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/modifyApplyAp", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+	@RequestMapping(value = "/modifyDeliveryPlanApply", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
 	@ResponseBody
-	public String modifyApplyAp(
+	public String modifyDeliveryPlanApply(
 			@RequestParam("taskId") String taskId,
 			@RequestParam("reApply") Boolean reApply,
 			@Valid DeliveryVO record) throws Exception{
@@ -1249,47 +1254,69 @@ public class DeliveryController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/apply", method = RequestMethod.POST)
+	@RequestMapping(value = "/startDeliveryPlanProcess", method = RequestMethod.POST)
 	@ResponseBody
-	public String apply(@RequestBody JSONObject entity) throws Exception {
-		User user = UserUtil.getUserFromSession();
-		Map map = JSONObject.fromObject(entity);
-		String reason = (String) map.get("reason");
-		String serialNum = (String) map.get("serialNum");
-		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
-		delivery.setUserId(user.getUserId());
-		delivery.setUser_name(user.getUserName());
-		delivery.setUpdater(user.getUserName());
-		delivery.setTitle(user.getUserName()+"的发货申请");
-		delivery.setBusinessType(BaseVO.ACCOUNTDELIVERY);
-		delivery.setStatus(BaseVO.PENDING);
-		delivery.setApplyDate(new Date());
-		delivery.setBusinessKey(serialNum);
-		delivery.setReason(reason);
-
+	public String startDeliveryPlanProcess(@RequestBody String params) throws Exception {
+		String flag = "0"; //默认失败
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+		Delivery delivery = new Delivery();
 		try {
-			String processInstanceId = this.processService
-					.startAccountDeliveryable(delivery);
-			// message.setStatus(Boolean.TRUE);
-			// message.setMessage("请假流程已启动，流程ID：" + processInstanceId);
-			logger.info("processInstanceId: " + processInstanceId);
+			delivery = objectMapper.readValue(params, Delivery.class);
+		} catch (Exception e1) {
+			return flag;
+		} 
+		delivery.setStatus(BaseVO.PENDING);
+		deliveryService.updateDelivery(delivery);//更新申请原因和状态
+		//启动订单审批测试流程-start
+		User user = UserUtil.getUserFromSession();
+		DeliveryVO deliveryVO = new DeliveryVO();
+		deliveryVO.setSerialNum(delivery.getSerialNum());
+		deliveryVO.setUserId(user.getUserId());
+		deliveryVO.setUser_name(user.getUserName());
+		deliveryVO.setTitle(user.getUserName()+" 的发货计划申请");
+		deliveryVO.setBusinessType(BaseVO.DELIVERY); 			//业务类型：发货计划
+		deliveryVO.setStatus(BaseVO.PENDING);					//审批中
+		deliveryVO.setApplyDate(new Date());
+    	processBaseService.insert(deliveryVO);
+		String businessKey = deliveryVO.getSerialNum().toString();
+		deliveryVO.setBusinessKey(businessKey);
+		try {
+			String processInstanceId = this.processService.startDeliveryPlanProcess(deliveryVO);
+//                message.setStatus(Boolean.TRUE);
+//    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+			
+			//申请加入流程已办
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+			historicTaskVO.setProcessInstanceId(processInstanceId);
+			historicTaskVO.setStartTime(new Date());
+			historicTaskVO.setEndTime(new Date());
+			historicTaskVO.setProcessDefId(deliveryVO.getBusinessKey());
+			historicTaskVO.setUserId(user.getUserId().toString());
+			
+			processBaseService.insertHistoricTask(historicTaskVO);
+		    logger.info("processInstanceId: "+processInstanceId);
+		    
+		    flag = "1";
 		} catch (ActivitiException e) {
-			// message.setStatus(Boolean.FALSE);
-			if (e.getMessage().indexOf("no processes deployed with key") != -1) {
-				logger.warn("没有部署流程!", e);
-				// message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
-			} else {
-				logger.error("启动请假流程失败：", e);
-				// message.setMessage("启动请假流程失败，系统内部错误！");
-			}
-			throw e;
+//            	message.setStatus(Boolean.FALSE);
+		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+		        logger.warn("没有部署流程!", e);
+//        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+		    } else {
+		        logger.error("启动流程失败：", e);
+//                    message.setMessage("启动订单流程失败，系统内部错误！");
+		    }
+		    throw e;
 		} catch (Exception e) {
-			logger.error("启动请假流程失败：", e);
-			// message.setStatus(Boolean.FALSE);
-			// message.setMessage("启动请假流程失败，系统内部错误！");
-			throw e;
+		    logger.error("启动流程失败：", e);
+//                message.setStatus(Boolean.FALSE);
+//                message.setMessage("启动订单流程失败，系统内部错误！");
+		    throw e;
 		}
-		return null;
+        //启动订单审批测试流程-end
+		return flag;
 	}
 	
 	
@@ -1303,10 +1330,6 @@ public class DeliveryController {
 		User user = UserUtil.getUserFromSession();
 		String result = "";
 		try {
-			/*PaymentRecord paymentRecord = this.payService
-					.selectPayById(serialNum);
-			PaymentRecord basePaymentRecord = (PaymentRecord) this.runtimeService
-					.getVariable(paymentRecord.getProcessInstanceId(), "entity");*/
 			
 			DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
 			
@@ -1323,7 +1346,7 @@ public class DeliveryController {
 			variables.put("isPass", completeFlag);
 			if (!completeFlag) {
 				baseDelivery.setTitle(baseDelivery.getUser_name()
-						+ " 的发货申请失败,需修改后重新提交！");
+						+ " 的发货计划申请失败,需修改后重新提交！");
 				delivery.setStatus(BaseVO.APPROVAL_FAILED);
 				variables.put("entity", baseDelivery);
 			}
@@ -1339,7 +1362,7 @@ public class DeliveryController {
 						.processInstanceId(delivery.getProcessInstanceId())
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
-					delivery.setStatus("3");
+					delivery.setStatus("0");//审批完成更新为待发货
 				}
 			}
 

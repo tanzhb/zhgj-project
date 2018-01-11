@@ -1218,11 +1218,19 @@ margin-right: 20px;
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.lastDeliveryDate}} </p>
 			                          </td>
 			                          <td>  
-			                          		<select  ng-if="$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+			                          <select  ng-if="$first&&(stateParamserialNum==undefined||stateParamserialNum=='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
 	                                              <!--  <option value=""></option> -->
 	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
 	                                         </select>
-	                                         <select  ng-if="!$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
+	                                         <select  ng-if="!$first&&(stateParamserialNum==undefined||stateParamserialNum=='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
+	                                              <!--  <option value=""></option> -->
+	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+	                                         </select>
+			                          		<select  ng-if="$first&&(stateParamserialNum!=undefined&&stateParamserialNum!='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+	                                              <!--  <option value=""></option> -->
+	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+	                                         </select>
+	                                         <select  ng-if="!$first&&(stateParamserialNum!=undefined&&stateParamserialNum!='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
 	                                              <!--  <option value=""></option> -->
 	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
 	                                         </select>

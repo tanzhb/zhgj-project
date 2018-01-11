@@ -56,7 +56,7 @@
     (serialNum,orderSerial,deliverNum,deliverType,supplyComId,buyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
     materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
     (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{buyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
-    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),'0')
+    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),#{status})
     </insert>
     
     <!--更新基本信息  -->

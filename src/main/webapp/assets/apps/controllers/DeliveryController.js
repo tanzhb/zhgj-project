@@ -773,8 +773,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		    								$(".modal-backdrop").remove();
 		    								toastr.success("确认发货成功");
 		    								$scope.delivery.status=status;
-		    							/*	$state.go('delivery',{},{reload:true});*/
 		    								handle.unblockUI();
+		    								$state.go('delivery',{},{reload:true});
+		    								
 		    						}, function(data) {
 		    							// 调用承诺接口reject();
 		    							$(".modal-backdrop").remove();
@@ -3408,6 +3409,29 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 		  			$scope.warehouseAddress=$(obj).val();
 		  		}
 		  	}
+		  	//发货申请
+		    $scope.confirmDeliveryPlanApply  = function() {// 进入提交申请
+	        	$scope.submitOrder = {}
+	        	$scope.submitOrder.serialNum = $scope.deliveryDetail.serialNum;
+	        	$scope.submitOrder.remark = $scope.deliveryDetail.reason;
+	        	//启动流程
+	        	DeliveryService.startDeliveryPlanProcess($scope.submitOrder).then(
+	          		     function(data){
+	          		    	if(data == "1"){
+		        				toastr.success("提交申请成功！");
+		        				$scope.cancelPage();
+		        			}else{
+		        				toastr.error("提交申请失败！");
+				            	console.log(data);
+		        			}
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		         toastr.error('数据保存出错！');
+	          		     }
+	          		 );
+	    		
+	        };
 }]);
 
 

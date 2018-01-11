@@ -169,7 +169,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="stockDate">出库数量 </label>
                                                     <div class="">
-                                                       <input type="text" class="form-control"   ng-model="record.materielCount"  disabled="disabled">
+                                                       <input type="text" class="form-control"   ng-model="record.materielCount"  disabled="disabled"  ng-if="record.materielCount!=undefined">
+                                                       <input type="text" class="form-control"   ng-model="record.materielCount"    ng-init="record.materielCount=0"   disabled="disabled"  ng-if="record.materielCount==undefined">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.materielCount}}</p>
                                                     </div>
@@ -415,18 +416,20 @@
 										</span> -->
 										<!-- <span id="{{materiel.serialNum}}"   ng-if="materiel.stockOutMateriels.length==0"  ></span> -->
 											<span id="{{materiel.serialNum}}"    >{{materiel.inOutNums}}</span>
-                                                <button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels .length==0" 
+                                                <button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels .length==0&&materiel.currentStockAmount!=0" 
 								ng-click="showStockBatch($index,materiel,'add')" onclick="return false;"  data-toggle="modal" >
 								<i class="fa fa-plus"></i>选择批次
 							</button>
-							<button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels.length!=0" 
+							<button class="btn blue btn-sm btn-circle"  ng-if="materiel.stockOutMateriels.length!=0&&materiel.currentStockAmount!=0" 
 								ng-click="showStockBatch($index,materiel,'edit')" onclick="return false;"  data-toggle="modal" >
 								<i class="fa fa-plus"></i>修改批次
 							</button>
 										</td>
-										<td>{{materiel.stockCount}}</td>
+										<td  ng-if="materiel.currentStockAmount!=0">{{materiel.stockCount}}</td>
+										<td  ng-if="materiel.currentStockAmount==0">0</td>
 										<td>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
+											<span ng-if="materiel.currentStockAmount==0">{{materiel.deliverCount}}</span>
 										</td>
 										<!-- <td class="form-group">
                                                  <input type="text"    style="border:none;"  readonly="readonly"       class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >

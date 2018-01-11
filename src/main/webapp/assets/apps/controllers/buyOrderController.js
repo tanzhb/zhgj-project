@@ -81,8 +81,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             	
             	if($stateParams.serialNum){
             		$scope.opration = '修改';
-            		
             		$scope.cancelContract();
+            		$scope.stateParamserialNum=$stateParams.serialNum;
             		$scope.cancelClauseSettlement();
             		$scope.cancelClauseAdvance();
             		$scope.cancelClauseDelivery();
@@ -95,6 +95,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
             		$scope.buyOrder={};
+            		$scope.stateParamserialNum=$stateParams.serialNum;
+            		$scope.stateParamserialNum=
             		$scope.buyOrder.orderNum = '';
             		$rootScope.setNumCode("PO",function(newCode){
             			$scope.buyOrder.orderNum = newCode;
@@ -532,7 +534,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}*/
 								if(isNull(row.receiveCount)||row.receiveCount==0){
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\'0\')">已收</a>'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'//<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\'0\')"></a>
 								}else{
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\''+row.receiveCount+'\')">已收</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}
@@ -1992,7 +1994,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = false;
 					$scope["orderMaterielShow"+i] = false;
-					$scope["orderMaterielEdit"+i] = true;
+					if(!isNull($scope.stateParamserialNum)){
+						$scope["orderMaterielEdit"+i] = true;
+					}
+					
 	        	}
 	        }; 
 	        //选择第一个，设置后面的数据
@@ -2000,6 +2005,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				 for(var i=1;i<$scope.orderMateriel.length;i++){
 					 if($scope["orderMaterielInput"+i] != true/*&&isNull($scope.orderMateriel[i].deliveryAddress)*/){
 						 $scope.orderMateriel[i].deliveryAddress = orderMateriel.deliveryAddress;
+							if(!isNull($scope.stateParamserialNum)){
+								$scope["orderMaterielEdit"+i] = true;
+							}else{
+								$scope["orderMaterielEdit"+i] = false;
+							}
 					 }
 				 }
 			}
@@ -2053,7 +2063,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		if(materiel.serialNum == $scope.orderMateriel[i].serialNum){
 	        			$scope["orderMaterielInput"+i] = false;
 	        			$scope["orderMaterielShow"+i] = false;
-	        			$scope["orderMaterielEdit"+i] = true;
+	        			if(!isNull($scope.stateParamserialNum)){
+							$scope["orderMaterielEdit"+i] = true;
+						}
 	        		}
 	        	}
 	        	

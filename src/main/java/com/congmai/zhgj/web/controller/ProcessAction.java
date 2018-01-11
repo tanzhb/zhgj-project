@@ -234,6 +234,16 @@ public class ProcessAction {
 				}
 				
 			}
+			if("d".equals(businessType)||"saleOrder".equals(businessType)){
+				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
+				map.put("num", o==null?"":o.getOrderNum());
+				if("buyOrder".equals(businessType)){
+					map.put("comName", o==null?"":o.getSupplyName());
+				}else {
+					map.put("comName", o==null?"":o.getBuyName());
+				}
+				
+			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
 				User u = this.userService.selectById(new Integer(assign));

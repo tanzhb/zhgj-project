@@ -4342,6 +4342,123 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
+        // 申请发货计划
+        .state('submitDeliveryPlanApply', {
+            url: "/submitDeliveryPlanApply?:serialNum&:view",
+            templateUrl: "rest/page/submitDeliveryPlanApply",
+            data: {pageTitle: '申请发货计划'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 审批发货计划
+        .state('approvalDeliveryPlanApply', {
+            url: "/approvalDeliveryPlanApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/approvalDeliveryPlanApply",
+            data: {pageTitle: '审批发货计划'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+	        	
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
+        // 重新编辑发货计划
+        .state('editDeliveryPlanApply', {
+            url: "/editDeliveryPlanApply?:serialNum&:view",
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            templateUrl: "rest/page/editDeliveryPlanApply",
+            data: {pageTitle: '重新编辑订单'},
+            controller: "DeliveryController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload.min.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/materielService.js',
+	        	'assets/apps/service/orderService.js',
+	        	'assets/apps/service/DeliveryService.js',
+				'assets/apps/controllers/saleOrderController.js',
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/controllers/DeliveryController.js',
+				//流程申请
+				'assets/global/css/dialog.css',
+				'assets/global/css/easyui.css',
+				'assets/global/css/datagrid.css',
+				'assets/global/css/jquery.qtip.min.css',
+	         
+				'assets/global/plugins/jquery.easyui.min.js',
+				'assets/global/plugins/jquery.qtip.min.js',
+				'assets/global/plugins/jquery.outerhtml.js'
+                      ]
+                    });
+                }]
+            }
+        })
         }]);
 
 
@@ -5138,6 +5255,18 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 								 		"<li><a>调整付款计划申请</a></li>"					 
+			   }else if('submitDeliveryPlanApply' == toState.name){//发货审批申请
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"+
+					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+					 		"<li><a>发货计划申请</a></li>";
+			   }else if('approvalDeliveryPlanApply' == toState.name){//发货审批
+				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+			 		"<li><a>发货计划审批</a></li>";				 
+			   }else if('editDeliveryPlanApply' == toState.name){//调整发货审批申请
+				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+			 		"<li><a>调整发货计划申请</a></li>";							 
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

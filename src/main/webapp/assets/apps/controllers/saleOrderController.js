@@ -34,7 +34,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				$('#orderTab a[href="#apply"]').tab('show');
 			};
 			// 待办流程
-			$scope.toDaiban = function() {
+			$scope.toDaiban = function() {//deliveryPlanTab
 				$('#orderTab a[href="#daiban"]').tab('show');
 
 				// 构建datatables开始***************************************
@@ -47,7 +47,14 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				$('#orderTab a[href="#yiban"]').tab('show');
 				endTaskTable = showYbTable();
 			};
-			
+			// 待办发货计划流程
+			$scope.toDaibanDeliveryPlan = function() {//deliveryPlanTab
+				dbtable = showDbDeliveryPlanTable();								
+			};
+			// 已办发货计划流程
+			$scope.toYibanDeliveryPlan = function() {
+				endTaskTable = showYbDeliveryPlanTable();
+			};
 			// 关闭审批窗口
 			$scope.closeAuditDialogue = function() {
 				$('#auditOrderModal').modal("hide");
@@ -63,7 +70,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				
 			}
 			//***************************************流程处理相关end
-        	}else{
+        	}else {
         		$scope.datepickerInit();
             	// 初始化日期控件
             	     	
@@ -72,7 +79,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             	// 加载数据
             	if($stateParams.serialNum){
             		$scope.opration = '修改';
-
+            		$scope.stateParamserialNum=$stateParams.serialNum;
             		$scope.cancelContract();
             		$scope.cancelClauseSettlement();
             		$scope.cancelClauseAdvance();
@@ -86,6 +93,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
             		$scope.saleOrder={};
+            		$scope.stateParamserialNum=$stateParams.serialNum;
             		$rootScope.setNumCode("SO",function(newCode){
             			$scope.saleOrder.orderNum = newCode;
             		});
@@ -364,7 +372,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		loadOutRecordTable(serialNum,count);
 	}
     
-	 var  outRecordTable,tableUrl,type,tableId;// 核销弹框
+	 var  outRecordTable,tableUrl,type,tableId;// 出库记录弹框
  var loadOutRecordTable = function(serialNum,count) {
 	 tableId="select_sample_outRecord";
 	 $scope.totaOutRecordCount=count;
@@ -636,7 +644,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发 '+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}*/
 								if(isNull(row.receiveCount)||row.receiveCount==0){
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\',\'0\')">已发</a>'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'//<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\',\'0\')"></a>
 								}else{
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showOutRecord(\''+row.serialNum+'\',\''+row.receiveCount+'\')">已发</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}
@@ -2141,7 +2149,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		$scope["orderMaterielInput"+i] = false;
 					$scope["orderMaterielShow"+i] = false;
-					$scope["orderMaterielEdit"+i] = true;
+					if(!isNull($scope.stateParamserialNum)){
+        				$scope["orderMaterielEdit"+i] = true;
+        			}
 					
 	        	}
 	        }; 
@@ -2204,7 +2214,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        		if(materiel.serialNum == $scope.orderMateriel[i].serialNum){
 	        			$scope["orderMaterielInput"+i] = false;
 	        			$scope["orderMaterielShow"+i] = false;
-	        			$scope["orderMaterielEdit"+i] = true;
+	        			if(!isNull($scope.stateParamserialNum)){
+	        				$scope["orderMaterielEdit"+i] = true;
+	        			}
+	        			
 	        		}
 	        	}
 	        	
@@ -4624,6 +4637,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 																		return '待入库';
 		 																	}else if(data=='10'){
 		 																		return '待收货';
+		 																	}else if(data=='00'){
+		 																		return '待申请';
 		 																	}else{
 		 																		return '';
 		 																	}
@@ -5015,4 +5030,434 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				                });
 				    			$('select[name="paymentType"]').selectpicker('refresh');//刷新插件
 			       };
+			     	//********发货计划审批流程start****************//
+			       $scope.submitDeliveryPlanApply  = function(serialNum,materielCount,status,processBase) {// 进入申请审批页面
+			    	   
+			    	   if(serialNum==undefined){
+			    		 	if(deliveryTable.rows('.active').data().length != 1){
+				    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+				    		}else{
+				    			var materielCount= deliveryTable.row('.active').data().materielCount;
+				    			  if(materielCount==null){
+						    		   showToastr('toast-top-center', 'warning', '该发货计划没有物料，不能发起流程申请！');
+						    		   return;
+						    	   }
+				    			var processBase = deliveryTable.row('.active').data().processBase;
+				    			 if(processBase != null){
+				    				showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
+				    			}else $state.go('submitDeliveryPlanApply',{serialNum:deliveryTable.row('.active').data().serialNum});
+				    		}  
+			    	   }else{
+			    		   if(materielCount=='null'){
+				    		   showToastr('toast-top-center', 'warning', '该发货计划没有物料，不能发起流程申请！');
+				    		   return;
+				    	   }
+			    		   if(processBase!='null'){
+			    			   showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
+			    		   }else  $state.go('submitDeliveryPlanApply',{serialNum:serialNum});
+			    	   }
+			        };
+			        
+			        function showDbDeliveryPlanTable(){
+			        	
+			        	var table = $("#dbDeliveryPlanTable")
+			        	.DataTable(
+			        			{
+			        				language : {
+			        					aria : {
+			        						sortAscending : ": 以升序排列此列",
+			        						sortDescending : ": 以降序排列此列"
+			        					},
+			        					emptyTable : "空表",
+			        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+			        					infoEmpty : "没有数据",
+			        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+			        					lengthMenu : "每页显示 _MENU_ 条数据",
+			        					search : "查询:",
+			        					zeroRecords : "抱歉， 没有找到！",
+			        					paginate : {
+			        						"sFirst" : "首页",
+			        						"sPrevious" : "前一页",
+			        						"sNext" : "后一页",
+			        						"sLast" : "尾页"
+			        					}
+			        				},
+
+			        				buttons : [
+			        						{
+			        							text : "办理",
+			        							className : "btn default",
+			        							action: function(e, dt, node, config) { 
+			        								
+			        								var ids = '';
+			        								table.$('input[type="checkbox"]').each(function() {
+			        									if ($.contains(document, this)) {											
+			        										if (this.checked) {
+			        											// 将选中数据id放入ids中
+			        											if (ids == '') {
+			        												ids = this.value;
+			        											} else
+			        												ids = 'more';
+			        										}
+			        									}
+			        								});
+			        								
+			        								if(ids==''){
+			        									toastr.warning('请选择一个办理！');return;
+			        								}else if(ids=='more'){
+			        									toastr.warning('只能选择一个办理！');return;
+			        								} else {
+			        									if(table.row('.active').data().assign == ''){
+			    											showToastr('toast-top-center', 'warning', '此任务您还没有签收，请【签收】任务后再处理任务！')
+			    											return;
+			    										}
+			        									orderService
+			        									.getAuditInfos(ids)
+														.then(
+																function(result) {													
+			        												var comments = ""//添加评论
+				        												for (var i=0;i<result.commentList.length;i++){
+				        													comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+				        													+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+				        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+				        												}
+				        												if(result.actionType == 'audit'){//审批流程
+				        													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+				        												}else{
+				        													$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+				        												}
+				        											},
+																function(errResponse) {
+				        												toastr.warning("办理失败！");
+				        												console.error('Error while apply ap');
+				        											}
+				
+														);
+			        								}
+			        							}
+			        						},
+			        						{
+			        							text : "签收",
+			        							className : "btn default",
+			        							action: function(e, dt, node, config) { 
+			        								var ids = '';
+			        								table.$('input[type="checkbox"]').each(function() {
+			        									if ($.contains(document, this)) {											
+			        										if (this.checked) {
+			        											// 将选中数据id放入ids中
+			        											if (ids == '') {
+			        												ids = this.value;
+			        											} else
+			        												ids = 'more';
+			        										}
+			        									}
+			        								});
+			        								
+			        								if(ids==''){
+			        									toastr.warning('请选择一个签收！');return;
+			        								}else if(ids=='more'){
+			        									toastr.warning('只能选择一个签收！');return;
+			        								} else {
+			        									claimTask(ids, 'dbTable');
+			        								}
+			        								
+			        							}
+			        						}/*,
+			        						{
+			        							text : "转办",
+			        							className : "btn default"
+			        						},
+			        						{
+			        							text : "委派",
+			        							className : "btn default"
+			        						},
+			        						{
+			        							text : "跳转",
+			        							className : "btn default"
+			        						}*/ ],
+			        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
+			        				order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
+
+			        				bRetrieve : true,
+			        				lengthMenu : [
+			        						[ 5, 10, 15, 30, -1 ],
+			        						[ 5, 10, 15, 30,
+			        								"All" ] ],
+			        				pageLength : 10,// 每页显示数量
+			        				processing : true,// loading等待框
+
+			        				ajax : ctx
+			        						+ "/rest/processAction/todoTask/" + 'delivery',// 加载待办列表数据
+
+			        				"aoColumns" : [
+			        					              { mData: 'taskId'},
+			        									{
+			        										mData : 'assign',
+			        										mRender : function(
+			        												data) {
+			        											if (data == '') {
+			        												return "待签收";
+			        											} else {
+			        												return "待办理";
+			        											}
+			        										}
+			        									},
+			        									{
+			        										mData : 'num'
+			        									},
+			        									{
+			        										mData : 'comName'
+			        									},
+			        									{
+			        										mData : 'userName'
+			        									},
+			        									{
+			        										mData : 'title'
+			        									},
+			        									{
+			        										mData : 'taskName',
+			        										mRender : function(
+			        												data,
+			        												type,
+			        												row,
+			        												meta) {
+			        											return "<a class='trace' onclick=\"graphTrace('"
+			        													+ row.processInstanceId + "','" + ctx 
+			        													+ "')\" id='diagram' href='javascript:;' pid='"
+			        													+ row.id
+			        													+ "' pdid='"
+			        													+ row.processDefinitionId
+			        													+ "' title='see'>"
+			        													+ data
+			        													+ "</a>";
+			        										}
+			        									},
+			        									{
+			        										mData : 'owner',
+			        										mRender : function(
+			        												data,
+			        												type,
+			        												row,
+			        												meta) {
+			        											if (data != ''
+			        													&& data != row.assign) {
+			        												return row.assign
+			        														+ " (原执行人："
+			        														+ data
+			        														+ ")";
+			        											} else {
+			        												return row.assign;
+			        											}
+			        										}
+			        									},
+			        									{
+			        										mData : 'createTime',
+			        										mRender : function(
+			        												data) {
+			        											if (data != null) {
+			        												return timeStamp2String(data);
+			        											} else
+			        												return '';
+			        										}
+			        									},
+			        									{
+			        										mData : 'suspended',
+			        										mRender : function(
+			        												data) {
+			        											if (data) {
+			        												return "已挂起";
+			        											} else {
+			        												return "正常";
+			        											}
+			        										}
+			        									} ],
+			        						'aoColumnDefs': [ {
+			        	                    	'targets' : 0,
+			        	                    	'searchable' : false,
+			        	                    	'orderable' : false,
+			        	                    	'className' : 'dt-body-center',
+			        	                    	'render' : function(data,type, full, meta) {
+			        								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+			        								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+			        								"<span></span></label>";
+			        							
+			        	                    	}
+			        	                    },
+			        	                    {
+			        	                    	'targets' : 2,
+			        	                    	'searchable' : false,
+			        	                    	'orderable' : false,
+			        	                    	'className' : 'dt-body-center',
+			        	                    	'render' : function(data,type, full, meta) {
+			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+			        							
+			        	                    	},
+			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+		        									 $compile(td)($scope);
+		        							       }
+			        	                    } 
+			        	                    ]
+
+			        			})
+			        			
+			        			
+			        			$("#dbDeliveryPlanTable").find(".group-checkable").change(function() {
+						            var e = jQuery(this).attr("data-set"),
+						            t = jQuery(this).is(":checked");
+						            jQuery(e).each(function() {
+						                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+						            })
+						        }),
+						        $("#dbDeliveryPlanTable").on("change", "tbody tr .checkboxes",
+						        function() {
+						            $(this).parents("tr").toggleClass("active")
+						        })
+		        
+			        			return table;
+			        	
+			        	
+			        }
+			        function showYbDeliveryPlanTable(){
+		        	var endTaskTable = $("#endTaskDeliveryPlanTable").DataTable(
+		        			{
+		        				language : {
+		        					aria : {
+		        						sortAscending : ": 以升序排列此列",
+		        						sortDescending : ": 以降序排列此列"
+		        					},
+		        					emptyTable : "空表",
+		        					info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		        					infoEmpty : "没有数据",
+		        					infoFiltered : "(从 _MAX_ 条数据中检索)",
+		        					lengthMenu : "每页显示 _MENU_ 条数据",
+		        					search : "查询:",
+		        					zeroRecords : "抱歉， 没有找到！",
+		        					paginate : {
+		        						"sFirst" : "首页",
+		        						"sPrevious" : "前一页",
+		        						"sNext" : "后一页",
+		        						"sLast" : "尾页"
+		        					}
+		        				},
+		        				order : [ [ 5, "desc" ] ],// 默认排序列及排序方式
+		        				bRetrieve : true,
+		        				lengthMenu : [
+		        						[ 5, 10, 15, 30, -1 ],
+		        						[ 5, 10, 15, 30,
+		        								"All" ] ],
+		        				pageLength : 10,// 每页显示数量
+		        				processing : true,// loading等待框
+
+		        				ajax : ctx
+		        						+ "/rest/processAction/endTask/"+'delivery',// 加载已办列表数据
+
+		        				"aoColumns" : [
+		        						{
+		        							mData : 'businessType',
+		        							mRender : function(
+		        									data) {
+		        								return "订单申请";
+		        							}
+		        						},
+		        						{
+    										mData : 'num'
+    									},
+    									{
+    										mData : 'comName'
+    									},
+		        						{
+		        							mData : 'userName'
+		        						},
+		        						{
+		        							mData : 'title'
+		        						},
+		        						{
+		        							mData : 'startTime',
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								return timeStamp2String(data);
+		        							}
+		        						},
+		        						{
+		        							mData : 'currentPointUserName',//claimTime
+		        							mRender : function(
+		        									data,
+		        									type,
+		        									row,
+		        									meta) {
+		        								if(data != null){
+		        		                			return data;
+		        		                		}else{
+		        		                			return "";
+		        		                		}
+		        							}
+		        						},
+		        						{
+		        							mData : 'endTime',
+		        							mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return timeStamp2String(data);
+		        								} else
+		        									return '';
+		        							}
+		        						},
+		        						{
+		        							mData : 'deleteReason',
+	        								mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return data
+		        								} else
+		        									return '';
+		        							}
+		        						}/*,
+		        						{
+		        							mData : 'version',
+	        								mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return data
+		        								} else
+		        									return '';
+		        							}
+		        						}*/,
+		        						{
+		        							mData : 'revoke',
+		        							mRender : function(data,type,row,meta) {
+		        								if(isNull(row.version)&&isNull(row.deleteReason)){
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskDeliveryPlanTable','saleOrder')\">取消申请</a>";
+		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
+		        									return '';
+		        								}else if(row.deleteReason!='已撤销'){
+		        									return "<a href='javascript:void(0);' onclick=\"revoke('"+row.taskId+"','"+row.processInstanceId+"','endTaskDeliveryPlanTable')\">撤销</a>";
+		        								}else{
+		        									return '';
+		        								}
+		        							}
+		        						}
+		        						],
+		        						'aoColumnDefs': [
+		        			        	                    {
+		        			        	                    	'targets' : 1,
+		        			        	                    	'searchable' : false,
+		        			        	                    	'orderable' : false,
+		        			        	                    	'className' : 'dt-body-center',
+		        			        	                    	'render' : function(data,type, full, meta) {
+		        			        	                    		
+		        			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        			        							
+		        			        	                    	},
+		        			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
+		        		        									 $compile(td)($scope);
+		        		        							       }
+		        			        	                    } 
+		        			        	                    ]
+
+		        			})
+		         return endTaskTable;
+		        }
 }]);
