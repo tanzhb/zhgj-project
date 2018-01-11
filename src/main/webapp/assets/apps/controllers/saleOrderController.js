@@ -5467,8 +5467,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			        	                    	'orderable' : false,
 		        			        	                    	'className' : 'dt-body-center',
 		        			        	                    	'render' : function(data,type, full, meta) {
-		        			        	                    		
-		        			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        			        	                    		return data;
+		        			        								//return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
 		        			        							
 		        			        	                    	},
 		        			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
