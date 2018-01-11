@@ -34,7 +34,7 @@
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission> --%>
 		<li><a data-target="#tab_15_3" data-toggle="tab">收货计划</a></li>
-		<li><a data-target="#tab_15_4" data-toggle="tab">付款计划</a></li>
+		<!-- <li><a data-target="#tab_15_4" data-toggle="tab">付款计划</a></li> -->
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
