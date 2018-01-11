@@ -306,12 +306,14 @@ public class TakeDeliveryController {
     			deliveryMaterielVO.setDeliveryAttachFile(deliveryAttachFile);
     			deliveryMaterielVO.setDeliveryFiles(deliveryFiles);
     		}
+    		StockInOutRecord sr=takeDeliveryService.findStockInSerialNum(serialNum);//根据收货流水查入库单记录
+        	if(delivery.getOrderSerial()!=null&&sr!=null){
+        		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+        		sr.setOrder(o);
+        		delivery.setStockInOutRecord(sr);
+        	}
     	}
-    	StockInOutRecord sr=takeDeliveryService.findStockInSerialNum(serialNum);//根据收货流水查入库单记录
-    	String orderSerial=delivery.getOrderSerial();//获取订单流水
-    	OrderInfo o=orderService.selectById(orderSerial);
-    	sr.setOrder(o);
-    	delivery.setStockInOutRecord(sr);
+    	
     	return delivery;
     }
     

@@ -315,8 +315,8 @@
 			        <div class="portlet light">
 			            <div class="portlet-title">
 					<div class="actions" ><!-- ng-controller='MyCtrl' -->
-					<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+					<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label> -->
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
 										class="fa fa-plus"></i> 添加
@@ -383,7 +383,7 @@
 	                                            </label>
 	                                        </th>
 											<th style="white-space: nowrap;">任务状态</th>
-											<th style="white-space: nowrap;">销售订单号</th>
+											<th style="white-space: nowrap;">发货单号</th>
 											<th style="white-space: nowrap;">采购商</th>
 											<th style="white-space: nowrap;">申请人</th>
 											<th style="white-space: nowrap;">申请原因</th>
@@ -413,7 +413,7 @@
 										<thead>
 											<tr>
 												<th>单据类型</th>
-												<th>销售订单号</th>
+												<th>发货单号</th>
 												<th>采购商</th>
 												<th>申请人</th>
 												<th>申请原因</th>
