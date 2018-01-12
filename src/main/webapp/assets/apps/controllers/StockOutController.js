@@ -274,12 +274,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					var arraySerialNums=$scope.arraySerialNums;
 					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
 					
-					for(var i=0;i < deliveryMaterielSerialNums.length;i++){
+					/*for(var i=0;i < deliveryMaterielSerialNums.length;i++){
 						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0&&$scope.takeDeliveryMateriels[i].currentStockAmount>0){
 							toastr.warning("存在库存不为0且未选择出库批次的物料!");
 							return;
 						}
-					}
+					}*/
 					//handle.blockUI();
 					for(var m=0;m< deliveryMaterielSerialNums.length;m++){
 					if($scope["arraySerialNums"+deliveryMaterielSerialNums[m]]!=undefined){
