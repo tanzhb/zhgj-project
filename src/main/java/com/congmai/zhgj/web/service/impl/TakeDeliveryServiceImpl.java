@@ -315,7 +315,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 				delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
 			}else{
-				if("1".equals(orderInfonew.getContractContent().substring(4, 5))){//有验收条款
+				if(orderInfonew.getContractContent()!=null&&"1".equals(orderInfonew.getContractContent().substring(4, 5))){//有验收条款
 					//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
 					if(takeDelivery!=null){
 						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
