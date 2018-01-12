@@ -298,7 +298,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						params.stockOutMateriels.push(param);
 					}
 					}else{
-						if($scope.takeDeliveryMateriels[m].stockOutMateriels.length!=0){//存在出库批次
+						if(!isNull($scope.takeDeliveryMateriels[m])&&
+								!isNull($scope.takeDeliveryMateriels[m].stockOutMateriels)&&
+								$scope.takeDeliveryMateriels[m].stockOutMateriels.length!=0){//存在出库批次
 							for(var i=0;i < $scope.takeDeliveryMateriels[m].stockOutMateriels.length;i++){
 								param = {};
 								var stockOutMateriel=$scope.takeDeliveryMateriels[m].stockOutMateriels[i];

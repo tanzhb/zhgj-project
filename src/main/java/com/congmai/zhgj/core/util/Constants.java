@@ -100,6 +100,11 @@ public class Constants {
 	 * 销售
 	 */
 	public static final String SALES =  "sales";
+	
+	/**
+	 * 供应链管理组
+	 */
+	public static final String MANAGER =  "manager";
 	/******************************=======用户组类型END=====**********************************/
 	
 	

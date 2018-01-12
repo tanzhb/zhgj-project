@@ -51,7 +51,7 @@ public class WebSocketProcessor implements MessageProcessor {
 
 	
 	//已发货
-	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 已进行部分发货，发货单号${paramer_c}。"+
+	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 已进行发货，发货单号${paramer_c}。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
 
 	//已出库检验（to采购）
@@ -97,9 +97,17 @@ public class WebSocketProcessor implements MessageProcessor {
 		private static String message106 ="尊敬的${paramer_a}，您好！"+"销售订单号${paramer_b} 即将付款，付款类型为预收款，请贵司在X年X月X日前完成付款，感谢您的配合查看(跳转收款计划单链接)"
 	     +"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 	
-	
+	//销售订单分解采购计划，发送计划发布人
+		private static String message107 = "尊敬的${paramer_a}，您好！销售订单号${paramer_b} 已完成分解采购，请及时处理。"+
+		  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 
+	//采购计划发布发送给采购人员
+	private static String message108 = "尊敬的${paramer_a}，您好！采购计划${paramer_b} 已发布，请及时处理。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 
+	//入库发送给仓储人员
+		private static String message109 = "尊敬的${paramer_a}，您好！入库通知${paramer_b} 已发布，请及时处理。"+
+		  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 	
 	static{
 		MessageTemplate.register("01", DEFAULT_MSG_TEMPLATE, null, message01);
@@ -123,6 +131,10 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("104", DEFAULT_MSG_TEMPLATE, null, message104);
 		MessageTemplate.register("105", DEFAULT_MSG_TEMPLATE, null, message105);
 		MessageTemplate.register("106", DEFAULT_MSG_TEMPLATE, null, message106);
+		
+		MessageTemplate.register("107", DEFAULT_MSG_TEMPLATE, null, message107);
+		MessageTemplate.register("108", DEFAULT_MSG_TEMPLATE, null, message108);
+		MessageTemplate.register("109", DEFAULT_MSG_TEMPLATE, null, message109);
 
 	}
 	

@@ -55,8 +55,10 @@
 			        <div class="portlet light">
 			            <div class="portlet-title">
 							<div class="actions">
-								<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+								<shiro:hasPermission name="buyNormalOrder:add">
+									<label class="btn btn-transparent yellow btn-circle btn-sm"
+											ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+								</shiro:hasPermission>
 								<shiro:hasPermission name="buyNormalOrder:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addBuyOrder"> <i class="fa fa-plus"></i> 添加

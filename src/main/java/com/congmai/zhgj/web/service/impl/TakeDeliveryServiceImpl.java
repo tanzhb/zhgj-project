@@ -19,6 +19,7 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.core.util.Constants;
@@ -37,6 +38,8 @@ import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
@@ -340,6 +343,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					stockInOutRecord.setUpdater(currenLoginName);
 					stockInOutRecord.setUpdateTime(new Date());
 					stockInOutRecordMapper.insert(stockInOutRecord);
+					
+			    	//入库消息通知仓储人员
+			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
 				}
 			}
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态

@@ -24,6 +24,14 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
 				$('#orderTab a[href="#yiban"]').tab('show');
 				showYbTable();
+			}else if($stateParams.tabHref == '3'){//首页已办列表传过来的参数
+				$('#SALEorderTab a[href="#fahuojihua"]').tab('show');
+				$('#deliveryPlanTab a[href="#daibanDeliveryPlan"]').tab('show');
+				showDbDeliveryPlanTable()
+			}else if($stateParams.tabHref == '4'){//首页已办列表传过来的参数
+				$('#SALEorderTab a[href="#fahuojihua"]').tab('show');
+				$('#deliveryPlanTab a[href="#yibanDeliveryPlan"]').tab('show');
+				showYbDeliveryPlanTable()
 			}else{//从菜单进入
 				$('#orderTab a[href="#apply"]').tab('show');
 			}

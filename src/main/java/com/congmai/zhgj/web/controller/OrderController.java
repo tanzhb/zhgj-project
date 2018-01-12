@@ -2365,6 +2365,9 @@ public class OrderController {
 		orderService.updateOrderRelation(updateOrderInfo);
     	
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
+    	
+    	//分解订单发送消息至采购计划操作人
+    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(newProcurementPlan,MessageConstants.SALE_TO_PALN));
 		return orderInfo;
 	}
 	/**

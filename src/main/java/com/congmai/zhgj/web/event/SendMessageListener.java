@@ -28,6 +28,7 @@ import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -140,12 +141,18 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			inToBuyMessage(event);
 		}else if(MessageConstants.IN_TO_SALE.equals(event.getAction())){ //入库完成（to供应）
 			inToSaleMessage(event);
-		}else if(MessageConstants.IN_TO_BUY_TO_SALE.equals(event.getAction())){ //入库完成（to采购）
+		}else if(MessageConstants.IN_TO_BUY_TO_SALE.equals(event.getAction())){
 			inToBuyToSaleMessage(event);
 		}else if(MessageConstants.SHOUKUAN.equals(event.getAction())){ //收款（to供应）
 			shoukuanMessage(event);
 		}else if(MessageConstants.FUKUAN.equals(event.getAction())){ //付款（to采购）
 			fukuanMessage(event);
+		}else if(MessageConstants.SALE_TO_PALN.equals(event.getAction())){ 
+			sale2palnMessage(event);
+		}else if(MessageConstants.PALN_TO_BUY.equals(event.getAction())){ 
+			paln2buyMessage(event);
+		}else if(MessageConstants.IN_TO_STOCK.equals(event.getAction())){ 
+			in2stockMessage(event);
 		}
 
 	}
@@ -505,13 +512,13 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				DeliveryVO delivery = (DeliveryVO) event.getSource();
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
 				List<User> users = null;
-				Properties properties = new Properties();
+				
 				if(StringUtils.isEmpty(order.getBuyComId())){ //发给采购
 					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
 							Message messageVO = this.createMessage(event,user);
-
+							Properties properties = new Properties();
 							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
 							messageVO.setTempleteType(MessageConstants.TEMP_DELIVERY); //收货消息
 
@@ -533,6 +540,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}else{   //发给客户
 					users = new ArrayList<User>();
 					Company company = companyService.selectById(order.getBuyComId());
+					Properties properties = new Properties();
 					Message messageVO = this.createMessage(event,user);
 					List<UserCompanyKey> userCompanyKeys = userCompanyService.getUsersByComId(order.getBuyComId());
 					List<String> userIds = new ArrayList<String>();
@@ -556,6 +564,30 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					messageVO.setProperties(properties);
 					messageProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
+				}
+				
+				//发给仓储
+				users = null;
+				users = groupService.selectUserIdsByGroupType(Constants.STORAGE);
+				if(CollectionUtils.isNotEmpty(users)){
+					for(User u : users){
+						Properties properties = new Properties();
+						Message messageVO = this.createMessage(event,user);
+						messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+						messageVO.setTempleteType(MessageConstants.TEMP_DELIVERY); 
+						messageVO.setActionName(MessageConstants.OUT_TO_SALE);
+						messageVO.setObjectSerial(delivery.getSerialNum());
+						messageVO.setReceiverId(u.getUserId().toString());
+						properties.put("paramer_a", u.getUserName());
+						properties.put("paramer_b", order.getOrderNum());
+						properties.put("paramer_c", delivery.getDeliverNum());
+						properties.put("paramer_d", MessageConstants.URL_IN_TO_SALE);
+						properties.put("paramer_e", messageVO.getSerialNum());
+
+						messageVO.setProperties(properties);
+						messageProcessor.sendMessageToUser(messageVO);
+						messageService.insert(messageVO);
+					}
 				}
 
 
@@ -1119,23 +1151,75 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
 				TakeDeliveryParams params = (TakeDeliveryParams) event.getSource();
-
-				Properties properties = new Properties();
 				TakeDelivery takeDelivery = takeDeliveryService.selectById(params.getRecord().getTakeDeliverSerial());
 				DeliveryVO delivery = deliveryService.selectDetailById(takeDelivery.getDeliverSerial());
 				OrderInfo order = orderService.selectById(delivery.getOrderSerial());
-				Integer count = 0;
-				for(DeliveryMateriel dm : params.getDeliveryMateriels()){
-					count += Integer.parseInt(dm.getStockCount());
-				}
-				User u = null;
+				
 				if(StringUtils.isNotEmpty(order.getOrderSerial())){ //发给采购对应销售订单
-					Message messageVO = this.createMessage(event,user);
-					OrderInfo saleOrder = orderService.selectByOrderNum(order.getOrderSerial());
-					if(saleOrder!=null&&saleOrder.getMaker()!=null){
-						u = userService.selectByUsername(order.getMaker());
-						if(u!=null){
-							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					Integer count = 0;
+					for(DeliveryMateriel dm : params.getDeliveryMateriels()){
+						count += Integer.parseInt(dm.getStockCount());
+					}
+					
+					//发给采购人员
+					List<User> users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY_TO_SALE); //收货消息
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							messageVO.setActionName(MessageConstants.PALN_TO_BUY);
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_SALE_ORDER);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							properties.put("paramer_g", order.getOrderSerial());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+					
+					//发给销售人员
+					users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY_TO_SALE); //收货消息
+							messageVO.setObjectSerial(params.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", takeDelivery.getTakeDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", order.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
+							properties.put("paramer_f", messageVO.getSerialNum());
+							properties.put("paramer_g", order.getOrderSerial());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+					
+					//发给供应链管理组（产品总监）
+					users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.MANAGER);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
 							messageVO.setTempleteType(MessageConstants.TEMP_IN_TO_BUY_TO_SALE); //收货消息
 							messageVO.setObjectSerial(params.getRecord().getSerialNum());
 							messageVO.setReceiverId(u.getUserId().toString());
@@ -1316,8 +1400,124 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		}
 
 	}
+	
+	/**
+	 * 
+	 * @Description (销售分解为计划to 计划发布人员)
+	 * @param event
+	 */
+	private void sale2palnMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				ProcurementPlan record=(ProcurementPlan)event.getSource();
+				OrderInfo order = orderService.selectById(record.getSaleOrderSerial());
+				List<User> users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.MANAGER);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.SALE2PLAN); //收货消息
+							messageVO.setObjectSerial(record.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", order.getOrderNum());
+							properties.put("paramer_c", MessageConstants.URL_TO_BUYPLAN);
+							properties.put("paramer_d", messageVO.getSerialNum());
 
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
 
+	}
+	
+	
+	/**
+	 * 
+	 * @Description (采购计划发布to 采购人员)
+	 * @param event
+	 */
+	private void paln2buyMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				ProcurementPlan record=(ProcurementPlan)event.getSource();
+				List<User> users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.PLAN2BUY); //收货消息
+							messageVO.setObjectSerial(record.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", record.getProcurementPlanNum());
+							properties.put("paramer_c", MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
+							properties.put("paramer_d", messageVO.getSerialNum());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
+
+	}
+	
+	
+	/**
+	 * 
+	 * @Description (发货to 仓储)
+	 * @param event
+	 */
+	private void in2stockMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				StockInOutRecord record=(StockInOutRecord)event.getSource();
+				List<User> users = null;
+					users = groupService.selectUserIdsByGroupType(Constants.STORAGE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Properties properties = new Properties();
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.IN2STOCK); //收货消息
+							messageVO.setObjectSerial(record.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", record.getInOutNum());
+							properties.put("paramer_c", MessageConstants.URL_IN_TO_BUY);
+							properties.put("paramer_d", messageVO.getSerialNum());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
+
+	}
+	
 	/**
 	 * 
 	 * @Description (构建消息对象)

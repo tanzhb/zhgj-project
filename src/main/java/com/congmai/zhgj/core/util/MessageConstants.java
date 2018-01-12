@@ -53,7 +53,20 @@ public class MessageConstants {
 	public static final String BE_CONFIRM_BUY_ORDER = "beConfirmBuyOrder";
 	/*========================销售订单相关消息End==============================*/
 	
+	/**
+	 * 销售订单分解采购计划（发给采购发布人员）
+	 */
+	public static final String SALE_TO_PALN = "sale2paln";
 	
+	/**
+	 * 采购计划发布（发给采购人员）
+	 */
+	public static final String PALN_TO_BUY = "paln2buy";
+	
+	/**
+	 * 入库2仓储
+	 */
+	public static final String IN_TO_STOCK = "in2stock";
 	/*========================销售订单相关消息Start==============================*/
 	//1
 	
@@ -302,7 +315,7 @@ public class MessageConstants {
 	 */
 	public static final String URL_OUT_CHECK_TO_SALE = "takeDelivery";
 	/*========================出入库检验相关消息End==============================*/
-	
+	public static final String URL_TO_BUYPLAN = "procurementPlan";
 
 	
 	
@@ -467,6 +480,20 @@ public class MessageConstants {
 	 */
 	public static final String TEMP_OUT_CHECK_TO_SALE = "101";
 
+	/**
+	 * 销售分解(发给采购计划发布人员)
+	 */
+	public static final String SALE2PLAN = "107";
+	
+	/**
+	 * 采购计划发布(发给采购人员)
+	 */
+	public static final String PLAN2BUY = "108";
+	
+	/**
+	 * 入库(发给仓储)
+	 */
+	public static final String IN2STOCK = "109";
 	/*===========出入库检验相关消息End=================*/
 	
 	

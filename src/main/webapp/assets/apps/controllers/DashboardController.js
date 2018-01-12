@@ -37,12 +37,17 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			||actionName=="outCheckToBuy"
 			||actionName=="inCheckToBuy"
 			||actionName=="outToBuy"
-			||actionName=="inToBuy"){
+			||actionName=="inToBuy"
+			||actionName=="in2stock"){
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
 		}else if(actionName=="inToBuyToSale"){
 			$state.go("saleOrder");
+		}else if(actionName=="sale2paln"){
+			$state.go("procurementPlan");
+		}else if(actionName=="paln2buy"){
+			$state.go("buyOrder");
 		}
 	}
 	
@@ -119,6 +124,13 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 						"<a ui-sref='"+workflowType+"({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
 								"<span>"+workflowName+"："+title+"</span></a></div>" +
 						"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				
+				if(workflowType == 'delivery'){
+					map['template'] = "<li><div class='col-md-7'>" +
+					"<a ui-sref='saleOrder({tabHref:3})'>" +//tabHref:1将tab指向“待办列表”
+							"<span>"+workflowName+"："+title+"</span></a></div>" +
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				}
 				list.push(map);
 			}
 		}else{
@@ -168,6 +180,13 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 						"<a ui-sref='"+workflowType+"({tabHref:2})'>" +//tabHref:1将tab指向“已办列表”
 						"<span>"+workflowName+"："+title+"</span></a></div>" +
 						"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
+				
+				if(workflowType == 'delivery'){
+					map['template'] = "<li><div class='col-md-7'>" +
+					"<a ui-sref='saleOrder({tabHref:4})'>" +//tabHref:1将tab指向“待办列表”
+							"<span>"+workflowName+"："+title+"</span></a></div>" +
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				}
 				list.push(map);
 			}
 		}else{

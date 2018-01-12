@@ -24,7 +24,7 @@
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs" id="SALEorderTab">
 		<shiro:hasPermission name="zhgj:normalOrder">
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">销售订单</a>
 			</li>
@@ -32,7 +32,7 @@
 <%-- 		<shiro:hasPermission name="zhgj:frameOrder">
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission> --%>
-			<li><a data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
+			<li><a ng-click="return;" href="#fahuojihua" data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
 			<!-- <li><a data-target="#tab_15_4" data-toggle="tab">收款计划</a></li> -->
 	</ul>
     <div class="tab-content">
@@ -53,9 +53,10 @@
 			        <div class="portlet light">
 			            <div class="portlet-title">
 						<div class="actions">
-									
+									<shiro:hasPermission name="normalOrder:add">
 										<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitSaleApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+										</shiro:hasPermission>
 									<%-- <shiro:hasPermission name="normalOrder:add">
 										<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="alert(1)"> <i class="glyphicon glyphicon-play"></i> 分解</label>
@@ -115,7 +116,7 @@
 			                            <!-- <th> 配送 </th> -->
 			                            <th> 销售类型 </th>
 			                            <th> 关联销售合同 </th>
-			                            <th> 关联采购单 </th>
+			                            <th> 关联采购计划 </th>
 			                            <th> 下单日期 </th>
 			                            <th> 操作 </th>
 			                           <!--  <th> 状态 </th> -->
