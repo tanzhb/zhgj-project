@@ -977,7 +977,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			 $scope.saveCompanyAddress();
 		        			 $scope.saveCompanyContact();
 		        			}
-		        			//$scope.saveCompanyManage();//保存管理信息
+		        			$scope.saveCompanyManageInfo();//保存管理信息
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();
@@ -1380,7 +1380,13 @@ $scope.showCompany=function(judgeString){
 			            });
 		    		}else{
 		    			$scope.companyContact1=$scope.companyContact;
-		    			 toastr.warning("第一条联系方式暂存!");
+		    			if($scope.companyContacts){
+		    				$scope.companyContacts=$scope.companyContacts.push($scope.companyContact);
+		    			}else{
+		    				$scope.companyContacts=[];
+		    				$scope.companyContacts.push($scope.companyContact);
+		    			}
+		    			 //toastr.warning("第一条联系方式暂存!");
 		    			$("#contactor").modal("hide");
 		    		}
 		        	
@@ -1544,7 +1550,13 @@ $scope.showCompany=function(judgeString){
 		    		   });
 	    		   }else{
 	    			   $scope.companyAddress1= $scope.companyAddress; 
-	    			   toastr.warning("第一条联系地址暂存!");
+	    			   if($scope.companyAddresses){
+		    				$scope.companyAddresses=$scope.companyAddresses.push($scope.companyAddress);
+		    			}else{
+		    				$scope.companyAddresses=[];
+		    				$scope.companyAddresses.push($scope.companyAddress);
+		    			}
+	    			   /*toastr.warning("第一条联系地址暂存!");*/
 	    			   $("#address").modal("hide");
 	    		   }
 	    		   

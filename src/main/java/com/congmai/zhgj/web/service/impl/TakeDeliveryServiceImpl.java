@@ -682,22 +682,25 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//stockOutEndHandle(old_delivery.getOrderSerial(),deliverySerial,currenLoginName);
 		
 		//保存出库来源批次
-				List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
-				StockOutBatchExample  se=new  StockOutBatchExample();
-				com.congmai.zhgj.web.model.StockOutBatchExample.Criteria c=se.createCriteria();
-				c.andStockOutSerialEqualTo(stockOutMateriels.get(0).getStockOutSerial());
-				stockOutBatchMapper.deleteByExample(se);//删除原来出库单关联的出库批次 
-				for (StockOutBatch stockOutBatch : stockOutMaterielsNew) {
-					if (StringUtils.isEmpty(stockOutBatch.getSerialNum())) {
-						stockOutBatch.setSerialNum(ApplicationUtils.random32UUID());
-						stockOutBatch.setUpdater(currenLoginName);
-						stockOutBatch.setUpdateTime(new Date());
-						stockOutBatch.setCreator(currenLoginName);
-						stockOutBatch.setCreateTime(new Date());
-						stockOutBatch.setDelFlg("0");
-						stockOutBatchMapper.insert(stockOutBatch);
-					}
+		if(stockOutMateriels.size()!=0){
+			List<StockOutBatch> stockOutMaterielsNew = stockOutMateriels; //这里是入库的物料信息
+			StockOutBatchExample  se=new  StockOutBatchExample();
+			com.congmai.zhgj.web.model.StockOutBatchExample.Criteria c=se.createCriteria();
+			c.andStockOutSerialEqualTo(stockOutMateriels.get(0).getStockOutSerial());
+			stockOutBatchMapper.deleteByExample(se);//删除原来出库单关联的出库批次 
+			for (StockOutBatch stockOutBatch : stockOutMaterielsNew) {
+				if (StringUtils.isEmpty(stockOutBatch.getSerialNum())) {
+					stockOutBatch.setSerialNum(ApplicationUtils.random32UUID());
+					stockOutBatch.setUpdater(currenLoginName);
+					stockOutBatch.setUpdateTime(new Date());
+					stockOutBatch.setCreator(currenLoginName);
+					stockOutBatch.setCreateTime(new Date());
+					stockOutBatch.setDelFlg("0");
+					stockOutBatchMapper.insert(stockOutBatch);
 				}
+			}
+		}
+			
 		
 	}
 	

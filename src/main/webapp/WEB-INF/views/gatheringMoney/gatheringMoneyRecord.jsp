@@ -14,17 +14,6 @@
 <div class="row">
 	<div class="col-md-12">
 
-		<script type="text/javascript">
-
-		function MyCtrl($scope, $location) {
-			  $scope.jumpToUrl = function(path) {
-			 
-				  $location.path(path);
-			  };
-			}
-		
-		</script>
-
 		<!-- BEGIN EXAMPLE TABLE PORTLET-->
 		<div class="portlet light">
 			<div class="portlet-title">
@@ -32,7 +21,7 @@
 					<i class="fa fa-globe font-green"></i>
 					<span class="caption-subject font-green bold uppercase">收款列表</span>
 				</div>
-				<div class="actions" ng-controller='MyCtrl'>
+				<div class="actions" >
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>
 									
 				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>

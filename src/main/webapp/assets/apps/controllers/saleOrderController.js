@@ -28,7 +28,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				$('#orderTab a[href="#apply"]').tab('show');
 			}
 			
-
+			$scope.toShowDeliveryPlan=function(){
+				$('#deliveryPlanTab a[href="#applyDeliveryPlan"]').tab('show');
+			}
 			// 请假申请
 			$scope.toApply = function() {
 				$('#orderTab a[href="#apply"]').tab('show');
@@ -48,6 +50,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				endTaskTable = showYbTable();
 			};
 			// 待办发货计划流程
+			$scope.toDaibanDeliveryPlan = function() {//deliveryPlanTab
+				dbtable = showDbDeliveryPlanTable();								
+			};
 			$scope.toDaibanDeliveryPlan = function() {//deliveryPlanTab
 				dbtable = showDbDeliveryPlanTable();								
 			};
@@ -429,7 +434,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                             { mData: 'deliverCount' },
                             { mData: 'stockInOutRecord.stockDate' },
                             { mData: 'stockCount' },
-                            { mData: 'stockInOutRecord.outWarehouseName' },
+                          /*  { mData: 'stockInOutRecord.outWarehouseName' },*/
                             { mData: 'stockInOutRecord.operator' }
                       ],
              'aoColumnDefs' : [{
@@ -762,7 +767,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 								if(row.status==55){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';
 								} else if(row.status==0&&(row.processBase==null)){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.status+'\',\''+row.processBase+'\')">申请</a><br/>';
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>';
 									
 								}else if(row.processBase!=""&&row.processBase!=null){
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -3783,9 +3788,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			});
 			}
 			//********审批流程start****************//
-		       $scope.submitSaleApply  = function(serialNum,materielCount,status,processBase) {// 进入申请审批页面
+		       $scope.submitSaleApply  = function(serialNum,materielCount) {// 进入申请审批页面
 		    	   
-		    	   if(serialNum==undefined){
+		    	   if(serialNum==undefined){//从列表头上申请
 		    		 	if(table.rows('.active').data().length != 1){
 			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 			    		}else{
@@ -3800,13 +3805,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
 			    		}  
 		    	   }else{
-		    		   if(materielCount=='null'){
-			    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
-			    		   return;
-			    	   }
-		    		   if(processBase!='null'){
-		    			   showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
-		    		   }else  $state.go('submitSaleApply',{serialNum:serialNum});
+		    		   if(serialNum=='view'){//详情申请
+		    			   if($scope.saleOrder.materielCount==0||$scope.saleOrder.materielCount==null){
+		    				   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
+				    		   return;
+		    			   }else $state.go('submitSaleApply',{serialNum:$scope.saleOrder.serialNum});
+		    		   }else{
+		    			   if(materielCount=='null'|| materielCount==0){
+				    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
+				    		   return;
+				    	   }
+			    		   if(!isNull(processBase)){
+			    			   showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
+			    		   }else  $state.go('submitSaleApply',{serialNum:serialNum});
+		    		   }
+		    		  
 		    	   }
 		        };
 		        
@@ -4435,7 +4448,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 		    		}
 		    	}
-		    	
+		    	$scope.goCollectMoney= function (serialNum){//收款
+		    		$state.go('addGatheringMoney',{orderSerialNum:serialNum});
+		    	}
 		    	
 		    	 function showLogTable(url){
 		    		logTable = $("#select_operateLog")
@@ -4741,9 +4756,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					if(deliveryTable.rows('.active').data().length != 1){
 						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 					}else{
-						if(deliveryTable.row('.active').data().status== '0'){
+						if(deliveryTable.row('.active').data().status== '00'){
 							$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
-						}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
+						}else showToastr('toast-top-center', 'warning', '该条数据已非初始状态，不能进行修改！')
 					} 
 				};
 				//确认
@@ -4754,7 +4769,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						
 						if(deliveryTable.row('.active').data().status == '0'){
 							$state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
-						}else showToastr('toast-top-center', 'warning', '已确认发货')
+						}else showToastr('toast-top-center', 'warning', '未处于待发货')
 					} 
 				};
 		        //跳转到查看详情页面
@@ -4769,8 +4784,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			var ap = deliveryTable.rows('.active').data();
 		    			var ids = '';
 		    			for(i=0;i<ap.length;i++){
-		    				if(ap[i].status != '0'){
-		    					showToastr('toast-top-center', 'warning', '所选数据已经发货，不能删除！');
+		    				if(ap[i].status != '00'){
+		    					showToastr('toast-top-center', 'warning', '所选数据已非初始状态，不能删除！');
 		    					return;
 		    				}
 		    				
@@ -5044,12 +5059,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 				    		}else{
 				    			var materielCount= deliveryTable.row('.active').data().materielCount;
-				    			  if(materielCount==null){
+				    			  if(materielCount==null||materielCount==0){
 						    		   showToastr('toast-top-center', 'warning', '该发货计划没有物料，不能发起流程申请！');
 						    		   return;
 						    	   }
-				    			var processBase = deliveryTable.row('.active').data().processBase;
-				    			 if(processBase != null){
+				    			var status = deliveryTable.row('.active').data().status;
+				    			 if(status != '00'){
 				    				showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
 				    			}else $state.go('submitDeliveryPlanApply',{serialNum:deliveryTable.row('.active').data().serialNum});
 				    		}  
@@ -5118,7 +5133,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    											return;
 			    										}
 			        									orderService
-			        									.getAuditInfos(ids)
+			        									.getAuditInfosForDelivery(ids)
 														.then(
 																function(result) {													
 			        												var comments = ""//添加评论
@@ -5128,9 +5143,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				        													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 				        												}
 				        												if(result.actionType == 'audit'){//审批流程
-				        													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+				        													$state.go('approvalDeliveryPlanApply',{serialNum:result.deliveryVO.businessKey, taskId:ids, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
 				        												}else{
-				        													$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+				        													$state.go('editDeliveryPlanApply',{serialNumEdit:result.deliveryVO.businessKey, taskId:ids, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
 				        												}
 				        											},
 																function(errResponse) {
@@ -5164,7 +5179,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        								}else if(ids=='more'){
 			        									toastr.warning('只能选择一个签收！');return;
 			        								} else {
-			        									claimTask(ids, 'dbTable');
+			        									claimTask(ids, 'dbDeliveryPlanTable');
 			        								}
 			        								
 			        							}
@@ -5295,7 +5310,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        	                    	'orderable' : false,
 			        	                    	'className' : 'dt-body-center',
 			        	                    	'render' : function(data,type, full, meta) {
-			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+			        								return '<a href="javascript:void(0);" ng-click="goDeliveryInfoApply(\''+full.taskId+'\',\''+full.assign+'\',\''+full.serialNum+'\')">'+data+'</a>';
+			        	                    		//return data;
 			        							
 			        	                    	},
 			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -5362,7 +5378,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        							mData : 'businessType',
 		        							mRender : function(
 		        									data) {
-		        								return "订单申请";
+		        								return "发货计划申请";
 		        							}
 		        						},
 		        						{
@@ -5435,7 +5451,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
 		        								if(isNull(row.version)&&isNull(row.deleteReason)){
-		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskDeliveryPlanTable','saleOrder')\">取消申请</a>";
+		        									return "<a href='javascript:void(0);' onclick=\"userCancelApply('"+row.taskId+"','"+row.processInstanceId+"','endTaskDeliveryPlanTable','delivery')\">取消申请</a>";
 		        								}else  if(isNull(row.version)&&row.deleteReason=='已取消申请'){
 		        									return '';
 		        								}else if(row.deleteReason!='已撤销'){
@@ -5453,8 +5469,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			        	                    	'orderable' : false,
 		        			        	                    	'className' : 'dt-body-center',
 		        			        	                    	'render' : function(data,type, full, meta) {
-		        			        	                    		
-		        			        								return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        			        	                    		//return data;
+		        			        	                    		return '<a href="javascript:void(0);" ng-click="viewDeliveryInfo(\''+full.serialNum+'\')">'+data+'</a>';
 		        			        							
 		        			        	                    	},
 		        			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -5466,4 +5482,28 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			})
 		         return endTaskTable;
 		        }
+			        $scope.viewDeliveryInfo = function(serialNum){//已办查看
+			        	$state.go("viewDelivery",{serialNum:serialNum,oprateType:'forSaleOrder'});
+			        }
+			        $scope.goDeliveryInfoApply = function(taskId,assign,serialNum){//待办通过单号跳审批
+			        	if(assign==''){
+			        		claimTask(taskId, 'dbTable');
+			        	}
+			        	orderService
+						.getAuditInfosForDelivery(taskId)
+						.then(
+								function(result) {													
+									var comments = ""//添加评论
+										for (var i=0;i<result.commentList.length;i++){
+											comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+											+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+											+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+										}
+										if(result.actionType == 'audit'){//审批流程
+											$state.go('approvalDeliveryPlanApply',{serialNum:result.deliveryVO.businessKey, taskId:taskId, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
+										}else{
+											$state.go('editDeliveryPlanApply',{serialNumEdit:result.deliveryVO.businessKey, taskId:taskId, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
+										}
+									});
+			        }
 }]);

@@ -26,13 +26,13 @@
 	                            <th> 发货数量 </th>
 	                            <th> 出库日期 </th>
 	                            <th>出库数量 </th>
-	                           <th>出库仓库</th> 
+	                           <!-- <th>出库仓库</th>  -->
 	                            <th> 操作员</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                    </tbody>
-	                   <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaOutRecordCount}}</td><td/><td/></tr></tfoot>
+	                   <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaOutRecordCount}}</td><!-- <td/> --><td/></tr></tfoot>
 	                </table>
 	            </div>
 	           

@@ -3607,7 +3607,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         
         .state('addGatheringMoney', {
-            url: "/addGatheringMoney:serialNum",
+            url: "/addGatheringMoney:serialNum&:orderSerialNum",
             templateUrl: "rest/page/addGatheringMoney",
             data: {pageTitle: '新增收款'},
             controller: "GatheringMoneyController",
@@ -4430,7 +4430,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 重新编辑发货计划
         .state('editDeliveryPlanApply', {
-            url: "/editDeliveryPlanApply?:serialNum&:view",
+            url: "/editDeliveryPlanApply?:serialNumEdit&:view",
             params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
             templateUrl: "rest/page/editDeliveryPlanApply",
             data: {pageTitle: '重新编辑订单'},
@@ -5268,11 +5268,13 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 					 		"<li><a>发货计划申请</a></li>";
 			   }else if('approvalDeliveryPlanApply' == toState.name){//发货审批
-				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				   html +="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"+
+					   "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 			 		"<li><a>发货计划审批</a></li>";				 
 			   }else if('editDeliveryPlanApply' == toState.name){//调整发货审批申请
-				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				   html += "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"+
+					   "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 			 		"<li><a>调整发货计划申请</a></li>";							 
 			   }else if('solrSearch' == toState.name){//全文检索   
@@ -5313,6 +5315,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 						getEndTaskLength('myNotice', 'myNotice');
 					}else if('saleOrder' == toState.name){
 						getTodoTaskLength('saleOrder', 'saleOrder');
+						getTodoTaskLength('delivery', 'delivery');
 						getEndTaskLength('saleOrder', 'saleOrder');
 					}else if('priceList' == toState.name){
 						getTodoTaskLength('priceList', 'buyPrice');
@@ -5394,7 +5397,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			        deferred.reject('连接服务器出错！');  
 			    })
 			    return deferred.promise.then(function(data){
-			    	if(workflowType=='salePrice'||workflowType=='accountPayable'){
+			    	if(workflowType=='salePrice'||workflowType=='accountPayable'||workflowType=='delivery'){
 			    		$rootScope.dbsLength1 = data; 
 			    	}else{
 			    		$rootScope.dbsLength = data; 

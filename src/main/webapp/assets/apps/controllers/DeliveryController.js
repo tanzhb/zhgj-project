@@ -27,7 +27,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.transportType="水路运输";
 		$scope.serialNums = [];	
 		$scope.orderSerial=null;
-		
+		console.log($location.path());
 		
 		/*$scope.takeDelivery.warehouseSerial=null;*/
 		if($state.current.name=="addDelivery"){
@@ -43,7 +43,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.delivery.deliverType="贸易发货";
     	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	getCurrentUser();
-    	
+    	if($stateParams.oprateType == "forSaleOrder"){
+    		$scope.confirmDeliverybtn = true;
+		}else if($stateParams.oprateType == "forSupplyOrder"){
+			$scope.confirmDeliverybtn = false;
+		}
 	    	if(!isNull($stateParams.orderSerialNum)){//由订单发货
 				//查找是否已有进行中发货单
     			DeliveryService.getDoingDelivery($stateParams.orderSerialNum).then(
@@ -62,11 +66,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
 		//根据参数查询对象
     if($stateParams.serialNum){
-    	if($stateParams.oprateType == "forSaleOrder"){
+    	/*if($stateParams.oprateType == "forSaleOrder"){
     		$scope.confirmDeliverybtn = true;
 		}else if($stateParams.oprateType == "forSupplyOrder"){
 			$scope.confirmDeliverybtn = true;
-		}
+		}*/
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     
@@ -3432,6 +3436,55 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	          		 );
 	    		
 	        };
+	        //********审批流程end****************//  
+	        function doDelivery(_url, mydata, modal){
+	        	$.ajax( {
+	    	        url : _url,
+	    	        dataType:"text",
+	    	        type: 'POST',
+	    	        data : mydata,
+	    	        success : function(data) {
+	    	        	showToastr('toast-bottom-right', 'success', data);
+	    	        	$scope.cancelPage();
+	    	        },
+	    	        error : function(data) {
+	    	        	toastr.error('连接服务器出错,请登录重试！');
+	    	        }
+	    	     });
+	    	}
+	    	
+	    	//审批通过
+	    	$scope.deliverPass = function() {
+	    	    var mydata={"processInstanceId":$("#processInstanceId").val(),"serialNum":$scope.deliveryDetail.serialNum,"content":$("#content").val(),
+	    				"completeFlag":true};
+	    	    var _url = ctx + "rest/delivery/complate/" + $("#taskId").val();
+	    	    doDelivery(_url, mydata, 'audit');
+	    	};
+	    	//审批不通过
+	    	$scope.deliverUnPass = function() {
+	    		var mydata={"processInstanceId":$("#processInstanceId").val(),"serialNum":$scope.deliveryDetail.serialNum,"content":$("#content").val(),
+	    				"completeFlag":false};
+	    		var _url = ctx + "rest/delivery/complate/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'audit');
+	    	};
+	    	
+	    	//重新申请
+	    	$scope.replyDelivery = function() {
+	    	    var mydata={"processInstanceId":$("#processInstanceId").val(),
+	    				"reApply":true,"reason":$scope.delivery.reason,"serialNum":$scope.delivery.serialNum};
+	    		var _url = ctx + "rest/delivery/modifyDeliveryPlanApply/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'modify');
+	    	};
+	    	//取消申请
+	    	$scope.cancelApply = function() {
+	    		 var mydata={"processInstanceId":$("#processInstanceId").val(),
+		    				"reApply":true,"reason":$scope.delivery.reason,"serialNum":$scope.delivery.serialNum};
+	    		var _url = ctx + "rest/delivery/modifyDeliveryPlanApply/" + $("#taskId").val();
+	    		doDelivery(_url, mydata, 'modify' );
+	    	};
+	    	 $scope.cancelPage  = function() {// 取消编辑
+		        	$state.go("saleOrder");
+		        };
 }]);
 
 

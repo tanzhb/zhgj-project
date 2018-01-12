@@ -32,6 +32,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			$scope.paymentRecord.status='0';
 			getCurrentUser();
 		});
+	if(!isNull($stateParams.orderSerialNum)){//从销售订单到收款
+		$scope.getSaleOrderInfo($stateParams.orderSerialNum);
+	}
 			    }
 	
 	}else if($state.current.name=="viewGatheringMoney"){
@@ -1716,6 +1719,48 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$scope.paymentRecord.accountName='';
 		$scope.paymentRecord.accountNumber='';
 	}
+    var buyComId=null;
+   	//获取销售订单的信息（并给buyComId赋值）
+   	$scope.getBuyOrderInfo  = function(serialNum) {
+   		PayService.getSaleOrderInfo(serialNum).then(
+   				function(data){
+   					debugger
+   					if($scope.pay==null){
+   						$scope.saleOrder=data.orderInfo;
+   						buyComId=$scope.saleOrder.buyComId;
+   						var orderSerial=data.orderInfo.serialNum;
+   						$scope.orderSerial=data.orderInfo.serialNum;
+   						$scope.paymentRecord.orderDate=data.orderInfo.orderDate;
+   						$scope.deliveryMaterielE=data.clauList;
+   						$scope.isBG=data.createBG;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   						$scope.comFinances=data.comFinances//收付款信息
+   						$scope.comContacts=data.comContacts//联系信息
+   						$scope.paymentRecord.payee=data.orderInfo.supplyName;
+   						
+   					}else{
+   						/*$scope.pay.orderNum=data.orderInfo.orderNum;
+   						$scope.pay.orderSerial=data.orderInfo.serialNum;
+   						$scope.pay.orderAmount=data.orderInfo.orderAmount;
+   						$scope.pay.paiedMoney=data.orderInfo.paiedMoney;
+   						$scope.pay.billedMoney=data.orderInfo.billedMoney;
+   						$scope.clauseSettlementList=data.clauseSettlementDetail;
+   						
+   						
+   						$scope.pay.supplyComId=data.orderInfo.supplyComId;
+   						$scope.pay.deliveryAmount=null;
+   						supplyComId=data.orderInfo.supplyComId;*/
+   					}
+   				},
+   				function(error){
+   					$scope.error = error;
+   				}
+   		);
+
+   	};
+   	$scope.jumpToUrl=function(url){
+   		$state.go(url);
+   	}
 }]);
 
 

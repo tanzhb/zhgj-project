@@ -37,7 +37,7 @@ public class ActRuTaskServiceImpl extends GenericServiceImpl<ActRuTask, String>
 		List<ActRuTask> actRuTaskList = actRuTaskMapper.selectByExample(example);
 		if(CollectionUtils.isNotEmpty(actRuTaskList)&&actRuTaskList.size()==1){
 			ActRuTask actRuTask = actRuTaskList.get(0);
-			if(actRuTask != null){
+			if(actRuTask != null&&actRuTask.getAssignee()!=null){
 				return userMapper.selectByPrimaryKey(Integer.valueOf(actRuTask.getAssignee()));
 			}
 		}

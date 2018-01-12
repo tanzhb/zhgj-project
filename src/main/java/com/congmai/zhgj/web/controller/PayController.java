@@ -344,7 +344,7 @@ public class PayController {
 
 	/**
 	 * 
-	 * @Description 获取采购订单信息
+	 * @Description 获取采购/销售订单信息
 	 * @param ids
 	 * @return
 	 */

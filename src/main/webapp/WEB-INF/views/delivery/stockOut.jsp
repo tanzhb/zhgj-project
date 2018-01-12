@@ -428,8 +428,8 @@
 										<td  ng-if="materiel.currentStockAmount!=0">{{materiel.stockCount}}</td>
 										<td  ng-if="materiel.currentStockAmount==0">0</td>
 										<td>
-											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined">{{materiel.deliverCount-materiel.stockCount}}</span>
-											<span ng-if="materiel.currentStockAmount==0">{{materiel.deliverCount}}</span>
+											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined&&materiel.stockCount!=0">{{materiel.deliverCount-materiel.stockCount}}</span>
+											<span ng-if="materiel.currentStockAmount==0||materiel.stockCount==0">{{materiel.deliverCount}}</span>
 										</td>
 										<!-- <td class="form-group">
                                                  <input type="text"    style="border:none;"  readonly="readonly"       class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount" data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-change="deleteOrdinaryData(materiel.serialNum)"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
