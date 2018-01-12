@@ -3607,7 +3607,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         
         .state('addGatheringMoney', {
-            url: "/addGatheringMoney:serialNum",
+            url: "/addGatheringMoney:serialNum&:orderSerialNum",
             templateUrl: "rest/page/addGatheringMoney",
             data: {pageTitle: '新增收款'},
             controller: "GatheringMoneyController",

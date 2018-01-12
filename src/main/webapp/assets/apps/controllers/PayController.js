@@ -50,7 +50,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					getCurrentUser();
 				});
 			if(!isNull($stateParams.orderSerialNum)){
-				$scope.getSaleOrderInfo($stateParams.orderSerialNum);
+				$scope.getBuyOrderInfo($stateParams.orderSerialNum);
 			}
 					    }
 			
@@ -705,7 +705,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
        
        var supplyComId=null;
    	//获取采购订单的信息（并给supplyComId赋值）
-   	$scope.getSaleOrderInfo  = function(serialNum) {
+   	$scope.getBuyOrderInfo  = function(serialNum) {
    		PayService.getSaleOrderInfo(serialNum).then(
    				function(data){
    					debugger
@@ -1907,7 +1907,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			if(ids==$scope.orderSerial){
 				toastr.warning('当前采购订单已选,请选择其他的采购订单！');return;
 			}
-			$scope.getSaleOrderInfo(ids);
+			$scope.getBuyOrderInfo(ids);
 
 			ids = '';
 			$('#basicMaterielInfo').modal('hide');// 删除成功后关闭模态框

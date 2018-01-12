@@ -4448,7 +4448,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 		    		}
 		    	}
-		    	
+		    	$scope.goCollectMoney= function (serialNum){//收款
+		    		$state.go('addGatheringMoney',{orderSerialNum:serialNum});
+		    	}
 		    	
 		    	 function showLogTable(url){
 		    		logTable = $("#select_operateLog")
