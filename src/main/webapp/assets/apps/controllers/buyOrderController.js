@@ -845,7 +845,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                   { mData: 'deliverCount' },//orderMateriel
                                   { mData: 'stockInOutRecord.stockDate' },
                                   { mData: 'stockCount' },
-                                  { mData: 'stockInOutRecord.inWarehouseName' },
+                                 /* { mData: 'stockInOutRecord.inWarehouseName' },*/
                                   { mData: 'stockInOutRecord.operator' }
                                   
                           ],

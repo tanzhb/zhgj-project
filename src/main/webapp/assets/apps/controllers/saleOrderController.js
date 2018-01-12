@@ -434,7 +434,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                             { mData: 'deliverCount' },
                             { mData: 'stockInOutRecord.stockDate' },
                             { mData: 'stockCount' },
-                            { mData: 'stockInOutRecord.outWarehouseName' },
+                          /*  { mData: 'stockInOutRecord.outWarehouseName' },*/
                             { mData: 'stockInOutRecord.operator' }
                       ],
              'aoColumnDefs' : [{
@@ -5310,8 +5310,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        	                    	'orderable' : false,
 			        	                    	'className' : 'dt-body-center',
 			        	                    	'render' : function(data,type, full, meta) {
-			        								//return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
-			        	                    		return data;
+			        								return '<a href="javascript:void(0);" ng-click="goDeliveryInfoApply(\''+full.taskId+'\',\''+full.assign+'\',\''+full.serialNum+'\')">'+data+'</a>';
+			        	                    		//return data;
 			        							
 			        	                    	},
 			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -5469,8 +5469,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			        	                    	'orderable' : false,
 		        			        	                    	'className' : 'dt-body-center',
 		        			        	                    	'render' : function(data,type, full, meta) {
-		        			        	                    		return data;
-		        			        								//return '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+full.serialNum+'\',\''+full.businessType+'\')">'+data+'</a>';
+		        			        	                    		//return data;
+		        			        	                    		return '<a href="javascript:void(0);" ng-click="viewDeliveryInfo(\''+full.serialNum+'\')">'+data+'</a>';
 		        			        							
 		        			        	                    	},
 		        			        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -5482,4 +5482,28 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        			})
 		         return endTaskTable;
 		        }
+			        $scope.viewDeliveryInfo = function(serialNum){//已办查看
+			        	$state.go("viewDelivery",{serialNum:serialNum,oprateType:'forSaleOrder'});
+			        }
+			        $scope.goDeliveryInfoApply = function(taskId,assign,serialNum){//待办通过单号跳审批
+			        	if(assign==''){
+			        		claimTask(taskId, 'dbTable');
+			        	}
+			        	orderService
+						.getAuditInfosForDelivery(taskId)
+						.then(
+								function(result) {													
+									var comments = ""//添加评论
+										for (var i=0;i<result.commentList.length;i++){
+											comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+											+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+											+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+										}
+										if(result.actionType == 'audit'){//审批流程
+											$state.go('approvalDeliveryPlanApply',{serialNum:result.deliveryVO.businessKey, taskId:taskId, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
+										}else{
+											$state.go('editDeliveryPlanApply',{serialNumEdit:result.deliveryVO.businessKey, taskId:taskId, comments:comments,processInstanceId:result.deliveryVO.processInstanceId});
+										}
+									});
+			        }
 }]);

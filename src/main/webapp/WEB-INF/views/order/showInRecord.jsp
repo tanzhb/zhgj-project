@@ -27,13 +27,13 @@
 	                            <th> 发货数量 </th>
 	                            <th> 入库日期 </th>
 	                            <th>入库数量 </th>
-	                           <th>入库仓库</th> 
+	                           <!-- <th>入库仓库</th>  -->
 	                            <th> 操作员</th>
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                    </tbody>
-	                    <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaIInRecordCount}}</td><td/><td/></tr></tfoot>
+	                    <tfoot><tr><td/><td/><td/><td/><td/><td/><td>合计:</td><td>{{totaIInRecordCount}}</td><!-- <td/> --><td/></tr></tfoot>
 	                </table>
 	            </div>
 	            

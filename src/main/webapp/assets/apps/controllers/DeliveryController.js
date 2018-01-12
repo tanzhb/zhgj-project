@@ -27,7 +27,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		$scope.transportType="水路运输";
 		$scope.serialNums = [];	
 		$scope.orderSerial=null;
-		
+		console.log($location.path());
 		
 		/*$scope.takeDelivery.warehouseSerial=null;*/
 		if($state.current.name=="addDelivery"){
@@ -43,7 +43,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.delivery.deliverType="贸易发货";
     	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	getCurrentUser();
-    	
+    	if($stateParams.oprateType == "forSaleOrder"){
+    		$scope.confirmDeliverybtn = true;
+		}else if($stateParams.oprateType == "forSupplyOrder"){
+			$scope.confirmDeliverybtn = false;
+		}
 	    	if(!isNull($stateParams.orderSerialNum)){//由订单发货
 				//查找是否已有进行中发货单
     			DeliveryService.getDoingDelivery($stateParams.orderSerialNum).then(
@@ -62,11 +66,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
 		//根据参数查询对象
     if($stateParams.serialNum){
-    	if($stateParams.oprateType == "forSaleOrder"){
+    	/*if($stateParams.oprateType == "forSaleOrder"){
     		$scope.confirmDeliverybtn = true;
 		}else if($stateParams.oprateType == "forSupplyOrder"){
 			$scope.confirmDeliverybtn = true;
-		}
+		}*/
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     

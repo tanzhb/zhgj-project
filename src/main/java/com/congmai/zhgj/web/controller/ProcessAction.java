@@ -242,6 +242,7 @@ public class ProcessAction {
 			if("delivery".equals(businessType)){
 				DeliveryVO d=deliveryService.selectDetailById(base.getBusinessKey());//获取发货计划详情
 				map.put("num", d==null?"":d.getDeliverNum());
+				map.put("serialNum", d==null?"":d.getSerialNum());
 				if(d!=null){
 					OrderInfo o=orderService.selectById(d.getOrderSerial());//获取订单详情
 					map.put("comName", o==null?"":o.getBuyName());
@@ -368,6 +369,7 @@ public class ProcessAction {
     		if("delivery".equals(businessType)){
 				DeliveryVO d=deliveryService.selectDetailById(base.getBusinessKey());//获取发货计划详情
 				map.put("num", d==null?"":d.getDeliverNum());
+				map.put("serialNum", d==null?"":d.getSerialNum());
 				if(d!=null){
 					OrderInfo o=orderService.selectById(d.getOrderSerial());//获取订单详情
 					map.put("comName", o==null?"":o.getBuyName());
