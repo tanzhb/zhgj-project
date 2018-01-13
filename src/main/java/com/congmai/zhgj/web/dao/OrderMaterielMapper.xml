@@ -24,6 +24,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="demandPlanMaterielSerial" property="demandPlanMaterielSerial" jdbcType="VARCHAR" />
+    <result column="applyCount" property="applyCount" jdbcType="VARCHAR" />
     <!-- <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> -->
     <association property="materiel" column="serialNum" select="com.congmai.zhgj.web.dao.MaterielMapper.selectDifferentMaterielByOrderSerial"/> <!-- 订单物料显示供应商或采购商或基础物料 -->
     <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey"/>
@@ -90,7 +91,7 @@
   <sql id="Base_Column_List" >
     serialNum, orderSerial, materielSerial, supplyMaterielSerial, amount, orderUnitPrice, orderRateUnit,
     money, deliveryDate, lastDeliveryDate, deliveryAddress, customsRate, discountRate, serviceRate, redTicket,sort, 
-    delFlg, creator, createTime, updater, updateTime, demandPlanMaterielSerial
+    delFlg, creator, createTime, updater, updateTime, demandPlanMaterielSerial,applyCount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderMaterielExample" >
     select
@@ -128,13 +129,13 @@
       money, deliveryDate, lastDeliveryDate, 
       deliveryAddress, customsRate, discountRate, serviceRate, redTicket,sort, 
       creator, createTime, 
-      updater, updateTime, demandPlanMaterielSerial)
+      updater, updateTime, demandPlanMaterielSerial,applyCount)
     values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR},
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
       #{deliveryAddress,jdbcType=VARCHAR}, #{customsRate,jdbcType=VARCHAR}, #{discountRate,jdbcType=VARCHAR}, #{serviceRate,jdbcType=VARCHAR},#{redTicket,jdbcType=VARCHAR},#{sort,jdbcType=INTEGER},  
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{demandPlanMaterielSerial,jdbcType=VARCHAR})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, #{demandPlanMaterielSerial,jdbcType=VARCHAR},#{applyCount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.OrderMateriel" >
     insert into orderMateriel
@@ -202,6 +203,9 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+        <if test="applyCount != null" >
+        applyCount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -266,6 +270,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="applyCount != null" >
+        #{applyCount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -341,6 +348,9 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.applyCount != null" >
+        applyCount=#{record.applyCount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -368,7 +378,8 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      applyCount=#{record.applyCount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -436,6 +447,9 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="applyCount != null" >
+        applyCount = #{applyCount,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -460,7 +474,8 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        applyCount = #{applyCount,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
    <select id="selectOrderMaterielOrDeliveryMaterielByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
