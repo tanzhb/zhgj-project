@@ -5,6 +5,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
     $scope.$on('$viewContentLoaded', function() {   
         // initialize core components
         App.initAjax();
+        handle = new pageHandle();
         createTableMessage(5,1,true,null);
         createTable(5,1,true,null)
     });
