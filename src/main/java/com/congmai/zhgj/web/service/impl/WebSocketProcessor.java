@@ -51,7 +51,7 @@ public class WebSocketProcessor implements MessageProcessor {
 
 	
 	//已发货
-	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 已进行发货，发货单号${paramer_c}。"+
+	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 需要发货，发货单号${paramer_c}。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
 
 	//已出库检验（to采购）

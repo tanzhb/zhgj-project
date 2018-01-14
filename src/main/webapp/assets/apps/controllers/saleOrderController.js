@@ -4727,7 +4727,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			type, row, meta) {
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='8' ||data=='10'){
-		 							                            				return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">收货</a>';
+		 							                            				return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">代收货</a>';
 		 							                            			//	return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')"></span>';
 		 							                            			}else{
 		 																		return '';

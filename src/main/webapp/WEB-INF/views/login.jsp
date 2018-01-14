@@ -81,7 +81,7 @@ License: You must have a valid license purchased only from themeforest(the above
                                     <input class="form-control form-control-solid placeholder-no-fix form-group" type="password" autocomplete="off" placeholder="密码" name="userPwd" required/> </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <!-- <div class="col-sm-4">
                                     <div class="rem-password">
                                             <div class="md-checkbox">
                                                     <input type="checkbox" name="rememberMe" id="checkbox6" class="md-check">
@@ -92,8 +92,8 @@ License: You must have a valid license purchased only from themeforest(the above
                                                 </div>
                                             <span></span>
                                     </div>
-                                </div>
-                                <div class="col-sm-8 text-right">
+                                </div> -->
+                                <div class="col-sm-12 text-right">
                                     <div class="forgot-password">
                                         <a href="javascript:;" id="forget-password" class="forget-password">忘记密码?</a>
                                     </div>

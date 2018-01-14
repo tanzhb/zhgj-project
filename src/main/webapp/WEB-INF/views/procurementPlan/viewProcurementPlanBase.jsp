@@ -185,7 +185,7 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.planCount}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.planCount}} </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.buyCount}} </p>
 		                          </td>
 		                          <td>  
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.supplyName}} </p>
