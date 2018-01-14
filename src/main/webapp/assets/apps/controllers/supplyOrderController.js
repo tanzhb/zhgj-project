@@ -393,16 +393,16 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                     		}else{
                     			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
                     		}*/
-							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">已审批</span>';//待签合同
+							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">已确认</span>';//待签合同
 						}else if(row.status==2){
 							if(row.contract.contractType=='采购订单'){
-								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';
+								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
 							}else{
-								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';//已签合同
+								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';//已签合同
 							}
 							
 						}else if(row.status==3){
-							return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已审批</span>';//待签合同
+							return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">已确认</span>';//待签合同
 						}else if(row.status=="66"){
             				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待确认</span>';
 						}else if(row.status=="77"){
@@ -421,7 +421,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                     		}else{
                     			return clickhtm + '';
                     		}*/
-							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">已审批</span>';//待签合同
+							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">已确认</span>';//待签合同
 						}
 					},
 					"createdCell": function (td, cellData, rowData, row, col) {
