@@ -58,6 +58,8 @@ public class OrderMateriel {
     private String demandPlanMaterielSerial;
     
     private String  deliveredCount;//已发数量
+    
+    private String  applyCount;//已申请数量
 
     public String getSerialNum() {
         return serialNum;
@@ -257,6 +259,14 @@ public class OrderMateriel {
 
 	public void setDeliveredCount(String deliveredCount) {
 		this.deliveredCount = deliveredCount;
+	}
+
+	public String getApplyCount() {
+		return applyCount;
+	}
+
+	public void setApplyCount(String applyCount) {
+		this.applyCount = applyCount;
 	}
 
 	

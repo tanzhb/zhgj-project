@@ -5062,7 +5062,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			     	//********发货计划审批流程start****************//
 			       $scope.submitDeliveryPlanApply  = function(serialNum,materielCount,status,processBase) {// 进入申请审批页面
 			    	   
-			    	   if(serialNum==undefined){
+			    	 
 			    		 	if(deliveryTable.rows('.active').data().length != 1){
 				    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 				    		}else{
@@ -5074,17 +5074,27 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				    			var status = deliveryTable.row('.active').data().status;
 				    			 if(status != '00'){
 				    				showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
-				    			}else $state.go('submitDeliveryPlanApply',{serialNum:deliveryTable.row('.active').data().serialNum});
+				    			}else {
+				    				//调取发货申请判断
+				    				var promise = DeliveryService.goApplyDelivery(deliveryTable.row('.active').data().serialNum);
+				    				promise.then(function(data) {
+				    					if(data.flag){
+				    						if(data.isDel){
+				    							toastr.warning("当前发货单关联销售订单已发货完毕,请删除当前发货单!");
+				    						}else{toastr.warning("请重新编辑发货物料数量后再次申请!");}
+				    						return;
+				    					}else{
+				    						$state.go('submitDeliveryPlanApply',{serialNum:deliveryTable.row('.active').data().serialNum});
+				    					}
+				    				}, function(data) {
+				    					// 调用承诺接口reject();
+				    					$(".modal-backdrop").remove();
+				    					handle.unblockUI();
+				    					toastr.error("申请失败！请联系管理员");
+				    					console.log(data);
+				    				});
+				    			}
 				    		}  
-			    	   }else{
-			    		   if(materielCount=='null'){
-				    		   showToastr('toast-top-center', 'warning', '该发货计划没有物料，不能发起流程申请！');
-				    		   return;
-				    	   }
-			    		   if(processBase!='null'){
-			    			   showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
-			    		   }else  $state.go('submitDeliveryPlanApply',{serialNum:serialNum});
-			    	   }
 			        };
 			        
 			        function showDbDeliveryPlanTable(){

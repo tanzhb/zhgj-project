@@ -177,6 +177,8 @@ public class OrderInfo extends BaseVO {
     
     private String receiveCount;//实际入库数量
     
+    private String applyCount;//已申请数量
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -605,6 +607,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setReceiveCount(String receiveCount) {
 		this.receiveCount = receiveCount;
+	}
+
+	public String getApplyCount() {
+		return applyCount;
+	}
+
+	public void setApplyCount(String applyCount) {
+		this.applyCount = applyCount;
 	}
 
 	

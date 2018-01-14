@@ -152,6 +152,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			for (var i=0;i<result.data.length;i++){
 				var map = {};
 				var title = result.data[i].title;
+				var creatTime = result.data[i].createTime;
 				var endTime = result.data[i].endTime;
 				var workflowType = result.data[i].businessType;
 				var workflowName = "";

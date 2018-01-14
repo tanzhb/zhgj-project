@@ -68,7 +68,8 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		getCompanyaddressList:getCompanyaddressList,
     		//获取进行中的发货单
     		getDoingDelivery:getDoingDelivery,
-    		startDeliveryPlanProcess:startDeliveryPlanProcess
+    		startDeliveryPlanProcess:startDeliveryPlanProcess,
+    		goApplyDelivery:goApplyDelivery
     };
 
     return factory;
@@ -624,5 +625,18 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
         })
 		return deferred.promise;
 	}
+    //申请发货
+    function goApplyDelivery(serialNum){
+    	var deferred = $q.defer();  
+
+        $http.get("rest/delivery/goApplyDelivery", {params:{serialNum:serialNum}})
+        .success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        }).error(function () {  
+            deferred.reject('连接服务器出错！');  
+        })  
+        return deferred.promise; 
+    }
 }]);
 

@@ -52,6 +52,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.alibaba.druid.util.StringUtils;
@@ -218,6 +219,7 @@ public class DeliveryController {
 	    private ClauseDeliveryService clauseDeliveryService;
 	  @Resource
 	    private ProcessBaseService processBaseService;
+	 
 	
 	 /**
      * @Description (查询仓库列表)
@@ -311,6 +313,18 @@ public class DeliveryController {
 			query.setStatus("noInit");
 		}
 		List<DeliveryVO> deliveryList=deliveryService.findAllDeliveryList(query);
+		for(DeliveryVO d:deliveryList){
+			if("00".equals(d.getStatus())){//可能需要申请取对应订单已申请数量
+				if(d.getOrderSerial()!=null){
+					OrderInfo o=orderService.selectById(d.getOrderSerial());
+					if(o.getApplyCount()==null){
+						d.setOrderApplyCount("0");
+					}else{
+						d.setOrderApplyCount(o.getApplyCount());
+					}
+				}
+			}
+		}
 		List<DeliveryVO> now=new ArrayList<DeliveryVO>();
 		if("clearance".equals(customsFormType)){
 			for(DeliveryVO deliveryVO:deliveryList){
@@ -1282,6 +1296,18 @@ public class DeliveryController {
 		    flag = "1";
 		    delivery.setProcessInstanceId(processInstanceId);
 		    deliveryService.updateDelivery(delivery);//更新申请原因和状态
+		    List<DeliveryMaterielVO> list= deliveryService.selectListForDetail(delivery.getSerialNum());
+		  DeliveryVO   d=deliveryService.selectDetailById(delivery.getSerialNum());
+		    OrderInfo o=orderService.selectById(d.getOrderSerial());
+		    if(list!=null&&list.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:list){
+					OrderMateriel om=orderMaterielService.selectById(deliveryMaterielVO.getOrderMaterielSerialNum());
+					om.setApplyCount(StringUtil.sum(om.getApplyCount(),deliveryMaterielVO.getDeliverCount()));
+					orderMaterielService.update(om);
+					o.setApplyCount(StringUtil.sum(o.getApplyCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
+		    orderService.update(o);
 		} catch (ActivitiException e) {
 //            	message.setStatus(Boolean.FALSE);
 		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
@@ -1344,14 +1370,27 @@ public class DeliveryController {
 						.processInstanceId(delivery.getProcessInstanceId())
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
-					delivery.setStatus("0");//审批完成更新为待发货
+					delivery.setStatus("1");//审批完成更新为已确认发货
 				}
 			}
-
 			delivery.setReason(content);
 			this.deliveryService.updateBasicInfo(delivery);
-
+			 goDeliveryWithoutConfirm(serialNum);//直接确认发货
 			result = "任务办理完成！";
+			/*Map<String, Object> map1 = goDeliveryWithoutConfirm(serialNum);// 直接确认发货,获取map
+			Boolean flag = (Boolean) map1.get("flag");
+			Boolean isDel = (Boolean) map1.get("isDel");
+			if (flag) {// 提示删除或修改发货单
+				if (isDel) {
+					result = StaticConst.getInfo("delPlease");
+				} else {
+					result = StaticConst.getInfo("changePlease");
+				}
+			} else {
+				this.deliveryService.updateBasicInfo(delivery);
+				result = "任务办理完成！";
+			}*/
+			
 		} catch (ActivitiObjectNotFoundException e) {
 			result = "此任务不存在，请联系管理员！";
 			throw e;
@@ -1760,5 +1799,218 @@ public class DeliveryController {
 			return null;
 		}
     	
+    }
+    
+    public Map<String,Object> goDeliveryWithoutConfirm(String serialNum) throws Exception {
+		//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
+		Map<String,Object> map=new HashMap<String,Object>();
+		Boolean  isDel=false;//是否删除当前发货单
+		 Boolean flag=false;//还可以发
+		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+		String orderSerial=delivery.getOrderSerial();
+		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+		OrderInfo o=orderService.selectById(orderSerial);
+		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+		String  materielCount=o.getMaterielCount();//订单总数量
+		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+		  BigDecimal materielCount1=new BigDecimal(materielCount);
+		  if(deliveryCount1.compareTo(materielCount1)>=0){
+			  flag=true;
+			  isDel=true;//提示删除当前发货单
+			  map.put("isDel", isDel);
+			  map.put("flag", flag);
+			  return map;
+		  }else{
+			  map.put("isDel", isDel);
+		  }
+		 
+		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+		deliveryMateriels1= deliveryService.selectListForDetail(serialNum);
+		if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+			String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+			if(StringUtils.isEmpty(materielNum)){
+			deliveryMateriels1 = deliveryService.selectListForDetail2(serialNum);	
+			}	
+		}
+		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+			  for(DeliveryMaterielVO vo:orderMateriels){
+				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+					  if(deliverCount.compareTo(canDeliverCount)>0){
+						  flag=true;
+						  map.put("flag", flag);
+						  return map;
+					  }
+				  }
+			  }
+		  }
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
+
+		map.put("serialNum", serialNum);
+		map.put("updater", currenLoginName);
+		
+	
+		TakeDelivery takeDelivery = new TakeDelivery();
+		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+		
+		
+		map.put("orderSerial", orderSerial);
+		map.put("orderInfo", o);
+		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
+		deliveryService.updateOrderWhenDeliveryComlete(map);
+		map.put("createQG", createQG);
+		deliveryService.goDelivery(map);//外贸供应商发货
+		if(!createQG){//不产生清关单(供应商发货/平台发货)
+			OrderInfo orderInfo=new OrderInfo();
+			orderInfo.setSerialNum(orderSerial);
+			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
+			//设置订单发货数量，用于更新
+			orderInfo.setDeliveryCount(o.getDeliveryCount());
+			List<DeliveryMaterielVO> deliveryMateriels=null;
+			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
+			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+				}
+			}
+			
+			Delivery delivery1=new  Delivery();
+			delivery1.setSerialNum(delivery.getSerialNum());
+			delivery1.setStatus(DeliveryVO.COMPLETE);
+			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
+					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生检验单
+						//平台发货-->  需要检验 --> 生成出库检验单
+						StockInOutCheck stockInOutCheck=new StockInOutCheck();
+						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
+						stockInOutCheck.setDeliverSerial(serialNum);
+						stockInOutCheck.setCheckNum(orderService.getNumCode("QU"));
+						stockInOutCheck.setTakeDeliverSerial("checkout");
+						stockInOutCheck.setChecker(currenLoginName);
+						stockInOutCheck.setCreator(currenLoginName);
+						stockInOutCheck.setCreateTime(new Date());
+						stockInOutCheck.setUpdater(currenLoginName);
+						stockInOutCheck.setUpdateTime(new Date());
+						stockInOutCheck.setStatus("0");//待检验
+						stockInOutCheck.setCheckDate(new Date());
+						stockInOutCheck.setDelFlg("0");
+						stockInOutCheckService.insert(stockInOutCheck);
+						//更新订单状态至出库待检验
+						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
+						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
+						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
+					}else{
+						//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
+						
+						if(takeDelivery!=null){
+							takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
+							this.createStockInCheckRecord(takeDelivery,currenLoginName);
+							orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
+							delivery1.setStatus(DeliveryVO.WAIT_CHECK);
+						}
+						
+					}
+			}else{//没有验收条款
+				if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库单
+					//平台发货-->  不需要检验 --> 生成出库单
+					
+					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
+					StockInOutRecord stockInOutRecord=new StockInOutRecord();
+					stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
+					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+					stockInOutRecord.setDelFlg("0");
+					stockInOutRecord.setStatus("0");
+					stockInOutRecord.setDeliverSerial(serialNum);
+					stockInOutRecord.setTakeDeliverSerial("");
+					stockInOutRecord.setCreator(currenLoginName);
+					stockInOutRecord.setCreateTime(new Date());
+					stockInOutRecord.setUpdater(currenLoginName);
+					stockInOutRecord.setUpdateTime(new Date());
+					stockInOutRecordMapper.insert(stockInOutRecord);
+					//更新订单状态至待出库
+					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
+					delivery1.setStatus(DeliveryVO.WAITRECORD);
+					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE);
+				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
+					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
+					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
+					delivery1.setStatus(DeliveryVO.WAIT_IN_RECORD);
+					//生成入库单
+					StockInOutRecord stockInOutRecord=new StockInOutRecord();
+					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+					stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
+					stockInOutRecord.setDeliverSerial("");
+					stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
+					stockInOutRecord.setDelFlg("0");
+					stockInOutRecord.setStatus("0");
+					stockInOutRecord.setCreator(currenLoginName);
+					stockInOutRecord.setCreateTime(new Date());
+					stockInOutRecord.setUpdater(currenLoginName);
+					stockInOutRecord.setUpdateTime(new Date());
+					stockInOutRecordMapper.insert(stockInOutRecord);
+					
+				}
+				
+			}
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
+			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
+		}
+		
+		//发货消息
+		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));
+		 map.put("flag", flag);
+		return map;
+	}
+//申请前判断数量
+    @RequestMapping(value = "/goApplyDelivery", method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>>goApplyDelivery(String serialNum) {
+    	//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
+    			Map<String,Object> map=new HashMap<String,Object>();
+    			Boolean  isDel=false;//是否删除当前发货单
+    			 Boolean flag=false;//还可以发
+    			DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
+    			String orderSerial=delivery.getOrderSerial();
+    			List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+    			OrderInfo o=orderService.selectById(orderSerial);
+    			String  applyCount=o.getApplyCount();//订单已申请数量
+    			String  materielCount=o.getMaterielCount();//订单总数量
+    			  BigDecimal applyCount1=new BigDecimal(applyCount==null?"0":applyCount);
+    			  BigDecimal materielCount1=new BigDecimal(materielCount);
+    			  if(applyCount1.compareTo(materielCount1)>=0){
+    				  flag=true;
+    				  isDel=true;//提示删除当前发货单
+    				  map.put("isDel", isDel);
+    				  map.put("flag", flag);
+    				  return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+    			  }else{
+    				  map.put("isDel", isDel);
+    			  }
+    			 
+    			List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+    			deliveryMateriels1= deliveryService.selectListForDetail(serialNum);
+    			if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+    				String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+    				if(StringUtils.isEmpty(materielNum)){
+    				deliveryMateriels1 = deliveryService.selectListForDetail2(serialNum);	
+    				}	
+    			}
+    			  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+    				  for(DeliveryMaterielVO vo:orderMateriels){
+    					  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+    						  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+    						  OrderMateriel om=orderMaterielService.selectById(vo.getOrderMaterielSerialNum());
+    						  BigDecimal canApplyCount=new BigDecimal(om.getAmount()).subtract(new BigDecimal(om.getApplyCount()==null?"0":om.getApplyCount()));//可申请数量=物料数量-已申请数量
+    						  if(deliverCount.compareTo(canApplyCount)>0){
+    							  flag=true;
+    							  map.put("flag", flag);
+    							  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+    						  }
+    					  }
+    				  }
+    			  }
+    			  map.put("flag", flag);  
+    			  return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
     }
 }

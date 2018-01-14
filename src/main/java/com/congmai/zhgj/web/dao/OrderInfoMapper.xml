@@ -47,6 +47,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="receiveCount" property="receiveCount" jdbcType="VARCHAR" />
+    <result column="applyCount" property="applyCount" jdbcType="VARCHAR" />
     <association property="contract" column="contractSerial" select="com.congmai.zhgj.web.dao.ContractMapper.selectContractById"/> 
     <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
@@ -123,7 +124,7 @@ otherAmount, contractContent,remark, orderRemark,
     status, deliverStatus,
 payStatus,
 billStatus,
-    delFlg, creator, createTime, updater, updateTime,receiveCount
+    delFlg, creator, createTime, updater, updateTime,receiveCount,applyCount
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.OrderInfoExample" >
     select
@@ -148,7 +149,7 @@ billStatus,
     orderInfo.status,orderInfo.deliverStatus,
 orderInfo.payStatus,
 orderInfo.billStatus, orderInfo.delFlg, 
-    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime,orderInfo.receiveCount
+    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime,orderInfo.receiveCount,orderInfo.applyCount
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
     where
@@ -195,7 +196,7 @@ orderInfo.billStatus, orderInfo.delFlg,
     orderInfo.status,orderInfo.deliverStatus,
 orderInfo.payStatus,
 orderInfo.billStatus, orderInfo.delFlg, 
-    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime,orderInfo.receiveCount
+    orderInfo.creator, orderInfo.createTime, orderInfo.updater, orderInfo.updateTime,orderInfo.receiveCount,orderInfo.applyCount
     from orderInfo
     left join contract on orderInfo.contractSerial = contract.serialNum
     where
@@ -268,7 +269,7 @@ otherAmount, orderAmount,deliveryCount,payAmount,contractContent,
 payStatus,
 billStatus,
       creator, createTime, updater, 
-      updateTime,receiveCount)
+      updateTime,receiveCount,applyCount)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{supplyComId,jdbcType=VARCHAR}, 
       #{buyComId,jdbcType=VARCHAR}, #{orderNum,jdbcType=VARCHAR}, #{orderType,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR},
       #{seller,jdbcType=VARCHAR}, #{entrustParty,jdbcType=VARCHAR}, #{serviceModel,jdbcType=VARCHAR}, 
@@ -285,7 +286,7 @@ billStatus,
       #{remark,jdbcType=VARCHAR},#{orderRemark,jdbcType=VARCHAR}, 
       #{status,jdbcType=VARCHAR},#{deliverStatus,jdbcType=VARCHAR},#{payStatus,jdbcType=VARCHAR},#{billStatus,jdbcType=VARCHAR},
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{receiveCount,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{receiveCount,jdbcType=VARCHAR},#{receiveCount,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.OrderInfo" >
     insert into orderInfo
@@ -421,6 +422,9 @@ billStatus,
       </if>
       <if test="receiveCount != null" >
         receiveCount,
+      </if>
+      <if test="applyCount != null" >
+        applyCount,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -558,6 +562,9 @@ billStatus,
       </if>
       <if test="receiveCount != null" >
         #{receiveCount,jdbcType=VARCHAR},
+      </if>
+       <if test="applyCount != null" >
+        #{applyCount,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -702,6 +709,9 @@ billStatus,
       <if test="record.receiveCount != null" >
         receiveCount = #{record.receiveCount,jdbcType=VARCHAR},
       </if>
+      <if test="record.applyCount != null" >
+       applyCount= #{record.applyCount,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -753,7 +763,8 @@ billStatus,
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      receiveCount= #{record.receiveCount,jdbcType=VARCHAR}
+      receiveCount= #{record.receiveCount,jdbcType=VARCHAR},
+      applyCount= #{record.applyCount,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -896,6 +907,9 @@ billStatus,
       <if test="receiveCount != null" >
         receiveCount = #{receiveCount,jdbcType=VARCHAR},
       </if>
+      <if test="applyCount != null" >
+       applyCount= #{applyCount,jdbcType=VARCHAR}
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -944,7 +958,8 @@ billStatus,
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-        receiveCount = #{receiveCount,jdbcType=VARCHAR}
+        receiveCount = #{receiveCount,jdbcType=VARCHAR},
+        applyCount= #{applyCount,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
     

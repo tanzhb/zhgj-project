@@ -214,6 +214,8 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    
 	    private  Boolean  flag;
 	    private  List<DeliveryMaterielVO> deliveryMateriels;
+	    
+	    private String orderApplyCount;//订单已申请数量
 	
 /*	// 业务类型
 	private String businessType;
@@ -756,6 +758,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setDeliveryMateriels(List<DeliveryMaterielVO> deliveryMateriels) {
 		this.deliveryMateriels = deliveryMateriels;
+	}
+
+	public String getOrderApplyCount() {
+		return orderApplyCount;
+	}
+
+	public void setOrderApplyCount(String orderApplyCount) {
+		this.orderApplyCount = orderApplyCount;
 	}
 
 /*	public String getBusinessType() {
