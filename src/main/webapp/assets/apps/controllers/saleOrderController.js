@@ -135,7 +135,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		//加载客户
                 	initCustomers();
                 	initWarehouse();
-                	initPtWarehouseAddress();
+                	//initPtWarehouseAddress();
             	}
             	
             	$scope.noShow = true;
@@ -272,6 +272,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
          		         		    	}
          		  	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 //         		  	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
+         		  	   	    		//根据买方comId获取采购商联系地址
+         		  	   	    	initBuyComAddress($scope.saleOrder.buyComId);
 	         		  	   	    	if($scope.contract.contractType=='销售订单'){
 	    	        		    		$scope.contract.contractNum = null;
 	    	        		    	}
@@ -791,13 +793,13 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 											}else if(Number(row.materielCount)>Number(row.deliveryCount)){
 												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
-												/*	+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'*/
+													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'
 													+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 													}
 											}else if(Number(row.materielCount)==Number(row.deliveryCount)){
 												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
-													/*+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>';*/
+													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>';
 													}
 											}else{
 												return clickhtm + '';
@@ -1405,7 +1407,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	//加载客户
                     	initCustomers();
                     	initWarehouse();
-                    	initPtWarehouseAddress();
+                    	//initPtWarehouseAddress();
                     	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
     					$("#processInstanceId").val(processInstanceId);//赋值给隐藏input，通过和不通过时调用
@@ -1419,6 +1421,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                     		$scope.saleOrder.contractContent = '111100';
                     	}
                     	$scope.initContractContent();
+                    	initBuyComAddress($scope.saleOrder.buyComId);
           		     },
           		     function(error){
           		         $scope.error = error;
@@ -3795,6 +3798,25 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				//调用承诺接口reject();
 			});
 			}
+			/**
+			 * 加载采购商联系地址数据
+			 */
+			var initBuyComAddress = function(comId){
+			var promise = orderService.initBuyComAddress(comId);
+			promise.then(function(data){
+				$scope.buyComAddresses = data.data;
+				setTimeout(function () {
+        			$("select[name='warehouseAddress1']").selectpicker({
+                        showSubtext: true,
+                        size : 5
+                    });
+        			$("select[name='warehouseAddress1']").selectpicker('refresh');//刷新插件
+        			
+                }, 100);
+			},function(data){
+				//调用承诺接口reject();
+			});
+			}
 			//********审批流程start****************//
 		       $scope.submitSaleApply  = function(serialNum,materielCount) {// 进入申请审批页面
 		    	   
@@ -4456,9 +4478,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 		    		}
 		    	}
-		    	$scope.goCollectMoney= function (serialNum){//收款
+		    	$scope.goCollectMoney= function (serialNum){//从订单收款
 		    		$state.go('addGatheringMoney',{orderSerialNum:serialNum});
 		    	}
+		    	//从订单开票
+		 	      $scope.goOpenInvoice= function(serialNum) {
+		 	    	  $state.go('addOrEditInvoice',{inOrOut:"out",orderSerialNum:serialNum});
+		 	       }
 		    	
 		    	 function showLogTable(url){
 		    		logTable = $("#select_operateLog")

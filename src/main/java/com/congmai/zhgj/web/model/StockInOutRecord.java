@@ -84,7 +84,7 @@ public class StockInOutRecord {
 	    
 	    private String outWarehouseName;
 	    
-	    private String materielCount;//出入库数量
+	    private String materielCount;//物料条目数量
 	    //发货计划运输信息挪至出库
 	    private String transportType;//运输方式
 
@@ -100,8 +100,16 @@ public class StockInOutRecord {
 	    
 	    private String orderSerial;//订单流水
 	    
+		private String realCount;//实际出入库数量
 	    
+	    
+		 public String getRealCount() {
+				return realCount;
+		}
 
+		public void setRealCount(String realCount) {
+				this.realCount = realCount;
+		}
 
 		public int getPageSize() {
 			return pageSize;

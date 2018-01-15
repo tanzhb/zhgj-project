@@ -597,6 +597,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			}
 			o.setReceiveCount(totalOutCount.toString());
 			orderService.update(o);
+			//更新入库单实际入库数量
+			StockInOutRecordExample example = new StockInOutRecordExample();
+			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+			record.setRealCount(totalOutCount.toString());//实际入库数量
+			stockInOutRecordMapper.updateByExampleSelective(record, example);
 			}
 		
 		
@@ -669,6 +674,12 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String orderString = old_delivery.getOrderSerial();
 		String nodeString = ClauseSettlementDetail.CKH;
 		contractService.findPaymentNode(orderString, nodeString);	
+		
+		//更新出库单实际入库数量
+		StockInOutRecordExample example = new StockInOutRecordExample();
+		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+		record.setRealCount(totalOutCount.toString());//实际出库数量
+		stockInOutRecordMapper.updateByExampleSelective(record, example);
 		}else{
 			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
 			for(DeliveryMateriel materiel : materiels){

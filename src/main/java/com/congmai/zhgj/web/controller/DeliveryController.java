@@ -1370,13 +1370,18 @@ public class DeliveryController {
 						.processInstanceId(delivery.getProcessInstanceId())
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
-					delivery.setStatus("1");//审批完成更新为已确认发货
+					delivery.setStatus("0");//审批完成更新为已确认发货
+					delivery.setReason(content);
+					result = "任务办理完成！";
+					this.deliveryService.updateBasicInfo(delivery);
+					 goDeliveryWithoutConfirm(serialNum);//直接确认发货
 				}
+			}else{
+				delivery.setReason(content);
+				this.deliveryService.updateBasicInfo(delivery);
+				result = "任务办理完成！";
 			}
-			delivery.setReason(content);
-			this.deliveryService.updateBasicInfo(delivery);
-			 goDeliveryWithoutConfirm(serialNum);//直接确认发货
-			result = "任务办理完成！";
+			
 			/*Map<String, Object> map1 = goDeliveryWithoutConfirm(serialNum);// 直接确认发货,获取map
 			Boolean flag = (Boolean) map1.get("flag");
 			Boolean isDel = (Boolean) map1.get("isDel");
@@ -1771,13 +1776,20 @@ public class DeliveryController {
     	List<CompanyAddress> companyAddresss=null;
     if("pt".equals(comId)){
     	 comId=companyservice.selectComIdByComName(StaticConst.getInfo("comName"));
+    	 companyAddresss = companyAddressService.selectListByComId(comId);
+ 		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
     }
     if(StringUtil.isEmpty(comId)){//供应商发货时
     	User user = UserUtil.getUserFromSession();
 		comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//查询当前登录人所属企业类型
-   }
-    companyAddresss = companyAddressService.selectListByComId(comId);
+		companyAddresss = companyAddressService.selectListByComId(comId);
+ 		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
+   }else{
+	   companyAddresss = companyAddressService.selectListByComId(comId);
 		return new ResponseEntity<List<CompanyAddress>>(companyAddresss, HttpStatus.OK);
+   }
+   
+    
 	}
     
     /**

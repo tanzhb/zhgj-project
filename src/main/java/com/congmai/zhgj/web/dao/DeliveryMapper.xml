@@ -234,7 +234,7 @@
 	a.receiver,a.deliverAddress deliveryAddress,a.status,a.packageType,
 	d.takeDeliverAddress AS takeAddress,a.deliverDate,
 	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName,
-	sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial
+	sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial,sr.realCount as realCount
 	FROM delivery a 
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
 	LEFT JOIN deliveryMateriel c ON a.serialNum=c.deliverSerial

@@ -431,7 +431,7 @@
 															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															 >
-															<option ng-repeat="item in companyAddressesf"
+															<option ng-repeat="item in companyAddressess"
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>

@@ -931,5 +931,19 @@ public class CompanyController {
 		}
     	return list;
 	}
+	/**
+     * @Description (获取采购商联系地址信息)
+     * @param request
+     * @return
+     */
+	@RequestMapping(value = "/initBuyComAddress",method = RequestMethod.POST)
+    @ResponseBody
+    public List<CompanyAddress> getBuyComAddress(@RequestBody String comId) {
+		List<CompanyAddress>list=new ArrayList<CompanyAddress>();
+		if(!StringUtil.isEmpty(comId)){
+			list=companyAddressService.selectListByComId(comId);
+		}
+    	return list;
+    }
 }
 

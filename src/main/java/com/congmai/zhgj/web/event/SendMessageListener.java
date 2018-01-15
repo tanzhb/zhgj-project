@@ -48,7 +48,7 @@ import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
-import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
+//import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
 /**
  * 
  * @ClassName SendMessageListener
@@ -89,7 +89,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	private StockInOutCheckService stockInOutCheckService = null;
 
 	private void initService(){
-		messageProcessor = ApplicationContextHelper.getBean(WebSocketProcessor.class);
+		//messageProcessor = (MessageProcessor) ApplicationContextHelper.getBean(WebSocketProcessor.class);
 		messageService =  ApplicationContextHelper.getBean(MessageService.class);
 		actRuTaskService = ApplicationContextHelper.getBean(ActRuTaskService.class);
 		userCompanyService = ApplicationContextHelper.getBean(UserCompanyService.class);

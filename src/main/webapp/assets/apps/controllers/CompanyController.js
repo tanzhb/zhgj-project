@@ -1360,7 +1360,8 @@ $scope.showCompany=function(judgeString){
 		    		$scope.companyContact.updateTime = null;
 		    	}
 		    	if($('#contactForm').valid()){
-		    		if(!flagContact){//不是第一个
+		    		if(!flagContact||!isNull($scope.company.comId)){
+		    			$scope.companyContact.comId = $scope.company.comId;
 		    			var promise = companyService.saveCompanyContact($scope.companyContact);
 			        	promise.then(function(data){
 			        		//$(".modal-backdrop").remove();
@@ -1530,7 +1531,8 @@ $scope.showCompany=function(judgeString){
 	    		   $scope.companyAddress.updateTime = null;
 	    	   }
 	    	   if($('#companyAddressForm').valid()){
-	    		   if(!flagAddress){
+	    		   if(!flagAddress||!isNull( $scope.company.comId)){
+	    			   $scope.companyAddress.comId = $scope.company.comId;
 	    			   var promise = companyService.saveCompanyAddress($scope.companyAddress);
 		    		   promise.then(function(data){
 		    			   //$(".modal-backdrop").remove();
@@ -1539,6 +1541,7 @@ $scope.showCompany=function(judgeString){
 		    				   $("#address").modal("hide");
 		    				   $scope.companyAddress = {};
 		    				   $scope.companyAddresses = data.data;
+		    				   
 		    			   }else{
 		    				   $("#address").modal("hide");
 		    				   toastr.error("保存失败！请联系管理员");

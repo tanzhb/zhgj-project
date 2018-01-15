@@ -189,6 +189,8 @@ public class DeliveryVO extends BaseVO implements Serializable{
 		private String inOutType;// 出入库计划列表出入库类型
 		private String inOutRemark;// 出入库计划列表备注
 		private String inOutPackageCount;// 出入库计划列表包装数量
+		
+		private String realCount;// 实际出入库数量
 	  
 	
 	  //0：待发货；3：待收货；4：已收货；5：部分收货'
@@ -766,6 +768,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setOrderApplyCount(String orderApplyCount) {
 		this.orderApplyCount = orderApplyCount;
+	}
+
+	public String getRealCount() {
+		return realCount;
+	}
+
+	public void setRealCount(String realCount) {
+		this.realCount = realCount;
 	}
 
 /*	public String getBusinessType() {

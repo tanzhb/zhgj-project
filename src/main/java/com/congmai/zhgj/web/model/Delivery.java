@@ -118,6 +118,9 @@ public class Delivery {
 	private String takeDeliverAddress;//收货地址
 	
 	private String takeDeliverWarehouseName;// 收货仓库名称
+	
+	private String realCount;// 实际出入库数量
+	
 
 	public String getSerialNum() {
 		return serialNum;
@@ -589,6 +592,14 @@ public class Delivery {
 
 	public void setTakeDeliverWarehouseName(String takeDeliverWarehouseName) {
 		this.takeDeliverWarehouseName = takeDeliverWarehouseName;
+	}
+
+	public String getRealCount() {
+		return realCount;
+	}
+
+	public void setRealCount(String realCount) {
+		this.realCount = realCount;
 	}
 	
 }

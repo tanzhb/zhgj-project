@@ -600,6 +600,16 @@ angular.module('MetronicApp').service('orderService',
 							                deferred.reject('连接服务器出错！');  
 							            })  
 							        return deferred.promise;  
-							    }
+							    },
+							    initBuyComAddress : function (comId){
+									  var deferred = $q.defer();
+										$http.post("rest/company/initBuyComAddress",comId)
+										.then(function success(result) {
+								            deferred.resolve(result);//请求成功
+								        }, function error(err) {
+								            deferred.reject(err);//请求失败
+								        });
+								        return deferred.promise;//返回承诺
+								  }
 		}
 		} ]);

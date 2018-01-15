@@ -283,10 +283,11 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					//handle.blockUI();
 					for(var m=0;m< deliveryMaterielSerialNums.length;m++){
 					if($scope["arraySerialNums"+deliveryMaterielSerialNums[m]]!=undefined){
-					var serialNums=new Array();
+				/*	var serialNums=new Array();
 					for(var i=0;i < arraySerialNums.length;i++){
 						serialNums=serialNums.concat($scope["arraySerialNums"+arraySerialNums[i]]);
-					}
+					}*/
+						var serialNums=$scope["arraySerialNums"+arraySerialNums[m]];
 					for(var i=0;i < serialNums.length;i++){
 						param = {};
 						var arrays=serialNums[i].split(",");

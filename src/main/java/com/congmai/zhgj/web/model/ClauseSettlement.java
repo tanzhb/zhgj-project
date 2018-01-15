@@ -35,6 +35,8 @@ public class ClauseSettlement {
     private String updater;
 
     private Date updateTime;
+    
+    private String tradeWay;//贸易方式
 
     public String getSerialNum() {
         return serialNum;
@@ -179,6 +181,14 @@ public class ClauseSettlement {
 
 	public void setOrderSerial(String orderSerial) {
 		this.orderSerial = orderSerial;
+	}
+
+	public String getTradeWay() {
+		return tradeWay;
+	}
+
+	public void setTradeWay(String tradeWay) {
+		this.tradeWay = tradeWay;
 	}
     
 }

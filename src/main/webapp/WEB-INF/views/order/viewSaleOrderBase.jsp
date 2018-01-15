@@ -1123,17 +1123,31 @@ margin-right: 20px;
                              </div>
                          </div>
                          <!--/span-->
-                         <div class="col-md-4">
+                       <div class="col-md-4" ng-if="saleOrder.tradeType =='外贸'">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">备注：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{clauseSettlement.remark}} </p>
-                              		</div>
+                                 <label class="control-label col-md-5 bold">贸易方式：</label>
+                                       <div class="control-label col-md-7"> </div>
+                                     <p > {{clauseSettlement.tradeWay}} </p>
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="saleOrder.tradeType =='内贸'">
+                             <div class="form-group ">
+                                 <label class="control-label bold">备注：</label>
+                                     <div class="control-label col-md-7"> </div>
+                                     <p > {{clauseSettlement.remark}} </p>
                              </div>
                          </div>
                          <!--/span-->
                      </div>
-                     <!--/row-->
+                       <div class="row"  ng-if="saleOrder.tradeType =='外贸'">
+                      <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label  class="control-label col-md-5 bold">备注：</label>
+                                     <div  class="control-label col-md-7"> </div>
+                                     <p > {{clauseSettlement.remark}} </p>
+                             </div>
+                         </div>
+                     </div>
                  </div>
 			</form>
 			<form id="form_sample_3"   >

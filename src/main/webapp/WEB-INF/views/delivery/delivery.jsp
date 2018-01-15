@@ -109,6 +109,7 @@
 													<th style="white-space: nowrap;">采购商</th>
 													<th style="white-space: nowrap;">包装数量</th>
 													<th style="white-space: nowrap;">物料数量</th>
+													<th style="white-space: nowrap;">实际出库数量</th>
 													<th style="white-space: nowrap;">发货日期</th>
 													<th style="white-space: nowrap;">运输方式</th>
 													<th style="white-space: nowrap;">收货地址</th>

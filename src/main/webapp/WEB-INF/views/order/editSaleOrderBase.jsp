@@ -1364,21 +1364,48 @@ margin-right: 20px;
                                   </div>
                               </div>
                           </div>
-                          <!--/span-->
-                          <div class="col-md-4">
-                              <div class="form-group ">
-                                  <label class="control-label bold">备注：</label>
-                                  <div class="">
-                                  		<input type="text" name="clauseSettlementRemark" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.remark"  >
-                                      <div class="form-control-focus"> </div>
-                                      <span class="help-block" ng-hide="clauseSettlementInput">请输入备注</span>
-                                      <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.remark}} </p>
-                               		</div>
-                              </div>
-                          </div>
+                      <div class="col-md-4" ng-if="saleOrder.tradeType =='外贸'">
+                             <div class="form-group ">
+                                 <label class="control-label bold"><!-- <span class="required" aria-required="true"> * </span> -->贸易方式：</label>
+                                 <div class="">
+                                 		<select class="form-control" id="deliveryMode"  ng-hide="clauseSettlementInput" name="tradeWay"  ng-model="clauseSettlement.tradeWay" >
+                                           <option value=""></option>
+                                          	<option value="FOB" >FOB</option>
+                                            <option value="CIF" >CIF</option>
+                                       </select>
+                                       <div class="form-control-focus"> </div>
+                             			<span class="help-block" ng-hide="clauseSettlementInput">请选择贸易方式</span>
+                                     <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.tradeWay}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-4" ng-if="saleOrder.tradeType =='内贸'">
+                             <div class="form-group ">
+                                 <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 		<input type="text" name="clauseSettlementRemark" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseSettlementInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.remark}} </p>
+                              		</div>
+                             </div>
+                         </div>
                           <!--/span-->
                       </div>
                       <!--/row-->
+                         <div class="row"  ng-if="saleOrder.tradeType =='外贸'">
+                      <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">备注：</label>
+                                 <div class="">
+                                 		<input type="text" name="clauseSettlementRemark" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.remark"  >
+                                     <div class="form-control-focus"> </div>
+                                     <span class="help-block" ng-hide="clauseSettlementInput">请输入备注</span>
+                                     <p class="form-control-static" ng-show="clauseSettlementShow"> {{clauseSettlement.remark}} </p>
+                              		</div>
+                             </div>
+                         </div>
+                     </div>
                   </div>
 				</form>
 				<form id="form_sample_3"   >
@@ -1479,9 +1506,9 @@ margin-right: 20px;
 		                          <td>
                                      		<select  id="paymentMethod[$index]" name="paymentMethod" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].paymentMethod"  >
 		                                <option value=""></option>
-                                            	<option ng-if="saleOrder.tradeType =='外贸'" value="T" >T</option>
-                                              <option ng-if="saleOrder.tradeType =='外贸'" value="TL" >TL</option>
-                                              <option ng-if="saleOrder.tradeType =='外贸'" value="C" >C</option>
+                                            		<option ng-if="saleOrder.tradeType =='外贸'" value="TT" >TT</option>
+                                            <!--   <option ng-if="saleOrder.tradeType =='外贸'" value="TL" >TL</option> -->
+                                              <option ng-if="saleOrder.tradeType =='外贸'" value="LC" >LC</option>
                                               
                                               <option ng-if="saleOrder.tradeType =='内贸'" value="电汇" >电汇</option>
                                               <option ng-if="saleOrder.tradeType =='内贸'" value="银行承兑" >银行承兑</option>
@@ -1689,7 +1716,7 @@ margin-right: 20px;
 															name="warehouseAddress1"
 															ng-model="clauseDelivery.warehouseAddress"
 															 >
-															<option ng-repeat="item in warehouseAddresses"
+															<option ng-repeat="item in buyComAddresses"
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>

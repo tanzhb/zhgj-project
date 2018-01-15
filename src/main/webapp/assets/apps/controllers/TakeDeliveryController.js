@@ -1020,6 +1020,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                  { mData: 'inOutPackageCount' },
 	                                  //{ mData: 'materielCount' },物料条目数
 			                          { mData: 'materielTotalCount' },//物料总数
+			                          { mData: 'realCount' },//实际入库物料总数
 	                                  { mData: 'deliverDate' },
 	                                  { mData: 'takeDelivery.takeDeliverDate' },//packageType
 	                                 { mData: 'takeDeliverAddress' },//deliverAddress
@@ -1075,7 +1076,17 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	
 	    							}
 	    						},{
-	    							'targets' : 11,
+	    							'targets' : 7,
+	    							'render' : function(data,
+	    									type, row, meta) {
+	    									if(!isNull(data)){
+	    										return data;
+	    									}
+	  	  								return 0;
+	  	
+	    							}
+	    						},{
+	    							'targets' : 12,
 	    							'searchable' : false,
 	    							'orderable' : false,
 	    							'className' : 'dt-body-center',
@@ -1104,7 +1115,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	      									}
 	    							}
 	    						},{
-	    							'targets' : 12,
+	    							'targets' : 13,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									

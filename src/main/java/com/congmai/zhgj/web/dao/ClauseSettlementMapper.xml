@@ -18,6 +18,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+     <result column="tradeWay" property="tradeWay" jdbcType="TIMESTAMP" />
     <collection property="clauseSettlementDetails" column="serialNum" select="com.congmai.zhgj.web.dao.ClauseSettlementDetailMapper.selectDetailByClauseSettlementSerial"/> 
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -83,7 +84,7 @@
 rateAmount,
 rateAndAmount,
     orderAmount, otherAmount, remark, 
-    status, delFlg, creator, createTime, updater, updateTime
+    status, delFlg, creator, createTime, updater, updateTime,tradeWay
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ClauseSettlementExample" >
     select
@@ -122,7 +123,7 @@ rateAmount,
 rateAndAmount, orderAmount, otherAmount, 
        remark, status, 
       delFlg, creator, createTime, 
-      updater, updateTime)
+      updater, updateTime,tradeWay)
     values (#{serialNum,jdbcType=VARCHAR}, #{contractSerial,jdbcType=VARCHAR}, #{payee,jdbcType=VARCHAR}, 
       #{payer,jdbcType=VARCHAR},
       #{materielAmount,jdbcType=VARCHAR},
@@ -131,7 +132,7 @@ rateAndAmount, orderAmount, otherAmount,
 #{orderAmount,jdbcType=VARCHAR}, #{otherAmount,jdbcType=VARCHAR}, 
        #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{tradeWay,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ClauseSettlement" >
     insert into clauseSettlement
@@ -184,6 +185,9 @@ rateAndAmount, orderAmount, otherAmount,
       <if test="updateTime != null" >
         updateTime,
       </if>
+       <if test="tradeWay != null" >
+        tradeWay,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -233,6 +237,9 @@ rateAndAmount, orderAmount, otherAmount,
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="tradeWay != null" >
+       #{tradeWay,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -293,6 +300,9 @@ rateAndAmount, orderAmount, otherAmount,
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+       <if test="record.tradeWay != null" >
+        tradeWay = #{record.tradeWay,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -315,7 +325,8 @@ rateAndAmount, orderAmount, otherAmount,
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      tradeWay = #{record.tradeWay,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -368,6 +379,9 @@ rateAndAmount, orderAmount, otherAmount,
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="tradeWay != null" >
+        tradeWay = #{tradeWay,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -387,7 +401,8 @@ rateAndAmount, orderAmount, otherAmount,
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      tradeWay = #{tradeWay,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>

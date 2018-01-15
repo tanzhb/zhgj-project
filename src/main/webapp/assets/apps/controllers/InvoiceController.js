@@ -1448,22 +1448,25 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					function getOrderInfoBySerialNum(serialNum){
 						InvoiceService.getOrderInfoBySerialNum(serialNum).then(
 								function(data) {debugger;
-								if(serialNum.length>32){
-									//$scope.row.orderMateriels=data.orderMateriels;
-									$scope.row.orderInfo=data.orderInfo;
-									$scope.row.orderAmount=data.orderInfo.orderAmount;
-									$scope.row.currency=data.orderInfo.currency;
-									$scope.row.orderNum=data.orderInfo.orderNum;//订单编号
+								if(serialNum.length>32&&serialNum.indexOf("in")>-1){
 				 	            	$scope.row.comId=data.orderInfo.supplyComId;//开票方/收票方企业id
 				 	            	$scope.row.comName=data.orderInfo.supplyName;//开票方/收票方企业名称
 									$scope.row.company=data.company;
+								}else if(serialNum.length>32&&serialNum.indexOf("out")>-1){
+									$scope.row.comId=data.orderInfo.buyComId;//开票方/收票方企业id
+									$scope.row.comName=data.orderInfo.buyName;//开票方/收票方企业名称
+									$scope.row.company=data.company;
+								}
+								$scope.row.orderInfo=data.orderInfo;
+								$scope.row.orderAmount=data.orderInfo.orderAmount;
+								$scope.row.currency=data.orderInfo.currency;
+								$scope.row.orderNum=data.orderInfo.orderNum;//订单编号
 									if(!isNull($stateParams.orderSerialNum)&&$stateParams.inOrOut=='in'){
 										$scope.confirmSelectBuyOrSaleOrderInfo('buy',serialNum.substring(0,32));
+									}else if(!isNull($stateParams.orderSerialNum)&&$stateParams.inOrOut=='out'){
+										$scope.confirmSelectBuyOrSaleOrderInfo('',serialNum.substring(0,32));
 									}
-									//$scope.row.companyFinanceList=data.companyFinanceList;
-								}
-								/*if(serialNum.indexOf("in")>-1){loadMaterielInTable(serialNum.substring(0,32),'no');
-			 	            	}else{debugger;loadMaterielOutTable(serialNum.substring(0,32),'no');}*/
+								
 							},
 							function(errResponse) {
 								toastr.warning("获取失败！");
