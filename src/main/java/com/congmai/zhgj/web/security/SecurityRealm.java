@@ -39,7 +39,7 @@ import com.congmai.zhgj.web.service.UserService;
  */
 @Component(value = "securityRealm")
 public class SecurityRealm extends AuthorizingRealm {
-	private static final Logger logger = Logger.getLogger(SecurityRealm.class);
+private static final Logger logger = Logger.getLogger(SecurityRealm.class);
 
     @Resource
     private UserService userService;

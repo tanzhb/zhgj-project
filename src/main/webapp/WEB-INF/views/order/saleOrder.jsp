@@ -322,9 +322,9 @@
 										ng-click="jumpToUrl('forSaleOrder')"> <i
 										class="fa fa-plus"></i> 添加
 									</label> 
-									<label class="btn btn-transparent yellow btn-circle btn-sm"
+									<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货
-								</label>
+								</label> -->
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="jumpToEdit()"> <i class="fa fa-edit"></i> 修改
 									</label> <label class="btn btn-transparent red btn-circle btn-sm"

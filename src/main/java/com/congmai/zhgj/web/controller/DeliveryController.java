@@ -1349,7 +1349,6 @@ public class DeliveryController {
 			deliveryService.updateOrderWhenDeliveryComlete(map);
 			DeliveryVO baseDelivery = (DeliveryVO) this.runtimeService.getVariable(delivery.getProcessInstanceId(), "entity");
 					
-			
 			Map<String, Object> variables = new HashMap<String, Object>();
 			variables.put("isPass", completeFlag);
 			if (!completeFlag) {
@@ -1375,6 +1374,7 @@ public class DeliveryController {
 					result = "任务办理完成！";
 					this.deliveryService.updateBasicInfo(delivery);
 					 goDeliveryWithoutConfirm(serialNum);//直接确认发货
+					 goDeliveryWithoutConfirm(serialNum);//直接确认发货
 				}
 			}else{
 				delivery.setReason(content);
@@ -1382,6 +1382,7 @@ public class DeliveryController {
 				result = "任务办理完成！";
 			}
 			
+
 			/*Map<String, Object> map1 = goDeliveryWithoutConfirm(serialNum);// 直接确认发货,获取map
 			Boolean flag = (Boolean) map1.get("flag");
 			Boolean isDel = (Boolean) map1.get("isDel");
