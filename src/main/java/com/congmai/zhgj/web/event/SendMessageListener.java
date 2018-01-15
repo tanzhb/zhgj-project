@@ -60,7 +60,7 @@ import com.congmai.zhgj.web.service.UserService;
 @Component
 public class SendMessageListener implements  ApplicationListener<SendMessageEvent> {
 
-//	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
+	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
 
 	private MessageProcessor messageProcessor = null;
 
