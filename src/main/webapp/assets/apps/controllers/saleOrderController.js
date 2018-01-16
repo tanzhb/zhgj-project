@@ -4016,9 +4016,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							text : "跳转",
 							className : "btn default"
 						}*/ ];
-		        	if($rootScope.userName=='sunsir'){
+		        	/*if($rootScope.userName=='sunsir'){
 		        		tableButtons = []
-		        	}
+		        	}*/
 		        	var table = $("#dbTable")
 		        	.DataTable(
 		        			{
@@ -4157,9 +4157,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	                    	'orderable' : false,
 		        	                    	'className' : 'dt-body-center',
 		        	                    	'render' : function(data,type, full, meta) {
-		        	                    		if($rootScope.userName=='sunsir'){
+		        	                    		/*if($rootScope.userName=='sunsir'){
 		        	                    			return data
-		        	        		        	}
+		        	        		        	}*/
 		        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
 		        							
 		        	                    	},
