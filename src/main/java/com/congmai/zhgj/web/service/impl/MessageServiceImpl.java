@@ -104,4 +104,18 @@ public class MessageServiceImpl extends GenericServiceImpl<Message, String> impl
 		return messageMapper.countByExample(example);
 	}
 
+	@Override
+	public void changeReadFlg(String serialNum, String userName) {
+		Message message = messageMapper.selectByPrimaryKey(serialNum);
+		if("1".equals(message.getReadFlg())){
+			message.setReadFlg("0");
+		}else{
+			message.setReadFlg("1");
+		}
+		message.setUpdater(userName);
+		message.setUpdateTime(new Date());
+		messageMapper.updateByPrimaryKeySelective(message);
+		
+	}
+
 }

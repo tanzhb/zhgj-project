@@ -84,7 +84,7 @@
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="贸易发货">贸易发货</option>
-															<option value="其他发货">其他发货</option>
+															<option value="个人借用">个人借用</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -367,7 +367,7 @@
 															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															 >
-															<option ng-repeat="item in companyAddressesf"
+															<option ng-repeat="item in companyAddressess"
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>

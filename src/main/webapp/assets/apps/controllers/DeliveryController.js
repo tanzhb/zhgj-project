@@ -192,7 +192,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			$('#deliverWarehouse').selectpicker('refresh');//刷新插件
                }, 100);
        		 
-       		}else{
+       		}else if(index=="in"){
        		 $scope.warehouseLists=data;
        		setTimeout(function () {
        			$("#takeDeliverWarehouse").selectpicker({
@@ -224,6 +224,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                }, 100);
        		 
        		}else  if(judgeString=='sh'){
+       			
        		 $scope.companyAddressess=data;
        		setTimeout(function () {//
        			$("select[name='takeDeliveryWarehouseAddress1']").selectpicker({
@@ -237,6 +238,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
        	});
 	}
 	
+
 	$scope.showSX=function(judgeString){
 		debugger;
 		if(judgeString=='s'){
@@ -736,12 +738,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	    			if($scope.showSXf!=1){
 	    				$scope.warehouseAddress=$("input[name='warehouseAddress']").val();
 	    			}else if($scope.showSXf==1){
-	    				$scope.warehouseAddress=$("input[name='warehouseAddress1']").val();
+	    				$scope.warehouseAddress=$("select[name='warehouseAddress1']").val();
 	    			}
 	    			if($scope.showSXs!=1){
 	    				$scope.takeDeliveryWarehouseAddress=$("input[name='takeDeliveryWarehouseAddress']").val();
 	    			}else if($scope.showSXs==1){
-	    				$scope.takeDeliveryWarehouseAddress=$("input[name='takeDeliveryWarehouseAddress1']").val();
+	    				$scope.takeDeliveryWarehouseAddress=$("select[name='takeDeliveryWarehouseAddress1']").val();
 	    			}
 	    			var promise = DeliveryService.saveBasicInfo($scope,"deliveryInfo");
 	    			promise.then(function(data) {
@@ -770,7 +772,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
 		    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
 		    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
-		    	  		    //	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
+		    	  		      $scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
 		    					if(status!=undefined){
 		    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
 		    						promise.then(function(data) {
@@ -1203,6 +1205,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 					}
 				}
 			}
+			
 		//销售订单列表
         var table1;
 	    var loadMainTable1 = function() {
@@ -2177,7 +2180,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    		$scope.delivery.receiver=data.orderInfo.buyName;//收货方默认销售订单的采购方
 	          		    	}
 	          		    	 initWarehouses('pts',data.orderInfo.buyComId,"in");
-	          		    	 initCompanyaddresses(data.orderInfo.buyComId,'sh');//先加载收货地址列表
+	          		    	if($stateParams.oprateType=='forSupplyOrder'){
+	          		    		 initCompanyaddresses("pt",'sh');//先加载收货地址列表
+	          		    	}else{
+	          		    		 initCompanyaddresses(data.orderInfo.buyComId,'sh');//先加载收货地址列表
+	          		    	}
+	          		    	
 	          		    	$scope.delivery.maker=data.currenLoginName;//制单人默认当前用户
 	          		    	if(data.clauseDelivery!=null){
 	          		    		$scope.deliver.packageType=data.clauseDelivery.deliveryMode;
@@ -2282,6 +2290,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.deliver={};
 	          		    	$scope.flag=true;
 	          		    	/*$scope.delivery.orderNum1=data.delivery.orderNum;*/
+	          		    	 initWarehouses('pts',data.delivery.buyComId,"in");
+		          		    	if($stateParams.oprateType=='forSupplyOrder'){
+		          		    		 initCompanyaddresses("pt",'sh');//先加载收货地址列表
+		          		    	}else{
+		          		    		 initCompanyaddresses(data.delivery.buyComId,'sh');//先加载收货地址列表
+		          		    	}
 	          		    	$scope.deliveryTransport={};
 	          		    	$scope.takeDelivery={};
 	          		    	$scope.deliver.deliverer=$scope.delivery.deliverer;
@@ -2304,8 +2318,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.takeDelivery.receiver=$scope.delivery.takeDeliveryReceiver;
 	          		    	$scope.takeDelivery.contactNum=$scope.delivery.takeDeliveryContactNum;
 	          		    	$scope.takeDelivery.remark=$scope.delivery.takeDeliveryRemark;
-	          		    	 initWarehouses('pts',$scope.delivery.buyComId,"in");
-	          		    	 initCompanyaddresses($scope.delivery.buyComId,'sh');//先加载收货地址列表
+	          		    	// initWarehouses('pts',$scope.delivery.buyComId,"in");
+	          		    	//	initCompanyaddressesOther($scope.delivery.buyComId,'sh');//先加载收货地址列表
+	          		    	 //$scope.getSaleOrderInfo(serialNumEdit);
 	          		    	if(data.delivery.deliverType=='其他发货'){
 	          		    		$scope.otherMode=true;
 	          		    	}else{

@@ -147,8 +147,8 @@
 									<li class="todo-tasks-item" style="padding: 0px 0 0 0;" ng-repeat="message in messageList track by message.serialNum">
 										<h4 class="todo-inline" style="font-size: 15px;font-weight: 500;">
 											<p><i class="glyphicon glyphicon-envelope"></i>&nbsp;&nbsp;{{delHtmlTag(message.context)}}&nbsp;<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)" >查看</a>
-											<font ng-if="message.readFlg=='1'" style="color: gray;">已读</font>
-											<font ng-if="message.readFlg=='0'" style="color: #f36a5a;">未读</font>
+											<font ng-if="message.readFlg=='1'" style="color: gray;"  ><a ng-click="changeReadFlg(message.serialNum)"       id="{{message.serialNum}}">已读</a></font>
+											<font ng-if="message.readFlg=='0'" style="color: #f36a5a;" ><a ng-click="changeReadFlg(message.serialNum)"      style="color: #f36a5a;"  id="{{message.serialNum}}" >未读</a></font>
 											<font class="date">{{message.createTime | date:'yyyy-MM-dd  HH:mm:ss'}}</font>
 											</p>
 										</h4>

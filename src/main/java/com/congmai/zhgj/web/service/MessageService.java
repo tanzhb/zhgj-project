@@ -20,5 +20,7 @@ public interface MessageService extends GenericService<Message, String>{
 	void insertBatch(Message messageVO);
 
 	int messageSize(Integer userId, String systemMessage);
+	
+	void changeReadFlg(String serialNum, String userName);//修改消息已读/未读状态
 
 }

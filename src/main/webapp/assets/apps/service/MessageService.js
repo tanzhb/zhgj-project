@@ -146,7 +146,20 @@ angular.module('MetronicApp').service('messageService',['$http','$q',function($h
 	    return deferred.promise;
 	}
 	
-
+	/**
+	 * 获取列表数据
+	 */
+	this.changeReadFlg = function(serialNum){
+		var deferred = $q.defer();
+		$http.post("rest/message/changeReadFlg",   
+				serialNum
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
 
 
 }]); 

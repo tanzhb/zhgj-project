@@ -101,7 +101,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.cancelClauseFramework();
        		    	$scope.cancelClauseAfterSales();
    	       		    $scope.cancelFile();
-            		$scope.getSaleOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId)
+            		$scope.getSaleOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId,$stateParams.isReject)
             	}else{
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
@@ -357,7 +357,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		$state.go("saleOrder");
     		return;
 		}
-    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
+    	$scope.getSaleOrderInfo($scope.saleOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId,$stateParams.isReject);
     	$scope.cancelOrder();
     	
     };
@@ -1323,7 +1323,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         /**
 		 * 获取订单信息
 		 */	
-        $scope.getSaleOrderInfo  = function(serialNum,taskId,comments,processInstanceId) {
+        $scope.getSaleOrderInfo  = function(serialNum,taskId,comments,processInstanceId,isReject) {
         	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
           		    	
@@ -1339,7 +1339,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    			
           		    		}
           		    	}
-          		    	
+          		    	$scope.isReject=isReject;
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
@@ -3963,7 +3963,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
     													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
     												}
     												if(result.actionType == 'audit'){//审批流程
-    													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+    													$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId,isReject:table.row('.active').data().isReject});
     												}else{
     													$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
     												}
@@ -4160,7 +4160,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	                    		if($rootScope.userName=='sunsir'){
 		        	                    			return data
 		        	        		        	}
-		        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+		        								return '<a href="javascript:void(0);" ng-click="viewSaleOrderApply(\''+full.taskId+'\',\''+full.assign+'\',\''+full.isReject+'\')">'+data+'</a>';
 		        							
 		        	                    	},
 		        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -4188,7 +4188,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	
 		        	
 		        }
-		        $scope.viewSaleOrderApply=function(taskId,assign){//点击订单编号跳转至审批办理页面
+		        $scope.viewSaleOrderApply=function(taskId,assign,isReject){//点击订单编号跳转至审批办理页面
 		        	if(assign==''){
 		        		claimTask(taskId, 'dbTable');
 		        	}
@@ -4203,7 +4203,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 									}
 									if(result.actionType == 'audit'){//审批流程
-										$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+										if(isReject=='true'){
+											isReject=true;
+										}else{
+											isReject=false;
+										}
+										$state.go('approvalSaleApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId,isReject:isReject});
 									}else{
 										$state.go('editSaleApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
 									}

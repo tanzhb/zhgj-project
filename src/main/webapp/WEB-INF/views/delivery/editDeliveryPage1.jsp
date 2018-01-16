@@ -83,7 +83,7 @@
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value="贸易发货">贸易发货</option>
-															<option value="其他发货">其他发货</option>
+															<option value="个人借用">个人借用</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">

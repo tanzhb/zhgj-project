@@ -482,6 +482,16 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 			    			return;
 			    		}else{
 			    			handle.blockUI();
+			    			if($scope.showSXf!=1){
+			    				$scope.deliver.deliverAddress=$("input[name='deliverAddress']").val();
+			    			}else if($scope.showSXf==1){
+			    				$scope.deliver.deliverAddress=$("select[name='deliverAddress1']").val();
+			    			}
+			    			if($scope.showSXs!=1){
+			    				$scope.takeDeliver.takeDeliverAddress=$("input[name='takeDeliverAddress']").val();
+			    			}else if($scope.showSXs==1){
+			    				$scope.takeDeliver.takeDeliverAddress=$("select[name='takeDeliverAddress1']").val();
+			    			}
 							var params = {};
 							if(number==0){//保存代发货
 								$scope.deliver.status=0;

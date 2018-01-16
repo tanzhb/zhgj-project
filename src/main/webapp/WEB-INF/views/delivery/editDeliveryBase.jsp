@@ -84,7 +84,7 @@ margin-right: 20px;
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="贸易发货">贸易发货</option>
-															<option value="其他发货">其他发货</option>
+															<option value="个人借用">个人借用</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -120,8 +120,7 @@ margin-right: 20px;
 													</div>
 												</div>
 												<div class="form-group" ng-if="otherMode">
-													<label class="control-label bold">关联单据号<span  ng-hide="span"
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">关联单据号</label>
 													<div class="">
 														<input type="text" class="form-control"
 															ng-model="delivery.orderSerial" ng-show="inputDeliveryInfo" />
@@ -431,7 +430,7 @@ margin-right: 20px;
 															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															 >
-															<option ng-repeat="item in companyAddressesf"
+															<option ng-repeat="item in companyAddressess"
 																value="{{item.address}}">{{item.address}}</option>
 															<option value=""></option>
 														</select>

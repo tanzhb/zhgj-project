@@ -144,6 +144,7 @@
 	                                        </th>
 											<th style="white-space: nowrap;">任务状态</th>
 											<th style="white-space: nowrap;">采购订单号</th>
+											<th style="white-space: nowrap;">关联销售单号</th>
 											<th style="white-space: nowrap;">供应商</th>
 											<th style="white-space: nowrap;">申请人</th>
 											<th style="white-space: nowrap;">申请原因</th>

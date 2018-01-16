@@ -51,7 +51,25 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("buyOrder");
 		}
 	}
-	
+    $scope.changeReadFlg = function(serialNum,readFlg){
+    	var promise = messageService.changeReadFlg(serialNum);
+		promise.then(function(data){
+			if(data.data==0){//修改readFlg成功
+				if($("#"+serialNum).html()=='已读'){
+					$("#"+serialNum).html("未读");
+					$("#"+serialNum).css("color","#f36a5a");
+				}else{
+					$("#"+serialNum).html("已读");
+					$("#"+serialNum).css("color","gray");
+				}
+				
+			}else if(data.data==1){//修改readFlg失败
+				
+			}
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
 	var readMessage = function(serialNum){
 		var promise = messageService.readMessage(serialNum);
 		promise.then(function(data){

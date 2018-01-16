@@ -852,7 +852,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         // 审批销售订单
         .state('approvalSaleApply', {
             url: "/approvalSaleApply?:serialNum&:view",
-            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null,"isReject":null},
             templateUrl: "rest/page/approvalSaleApply",
             data: {pageTitle: '审批销售订单'},
             controller: "saleOrderController",
@@ -1659,7 +1659,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         // 审批采购订单
         .state('approvalBuyApply', {
             url: "/approvalBuyApply?:serialNum&:view",
-            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
+            params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null,"isReject":null},
             templateUrl: "rest/page/approvalBuyApply",
             data: {pageTitle: '审批采购订单'},
             controller: "buyOrderController",

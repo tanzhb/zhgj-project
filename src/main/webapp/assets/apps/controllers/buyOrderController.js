@@ -90,7 +90,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.cancelClauseFramework();
        		    	$scope.cancelClauseAfterSales();
    	       		    $scope.cancelFile();
-            		$scope.getBuyOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId)
+            		$scope.getBuyOrderInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId,$stateParams.isReject)
             	}else{
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
@@ -370,7 +370,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     		$state.go("buyOrder");
     		return;
 		}
-    	$scope.getBuyOrderInfo($scope.buyOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
+    	$scope.getBuyOrderInfo($scope.buyOrder.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId,$stateParams.isReject);
     	$scope.cancelOrder();
     	
     };
@@ -1309,7 +1309,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         /**
 		 * 获取订单信息
 		 */	
-        $scope.getBuyOrderInfo  = function(serialNum,taskId,comments,processInstanceId) {
+        $scope.getBuyOrderInfo  = function(serialNum,taskId,comments,processInstanceId,isReject) {
         	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
           		    	$scope.buyOrder=data.orderInfo;
@@ -1324,7 +1324,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
           		    			
           		    		}
           		    	}
-          		    	
+          		    	$scope.isReject=isReject;
           		    	$scope.contract=data.contract;
           		    	$scope.clauseAfterSales=data.clauseAfterSales;
           		    	$scope.clauseAdvance=data.clauseAdvance;
@@ -3759,7 +3759,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
  													+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
  												}
  												if(result.actionType == 'audit'){//审批流程
- 													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+ 													$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId,isReject:table.row('.active').data().isReject});
  												}else{
  													$state.go('editBuyApply',{serialNum:result.orderInfo.serialNum, taskId:ids, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
  												}
@@ -3870,6 +3870,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        										mData : 'num'
 		        									},
 		        									{
+		        										mData : 'saleOrderNum'
+		        									},
+		        									{
 		        										mData : 'comName'
 		        									},
 		        									{
@@ -3956,7 +3959,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	                    		if($rootScope.userName=='sunsir'){
 		        	                    			return data
 		        	        		        	}
-		        								return '<a href="javascript:void(0);" ng-click="viewBuyOrderApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+		        								return '<a href="javascript:void(0);" ng-click="viewBuyOrderApply(\''+full.taskId+'\',\''+full.assign+'\',\''+full.isReject+'\')">'+data+'</a>';
 		        							
 		        	                    	},
 		        	                    	"createdCell": function (td, cellData, rowData, full, col) {
@@ -3984,7 +3987,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	
 		        	
 		        }
-		        $scope.viewBuyOrderApply=function(taskId,assign){//点击订单编号跳转至审批办理页面
+		        $scope.viewBuyOrderApply=function(taskId,assign,isReject){//点击订单编号跳转至审批办理页面
 		        	if(assign==''){
 		        		claimTask(taskId, 'dbTable');
 		        	}
@@ -3999,7 +4002,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
 									}
 									if(result.actionType == 'audit'){//审批流程
-										$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
+										if(isReject=='true'){
+											isReject=true;
+										}else{
+											isReject=false;
+										}
+										$state.go('approvalBuyApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId,isReject:isReject});
 									}else{
 										$state.go('editBuyApply',{serialNum:result.orderInfo.serialNum, taskId:taskId, comments:comments,processInstanceId:result.orderInfo.processInstanceId});
 									}

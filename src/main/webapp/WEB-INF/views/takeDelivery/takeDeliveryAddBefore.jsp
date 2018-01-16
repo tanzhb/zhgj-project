@@ -85,7 +85,7 @@
                                                     <div class="">
                                                         <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='贸易发货'" ng-change="changeTakeDeliveryMode(deliver.deliverType)"  name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
 	                                                        <option  value="贸易发货" selected="selected" >贸易发货</option>
-	                                                      <!--   <option  value="其他发货" selected="selected" >其他发货</option> -->
+	                                                      <!--   <option  value="个人借用" selected="selected" >个人借用</option> -->
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{takeDeliver.takeDeliverNum}}</p>

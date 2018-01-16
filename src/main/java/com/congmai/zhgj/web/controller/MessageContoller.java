@@ -259,6 +259,24 @@ public class MessageContoller {
     	}
     	return String.valueOf(flag);
     }
-    
+    /**
+     * @Description (修改消息已读未读状态)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="changeReadFlg",method=RequestMethod.POST)
+    @ResponseBody
+    public String changeReadFlg(Map<String, Object> map,@RequestBody String serialNum,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNum)){
+    			messageService.changeReadFlg(serialNum,UserUtil.getUserFromSession().getUserName());
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    		flag = "1";
+    	}
+    	return flag;
+    }
 
 }

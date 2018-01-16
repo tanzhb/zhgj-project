@@ -323,10 +323,13 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						if(data.data == "1"){
 							if(judgeString=='save'){
 								toastr.success("保存成功！");
+								$scope.deliverAdd=true;
+								$scope.deliverView=true;
 							}else{
 								toastr.success("出库成功！");
+								$state.go("delivery");
 							}
-							$state.go("delivery");
+							
 						}else{
 							toastr.error("出库失败！请联系管理员");
 						}
@@ -343,6 +346,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			$scope.cancelStockOut = function(){
 				$state.go("delivery");
 			}
+			/*$scope.editStockOut = function(serialNum){
+				$state.go("stockOut",{serialNum:serialNum});
+			}*/
 			
 			$scope.getWarehouseName = function(type){
 				debugger;
@@ -378,6 +384,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         			$scope.record = data.data.stockInOutRecord; 
         			$scope.deliver = data.data.deliver; 
         			$scope.totalDeliveryCount=data.data.totalDeliveryCount; //发货数量
+        			$scope.deliverAdd=false;
+					$scope.deliverView=false;
         			if($scope.deliver.deliverType!='其他发货'){
         				$scope.otherMode=false
         			}else{

@@ -229,13 +229,19 @@ public class ProcessAction {
 			map.put("taskId", base.getTask().getId());
 			map.put("taskName", base.getTask().getName());
 			map.put("createTime", base.getTask().getCreateTime());
-			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)){
+			if("buyOrder".equals(businessType)||"saleOrder".equals(businessType)||"foreignTradeOrder".equals(businessType)||"FTBuyOrder".equals(businessType)){
 				OrderInfo o=orderService.selectById(base.getBusinessKey());//获取订单详情
 				map.put("num", o==null?"":o.getOrderNum());
-				if("buyOrder".equals(businessType)){
+				if("buyOrder".equals(businessType)||"foreignTradeOrder".equals(businessType)||"FTBuyOrder".equals(businessType)){//采购订单显示关联销售订单号
 					map.put("comName", o==null?"":o.getSupplyName());
+					map.put("saleOrderNum", o.getOrderSerial()==null?"--":o.getOrderSerial());//采购订单关联销售订单号
 				}else {
 					map.put("comName", o==null?"":o.getBuyName());
+				}
+				if("managerAudit5".equals(base.getProcessInstance().getActivityId())){//sunsir审批不许驳回
+					map.put("isReject", false);//没有驳回权限
+				}else{
+					map.put("isReject", true);//有驳回权限
 				}
 				
 			}
