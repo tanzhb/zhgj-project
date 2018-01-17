@@ -551,6 +551,8 @@ public class TakeDeliveryController {
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_BUY));
         			//出库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_SALE));
+        			//出库消息  to 销售组
+        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.OUT_TO_SALE_GROUP));
         			}
         		}else{
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);

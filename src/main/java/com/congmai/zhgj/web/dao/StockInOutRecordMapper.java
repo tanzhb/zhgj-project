@@ -53,6 +53,8 @@ public interface StockInOutRecordMapper  extends GenericDao<StockInOutRecord,Str
 		String  countOutAmountForZijian(String serialNum);//自建库存根据基本物料流水查出库总数
 		String  countInAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查入库总数
 		String  countOutAmountForDaiguan(String serialNum);//代管库存根据基本物料流水查出库总数
+		
+		String  getMaterielZiJianStock(String serialNum);//获取自建库存物料数量
 	    
 	 
 }

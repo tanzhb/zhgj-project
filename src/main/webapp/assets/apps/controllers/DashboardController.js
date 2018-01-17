@@ -21,6 +21,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 	}
     
     $scope.messageView = function(serialNum,objSerial,actionName){
+    	debugger;
 		readMessage(serialNum);
 		if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 			$state.go("buyOrder",{tabHref:'1'});
@@ -32,7 +33,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			||actionName=="outCheckToSale"
 			||actionName=="inCheckToSale"
 			||actionName=="outToSale"
-			||actionName=="inToSale"){
+			||actionName=="inToSale"||actionName=="outToSaleGroup"){
 			$state.go("delivery");
 		}else if(actionName=="delivery"
 			||actionName=="outCheckToBuy"

@@ -16,6 +16,7 @@ import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.dao.InvoiceBillingRecordMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
@@ -40,6 +41,8 @@ public class MaterielServiceImpl implements MaterielService {
     private InvoiceBillingRecordMapper invoiceBillingRecordMapper;
     @Resource
     private OrderInfoMapper orderInfoMapper;
+    @Resource
+    private StockInOutRecordMapper stockInOutRecordMapper;
     
 	@Override
 	public int insert(Materiel model) {
@@ -177,6 +180,12 @@ public class MaterielServiceImpl implements MaterielService {
 		}
 	
 		return materiels;
+	}
+
+	@Override
+	public String getCurrentCount(String serialNum) {
+		
+		return stockInOutRecordMapper.getMaterielZiJianStock(serialNum);
 	}
 
 }

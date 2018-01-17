@@ -180,7 +180,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					||actionName=="outCheckToSale"
 					||actionName=="inCheckToSale"
 					||actionName=="outToSale"
-					||actionName=="inToSale"){
+					||actionName=="inToSale"||actionName=="outToSaleGroup"){
 					$state.go("delivery");
 				}else if(actionName=="delivery"
 					||actionName=="outCheckToBuy"
@@ -190,7 +190,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("takeDelivery");
 				}else if(actionName=="shoukuan"){
 					$state.go("gatheringMoneyRecord");
-				}else if(actionName=="inToBuyToSale"){
+				}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"){
 					$state.go("saleOrder");
 				}
 			}

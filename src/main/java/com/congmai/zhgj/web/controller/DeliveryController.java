@@ -114,6 +114,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
@@ -219,6 +220,8 @@ public class DeliveryController {
 	    private ClauseDeliveryService clauseDeliveryService;
 	  @Resource
 	    private ProcessBaseService processBaseService;
+	  @Resource
+	    private MaterielService materielService;
 	 
 	
 	 /**
@@ -1212,7 +1215,16 @@ public class DeliveryController {
 		}
 		if(!StringUtils.isEmpty(delivery.getWarehouseSerial())){
 			Warehouse w=warehouseService.selectOne(delivery.getWarehouseSerial());
-//			delivery.set
+		}
+		StockInOutRecord sir=deliveryService.selectStockInOutRecordByDeliveryId(delivery.getSerialNum());//查找关联的已出库出库单信息
+		if(sir!=null){
+			delivery.setTransportType(sir.getTransportType());
+			delivery.setTransport(sir.getTransport());
+			delivery.setShipNumber(sir.getShipNumber());//transportContact  transportContactNum  transportRemark
+			delivery.setTransportContact(sir.getTransportContact());
+			delivery.setTransportContactNum(sir.getTransportContactNum());
+			delivery.setTransportRemark(sir.getTransportRemark());
+			map.put("hasOutData", true);
 		}
 		map.put("delivery", delivery);
 
@@ -2015,7 +2027,8 @@ public class DeliveryController {
     						  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
     						  OrderMateriel om=orderMaterielService.selectById(vo.getOrderMaterielSerialNum());
     						  BigDecimal canApplyCount=new BigDecimal(om.getAmount()).subtract(new BigDecimal(om.getApplyCount()==null?"0":om.getApplyCount()));//可申请数量=物料数量-已申请数量
-    						  if(deliverCount.compareTo(canApplyCount)>0){
+    						  BigDecimal currentCount=new BigDecimal(materielService.getCurrentCount(om.getMaterielSerial()));//该物料实时自建库存数量
+    						  if(deliverCount.compareTo(canApplyCount)>0||deliverCount.compareTo(currentCount)>0){
     							  flag=true;
     							  map.put("flag", flag);
     							  return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);

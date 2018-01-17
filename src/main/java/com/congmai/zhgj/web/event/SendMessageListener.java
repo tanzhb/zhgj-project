@@ -48,7 +48,7 @@ import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
-//import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
+import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
 /**
  * 
  * @ClassName SendMessageListener
@@ -89,7 +89,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	private StockInOutCheckService stockInOutCheckService = null;
 
 	private void initService(){
-		//messageProcessor = (MessageProcessor) ApplicationContextHelper.getBean(WebSocketProcessor.class);
+		messageProcessor = (MessageProcessor) ApplicationContextHelper.getBean(WebSocketProcessor.class);
 		messageService =  ApplicationContextHelper.getBean(MessageService.class);
 		actRuTaskService = ApplicationContextHelper.getBean(ActRuTaskService.class);
 		userCompanyService = ApplicationContextHelper.getBean(UserCompanyService.class);
@@ -153,6 +153,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			paln2buyMessage(event);
 		}else if(MessageConstants.IN_TO_STOCK.equals(event.getAction())){ 
 			in2stockMessage(event);
+		}else if(MessageConstants.OUT_TO_SALE_GROUP.equals(event.getAction())){ //出库(to 销售组)
+			outToSaleGroupMessage(event);
 		}
 
 	}
@@ -1517,7 +1519,48 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		}
 
 	}
-	
+	/**
+	 * 
+	 * @Description (确认出库消息  to 销售组)
+	 * @param event
+	 */
+	private void outToSaleGroupMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				TakeDeliveryParams takeDeliveryParams = (TakeDeliveryParams) event.getSource();
+
+				Properties properties = new Properties();
+				DeliveryVO delivery=deliveryService.selectDetailById(takeDeliveryParams.getRecord().getDeliverSerial());
+				Integer count = 0;
+				for(DeliveryMateriel dm : takeDeliveryParams.getDeliveryMateriels()){
+					count += Integer.parseInt(dm.getStockCount()==null?"0":dm.getStockCount());
+				}
+				List<User> users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_OUT_TO_SALE_GROUP); //出库
+							messageVO.setObjectSerial(takeDeliveryParams.getRecord().getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", delivery.getDeliverNum());
+							properties.put("paramer_c", count);
+							properties.put("paramer_d", delivery.getOrderNum());
+							properties.put("paramer_e", MessageConstants.URL_OUT_TO_SALE_GROUP);
+							properties.put("paramer_f", messageVO.getSerialNum());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+			}
+		} catch (Exception e) {
+		}
+	}
 	/**
 	 * 
 	 * @Description (构建消息对象)

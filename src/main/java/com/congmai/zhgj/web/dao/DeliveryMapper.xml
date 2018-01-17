@@ -11,6 +11,8 @@
     <result column="amount" property="amount" jdbcType="DATE" />
     <result column="orderMaterielSerialNum" property="orderMaterielSerialNum" jdbcType="VARCHAR"/>
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR"/>
+     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR"/><!--  基本物料流水-->
+    <association property="currentCount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
     <association column="orderMaterielSerialNum" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  /><!-- 根订单物料流水查已发数量 -->
   </resultMap>
        <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.DeliveryMaterielVO" >
@@ -36,6 +38,8 @@
      <result column="takeRemark" property="takeRemark" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="orderMaterielSerialNum" property="orderMaterielSerialNum" jdbcType="VARCHAR"/>
+  	 <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR"/><!--  基本物料流水-->
+    <association property="currentCount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
     <association column="orderMaterielSerialNum" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  /><!-- 根订单物料流水查已发数量 -->
   </resultMap>
     <!--添加发货物料  -->
@@ -148,7 +152,7 @@
     <!--查询订单物料集合  -->
     <select id="selectByExample"  resultMap="BaseResultMap"   parameterType="java.lang.String">
     SELECT
-	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate,o.serialNum as  orderSerial
+	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate,o.serialNum as  orderSerial,b.serialNum as  materielSerial
 	FROM
 	orderMateriel a
 	LEFT JOIN materiel b ON a.materielSerial=b.serialNum
@@ -161,7 +165,7 @@
     SELECT
 	a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,b.amount,a.deliverCount,a.remark,
 	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,a.orderMaterielSerial as orderMaterielSerialNum,b.orderSerial,
-	a.acceptCount,a.refuseCount,a.takeRemark,f.status
+	a.acceptCount,a.refuseCount,a.takeRemark,f.status,b.materielSerial as materielSerial
 	FROM
 	deliveryMateriel a
 	LEFT JOIN orderMateriel b ON a.orderMaterielSerial=b.serialNum

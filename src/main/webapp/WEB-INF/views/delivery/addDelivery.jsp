@@ -1005,6 +1005,7 @@
 														<th>订单数量</th>
 														<th>未发数量</th>
 														<th>发货数量</th>
+														<th ng-if="oprateType=='forSaleOrder'">库存数量</th>
 														<th>备注</th>
 														<th style="width: 100px;">操作</th>
 													</tr>
@@ -1051,24 +1052,46 @@
 															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
 															</p>
 														</td>
-														<td class="form-group"><input type="text"  ng-if="!otherMode"
-															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount-_deliveryMateriel.deliveredCount"
+														<td class="form-group"><input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
 															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
 															/>
+															<input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount!=null"
+															name="deliverCount" id="deliverCount{{$index}}"  
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
+															/>
+															<input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)>_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.currentCount"
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.currentCount}}"
+															/>
+																<input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)>_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount!=null"
+															name="deliverCount" id="deliverCount{{$index}}"  
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.currentCount}}"
+															/>
 															<input type="text"  ng-if="otherMode"
 															name="deliverCount" id="deliverCount{{$index}}"  
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
-															ng-model="deliveryMaterielE[$index].deliverCount"   data-ordercount="otherMode"
+															ng-model="deliveryMaterielE[$index].deliverCount"   data-ordercount="100000000000"
 															 
-															/><!-- ng-blur="getTotalDeliveryCount()"  --><!--  ng-blur="judgeNumber($index)" -->
+															/><!-- ng-blur="getTotalDeliveryCount()"  --><!--  ng-blur="judgeNumber($index)"   -->
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
 																ng-show="orderMaterielShow{{$index}}">
 																{{_deliveryMateriel.deliverCount}}</p></td>
+																<td  ng-if="oprateType=='forSaleOrder'">{{_deliveryMateriel.currentCount}}</td>
 														<td><input type="text" name="deliverRemark{{$index}}"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"

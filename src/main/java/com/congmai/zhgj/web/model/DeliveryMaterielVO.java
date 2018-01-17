@@ -115,6 +115,10 @@ public class DeliveryMaterielVO  {
 	private List<RelationFile> files;
 	
 	 private String  deliveredCount;//已发数量
+	 
+	 private String  currentCount;//当前自建库存数量
+	 
+	 private String materielSerial;//基本物料流水
 	
 	
 
@@ -406,6 +410,22 @@ public class DeliveryMaterielVO  {
 
 	public void setDeliveredCount(String deliveredCount) {
 		this.deliveredCount = deliveredCount;
+	}
+
+	public String getCurrentCount() {
+		return currentCount;
+	}
+
+	public void setCurrentCount(String currentCount) {
+		this.currentCount = currentCount;
+	}
+
+	public String getMaterielSerial() {
+		return materielSerial;
+	}
+
+	public void setMaterielSerial(String materielSerial) {
+		this.materielSerial = materielSerial;
 	}
 
 }

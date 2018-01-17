@@ -149,6 +149,11 @@ public class MessageConstants {
 	 * 出库完成消息(发给供应)
 	 */
 	public static final String OUT_TO_SALE = "outToSale";
+	/**
+	 * 出库完成消息(发给销售组)
+	 */
+	public static final String OUT_TO_SALE_GROUP = "outToSaleGroup";
+	
 	
 	/**
 	 * 入库完成消息(入库完成的采购订单，通知关联的销售订单制单人)
@@ -294,6 +299,10 @@ public class MessageConstants {
 	 * 出库完成消息(发给供应)
 	 */
 	public static final String URL_OUT_TO_SALE = "delivery";
+	/**
+	 * 出库完成消息(发给销售组)
+	 */
+	public static final String URL_OUT_TO_SALE_GROUP = "delivery";
 	/*========================出入库相关消息End==============================*/
 	
 	/*========================出入库检验相关消息Start==============================*/
@@ -448,6 +457,11 @@ public class MessageConstants {
 	 * 入库完成消息(发给采购通知关联的销售订单制单人)
 	 */
 	public static final String TEMP_IN_TO_BUY_TO_SALE = "95";
+	
+	/**
+	 * 出库完成消息(发给销售组)
+	 */
+	public static final String  TEMP_OUT_TO_SALE_GROUP = "96"; 
 	
 	
 	/*===========出入库相关消息End===========*/

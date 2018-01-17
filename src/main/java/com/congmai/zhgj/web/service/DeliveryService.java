@@ -11,6 +11,7 @@ import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.RelationFile;
+import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
 
@@ -242,5 +243,8 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	  public String getDeliveryTotalCount(String serialNum);
 	  
 	  public void  updateDelivery(Delivery delivery);
+	  
+	  public StockInOutRecord  selectStockInOutRecordByDeliveryId(String serialNum );
+	  
 	
 }

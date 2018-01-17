@@ -24,6 +24,7 @@ import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
+import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
@@ -39,6 +40,8 @@ import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockInOutCheck;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.StockInOutRecordExample;
 import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Warehouse;
@@ -86,6 +89,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 	
 	@Resource
 	private Delivery2Mapper delivery2Mapper;
+	
+	@Resource
+	private StockInOutRecordMapper stockInOutRecordMapper;
 
 	@Override
 	public GenericDao<DeliveryMaterielVO, String> getDao() {
@@ -551,4 +557,22 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		delivery2Mapper.updateByPrimaryKeySelective(delivery);
 		
 	}
+
+
+	@Override
+	public StockInOutRecord selectStockInOutRecordByDeliveryId(String serialNum) {
+		StockInOutRecordExample sre=new StockInOutRecordExample();
+		com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c=sre.createCriteria();
+		c.andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum).andStatusNotEqualTo("0");
+		List<StockInOutRecord>list=stockInOutRecordMapper.selectByExample(sre);
+		if(org.springframework.util.CollectionUtils.isEmpty(list)){
+			return null;
+		}else{
+			return list.get(0);
+		}
+		
+		
+	}
+
+
 }

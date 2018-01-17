@@ -43,11 +43,6 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	$scope.delivery.deliverType="贸易发货";
     	$scope.deliver.approvalDate=$filter('date')(new Date(), 'yyyy-MM-dd');
     	getCurrentUser();
-    	if($stateParams.oprateType == "forSaleOrder"){
-    		$scope.confirmDeliverybtn = true;
-		}else if($stateParams.oprateType == "forSupplyOrder"){
-			$scope.confirmDeliverybtn = false;
-		}
 	    	if(!isNull($stateParams.orderSerialNum)){//由订单发货
 				//查找是否已有进行中发货单
     			DeliveryService.getDoingDelivery($stateParams.orderSerialNum).then(
@@ -66,11 +61,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}
 		//根据参数查询对象
     if($stateParams.serialNum){
-    	/*if($stateParams.oprateType == "forSaleOrder"){
+    	if($stateParams.oprateType == "forSaleOrder"){
     		$scope.confirmDeliverybtn = true;
 		}else if($stateParams.oprateType == "forSupplyOrder"){
 			$scope.confirmDeliverybtn = true;
-		}*/
+		}
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     
@@ -79,6 +74,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
     	//$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     	$scope.getDeliveryEditInfo($stateParams.serialNumEdit,$stateParams.taskId, $stateParams.comments);
     }
+    $scope.oprateType=$stateParams.oprateType;
 /*    if($scope.delivery==undefined||$scope.delivery.deliverDate==undefined){
     	
     }*/
@@ -390,8 +386,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             messages: {
             	batchNum:{required:"批次号不能为空！"},
             	manufactureDate:{required:"生产日期不能为空！"},
-            	deliverCount:{required:"发货数量不能为0！",digits:"只能是正整数！"},
-            	deliverCount1:{required:"发货数量不能为0！",digits:"只能是正整数！"},
+            	deliverCount:{required:"发货数量不能为小于0的正整数！",digits:"只能是正整数！"}
             },
             rules: {
             	batchNum:{
@@ -401,9 +396,10 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
             		required:true,
             	},
                 deliverCount:{
-                	required:!0,
+                	required:true,
                 	digits:true,
-                	deliverNumCheck:true
+                	deliverNumCheck:true/*,
+                	deliverNumCheck1:true*/
                 },
             },
             invalidHandler: function(e, t) {
@@ -2212,11 +2208,16 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	
 	          		    	$scope.materielCount=data.orderMateriel.length;
 	          		    	var totalOrderCount=0,totalDeliveryedCount=0,totalUnDeliveryCount=0;
+	          		    	var array=new Array();
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
-	          		    		totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
-	          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);
-	          		    		totalUnDeliveryCount+=Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
+	          		    		if($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount!=0){//未发数量不为0,统计
+	          		    			totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
+		          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);
+		          		    		totalUnDeliveryCount+=Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
+	          		    			array.push($scope.deliveryMaterielE[i]);
+	          		    		}
 	          		    	}
+	          		    	$scope.deliveryMaterielE=array;
 	          		    	$scope.totalOrderCount=totalOrderCount;
 	          		    	$scope.totalDeliveryCount=totalOrderCount-totalDeliveryedCount;
 	          		    	$scope.totalUnDeliveryCount=totalUnDeliveryCount;
@@ -2410,6 +2411,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		     function(data){
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
+			          		    	if(data.hasOutData){//已出过库
+			          		    		$scope.showTransport=true;//显示运输信息
+			          		    	}
 			          		    	$scope.delivery={};
 			          		    	$scope.flag=false;
 			          		    	$scope.delivery.serialNum=serialNum;
@@ -2981,13 +2985,13 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             focusInvalid: !1,
             ignore: "",
             messages: {
-            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
+            	deliverCount:{required:"发货数量必须为大于等于0的正整数！",digits:"发货数量必须为大于等于0的正整数！"},
             },
             rules: {
             	deliverCount: {
-	                	required: !0,
-	                	digits: !0,
-	                	deliverNumCheck:!0
+	                	required: true,
+	                	digits: true,
+	                	deliverNumCheck:true
 	                }
             },
             invalidHandler: function(e, t) {
@@ -3130,8 +3134,11 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	}
     
 	jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
-		    return element.dataset.ordercount=="otherMode"?false : this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
-		}, "发货数量不能超过未发数量");
+		    return element.dataset.ordercount==undefined?true : this.optional(element) || Number(element.dataset.ordercount)-value >= 0;
+		}, "发货数量不能超过未发数量且不能超过库存数量");
+	/*jQuery.validator.addMethod("deliverNumCheck1", function (value, element) {
+	    return element.dataset.ordercount1==undefined?true : this.optional(element) || Number(element.dataset.ordercount1)-value >= 0;
+	}, "发货数量不能超过库存数量");*/
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
         // 获取已激活的标签页的名称
