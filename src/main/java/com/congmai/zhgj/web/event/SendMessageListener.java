@@ -121,6 +121,14 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			singleAgreeBuyOrderMessage(event);
 		}else if(MessageConstants.NO_TAKE_DELIVERY.equals(event.getAction())){ //采购订单单个审批通过
 			noTakeDeliveryMessage(event);
+		}else if(MessageConstants.APPLY_SALE_ORDER.equals(event.getAction())){ //销售订单被驳回消息
+			refuseBuyOrderMessage(event);
+		}else if(MessageConstants.REFUSE_SALE_ORDER.equals(event.getAction())){ //销售订单审核通过消息
+			agreeBuyOrderMessage(event);
+		}else if(MessageConstants.AGREE_SALE_ORDER.equals(event.getAction())){ //销售订单审批通过
+			confirmBuyOrderMessage(event);
+		}else if(MessageConstants.SINGLE_AGREE_SALE_ORDER.equals(event.getAction())){ //销售订单单个审批通过
+			beConfirmBuyOrderMessage(event);
 		}else if(MessageConstants.TAKE_DELIVERY.equals(event.getAction())){ //收货完成
 			takeDeliveryMessage(event);
 		}else if(MessageConstants.DELIVERY.equals(event.getAction())){ //发货完成

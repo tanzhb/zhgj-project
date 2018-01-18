@@ -37,6 +37,18 @@ public class WebSocketProcessor implements MessageProcessor {
 	private static String message06 = "尊敬的${paramer_a}，您好！</br>${paramer_b}确认接收采购订单&nbsp;${paramer_c}&nbsp;。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>备注：${paramer_f}。</br>祝您工作愉快！";
 	
+		// 销售订单申请消息模板
+		private static String message07 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建销售订单&nbsp;${paramer_c}&nbsp;等待您的审批。"+
+										 "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
+		// 销售订单驳回消息模板
+		private static String message08 = "尊敬的${paramer_a}，您好！</br>您的销售订单&nbsp;${paramer_b}&nbsp;被${paramer_c}驳回审批。"+
+				"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
+		// 销售订单单个节点审核通过消息模板
+		private static String message09 = "尊敬的${paramer_a}，您好！</br>您的销售订单&nbsp;${paramer_b}&nbsp;被${paramer_c}通过审批。"+
+				"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>备注：${paramer_f}。</br>祝您工作愉快！";	
+		// 销售订单订单审核通过消息模板(通知销售订单制单人)
+		private static String message10 = "尊敬的${paramer_a}，您好！</br>您的销售订单&nbsp;${paramer_b}&nbsp;被${paramer_c}通过审批并发布成功。"+
+				"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>备注：${paramer_f}。</br>祝您工作愉快！";
 	
 	
 	//逾期未到货
@@ -121,6 +133,10 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("04", DEFAULT_MSG_TEMPLATE, null, message04);
 		MessageTemplate.register("05", DEFAULT_MSG_TEMPLATE, null, message05);
 		MessageTemplate.register("06", DEFAULT_MSG_TEMPLATE, null, message06);
+		MessageTemplate.register("07", DEFAULT_MSG_TEMPLATE, null, message07);
+		MessageTemplate.register("08", DEFAULT_MSG_TEMPLATE, null, message08);
+		MessageTemplate.register("09", DEFAULT_MSG_TEMPLATE, null, message09);
+		MessageTemplate.register("10", DEFAULT_MSG_TEMPLATE, null, message10);
 		MessageTemplate.register("71", DEFAULT_MSG_TEMPLATE, null, message71);
 		MessageTemplate.register("72", DEFAULT_MSG_TEMPLATE, null, message72);
 		

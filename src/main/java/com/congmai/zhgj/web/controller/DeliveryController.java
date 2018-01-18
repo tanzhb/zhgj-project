@@ -1386,7 +1386,6 @@ public class DeliveryController {
 					result = "任务办理完成！";
 					this.deliveryService.updateBasicInfo(delivery);
 					 goDeliveryWithoutConfirm(serialNum);//直接确认发货
-					 goDeliveryWithoutConfirm(serialNum);//直接确认发货
 				}
 			}else{
 				delivery.setReason(content);

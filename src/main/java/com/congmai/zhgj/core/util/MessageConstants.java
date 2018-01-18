@@ -52,7 +52,25 @@ public class MessageConstants {
 	 */
 	public static final String BE_CONFIRM_BUY_ORDER = "beConfirmBuyOrder";
 	/*========================销售订单相关消息End==============================*/
+	/**
+	 * 销售订单申请消息
+	 */
+	public static final String APPLY_SALE_ORDER = "applySaleOrder";
 	
+	/**
+	 * 销售订单被驳回
+	 */
+	public static final String REFUSE_SALE_ORDER = "refuseSaleOrder";
+	
+	/**
+	 * 销售订单单个节点通过审核
+	 */
+	public static final String SINGLE_AGREE_SALE_ORDER = "singleAgreeSaleOrder";
+	
+	/**
+	 * 销售订单通过审核
+	 */
+	public static final String AGREE_SALE_ORDER = "agreeSaleOrder";
 	/**
 	 * 销售订单分解采购计划（发给采购发布人员）
 	 */
@@ -372,7 +390,22 @@ public class MessageConstants {
 	/*========================采购订单相关消息End==============================*/
 	
 	/*========================销售订单相关消息Start==============================*/
-	//1
+	/**
+	 * 销售订单申请消息模板
+	 */
+	public static final String TEMP_APPLY_SALE_ORDER = "07"; 
+	/**
+	 * 销售订单驳回消息模板
+	 */
+	public static final String TEMP_REFUSE_SALE_ORDER = "08"; 
+	/**
+	 * 销售订单单个节点审核通过消息模板
+	 */
+	public static final String TEMP_SINGLE_AGREE_SALE_ORDER = "09"; 
+	/**
+	 * 销售订单审核通过消息模板(通知销售订单制单人)
+	 */
+	public static final String TEMP_AGREE_SALE_ORDER = "10"; 
 	
 	/*========================销售订单相关消息End==============================*/
 	

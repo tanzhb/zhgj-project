@@ -54,8 +54,12 @@ public enum StaticConst {
 	DAILIBUY("dailiBuy", "委托采购"),
 
 	ZIZHUBUY("zizhuBuy", "自主采购"),
+	
+	SERVICEBUY("serviceBuy", "服务采购"),
 
 	ZIZHUSALE("zizhuSale", "自主销售"),
+	
+	SERVICESALE("serviceSale", "服务销售"),
 	/**
 	 * @Field @DAILISALE : TODO(平台名称)
 	 */
