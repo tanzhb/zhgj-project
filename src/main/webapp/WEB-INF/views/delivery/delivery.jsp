@@ -89,9 +89,9 @@
 						</div>
 
 						<div class="portlet-body">
-							<div class="tabbable-custom ">
+<!-- 							<div class="tabbable-custom ">
 								<div class="tab-content">
-									<div class="tab-pane active" id="apply">
+									<div class="tab-pane active" id="apply"> -->
 										<table
 											class="table table-striped table-bordered table-hover table-checkable order-column"
 											id="sample_2">
@@ -122,12 +122,12 @@
 											<tbody>
 											</tbody>
 										</table>
-									</div>
+									<!-- </div>
 									<div class="tab-pane" id="daiban">
 										<div class="row">
 											<div class="col-md-12">
 
-												<!-- BEGIN EXAMPLE TABLE PORTLET-->
+												BEGIN EXAMPLE TABLE PORTLET
 												<div class="portlet box green">
 													<div class="portlet-title" style="height: 50px"></div>
 
@@ -156,7 +156,7 @@
 														</table>
 													</div>
 												</div>
-												<!-- END EXAMPLE TABLE PORTLET-->
+												END EXAMPLE TABLE PORTLET
 											</div>
 										</div>
 									</div>
@@ -164,7 +164,7 @@
 										<div class="row">
 											<div class="col-md-12">
 
-												<!-- BEGIN EXAMPLE TABLE PORTLET-->
+												BEGIN EXAMPLE TABLE PORTLET
 												<div class="portlet box green">
 													<div class="portlet-title" style="height: 50px"></div>
 
@@ -192,12 +192,12 @@
 														</table>
 													</div>
 												</div>
-												<!-- END EXAMPLE TABLE PORTLET-->
+												END EXAMPLE TABLE PORTLET
 											</div>
 										</div>
 									</div>
 								</div>
-							</div>
+							</div> -->
 						</div>
 					</div>
 					<!-- END EXAMPLE TABLE PORTLET-->

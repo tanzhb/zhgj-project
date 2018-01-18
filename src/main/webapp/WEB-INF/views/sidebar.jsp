@@ -180,7 +180,7 @@
 	                    </a>
 	                </li>
                 </shiro:hasPermission> --%>
-                <shiro:hasPermission name="zhgj:buyOrder:*">
+                <shiro:hasPermission name="zhgj:procurementPlan:*">
 	                <li>
 	                    <a ui-sref="procurementPlan">
 	                         采购计划</span>

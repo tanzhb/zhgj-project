@@ -33,6 +33,12 @@
                 <!-- /rest/index = authc --> 
                 <!-- 访问该地址的用户是身份验证通过或RememberMe登录的都可以 -->
             	/** = user 
+            	
+            	/rest/page/buyOrder = perms[zhgj:buyOrder:*]
+                /rest/page/addBuyOrder = perms[buyNormalOrder:add]
+                /rest/page/addBuyOrder = perms[buyNormalOrder:edit]
+                /rest/page/submitBuyApply = perms[buyNormalOrder:add]
+            	
             </value>
         </property>
     </bean>
