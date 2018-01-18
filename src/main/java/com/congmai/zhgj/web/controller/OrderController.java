@@ -594,12 +594,12 @@ public class OrderController {
     			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
     			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
     			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
-    			/*if(BeanUtils.isBlank(pi)){
-    				order.setStatus(BaseVO.APPROVAL_SUCCESS);
-    			}*/
-    			if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
+    			if(BeanUtils.isBlank(pi)){
     				order.setStatus(BaseVO.APPROVAL_SUCCESS);
     			}
+    			/*if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
+    				order.setStatus(BaseVO.APPROVAL_SUCCESS);
+    			}*/
     		}
     		
     		this.processBaseService.update(order);
@@ -644,8 +644,8 @@ public class OrderController {
 				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
 				//给制单人发送消息
 				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
-    			/*if(BeanUtils.isBlank(pi)){*/
-				if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
+    			if(BeanUtils.isBlank(pi)){
+				/*if("managerAudit4".equals(taskDefinitionKey)){*///副总审批节点，流程结束
     				//采购订单审核通过消息
         		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
         		    //采购订单待确认（发给供应商）
