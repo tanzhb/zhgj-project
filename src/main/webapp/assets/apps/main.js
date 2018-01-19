@@ -1973,7 +1973,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
 	    .state('userContract', {
 	            url: "/userContract:tabHref",
-	            templateUrl:"rest/page/userContract",
+	            templateUrl: "rest/page/userContract",
 	            data: {pageTitle: '合同管理'},
 	            controller: "ContractController",
 	            resolve: {
@@ -2768,7 +2768,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         .state('stock', {
 	            url: "/stock",
-	            templateUrl:"rest/stock/viewStockList?:stockSerialNum",
+	            templateUrl: "rest/stock/viewStockList?:stockSerialNum",
 	            data: {pageTitle: '库存'},
 	            controller: "StockController",
 	            resolve: {
@@ -2842,7 +2842,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    })   
 		    .state('stockInOutCheck', {
 	            url: "/stockInOutCheck?:inOrOut",
-	            templateUrl:"rest/stockInOut/viewStockInOutCheckList",
+	            templateUrl: "rest/stockInOut/viewStockInOutCheckList",
 	            data: {pageTitle: '出入库检验'},
 	            controller: "StockInOutController",
 	            resolve: {
@@ -3157,7 +3157,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'vacation',
 				{
 					url : "/vacation?tabHref",
-					templateUrl : "rest/page/addVacation",
+					templateUrl: "rest/page/addVacation",
 					data : {
 						pageTitle : '请假'
 					},
@@ -3190,7 +3190,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				})
         .state('invoice', {
             url: "/invoice?:inOrOut",
-            templateUrl:"rest/invoice/viewInvoiceList",
+            templateUrl: "rest/invoice/viewInvoiceList",
             data: {pageTitle: '发票'},
             controller: "InvoiceController",
             resolve: {
@@ -4433,7 +4433,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             url: "/editDeliveryPlanApply?:serialNumEdit&:view",
             params:{"serialNum":null,"taskId":null, "comments":null,"processInstanceId":null},
             templateUrl: "rest/page/editDeliveryPlanApply",
-            data: {pageTitle: '重新编辑订单'},
+            data: {pageTitle: '重新编辑发货计划'},
             controller: "DeliveryController",
             resolve: {
                 deps: ['$ocLazyLoad', function($ocLazyLoad) {

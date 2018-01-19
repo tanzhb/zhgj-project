@@ -48,15 +48,20 @@ Purchase: http://themeforest.net/item/metronic-responsive-admin-dashboard-templa
 <!-- BEGIN BODY -->
 <body class="page-500-full-page">
 <div class="row">
-	<div class="col-md-12 page-500">
-		<div class=" number">
-			 401
+	<div class="col-md-12 page-500" style="background-color:white;hight:100%;width: 100%;">
+		<div style="position: absolute;left: 100px;top:100px">
+			<div class=" number" style="color:#F00">
+				 401
+			</div>
+			<div class=" details">
+				<h3>未授权</h3>
+				<p>
+					请联系管理员授予相应操作权限.<br/><br/>
+				</p>
+			</div>
 		</div>
-		<div class=" details">
-			<h3>未授权</h3>
-			<p>
-				Please come back in a while.<br/><br/>
-			</p>
+		<div align="center">
+			<img src="assets/global/img/401.gif"  alt="没有权限时我就出来了，：）.">
 		</div>
 	</div>
 </div>

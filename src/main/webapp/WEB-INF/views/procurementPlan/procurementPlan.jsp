@@ -41,7 +41,7 @@
 										ui-sref="addProcurementPlan"> <i class="fa fa-plus"></i> 添加
 									</label>
 								</shiro:hasPermission> --%>
-								<shiro:hasPermission name="buyNormalOrder:edit">
+								<shiro:hasPermission name="procurementPlan:edit">
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="editProcurementPlan()"> <i class="fa fa-edit"></i>
 										修改
@@ -52,7 +52,7 @@
 										ng-click="copyOrder()"> <i class="fa fa-plus"></i> 复制
 									</label>
 								</shiro:hasPermission> --%>
-									<shiro:hasPermission name="buyNormalOrder:delete">
+									<shiro:hasPermission name="procurementPlan:delete">
 										<label class="btn btn-transparent red btn-circle btn-sm"
 											ng-click="deleteProcurementPlan()"> <i class="fa fa-minus"></i>
 											删除
