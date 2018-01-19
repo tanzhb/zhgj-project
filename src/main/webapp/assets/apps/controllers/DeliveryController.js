@@ -59,13 +59,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                		 );
 			}
 		}
-		//根据参数查询对象
-    if($stateParams.serialNum){
-    	if($stateParams.oprateType == "forSaleOrder"){
+		if($stateParams.oprateType == "forSaleOrder"){
     		$scope.confirmDeliverybtn = true;
 		}else if($stateParams.oprateType == "forSupplyOrder"){
-			$scope.confirmDeliverybtn = true;
+			$scope.confirmDeliverybtn = false;
 		}
+		//根据参数查询对象
+    if($stateParams.serialNum){
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     

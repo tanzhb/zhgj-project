@@ -21,7 +21,6 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 	}
     
     $scope.messageView = function(serialNum,objSerial,actionName){
-    	debugger;
 		readMessage(serialNum);
 		if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 			$state.go("buyOrder",{tabHref:'1'});
@@ -50,6 +49,12 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("procurementPlan");
 		}else if(actionName=="paln2buy"){
 			$state.go("buyOrder");
+		}else if(actionName=="in2WaitCheck"){
+			$state.go("stockInOutCheck");
+		}else if(actionName=="clearance"){
+			$state.go("customsClearanceForm");
+		}else if(actionName=="declaration"){
+			$state.go("customsDeclarationForm");
 		}
 	}
     $scope.changeReadFlg = function(serialNum,readFlg){

@@ -209,9 +209,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
    			tmateriel.setAcceptCount(materiel.getDeliverCount());
    			deliveryMaterielMapper.insert(tmateriel);
 		}
-		
+		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购商提货
 		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
-		
+		}
 		
 	}
 	
@@ -283,7 +283,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	   			tmateriel.setAcceptCount(materiel.getDeliverCount());
 	   			deliveryMaterielMapper.insert(tmateriel);
 		}
-		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
+		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购商提货
+			confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
+		}
+		
 	}
 	@Override
 	public  void  confirmDelivery(Delivery delivery,
@@ -310,8 +313,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				map.put("serialNum", delivery.getSerialNum());
 				map.put("currenLoginName", currenLoginName);
 				map.put("orderSerial", delivery.getOrderSerial());
-				deliveryService.createCustomsClearanceForm(map);
-				orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
+				deliveryService.createCustomsClearanceForm(map);//内有清关提醒消息
+				orderInfo.setDeliverStatus(OrderInfo.CLEARANCE);
 				
 				delivery1.setStatus(DeliveryVO.WAIT_OUT);//待清关
 				takeDelivery.setStatus(TakeDelivery.WAIT_Cearance);//收货单更新为待清关
@@ -322,9 +325,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
 					if(takeDelivery!=null){
 						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
-						this.createStockInCheckRecord(takeDelivery,currenLoginName);
+						this.createStockInCheckRecord(takeDelivery,currenLoginName);//内有检验提醒
 						orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
 						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
+						
 					}
 				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
 					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
@@ -773,7 +777,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
     		customsForm.setPlayArrivalDate(deliveryTransport==null?null:deliveryTransport.getPlayArrivalDate());
     		customsForm.setPort(deliveryTransport==null?null:deliveryTransport.getPort());
     		customsFormMapper.insert(customsForm);
-			
+    		//报关消息通知销售订单制单人
+        	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(customsForm,MessageConstants.IN_TO_CUSTOMSFORM));
 		}
 	public  List<String> removeDuplicate(List<String> list) 
 
@@ -943,6 +948,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdater(currenLoginName);
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
+		//入库检验通知仓储人员/采购
+    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.IN_TO_WAITCHECK));
 		
 		/*//更改订单 
 		OrderInfo orderInfo = new OrderInfo();
@@ -985,6 +992,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		check.setUpdater(currenLoginName);
 		check.setUpdateTime(new Date());
 		stockInOutCheckMapper.insert(check);
+		//出库检验通知仓储人员/采购
+    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(check,MessageConstants.IN_TO_WAITCHECK));
 	}
 	
 	/**

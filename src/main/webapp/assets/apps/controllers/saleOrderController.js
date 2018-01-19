@@ -4669,7 +4669,6 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            { mData: 'deliverDate'},
 		 							                            { mData: 'transportType'},
 		 							                            { mData: 'status',
-
 		 					                            	mRender:function(data){
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='0'){
@@ -4693,12 +4692,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 																	}else if(data=='7'){
 		 																		return '<span  class="label label-sm label-warning ng-scope">待报关</span>';
 		 																	}else if(data=='8'){
-		 																		return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
+		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
 		 																	}else if(data=='9'){
-		 																		return '<span  class="label label-sm label-warning ng-scope">待入库</span>';
+		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
 		 																	}else if(data=='10'){
 		 																		return '<span  class="label label-sm label-warning ng-scope">待收货</span>';
-		 																	}else if(data=='00'){
+		 																	}else if(data=='00'||data=='100'){
 		 																		return '<span  class="label label-sm label-warning ng-scope">待申请</span>';		
 		 																	}else{
 		 																		return '';

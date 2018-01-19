@@ -204,7 +204,7 @@
 										class="fa fa-edit"></i> 修改提货
 									</label>  
 										<label class="btn btn-transparent yellow btn-circle btn-sm"
-									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认提货
+									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发布提货
 								</label>
 							<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"

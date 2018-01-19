@@ -4463,7 +4463,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        	});
 			        }
 			        
-			      //确认提货
+			      //确认发布提货
 					$scope.jumpToConfirm = function() {	
 						
 						var id_count = $('#takeDeliveryTable input[name="serialNum"]:checked').length;
@@ -4478,7 +4478,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						}
 					};
 			        /**
-			         * 确认提货/保存提货
+			         * 确认发布提货/保存提货
 			         */
 					$scope.saveTakeDelivery = function(number) {
 						if($('#takeDeliveryForm').valid()){
@@ -4505,7 +4505,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 								if(number==0){//保存代发货
 									$scope.deliver.status="0";//待提货
 								}else{
-									$scope.deliver.status="1";//确认提货
+									$scope.deliver.status="100";//确认发布提货
 								}
 								params.delivery = $scope.deliver;
 								params.deliveryTransport = $scope.deliverTransport;
@@ -4560,7 +4560,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 											$scope.deliver=data.data.delivery;
 											$scope.deliverAdd=true;
 											$scope.deliverView=true;
-										}else{toastr.success("确认提货成功！");
+										}else{toastr.success("确认发布提货成功！");
 										$state.go("customerOrder");
 										}
 										handle.unblockUI();

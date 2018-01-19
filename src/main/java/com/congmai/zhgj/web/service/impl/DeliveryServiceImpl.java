@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
@@ -27,6 +28,8 @@ import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
@@ -497,6 +500,8 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		customsForm.setPlayArrivalDate(deliveryTransport==null?null:deliveryTransport.getPlayArrivalDate());
 		customsForm.setPort(deliveryTransport==null?null:deliveryTransport.getPort());
 		customsFormMapper.insert(customsForm);
+		//清关消息通知采购订单制单人
+    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(customsForm,MessageConstants.IN_TO_CUSTOMSFORM));
 		
 		
 	}

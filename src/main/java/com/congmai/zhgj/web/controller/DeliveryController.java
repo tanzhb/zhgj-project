@@ -495,6 +495,8 @@ public class DeliveryController {
 					stockInOutRecord.setUpdater(currenLoginName);
 					stockInOutRecord.setUpdateTime(new Date());
 					stockInOutRecordMapper.insert(stockInOutRecord);
+					//出库消息通知仓储人员
+			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
 					//更新订单状态至待出库
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
 					delivery1.setStatus(DeliveryVO.WAITRECORD);
@@ -516,6 +518,8 @@ public class DeliveryController {
 					stockInOutRecord.setUpdater(currenLoginName);
 					stockInOutRecord.setUpdateTime(new Date());
 					stockInOutRecordMapper.insert(stockInOutRecord);
+					//入库消息通知仓储人员
+			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
 					
 				}
 				
@@ -1924,6 +1928,8 @@ public class DeliveryController {
 						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
 						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
 						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
+						//出库检验通知仓储人员/采购
+				    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_TO_WAITCHECK));
 					}else{
 						//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
 						
@@ -1956,6 +1962,8 @@ public class DeliveryController {
 					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
 					delivery1.setStatus(DeliveryVO.WAITRECORD);
 					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE);
+					//出库通知消息通知仓储人员
+			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
 				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
 					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
 					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
@@ -1973,6 +1981,8 @@ public class DeliveryController {
 					stockInOutRecord.setUpdater(currenLoginName);
 					stockInOutRecord.setUpdateTime(new Date());
 					stockInOutRecordMapper.insert(stockInOutRecord);
+					//出库通知消息通知仓储人员
+			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
 					
 				}
 				
