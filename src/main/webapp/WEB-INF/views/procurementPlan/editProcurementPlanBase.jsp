@@ -212,7 +212,7 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.planCount}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="procurementPlanMateriel[$index].buyCount" ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount')" >
+		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="procurementPlanMateriel[$index].buyCount" ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   ><!--内有验证采购数量不得大于需求数量  -->
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.buyCount}} </p>
                                      		<p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p>
 		                          </td>

@@ -170,6 +170,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			
 			$scope.messageView = function(serialNum,objSerial,actionName){
 				readMessage(serialNum);
+			
 				if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 					$state.go("buyOrder",{tabHref:'1'});
 				}else if(actionName=="confirmBuyOrder"){
@@ -186,12 +187,23 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					||actionName=="outCheckToBuy"
 					||actionName=="inCheckToBuy"
 					||actionName=="outToBuy"
-					||actionName=="inToBuy"){
+					||actionName=="inToBuy"
+					||actionName=="in2stock"){
 					$state.go("takeDelivery");
 				}else if(actionName=="shoukuan"){
 					$state.go("gatheringMoneyRecord");
 				}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"){
 					$state.go("saleOrder");
+				}else if(actionName=="sale2paln"){
+					$state.go("procurementPlan");
+				}else if(actionName=="paln2buy"){
+					$state.go("buyOrder");
+				}else if(actionName=="in2WaitCheck"){
+					$state.go("stockInOutCheck");
+				}else if(actionName=="clearance"){
+					$state.go("customsClearanceForm");
+				}else if(actionName=="declaration"){
+					$state.go("customsDeclarationForm");
 				}
 			}
 			

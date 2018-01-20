@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('StockOutController',['$rootScope','$scope','$state','$http','takeDeliveryService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,takeDeliveryService,$location,$compile,$stateParams,commonService) {
+angular.module('MetronicApp').controller('StockOutController',['$rootScope','$scope','$state','$http','takeDeliveryService','DeliveryService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,takeDeliveryService,DeliveryService,$location,$compile,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -287,7 +287,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					for(var i=0;i < arraySerialNums.length;i++){
 						serialNums=serialNums.concat($scope["arraySerialNums"+arraySerialNums[i]]);
 					}*/
-						var serialNums=$scope["arraySerialNums"+arraySerialNums[m]];
+						var serialNums=new Array();
+						 serialNums=serialNums.concat($scope["arraySerialNums"+deliveryMaterielSerialNums[m]]);
 					for(var i=0;i < serialNums.length;i++){
 						param = {};
 						var arrays=serialNums[i].split(",");
@@ -327,7 +328,23 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 								$scope.deliverView=true;
 							}else{
 								toastr.success("出库成功！");
-								$state.go("delivery");
+								//自动代收货
+								var promise = DeliveryService.goTakeDelivery($scope.record.deliverSerial);
+								promise.then(function(data) {
+									if(data.flag=='0'){
+										$state.go("delivery");
+									}else{
+										toastr.error("确认收货失败！请联系管理员");
+									}
+								
+								}, function(data) {
+									// 调用承诺接口reject();
+									$(".modal-backdrop").remove();
+									handle.unblockUI();
+									toastr.error("发货失败！请联系管理员");
+									console.log(data);
+								});
+								
 							}
 							
 						}else{

@@ -60,7 +60,7 @@
 			                            <!-- <th> 配送 </th> -->
 			                            <th> 采购类型 </th>
 			                            <th> 关联合同 </th>
-			                            <th> 关联采购单 </th>
+			                            <th> 关联采购计划 </th>
 			                            <th> 下单日期 </th>
 			                           <!--  <th> 状态 </th> -->
 			                        </tr>
@@ -204,7 +204,7 @@
 										class="fa fa-edit"></i> 修改提货
 									</label>  
 										<label class="btn btn-transparent yellow btn-circle btn-sm"
-									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认提货
+									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发布提货
 								</label>
 							<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"

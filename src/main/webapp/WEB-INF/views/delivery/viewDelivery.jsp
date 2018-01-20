@@ -29,10 +29,10 @@
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
-								<button type="button" ng-click="goDelivery('takeDelivery')"     ng-if="deliveryDetail.status=='8'||deliveryDetail.status=='10'"
+								<!-- <button type="button" ng-click="goDelivery('takeDelivery')"     ng-if="deliveryDetail.status=='8'||deliveryDetail.status=='10'"
 								class="btn green  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认收货
-							</button>
+							</button> -->
                 
                 </div>
             </div>

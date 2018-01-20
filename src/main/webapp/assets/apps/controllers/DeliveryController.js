@@ -59,13 +59,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
                		 );
 			}
 		}
-		//根据参数查询对象
-    if($stateParams.serialNum){
-    	if($stateParams.oprateType == "forSaleOrder"){
+		if($stateParams.oprateType == "forSaleOrder"){
     		$scope.confirmDeliverybtn = true;
 		}else if($stateParams.oprateType == "forSupplyOrder"){
-			$scope.confirmDeliverybtn = true;
+			$scope.confirmDeliverybtn = false;
 		}
+		//根据参数查询对象
+    if($stateParams.serialNum){
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     
@@ -530,11 +530,25 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			param.supplyMaterielSerial=deliveryMateriel.supplyMaterielSerial;
 			params.deliveryMateriels.push(param);
 		}*/
+		var totalCount=0;
 		for (var i=0;i < $scope.deliveryMaterielE.length;i++){
 			var deliveryMateriel=$scope.deliveryMaterielE[i];
 			if(isNull(deliveryMateriel.deliverCount)){
-				toastr.error("发货数量不能为0！");	
+				toastr.error("发货数量不能为空！");	
 				return;
+			}else if(!isNaN(deliveryMateriel.deliverCount)){
+				if(Number(deliveryMateriel.amount-deliveryMateriel.deliveredCount)<Number(deliveryMateriel.currentCount)){//未发数量小于库存数
+					if(Number(deliveryMateriel.amount-deliveryMateriel.deliveredCount)<Number(deliveryMateriel.deliverCount)){
+						toastr.error("发货数量不能大于未发数量！");	
+						return;
+					}
+				}else{//未发数量大于等于库存数
+					if(Number(deliveryMateriel.currentCount)<Number(deliveryMateriel.deliverCount)){
+						toastr.error("发货数量不能大于库存数量！");	
+						return;
+					}
+				}
+				totalCount+=Number(deliveryMateriel.deliverCount);
 			}
 			deliveryMateriel.deliverSerial=$scope.delivery.serialNum;
 			var attachFile=$("#batchNumReal"+i).text();
@@ -546,6 +560,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			deliveryMaterielorderMaterielSerial:deliveryMateriel.orderMaterielSerialNum,//传整个表单数据  
 			deliveryMateriel.supplyMaterielSerial:deliveryMateriel.supplyMaterielSerial,*/
 			
+		}
+	//判断当前发货单发货总数
+		if(totalCount==0){
+			toastr.error("发货总数量不能为0,当前发货单暂时不能发货！");	
+			return;
 		}
 		handle.blockUI();
 		var promise = DeliveryService.saveAllDeliveryMateriel($scope.deliveryMaterielE);

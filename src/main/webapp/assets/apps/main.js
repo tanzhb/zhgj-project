@@ -2495,7 +2495,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockOutController.js',
 		    				        'assets/apps/service/CommonService.js',
-		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/DeliveryService.js'
 		    				        ]
 		    			});
 		    		}]
@@ -2516,7 +2517,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				        'assets/global/plugins/datatables/datatables.all.min.js',
 		    				        'assets/apps/controllers/StockOutController.js',
 		    				        'assets/apps/service/CommonService.js',
-		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/DeliveryService.js'
 		    				        ]
 		    			});
 		    		}]
@@ -2535,7 +2537,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		    				files: [       
 		    				        'assets/apps/controllers/StockOutController.js',
 		    				        'assets/apps/service/CommonService.js',
-		    				        'assets/apps/service/TakeDeliveryService.js'
+		    				        'assets/apps/service/TakeDeliveryService.js',
+		    				        'assets/apps/service/DeliveryService.js'
 		    				        ]
 		    			});
 		    		}]

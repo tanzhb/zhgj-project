@@ -513,6 +513,9 @@ public class TakeDeliveryController {
         			//入库消息  to 供应
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
         			//入库完成的采购订单，通知关联的销售订单制单人
+        				//1、通知采购订单的制单人
+        				//2、通知关联采购计划的制单人
+        				//3、通知关联销售订单的制单人
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY_TO_SALE));
         			}
         		}else{

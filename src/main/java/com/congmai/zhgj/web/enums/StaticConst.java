@@ -54,8 +54,12 @@ public enum StaticConst {
 	DAILIBUY("dailiBuy", "委托采购"),
 
 	ZIZHUBUY("zizhuBuy", "自主采购"),
+	
+	SERVICEBUY("serviceBuy", "服务采购"),
 
 	ZIZHUSALE("zizhuSale", "自主销售"),
+	
+	SERVICESALE("serviceSale", "服务销售"),
 	/**
 	 * @Field @DAILISALE : TODO(平台名称)
 	 */
@@ -76,6 +80,8 @@ public enum StaticConst {
 	CHEXIAOAPPLY("chexiaoApply", "已撤销"),
 
 	DELTIPS("delPlease", "当前发货单已发货完毕请删除当前发货单!"),
+	
+	BUYGETMERCHANT("buygetmerchant", "采购商提货"),
 
 	CHANGETIPS("changePlease", "请重新编辑发货物料数量后再确认发货!");
 

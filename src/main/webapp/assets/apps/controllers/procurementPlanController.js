@@ -1545,9 +1545,17 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
 	 }
    
-   $scope.clearNoNum = function(obj,attr){
+   $scope.clearNoNum = function(obj,attr,attr1){
     	 //把非数字的都替换掉
     	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
+    	 if(isNull(obj[attr] )){
+    		 obj[attr]=0;
+    		 return;
+    	 }
+    	 if(!isNaN(obj[attr])&&Number(obj[attr])>Number(obj[attr1])){
+    		 toastr.warning('采购数量不得大于需求数量！');
+    		 obj[attr]=0;
+    	 }
     	 
 	 }     
    

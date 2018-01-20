@@ -57,7 +57,6 @@ angular
 										 			getInvoiceInfo($stateParams.inOrOut+"view");//查看发票详情
 									 		}else if(($location.path()=="/invoice")){
 									 			debugger;
-									 			initTabClass()
 									 			if($stateParams.inOrOut=='showout'){
 									 				debugger;
 									 				$("#in").removeClass("active");
@@ -66,13 +65,16 @@ angular
 									 				$("#tab_out").addClass("active");
 									 				loadInvoiceOutTable();
 									 				//加载进销票列表
-									 			}else{
+									 			}else if($stateParams.inOrOut=='showin'){
 									 				$("#in").addClass("active");
 									 				$("#out").removeClass("active");
 									 				$("#tab_in").addClass("active");
 									 				$("#tab_out").removeClass("active")
 									 				loadInvoiceInTable();//加载销项票列表
+									 			}else{
+									 				initTabClass();
 									 			}
+									 				
 										 		}else{
 										 			
 															 $scope.taskId=$stateParams.taskId;

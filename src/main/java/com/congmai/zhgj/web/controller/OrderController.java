@@ -486,6 +486,7 @@ public class OrderController {
 //                message.setStatus(Boolean.TRUE);
 //    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 		    logger.info("processInstanceId: "+processInstanceId);
+		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.APPLY_SALE_ORDER));
 		    flag = "1";
 		} catch (ActivitiException e) {
 //            	message.setStatus(Boolean.FALSE);
@@ -637,20 +638,49 @@ public class OrderController {
     		order.setProcessInstanceId(processInstanceId);
     		//发送消息
     		if(!completeFlag){
-    			//采购订单驳回消息
-    		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_BUY_ORDER));
+			/*	if (StaticConst.getInfo("dailiBuy")
+						.equals(order.getOrderType())
+						|| StaticConst.getInfo("zizhuBuy").equals(
+								order.getOrderType())
+						|| StaticConst.getInfo("serviceBuy").equals(
+								order.getOrderType())){
+					//采购订单驳回消息
+	    		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_BUY_ORDER));
+				}else{//销售订单驳回消息
+	    		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.REFUSE_SALE_ORDER));
+				}*/
+    			
     		}else{
-    			//给中间审批人发消息
-				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
-				//给制单人发送消息
-				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
-    			if(BeanUtils.isBlank(pi)){
-				/*if("managerAudit4".equals(taskDefinitionKey)){*///副总审批节点，流程结束
-    				//采购订单审核通过消息
-        		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
-        		    //采购订单待确认（发给供应商）
-        		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
-    			}
+    			if (StaticConst.getInfo("dailiBuy")
+						.equals(order.getOrderType())
+						|| StaticConst.getInfo("zizhuBuy").equals(
+								order.getOrderType())
+						|| StaticConst.getInfo("serviceBuy").equals(
+								order.getOrderType())){
+    				if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
+        				//采购订单审核通过消息
+            		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
+            		    //采购订单待确认（发给供应商）
+            		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
+        			}else{
+        				//给中间审批人发消息
+        				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));
+        				//给制单人发送消息
+        				//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_BUY_ORDER));
+            			/*if(BeanUtils.isBlank(pi)){*/
+        			}
+				}else{//销售订单发消息
+					if("managerAudit4".equals(taskDefinitionKey)){//副总审批节点，流程结束
+	    				//销售订单审核通过消息
+	        		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_SALE_ORDER));
+	    			}else{
+	    				//给中间审批人发消息
+	    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_SALE_ORDER));
+	    				//给制单人发送消息
+	    				//EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.SINGLE_AGREE_SALE_ORDER));
+	    			}
+				}
+    			
     		}
     		result = "任务办理完成！";
 		} catch (ActivitiObjectNotFoundException e) {
