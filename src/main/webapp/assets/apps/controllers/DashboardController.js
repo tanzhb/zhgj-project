@@ -68,7 +68,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					$("#"+serialNum).html("已读");
 					$("#"+serialNum).css("color","gray");
 				}
-				
+				location.reload();//刷新获取最新消息数量
 			}else if(data.data==1){//修改readFlg失败
 				
 			}
