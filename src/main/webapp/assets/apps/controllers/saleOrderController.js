@@ -4758,7 +4758,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			type, row, meta) {
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='8' ||data=='10'){
-		 							                            				return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">代收货</a>';
+		 							                            				return '';
+		 							                            				//return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">代收货</a>';
 		 							                            			//	return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')"></span>';
 		 							                            			}else{
 		 																		return '';
@@ -4795,7 +4796,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					if(deliveryTable.rows('.active').data().length != 1){
 						showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 					}else{
-						if(deliveryTable.row('.active').data().status== '00'){
+						if(deliveryTable.row('.active').data().status== '00'||deliveryTable.row('.active').data().status== '100'){
 							$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
 						}else showToastr('toast-top-center', 'warning', '该条数据已非初始状态，不能进行修改！')
 					} 
@@ -4823,7 +4824,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    			var ap = deliveryTable.rows('.active').data();
 		    			var ids = '';
 		    			for(i=0;i<ap.length;i++){
-		    				if(ap[i].status != '00'){
+		    				if(ap[i].status != '00'||ap[i].status != '100'){
 		    					showToastr('toast-top-center', 'warning', '所选数据已非初始状态，不能删除！');
 		    					return;
 		    				}
@@ -5103,7 +5104,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						    		   return;
 						    	   }
 				    			var status = deliveryTable.row('.active').data().status;
-				    			 if(status != '00'){
+				    			 if(status != '00'&&status != '100'){
 				    				showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
 				    			}else {
 				    				//调取发货申请判断

@@ -4117,10 +4117,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					                          { mData: 'materielTotalCount' },//物料总数
 		                                    { mData: 'packageCount' },
 		                                    { mData: 'packageType' },
-		                                    { mData: 'warehouse' },
+		                                    { mData: 'deliverAddress' },
 		                                    { mData: 'deliverDate' },
 		                                    { mData: 'deliveryTransport.transportType' },
-		                                    { mData: 'takeDelivery.warehouse.address' },
+		                                    { mData: 'takeDelivery.takeDeliverAddress' },
 		                                    { mData: 'takeDelivery.remark' },
 		                                    { mData: 'status' }
 		                              ],
@@ -4169,7 +4169,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	  								return row.docNum;
 		    	
 		      							}
-		      						},{
+		      						}/*,{
 		      							'targets' : 7,
 		      							'render' : function(data,
 		      									type, row, meta) {
@@ -4179,7 +4179,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	  								return '';
 		    	
 		      							}
-		      						},{
+		      						}*/,{
 		      							'targets' : 9,
 		      							'render' : function(data,
 		      									type, row, meta) {
@@ -4238,6 +4238,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      										return '<span  class="label label-sm label-success ng-scope">待清关</span>';
 		      									}else if(data=="8"){
 		      										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
+		      									}else if(data=="100"){
+		      										return '<span  class="label label-sm label-success ng-scope">待申请</span>';
 		      									}
 		      							}
 		      						}]
