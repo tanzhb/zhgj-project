@@ -211,7 +211,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					map['template'] = "<li><div class='col-md-7'>" +
 					"<a ui-sref='saleOrder({tabHref:4})'>" +//tabHref:1将tab指向“待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
-					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				}
 				list.push(map);
 			}
