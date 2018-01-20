@@ -123,6 +123,15 @@ function timeStamp2String (time){
      if(second < 10){
     	 second = '0' + second;
      }
+     if(month < 10){
+    	 month = '0' + month;
+     }
+     if(date < 10){
+    	 date = '0' + date;
+     }
+     if(hour < 10){
+    	 hour = '0' + hour;
+     }
      return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second;
 };
 function timeStamp2ShortString (time){

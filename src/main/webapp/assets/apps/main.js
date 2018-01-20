@@ -5347,7 +5347,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    	if(data.length>20){
 	    		window.location = ctx + "/rest/page/login";
 	    	}else{
-	    		$rootScope.businessMessageSize = data; 
+	    		$rootScope.businessMessageSize = Number(data); 
 	    	}
 	    },function(error){
 	         toastr.error('连接服务器出错,请登录重试！');
@@ -5400,7 +5400,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			    	if(workflowType=='salePrice'||workflowType=='accountPayable'||workflowType=='delivery'){
 			    		$rootScope.dbsLength1 = data; 
 			    	}else{
-			    		$rootScope.dbsLength = data; 
+			    		$rootScope.dbsLength = Number(data); 
 			    	}
 			    	 //调用承诺接口resolove()
 			    },function(error){

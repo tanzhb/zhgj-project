@@ -315,44 +315,44 @@ angular
 														ajax : tableAjaxUrl,// 加载数据中检验表数据
 
 														"aoColumns" : [
-																{
-													mData : 'serialNum',
-					                            	  mRender : function(
-																data,
-																type,
-																row,
-																meta) {
-															return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-																	"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
-																	"<span></span></label>";
-														}
-													},
-													 {
-														mData : 'checkNum'
-													},  {
-														mData : 'deliverNum'
-													},{
-														mData : 'relationSaleNum'
-													}, {
-														mData : 'materialNum'
-													},{
-														mData : 'totalQualifiedCount'
-													}, {
-														mData : 'totalUnQualifiedCount'
-													},  { 
-														mData : 'checkDate',
-														mRender:function(data){
-						                            		if(data!=""&&data!=null){
-						                            			return timeStamp2ShortString(data);
-						                            		}else{
-						                            			return "";
-						                            		}
-						                            	}
-													}, {
-														mData : 'checker'
-													},{
-														mData : 'status'
-													}
+															{
+															mData : 'serialNum',
+							                            	  mRender : function(
+																		data,
+																		type,
+																		row,
+																		meta) {
+																	return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+																			"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
+																			"<span></span></label>";
+																}
+															},
+															 {
+																mData : 'checkNum'
+															},  {
+																mData : 'takeDeliverNum'
+															},{
+																mData : 'relationBuyNum'
+															}, {
+																mData : 'materialNum'
+															},{
+																mData : 'totalQualifiedCount'
+															}, {
+																mData : 'totalUnQualifiedCount'
+															}, { 
+																mData : 'checkDate',
+																mRender:function(data){
+								                            		if(data!=""&&data!=null){
+								                            			return timeStamp2ShortString(data);
+								                            		}else{
+								                            			return "";
+								                            		}
+								                            	}
+															}, {
+																mData : 'checker'
+															},{
+																mData : 'status'
+															}
 															],
 														'aoColumnDefs' : [ {
 															'targets' : 0,
@@ -374,7 +374,7 @@ angular
 															'targets' : 1,
 															'render' : function(data,
 																	type, row, meta) {
-																return '<a   ng-click="showStockInOutCheckInfo(\''+row.serialNum+'\',\''+judgeString+'\' )">'+data+'</a>';
+																return '<a   ng-click="showStockInOutCheckInfo(\''+row.serialNum+'\',\''+judgeString+'\')">'+data+'</a>';
 																//return data;
 															},"createdCell": function (td, cellData, rowData, row, col) {
 																 $compile(td)($scope);
