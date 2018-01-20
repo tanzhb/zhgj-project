@@ -625,65 +625,108 @@
          </div>
          <!-- 发货计划---end -->
           <!-- 收款计划---end -->
+          <!-- 付款计划---end -->
         <div class="tab-pane" id="tab_15_4">
         	<div class="row">
-				<div class="col-md-12">
-					<!-- BEGIN EXAMPLE TABLE PORTLET-->
-					<div class="portlet light">
-						<div class="portlet-title">
-							<div class="caption"></div>
-							<div class="actions">
-								<div class="btn-group btn-group-devided"
-									data-toggle="buttons" id="buttons">
-									<label class="btn btn-transparent green btn-circle btn-sm"
-										ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
-										代发货
-									</label><label class="btn btn-transparent yellow btn-circle btn-sm"
-									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认代发货
-								</label> <label class="btn btn-transparent purple btn-circle btn-sm"
-										ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i>
-										修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
-										ng-click="takeDeliveryDelete()"> <i
-										class="fa fa-minus"></i> 删除
-									</label> <label
-										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
-										ng-click="exportTakeDelivery()"> <i
-										class="fa fa-file-excel-o"></i> 导出
-									</label>
-								</div>
-							</div>
+	<div class="col-md-12">
+
+		<script type="text/javascript">
+
+		function MyCtrl($rootScope, $scope, $location,$stateParams) {
+			  $scope.jumpToUrl = function(path) {
+				  $location.path(path);
+				  initPageBar($rootScope, path);
+			  };
+			}
+		
+		</script>
+
+		<!-- BEGIN EXAMPLE TABLE PORTLET-->
+		<div class="portlet light">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="fa fa-globe font-green"></i>
+					<span class="caption-subject font-green bold uppercase">收款计划列表</span>
+				</div>
+				<div class="actions" ng-controller='MyCtrl' id="buttons">
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPayForSaleOrder')"><i class="fa fa-plus"></i> 添加</label>
+									
+				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
+									
+									
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPay()"> <i class="fa fa-minus"></i> 删除</label>
+									
+				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				</div>
+			</div>
+
+			<div id="delUsersModal" class="modal fade" tabindex="-1"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title">确认</h4>
 						</div>
-						<table
-							class="table table-striped table-bordered table-hover table-checkable order-column"
-							id="takeDeliveryTable">
-							<thead>
-								<tr>
-									<th style="text-align: center"><label
-										class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-											<input type="checkbox" class="group-checkable"
-											data-set="#takeDeliveryTable .checkboxes" /> <span></span>
-									</label></th>
-									<!-- <th>收货单编号</th> -->
-										<th style="white-space: nowrap;">收货计划号</th>
-														<th style="white-space: nowrap;">关联采购单号</th>
-														<th style="white-space: nowrap;">发货方</th>
-														<th style="white-space: nowrap;">发货数量</th>
-														<th style="white-space: nowrap;">交付方式</th>
-														<th style="white-space: nowrap;">发货/提货地址</th>
-														<th style="white-space: nowrap;">发货/提货日期</th>
-														<th style="white-space: nowrap;">运输方式</th>
-														<th style="white-space: nowrap;">状态</th>
-														<th style="white-space: nowrap;">操作</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
+						<div class="modal-body">
+							<p>是否删除已选条目?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-dismiss="modal"
+								class="btn dark btn-outline">取消</button>
+							<button type="button" ng-click="confirmDel()" class="btn green">确定
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
+			<div class="portlet-body">
+					<div class="tabbable-custom ">
+						<div class="tab-content">
+							<div class="tab-pane active" id="applyPay">
+								<table
+									class="table table-striped table-bordered table-hover table-checkable order-column"
+									id="sample_4">
+									<thead>
+										<tr>
+											<!-- <th style="text-align: center"><input name="select_all"
+												value="1" id="example-select-all" type="checkbox" /></th> -->
+												
+											<th>
+                                                 <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                                     <input type="checkbox" class="group-checkable" data-set="#sample_4 .checkboxes" />
+                                                     <span></span>
+                                                 </label>
+                                             </th>
+												
+							<th style="white-space: nowrap;">应收帐单号</th>
+							<th style="white-space: nowrap;">收款类型</th>
+							<th style="white-space: nowrap;">币种</th>
+							<th style="white-space: nowrap;">应收金额</th>
+							<th style="white-space: nowrap;">应收日期</th>
+							<th style="white-space: nowrap;">付款方</th>
+							<th style="white-space: nowrap;">实收日期</th>
+							<th style="white-space: nowrap;">实收金额</th>
+							<th style="white-space: nowrap;">是否开票</th>
+							<th style="white-space: nowrap;">状态</th>
+							<th style="white-space: nowrap;">操作</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						
+						</div>
+					</div>
+			</div>
+		</div>
+		<!-- END EXAMPLE TABLE PORTLET-->
+	</div>
+</div>
         </div>
+        <!-- 付款计划---end -->
         <!-- 收款计划---end -->
  </div>
  </div>

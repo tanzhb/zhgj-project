@@ -3752,7 +3752,6 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 								paginate : {
 									"sFirst" : "首页",
 									"sPrevious" : "前一页",
-									"sNext" : "后一页",
 									"sLast" : "尾页"
 								}
 							},
