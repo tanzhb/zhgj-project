@@ -81,7 +81,7 @@ public enum StaticConst {
 
 	DELTIPS("delPlease", "当前发货单已发货完毕请删除当前发货单!"),
 	
-	BUYGETMERCHANT("buygetmerchant", "采购商提货"),
+	BUYGETMERCHANT("buygetmerchant", "采购发货"),
 
 	CHANGETIPS("changePlease", "请重新编辑发货物料数量后再确认发货!");
 

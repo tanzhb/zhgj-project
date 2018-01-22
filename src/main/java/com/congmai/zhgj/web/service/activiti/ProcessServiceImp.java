@@ -716,7 +716,9 @@ public class ProcessServiceImp implements IProcessService{
 
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance;
-        if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
+        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTBUYORDER, businessKey, variables);
+		}else if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
         	if("4a6d7471644248dbb057298d141413ee".equals(orderInfo.getSupplyComId()))//如果是FT公司，走特殊流程
         	{
         		processInstance = runtimeService.startProcessInstanceByKey(Constants.FT_BUY_ORDER, businessKey, variables);
@@ -748,7 +750,12 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEORDER, businessKey, variables);
+        ProcessInstance processInstance=null;
+        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())) {//委托销售内贸
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTSALEORDER, businessKey, variables);
+		}else{
+			processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEORDER, businessKey, variables);
+		}
         String processInstanceId = processInstance.getId();
         orderInfo.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(orderInfo);

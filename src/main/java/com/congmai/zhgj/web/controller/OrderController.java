@@ -404,6 +404,7 @@ public class OrderController {
 		try {
 			OrderInfo orderInfo2 = orderService.selectById(orderInfo.getSerialNum());
 			orderInfo.setSupplyComId(orderInfo2.getSupplyComId());
+			orderInfo.setOrderType(orderInfo2.getOrderType());
 			String processInstanceId = this.processService.startBuyOrderInfo(orderInfo);
 			
 			//申请加入流程已办
@@ -457,7 +458,7 @@ public class OrderController {
     	OrderInfo orderInfo = json2Order(params);
     	orderInfo.setUpdateTime(new Date());
     	orderService.updateStatus(orderInfo);//更新备注
-    	
+    	OrderInfo  o=orderService.selectById(orderInfo.getSerialNum());//获取订单信息
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUserId(user.getUserId());
@@ -470,6 +471,7 @@ public class OrderController {
     	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
+		orderInfo.setOrderType(o.getOrderType());
 		try {
 			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
 			

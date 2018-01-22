@@ -27,7 +27,7 @@
                <div class="tools" style="float:right"><!-- ng-if="deliver.status=='0'" -->
                	<button type="button" ng-click="confirmDelivery()"     ng-if="deliver.status=='0'||deliver.status==undefined"
 								class="btn blue  btn-circle  btn-sm">
-								<i class="fa fa-save"></i> 确认提货
+								<i class="fa fa-save"></i> 确认发布
 							</button>
                 
                 </div>
@@ -331,7 +331,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">预计到货日期</label>
+													<label class="control-label bold">期望到货日期</label>
 													<div class="">
 														<input type="text" name="takeDeliverDate"
 															id="takeDeliverDate" data-date-format="yyyy-mm-dd"

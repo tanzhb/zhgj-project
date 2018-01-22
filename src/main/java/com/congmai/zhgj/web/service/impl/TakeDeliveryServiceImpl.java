@@ -156,7 +156,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		Criteria c2 = example.or();
 		c2.andStatusEqualTo("0");//状态为初始
 		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
-		c2.andDeliverTypeEqualTo("采购商提货");
+		c2.andDeliverTypeEqualTo("采购发货");
 	
 		}else{
 			c.andDeliverBuyComIdIsNull();
@@ -209,7 +209,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
    			tmateriel.setAcceptCount(materiel.getDeliverCount());
    			deliveryMaterielMapper.insert(tmateriel);
 		}
-		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购商提货
+		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
 		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 		}
 		
@@ -283,7 +283,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	   			tmateriel.setAcceptCount(materiel.getDeliverCount());
 	   			deliveryMaterielMapper.insert(tmateriel);
 		}
-		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购商提货
+		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
 			confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 		}
 		

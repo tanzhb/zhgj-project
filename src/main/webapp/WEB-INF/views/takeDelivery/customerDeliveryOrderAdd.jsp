@@ -87,8 +87,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverType">发货类型<span  ng-hide="deliverAdd"  class="required"> * </span></label>
                                                     <div class="">
-                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='采购商提货'"  disabled="disabled"     name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
-	                                                        <option  value="采购商提货" selected="selected" >采购商提货</option>
+                                                        <select class="form-control"  id="deliverType" ng-init="deliver.deliverType='采购发货'"  disabled="disabled"     name="deliverType" ng-model="deliver.deliverType" ng-hide="deliverAdd"  data-size="8">
+	                                                        <option  value="采购发货" selected="selected" >采购发货</option>
 	                                                      <!--   <option  value="个人借用" selected="selected" >个人借用</option> -->
 	                                                    </select>
                                                         <div class="form-control-focus"> </div>
@@ -406,7 +406,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="takeDeliverDate">预计到货日期 </label>
+                                                    <label class="control-label bold" for="takeDeliverDate">期望到货日期 </label>
                                                     <div class="">
                                                         <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="takeDeliverDate"  ng-model="takeDeliver.takeDeliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>

@@ -195,7 +195,7 @@ public class TakeDeliveryController {
     	if("1".equals(noInit)){//不查询初始化状态的发货
     		takeDelivery.setStatus("noInit");
 		}else if("1buy".equals(noInit)){
-			//takeDelivery.setDeliverType("采购商提货");
+			//takeDelivery.setDeliverType("采购发货");
 			takeDelivery.setStatus("noInit");
 		}
     	User user = UserUtil.getUserFromSession();

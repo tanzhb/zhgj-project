@@ -320,7 +320,7 @@
 										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
-										class="fa fa-plus"></i> 添加
+										class="fa fa-plus"></i>发货通知
 									</label> 
 									<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货

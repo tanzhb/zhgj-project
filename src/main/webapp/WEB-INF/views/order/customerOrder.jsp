@@ -197,14 +197,14 @@
 									<!-- <div class="actions" ng-controller='MyCtrl'> --><!--  ng-click="jumpToUrl('addDeliveryforSaleOrder')"-->
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="addDelivery()"> <i
-										class="fa fa-plus"></i> 新增提货
+										class="fa fa-plus"></i> 发货通知
 									</label>  
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="editDelivery()"> <i
-										class="fa fa-edit"></i> 修改提货
+										class="fa fa-edit"></i> 修改
 									</label>  
 										<label class="btn btn-transparent yellow btn-circle btn-sm"
-									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发布提货
+									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发布
 								</label>
 							<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"

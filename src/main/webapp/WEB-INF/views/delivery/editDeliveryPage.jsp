@@ -73,7 +73,7 @@
 											</div>
 											<!--/span-->
 
-											<div class="col-md-4"  ng-if="delivery.status!='100'"><!-- 非采购商提货 -->
+											<div class="col-md-4"  ng-if="delivery.status!='100'"><!-- 非采购发货 -->
 												<div class="form-group">
 													<label class="control-label bold">发货类型<span
 														class="required" aria-required="true"> * </span></label>
@@ -92,17 +92,17 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-md-4"  ng-if="delivery.status=='100'"><!-- 采购商提货 -->
+											<div class="col-md-4"  ng-if="delivery.status=='100'"><!-- 采购发货 -->
 												<div class="form-group">
 													<label class="control-label bold">发货类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														<select class="form-control" id="deliverType"
-															name="deliverType" ng-model="delivery.deliverType"  ng-init="delivery.deliverType='采购商提货'"
+															name="deliverType" ng-model="delivery.deliverType"  ng-init="delivery.deliverType='采购发货'"
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)" disabled="disabled"
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
-															<option   value="采购商提货">采购商提货</option>
+															<option   value="采购发货">采购发货</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
