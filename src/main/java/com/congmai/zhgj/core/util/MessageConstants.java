@@ -589,6 +589,10 @@ public class MessageConstants {
 	 * 销售分解(发给采购计划发布人员)
 	 */
 	public static final String SALE2PLAN = "107";
+	/**
+	 * 销售分解(发给物料消息给采购订单制单人)
+	 */
+	public static final String SALE2BUYORDEROWNER = "19";
 	
 	/**
 	 * 销售分解(发给销售订单制单人)

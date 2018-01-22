@@ -139,7 +139,7 @@ public class WebSocketProcessor implements MessageProcessor {
 	     +"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 	
 	//销售订单分解采购计划，发送计划发布人
-		private static String message107 = "尊敬的${paramer_a}，您好！销售订单号${paramer_b} 已完成分解采购，请及时处理。"+
+		private static String message107 = "尊敬的${paramer_a}，您好！销售订单号${paramer_b} 已完成分解采购，请及时处理发货。"+
 		  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 
 	//采购计划发布发送给采购人员
@@ -161,6 +161,9 @@ public class WebSocketProcessor implements MessageProcessor {
 				//报关发送给仓储人员
 						private static String message18 = "尊敬的${paramer_a}，您好！报关单${paramer_b} 已发布，请及时处理。"+
 						  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+						//自主销售订单分解提醒供应商备货给平台
+						private static String message19= "尊敬的${paramer_a}，${paramer_b}物料需要在${paramer_c}完成入库，数量为${paramer_d}，请及时通知${paramer_e}备货"+
+						  "<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
 	
 	static{
 		MessageTemplate.register("01", DEFAULT_MSG_TEMPLATE, null, message01);
@@ -181,6 +184,7 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("16", DEFAULT_MSG_TEMPLATE, null, message16);
 		MessageTemplate.register("17", DEFAULT_MSG_TEMPLATE, null, message17);
 		MessageTemplate.register("18", DEFAULT_MSG_TEMPLATE, null, message18);
+		MessageTemplate.register("19", DEFAULT_MSG_TEMPLATE, null, message19);
 		
 		MessageTemplate.register("71", DEFAULT_MSG_TEMPLATE, null, message71);
 		MessageTemplate.register("72", DEFAULT_MSG_TEMPLATE, null, message72);

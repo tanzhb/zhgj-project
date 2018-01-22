@@ -995,5 +995,12 @@ billStatus,
     and delFlg = '0'
     limit 1
   </select>
+    <select id="selectUnfinishedBuyOrderList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderInfo
+    WHERE
+	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount
     
+  </select>
 </mapper>

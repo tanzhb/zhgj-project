@@ -34,6 +34,8 @@ public class ProcurementPlan {
     private Date updateTime;
     
     private OrderInfo saleOrder;
+    
+    private  List<ProcurementPlanMateriel> materielList;
 
     public String getSerialNum() {
         return serialNum;
@@ -137,6 +139,14 @@ public class ProcurementPlan {
 
 	public void setProcurementPlanNum(String procurementPlanNum) {
 		this.procurementPlanNum = procurementPlanNum;
+	}
+
+	public List<ProcurementPlanMateriel> getMaterielList() {
+		return materielList;
+	}
+
+	public void setMaterielList(List<ProcurementPlanMateriel> materielList) {
+		this.materielList = materielList;
 	}
     
 }

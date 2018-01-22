@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.event;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,9 +31,12 @@ import com.congmai.zhgj.web.model.DeliveryMaterielExample;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanExample;
+import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -44,8 +48,10 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.GroupService;
+import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.MessageProcessor;
 import com.congmai.zhgj.web.service.MessageService;
+import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.ProcurementPlanService;
@@ -94,6 +100,10 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	private StockInOutCheckService stockInOutCheckService = null;
 	
 	private ProcurementPlanService procurementPlanService = null;
+	
+	private OrderMaterielService orderMaterielService = null;
+	
+	private MaterielService materielService = null;
 
 	private void initService(){
 		messageProcessor = (MessageProcessor) ApplicationContextHelper.getBean(WebSocketProcessor.class);
@@ -109,6 +119,9 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		payService =  ApplicationContextHelper.getBean(PayService.class);
 		stockInOutCheckService =  ApplicationContextHelper.getBean(StockInOutCheckService.class);
 		deliveryMaterielService =  ApplicationContextHelper.getBean(DeliveryMaterielService.class);
+		procurementPlanService=  ApplicationContextHelper.getBean(ProcurementPlanService.class);
+		orderMaterielService=  ApplicationContextHelper.getBean(OrderMaterielService.class);
+		materielService=  ApplicationContextHelper.getBean(MaterielService.class);
 	}
 
 	@Override
@@ -1647,8 +1660,55 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_c", MessageConstants.URL_CONFIRM_SALE_ORDER);
 					properties.put("paramer_d", messageVO.getSerialNum());
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
-					messageService.insertBatch(messageVO);
+					messageProcessor.sendMessageToUser(messageVO);
+					messageService.insert(messageVO);
+					//再通知采购物料关联的采购订单物料(未完成的采购订单)中关联的采购订单制单人
+					List<ProcurementPlanMateriel> materielList = null;
+					materielList = record.getMaterielList();
+					OrderMaterielExample m=new  OrderMaterielExample();
+					com.congmai.zhgj.web.model.OrderMaterielExample.Criteria c=m.createCriteria();
+						if(CollectionUtils.isNotEmpty(materielList)){
+							for( ProcurementPlanMateriel pm:materielList){
+								if(StringUtil.isNotEmpty(pm.getSupplyMaterielSerial())){//取物料供应商id
+									//获取供应商comid为pm.getSupplyMaterielSerial()的未完成的采购订单
+									List<OrderInfo>list=orderService.selectUnfinishedBuyOrderList(pm.getSupplyMaterielSerial());
+									if(CollectionUtils.isNotEmpty(list)){
+										for(OrderInfo orderInfo:list){
+											c.andOrderSerialEqualTo(orderInfo.getSerialNum()).andDelFlgEqualTo("0");
+											List<OrderMateriel>omList=orderMaterielService.selectList(m);
+											for(OrderMateriel om:omList){
+												if(pm.getMaterielSerial().equals(om.getMaterielSerial())){
+													Message messageVO1 = this.createMessage(event,user);
+													Properties properties1 = new Properties();
+													messageVO1.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+													messageVO1.setTempleteType(MessageConstants.SALE2BUYORDEROWNER); //发给采购订单制单人
+													messageVO1.setObjectSerial(orderInfo.getSerialNum());
+													messageVO1.setActionName(MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
+													User maker1 = userService.selectByUsername(orderInfo.getMaker()); //制单人
+													messageVO1.setReceiverId(maker1.getUserId()+"");
+													properties1.put("paramer_a", maker1.getUserName());
+													properties1.put("paramer_b", materielService.selectById(om.getMaterielSerial()).getMaterielName());
+													properties1.put("paramer_c", pm.getDeliveryDate()==null?"":new SimpleDateFormat().format(pm.getDeliveryDate()));
+													properties1.put("paramer_d", pm.getPlanCount());
+													properties1.put("paramer_e", orderInfo.getSupplyName());
+													properties1.put("paramer_f", MessageConstants.URL_CONFIRM_SALE_ORDER);
+													properties1.put("paramer_g", messageVO1.getSerialNum());
+													messageVO1.setProperties(properties1);
+													messageProcessor.sendMessageToUser(messageVO1);
+													messageService.insert(messageVO1);
+													break;
+												}
+											}
+											
+										}
+										
+									}
+									
+								}
+								
+							}
+							
+						}
 				}
 		} catch (Exception e) {
 //			logger.warn(e.getMessage(), e);

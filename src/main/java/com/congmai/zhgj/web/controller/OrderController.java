@@ -2376,7 +2376,7 @@ public class OrderController {
     			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());
     			pMateriel.setCreator(currenLoginName);
     			pMateriel.setUpdater(currenLoginName);
-    			pMateriel.setCreateTime(new Date());
+    			pMateriel.setCreateTime(new Date()); 
     			pMateriel.setUpdateTime(new Date());
     			if(o.getMateriel()!=null&& !CollectionUtils.isEmpty(o.getMateriel().getSupplyMateriels())){
     				pMateriel.setSupplyMaterielSerial((o.getMateriel().getSupplyMateriels()).get(0).getSupplyComId());//设置供应商id
@@ -2397,9 +2397,12 @@ public class OrderController {
 		orderService.updateOrderRelation(updateOrderInfo);
     	
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
-    	
+    	newProcurementPlan.setMaterielList(newMaterielList);//物料list塞入ProcurementPlan中
     	//分解订单发送消息至采购计划操作人
     	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(newProcurementPlan,MessageConstants.SALE_TO_PALN));
+    	
+    	
+    	
 		return orderInfo;
 	}
 	/**

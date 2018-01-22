@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.congmai.zhgj.core.generic.GenericService;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -64,5 +65,7 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 	int pingTaiSubmit(OrderInfo orderInfo);
 	
 	OrderInfo selectByOrderNum(String orderNum);
+	
+	List<OrderInfo> selectUnfinishedBuyOrderList(String comId);//获取未完成的采购订单
 
 }
