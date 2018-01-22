@@ -1688,7 +1688,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 													messageVO1.setReceiverId(maker1.getUserId()+"");
 													properties1.put("paramer_a", maker1.getUserName());
 													properties1.put("paramer_b", materielService.selectById(om.getMaterielSerial()).getMaterielName());
-													properties1.put("paramer_c", pm.getDeliveryDate()==null?"":new SimpleDateFormat().format(pm.getDeliveryDate()));
+													properties1.put("paramer_c", pm.getDeliveryDate()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(pm.getDeliveryDate())); //    
 													properties1.put("paramer_d", pm.getPlanCount());
 													properties1.put("paramer_e", orderInfo.getSupplyName());
 													properties1.put("paramer_f", MessageConstants.URL_CONFIRM_SALE_ORDER);
