@@ -45,7 +45,7 @@
 					</div>
 					<ul class="nav nav-tabs" id="test">
 						<li class="active"><a href="#tab_1_1" class="active"
-							data-toggle="tab"> 待办<dbQuantity/></a></li>
+							data-toggle="tab"> 待办<dballquantity/></a></li>
 						<li><a href="#tab_1_2" data-toggle="tab" ng-click="findEndTask()"> 已办 <ybQuantity/></a></li>
 					</ul>
 				</div>
@@ -58,13 +58,21 @@
 									<div ng-repeat="dbItem in dbItems">
 								         <div compile="dbItem.template"></div>         
 								     </div>
+								     <div ng-repeat="message in unReadMessageList track by message.serialNum">
+										<li style='background-color:#fff'>
+											<div class="col-md-7">
+												<a ng-click="messageView(message.serialNum,message.objectSerial,message.actionName)">
+												<span>{{delHtmlTag(message.context)}}</span></a>
+											</div>
+											<div class="col-md-5">{{message.createTime | date:'yyyy-MM-dd  HH:mm:ss'}}</div></li>
+									</div>
 								</ul>
 								
 							</div>
 								
 						</div>
 						<div class="tab-pane" id="tab_1_2">
-							<div class="scroller" style="height: 610px;" data-always-visible="1" data-rail-visible="0">
+							<div class="scroller" style="height: 620px;" data-always-visible="1" data-rail-visible="0">
 								<ul class="feeds">									
 									 <div ng-repeat="ybItem in ybItems">
 								         <div compile="ybItem.template"></div>         
@@ -126,7 +134,7 @@
 				</div>
 			</div>
 		</div>
-		<div  class="col-md-6 col-sm-5"   style="margin-top: -10px;float:right">
+		<div  class="col-md-6 col-sm-5"   style="margin-top: -10px;float:right;">
 			<div class="portlet light " >
 					<div class="portlet-title">
 					<div class="caption caption-md">
@@ -135,7 +143,8 @@
 							</span> <span class="caption-helper"><span class="badge badge-danger" style="position: relative;top: -10px;"> {{businessMessageSize}} </span></span><!-- 显示公告条数 -->
 					</div>
 				</div>
-				<div  class="scroller" style="height:300px"><!-- class="portlet-body"  -->
+				<div class="portlet-body" style="height:350px">
+				<div  class="scroller" style="height:330px"><!-- class="portlet-body"  -->
 						<div ng-if="messageList==null||messageList.length==0" class="row todo-container">
 							<div class="todo-tasks-container" align="center" style="padding: 0px 20px;border:0px solid #ebf0f5;">
 									暂无消息
@@ -189,6 +198,7 @@
 								</div>
 							</div>
 						</div>
+				</div>
 				</div>
 			</div>
 			</div>

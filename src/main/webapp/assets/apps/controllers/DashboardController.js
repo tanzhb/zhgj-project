@@ -6,8 +6,9 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
         // initialize core components
         App.initAjax();
         handle = new pageHandle();
-        createTableMessage(5,1,true,null);
-        createTable(5,1,true,null)
+        createTableMessage(50,1,true,null);
+        createTable(50,1,true,null);
+        createTableUnReadMessage(50,1,true,null);
     });
 
     // set sidebar closed and body solid layout mode
@@ -145,13 +146,13 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					workflowName = "未命名";
 				}
 				
-				map['template'] = "<li><div class='col-md-7'>" +
+				map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 						"<a ui-sref='"+workflowType+"({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
 								"<span>"+workflowName+"："+title+"</span></a></div>" +
 						"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
 				
 				if(workflowType == 'delivery'){
-					map['template'] = "<li><div class='col-md-7'>" +
+					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='saleOrder({tabHref:3})'>" +//tabHref:1将tab指向“待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
 					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
@@ -160,7 +161,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			}
 		}else{
 			var map = {};
-			map['template'] = "<div>无待办事项！</div>"
+//			map['template'] = "<div>无待办事项！</div>"
 				list.push(map);
 		}
 		$scope.dbItems = list;
@@ -202,13 +203,13 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 				}else{
 					workflowName = "未命名";
 				}
-				map['template'] = "<li><div class='col-md-7'>" +
+				map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 						"<a ui-sref='"+workflowType+"({tabHref:2})'>" +//tabHref:1将tab指向“已办列表”
 						"<span>"+workflowName+"："+title+"</span></a></div>" +
 						"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				
 				if(workflowType == 'delivery'){
-					map['template'] = "<li><div class='col-md-7'>" +
+					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='saleOrder({tabHref:4})'>" +//tabHref:1将tab指向“待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
 					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
@@ -277,6 +278,20 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					message
 	    	).then(function success(result) {
 	    		$scope.messageList = result.data.result;//请求成功
+	        }, function error(err) {
+	            deferred.reject(err);//请求失败
+	        });
+			return deferred.promise;//返回承诺
+		    }
+	 function createTableUnReadMessage(pageSize,pageIndex,init,params){
+			var deferred = $q.defer();
+			var message = {};
+			message.pageSize = pageSize;
+			message.pageIndex = pageIndex;
+			$http.post("rest/message/unReadBusinessMessageList",   
+					message
+	    	).then(function success(result) {
+	    		$scope.unReadMessageList = result.data.result;//请求成功
 	        }, function error(err) {
 	            deferred.reject(err);//请求失败
 	        });

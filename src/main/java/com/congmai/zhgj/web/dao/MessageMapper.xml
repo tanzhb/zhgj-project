@@ -415,7 +415,11 @@
     ,
     <include refid="Blob_Column_List" />
     from message
-    where message_type = #{messageType} and del_flg = '0' and receiver_id = #{receiverId} order by update_time desc limit #{start},#{pageSize}
+    where message_type = #{messageType} and del_flg = '0' and receiver_id = #{receiverId} 
+     <if test="readFlg != null" >
+        and read_flg = #{readFlg,jdbcType=CHAR}
+      </if>
+    order by update_time desc limit #{start},#{pageSize}
   </select>
   
   <select id="countMessageList" parameterType="com.congmai.zhgj.web.model.Message" resultType="java.lang.Integer">

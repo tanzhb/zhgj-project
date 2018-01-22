@@ -153,6 +153,25 @@ public class MessageContoller {
     	}
     	return page;
     }
+    
+    @RequestMapping(value="unReadBusinessMessageList",method=RequestMethod.POST)
+    @ResponseBody
+    public Page<Message> unReadBusinessMessageList(@RequestBody Message message){
+    	Page<Message> page = null;
+    	try{
+    		User user = UserUtil.getUserFromSession();
+    		message.setReadFlg("0");
+    		page = this.messageService.selectBusinessMessageByPage(message, user.getUserId().toString());
+    		if(CollectionUtils.isNotEmpty(page.getResult())){
+    			for(Message n : page.getResult()){
+    				//n.setRelaseDate(DateUtil.getInterval(DateUtil.format("yyyy-MM-dd HH:mm:ss",n.getUpdateTime())));
+    			}
+    		}
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    	}
+    	return page;
+    }
 
     /**
      * @Description (删除消息)
