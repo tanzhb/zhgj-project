@@ -318,7 +318,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageService.insert(messageVO);
 				//向采购订单关联销售订单制单人发消息
 				if(StringUtil.isNotEmpty(order.getOrderSerial())){//获取采购订单关联销售订单
-					OrderInfo o=orderService.selectById(order.getOrderSerial());
+					OrderInfo o=orderService.selectByOrderNum(order.getOrderSerial());
 					User u= userService.selectByUsername(o.getMaker());
 					Message messageVO1 = this.createMessage(event,user);
 					messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);
@@ -1309,7 +1309,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				}
 				
 				if(StringUtils.isNotEmpty(order.getOrderSerial())){ //发给采购对应销售订单制单人
-					OrderInfo saleOrder = orderService.selectById(order.getOrderSerial());//获取销售订单
+					OrderInfo saleOrder = orderService.selectByOrderNum(order.getOrderSerial());//获取销售订单
 					User maker = userService.selectByUsername(saleOrder.getMaker()); //制单人
 					Properties properties = new Properties();
 					//通知采购订单的制单人
