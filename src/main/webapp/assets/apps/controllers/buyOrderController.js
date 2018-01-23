@@ -679,12 +679,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        		}
 								}else if(row.status==2){
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
-										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>'
+										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>'//代发货
 									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
 										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
-											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
+											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
 											}
 									}else if(Number(row.materielCount)==Number(row.deliveryCount)){
 										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
@@ -3842,7 +3842,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 
 		        				buttons : tableButtons,
 		        				dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-		        				order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
+		        				order : [ [ 9, "desc" ] ],// 默认排序列及排序方式
 
 		        				bRetrieve : true,
 		        				lengthMenu : [

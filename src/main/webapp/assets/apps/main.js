@@ -4883,12 +4883,12 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				   if(toParams.type == "edit"){ html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" +  
-				 		"<li><a>修改代发货</a></li>";
+				 		"<li><a>通知发货</a></li>";
 				   }else{
 					   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" +  
-				 		"<li><a>新建代发货</a></li>";
+				 		"<li><a>通知发货</a></li>";
 				   }
 					 
 			   }else if('takeDeliveryView' == toState.name){//查看收货

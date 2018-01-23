@@ -1265,7 +1265,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	approval:{required:"审批人不能为空！"},
 	  						            	approvalDate:{required:"审批日期不能为空！"},
 	  						            	/*dWarehouseSerial:{required:"发货仓库不能为空！"},*/
-	  						            	deliverDate:{required:"发货日期不能为空！"},
+	  						            	/*deliverDate:{required:"发货日期不能为空！"},*/
 	  						            	materielCount:{required:"物料数不能为空！"},
 	  						            	packageCount:{required:"包装件数不能为空！",digits:"包装件数必须为数字！"},
 	  						            	packageType:{required:"包装类型不能为空！"},
@@ -1277,7 +1277,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	/*transport:{required:"运输方不能为空！"},*/
 	  						            	port:{required:"港口不能为空！"},
-	  						            	deliverAddress:{required:"发货地址不能为空！"},
+	  						            	/*deliverAddress:{required:"发货地址不能为空！"},*/
 	  						            	takeDeliverAddress:{required:"收货地址不能为空！"},
 	  						            	/*shipNumber:{required:"运单号不能为空！"},*/
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
@@ -1329,9 +1329,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						               /* dWarehouseSerial: {
 	  						                	required: !0
 	  						                },*/
-	  						                deliverDate: {
+	  						                /*deliverDate: {
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						                materielCount: {
 	  						                	required: !0
 	  						                },
@@ -1368,9 +1368,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                port: {
 	  						                	required: !0
 	  						                },
-	  						              deliverAddress:{
+	  						              /*deliverAddress:{
 	  						                	required: !0
-	  						                },
+	  						                },*/
 	  						            	takeDeliverAddress:{
 	  						                	required: !0
 	  						                },

@@ -276,7 +276,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" > 发货地址<span  ng-hide="deliverAdd"  class="required"> * </span></label>
+                                                    <label class="control-label bold" > 发货地址</label>
                                                   <!--       	<div class=""   ng-if="showSXf!='1'">
 													<div class="input-group"  ng-if="showSXf!='1'">
 															<input type="text" name="deliverAddress"
@@ -341,7 +341,7 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 <span  ng-hide="deliverAdd"  class="required"> * </span></label>
+                                                    <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 </label>
                                                     <div class="">
                                                         <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-hide="deliverAdd" readonly="readonly">
                                                         <div class="form-control-focus"> </div>

@@ -234,7 +234,12 @@ public class ProcessAction {
 				map.put("num", o==null?"":o.getOrderNum());
 				if("buyOrder".equals(businessType)||"foreignTradeOrder".equals(businessType)||"FTBuyOrder".equals(businessType)){//采购订单显示关联销售订单号
 					map.put("comName", o==null?"":o.getSupplyName());
-					map.put("saleOrderNum", o.getOrderSerial()==null?"--":o.getOrderSerial());//采购订单关联销售订单号
+					if(o==null){
+						map.put("saleOrderNum", "--");//采购订单关联销售订单号
+					}else{
+						map.put("saleOrderNum", o.getOrderSerial()==null?"--":o.getOrderSerial());//采购订单关联销售订单号
+					}
+					
 				}else {
 					map.put("comName", o==null?"":o.getBuyName());
 				}
