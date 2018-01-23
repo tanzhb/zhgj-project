@@ -495,6 +495,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							var params = {};
 							if(number==0){//保存代发货
 								$scope.deliver.status=0;
+							}else if(number=="notice"){
+								$scope.deliver.status=10;//通知发货(保存加通知)
 							}else{
 								$scope.deliver.status=1;
 							}
@@ -547,6 +549,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 									$scope.deliver=data.data.delivery;
 									$scope.deliverAdd=true;
 									$scope.deliverView=true;
+								}else if(number=="notice"){
+									toastr.success("通知发货成功！");
+									$state.go("buyOrder");
+									$state.go("buyOrder");
 								}else{toastr.success("代发货成功！");
 								$state.go("buyOrder");
 								}
@@ -2980,6 +2986,96 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        
 			  //********附件  end****************//
 		    		
+		       $scope.selectSaleOrderInfo=function(){
+		    	   if(isNull($scope.deliver.orderNum)){
+		    		   toastr.error("请先选泽采购订单!");
+		    		   return;
+		    	   }else{
+		    		   loadSaleTable();
+		    	   }
+		   		
+		   	}
+		   	//销售订单列表
+		   	var saleTable;
+		   	var loadSaleTable= function() {
+		   		var orderSerial=$scope.deliver.orderSerial;//传入采购订单流水
+		   		a = 0;
+		   		 if(saleTable!=undefined){
+		   			 saleTable.destroy();
+		   		    	 }
+		   		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+		   		saleTable= $("#saleOrder")
+		   		.DataTable({
+		   			language: {
+		   				aria: {
+		   					sortAscending: ": 以升序排列此列",
+		   					sortDescending: ": 以降序排列此列"
+		   				},
+		   				emptyTable: "空表",
+		   				info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		   				infoEmpty: "没有数据",
+		   				// infoFiltered: "(filtered1 from _MAX_ total entries)",
+		   				lengthMenu: "每页显示 _MENU_ 条数据",
+		   				search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+		   				zeroRecords: "抱歉， 没有找到！",
+		   				paginate: {
+		   					"sFirst": "首页",
+		   					"sPrevious": "前一页",
+		   					"sNext": "后一页",
+		   					"sLast": "尾页"
+		   				}
+		   			},
+		   			order: [[1, "desc"]],// 默认排序列及排序方式
+		   			searching: true,// 是否过滤检索
+		   			ordering:  true,// 是否排序
+		   			lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+		   			pageLength: 5,// 每页显示数量
+		   			processing: true,// loading等待框
+		   			//"rest/invoice/getMaterielList?orderSerial="+orderSerial+"&deliverSerial="+deliverSerial
+		   			ajax:"rest/order/findOrderListForPtdfh?orderSerial="+orderSerial,
+		   			"aoColumns": [
+		   			              { mData: 'serialNum' },
+		   			              { mData: 'orderNum' },
+		   			              { mData: 'orderDate'  },
+		                             { mData: 'maker' },
+		                             { mData: 'materielCount' }
+
+		   			              ],
+		   			              'aoColumnDefs' : [{
+	  		  							'targets' : 0,
+		  		  							'searchable' : false,
+		  		  							'orderable' : false,
+		  		  							'render' : function(data,
+		  		  									type, row, meta) {
+			  		  							return '<label class="mt-radio mt-radio-outline">'+
+			                                     '<input type="radio"  data-num="'+row.orderNum+'"  name="selecrOrderSerial"  class="checkboxes" id="'+data+'" value="'+row.orderNum+'" data-set="#saleOrder .checkboxes" />'+
+			                                     '<span></span></label>';
+		  		  							},
+		  		  							"createdCell": function (td, cellData, rowData, row, col) {
+		  		  								 $compile(td)($scope);
+		  		  						       }
+		  		  						} ]
+
+		   		}).on('order.dt',
+		   				function() {
+		   			console.log('排序');
+		   		})
+		   	}
+		   		// 确认选择开始***************************************
+		   		$scope.confirmSelectSaleOrder = function() {
+		   			var id_count1 = $('#saleOrder input[name="selecrOrderSerial"]').length;
+		   			var id_count = $('#saleOrder input[name="selecrOrderSerial"]:checked').length;
+		   			if(id_count1==0){
+		   				$('#saleOrderInfo').modal('hide');// 删除成功后关闭模态框
+		   				return;
+		   				}
+					if(id_count==0){
+						toastr.warning("请选择一个销售订单");
+					}else{
+						$scope.deliver.docNum= $('#saleOrder input[name="selecrOrderSerial"]:checked').val();
+						$('#saleOrderInfo').modal('hide');// 删除成功后关闭模态框
+		   		}
+		   	};
 				
 		    /********************************物料模糊检索及分页 START *********************************/
 		  	 /** *************订单物料明细可检索化  start*************** */

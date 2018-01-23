@@ -129,4 +129,11 @@ public class UserServiceImpl extends GenericServiceImpl<User, Integer> implement
 		}*/
 		return userMapper.selectByExample(example);
 	}
+
+
+	@Override
+	public List<User> selectUserListByComId(String comId) {
+		
+		return userMapper.selectUserListByComId(comId);
+	}
 }

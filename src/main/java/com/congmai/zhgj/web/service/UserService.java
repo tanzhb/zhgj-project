@@ -62,4 +62,8 @@ public interface UserService extends GenericService<User, Integer> {
 	public void updatePhone(User user);
 	
 	List<User> selectUserList(String type);
+	
+	List<User> selectUserListByComId(String comId);//通过企业id查
+	
+	
 }

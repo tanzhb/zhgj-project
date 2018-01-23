@@ -91,6 +91,7 @@ import com.congmai.zhgj.web.model.OperateLogExample;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PriceList;
@@ -3128,4 +3129,55 @@ public class OrderController {
 			 pageMap.put("data", takeDeliverys.getResult());
 			 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
 		 }
+		 /**
+		  * 根据所选采购订单流水获取销售订单中有其中一个订单物料流水与其相同(销售订单审批通过)
+		  * 
+	     */
+	    @RequestMapping("/findOrderListForPtdfh")
+	    @ResponseBody
+	public ResponseEntity<Map<String, Object>> findOrderListForPtdfh(String orderSerial) {
+		List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
+		OrderMaterielExample m = new OrderMaterielExample();
+		com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria = m
+				.createCriteria();
+		criteria.andDelFlgEqualTo("0");
+		criteria.andOrderSerialEqualTo(orderSerial);
+		m.setOrderByClause(" sort asc");
+		List<OrderMateriel> orderMateriels = orderMaterielService.selectList(m);// 获取采购订单物料
+		// 获取所有未完成的销售订单
+		List<OrderInfo> list = orderService.selectUnfinishedSaleOrderList();
+		if (!CollectionUtils.isEmpty(list)) {
+			for (OrderInfo o : list) {
+				OrderMaterielExample m1 = new OrderMaterielExample();
+				com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria1 = m1
+						.createCriteria();
+				criteria1.andDelFlgEqualTo("0");
+				criteria1.andOrderSerialEqualTo(o.getSerialNum());
+				List<OrderMateriel> saleOrderMateriels = orderMaterielService.selectList(m);
+				for (OrderMateriel om : saleOrderMateriels) {
+					String materielSerial = om.getMaterielSerial();
+					for (OrderMateriel om1 : orderMateriels) {
+						if (materielSerial.equals(om1.getMaterielSerial())) {
+							orderInfoList.add(o);
+							break;
+						}
+
+					}
+
+				}
+
+			}
+		}
+
+		// 封装datatables数据返回到前台
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",
+				orderInfoList == null ? 0 : orderInfoList.size());
+		pageMap.put("recordsFiltered", orderInfoList == null ? 0
+				: orderInfoList.size());
+		pageMap.put("data", orderInfoList);
+		return new ResponseEntity<Map<String, Object>>(pageMap, HttpStatus.OK);
+
+	}
 }

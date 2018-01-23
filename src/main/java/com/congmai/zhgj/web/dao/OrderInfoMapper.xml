@@ -1003,4 +1003,12 @@ billStatus,
 	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount
     
   </select>
+  <select id="selectUnfinishedSaleOrderList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from orderInfo
+    WHERE
+	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount   and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
+    
+  </select>
 </mapper>

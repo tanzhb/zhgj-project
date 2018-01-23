@@ -25,7 +25,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 		readMessage(serialNum);
 		if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 			$state.go("buyOrder",{tabHref:'1'});
-		}else if(actionName=="confirmBuyOrder"){
+		}else if(actionName=="confirmBuyOrder"||actionName=="supplyOrder"){
 			$state.go("supplyOrder");
 		}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
 			$state.go("buyOrder");
@@ -44,7 +44,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
-		}else if(actionName=="inToBuyToSale"){
+		}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"){
 			$state.go("saleOrder");
 		}else if(actionName=="sale2paln"){
 			$state.go("procurementPlan");

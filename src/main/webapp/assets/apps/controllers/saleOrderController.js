@@ -806,6 +806,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 												return clickhtm + '';
 											}
 											
+										}else if(isNull(row.receiveCount)||row.receiveCount<row.materielCount){
+											return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 										}else{
 											return clickhtm + '';
 										}

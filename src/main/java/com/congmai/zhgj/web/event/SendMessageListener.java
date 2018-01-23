@@ -185,6 +185,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			inToWaitCheckMessage(event);
 		}else if(MessageConstants.IN_TO_CUSTOMSFORM.equals(event.getAction())){ //确认代收货/发货生成清报关单提醒消息
 			inToWaitCustomsform(event);
+		}else if(MessageConstants.NOTICESUPPLY.equals(event.getAction())){ //平台代发货通知供应商修改消息
+			inToSupply(event);
 		}
 
 	}
@@ -1618,97 +1620,36 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	
 	/**
 	 * 
-	 * @Description (销售分解为计划to 计划发布人员)
+	 * @Description (平台代发货通知供应商修改消息)
 	 * @param event
 	 */
-	private void sale2palnMessage(SendMessageEvent event) {
+	private void inToSupply(SendMessageEvent event) {
 		try {
 			initService();
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
-				ProcurementPlan record=(ProcurementPlan)event.getSource();
-				OrderInfo order = orderService.selectById(record.getSaleOrderSerial());
-				List<User> users = null;
-				Properties properties = new Properties();
-					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
-					if(CollectionUtils.isNotEmpty(users)){
-						for(User u : users){
-							Message messageVO = this.createMessage(event,user);
-							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
-							messageVO.setTempleteType(MessageConstants.SALE2PLAN); //收货消息
-							messageVO.setObjectSerial(record.getSerialNum());
-							messageVO.setReceiverId(u.getUserId().toString());
-							properties.put("paramer_a", u.getUserName());
-							properties.put("paramer_b", order.getOrderNum());
-							properties.put("paramer_c", MessageConstants.URL_TO_BUYPLAN);
-							properties.put("paramer_d", messageVO.getSerialNum());
-
-							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
-							messageService.insert(messageVO);
-						}
+				Delivery record=(Delivery)event.getSource();
+				List<User>list=userService.selectUserListByComId(record.getSupplyComId());//通知对应人员
+				if(CollectionUtils.isNotEmpty(list)){
+					//再通知通知供应商
+					for(User u:list){
+						Message messageVO = this.createMessage(event,user);
+						Properties properties = new Properties();
+						messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+						messageVO.setTempleteType(MessageConstants.TEMP_NOTICESUPPLY); //发给通知供应商
+						messageVO.setObjectSerial(record.getSerialNum());
+						messageVO.setReceiverId(u.getUserId()+"");
+						messageVO.setActionName(MessageConstants.URL_CONFIRM_BUY_ORDER);
+						properties.put("paramer_a", u.getUserName());
+						properties.put("paramer_b", record.getDeliverNum());
+						properties.put("paramer_c", MessageConstants.URL_SALE_ORDER);
+						properties.put("paramer_d", messageVO.getSerialNum());
+						messageVO.setProperties(properties);
+						messageProcessor.sendMessageToUser(messageVO);
+						messageService.insert(messageVO);
 					}
-					//再通知销售订单制单人
-					Message messageVO = this.createMessage(event,user);
-					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
-					messageVO.setTempleteType(MessageConstants.SALE2PLANOWNER); //发给销售订单制单人
-					messageVO.setObjectSerial(order.getSerialNum());
-					User maker = userService.selectByUsername(order.getMaker()); //制单人
-					messageVO.setReceiverId(maker.getUserId()+"");
-					properties.put("paramer_a", maker.getUserName());
-					properties.put("paramer_b", order.getOrderNum());
-					properties.put("paramer_c", MessageConstants.URL_CONFIRM_SALE_ORDER);
-					properties.put("paramer_d", messageVO.getSerialNum());
-					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUser(messageVO);
-					messageService.insert(messageVO);
-					//再通知采购物料关联的采购订单物料(未完成的采购订单)中关联的采购订单制单人
-					List<ProcurementPlanMateriel> materielList = null;
-					materielList = record.getMaterielList();
-					OrderMaterielExample m=new  OrderMaterielExample();
-					com.congmai.zhgj.web.model.OrderMaterielExample.Criteria c=m.createCriteria();
-						if(CollectionUtils.isNotEmpty(materielList)){
-							for( ProcurementPlanMateriel pm:materielList){
-								if(StringUtil.isNotEmpty(pm.getSupplyMaterielSerial())){//取物料供应商id
-									//获取供应商comid为pm.getSupplyMaterielSerial()的未完成的采购订单
-									List<OrderInfo>list=orderService.selectUnfinishedBuyOrderList(pm.getSupplyMaterielSerial());
-									if(CollectionUtils.isNotEmpty(list)){
-										for(OrderInfo orderInfo:list){
-											c.andOrderSerialEqualTo(orderInfo.getSerialNum()).andDelFlgEqualTo("0");
-											List<OrderMateriel>omList=orderMaterielService.selectList(m);
-											for(OrderMateriel om:omList){
-												if(pm.getMaterielSerial().equals(om.getMaterielSerial())){
-													Message messageVO1 = this.createMessage(event,user);
-													Properties properties1 = new Properties();
-													messageVO1.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
-													messageVO1.setTempleteType(MessageConstants.SALE2BUYORDEROWNER); //发给采购订单制单人
-													messageVO1.setObjectSerial(orderInfo.getSerialNum());
-													messageVO1.setActionName(MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
-													User maker1 = userService.selectByUsername(orderInfo.getMaker()); //制单人
-													messageVO1.setReceiverId(maker1.getUserId()+"");
-													properties1.put("paramer_a", maker1.getUserName());
-													properties1.put("paramer_b", materielService.selectById(om.getMaterielSerial()).getMaterielName());
-													properties1.put("paramer_c", pm.getDeliveryDate()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(pm.getDeliveryDate())); //    
-													properties1.put("paramer_d", pm.getPlanCount());
-													properties1.put("paramer_e", orderInfo.getSupplyName());
-													properties1.put("paramer_f", MessageConstants.URL_CONFIRM_SALE_ORDER);
-													properties1.put("paramer_g", messageVO1.getSerialNum());
-													messageVO1.setProperties(properties1);
-													messageProcessor.sendMessageToUser(messageVO1);
-													messageService.insert(messageVO1);
-													break;
-												}
-											}
-											
-										}
-										
-									}
-									
-								}
-								
-							}
-							
-						}
+					
+				}
 				}
 		} catch (Exception e) {
 //			logger.warn(e.getMessage(), e);
@@ -2003,6 +1944,106 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			}
 		} catch (Exception e) {
 		}
+	}
+	
+	/**
+	 * 
+	 * @Description (销售分解为计划to 计划发布人员)
+	 * @param event
+	 */
+	private void sale2palnMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				ProcurementPlan record=(ProcurementPlan)event.getSource();
+				OrderInfo order = orderService.selectById(record.getSaleOrderSerial());
+				List<User> users = null;
+				Properties properties = new Properties();
+					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.SALE2PLAN); //收货消息
+							messageVO.setObjectSerial(record.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", order.getOrderNum());
+							properties.put("paramer_c", MessageConstants.URL_TO_BUYPLAN);
+							properties.put("paramer_d", messageVO.getSerialNum());
+
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+					//再通知销售订单制单人
+					Message messageVO = this.createMessage(event,user);
+					messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO.setTempleteType(MessageConstants.SALE2PLANOWNER); //发给销售订单制单人
+					messageVO.setObjectSerial(order.getSerialNum());
+					User maker = userService.selectByUsername(order.getMaker()); //制单人
+					messageVO.setReceiverId(maker.getUserId()+"");
+					properties.put("paramer_a", maker.getUserName());
+					properties.put("paramer_b", order.getOrderNum());
+					properties.put("paramer_c", MessageConstants.URL_CONFIRM_SALE_ORDER);
+					properties.put("paramer_d", messageVO.getSerialNum());
+					messageVO.setProperties(properties);
+					messageProcessor.sendMessageToUser(messageVO);
+					messageService.insert(messageVO);
+					//再通知采购物料关联的采购订单物料(未完成的采购订单)中关联的采购订单制单人
+					List<ProcurementPlanMateriel> materielList = null;
+					materielList = record.getMaterielList();
+					OrderMaterielExample m=new  OrderMaterielExample();
+					com.congmai.zhgj.web.model.OrderMaterielExample.Criteria c=m.createCriteria();
+						if(CollectionUtils.isNotEmpty(materielList)){
+							for( ProcurementPlanMateriel pm:materielList){
+								if(StringUtil.isNotEmpty(pm.getSupplyMaterielSerial())){//取物料供应商id
+									//获取供应商comid为pm.getSupplyMaterielSerial()的未完成的采购订单
+									List<OrderInfo>list=orderService.selectUnfinishedBuyOrderList(pm.getSupplyMaterielSerial());
+									if(CollectionUtils.isNotEmpty(list)){
+										for(OrderInfo orderInfo:list){
+											c.andOrderSerialEqualTo(orderInfo.getSerialNum()).andDelFlgEqualTo("0");
+											List<OrderMateriel>omList=orderMaterielService.selectList(m);
+											for(OrderMateriel om:omList){
+												if(pm.getMaterielSerial().equals(om.getMaterielSerial())){
+													Message messageVO1 = this.createMessage(event,user);
+													Properties properties1 = new Properties();
+													messageVO1.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+													messageVO1.setTempleteType(MessageConstants.SALE2BUYORDEROWNER); //发给采购订单制单人
+													messageVO1.setObjectSerial(orderInfo.getSerialNum());
+													messageVO1.setActionName(MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
+													User maker1 = userService.selectByUsername(orderInfo.getMaker()); //制单人
+													messageVO1.setReceiverId(maker1.getUserId()+"");
+													properties1.put("paramer_a", maker1.getUserName());
+													properties1.put("paramer_b", materielService.selectById(om.getMaterielSerial()).getMaterielName());
+													properties1.put("paramer_c", pm.getDeliveryDate()==null?"":new SimpleDateFormat("yyyy-MM-dd").format(pm.getDeliveryDate())); //    
+													properties1.put("paramer_d", pm.getPlanCount());
+													properties1.put("paramer_e", orderInfo.getSupplyName());
+													properties1.put("paramer_f", MessageConstants.URL_CONFIRM_SALE_ORDER);
+													properties1.put("paramer_g", messageVO1.getSerialNum());
+													messageVO1.setProperties(properties1);
+													messageProcessor.sendMessageToUser(messageVO1);
+													messageService.insert(messageVO1);
+													break;
+												}
+											}
+											
+										}
+										
+									}
+									
+								}
+								
+							}
+							
+						}
+				}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
+
 	}
 	/**
 	 * 

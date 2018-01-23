@@ -78,7 +78,7 @@
 													<label class="control-label bold">发货类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="deliverType"
+														<select class="form-control" id="deliverType"  ng-if="delivery.deliverType!='代发货'"
 															name="deliverType" ng-model="delivery.deliverType"
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
@@ -86,9 +86,16 @@
 															<option   value="贸易发货">贸易发货</option>
 															<option value="个人借用">个人借用</option>
 														</select>
+															<select class="form-control" id="deliverType"
+															name="deliverType"   disabled="disabled"
+															ng-show="inputDeliveryInfo" >
+															<option  selected value="代发货">代发货</option>
+														</select>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">
+														<p class="form-control-static" ng-show="span"  ng-if="delivery.deliverType!='代发货'">
 															{{delivery.deliverType}}</p>
+															<p class="form-control-static" ng-show="span"  ng-if="delivery.deliverType=='代发货'">
+															代发货</p>
 													</div>
 												</div>
 											</div>
@@ -1009,18 +1016,18 @@
 															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
 															</p>
 														</td>
-														<!-- <td class="form-group"><input type="text"
+														<td class="form-group"  ng-if="oprateType=='forSupplyOrder'"><input type="text"
 															name="deliverCount" id="deliverCount{{$index}}"   
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
-															ng-model="deliveryMaterielE[$index].deliverCount"
+															ng-model="_deliveryMateriel.deliverCount"
 															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
-															/>ng-blur="getTotalDeliveryCount()" 
+															/> 
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
 																ng-show="orderMaterielShow{{$index}}">
-																{{_deliveryMateriel.deliverCount}}</p></td> -->
-																	<td class="form-group"><input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+																{{_deliveryMateriel.deliverCount}}</p></td>
+																	<td class="form-group"    ng-if="oprateType=='forSaleOrder'"><input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
 															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"

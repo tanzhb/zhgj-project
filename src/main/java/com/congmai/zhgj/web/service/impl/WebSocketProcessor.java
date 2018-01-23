@@ -54,7 +54,7 @@ public class WebSocketProcessor implements MessageProcessor {
 				"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a></br>祝您工作愉快！";
 		// 销售订单订单审核通过消息模板(通知销售订单除制单人外)
 				private static String message11 = "尊敬的${paramer_a}，您好！</br>${paramer_b}的销售订单&nbsp;${paramer_c}&nbsp;通过审批并发布成功。"+
-						"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";	
+						"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
 		//确认代收货提醒相关人员进行入库检验
 		private static String message12 = "尊敬的${paramer_a}，您好！</br>入库检验单&nbsp;${paramer_b}&nbsp;等待您入库检验。"+
 						"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
@@ -66,6 +66,9 @@ public class WebSocketProcessor implements MessageProcessor {
 								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";
 				//确认发货提醒相关人员进行报关
 				private static String message14 = "尊敬的${paramer_a}，您好！</br>报关单&nbsp;${paramer_b}&nbsp;等待您的报关。"+
+								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
+				//平台代发货通知供应商修改
+				private static String message20 = "尊敬的${paramer_a}，您好！</br>发货单&nbsp;${paramer_b}&nbsp;等待您的修改。"+
 								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
 	
 	//逾期未到货
@@ -185,6 +188,8 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("17", DEFAULT_MSG_TEMPLATE, null, message17);
 		MessageTemplate.register("18", DEFAULT_MSG_TEMPLATE, null, message18);
 		MessageTemplate.register("19", DEFAULT_MSG_TEMPLATE, null, message19);
+		MessageTemplate.register("20", DEFAULT_MSG_TEMPLATE, null, message20);
+		
 		
 		MessageTemplate.register("71", DEFAULT_MSG_TEMPLATE, null, message71);
 		MessageTemplate.register("72", DEFAULT_MSG_TEMPLATE, null, message72);

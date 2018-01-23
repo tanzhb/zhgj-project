@@ -51,6 +51,12 @@ public class MessageConstants {
 	 * 采购订单被确认
 	 */
 	public static final String BE_CONFIRM_BUY_ORDER = "beConfirmBuyOrder";
+	/**
+	 * 平台代发货通知
+	 */
+	public static final String NOTICESUPPLY = "noticeSupply";
+	
+	
 	/*========================销售订单相关消息End==============================*/
 	/**
 	 * 销售订单申请消息
@@ -628,6 +634,10 @@ public class MessageConstants {
 	 * 清关单通知(发给仓储)
 	 */
 	public static final String IN2DECLARATION = "18";
+	/**
+	 * 平台代发货通知
+	 */
+	public static final String TEMP_NOTICESUPPLY= "20";
 	
 	
 	

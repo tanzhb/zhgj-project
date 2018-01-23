@@ -173,7 +173,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			
 				if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 					$state.go("buyOrder",{tabHref:'1'});
-				}else if(actionName=="confirmBuyOrder"){
+				}else if(actionName=="confirmBuyOrder"||actionName=="supplyOrder"){
 					$state.go("supplyOrder");
 				}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
 					$state.go("buyOrder");

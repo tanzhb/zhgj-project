@@ -53,6 +53,8 @@
 					<li class="dropdown pull-right tabdrop" >
                        <button    class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="deliver.status=='0'||deliver.status==undefined">
                               <i class="fa fa-check"></i> 代发货 </button>
+                               <button    class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery('notice')"  ng-hide="deliverAdd" >
+                              <i class="fa fa-check"></i> 通知发货 </button>
                               <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
                               <i class="fa fa-check"></i> 保存 </button>
                               <button ng-click="editDeliveryInfo()" type="button"   ng-show="deliverView"   class="btn purple  btn-circle  btn-sm">
@@ -254,7 +256,34 @@
 										</div>
 										<!--/span-->
 									</div>
-									<!--/row-->
+									<!--/row--><!--  -->
+									<div  class="row"  >
+									<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="maker">关联销售单号 </label>
+                                                    <!-- <div class="">
+                                                        <input type="text" class="form-control" id="docNum" name="docNum" ng-model="deliver.docNum" ng-hide="deliverAdd" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-show="deliverView" >{{deliver.docNum}}</p>
+                                                    </div> -->
+                                                    <div class="">
+														<div class="input-group" data-target="#saleOrderInfo"
+															data-toggle="modal" ng-click="selectSaleOrderInfo()"
+															onclick="return false;">
+															<input id="docNum" name="docNum" type="text"   ng-hide="deliverAdd" 
+																class="form-control"  ng-model="deliver.docNum"  
+																readonly="readonly"> <span
+																class="input-group-btn" ng-hide="deliverAdd"  style="vertical-align: top;">
+																<button class="btn default" type="button">
+																	<i class="fa fa-search"></i>
+																</button>
+															</span>
+															<p class="control-label left" ng-show="deliverView" >{{deliver.docNum}}</p>
+														</div>
+													</div>
+                                            </div>
+										</div>
+									</div>
 									
 									<div class="row"  style="border-top:1px solid #dddddd;padding-top: 20px;">
 										<div class="col-md-4">
@@ -726,5 +755,6 @@
 </div>
 <!-- END MAIN CONTENT -->
 <jsp:include page="selectBuyOrder.jsp"></jsp:include>
+<jsp:include page="selectSaleOrder.jsp"></jsp:include><!-- 单号 日期 制单人 销售数量 -->
 <jsp:include page="../demandPlan/selectMateriel.jsp"></jsp:include>
 <jsp:include page="../upload/uploadPage.jsp"></jsp:include>

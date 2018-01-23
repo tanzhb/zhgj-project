@@ -1051,20 +1051,41 @@ margin-right: 20px;
 															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
 															</p>
 														</td>
-														<td class="form-group"><input type="text"  ng-if="!otherMode"
-															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.amount-_deliveryMateriel.deliveredCount"
+													<td class="form-group"><input type="text"  ng-if="!otherMode&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
 															ng-model="deliveryMaterielE[$index].deliverCount"
 															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
 															/>
+															<input type="text"  ng-if="!otherMode&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount!=null"
+															name="deliverCount" id="deliverCount{{$index}}"  
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
+															/>
+															<input type="text"  ng-if="!otherMode&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)>_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=_deliveryMateriel.currentCount"
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.currentCount}}"
+															/>
+																<input type="text"  ng-if="!otherMode&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)>_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount!=null"
+															name="deliverCount" id="deliverCount{{$index}}"  
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.currentCount}}"
+															/>
 															<input type="text"  ng-if="otherMode"
 															name="deliverCount" id="deliverCount{{$index}}"  
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"
-															ng-model="deliveryMaterielE[$index].deliverCount"   data-ordercount="otherMode"
+															ng-model="deliveryMaterielE[$index].deliverCount"   data-ordercount="100000000000"
 															 
-															/><!-- ng-blur="getTotalDeliveryCount()"  --><!--  ng-blur="judgeNumber($index)" -->
+															/><!-- ng-blur="getTotalDeliveryCount()"  --><!--  ng-blur="judgeNumber($index)"   -->
 															<div class="form-control-focus"></div>
 															<p class="form-control-static"
 																ng-show="orderMaterielShow{{$index}}">

@@ -67,5 +67,7 @@ public interface OrderService extends GenericService<OrderInfo, String> {
 	OrderInfo selectByOrderNum(String orderNum);
 	
 	List<OrderInfo> selectUnfinishedBuyOrderList(String comId);//获取未完成的采购订单
+	
+	List<OrderInfo> selectUnfinishedSaleOrderList();//获取未完成的销售订单
 
 }

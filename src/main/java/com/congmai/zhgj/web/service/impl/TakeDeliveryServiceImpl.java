@@ -189,6 +189,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	public void insertTakeDelivery(Delivery delivery,TakeDelivery takeDelivery,DeliveryTransport deliveryTransport,List<DeliveryMateriel> deliveryMateriels,
 			String currenLoginName) {
 		//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams,currenLoginName);
+		if("10".equals(delivery.getStatus())){
+			delivery.setStatus("0");
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.NOTICESUPPLY));//通知供应商修改
+		}
 		delivery2Mapper.insert(delivery);
 		if(deliveryTransport==null){
 			deliveryTransport=new DeliveryTransport();

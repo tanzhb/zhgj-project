@@ -702,6 +702,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiConfirmed(\''+row.serialNum+'\')">确认</a>'
+								}else if(isNull(row.receiveCount)||row.receiveCount<row.materielCount){
+									return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';
 								}else{
 									return clickhtm + '';
 								}

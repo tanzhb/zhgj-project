@@ -251,6 +251,17 @@
 									<!--/row-->
 									</div>
 								</div>
+								<div  class="row"  >
+									<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="maker">关联销售单号 </label>
+                                                    <div class="">
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-hide="span">{{deliver.docNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+									</div>
 
 								<div class="portlet-body form" style="border-top:1px solid #dddddd;">
 									<!-- BEGIN FORM-->

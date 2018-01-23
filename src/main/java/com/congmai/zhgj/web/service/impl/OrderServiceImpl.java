@@ -501,6 +501,12 @@ public List<OrderInfo> selectUnfinishedBuyOrderList(String comId) {
 	return OrderInfoMapper.selectUnfinishedBuyOrderList(comId);
 }
 
+@Override
+public List<OrderInfo> selectUnfinishedSaleOrderList() {
+	// TODO Auto-generated method stub
+		return OrderInfoMapper.selectUnfinishedSaleOrderList();
+}
+
 
 	
 

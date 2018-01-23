@@ -47,4 +47,5 @@ public interface UserMapper extends GenericDao<User, Integer>{
     public void updatePhone(User user);
     
     public User getUserInfo(User record);
+    List<User> selectUserListByComId(String comId);
 }

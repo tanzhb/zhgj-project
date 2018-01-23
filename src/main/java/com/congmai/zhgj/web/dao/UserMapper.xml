@@ -221,4 +221,11 @@
 	WHERE
 	USER_ID=#{userId}
     </update>
+      <select id="selectUserListByComId" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from T_USER
+		where T_USER.com_id=#{comId,jdbcType=VARCHAR}
+	</select>
 </mapper>

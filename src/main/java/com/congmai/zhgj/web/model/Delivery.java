@@ -14,7 +14,7 @@ public class Delivery {
 
 	private String orderSerial;
 
-	private String docNum; // 单据号
+	private String docNum; // 单据号(当deliverType为代发货时,docNum存的值为相关联销售订单号)
 
 	private String supplyComId;
 

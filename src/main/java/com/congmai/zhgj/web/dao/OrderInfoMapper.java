@@ -44,4 +44,5 @@ public interface OrderInfoMapper {
 
     /*int updateByPrimaryKey(OrderInfo record);*/
 	List<OrderInfo> selectUnfinishedBuyOrderList(String comId) ;
+	List<OrderInfo> selectUnfinishedSaleOrderList() ;
 }

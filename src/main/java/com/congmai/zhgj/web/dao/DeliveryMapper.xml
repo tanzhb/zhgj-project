@@ -262,7 +262,7 @@
        AND a.buyComId= #{buyComId} 
     </if>
     <if test="supplyComId != null" >
-       AND((a.supplyComId= #{supplyComId}  and a.deliverType='代发货' and   a.status != '0') or (a.supplyComId= #{supplyComId}  and a.deliverType!='代发货' )
+       AND((a.supplyComId= #{supplyComId}  and a.deliverType='代发货') or (a.supplyComId= #{supplyComId}  and a.deliverType!='代发货' )
        or (a.supplyComId is null  and a.deliverType='代发货' ) )
       
     </if>
