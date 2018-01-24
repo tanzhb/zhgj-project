@@ -748,8 +748,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
                                    { mData: 'materielNum' },
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
-                                   { mData: 'unit' },
-                                   { mData: 'stockCount' }
+                                   { mData: 'unit' }/*,
+                                   { mData: 'stockCount' }*/
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,

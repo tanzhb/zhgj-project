@@ -99,9 +99,14 @@ public class Constants {
 	 */
 	public static final String STORAGE =  "storage";
 	/**
-	 * 采购
+	 * 国内采购组
 	 */
 	public static final String PURCHASE =  "purchase";
+	
+	/**
+	 * 国际采购组
+	 */
+	public static final String INTERNATIONALPURCHASE =  "internationalPurchase";
 	/**
 	 * 销售
 	 */

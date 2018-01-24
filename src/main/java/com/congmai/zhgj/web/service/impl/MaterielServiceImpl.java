@@ -78,7 +78,7 @@ public class MaterielServiceImpl implements MaterielService {
 
 	@Override
 	public List<Materiel> selectList(MaterielExample m) {
-		return MaterielMapper.selectByExample(m);
+		return MaterielMapper.selectByExample4list(m);
 	}
 	
 	@Override

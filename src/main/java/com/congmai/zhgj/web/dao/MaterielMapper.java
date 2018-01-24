@@ -22,6 +22,8 @@ public interface MaterielMapper {
 
     List<Materiel> selectByExample(MaterielExample example);
     
+    List<Materiel> selectByExample4list(MaterielExample example);
+    
     List<Materiel> selectBySelectExample(MaterielSelectExample example);
 
     Materiel selectByPrimaryKey(String serialNum);

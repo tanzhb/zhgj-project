@@ -1467,8 +1467,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                                    { mData: 'materielNum' },
                                    { mData: 'materielName' },
                                    { mData: 'specifications' },
-                                   { mData: 'unit' },
-                                   { mData: 'stockCount' }
+                                   { mData: 'unit' }/*,
+                                   { mData: 'stockCount' }*/
                              ],
                     'aoColumnDefs' : [ {
      							'targets' : 0,
