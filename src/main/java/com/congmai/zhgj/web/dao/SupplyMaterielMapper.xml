@@ -74,6 +74,44 @@
     <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
   </resultMap>
+  
+  
+  <resultMap id="SupplyMaterielMap4materielList" type="com.congmai.zhgj.web.model.SupplyMateriel" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="materielId" property="materielId" jdbcType="VARCHAR" />
+    <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+    <result column="supplyMaterielNum" property="supplyMaterielNum" jdbcType="VARCHAR" />
+    <result column="packageNum" property="packageNum" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageUnit" property="packageUnit" jdbcType="VARCHAR" />
+    <result column="packagewidth" property="packagewidth" jdbcType="VARCHAR" />
+    <result column="packageheight" property="packageheight" jdbcType="VARCHAR" />
+    <result column="packagelength" property="packagelength" jdbcType="VARCHAR" />
+    <result column="packagevolume" property="packagevolume" jdbcType="VARCHAR" />
+    <result column="packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="category3" property="category3" jdbcType="VARCHAR" />
+    <result column="unitPriceGuide" property="unitPriceGuide" jdbcType="VARCHAR" />
+    <result column="purchaseQuota" property="purchaseQuota" jdbcType="VARCHAR" />
+    <result column="moq" property="moq" jdbcType="VARCHAR" />
+    <association property="supply" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/>
+    <!-- <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/> -->
+  </resultMap>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -163,6 +201,14 @@
     and delFlg = '0'
   </select>
   
+  <select id="selectSupplyMaterielByMaterielId4materielList" resultMap="SupplyMaterielMap4materielList" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from supplyMateriel
+    where 
+    materielId = #{materielId,jdbcType=VARCHAR}
+    and delFlg = '0'
+  </select>
   
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 

@@ -141,7 +141,7 @@
                                                             <option value="9" >贸易商</option>
                                                             <option value="3" >承运人</option>
                                                             <option value="4" >外协仓</option>
-                                                            <option value="5" >境外供应商</option>
+                                                            <!-- <option value="5" >境外供应商</option> -->
                                                             <option value="6" >装卸公司</option>
                                                             <option value="7" >银行</option>
                                                             <option value="8" >保险公司</option>
@@ -151,8 +151,20 @@
                                                     </div>
                                             </div>
 										</div>
+										<div class="col-md-3">
+				                         	<div class="form-group ">
+				                                 <label class="control-label bold"><span class="required" aria-required="true"> * </span>贸易类型：</label>
+				                                 <div class="">
+					                                 <div ng-hide="companyAdd">
+						                               	<input type="radio"  ng-model="company.tradeType" name="tradeType" ng-checked="company.tradeType=='内贸'" value="内贸"> 内贸
+						                               	<input type="radio"  ng-model="company.tradeType" name="tradeType" ng-checked="company.tradeType=='外贸'" value="外贸"> 外贸
+					                                 </div>
+					                                 <p class="form-control-static" ng-show="companyView"> {{company.tradeType}} </p>
+				                                 </div>
+				                             </div>
+				                         </div>
 										<!--/span-->
-										<div class="col-md-6">
+										<div class="col-md-3">
 											<div class="form-group ">
 												<label class="control-label bold" for="abbreviation">企业简称</label>
 												<div class="">

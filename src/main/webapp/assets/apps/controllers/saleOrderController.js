@@ -1444,8 +1444,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                              { mData: 'materielName' },
                              { mData: 'specifications' },
                              { mData: 'unit' },
-                             { mData: 'supplyMateriels' },
-                             { mData: 'stockCount' }
+                             { mData: 'supplyMateriels' }/*,
+                             { mData: 'stockCount' }*/
                              
                        ];
         	var thisAoColumnDefs = [ {
@@ -1521,8 +1521,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
                                  { mData: 'materielNum' },
                                  { mData: 'materielName' },
                                  { mData: 'specifications' },
-                                 { mData: 'unit' },
-                                 { mData: 'stockCount' }
+                                 { mData: 'unit' }/*,
+                                 { mData: 'stockCount' }*/
                            ];
         		var thisAoColumnDefs = [ {
     				'targets' : 0,

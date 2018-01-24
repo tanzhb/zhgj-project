@@ -13,6 +13,8 @@ public class Company {
     private String comNum;
 
     private String comType;
+    
+    private String tradeType;
 
     private String abbreviation;
 
@@ -336,6 +338,14 @@ public class Company {
 
 	public void setCompanyQualifications(List<CompanyQualification> companyQualifications) {
 		this.companyQualifications = companyQualifications;
+	}
+
+	public String getTradeType() {
+		return tradeType;
+	}
+
+	public void setTradeType(String tradeType) {
+		this.tradeType = tradeType;
 	}
     
     

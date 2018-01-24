@@ -183,6 +183,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 <if test="status!='2'.toString()" >
 		 	AND contract.contractType = '框架合同'
 		 </if>
+		 <if test="tradeType != null" >
+		 	AND orderInfo.tradeType =  #{tradeType,jdbcType=VARCHAR}
+		 </if>
 		
 		ORDER BY
 			updateTime DESC 
@@ -233,6 +236,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="demandPlanSerial != null" >
 		 	AND orderInfo.demandPlanSerial =  #{demandPlanSerial,jdbcType=VARCHAR}
+		 </if>
+		 <if test="tradeType != null" >
+		 	AND orderInfo.tradeType =  #{tradeType,jdbcType=VARCHAR}
 		 </if>
 		ORDER BY
 			updateTime DESC 

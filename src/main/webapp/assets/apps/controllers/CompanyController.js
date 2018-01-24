@@ -19,10 +19,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	    		//qualificationFormValid();
 	    		validatorInit();
 	    		if(isNull($stateParams.comId)){
-	    		$rootScope.setNumCode("C",function(newCode){//
 	    			$scope.company={};
-        			$scope.company.comNum= newCode;//企业编码
-        		});
+	    			$scope.company.tradeType = '内贸';
+		    		$rootScope.setNumCode("C",function(newCode){//
+	        			$scope.company.comNum= newCode;//企业编码
+	        		});
 	    		}
 	 		}else{
 	 			initTabClass();

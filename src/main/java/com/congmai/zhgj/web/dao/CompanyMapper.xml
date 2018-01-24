@@ -5,6 +5,7 @@
     <result column="comId" property="comId" jdbcType="VARCHAR" />
     <result column="comNum" property="comNum" jdbcType="VARCHAR" />
     <result column="comType" property="comType" jdbcType="VARCHAR" />
+    <result column="tradeType" property="tradeType" jdbcType="VARCHAR" />
     <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
     <result column="comName" property="comName" jdbcType="VARCHAR" />
     <result column="registeredCapital" property="registeredCapital" jdbcType="VARCHAR" />
@@ -33,6 +34,7 @@
     <result column="comId" property="comId" jdbcType="VARCHAR" />
     <result column="comNum" property="comNum" jdbcType="VARCHAR" />
     <result column="comType" property="comType" jdbcType="VARCHAR" />
+    <result column="tradeType" property="tradeType" jdbcType="VARCHAR" />
     <result column="abbreviation" property="abbreviation" jdbcType="VARCHAR" />
     <result column="comName" property="comName" jdbcType="VARCHAR" />
     <result column="registeredCapital" property="registeredCapital" jdbcType="VARCHAR" />
@@ -88,7 +90,7 @@
     </where>
   </sql>
  <sql id="Base_Column_List" >
-    comId, comNum, comType, abbreviation, comName, registeredCapital, legalPerson, address, 
+    comId, comNum, comType,tradeType, abbreviation, comName, registeredCapital, legalPerson, address, 
     taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
     status, delFlg, creator, createTime, updater, updateTime, corporatePresence, openingBank, 
     accountNumber, billRemark
@@ -178,7 +180,7 @@
   </update>
 
     <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Company" >
-    insert into company (comId, comNum, comType, 
+    insert into company (comId, comNum, comType,tradeType, 
       abbreviation, comName, registeredCapital, 
       legalPerson, address, taxpayeNumber, 
       tel, contact, businessNature, 
@@ -187,7 +189,7 @@
       creator, createTime, updater, 
       updateTime, corporatePresence, openingBank, 
       accountNumber, billRemark)
-    values (#{comId,jdbcType=VARCHAR}, #{comNum,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, 
+    values (#{comId,jdbcType=VARCHAR}, #{comNum,jdbcType=VARCHAR}, #{comType,jdbcType=VARCHAR}, #{tradeType,jdbcType=VARCHAR}, 
       #{abbreviation,jdbcType=VARCHAR}, #{comName,jdbcType=VARCHAR}, #{registeredCapital,jdbcType=VARCHAR}, 
       #{legalPerson,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{taxpayeNumber,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{contact,jdbcType=VARCHAR}, #{businessNature,jdbcType=VARCHAR}, 
@@ -201,7 +203,7 @@
 
 
  <insert id="insertSelectiveBatch"  parameterType="java.util.List"> 
-   insert into company (comId, comNum, comType, 
+   insert into company (comId, comNum, comType, tradeType,
       abbreviation, comName, registeredCapital, 
       legalPerson, address, taxpayeNumber, 
       tel, contact, businessNature, 
@@ -211,7 +213,7 @@
       )
     values 
     <foreach collection="list" item="item" index="index" separator="," >  
-      (#{item.comId,jdbcType=VARCHAR}, #{item.comNum,jdbcType=VARCHAR}, #{item.comType,jdbcType=VARCHAR}, 
+      (#{item.comId,jdbcType=VARCHAR}, #{item.comNum,jdbcType=VARCHAR}, #{item.comType,jdbcType=VARCHAR}, #{item.tradeType,jdbcType=VARCHAR}, 
       #{item.abbreviation,jdbcType=VARCHAR}, #{item.comName,jdbcType=VARCHAR}, #{item.registeredCapital,jdbcType=VARCHAR}, 
       #{item.legalPerson,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.taxpayeNumber,jdbcType=VARCHAR}, 
       #{item.tel,jdbcType=VARCHAR}, #{item.contact,jdbcType=VARCHAR}, #{item.businessNature,jdbcType=VARCHAR}, 
@@ -233,6 +235,9 @@
       </if>
       <if test="comType != null" >
         comType = #{comType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeType != null" >
+        tradeType = #{tradeType,jdbcType=VARCHAR},
       </if>
       <if test="abbreviation != null" >
         abbreviation = #{abbreviation,jdbcType=VARCHAR},
@@ -323,7 +328,7 @@
   </select>
   <select id="selectListByRole" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.SupplyBuyVO" >
     select
-       comId, comNum, comType, abbreviation, comName, registeredCapital, legalPerson, address, 
+       comId, comNum, comType,tradeType, abbreviation, comName, registeredCapital, legalPerson, address, 
     taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
     status, c.delFlg, c.creator, c.createTime, c.updater, c.updateTime, corporatePresence, openingBank, 
     accountNumber, billRemark

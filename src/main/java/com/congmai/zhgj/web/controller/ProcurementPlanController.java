@@ -64,6 +64,7 @@ import com.congmai.zhgj.web.model.ProcurementPlanExample;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.ProcurementPlanMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
@@ -512,7 +513,8 @@ public class ProcurementPlanController {
     private OrderMaterielService orderMaterielService;
     @Resource
     private ContractService contractService;
-    
+    @Resource
+    private CompanyService companyService;
     
     /**
 	 * 
@@ -564,7 +566,14 @@ public class ProcurementPlanController {
     			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购
-    			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+    			
+    			Company supply =  companyService.selectOne(supplyComId);
+    			if(supply!=null&&StaticConst.getInfo("weimao").equals(supply.getTradeType())){
+    				newOrderInfo.setTradeType(StaticConst.getInfo("weimao"));//设置为外贸
+    			}else {
+    				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+				}
+    			
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
     			newOrderInfo.setOrderDate(new Date());
     			newOrderInfo.setRate("17");

@@ -65,6 +65,71 @@
     <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
     
   </resultMap>
+  
+  <resultMap id="BaseResultMap4list" type="com.congmai.zhgj.web.model.Materiel" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="materielId" property="materielId" jdbcType="VARCHAR" />
+    <result column="materielNum" property="materielNum" jdbcType="VARCHAR" />
+    <result column="materielName" property="materielName" jdbcType="VARCHAR" />
+    <result column="specifications" property="specifications" jdbcType="VARCHAR" />
+    <result column="unit" property="unit" jdbcType="VARCHAR" />
+    <result column="parentMaterielSerial" property="parentMaterielSerial" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="productionPlace" property="productionPlace" jdbcType="VARCHAR" />
+    <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <result column="category2" property="category2" jdbcType="VARCHAR" />
+    <result column="category3" property="category3" jdbcType="VARCHAR" />
+    <result column="materielAttribute" property="materielAttribute" jdbcType="VARCHAR" />
+    <result column="MnemonicCode" property="mnemonicCode" jdbcType="VARCHAR" />
+    <result column="isBOM" property="isBOM" jdbcType="VARCHAR" />
+    <result column="stockUnit" property="stockUnit" jdbcType="VARCHAR" />
+    <result column="originCountry" property="originCountry" jdbcType="VARCHAR" />
+    <result column="width" property="width" jdbcType="VARCHAR" />
+    <result column="height" property="height" jdbcType="VARCHAR" />
+    <result column="length" property="length" jdbcType="VARCHAR" />
+    <result column="currency" property="currency" jdbcType="VARCHAR" />
+    <result column="unitPrice" property="unitPrice" jdbcType="VARCHAR" />
+    <result column="deliveryCycle" property="deliveryCycle" jdbcType="VARCHAR" />
+    <result column="filingItemNo" property="filingItemNo" jdbcType="VARCHAR" />
+    <result column="volume" property="volume" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="VARCHAR" />
+    <result column="palletSpecification" property="palletSpecification" jdbcType="VARCHAR" />
+    <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="packageNum" property="packageNum" jdbcType="VARCHAR" />
+    <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+    <result column="packageUnit" property="packageUnit" jdbcType="VARCHAR" />
+    <result column="packagewidth" property="packagewidth" jdbcType="VARCHAR" />
+    <result column="packageheight" property="packageheight" jdbcType="VARCHAR" />
+    <result column="packagelength" property="packagelength" jdbcType="VARCHAR" />
+    <result column="packagevolume" property="packagevolume" jdbcType="VARCHAR" />
+    <result column="packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
+    <result column="palletWeight" property="palletWeight" jdbcType="VARCHAR" />
+    <result column="customsSupervisionConditions" property="customsSupervisionConditions" jdbcType="VARCHAR" />
+    <result column="customsCode" property="customsCode" jdbcType="VARCHAR" />
+    <result column="qualityDate" property="qualityDate" jdbcType="VARCHAR" />
+    <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
+    <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <!-- <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>  -->
+    <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+<!--     <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/> -->
+    <!-- 查询库存数量，影响查询效率 -->
+    <!-- <association property="stockCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/> -->
+    <!-- 查询物料指导单价,没有显示无 有过期了为已过期 -->
+    <!-- <association property="guideUnitPrice" column="serialNum" select="com.congmai.zhgj.web.dao.PriceListMapper.getGuideUnitPrice"/> -->
+    <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId4materielList"/> 
+    
+  </resultMap>
+  
   <resultMap id="BaseResultMap4Order" type="com.congmai.zhgj.web.model.Materiel" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="materielId" property="materielId" jdbcType="VARCHAR" />
@@ -213,7 +278,23 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectBySelectExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
+  
+  <select id="selectByExample4list" resultMap="BaseResultMap4list" parameterType="com.congmai.zhgj.web.model.MaterielExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from materiel
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  
+  <select id="selectBySelectExample" resultMap="BaseResultMap4list" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
     select
     <if test="distinct" >
       distinct

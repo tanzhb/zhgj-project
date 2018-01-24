@@ -51,6 +51,7 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
+import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -81,6 +82,7 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
+import com.congmai.zhgj.web.model.Group;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.LadderPrice;
@@ -113,6 +115,7 @@ import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
+import com.congmai.zhgj.web.service.GroupService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.InvoiceService;
 import com.congmai.zhgj.web.service.LadderPriceService;
@@ -190,6 +193,8 @@ public class OrderController {
 	private DeliveryMaterielService deliveryMaterielService;
     @Autowired
 	private DeliveryService deliveryService;
+    @Autowired
+	private GroupService groupService;
     
     
 	//销售订单
@@ -907,16 +912,30 @@ public class OrderController {
     public ResponseEntity<Map> findOrderList(String type,String selectFor,String fram,@RequestParam(required=false)String demandPlanSerial) {
     	List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
     	String comId = null;
+    	String groupType = null;
     	User user = UserUtil.getUserFromSession();
     	if(user!=null){
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+			Group group= groupService.selectGroupById(user.getGroupId());
 			if(comId==null){
 				comId = "null";//null此处可看做是平台方的公司id
+			}
+			
+			if(group!=null){
+				groupType = group.getType();
 			}
 		}
     	/******以上看做每个用户都有自己的公司id******/
     	
     	OrderInfo parm =new OrderInfo();
+    	//按贸易类型查询
+    	if(Constants.PURCHASE.equals(groupType)){
+    		parm.setTradeType(StaticConst.getInfo("neimao"));
+    	}else if(Constants.INTERNATIONALPURCHASE.equals(groupType)){
+    		parm.setTradeType(StaticConst.getInfo("waimao"));
+    	}
+    	
+    	
     	if(SALEORDER.equals(type)){//查找公司销售订单
     		parm.setSupplyComId(comId);
     		if("delivery".equals(selectFor)){//为发货查找自己公司待发货的销售订单
@@ -2073,7 +2092,13 @@ public class OrderController {
     			newOrderInfo.setOrderSerial(orderInfo.getOrderNum());//设置关联销售订单号
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("dailiBuy"));//设置为代理采购
-    			newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+    			Company supply =  companyService.selectOne(supplyComId);
+    			if(supply!=null&&StaticConst.getInfo("weimao").equals(supply.getTradeType())){
+    				newOrderInfo.setTradeType(StaticConst.getInfo("weimao"));//设置为外贸
+    			}else {
+    				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+				}
+    			
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
     			
     			if(supplySet.size()>1){
