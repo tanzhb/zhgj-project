@@ -21,7 +21,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    			stockInInfo($stateParams.serialNum);
 	    		}else{
 	    			$rootScope.setNumCode("IN",function(newCode){//
+	    				$scope.record.inOutNum= newCode;//入库单号
     		 		});
+	    			$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm');
 	    		}
 	    		
 	    	}else{
@@ -393,7 +395,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         				$scope.otherMode=true;
         			}
         			if($scope.record.stockDate==null){
-    		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm');
     		    	}
         			if(data.data.deliver!=null&&data.data.deliver.takeDelivery!=null){  //当贸易入库时
         				$scope.record.takeDeliverNum = data.data.deliver.takeDelivery.takeDeliverNum;

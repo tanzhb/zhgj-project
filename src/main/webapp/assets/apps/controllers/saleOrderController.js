@@ -388,6 +388,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		loadOutRecordTable(serialNum,count);
 	}
     
+    $scope.viewStockOutRecord = function(serialNum){
+    	outRecordTable.destroy();
+    	$state.go("stockOutView",{serialNum:serialNum});
+    	
+    }
+ 	   
 	 var  outRecordTable,tableUrl,type,tableId;// 出库记录弹框
  var loadOutRecordTable = function(serialNum,count) {
 	 tableId="select_sample_outRecord";
@@ -453,8 +459,11 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 					'sWidth': "10%",
 					'render' : function(data,
 							type, row, meta) {
-							return data;
-					}
+							return     '<a href="javascript:void(0);" ng-click="viewStockOutRecord(\''+row.stockInOutRecord.serialNum+'\')">'+data+'</a>';
+					},
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $compile(td)($scope);
+				       }
 				},{
 					'targets' : 2,
 					'render' : function(data,

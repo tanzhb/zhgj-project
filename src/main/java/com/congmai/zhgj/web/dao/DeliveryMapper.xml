@@ -58,9 +58,10 @@
     <insert id="insertBasicInfo" parameterType="com.congmai.zhgj.web.model.DeliveryVO">
     INSERT INTO delivery
     (serialNum,orderSerial,deliverNum,deliverType,supplyComId,buyComId,shipper,receiver,maker,approval,approvalDate,warehouseSerial,deliverAddress,remark,deliverDate,
-    materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status) VALUES
+    materielCount,packageCount,packageType,packageSpecifications,materielWeight,serviceMoney,deliverer,contactNum,deliverRemark,creator,createTime,updater,updateTime,status,takeContactNum,
+    takeDeliverer,takeTransportRemark) VALUES
     (#{serialNum},#{orderSerial},#{deliverNum},#{deliverType},#{supplyComId},#{buyComId},#{shipper},#{receiver},#{maker},#{approval},#{approvalDate},#{warehouseSerial},#{deliveryAddress},#{remark},#{deliverDate},#{materielCount},
-    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),#{status})
+    #{packageCount},#{packageType},#{packageSpecifications},#{materielWeight},#{serviceMoney},#{deliverer},#{contactNum},#{deliverRemark},#{creator},NOW(),#{creator},NOW(),#{status},#{takeContactNum},#{takeDeliverer},#{takeTransportRemark})
     </insert>
     
     <!--更新基本信息  -->
@@ -94,7 +95,11 @@
 	processInstanceId=#{processInstanceId},
 	userId=#{userId},
     updater=#{updater},
-    updateTime=NOW()
+    updateTime=NOW(),
+    userId=#{userId},
+    takeDeliverer=#{takeDeliverer},
+    takeContactNum=#{takeContactNum},
+    takeTransportRemark=#{takeTransportRemark}
     WHERE
     serialNum=#{serialNum}
     </update>
@@ -203,7 +208,7 @@
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
 	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,c.takeDeliverAddress takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
-	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId,a.takeDeliverer,a.takeContactNum,a.takeTransportRemark
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
@@ -222,7 +227,7 @@
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
 	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,c.takeDeliverAddress takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
-	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId,a.takeDeliverer,a.takeContactNum,a.takeTransportRemark
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'

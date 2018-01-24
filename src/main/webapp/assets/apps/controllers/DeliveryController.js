@@ -787,6 +787,8 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		    	  		    	$scope.deliver.approvalDate =$scope.delivery.approvalDate;  
 		    	  		    	$scope.deliver.deliverDate  =$scope.delivery.deliverDate;
 		    	  		    	$scope.deliver.packageType=$scope.delivery.packageType;
+		    	  		    	$scope.deliver.takeDeliverer=$scope.delivery.takeDeliverer;
+		    	  		    	$scope.deliver.takeTransportRemark=$scope.delivery.takeTransportRemark;
 		    	  		      $scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
 		    					if(status!=undefined){
 		    						var promise = DeliveryService.goDelivery($scope.delivery.serialNum);
@@ -2327,6 +2329,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	$scope.takeDeliveryWarehouseAddress=$scope.delivery.takeAddress;
 	          		    	$scope.warehouseAddress=$scope.delivery.deliveryAddress;
 	          		    	
+	          		    	$scope.deliver.takeDeliverer=$scope.delivery.takeDeliverer;
+	          		    	$scope.deliver.takeTransportRemark =$scope.delivery.takeTransportRemark;  
+	          		    	
 	          		    	$scope.deliveryTransport.transport=$scope.delivery.transport;
 	          		    	$scope.deliveryTransport.shipNumber=$scope.delivery.shipNumber
 	          		    	$scope.deliveryTransport.contact=$scope.delivery.transportContact;
@@ -2430,8 +2435,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		     function(data){
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
-			          		    	if(data.hasOutData){//已出过库
-			          		    		$scope.showTransport=true;//显示运输信息
+			          		    	if(data.hasOutData){//已出入过库
+			          		    		$scope.showTransport=true;//显示运输信息及出入库信息
+			          		    	}
+			          		    	if(data.hasCheckData){//已出过库
+			          		    		$scope.hasCheckData=true;//显示检验信息
 			          		    	}
 			          		    	$scope.delivery={};
 			          		    	$scope.flag=false;
@@ -2780,6 +2788,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
             	contactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	takeContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
             	/*transport:{required:"运输方不能为空！"},
@@ -2844,6 +2853,10 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 takeDeliveryWarehouseAddress1:{required:takeDeliveryWarehouseAddress1Flag,
                 },
                 contactNum:{
+                	digits:true,
+                	rangelength:[7,20]
+                },
+                takeContactNum:{
                 	digits:true,
                 	rangelength:[7,20]
                 },

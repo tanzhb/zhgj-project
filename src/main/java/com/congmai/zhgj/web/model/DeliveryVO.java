@@ -146,8 +146,15 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	
 	
 	private String takeWarehouseName;
+	//收货方联系人
+	private String takeDeliverer;
 	
-	
+	//收货方联系电话
+		private String takeContactNum;
+		
+	//收货方备注
+		private String takeTransportRemark;
+		
 	//发货地址
 	private String deliveryAddress;
 	
@@ -776,6 +783,30 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setRealCount(String realCount) {
 		this.realCount = realCount;
+	}
+
+	public String getTakeDeliverer() {
+		return takeDeliverer;
+	}
+
+	public String getTakeContactNum() {
+		return takeContactNum;
+	}
+
+	public String getTakeTransportRemark() {
+		return takeTransportRemark;
+	}
+
+	public void setTakeDeliverer(String takeDeliverer) {
+		this.takeDeliverer = takeDeliverer;
+	}
+
+	public void setTakeContactNum(String takeContactNum) {
+		this.takeContactNum = takeContactNum;
+	}
+
+	public void setTakeTransportRemark(String takeTransportRemark) {
+		this.takeTransportRemark = takeTransportRemark;
 	}
 
 /*	public String getBusinessType() {

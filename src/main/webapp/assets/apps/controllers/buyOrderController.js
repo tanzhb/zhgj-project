@@ -791,7 +791,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			$('#InRecordInfo').modal('show');//显示弹框
 			loadInRecordTable(serialNum,count);
 		}
-        
+        /*$scope.viewStockInRecord = function(serialNum){
+        	$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:"InRecordInfo"});
+        }*/
    	 var  inRecordTable,tableUrl,type,tableId;// 核销弹框
      var loadInRecordTable = function(serialNum,count) {
     	 tableId="select_sample_inRecord";
@@ -858,8 +860,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 					'className' : 'dt-body-center',
 					'render' : function(data,
 							type, row, meta) {
-							return data;
-					}
+							return  '<a href="javascript:void(0);" ng-click="viewStockInRecord(\''+row.stockInOutRecord.takeDeliverSerial+'\')">'+data+'</a>';;
+					},
+					"createdCell": function (td, cellData, rowData, row, col) {
+						 $compile(td)($scope);
+				       }
 				},{
 						'targets' : 2,
 							'render' : function(data,

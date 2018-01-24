@@ -23,7 +23,7 @@ public class StockInOutRecord {
 	    private String docNum;
 
 	    private String inOutNum;
-	    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+	    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm")
 	    //@DateTimeFormat(pattern="yyyy-MM-dd")
 	    private Date stockDate;//  
 
@@ -147,7 +147,7 @@ public class StockInOutRecord {
 			return inOutNum;
 		}
 	//	 @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd ")
-		@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm:ss ")
+		@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm ")
 		public Date getStockDate() {//
 			return stockDate;
 		}
@@ -232,7 +232,7 @@ public class StockInOutRecord {
 			this.inOutNum = inOutNum;
 		}
 		// @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-		@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm:ss ")
+		@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm ")
 		public void setStockDate(Date stockDate) {// @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm:ss ")
 			this.stockDate = stockDate;
 		}

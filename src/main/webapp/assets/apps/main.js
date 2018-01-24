@@ -4925,6 +4925,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 }else html += 
 				 		"<li><a>新增发货</a></li>";
 			   }else if('editDeliveryPage' == toState.name){//发货列表
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" ;
 				   html += "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 			 		"<li><a>编辑发货</a></li>";

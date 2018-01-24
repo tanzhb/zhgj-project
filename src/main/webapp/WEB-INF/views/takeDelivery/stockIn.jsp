@@ -120,8 +120,8 @@
                                                     <div class="">
                                                       <!--  <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd hh:mm:ss" 
                                                          id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly"> -->
-                                                         <input type="text" class="form-control  date-picker-time" size="16"  data-date-format="yyyy-mm-dd hh:ii:ss" 
-                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly">
+                                                         <input type="text" class="form-control  date-picker-time" size="16"  data-date-format="yyyy-mm-dd hh:ii" 
+                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" disabled>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
                                                     </div>

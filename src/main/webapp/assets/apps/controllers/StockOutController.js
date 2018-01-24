@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('StockOutController',['$rootScope','$scope','$state','$http','takeDeliveryService','DeliveryService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,takeDeliveryService,DeliveryService,$location,$compile,$stateParams,commonService) {
+angular.module('MetronicApp').controller('StockOutController',['$rootScope','$scope','$state','$filter','$http','takeDeliveryService','DeliveryService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$filter,$http,takeDeliveryService,DeliveryService,$location,$compile,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -22,6 +22,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 	    			$rootScope.setNumCode("OU",function(newCode){
     		 			$scope.record.inOutNum= newCode;//出库单号
     		 		});
+	    			$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm');
 	    		}
 	    	}else{
 	    			stockOutInfo($stateParams.serialNum);
@@ -213,6 +214,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
             				$scope.getPositions(data.data[i]);
             			}
         			}
+
         		},function(data){
         			//调用承诺接口reject();
         		});
@@ -408,6 +410,9 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         			}else{
         				$scope.otherMode=true;
         			}
+        			if($scope.record.stockDate==null){
+    		    		$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm');
+    		    	}
         			if(data.data.deliver!=null){
         				$scope.record.deliverNum = data.data.deliver.deliverNum;
             			$scope.record.shipperOrReceiver = data.data.deliver.receiver;
@@ -425,7 +430,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         				if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutView")){//出库编辑或出库时
         					//var de$scope.record.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.deliver);
-            				//$scope.createFilterList();
+            				            				//$scope.createFilterList();
             			}
         			}
         			

@@ -163,8 +163,8 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="stockDate">入库日期 <span class="required"> * </span></label>
                                                     <div class="">
-                                                       <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly">
+                                                       <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd hh:ii" data-date-viewmode="years"
+                                                         id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" disabled>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
                                                     </div>

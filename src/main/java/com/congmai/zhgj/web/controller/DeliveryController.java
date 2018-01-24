@@ -1206,11 +1206,17 @@ public class DeliveryController {
 	@ResponseBody
 	public Map<String, Object> getDeliveryInfo(String serialNum) {
 		DeliveryVO delivery=null;
+		Map<String, Object> map = new HashMap<String, Object>();
 		delivery=deliveryService.selectDetailById(serialNum);
 		if(StringUtils.isEmpty(delivery.getOrderNum())){
-			delivery=deliveryService.selectDetailById2(delivery.getSerialNum());	
+			delivery=deliveryService.selectDetailById2(delivery.getSerialNum());
+		}else{
+			OrderInfo o=orderService.selectById(delivery.getOrderSerial());
+			if("1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
+				map.put("hasCheckData", true);
+			}
+		
 		}
-		Map<String, Object> map = new HashMap<String, Object>();
 		String suppluComId=delivery.getSupplyComId();
 		Company company=deliveryService.selectCompanyInfo(suppluComId);
 		if(company!=null){
