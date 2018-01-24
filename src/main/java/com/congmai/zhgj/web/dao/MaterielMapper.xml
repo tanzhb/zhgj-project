@@ -77,7 +77,7 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="productionPlace" property="productionPlace" jdbcType="VARCHAR" />
     <result column="brand" property="brand" jdbcType="VARCHAR" />
-    <result column="category1" property="category1" jdbcType="VARCHAR" />
+    <!-- <result column="category1" property="category1" jdbcType="VARCHAR" />
     <result column="category2" property="category2" jdbcType="VARCHAR" />
     <result column="category3" property="category3" jdbcType="VARCHAR" />
     <result column="materielAttribute" property="materielAttribute" jdbcType="VARCHAR" />
@@ -95,9 +95,9 @@
     <result column="volume" property="volume" jdbcType="VARCHAR" />
     <result column="weight" property="weight" jdbcType="VARCHAR" />
     <result column="palletSpecification" property="palletSpecification" jdbcType="VARCHAR" />
-    <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" />
+    <result column="manufactureDate" property="manufactureDate" jdbcType="DATE" /> -->
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-    <result column="packageNum" property="packageNum" jdbcType="VARCHAR" />
+    <!-- <result column="packageNum" property="packageNum" jdbcType="VARCHAR" />
     <result column="packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
     <result column="packageUnit" property="packageUnit" jdbcType="VARCHAR" />
     <result column="packagewidth" property="packagewidth" jdbcType="VARCHAR" />
@@ -108,7 +108,7 @@
     <result column="palletWeight" property="palletWeight" jdbcType="VARCHAR" />
     <result column="customsSupervisionConditions" property="customsSupervisionConditions" jdbcType="VARCHAR" />
     <result column="customsCode" property="customsCode" jdbcType="VARCHAR" />
-    <result column="qualityDate" property="qualityDate" jdbcType="VARCHAR" />
+    <result column="qualityDate" property="qualityDate" jdbcType="VARCHAR" /> -->
     <result column="versionNO" property="versionNO" jdbcType="VARCHAR" />
     <result column="isLatestVersion" property="isLatestVersion" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -118,7 +118,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <!-- <association property="parentMateriel" column="parentMaterielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>  -->
-    <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
+    <!-- <association property="typeName" column="type" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/> -->
 <!--     <association property="categoryName1" column="category1" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/> -->
@@ -126,8 +126,45 @@
     <!-- <association property="stockCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/> -->
     <!-- 查询物料指导单价,没有显示无 有过期了为已过期 -->
     <!-- <association property="guideUnitPrice" column="serialNum" select="com.congmai.zhgj.web.dao.PriceListMapper.getGuideUnitPrice"/> -->
-    <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId4materielList"/> 
-    
+    <!-- <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId4materielList"/> --> 
+    <collection property="supplyMateriels" ofType="com.congmai.zhgj.web.model.SupplyMateriel">
+    	<result column="sm_serialNum" property="serialNum" jdbcType="VARCHAR" />
+	    <result column="sm_materielId" property="materielId" jdbcType="VARCHAR" />
+	    <result column="sm_supplyComId" property="supplyComId" jdbcType="VARCHAR" />
+	    <result column="sm_supplyMaterielNum" property="supplyMaterielNum" jdbcType="VARCHAR" />
+	   <!--  <result column="sm_packageNum" property="packageNum" jdbcType="VARCHAR" />
+	    <result column="sm_packageSpecifications" property="packageSpecifications" jdbcType="VARCHAR" />
+	    <result column="sm_packageUnit" property="packageUnit" jdbcType="VARCHAR" />
+	    <result column="sm_packagewidth" property="packagewidth" jdbcType="VARCHAR" />
+	    <result column="sm_packageheight" property="packageheight" jdbcType="VARCHAR" />
+	    <result column="sm_packagelength" property="packagelength" jdbcType="VARCHAR" />
+	    <result column="sm_packagevolume" property="packagevolume" jdbcType="VARCHAR" />
+	    <result column="sm_packageUnitConversion" property="packageUnitConversion" jdbcType="VARCHAR" />
+	    <result column="sm_delFlg" property="delFlg" jdbcType="VARCHAR" />
+	    <result column="sm_creator" property="creator" jdbcType="VARCHAR" />
+	    <result column="sm_createTime" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="sm_updater" property="updater" jdbcType="VARCHAR" />
+	    <result column="sm_updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="sm_remark" property="remark" jdbcType="VARCHAR" />
+	    <result column="sm_materielName" property="materielName" jdbcType="VARCHAR" />
+	    <result column="sm_specifications" property="specifications" jdbcType="VARCHAR" />
+	    <result column="sm_unit" property="unit" jdbcType="VARCHAR" />
+	    <result column="sm_type" property="type" jdbcType="VARCHAR" />
+	    <result column="sm_category1" property="category1" jdbcType="VARCHAR" />
+	    <result column="sm_category2" property="category2" jdbcType="VARCHAR" />
+	    <result column="sm_category3" property="category3" jdbcType="VARCHAR" />
+	    <result column="sm_unitPriceGuide" property="unitPriceGuide" jdbcType="VARCHAR" />
+	    <result column="sm_purchaseQuota" property="purchaseQuota" jdbcType="VARCHAR" />
+	    <result column="sm_moq" property="moq" jdbcType="VARCHAR" /> -->
+	    <association property="supply" javaType="com.congmai.zhgj.web.model.Company">
+	    	<result column="supply_comId" property="comId" jdbcType="VARCHAR" />
+		    <result column="supply_comNum" property="comNum" jdbcType="VARCHAR" />
+		    <result column="supply_comType" property="comType" jdbcType="VARCHAR" />
+		    <result column="supply_tradeType" property="tradeType" jdbcType="VARCHAR" />
+		    <result column="supply_comName" property="comName" jdbcType="VARCHAR" />
+	    </association>
+	    <!-- <association property="supply" column="sm_supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectByPrimaryKey"/> -->
+	</collection>
   </resultMap>
   
   <resultMap id="BaseResultMap4Order" type="com.congmai.zhgj.web.model.Materiel" >
@@ -295,14 +332,92 @@
   </select>
   
   <select id="selectBySelectExample" resultMap="BaseResultMap4list" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    <include refid="Base_Column_List2" />
-    from materiel m 
-    left join supplyMateriel sm on sm.materielId = m.materielId 
-    left join buyMateriel bm on bm.materielId = m.materielId 
+    SELECT DISTINCT
+m.serialNum,
+m.materielId,
+m.materielNum,
+m.materielName,
+m.specifications,
+m.unit,
+m.parentMaterielSerial,
+m.type,
+ca.categoryName as typeName,
+m.productionPlace,
+m.brand,
+<!-- m.category1,
+m.category2,
+m.category3,
+m.materielAttribute,
+m.mnemonicCode,
+m.isBOM,
+m.stockUnit,
+m.originCountry,
+m.width,
+m.height,
+m.length,
+m.currency,
+m.unitPrice,
+m.deliveryCycle,
+m.filingItemNo,
+m.volume,
+m.weight,
+m.palletSpecification,
+m.manufactureDate, -->
+m.remark,
+<!-- m.packageNum,
+m.packageSpecifications,
+m.packageUnit,
+m.packagewidth,
+m.packageheight,
+m.packagelength,
+m.packagevolume,
+m.packageUnitConversion,
+m.palletWeight,
+m.customsSupervisionConditions,
+m.qualityDate, -->
+m.versionNO,
+m.isLatestVersion,
+m.`status`,
+m.delFlg,
+m.creator,
+m.createTime,
+m.updater,
+m.updateTime,
+sm.serialNum AS sm_serialNum,
+sm.materielId		sm_materielId,
+sm.supplyComId		sm_supplyComId,
+sm.supplyMaterielNum		sm_supplyMaterielNum,
+<!-- sm.packageNum		sm_packageNum,
+sm.packageSpecifications		sm_packageSpecifications,
+sm.packageUnit		sm_packageUnit,
+sm.packagewidth		sm_packagewidth,
+sm.packageheight		sm_packageheight,
+sm.packagelength		sm_packagelength,
+sm.packagevolume		sm_packagevolume,
+sm.packageUnitConversion		sm_packageUnitConversion,
+sm.delFlg		sm_delFlg,
+sm.creator		sm_creator,
+sm.createTime		sm_createTime,
+sm.updater		sm_updater,
+sm.updateTime		sm_updateTime,
+sm.remark		sm_remark,
+sm.materielName		sm_materielName,
+sm.specifications		sm_specifications,
+sm.unit		sm_unit,
+sm.type		sm_type,
+sm.category1		sm_category1,
+sm.category2		sm_category2,
+sm.category3		sm_category3,
+sm.unitPriceGuide		sm_unitPriceGuide,
+sm.purchaseQuota		sm_purchaseQuota,
+sm.moq		sm_moq, -->
+supply.comId supply_comId,
+supply.comNum supply_comNum, supply.comType supply_comType,supply.tradeType supply_tradeType,supply.comName supply_comName
+from materiel m 
+    left join supplyMateriel sm on sm.materielId = m.materielId and sm.delFlg = '0'
+    left join company supply on supply.comId = sm.supplyComId
+    left join buyMateriel bm on bm.materielId = m.materielId and bm.delFlg = '0'
+LEFT JOIN category ca on ca.categoryId = m.type
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
