@@ -2093,8 +2093,8 @@ public class OrderController {
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("dailiBuy"));//设置为代理采购
     			Company supply =  companyService.selectOne(supplyComId);
-    			if(supply!=null&&StaticConst.getInfo("weimao").equals(supply.getTradeType())){
-    				newOrderInfo.setTradeType(StaticConst.getInfo("weimao"));//设置为外贸
+    			if(supply!=null&&StaticConst.getInfo("waimao").equals(supply.getTradeType())){
+    				newOrderInfo.setTradeType(StaticConst.getInfo("waimao"));//设置为外贸
     			}else {
     				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
 				}

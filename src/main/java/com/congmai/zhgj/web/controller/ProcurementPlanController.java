@@ -568,8 +568,8 @@ public class ProcurementPlanController {
     			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购
     			
     			Company supply =  companyService.selectOne(supplyComId);
-    			if(supply!=null&&StaticConst.getInfo("weimao").equals(supply.getTradeType())){
-    				newOrderInfo.setTradeType(StaticConst.getInfo("weimao"));//设置为外贸
+    			if(supply!=null&&StaticConst.getInfo("waimao").equals(supply.getTradeType())){
+    				newOrderInfo.setTradeType(StaticConst.getInfo("waimao"));//设置为外贸
     			}else {
     				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
 				}
