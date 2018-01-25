@@ -155,6 +155,18 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	//收货方备注
 		private String takeTransportRemark;
 		
+		private String saleOrderNum; // 关联销售订单号
+		
+		//发货方联系人
+		private String deContact;
+		
+		//发货方联系电话
+			private String deContactNum;
+			
+		//发货方备注
+			private String deRemark;
+
+		
 	//发货地址
 	private String deliveryAddress;
 	
@@ -807,6 +819,38 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setTakeTransportRemark(String takeTransportRemark) {
 		this.takeTransportRemark = takeTransportRemark;
+	}
+
+	public String getSaleOrderNum() {
+		return saleOrderNum;
+	}
+
+	public void setSaleOrderNum(String saleOrderNum) {
+		this.saleOrderNum = saleOrderNum;
+	}
+
+	public String getDeContact() {
+		return deContact;
+	}
+
+	public String getDeContactNum() {
+		return deContactNum;
+	}
+
+	public String getDeRemark() {
+		return deRemark;
+	}
+
+	public void setDeContact(String deContact) {
+		this.deContact = deContact;
+	}
+
+	public void setDeContactNum(String deContactNum) {
+		this.deContactNum = deContactNum;
+	}
+
+	public void setDeRemark(String deRemark) {
+		this.deRemark = deRemark;
 	}
 
 /*	public String getBusinessType() {

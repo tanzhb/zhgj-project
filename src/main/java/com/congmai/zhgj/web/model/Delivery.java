@@ -14,7 +14,7 @@ public class Delivery {
 
 	private String orderSerial;
 
-	private String docNum; // 单据号(当deliverType为代发货时,docNum存的值为相关联销售订单号)
+	private String docNum; // 单据号
 
 	private String supplyComId;
 
@@ -79,6 +79,26 @@ public class Delivery {
 	private String takeDeliverSerial;
 
 	private String warehouseName;// 发货仓库名称
+	
+	//收货方联系人
+	private String takeDeliverer;
+	
+	//收货方联系电话
+		private String takeContactNum;
+		
+	//收货方备注
+		private String takeTransportRemark;
+		
+		private String saleOrderNum; // 关联销售订单号
+		
+		//发货方联系人
+		private String deContact;
+		
+		//发货方联系电话
+			private String deContactNum;
+			
+		//发货方备注
+			private String deRemark;
 
 	// 发货数量合计
 	private String materielTotalCount;
@@ -600,6 +620,62 @@ public class Delivery {
 
 	public void setRealCount(String realCount) {
 		this.realCount = realCount;
+	}
+
+	public String getTakeDeliverer() {
+		return takeDeliverer;
+	}
+
+	public String getTakeContactNum() {
+		return takeContactNum;
+	}
+
+	public String getTakeTransportRemark() {
+		return takeTransportRemark;
+	}
+
+	public void setTakeDeliverer(String takeDeliverer) {
+		this.takeDeliverer = takeDeliverer;
+	}
+
+	public void setTakeContactNum(String takeContactNum) {
+		this.takeContactNum = takeContactNum;
+	}
+
+	public void setTakeTransportRemark(String takeTransportRemark) {
+		this.takeTransportRemark = takeTransportRemark;
+	}
+
+	public String getSaleOrderNum() {
+		return saleOrderNum;
+	}
+
+	public void setSaleOrderNum(String saleOrderNum) {
+		this.saleOrderNum = saleOrderNum;
+	}
+
+	public String getDeContact() {
+		return deContact;
+	}
+
+	public String getDeContactNum() {
+		return deContactNum;
+	}
+
+	public String getDeRemark() {
+		return deRemark;
+	}
+
+	public void setDeContact(String deContact) {
+		this.deContact = deContact;
+	}
+
+	public void setDeContactNum(String deContactNum) {
+		this.deContactNum = deContactNum;
+	}
+
+	public void setDeRemark(String deRemark) {
+		this.deRemark = deRemark;
 	}
 	
 }

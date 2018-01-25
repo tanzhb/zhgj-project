@@ -58,7 +58,14 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
-   
+    <result column="takeDeliverer" property="takeDeliverer" jdbcType="VARCHAR" />
+    <result column="takeContactNum" property="takeContactNum" jdbcType="VARCHAR" />
+    <result column="takeTransportRemark" property="takeTransportRemark" jdbcType="VARCHAR" />
+    <result column="takeDeliverer" property="takeDeliverer" jdbcType="VARCHAR" />
+    <result column="deRemark" property="deRemark" jdbcType="VARCHAR" />
+    <result column="deContact" property="deContact" jdbcType="VARCHAR" />
+	<result column="deContactNum" property="deContactNum" jdbcType="VARCHAR" />
+	<result column="saleOrderNum" property="saleOrderNum" jdbcType="VARCHAR" />
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="dtSerialNum" property="serialNum" jdbcType="VARCHAR" />
     	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
@@ -382,7 +389,9 @@
     d.serialNum, d.deliverNum,d.deliverType,d.docNum, d.orderSerial, d.supplyComId, d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate,d.deliverAddress, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,dm.serialNum as dmSerialNum,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.batchNum,d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,
+    d.takeDeliverer,d.takeTransportRemark,d.takeContactNum,d.saleOrderNum,d.deRemark,d.deContactNum,d.deContact,
+    dm.batchNum,dm.serialNum as dmSerialNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm2.acceptCount,dm2.refuseCount,dm2.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,dm.orderMaterielSerial,
     dm2.serialNum as stockInSerialNum,dm2.qualifiedCount as stockInQualifiedCount,dm2.unqualifiedCount as stockInUnqualifiedCount,dm2.checkRemark as stockInCheckRemark,dm2.warehouseSerial as stockInWarehouseSerial,

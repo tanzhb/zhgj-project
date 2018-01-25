@@ -4734,7 +4734,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
 	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
 	  						            	actualDate:{required:"实际收货日期不能为空！"},
-	  						            	taker:{required:"收货人不能为空！"}
+	  						            	taker:{required:"收货人不能为空！"},
+	  						            	deContactNum:{required:"联系电话不能为空！"},
+	  						            	takeContactNum:{required:"联系电话不能为空！"}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
@@ -4828,6 +4830,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                	required: !0
 	  						                },
 	  						                dtContactNum: {
+	  						                	//required: !0,
+	  						                	isPhone: !0
+	  						                },
+	  						              deContactNum: {
+	  						                	//required: !0,
+	  						                	isPhone: !0
+	  						                },
+	  						              takeContactNum: {
 	  						                	//required: !0,
 	  						                	isPhone: !0
 	  						                },

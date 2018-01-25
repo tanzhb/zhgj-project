@@ -208,7 +208,8 @@
 	b.serialNum AS transportserialNum,b.transportType,b.transport,b.port,b.shipNumber,b.playArrivalDate,b.playWarehouseDate,
 	b.contact transportContact,b.contactNum transportContactNum,b.remark transportRemark,
 	e.serialNum takeWarehouseSerial,e.warehouseName takeWarehouseName,c.takeDeliverAddress takeAddress,c.takeDeliverDate,c.receiver takeDeliveryReceiver,
-	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId,a.takeDeliverer,a.takeContactNum,a.takeTransportRemark
+	c.contactNum takeDeliveryContactNum,c.remark takeDeliveryRemark,c.serialNum AS takeDeliverSerialNum,a.reason,a.processInstanceId,a.userId,a.takeDeliverer,a.takeContactNum,a.takeTransportRemark,
+	a.saleOrderNum,a.deRemark,a.deContactNum,a.deContact
 	FROM delivery a
 	LEFT JOIN deliveryTransport b ON b.deliverSerial=a.serialNum
 	LEFT JOIN warehouse d ON a.warehouseSerial=d.serialNum AND d.delFlg='0'
@@ -345,7 +346,7 @@
     <!--查询仓库地址  -->
     <select id="queryAddressById" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.Warehouse">
     SELECT
-	address
+	address,tel,admin
 	FROM
 	warehouse
 	WHERE

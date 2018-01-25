@@ -35,6 +35,13 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="deliverAddress" property="deliverAddress" jdbcType="VARCHAR" />
+    <result column="takeDeliverer" property="takeDeliverer" jdbcType="VARCHAR" />
+    <result column="takeContactNum" property="takeContactNum" jdbcType="VARCHAR" />
+    <result column="takeTransportRemark" property="takeTransportRemark" jdbcType="VARCHAR" />
+    <result column="takeDeliverer" property="takeDeliverer" jdbcType="VARCHAR" />
+    <result column="deRemark" property="deRemark" jdbcType="VARCHAR" />
+    <result column="deContact" property="deContact" jdbcType="VARCHAR" />
+    <result column="deContactNum" property="deContactNum" jdbcType="VARCHAR" />
     <association property="deliveryTransport"  javaType="com.congmai.zhgj.web.model.DeliveryTransport">
     	 <result column="transportType" property="transportType" jdbcType="VARCHAR" />
 		 <result column="transport" property="transport" jdbcType="VARCHAR" />
@@ -151,7 +158,7 @@
     shipper, receiver, makeDate, maker, remark, status, approval, approvalDate, warehouseSerial, 
     materielCount, deliverDate, packageCount, materielWeight, packageType, packageSpecifications, 
     serviceMoney, deliverer, contactNum, deliverRemark, deliverAddress, processInstanceId, 
-    reason, userId, delFlg, creator, createTime, updater, updateTime
+    reason, userId, delFlg, creator, createTime, updater, updateTime,takeDeliverer,takeContactNum,takeTransportRemark,saleOrderNum,deRemark,deContactNum,deContact
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
@@ -178,7 +185,7 @@
     d.serialNum, d.deliverNum,deliverType, d.orderSerial, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,d.takeDeliverer,d.takeContactNum,d.takeTransportRemark,d.saleOrderNum,d.deRemark,d.deContactNum,d.deContact,
     dt.transportType,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver,td.contactNum,td.takeDeliverNum,td.remark as take_delivery_remark
     from takeDelivery td
@@ -196,7 +203,7 @@
     d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, 
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,d.takeDeliverer,d.takeContactNum,d.takeTransportRemark,d.saleOrderNum,d.deRemark,d.deContactNum,d.deContact,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
 	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
@@ -213,7 +220,7 @@
     d.serialNum, d.deliverNum,d.deliverType, d.orderSerial, d.supplyComId,d.buyComId, d.shipper, d.receiver, d.makeDate, d.maker, 
     d.remark, d.status, d.approval, d.approvalDate, d.warehouseSerial as warehouseSerial, d.materielCount, d.deliverDate, 
     d.packageCount, d.materielWeight, d.packageType, d.packageSpecifications, d.serviceMoney, d.deliverer, td.serialNum  as takeDeliverSerial,
-    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,dm.serialNum as dmSerialNum,dm.batchNum,
+    d.contactNum, d.deliverRemark, d.delFlg, d.creator, d.createTime, d.updater, d.updateTime,d.takeDeliverer,d.takeContactNum,d.takeTransportRemark,d.saleOrderNum,d.deRemark,d.deContactNum,d.deContact,dm.serialNum as dmSerialNum,dm.batchNum,
     dm.manufactureDate,dm.deliverCount,dm.deliverRemark,
     dm.acceptCount,dm.refuseCount,dm.takeRemark,dm.qualifiedCount,dm.unqualifiedCount,dm.checkRemark,dm.warehouseSerial,
 	dm.positionSerial,dm.stockCount,dm.unstockCount,dm.stockRemark,dm.remark as dmRemark,dm.warehouseSerial as dmWarehouseSerial,dm.orderMaterielSerial,
@@ -247,7 +254,7 @@
       contactNum, deliverRemark, deliverAddress, 
       processInstanceId, reason, userId, 
       delFlg, creator, createTime, 
-      updater, updateTime)
+      updater, updateTime,takeDeliverer,takeTransportRemark,takeContactNum,saleOrderNum,deRemark,deContactNum,deContact)
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverNum,jdbcType=VARCHAR}, #{deliverType,jdbcType=VARCHAR}, 
       #{orderSerial,jdbcType=VARCHAR}, #{docNum,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{supplyComId,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, #{shipper,jdbcType=VARCHAR}, #{receiver,jdbcType=VARCHAR}, 
@@ -259,7 +266,8 @@
       #{contactNum,jdbcType=VARCHAR}, #{deliverRemark,jdbcType=VARCHAR}, #{deliverAddress,jdbcType=VARCHAR}, 
       #{processInstanceId,jdbcType=VARCHAR}, #{reason,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{takeContactNum,jdbcType=VARCHAR},#{takeDeliverer,jdbcType=VARCHAR},#{takeTransportRemark,jdbcType=VARCHAR},
+     #{saleOrderNum,jdbcType=VARCHAR},#{deRemark,jdbcType=VARCHAR},#{deContactNum,jdbcType=VARCHAR},#{deContact,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Delivery" >
     insert into delivery
@@ -371,6 +379,27 @@
       </if>
       <if test="updateTime != null" >
         updateTime,
+      </if> 
+      <if test="takeTransportRemark != null" >
+        takeTransportRemark,
+      </if>
+      <if test="takeContactNum != null" >
+        takeContactNum,
+      </if>
+      <if test="takeDeliverer != null" >
+        takeDeliverer,
+      </if>
+      <if test="saleOrderNum != null" >
+        saleOrderNum,
+      </if>
+       <if test="deContact != null" >
+        deContact,
+      </if>
+      <if test="deContactNum != null" >
+        deContactNum,
+      </if>
+      <if test="deRemark != null" >
+        deRemark,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -478,6 +507,27 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+         <if test="takeTransportRemark != null" >
+        #{takeTransportRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="takeContactNum != null" >
+        #{takeContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="takeDeliverer != null" >
+        #{takeDeliverer,jdbcType=VARCHAR},
+      </if>
+       <if test="saleOrderNum != null" >
+        #{saleOrderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deContact != null" >
+         #{deContact,jdbcType=VARCHAR},
+      </if>
+      <if test="deContactNum != null" >
+         #{deContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="deRemark != null" >
+         #{deRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -598,6 +648,27 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.takeTransportRemark != null" >
+        takeTransportRemark=#{record.takeTransportRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.takeContactNum != null" >
+        takeContactNum=#{record.takeContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.takeDeliverer != null" >
+        takeDeliverer=#{record.takeDeliverer,jdbcType=VARCHAR},
+      </if>
+       <if test="record.saleOrderNum != null" >
+        saleOrderNum=#{record.saleOrderNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deContact != null" >
+         deContact=#{record.deContact,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deContactNum != null" >
+         deContactNum=#{record.deContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deRemark != null" >
+        deRemark = #{record.deRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -640,7 +711,14 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+        takeTransportRemark=#{record.takeTransportRemark,jdbcType=VARCHAR},
+        takeContactNum=#{record.takeContactNum,jdbcType=VARCHAR},
+        takeDeliverer=#{record.takeDeliverer,jdbcType=VARCHAR},
+        saleOrderNum=#{record.saleOrderNum,jdbcType=VARCHAR},
+         deContact=#{record.deContact,jdbcType=VARCHAR},
+         deContactNum=#{record.deContactNum,jdbcType=VARCHAR},
+        deRemark = #{record.deRemark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -753,6 +831,27 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="takeTransportRemark != null" >
+        takeTransportRemark = #{takeTransportRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="takeContactNum != null" >
+        takeContactNum = #{takeContactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="takeDeliverer != null" >
+        takeDeliverer = #{takeDeliverer,jdbcType=VARCHAR},
+      </if>
+       <if test="saleOrderNum != null" >
+        saleOrderNum = #{saleOrderNum,jdbcType=VARCHAR},
+      </if>
+        <if test="deContact != null" >
+         deContact=#{deContact,jdbcType=VARCHAR},
+      </if>
+      <if test="deContactNum != null" >
+       deContactNum=#{deContactNum,jdbcType=VARCHAR},
+      </if>
+       <if test="deRemark != null" >
+       deRemark = #{deRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -792,7 +891,14 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+       takeTransportRemark=#{takeTransportRemark,jdbcType=VARCHAR},
+        takeContactNum=#{takeContactNum,jdbcType=VARCHAR},
+        takeDeliverer=#{takeDeliverer,jdbcType=VARCHAR},
+        saleOrderNum = #{saleOrderNum,jdbcType=VARCHAR},
+         deContact=#{deContact,jdbcType=VARCHAR},
+       deContactNum=#{deContactNum,jdbcType=VARCHAR},
+       deRemark = #{deRemark,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <select id="selectDeliverNumByDeliverSerial" resultType="java.lang.String" parameterType="java.lang.String" >

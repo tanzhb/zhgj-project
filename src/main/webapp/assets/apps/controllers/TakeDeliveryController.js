@@ -243,7 +243,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					if($scope.companyAddressess.length==0){
 						toastr.warning("该企业无联系地址");
-						//return;
+						return;
 					}
 					if($scope.showSXs!='1'){
 						$scope.showSXs='1';
@@ -258,7 +258,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					if($scope.companyAddressesf.length==0){
 						toastr.warning("该企业无联系地址");
-						//return;
+						return;
 					}
 					if($scope.showSXf!='1'){
 						$scope.showSXf='1';
@@ -292,10 +292,10 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					}
 					if(data.clauseDelivery!=null){
       		    		$scope.deliver.packageType=data.clauseDelivery.deliveryMode;
-      		    		$scope.takeDeliver.takeDeliverAddress=data.clauseDelivery.warehouseAddress;
+      		    		//$scope.takeDeliver.takeDeliverAddress=data.clauseDelivery.warehouseAddress;
       		    	}else{
       		    		$scope.deliver.packageType='';
-      		    		$scope.takeDeliver.takeDeliverAddress='';
+      		    		//$scope.takeDeliver.takeDeliverAddress='';
       		    	}
 					initWarehouse("pt",$scope.deliver.supplyComId,"out");
 					initWarehouse("pt",$scope.deliver.buyComId,"in");
@@ -682,14 +682,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 								return;
 							}
 							if($scope.warehouselistf[i].serialNum == $scope.deliver.warehouseSerial){
-								$scope.deliver.deliverAddress = $scope.warehouselistf[i].warehouseName;
+								$scope.deliver.deliverAddress = $scope.warehouselistf[i].address;
 							}
 						}
 					}
 				}else{
 					for(var i in $scope.warehouselists){
 							if($scope.warehouselists[i].serialNum == $scope.takeDeliver.warehouseSerial){
-								$scope.takeDeliver.takeDeliverAddress = $scope.warehouselists[i].warehouseName;
+								$scope.takeDeliver.takeDeliverAddress = $scope.warehouselists[i].address;
 							}
 						}
 					}
@@ -1299,7 +1299,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
 	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
 	  						            	actualDate:{required:"实际收货日期不能为空！"},
-	  						            	taker:{required:"收货人不能为空！"}
+	  						            	taker:{required:"收货人不能为空！"},
+	  						            	deContactNum:{required:"联系电话不能为空！"},
+	  						            	takeContactNum:{required:"联系电话不能为空！"}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
@@ -1331,6 +1333,14 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                },
 	  						                approvalDate: {
 	  						                	required: !0
+	  						                },
+	  						              deContactNum: {
+	  						                	//required: !0,
+	  						                	isPhone: !0
+	  						                },
+	  						              takeContactNum: {
+	  						                	//required: !0,
+	  						                	isPhone: !0
 	  						                },
 	  						               /* dWarehouseSerial: {
 	  						                	required: !0
@@ -3072,7 +3082,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 					if(id_count==0){
 						toastr.warning("请选择一个销售订单");
 					}else{
-						$scope.deliver.docNum= $('#saleOrder input[name="selecrOrderSerial"]:checked').val();
+						$scope.deliver.saleOrderNum= $('#saleOrder input[name="selecrOrderSerial"]:checked').val();
 						$('#saleOrderInfo').modal('hide');// 删除成功后关闭模态框
 		   		}
 		   	};

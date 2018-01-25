@@ -251,7 +251,7 @@
                                                     <label class="control-label bold" for="deliverer">联系人 </label>
                                                     <div class="">
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-hide="span">{{deliveryDetail.deliverer}}</p>
+                                                         <p class="control-label left" ng-hide="span">{{deliveryDetail.deContact}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -261,7 +261,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.contactNum}}</p>
+															{{deliveryDetail.deContactNum}}</p>
 													</div>
 												</div>
 											</div>
@@ -272,7 +272,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.transportRemark}}</p>
+															{{deliveryDetail.deRemark}}</p>
 													</div>
 												</div>
 											</div>

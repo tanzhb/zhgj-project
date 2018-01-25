@@ -1652,10 +1652,10 @@ margin-right: 20px;
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                       <!--   <div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold"><span ng-if="clauseDelivery.deliveryMode=='自提'">提货</span><span ng-if="clauseDelivery.deliveryMode=='配送'">收货</span>地址<!-- <span ng-hide="span"
-														class="required" aria-required="true"> * </span> --></label>
+													<label class="control-label bold"><span ng-if="clauseDelivery.deliveryMode=='自提'">提货</span><span ng-if="clauseDelivery.deliveryMode=='配送'">收货</span>地址<span ng-hide="span"
+														class="required" aria-required="true"> * </span></label>
 											
 																  	<div class="" >
 													<div class="input-group"  >
@@ -1690,7 +1690,7 @@ margin-right: 20px;
 															{{clauseDelivery.warehouseAddress}}</p>
 													
 												</div>
-											</div>
+											</div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">运输方式：</label>

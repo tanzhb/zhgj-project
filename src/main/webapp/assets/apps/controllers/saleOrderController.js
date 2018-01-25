@@ -2934,7 +2934,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
    	   	    	if(isNull($scope.clauseDelivery)){// 交付条款为空的处理
    	   	    		toastr.error('请填写交付条款后保存！');return
    	   			}
-   	   	    	if(isNull($scope.clauseDelivery.warehouseAddress)&&$scope.showSXf =='1'){// 地址为空
+   	   	    	/*if(isNull($scope.clauseDelivery.warehouseAddress)&&$scope.showSXf =='1'){// 地址为空
 	   	    		toastr.error('请填写交付条款后保存！');return
 	   			}
    	   	  if($scope.showSXf =='1'){
@@ -2968,7 +2968,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			$scope.clauseDelivery.warehouseAddress=$("select[name='warehouseAddress1']").val();
 		}else{
 			$scope.clauseDelivery.warehouseAddress=$("input[name='warehouseAddress']").val();
-		}
+		}*/
    	   	    	if($('#form_clauseDelivery').valid()){
    	   	    		$scope.clauseDelivery.contractSerial = $scope.contract.id;
    	   	    		orderService.saveClauseDelivery($scope.clauseDelivery).then(
