@@ -77,15 +77,16 @@
     <result column="type" property="type" jdbcType="VARCHAR" />
     <result column="productionPlace" property="productionPlace" jdbcType="VARCHAR" />
     <result column="brand" property="brand" jdbcType="VARCHAR" />
+    <result column="typeName" property="typeName" jdbcType="VARCHAR" />
     <!-- <result column="category1" property="category1" jdbcType="VARCHAR" />
     <result column="category2" property="category2" jdbcType="VARCHAR" />
     <result column="category3" property="category3" jdbcType="VARCHAR" />
     <result column="materielAttribute" property="materielAttribute" jdbcType="VARCHAR" />
     <result column="MnemonicCode" property="mnemonicCode" jdbcType="VARCHAR" />
     <result column="isBOM" property="isBOM" jdbcType="VARCHAR" />
-    <result column="stockUnit" property="stockUnit" jdbcType="VARCHAR" />
+    <result column="stockUnit" property="stockUnit" jdbcType="VARCHAR" />-->
     <result column="originCountry" property="originCountry" jdbcType="VARCHAR" />
-    <result column="width" property="width" jdbcType="VARCHAR" />
+    <!-- <result column="width" property="width" jdbcType="VARCHAR" />
     <result column="height" property="height" jdbcType="VARCHAR" />
     <result column="length" property="length" jdbcType="VARCHAR" />
     <result column="currency" property="currency" jdbcType="VARCHAR" />
