@@ -246,25 +246,25 @@
                                                     </div>
                                             </div>
                                             </div> -->
-                                            <div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="deliverer">联系人 </label>
-                                                    <div class="">
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-hide="span">{{deliveryDetail.deContact}}</p>
-                                                    </div>
-                                            </div>
-										</div>
 									<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">联系电话</label>
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deContactNum}}</p>
+															{{deliveryDetail.deContactNum==null?deliveryDetail.contactNum:deliveryDetail.deContactNum}}</p>
 													</div>
 												</div>
 											</div>
+											<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="deliverer">联系人 </label>
+                                                    <div class="">
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-hide="span">{{deliveryDetail.deContact==null?deliveryDetail.deliverer:deliveryDetail.deContact}}</p>
+                                                    </div>
+                                            </div>
+										</div>
 										<!--/span-->
 										<div class="col-md-4">
 												<div class="form-group">
@@ -272,7 +272,7 @@
 													<div class="">
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deRemark}}</p>
+															{{deliveryDetail.deRemark==null?deliveryDetail.transportRemark:deliveryDetail.deRemark}}</p>
 													</div>
 												</div>
 											</div>
@@ -861,12 +861,13 @@
 							<th rowspan="2">单位</th>
 							<th rowspan="2">订单数量</th>
 							<th rowspan="2">未发数量</th>
+							<th rowspan="2">未发数量</th>
 							<th colspan="2" style="text-align: center;">发货</th>
-							<!--  -->
 							<th colspan="2" style="text-align: center;" ng-if="hasCheckData">质检</th>
 							<!-- <th rowspan="2">合格数量</th>
 							<th rowspan="2">备注</th> -->
-							<th colspan="2" style="text-align: center;" ng-if="showTransport">出库</th>
+							<th colspan="2" style="text-align: center;" ng-if="hasOutData">出库</th>
+							<th colspan="2" style="text-align: center;" ng-if="hasInData">入库</th>
 							<!-- <th>实际出库</th>
 							<th rowspan="2">备注</th> -->
 							<th rowspan="2">附件</th>
@@ -877,8 +878,11 @@
 							<th >备注</th>
 							<th ng-if="hasCheckData">合格数量</th>
 							<th ng-if="hasCheckData">备注</th>
-							<th ng-if="showTransport">实际出库</th>
-							<th  ng-if="showTransport">备注</th>
+							<th ng-if="hasOutData">实际出库</th>
+							<th  ng-if="hasOutData">备注</th>
+							<th ng-if="hasInData">实际入库</th>
+							<th  ng-if="hasInData">备注</th>
+							
 						</tr>
 					</thead>
 					<tbody>
@@ -893,12 +897,13 @@
 							<td>{{materiel.amount-materiel.deliveredCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>{{materiel.remark}}</td>
-							<td>{{materiel.deliverCount}}</td>
-							<td>{{materiel.remark}}</td>
 							<td ng-if="hasCheckData">{{materiel.qualifiedCount}}</td>
 							<td  ng-if="hasCheckData">{{materiel.checkRemark}}</td>
-							<td  ng-if="showTransport">{{materiel.stockCount}}</td>
-							<td ng-if="showTransport">{{materiel.stockRemark}}</td>
+							<td ng-if="hasOutData">{{materiel.stockCount}}</td>
+							<td  ng-if="hasOutData">{{materiel.stockRemark}}</td>
+							<td ng-if="hasInData">{{materiel.stockCount}}</td>
+							<td ng-if="hasInData">{{materiel.stockRemark}}</td>
+							
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
 							</td>
@@ -921,10 +926,12 @@
 														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
-														<td ng-if="hasCheckData">{{totalQualifiedCount}}</td>
-														<td  ng-if="hasCheckData"></td>
-														<td ng-if="showTransport">{{totalStockCount}}</td>
-														<td ng-if="showTransport"></td>
+															<th ng-if="hasCheckData">{{totalQualifiedCount}}</th>
+															<th ng-if="hasCheckData"></th>
+															<th ng-if="hasOutData">{{totalStockCount}}</th>
+															<th  ng-if="hasOutData"></th>
+															<th ng-if="hasInData">{{totalStockCount}}</th>
+															<th  ng-if="hasInData"></th>
 														<td></td>
 														<td></td>
 													</tr>

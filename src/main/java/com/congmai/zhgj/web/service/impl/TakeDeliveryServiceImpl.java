@@ -213,10 +213,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
    			tmateriel.setAcceptCount(materiel.getDeliverCount());
    			deliveryMaterielMapper.insert(tmateriel);
 		}
-		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
+		/*if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
 		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
-		}
-		
+		}*/
+		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 	}
 	
 	@Override
@@ -287,10 +287,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	   			tmateriel.setAcceptCount(materiel.getDeliverCount());
 	   			deliveryMaterielMapper.insert(tmateriel);
 		}
-		if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
+		/*if(!StaticConst.getInfo("buygetmerchant").equals(delivery.getDeliverType())){//非采购发货
 			confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
-		}
-		
+		}*/
+		confirmDelivery(delivery, takeDelivery, currenLoginName);//确认发货操作
 	}
 	@Override
 	public  void  confirmDelivery(Delivery delivery,

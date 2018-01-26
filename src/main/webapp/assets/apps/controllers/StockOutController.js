@@ -234,6 +234,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						$scope.record.status='1';
 					}
 					params.record = $scope.record;
+					params.record.dateStock = $scope.record.stockDate;
+					params.record.stockDate=null;
 					params.record.deliverSerial = $scope.deliverSerial;
 					params.deliveryMateriels = [];
 					params.stockOutMateriels = [];

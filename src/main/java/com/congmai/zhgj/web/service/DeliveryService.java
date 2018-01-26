@@ -244,7 +244,7 @@ public interface DeliveryService extends GenericService<DeliveryMaterielVO, Stri
 	  
 	  public void  updateDelivery(Delivery delivery);
 	  
-	  public StockInOutRecord  selectStockInOutRecordByDeliveryId(String serialNum );
+	  public StockInOutRecord  selectStockInOutRecordByDeliveryId(String serialNum,String inOrOut );
 	  
 	
 }

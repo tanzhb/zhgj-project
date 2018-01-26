@@ -795,7 +795,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		    						promise.then(function(data) {
 		    								$(".modal-backdrop").remove();
 		    								toastr.success("确认发货成功");
-		    								$scope.delivery.status=status;
+		    								if(status!=1){
+		    									$scope.delivery.status=0;
+		    								}else{
+		    									$scope.delivery.status=1;
+		    								}
+		    								$scope.confirmDeliverybtn=false;
 		    								handle.unblockUI();
 		    								$state.go('delivery',{},{reload:true});
 		    								
@@ -2435,11 +2440,17 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			          		     function(data){
 			          		    	 debugger;
 			          		    	$scope.deliveryDetail=data.delivery;
-			          		    	if(data.hasOutData){//已出入过库
-			          		    		$scope.showTransport=true;//显示运输信息及出入库信息
+			          		    	if(data.hasOutData){//已出过库
+			          		    		$scope.hasOutData=true;//显示运输信息及出入库信息
 			          		    	}
 			          		    	if(data.hasCheckData){//已出过库
 			          		    		$scope.hasCheckData=true;//显示检验信息
+			          		    	}
+			          		    	if(data.hasInData){//已入过库
+			          		    		$scope.hasInData=true;//
+			          		    	}
+			          		    	if(data.showTransport){//
+			          		    		$scope.showTransport=true;//显示运输信息
 			          		    	}
 			          		    	$scope.delivery={};
 			          		    	$scope.flag=false;

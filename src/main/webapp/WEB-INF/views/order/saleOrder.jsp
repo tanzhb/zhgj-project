@@ -306,18 +306,18 @@
 			<ul class="nav nav-tabs " id="deliveryPlanTab">
 				<li class="active"><a  href="#applyDeliveryPlan" data-toggle="tab"  ng-click="toShowDeliveryPlan()"
 					>发货计划 </a></li>
-				<li><a href="#daibanDeliveryPlan" data-toggle="tab" ng-click="toDaibanDeliveryPlan()">
+			<!-- 	<li><a href="#daibanDeliveryPlan" data-toggle="tab" ng-click="toDaibanDeliveryPlan()">
 						待办 <dbQuantity1/></a></li>
 				<li><a href="#yibanDeliveryPlan" data-toggle="tab" ng-click="toYibanDeliveryPlan()">
-						已办 <ybQuantity/></a></li>
+						已办 <ybQuantity/></a></li> -->
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="applyDeliveryPlan">
 			        <div class="portlet light">
 			            <div class="portlet-title">
 					<div class="actions" ><!-- ng-controller='MyCtrl' -->
-					<label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+					<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label> -->
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
 										class="fa fa-plus"></i>发货通知

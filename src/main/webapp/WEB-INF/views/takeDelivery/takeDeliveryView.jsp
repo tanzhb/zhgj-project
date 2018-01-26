@@ -251,7 +251,7 @@
 	                                                    </select>
 	                                                    </div>
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-hide="span">{{deliver.warehouseName}}</p>
+                                                         <p class="control-label left" ng-hide="span">{{deliver.warehouse.warehouseName}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -307,16 +307,6 @@
                                                     </div>
                                             </div>
                                             </div> -->
-								<div class="col-md-4">
-											<div class="form-group">
-                                                    <label class="control-label bold" for="deContact">联系人</label>
-                                                    <div class="">
-                                                        <input type="text" class="form-control" id="deContact" ng-model="deliver.deContact" ng-show="inputDeliveryInfo" >
-                                                        <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-hide="span">{{deliver.deContact}}</p>
-                                                    </div>
-                                            </div>
-										</div>
 						
 										<!--/span-->
 										<div class="col-md-4">
@@ -326,6 +316,16 @@
                                                         <input type="text" class="form-control" id="deContactNum"  name="deContactNum" ng-model="deliver.deContactNum" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-hide="span">{{deliver.deContactNum}}</p>
+                                                    </div>
+                                            </div>
+										</div>
+										<div class="col-md-4">
+											<div class="form-group">
+                                                    <label class="control-label bold" for="deContact">联系人</label>
+                                                    <div class="">
+                                                        <input type="text" class="form-control" id="deContact" ng-model="deliver.deContact" ng-show="inputDeliveryInfo" >
+                                                        <div class="form-control-focus"> </div>
+                                                         <p class="control-label left" ng-hide="span">{{deliver.deContact}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -1189,31 +1189,25 @@
 							<th rowspan="2">物料名称</th>
 							<th rowspan="2">规格型号</th>
 							<th rowspan="2">单位</th>
-							<!-- <th rowspan="2">生产日期</th> -->
-							<th colspan="5" style="text-align: center;">发货</th>
-							<!-- <th colspan="4" style="text-align: center;">收货</th> -->
-						<!-- 	<th colspan="3" style="text-align: center;">检验</th>
-							<th colspan="5" style="text-align: center;">入库</th> -->
+						<th rowspan="2">订单数量</th>
+							<th rowspan="2">未发数量</th>
+							<th colspan="2" style="text-align: center;">发货</th>
+							<th colspan="2" style="text-align: center;" ng-if="hasCheckData">质检</th>
+							<th colspan="2" style="text-align: center;" ng-if="hasOutData">出库</th>
+							<th colspan="2" style="text-align: center;" ng-if="hasInData">入库</th>
+							<th rowspan="2">附件</th>
 							<th rowspan="2">状态</th>
 						</tr>
 						<tr>
-							<th>订单数量</th>
-							<th>未发数量</th>
 							<th>发货数量</th>
-							<th>附件</th>
-							<th>备注</th>
-							<!-- <th>实收数量</th>
-							<th>拒收数量</th>
-							<th>附件</th>
-							<th>备注</th> -->
-							<!-- <th>合格数量</th>
-							<th>不合格数量</th>
-							<th>备注</th>
-							<th>入库数量</th>
-							<th>未入数量</th>
-							<th>仓库</th>
-							<th>库区</th>
-							<th>备注</th> -->
+							<th >备注</th>
+							<th ng-if="hasCheckData">合格数量</th>
+							<th ng-if="hasCheckData">备注</th>
+							<th ng-if="hasOutData">实际出库</th>
+							<th  ng-if="hasOutData">备注</th>
+							<th ng-if="hasInData">实际入库</th>
+							<th  ng-if="hasInData">备注</th>
+						
 						</tr>
 					</thead>
 					<tbody>
@@ -1227,10 +1221,17 @@
 							<td>{{materiel.orderMateriel.amount}}</td>
 							<td>{{materiel.orderMateriel.amount-materiel.deliveredCount}}</td>
 							<td>{{materiel.deliverCount}}</td>
+							<td>{{materiel.remark}}</td>
+							<td ng-if="hasCheckData">{{materiel.qualifiedCount}}</td>
+							<td  ng-if="hasCheckData">{{materiel.checkRemark}}</td>
+							<td ng-if="hasOutData">{{materiel.stockCount}}</td>
+							<td  ng-if="hasOutData">{{materiel.stockRemark}}</td>
+							<td ng-if="hasInData">{{materiel.stockCount}}</td>
+							<td ng-if="hasInData">{{materiel.stockRemark}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
 							</td>
-							<td>{{materiel.remark}}</td>
+							
 						<!-- 	<td>{{materiel.acceptCount}}</td>
 							<td>{{materiel.refuseCount}}</td>
 							<td>
@@ -1262,9 +1263,16 @@
 														<td>{{totalUnDeliveryCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td></td>
+														<th ng-if="hasCheckData">{{totalQualifiedCount}}</th>
+															<th ng-if="hasCheckData"></th>
+															<th ng-if="hasOutData">{{totalStockCount}}</th>
+															<th  ng-if="hasOutData"></th>
+															<th ng-if="hasInData">{{totalStockCount}}</th>
+															<th  ng-if="hasInData"></th>
 														<td></td>
 														<td></td>
 													</tr>
+													
 												</tfoot>
 				</table>
 			</div>

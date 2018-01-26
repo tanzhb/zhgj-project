@@ -565,10 +565,14 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 
 
 	@Override
-	public StockInOutRecord selectStockInOutRecordByDeliveryId(String serialNum) {
+	public StockInOutRecord selectStockInOutRecordByDeliveryId(String serialNum,String inOrOut ) {
 		StockInOutRecordExample sre=new StockInOutRecordExample();
 		com.congmai.zhgj.web.model.StockInOutRecordExample.Criteria c=sre.createCriteria();
-		c.andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum).andStatusNotEqualTo("0");
+		if("out".equals(inOrOut)){
+			c.andDelFlgEqualTo("0").andDeliverSerialEqualTo(serialNum).andStatusNotEqualTo("0");
+		}else{
+			c.andDelFlgEqualTo("0").andTakeDeliverSerialEqualTo(serialNum).andStatusNotEqualTo("0");
+		}
 		List<StockInOutRecord>list=stockInOutRecordMapper.selectByExample(sre);
 		if(org.springframework.util.CollectionUtils.isEmpty(list)){
 			return null;

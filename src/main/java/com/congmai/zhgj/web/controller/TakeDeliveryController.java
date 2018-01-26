@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -10,6 +11,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.json.JsonConfig;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
@@ -37,6 +40,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
@@ -500,10 +504,12 @@ public class TakeDeliveryController {
 			   takeDeliveryParams = JSON.parseObject(params, TakeDeliveryParams.class);
 			} catch (Exception e) {
 		    	//20180110 qhzhao System.out.println(this.getClass()+"---------"+ e.getMessage());
+				System.out.println(this.getClass()+"---------"+ e.getMessage());
 			}
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		takeDeliveryParams.getRecord().setStockDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(takeDeliveryParams.getRecord().getDateStock()));
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){
         			/*takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
@@ -525,6 +531,7 @@ public class TakeDeliveryController {
         		flag = "1";
         	}catch(Exception e){
         		logger.warn(e.getMessage(), e);
+        		 System.out.println(this.getClass()+"---------"+ e.getMessage());
         		return null;
         	}
     	return flag;

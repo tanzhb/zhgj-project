@@ -102,7 +102,7 @@ public class StockInOutRecord {
 	    
 		private String realCount;//实际出入库数量
 	    
-	    
+		private String dateStock;//日期
 		 public String getRealCount() {
 				return realCount;
 		}
@@ -233,7 +233,7 @@ public class StockInOutRecord {
 		}
 		// @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
 		@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm ")
-		public void setStockDate(Date stockDate) {// @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd HH:mm:ss ")
+		public void setStockDate(Date stockDate) {// 
 			this.stockDate = stockDate;
 		}
 
@@ -449,5 +449,13 @@ public class StockInOutRecord {
 			this.orderSerial = orderSerial;
 		}
 
+		public String getDateStock() {
+			return dateStock;
+		}
+
+		public void setDateStock(String dateStock) {
+			this.dateStock = dateStock;
+		}
+		
 	
 }

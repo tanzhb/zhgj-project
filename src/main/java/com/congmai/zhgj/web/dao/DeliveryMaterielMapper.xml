@@ -68,7 +68,7 @@
 	    <result column="docNum" property="docNum" jdbcType="VARCHAR" />
 	    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
 	    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
-	    <result column="stockDate" property="stockDate" jdbcType="DATE" />
+	    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
 	    <result column="operator" property="operator" jdbcType="VARCHAR" />
 	    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
 	    <result column="status" property="status" jdbcType="VARCHAR" />

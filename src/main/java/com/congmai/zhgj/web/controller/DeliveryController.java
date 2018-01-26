@@ -1038,7 +1038,7 @@ public class DeliveryController {
     	if(StringUtils.isEmpty(comId)){
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
-    		delivery.setStatus("00");//待申请
+    		//delivery.setStatus("00");//待申请
     		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
     		if(o!=null){
     			delivery.setBuyComId(o.getBuyComId());
@@ -1226,8 +1226,12 @@ public class DeliveryController {
 		if(!StringUtils.isEmpty(delivery.getWarehouseSerial())){
 			Warehouse w=warehouseService.selectOne(delivery.getWarehouseSerial());
 		}
-		StockInOutRecord sir=deliveryService.selectStockInOutRecordByDeliveryId(delivery.getSerialNum());//查找关联的已出库出库单信息
-		if(sir!=null){
+		StockInOutRecord sir=deliveryService.selectStockInOutRecordByDeliveryId(delivery.getSerialNum(),StringUtil.isEmpty(delivery.getSupplyComId())?"in":"out");//查找关联的已出库出库单信息
+		map.put("showTransport", true);
+		if(!StringUtil.isEmpty(delivery.getSupplyComId())){
+			map.put("showTransport", true);
+		}
+		if(sir!=null&&StringUtil.isEmpty(delivery.getSupplyComId())){
 			delivery.setTransportType(sir.getTransportType());
 			delivery.setTransport(sir.getTransport());
 			delivery.setShipNumber(sir.getShipNumber());//transportContact  transportContactNum  transportRemark
@@ -1235,7 +1239,10 @@ public class DeliveryController {
 			delivery.setTransportContactNum(sir.getTransportContactNum());
 			delivery.setTransportRemark(sir.getTransportRemark());
 			map.put("hasOutData", true);
+		}else if(sir!=null&&!StringUtil.isEmpty(delivery.getSupplyComId())){//采购发货
+			map.put("hasInData", true);
 		}
+		
 		map.put("delivery", delivery);
 
 		List<DeliveryMaterielVO> deliveryMateriels=null;
