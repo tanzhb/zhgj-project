@@ -234,6 +234,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						$scope.record.status='1';
 					}
 					params.record = $scope.record;
+					//params.record.materielCount=$scope.totalStockCount();
 					params.record.dateStock = $scope.record.stockDate;
 					params.record.stockDate=null;
 					params.record.deliverSerial = $scope.deliverSerial;
@@ -453,11 +454,34 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			    }
 			    return result.length;
 			}
-
+		    $scope.totalStockCount  = function() {//求和入库总数合计
+		    	   if($scope.takeDeliveryMateriels){
+		    		    var total = 0 ; 
+			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount
+			       			total = total + Number($scope.takeDeliveryMateriels[i].stockCount==undefined?0:$scope.takeDeliveryMateriels[i].stockCount);
+			       		}
+			       		$scope.record.materielCount=total;
+			       		return total
+			       	}else{
+			       		return 0;
+			       	}
+		       };
+		       $scope.totalUnStockCount  = function() {//求和未入库总数合计
+		    	   if($scope.takeDeliveryMateriels){
+		    		    var total = 0 ; 
+			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount
+			       			total = total +(Number($scope.takeDeliveryMateriels[i].deliverCount)-Number($scope.takeDeliveryMateriels[i].stockCount==undefined?0:$scope.takeDeliveryMateriels[i].stockCount));
+			       		}
+			       		return total
+			       	}else{
+			       		return 0;
+			       	}
+		       };
 		    jQuery.validator.addMethod("StockOutNumCheck", function (value, element) {
 				if(isNaN(Number($(element).data("delivercount")))){
 					return -1;
 				}
+			
 			    return this.optional(element) || (Number($(element).data("delivercount"))-value >= 0&&Number($(element).data("currentstock"))-value >= 0);
 			}, "出库数量不能超过发货数量且出库数量不能超过当前库存数量");
 		 // 页面加载完成后调用，验证输出框
@@ -477,7 +501,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	operator:{required:"操作员不能为空！"},
 					            	contactNum:{required:"联系方式不能为空！"},
 					            	inOutType:{required:"出库类型不能为空！"},
-					            	/*stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},*/
+					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"},
 					            	transportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
 					            	//positionSerial:{required:"库区不能为空！"}
@@ -504,12 +528,13 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                /*positionSerial: {
 					                	required: !0
 					                },*/
-					              /*  stockCount: {
-					                	required: !0,
+					                stockCount: {
+					                	required:true,
 					                	digits:!0,
-					                	StockOutNumCheck:!0,
+					                	StockOutNumCheck:true
+					                	/*,
 					                	StockOutNumCheck1:!0,//出库数量必须小等于当前库存数量
-					                },*/
+*/					                },
 					                contactNum: {
 					                	required: !0,
 					                	isPhone: !0
@@ -1233,7 +1258,11 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					        	  checkedIdHandler();
 					          });
 				          };
-				          
+				         $scope.changeValue= function (obj,attr){
+					    		if(Number(obj[attr])==0){
+					    			obj[attr]='';
+					    		}
+							}
 				          
 				          /**
 					         * 选择物料页面弹出

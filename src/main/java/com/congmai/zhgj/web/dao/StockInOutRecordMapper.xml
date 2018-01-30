@@ -953,12 +953,12 @@ SELECT td.serialNum FROM takeDelivery td, (
     </select>
      <!--自建库存获取累计出库数量 -->
     <select id="countOutAmountForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
-   <!--  SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
+    SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
 	EXISTS (select om.serialNum from
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
-	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
-	SELECT SUM(a.outCount ) from (
+	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL)
+<!-- 	SELECT SUM(a.outCount ) from (
 	SELECT
 			DISTINCT sob.serialNum,
 sob.outCount
@@ -976,7 +976,7 @@ sob.outCount
 				
 		)
 		
-		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a -->
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -1015,7 +1015,7 @@ sob.outCount
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
-<!-- 	select SUM( IFNULL(dm.stockCount,0) ) from deliveryMateriel dm where
+	select SUM( IFNULL(dm.stockCount,0) ) from deliveryMateriel dm where
 	EXISTS (
 	SELECT serialNum FROM (
 	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
@@ -1033,8 +1033,8 @@ sob.outCount
 	td.deliverSerial = tb.serialNum
 	)
 	)temp where temp.serialNum=dm.deliverSerial
-	) -->
-	SELECT SUM(a.stockInCount ) from (SELECT
+	)
+	<!-- SELECT SUM(a.stockInCount ) from (SELECT
 		DISTINCT sib.serialNum,
 sib.stockInCount
 
@@ -1052,7 +1052,7 @@ sib.stockInCount
 				AND o.orderType != '委托采购'
 		)
 		
-		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a -->
 	  
      </select>
      <!--代管库存获取累计入库数量   -->

@@ -764,9 +764,9 @@
       and  s.status= #{status,jdbcType=VARCHAR}
     </if>
     
-    <if test="comId != null" >
+   <!--  <if test="comId != null" >
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
-      </if>
+      </if> -->
   </select>
   
   <!-- 根据出入库流水号查找发货物料信息 -->

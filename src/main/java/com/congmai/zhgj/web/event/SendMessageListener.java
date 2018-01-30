@@ -1960,7 +1960,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				OrderInfo order = orderService.selectById(record.getSaleOrderSerial());
 				List<User> users = null;
 				Properties properties = new Properties();
-					users = groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+					users = groupService.selectUserIdsByGroupType(Constants.MANAGER);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
 							Message messageVO = this.createMessage(event,user);

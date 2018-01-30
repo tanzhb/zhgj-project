@@ -316,7 +316,7 @@
 										<th rowspan="2">订单数量</th>
 										<th  rowspan="2">发货数量</th>
 										<th  rowspan="2">合格数量</th>
-										<th  rowspan="2">生产批次</th>
+										<!-- <th  rowspan="2">生产批次</th> -->
 										<th  rowspan="2">入库数量</th>
 										<th  rowspan="2">未入数量</th>
 										<th  rowspan="2">备注</th>
@@ -340,7 +340,7 @@
 										<td>{{materiel.stockInUnqualifiedCount}}</td>
 										<td>{{materiel.stockInCheckRemark}}</td> -->
 										<td >
-												<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
+												<!-- <span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
 												</span>
                                                 <button ng-if="materiel.stockInBatchs.length==0" class="btn blue btn-sm btn-circle"
@@ -350,7 +350,11 @@
 												<button ng-if="materiel.stockInBatchs.length!=0" class="btn blue btn-sm btn-circle"
 													ng-click="showStockBatch(materiel,$index)" onclick="return false;"  data-toggle="modal" >
 													<i class="fa fa-edit"></i>修改
-												</button>
+												</button> -->
+												<div class="col-md-12 form-group">
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 <div class="form-control-focus"> </div>
+                                            </div>
 										</td>
 										<td>
 										{{materiel.stockInCount==null?0:materiel.stockInCount}}

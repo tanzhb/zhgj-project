@@ -119,6 +119,7 @@ import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.StockInOutCheckService;
+import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
@@ -222,6 +223,8 @@ public class DeliveryController {
 	    private ProcessBaseService processBaseService;
 	  @Resource
 	    private MaterielService materielService;
+	  @Resource
+	    private StockService stockService;
 	 
 	
 	 /**
@@ -1030,6 +1033,7 @@ public class DeliveryController {
     	User user = UserUtil.getUserFromSession();
     	String comId = null;
     	if("deliveryInfo".equals(delivery.getType())){
+    		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
     	if(StringUtils.isEmpty(delivery.getSerialNum())){
     	delivery.setSerialNum(ApplicationUtils.random32UUID());
     	delivery.setStatus("0");
@@ -1039,20 +1043,22 @@ public class DeliveryController {
     		delivery.setSupplyComId(null);
     		delivery.setShipper(null);
     		//delivery.setStatus("00");//待申请
-    		OrderInfo o = orderService.selectById(delivery.getOrderSerial());
-    		if(o!=null){
-    			delivery.setBuyComId(o.getBuyComId());
-    		}
-    		
     	}else{
 //    		Company company=deliveryService.selectCompanyInfo(comId);
        		delivery.setSupplyComId(comId);
     	}
 		delivery.setCreator(currenLoginName);
+		if(o!=null){
+			delivery.setBuyComId(o.getBuyComId());
+		}
     	deliveryService.insertBasicInfo(delivery);
     	}else{
+    		if(o!=null){
+    			delivery.setBuyComId(o.getBuyComId());
+    		}
     		deliveryService.updateBasicInfo(delivery);
     	}
+    	
     	}
     	//保存基本信息第二部分
     	if("deliveryInfo".equals(delivery.getType())){
@@ -2061,4 +2067,37 @@ public class DeliveryController {
     			  map.put("flag", flag);  
     			  return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
     }
+    /**
+	 * 判断订单物料是否均无库存
+	 * 
+	 */
+	@RequestMapping(value = "/judgeIsStock", method = RequestMethod.GET)
+	public ResponseEntity<Map<String,Object>> judgeIsStock(String serialNum, HttpServletRequest request,UriComponentsBuilder ucBuilder) throws Exception {
+		Boolean  flag=true;
+		Map<String,Object>map=new HashMap<String,Object>();
+		try{
+			OrderMaterielExample m =new OrderMaterielExample();
+	    	//and 条件1
+	    	com.congmai.zhgj.web.model.OrderMaterielExample.Criteria criteria =  m.createCriteria();
+	    	criteria.andDelFlgEqualTo("0");
+	    	criteria.andOrderSerialEqualTo(serialNum);
+			List<OrderMateriel>omList=orderMaterielService.selectList(m);
+			if(org.apache.commons.collections.CollectionUtils.isNotEmpty(omList)){
+				for(OrderMateriel om:omList){
+					String inCountString = stockService.getCountInAmountForZijian(om.getMaterielSerial());
+    				String outCountString = stockService.getCountOutAmountForZijian(om.getMaterielSerial());
+    				if(new BigDecimal(inCountString).compareTo(new BigDecimal(outCountString))>0){//存在有物料有库存
+    					flag=false;
+    					map.put("flag", flag);
+    					return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+    				}
+				}
+			}
+			
+    	}catch(Exception e){
+    		logger.warn(e.getMessage(), e);
+    	}
+		map.put("flag", flag);
+		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+	}
 }

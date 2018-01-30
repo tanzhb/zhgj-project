@@ -394,7 +394,7 @@
 										<th  rowspan="2">单位</th>
 										<th  rowspan="2">订单数量</th>
 										<th rowspan="2">发货数量</th>
-										<th  rowspan="2">生产批次</th>
+									<!-- 	<th  rowspan="2">生产批次</th> -->
 										<th  rowspan="2">出库数量</th>
 										<th rowspan="2">未出数量</th>
 										<th rowspan="2">当前库存</th>
@@ -413,11 +413,11 @@
 										<td>{{materiel.deliverCount}}</td>
 										<!-- <td>{{materiel.orderMateriel.amount}}</td>
 										<td>{{materiel.deliverRemark}}</td> -->
-										<td >
-										<!-- <span id="{{materiel.serialNum}}"  ng-repeat="stockOutBatch in materiel.stockOutMateriels track by $index"  ng-if="materiel.stockOutMateriels.length!=0">
+									<!-- 	<td >
+										<span id="{{materiel.serialNum}}"  ng-repeat="stockOutBatch in materiel.stockOutMateriels track by $index"  ng-if="materiel.stockOutMateriels.length!=0">
 										<span ng-if="!$first">;</span> {{stockOutBatch.batchNum}}({{stockOutBatch.outCount}})
-										</span> -->
-										<!-- <span id="{{materiel.serialNum}}"   ng-if="materiel.stockOutMateriels.length==0"  ></span> -->
+										</span>
+										<span id="{{materiel.serialNum}}"   ng-if="materiel.stockOutMateriels.length==0"  ></span>
 											<span id="{{materiel.serialNum}}"    >{{materiel.inOutNums}}</span>
                                                 <button class="btn blue btn-sm btn-circle"      ng-hide="deliverAdd"  ng-if="materiel.stockOutMateriels .length==0&&materiel.currentStockAmount!=0" 
 								ng-click="showStockBatch($index,materiel,'add')" onclick="return false;"  data-toggle="modal" >
@@ -427,8 +427,13 @@
 								ng-click="showStockBatch($index,materiel,'edit')" onclick="return false;"  data-toggle="modal" >
 								<i class="fa fa-plus"></i>修改批次
 							</button>
-										</td>
-										<td  ng-if="materiel.currentStockAmount!=0">{{materiel.stockCount}}</td>
+							
+										</td> -->
+										<td  ng-if="materiel.currentStockAmount!=0"  class="form-group">
+										<input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount"  ng-change="changeValue(materiel,'stockCount')"  data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+                                                 
+                                                 <div class="form-control-focus"> </div>
+                                                 </td>
 										<td  ng-if="materiel.currentStockAmount==0">0</td>
 										<td>
 											<span ng-if="materiel.deliverCount!=undefined && materiel.stockCount!=undedined&&materiel.stockCount!=null">{{materiel.deliverCount-materiel.stockCount}}</span>
@@ -467,13 +472,13 @@
 														<td></td>
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
-														<td></td>
-														<td>{{totalStockOutCount}}</td>
-														<td>{{totalUnstockOutCount}}</td>
-														<td></td>
+														<td>{{totalStockCount()}}</td>
+														<td>{{totalUnStockCount()}}</td>
 														<td></td>
 														<td></td>
 														<td></td>
+														<td></td>
+														
 													</tr>
 												</tfoot>
 							</table>

@@ -173,7 +173,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		   	       		     function(data){
 		   	       		    	 $scope.saleOrder.maker = data.data.userName;
 		   	       		 //获取一个随机的订单编号
-		   		        		commonService.getOrderNum().then(
+		   		        		/*commonService.getOrderNum().then(
 		   		        				function(data){
 		   		        					$scope.saleOrder.orderNum = data.data.orderNum;
 		   		        					setTimeout(function(){
@@ -183,7 +183,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		   		        				function(error){
 		   		        					$scope.error = error;
 		   		        				}
-		   		        		);
+		   		        		);*/
+		   	       		   $rootScope.setNumCode("SO",function(newCode){
+		            			$scope.saleOrder.orderNum = newCode;
+		            		});
 		   	       		     },
 		   	       		     function(error){
 		   	       		         $scope.error = error;
@@ -4875,7 +4878,21 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	       }
 		 	    //从订单代发货
 		 	      $scope.deliveryAdd= function(serialNum) {
-		 	    	  $state.go('addDelivery',{oprateType:"forSaleOrder",orderSerialNum:serialNum});
+		 	    	  //先判断该销售订单物料是否均无库存,若均无,提示稍后建发货计划
+		 	    		DeliveryService.judgeIsStock(serialNum).then(
+	    						function(data) {
+	    							if(data.flag){
+	    								toastr.warning("当前销售订单物料均无库存,请稍后发货！");
+	    							}else{
+	    								 $state.go('addDelivery',{oprateType:"forSaleOrder",orderSerialNum:serialNum});
+	    							}
+	    						},
+	    						function(errResponse) {
+	    							/*console.error('Error while deleting Users');*/
+	    						}
+
+	    				);
+		 	    	 
 		 	       }
 		 	     //设置默认框架或委托方
 		 	      $scope.setEntrustParty= function(obj) {

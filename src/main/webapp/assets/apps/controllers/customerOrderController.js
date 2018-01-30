@@ -170,7 +170,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 		   	       		     function(data){
 		   	       		    	 $scope.customerOrder.maker = data.data.userName;
 		   	       		 //获取一个随机的订单编号
-		   		        		commonService.getOrderNum().then(
+		   		        		/*commonService.getOrderNum().then(
 		   		        				function(data){
 		   		        					$scope.customerOrder.orderNum = data.data.orderNum;
 		   		        					setTimeout(function(){
@@ -180,7 +180,10 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 		   		        				function(error){
 		   		        					$scope.error = error;
 		   		        				}
-		   		        		);
+		   		        		);*/
+		   	       		   $rootScope.setNumCode("SO",function(newCode){
+		            			$scope.saleOrder.orderNum = newCode;
+		            		});
 		   	       		     },
 		   	       		     function(error){
 		   	       		         $scope.error = error;

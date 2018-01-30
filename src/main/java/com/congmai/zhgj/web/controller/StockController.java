@@ -156,6 +156,9 @@ public class StockController {
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
 			if("1".equals(manageType)){//自建
+				if("0e2523c32dd1415cac89999ccad52b83".equals(stock.getMaterielSerial())){
+					System.out.println("当前入库数是:"+stock.getCountInAmountZijian());
+				}
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountZijian()==null?"0":stock.getCountInAmountZijian())-Integer.parseInt(stock.getCountOutAmountZijian()==null?"0":stock.getCountOutAmountZijian()))+"");
 			}else if("2".equals(manageType)){//代管
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountDaiguan()==null?"0":stock.getCountInAmountDaiguan())-Integer.parseInt(stock.getCountOutAmountDaiguan()==null?"0":stock.getCountOutAmountDaiguan()))+"");

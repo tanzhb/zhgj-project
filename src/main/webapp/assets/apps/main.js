@@ -5370,7 +5370,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	    	if(data.length>20){
 	    		window.location = ctx + "/rest/page/login";
 	    	}else{
-	    		$rootScope.noticeCount = data; 
+	    		$rootScope.noticeCount = Number(data); 
 	    	}
 	    	
 	    },function(error){
@@ -5386,7 +5386,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 	        deferred.reject('连接服务器出错！');  
 	    })
 	    return deferred.promise.then(function(data){
-	    	$rootScope.systemMessageSize = data; 
+	    	$rootScope.systemMessageSize = Number(data); 
 	    },function(error){
 	         toastr.error('连接服务器出错,请登录重试！');
 	     });
@@ -5423,9 +5423,9 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				})
 				return deferred.promise.then(function(data){
 					if(workflowType=='salePrice'||workflowType=='accountPayable'){
-						$rootScope.ybsLength1 = data;
+						$rootScope.ybsLength1 = Number(data);
 			    	}else{
-			    		$rootScope.ybsLength = data;
+			    		$rootScope.ybsLength = Number(data);
 			    	}
 					
 				},function(error){

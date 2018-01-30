@@ -192,10 +192,10 @@ return {
 };  
 }); 
 
-MetronicApp.directive('businessmessage1', function() {  //header里面专用业务消息标签
+MetronicApp.directive('businessmessage1', function() {  //header里面专用业务消息未读加上系统消息标签
     return {  
         restrict: 'E',  
-        template: '<span class="badge badge-danger"  title="业务消息" style="position: relative;top: -10px;"> {{businessMessageSize}} </span>',
+        template: '<span class="badge badge-danger"  title="业务消息" style="position: relative;top: -10px;">  {{systemMessageSize+businessMessageSize}}  </span>',
         scope:true,
         replace: true  
     };  
