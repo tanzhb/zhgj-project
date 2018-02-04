@@ -3,6 +3,8 @@ package com.congmai.zhgj.web.model;
 import java.util.Date;
 import java.util.List;
 
+import com.congmai.zhgj.core.util.StringUtil;
+
 /**
  * @ClassName Stock
  * @Description TODO(库存)
@@ -153,7 +155,13 @@ public class Stock {
 	}
 
 	public String getLastInDateZijian() {
-		return lastInDateZijian;
+		if(StringUtil.isNotEmpty(lastInDateZijian)&&lastInDateZijian.length()>16){
+			return lastInDateZijian.substring(0, 16);
+					
+		}else{
+			return lastInDateZijian;
+		}
+		
 	}
 
 	public void setLastInDateZijian(String lastInDateZijian) {
@@ -161,7 +169,13 @@ public class Stock {
 	}
 
 	public String getLastInDateDaiguan() {
-		return lastInDateDaiguan;
+		if(StringUtil.isNotEmpty(lastInDateDaiguan)&&lastInDateDaiguan.length()>16){
+			return lastInDateDaiguan.substring(0, 16);
+					
+		}else{
+			return lastInDateDaiguan;
+		}
+		
 	}
 
 	public void setLastInDateDaiguan(String lastInDateDaiguan) {
@@ -169,7 +183,13 @@ public class Stock {
 	}
 
 	public String getLastOutDateZijian() {
-		return lastOutDateZijian;
+		if(StringUtil.isNotEmpty(lastOutDateZijian)&&lastOutDateZijian.length()>16){
+			return lastOutDateZijian.substring(0, 16);
+					
+		}else{
+			return lastOutDateZijian;
+		}
+		
 	}
 
 	public void setLastOutDateZijian(String lastOutDateZijian) {
@@ -177,7 +197,13 @@ public class Stock {
 	}
 
 	public String getLastOutDateDaiguan() {
-		return lastOutDateDaiguan;
+		if(StringUtil.isNotEmpty(lastOutDateDaiguan)&&lastOutDateDaiguan.length()>16){
+			return lastOutDateDaiguan.substring(0, 16);
+					
+		}else{
+			return lastOutDateDaiguan;
+		}
+		
 	}
 
 	public void setLastOutDateDaiguan(String lastOutDateDaiguan) {

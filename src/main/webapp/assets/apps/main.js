@@ -463,6 +463,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                             'assets/apps/controllers/saleOrderController.js',
                             'assets/apps/service/DeliveryService.js',
                             'assets/apps/service/CommonService.js',
+                            'assets/apps/service/GatheringMoneyService.js',
                           //流程申请
 							'assets/global/css/dialog.css',
 							'assets/global/css/easyui.css',
@@ -500,7 +501,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/orderService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
-	        	'assets/apps/service/CommonService.js'
+	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/GatheringMoneyService.js'
                       ]
                     });
                 }]
@@ -835,6 +837,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
 				//流程申请
 				'assets/global/css/dialog.css',
 				'assets/global/css/easyui.css',
@@ -873,6 +876,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
 				//流程申请
 				'assets/global/css/dialog.css',
 				'assets/global/css/easyui.css',
@@ -911,6 +915,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
 	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
 				//流程申请
 				'assets/global/css/dialog.css',
 				'assets/global/css/easyui.css',
@@ -1024,6 +1029,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleFrameController.js',
 	        	'assets/apps/service/CommonService.js',
+	        	'assets/apps/service/GatheringMoneyService.js',
 				//流程申请
 				'assets/global/css/dialog.css',
 				'assets/global/css/easyui.css',
@@ -1492,6 +1498,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        	'assets/apps/service/CommonService.js',
 	        	'assets/apps/service/DeliveryService.js',
 				'assets/apps/controllers/saleOrderController.js',
+				'assets/apps/service/GatheringMoneyService.js',
 	        	
 	        	//流程申请
 				'assets/global/css/dialog.css',
@@ -3652,7 +3659,35 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         
-        
+         .state('addForSaleOrderGatheringMoney', {
+            url: "/addForSaleOrderGatheringMoney:serialNum&:orderSerialNum",
+            templateUrl: "rest/page/addGatheringMoney",
+            data: {pageTitle: '新增收款'},
+            controller: "GatheringMoneyController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [
+				'assets/global/plugins/datatables/datatables.min.css',
+				'assets/global/plugins/datatables/datatables.all.min.js',
+				'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+				'assets/apps/scripts/angular-file-upload-shim.min.js',
+			    'assets/apps/scripts/angular-file-upload.min.js',
+			    'assets/apps/scripts/FileUploader.js',
+				'assets/apps/scripts/pageHandle.js',
+				'assets/apps/service/GatheringMoneyService.js',
+				'assets/apps/controllers/GatheringMoneyController.js',
+				  'assets/apps/service/CommonService.js',
+				  'assets/apps/service/ReceiveMemoService.js',
+				'assets/apps/controllers/app.js',
+				'assets/apps/controllers/uploadPhoto.js'
+                      ]
+                    });
+                }]
+            }
+        })
         .state('gatheringMoneyRecord', {
             url: "/gatheringMoneyRecord",
             templateUrl: "rest/page/gatheringMoneyRecord",
@@ -5267,6 +5302,16 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 								 		"<li><a>调整付款计划申请</a></li>"					 
+			   }else if('addForSaleOrderGatheringMoney' == toState.name){//新增应收款(销售订单)
+					 html= "<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>新增收款计划</a></li>"	
+			   }else if('viewPayForBuyOrder' == toState.name){//查看应收款(销售订单)
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+								 		"<li><a>查看付款计划</a></li>"								 
 			   }else if('submitDeliveryPlanApply' == toState.name){//发货审批申请
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>"+
 					 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 

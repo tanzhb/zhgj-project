@@ -220,8 +220,11 @@ angular
 				 	    								if(data==''||data==null){
 				 	    									return "";
 				 	    								}else{
-				 	    									debugger;
-				 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+				 	    									/*if(row.serialNum=="5bba825cb17144d4874f426b0cd3326e"){
+				 	    										debugger;
+				 	    										return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+				 	    									}*/
+				 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data.substring(0,10));
 				 	    								}
 														
 													}
@@ -389,8 +392,7 @@ angular
 	 	    								if(data==''||data==null){
 	 	    									return "";
 	 	    								}else{
-	 	    									debugger;
-	 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+	 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data.substring(0,10));
 	 	    								}
 											
 										}

@@ -1226,7 +1226,7 @@
 							<td  ng-if="hasCheckData">{{materiel.checkRemark}}</td>
 							<td ng-if="hasOutData">{{materiel.stockCount}}</td>
 							<td  ng-if="hasOutData">{{materiel.stockRemark}}</td>
-							<td ng-if="hasInData">{{materiel.stockCount}}</td>
+							<td ng-if="hasInData">{{materiel.stockInCount}}</td>
 							<td ng-if="hasInData">{{materiel.stockRemark}}</td>
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.deliveryFiles">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
@@ -1246,7 +1246,13 @@
 							<td>{{materiel.stockInWarehouse.warehouseName}}</td>
 							<td>{{materiel.stockInPosition.positionName}}</td>
 							<td>{{materiel.stockInRemark}}</td> -->
-							<td></td>
+							<td ng-if="hasInData"><!--  已出过库-->
+							<span ng-if="materiel.stockInCount==0||materiel.stockInCount==null">未入库</span>
+							<span  ng-if="materiel.stockInCount!=0&&materiel.stockInCount!=materiel.deliverCount&&materiel.stockInCount!=null">部分入库</span>
+							<span ng-if="materiel.stockInCount==materiel.deliverCount">已完成</span>
+							</td>
+							<td ng-if="!hasInData"><!--  未出过库-->
+							</td>
 						</tr>
 						<tr
 							ng-if="dispalyDeliveryMateriel==0">
@@ -1265,9 +1271,7 @@
 														<td></td>
 														<th ng-if="hasCheckData">{{totalQualifiedCount}}</th>
 															<th ng-if="hasCheckData"></th>
-															<th ng-if="hasOutData">{{totalStockCount}}</th>
-															<th  ng-if="hasOutData"></th>
-															<th ng-if="hasInData">{{totalStockCount}}</th>
+															<th ng-if="hasInData">{{totalStockInCount}}</th>
 															<th  ng-if="hasInData"></th>
 														<td></td>
 														<td></td>
@@ -1343,7 +1347,7 @@
 							<th rowspan="2">订单数量</th>
 							<th rowspan="2">发货数量</th>
 							<th rowspan="2">合格数量</th>
-							<th rowspan="2">生产批次</th>
+							<!-- <th rowspan="2">生产批次</th> -->
 							<th rowspan="2">入库数量</th>
 							<th rowspan="2">未入数量</th>
 							<th rowspan="2">备注</th>
@@ -1361,9 +1365,9 @@
 							<td>{{materiel.orderMateriel.amount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>{{materiel.stockInQualifiedCount==null?"无入库检验":materiel.stockInQualifiedCount}}</td>
-							<td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
+							<!-- <td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
-												</span></td>
+												</span></td> -->
 							<td>{{materiel.stockInCount}}</td>
 							<td>{{materiel.unstockInCount}}</td>
 							<td>{{materiel.stockInRemark}}</td>
@@ -1389,7 +1393,7 @@
 						</tr>
 						<tr
 							ng-if="dispalyDeliveryMateriel==0">
-							<td colspan="13" align="center">没有符合条件的物料信息</td>
+							<td colspan="12" align="center">没有符合条件的物料信息</td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -1401,7 +1405,7 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalQualifiedCount}}</td>
-														<td></td>
+														<!-- <td></td> -->
 														<td>{{totalStockInCount}}</td>
 														<td>{{totalUnstockInCount}}</td>
 														<td></td>

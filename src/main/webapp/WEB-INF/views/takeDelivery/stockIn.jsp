@@ -64,7 +64,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
                         <div class="portlet-title">
                             <div class="caption"></div>
-                            <div class="actions" style="float:right">
+                            <div class="actions" style="float:right;height: 18px;">
                               <!--   <button   ng-show="deliverView" class="btn blue  btn-outline  btn-sm " ng-click="editdeliver()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-show="deliverEdit" class="btn red  btn-outline  btn-sm " ng-click="canceldeliver('deliver')">
@@ -73,7 +73,7 @@
                                             <i class="fa fa-save"></i> 保存 </button> -->
                                  <!-- <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
                               		<i class="fa fa-check"></i> 确认入库 </button> -->
-                              		 <button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn('save')">
+                              		 <button   class="btn green  btn-sm btn-circle"   ng-hide="deliverAdd"  ng-click="saveStockIn('save')">
                               		<i class="fa fa-save"></i>保存 </button>
                       			 <button    class="btn defualt  btn-sm btn-circle" ng-click="cancelStockIn()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
@@ -102,7 +102,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="inOutType">入库类型<span class="required"> * </span> </label>
 	                                                 <div class="">
-	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType"  data-size="8">
+	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType"  data-size="8" ng-hide="deliverAdd">
 	                                                 	<option value="">无</option>
 			                                                   <option value="采购">采购</option>
 			                                                    <option value="备品备件">备品备件</option>
@@ -111,6 +111,7 @@
 			                                             </select>
                                                      </div>
                                                      <div class="form-control-focus"> </div>
+                                                     <p class="control-label left" ng-show="deliverView">{{record.inOutType}}</p>
                                             </div>
 										</div>
 										<!--/span-->
@@ -120,7 +121,7 @@
                                                     <div class="">
                                                       <!--  <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd hh:mm:ss" 
                                                          id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly"> -->
-                                                         <input type="text" class="form-control  date-picker-time" size="16"  
+                                                         <input type="text" class="form-control  date-picker" size="16"  
                                                          id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" disabled>
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-show="deliverView">{{record.stockDate}}</p>
@@ -161,8 +162,8 @@
                                                     <div class="">
                                                     	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
                                                     	<input type="hidden" class="form-control" value="{{WarehouseName}}" disabled="disabled">
-                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.takeDeliverAddress}}" disabled="disabled">
-                                                         <p class="control-label left"   ng-show="deliverView">{{record.inWarehouseName}}</p>
+                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.takeDeliverAddress}}" disabled="disabled"  ng-hide="deliverAdd">
+                                                         <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -170,7 +171,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="supplyComId"> 入库数量</label>
                                                     <div class="">
-                                                    	<input type="text" class="form-control"   ng-model="record.materielCount"  disabled="disabled"/>
+                                                    	<input type="text" class="form-control"   ng-model="record.materielCount"  disabled="disabled"  ng-hide="deliverAdd"/>
                                                        <p class="control-label left"   ng-show="deliverView">{{record.materielCount}}</p>
                                                     </div>
                                             </div>
@@ -352,15 +353,17 @@
 													<i class="fa fa-edit"></i>修改
 												</button> -->
 												<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockCount" ng-hide="deliverAdd" >
-                                                 <div class="form-control-focus"> </div>
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount" ng-hide="deliverAdd" >
+                                                 <p class="form-control-static" ng-show="deliverView">
+															{{materiel.stockInCount}}</p>
                                             </div>
 										</td>
-										<td>
+										<!-- <td>
 										{{materiel.stockInCount==null?0:materiel.stockInCount}}
-										</td>
+										</td> -->
 										<td>
-											<span ng-if="materiel.acceptCount!=undefined && materiel.stockCount!=undedined">{{materiel.acceptCount-materiel.stockInCount}}</span>
+											<span ng-if="materiel.acceptCount!=undefined && materiel.stockInCount!=undefined">{{materiel.acceptCount-materiel.stockInCount}}</span>
+											<span ng-if="materiel.acceptCount!=undefined && materiel.stockInCount==undefined">{{materiel.acceptCount}}</span>
 										</td>
 										<!-- <td>
 											<div class="col-md-12 form-group">
@@ -386,8 +389,10 @@
 										</td> -->
 										<td>
 											<div class="col-md-6 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark"  ng-model="materiel.stockRemark"   ng-init="materiel.stockRemark=materiel.stockInRemark" >
+                                                 <input type="text" class="form-control input-small" id="stockRemark{{$index}}" name="stockRemark"  ng-model="materiel.stockRemark"   ng-init="materiel.stockRemark=materiel.stockInRemark"  ng-hide="deliverAdd">
                                                  <div class="form-control-focus"> </div>
+                                                 <p class="form-control-static" ng-show="deliverView">
+															{{materiel.stockRemark}}</p>
                                             </div>
 										</td> 
 										<td >
@@ -401,7 +406,7 @@
 										</td> 
 									</tr>
 									<tr ng-if="takeDeliveryMateriels==undefined||takeDeliveryMateriels.length==0">
-											<td colspan="13" align="center">暂无数据</td>
+											<td colspan="12" align="center">暂无数据</td>
 									</tr>
 								</tbody>
 								<tfoot>
@@ -413,12 +418,12 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalQualifiedCount}}</td>
+														<!-- <td></td> -->
+														<td>{{totalStockCount()}}</td><!--{{totalStockInCount}}  -->
+														<td>{{totalUnStockInCount()}}</td><!--{{totalUnstockInCount}}  -->
 														<td></td>
-														<td>{{totalStockInCount}}</td>
-														<td>{{totalUnstockInCount}}</td>
 														<td></td>
-														<td></td>
-														<td></td>
+														<!-- <td></td> -->
 													</tr>
 												</tfoot>
 							</table>

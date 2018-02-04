@@ -13,7 +13,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		//控制输入框和span标签的显示
 		validateFileInit();//file表单初始化
 		
-	if($state.current.name=="addGatheringMoney"){
+	if($state.current.name=="addGatheringMoney"||$state.current.name=="addForSaleOrderGatheringMoney"){
 		loadMainTable1();
 		$scope.span =false;
 		$scope.input = true;

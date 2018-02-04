@@ -433,6 +433,8 @@
 										<input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount"  ng-change="changeValue(materiel,'stockCount')"  data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
                                                  
                                                  <div class="form-control-focus"> </div>
+                                                 <p class="form-control-static" ng-show="deliverView">
+															{{materiel.stockCount}}</p>
                                                  </td>
 										<td  ng-if="materiel.currentStockAmount==0">0</td>
 										<td>
@@ -473,7 +475,7 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalStockCount()}}</td>
-														<td>{{totalUnStockCount()}}</td>
+														<td>{{totalUnStockOutCount()}}</td>
 														<td></td>
 														<td></td>
 														<td></td>

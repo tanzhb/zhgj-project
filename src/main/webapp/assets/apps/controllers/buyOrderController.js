@@ -4596,6 +4596,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	}else{//详情页面按钮提交
 	        		$scope.submitOrder.serialNum = $scope.buyOrder.serialNum;
 	        		$scope.submitOrder.status = 66;
+	        		$scope.submitOrder.supplyComId= $scope.buyOrder.supplyComId;//取供应商联系人发邮件用
+	        		$scope.submitOrder.orderNum= $scope.buyOrder.orderNum;//取供应商联系人发邮件用
 		        	$scope.buyOrder.status = 66;
 	        	}
 	        	

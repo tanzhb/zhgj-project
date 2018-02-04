@@ -2471,17 +2471,21 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				    				$scope.deliveryMaterielE=array; 
 				    				$scope.materielCount=array.length;
 			          		    	//$scope.deliveryMaterielE=data.deliveryMateriels;
-			          		     var totalOrderCount=0,totalDeliveryCount=0,totalUnDeliveryCount=0;
+			          		     var totalOrderCount=0,totalDeliveryCount=0,totalUnDeliveryCount=0,totalQualifiedCount=0,totalStockCount=0;
 			          		    	for(var i=0;i<$scope.deliveryMaterielE.length;i++){
 			          		    		if($scope.deliveryMaterielE[i].status=='0'){$scope.deliveryMaterielE[i].status='待发货'};
 			          		    		if($scope.deliveryMaterielE[i].status=='1'){$scope.deliveryMaterielE[i].status='已发货'}
 			          		    	totalOrderCount=totalOrderCount+Number($scope.deliveryMaterielE[i].amount);
 			          		    	totalDeliveryCount=totalDeliveryCount+Number($scope.deliveryMaterielE[i].deliverCount);
 			          		    	totalUnDeliveryCount=totalUnDeliveryCount+Number($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount);
+			          		    	totalQualifiedCount=totalQualifiedCount+Number($scope.deliveryMaterielE[i].qualifiedCount);
+			          		    	totalStockCount=totalStockCount+Number($scope.deliveryMaterielE[i].stockCount);
 			          		    	}
 			          		    	$scope.totalOrderCount=totalOrderCount;
 			          		    	$scope.totalDeliveryCount=totalDeliveryCount;
 			          		    	$scope.totalUnDeliveryCount=totalUnDeliveryCount;
+			          		    	$scope.totalQualifiedCount=totalQualifiedCount;
+			          		    	$scope.totalStockCount=totalStockCount;
 			          		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 			    					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
 			    					

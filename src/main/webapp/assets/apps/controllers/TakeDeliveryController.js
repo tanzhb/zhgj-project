@@ -339,6 +339,12 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        	$scope.deliver.warehouseSerial = data.data.warehouse.serialNum;
 		        	$scope.deliver.warehouseName = data.data.warehouse.address;
 	        	}
+	        	if(data.data.hasCheckData){
+	        		$scope.hasCheckData=true;//显示检验信息
+	        	}
+	        	if(data.data.stockInOutRecord){
+	        		$scope.hasInData=true;//显示入库信息
+	        	}
 	        	/*if($scope.deliver.takeDelivery.warehouse==null){
 	        		$scope.deliver.takeDelivery.warehouse={};
 	        		$scope.deliver.takeDelivery.warehouse.warehouseName='无';
@@ -391,11 +397,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        			$scope.orderMateriels[i].orderMaterielSerial = data.data.deliveryMateriels[i].orderMateriel.serialNum;
 		        			totalOrderCount=totalOrderCount+Number( data.data.deliveryMateriels[i].orderMateriel.amount);
 		        			totalDeliveryCount=totalDeliveryCount+Number( data.data.deliveryMateriels[i].deliverCount);
-		        			if($scope.oprateType==undefined){//入库计划详情物料tab展示合格总数,入库总数,未入总数
+		        			//入库计划详情物料tab展示合格总数,入库总数,未入总数
 		        				totalQualifiedCount=totalQualifiedCount+Number( data.data.deliveryMateriels[i].stockInQualifiedCount);
 		        				totalStockInCount=totalStockInCount+Number( data.data.deliveryMateriels[i].stockInCount);
 		        				totalUnstockInCount=totalUnstockInCount+Number( data.data.deliveryMateriels[i].unstockInCount);
-			        		}
+			        		
 	        			}else{
 	        				//$scope.orderMateriels[i].orderMateriel = {};
 	        				if(data.data.deliveryMateriels[i].supplyMateriel!=null){
@@ -413,11 +419,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        		}
 	        		$scope.totalDeliveryCount=totalDeliveryCount;//发货总数
 	        		$scope.totalOrderCount=totalOrderCount;//订单总数
-	        		if($scope.oprateType==undefined){//入库计划详情物料tab展示合格总数,入库总数,未入总数
+	        		//入库计划详情物料tab展示合格总数,入库总数,未入总数
 	        			$scope.totalQualifiedCount=totalQualifiedCount;//合格总数
 		        		$scope.totalStockInCount=totalStockInCount;//入库总数
 		        		$scope.totalUnstockInCount=totalUnstockInCount;//未入总数
-	        		}
+	        		
 	        		/*var playWarehouseDate= $scope.deliverTransport.playWarehouseDate;
 	    		    if(!isNull(playWarehouseDate)){
 	    		    	$("#playWarehouseDate").datepicker('setDate',playWarehouseDate);

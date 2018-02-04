@@ -33,7 +33,7 @@
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission> --%>
 			<li><a ng-click="return;" href="#fahuojihua" data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
-			<!-- <li><a data-target="#tab_15_4" data-toggle="tab">收款计划</a></li> -->
+			<li><a data-target="#tab_15_4" data-toggle="tab">收款计划</a></li>
 	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
@@ -648,13 +648,13 @@
 					<i class="fa fa-globe font-green"></i>
 					<span class="caption-subject font-green bold uppercase">收款计划列表</span>
 				</div>
-				<div class="actions" ng-controller='MyCtrl' id="buttons">
-				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPayForSaleOrder')"><i class="fa fa-plus"></i> 添加</label>
+				<div class="actions"  id="buttons"><!--  ng-controller='MyCtrl'-->
+				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToSkUrl('addForSaleOrderGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>
 									
-				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
+				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEditGather()"> <i class="fa fa-edit"></i>修改</label>
 									
 									
-				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPay()"> <i class="fa fa-minus"></i> 删除</label>
+				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delGather()"> <i class="fa fa-minus"></i> 删除</label>
 									
 				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>

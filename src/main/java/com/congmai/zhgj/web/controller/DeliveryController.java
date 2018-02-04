@@ -1232,7 +1232,7 @@ public class DeliveryController {
 		if(!StringUtils.isEmpty(delivery.getWarehouseSerial())){
 			Warehouse w=warehouseService.selectOne(delivery.getWarehouseSerial());
 		}
-		StockInOutRecord sir=deliveryService.selectStockInOutRecordByDeliveryId(delivery.getSerialNum(),StringUtil.isEmpty(delivery.getSupplyComId())?"in":"out");//查找关联的已出库出库单信息
+		StockInOutRecord sir=deliveryService.selectStockInOutRecordByDeliveryId(delivery.getSerialNum(),StringUtil.isEmpty(delivery.getSupplyComId())?"out":"in");//查找关联的已出库出库单信息
 		map.put("showTransport", true);
 		if(!StringUtil.isEmpty(delivery.getSupplyComId())){
 			map.put("showTransport", true);
@@ -2086,7 +2086,7 @@ public class DeliveryController {
 				for(OrderMateriel om:omList){
 					String inCountString = stockService.getCountInAmountForZijian(om.getMaterielSerial());
     				String outCountString = stockService.getCountOutAmountForZijian(om.getMaterielSerial());
-    				if(new BigDecimal(inCountString).compareTo(new BigDecimal(outCountString))>0){//存在有物料有库存
+    				if(new BigDecimal(inCountString==null?"0":inCountString).compareTo(new BigDecimal(outCountString==null?"0":outCountString))>0){//存在有物料有库存
     					flag=false;
     					map.put("flag", flag);
     					return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);

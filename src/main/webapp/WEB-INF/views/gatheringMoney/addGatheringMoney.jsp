@@ -13,7 +13,7 @@
 								data-toggle="tab">应收信息</a></li>
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a> -->
-							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a>
+							<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a> -->
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 							</li>							

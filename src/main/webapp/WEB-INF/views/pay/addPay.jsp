@@ -12,7 +12,7 @@
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">应付信息</a></li>
 								<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a> -->
-							<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a>
+							<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a> -->
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 							</li>							
@@ -20,7 +20,7 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
-								<div class="portlet-title" style="min-height: 48px;">
+								<div class="portlet-title" style="min-height: 18px;">
 									<div class="tools" style="float: right" id="noprintdiv">
 										<button type="submit" ng-click="saveBasicInfo('pay')"
 											class="btn green  btn-circle  btn-sm" ng-show="input">

@@ -331,6 +331,21 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 								toastr.success("保存成功！");
 								$scope.deliverAdd=true;
 								$scope.deliverView=true;
+								$scope.record.stockDate=params.record.dateStock;
+								for(var i=0;i<params.deliveryMateriels.length;i++){
+									for(var j=0;j<$scope.takeDeliveryMateriels.length;j++){
+										if(params.deliveryMateriels[i].orderMaterielSerial==$scope.takeDeliveryMateriels[j].orderMaterielSerial){
+											$scope.takeDeliveryMateriels[j].stockCount=params.deliveryMateriels[i].stockCount;
+											$scope.takeDeliveryMateriels[j].unstockCount=params.deliveryMateriels[i].unstockCount;
+											$scope.takeDeliveryMateriels[j].stockRemark=params.deliveryMateriels[i].stockRemark;
+											break;
+											
+										}
+										
+									}
+									
+								}
+								//$scope.takeDeliveryMateriels=params.deliveryMateriels ;
 							}else{
 								toastr.success("出库成功！");
 								//自动代收货
@@ -454,7 +469,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			    }
 			    return result.length;
 			}
-		    $scope.totalStockCount  = function() {//求和入库总数合计
+		    $scope.totalStockCount  = function() {//求和出库总数合计
 		    	   if($scope.takeDeliveryMateriels){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount
@@ -466,7 +481,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 			       		return 0;
 			       	}
 		       };
-		       $scope.totalUnStockCount  = function() {//求和未入库总数合计
+		       $scope.totalUnStockOutCount  = function() {//求和未出库总数合计
 		    	   if($scope.takeDeliveryMateriels){
 		    		    var total = 0 ; 
 			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount

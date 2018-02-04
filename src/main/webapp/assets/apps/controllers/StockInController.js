@@ -250,7 +250,29 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
         		});
 	        }
 	        
-
+	        $scope.totalStockCount  = function() {//求和入库总数合计
+		    	   if($scope.takeDeliveryMateriels){
+		    		    var total = 0 ; 
+			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount
+			       			total = total + Number($scope.takeDeliveryMateriels[i].stockInCount==undefined?0:$scope.takeDeliveryMateriels[i].stockInCount);
+			       		}
+			       		$scope.record.materielCount=total;
+			       		return total
+			       	}else{
+			       		return 0;
+			       	}
+		       };
+		       $scope.totalUnStockInCount  = function() {//求和未入库总数合计
+		    	   if($scope.takeDeliveryMateriels){
+		    		    var total = 0 ; 
+			       		for(var i=0;i<$scope.takeDeliveryMateriels.length;i++){//materiel.deliverCount-materiel.stockCount
+			       			total = total +(Number($scope.takeDeliveryMateriels[i].deliverCount)-Number($scope.takeDeliveryMateriels[i].stockInCount==undefined?0:$scope.takeDeliveryMateriels[i].stockInCount));
+			       		}
+			       		return total
+			       	}else{
+			       		return 0;
+			       	}
+		       };
 	        /**
 	         * 确认入库
 	         */
@@ -278,13 +300,13 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							var param;
 							for(var i=0;i < $scope.takeDeliveryMateriels.length;i++){
 								param = {};
-								if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
+							/*	if(isNull($scope.takeDeliveryMateriels[i].stockInBatchs)){
 									toastr.warning("生产批次未填写！");
 									handle.unblockUI();
 				     				return false;
 								}else{
 									param.stockInBatchs = $scope.takeDeliveryMateriels[i].stockInBatchs;
-								}
+								}*/
 							param.orderMaterielSerial = $scope.takeDeliveryMateriels[i].orderMaterielSerial;//生成库存使用到
 //								param.batchNum = $scope.takeDeliveryMateriels[i].batchNum;
 //								param.manufactureDate = $scope.takeDeliveryMateriels[i].manufactureDate;
@@ -325,10 +347,27 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 								if(data.data == "1"){
 									if(judgeString=='save'){
 										toastr.success("保存成功！");
+										$scope.deliverAdd=true;
+										$scope.deliverView=true;
+										$scope.record.stockDate=params.record.dateStock;
+										for(var i=0;i<params.deliveryMateriels.length;i++){
+											for(var j=0;j<$scope.takeDeliveryMateriels.length;j++){
+												if(params.deliveryMateriels[i].orderMaterielSerial==$scope.takeDeliveryMateriels[j].orderMaterielSerial){
+													$scope.takeDeliveryMateriels[j].stockInCount=params.deliveryMateriels[i].stockCount;
+													$scope.takeDeliveryMateriels[j].unstockCount=params.deliveryMateriels[i].unstockCount;
+													$scope.takeDeliveryMateriels[j].stockRemark=params.deliveryMateriels[i].stockRemark;
+													break;
+													
+												}
+												
+											}
+											
+										}
 									}else{
 										toastr.success("入库成功！");
+										$state.go("takeDelivery");
 									}
-									$state.go("takeDelivery");
+									
 								}else{
 									toastr.error("入库失败！请联系管理员");
 								}

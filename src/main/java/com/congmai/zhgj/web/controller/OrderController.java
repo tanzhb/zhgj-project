@@ -57,6 +57,8 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.SendEmail;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
@@ -75,6 +77,7 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.ContractFile;
 import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
@@ -109,6 +112,7 @@ import com.congmai.zhgj.web.service.ClauseDeliveryService;
 import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
+import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractFileService;
 import com.congmai.zhgj.web.service.ContractService;
@@ -195,6 +199,8 @@ public class OrderController {
 	private DeliveryService deliveryService;
     @Autowired
 	private GroupService groupService;
+    @Autowired
+	private CompanyContactService  companyContactService;
     
     
 	//销售订单
@@ -293,6 +299,21 @@ public class OrderController {
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
 		orderService.pingTaiSubmit(orderInfo);
+		if(StringUtil.isNotEmpty(orderInfo.getSupplyComId())){
+			List<CompanyContact> companyContacts = companyContactService
+					.selectListByComId(orderInfo.getSupplyComId());// 获取企业联系人
+			if (org.apache.commons.collections.CollectionUtils
+					.isNotEmpty(companyContacts)) {
+				for (CompanyContact companyContact : companyContacts) {
+					if (StringUtil.isNotEmpty(companyContact.getContactEmail())) {
+						SendEmail.sendHtmlMail(companyContact.getContactEmail(),
+								"平台采购订单确认提醒", "采购订单" + orderInfo.getOrderNum()
+										+ "," + "需要你的确认,请及时确认该采购订单");
+					}
+				}
+			}
+		}
+	
 		return orderInfo;
     }
     
@@ -670,6 +691,23 @@ public class OrderController {
             		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.AGREE_BUY_ORDER));
             		    //采购订单待确认（发给供应商）
             		    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.CONFIRM_BUY_ORDER));
+            		    //采购订单审批通过发邮件通知供应商备货
+            			if(StringUtil.isNotEmpty(order.getSupplyComId())){
+            				List<CompanyContact> companyContacts = companyContactService
+            						.selectListByComId(order.getSupplyComId());// 获取企业联系人
+            				if (org.apache.commons.collections.CollectionUtils
+            						.isNotEmpty(companyContacts)) {
+            					for (CompanyContact companyContact : companyContacts) {
+            						if (StringUtil.isNotEmpty(companyContact.getContactEmail())) {
+            							SendEmail.sendHtmlMail(companyContact.getContactEmail(),
+            									"平台采购订单审批通过", "采购订单号" + order.getOrderNum()
+            											+ "," + "请及时备货");
+            						}
+            					}
+            				}
+            			}
+            		    
+            		    
         			}else{
         				//给中间审批人发消息
         				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(order,MessageConstants.APPLY_BUY_ORDER));

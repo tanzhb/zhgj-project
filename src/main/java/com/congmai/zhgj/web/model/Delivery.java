@@ -80,6 +80,7 @@ public class Delivery {
 
 	private String warehouseName;// 发货仓库名称
 	
+	private boolean hasCheckData;// 是否有检验条款(订单)
 	//收货方联系人
 	private String takeDeliverer;
 	
@@ -676,6 +677,14 @@ public class Delivery {
 
 	public void setDeRemark(String deRemark) {
 		this.deRemark = deRemark;
+	}
+
+	public boolean isHasCheckData() {
+		return hasCheckData;
+	}
+
+	public void setHasCheckData(boolean hasCheckData) {
+		this.hasCheckData = hasCheckData;
 	}
 	
 }

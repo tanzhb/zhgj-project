@@ -890,7 +890,7 @@
 							<th rowspan="2">订单数量</th>
 							<th rowspan="2">发货数量</th>
 							<th rowspan="2">合格数量</th>
-							<th rowspan="2">生产批次</th>
+							<!-- <th rowspan="2">生产批次</th> -->
 							<th rowspan="2">出库数量</th>
 							<th rowspan="2">未出数量</th>
 							<th rowspan="2">备注</th>
@@ -908,9 +908,9 @@
 							<td>{{materiel.orderMateriel.amount}}</td>
 							<td>{{materiel.deliverCount}}</td>
 							<td>{{materiel.qualifiedCount==null?"无出库检验":materiel.qualifiedCount}}</td>
-							<td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
+							<!-- <td>{{materiel.inOutNums}}<span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
-												</span></td>
+												</span></td> -->
 							<td>{{materiel.stockCount==null?"0":materiel.stockCount}}</td>
 							<td>{{materiel.deliverCount-materiel.stockCount}}</td>
 							<td>{{materiel.stockRemark}}</td>
@@ -948,7 +948,7 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalQualifiedCount}}</td>
-														<td></td>
+														<!-- <td></td> -->
 														<td>{{totalStockOutCount}}</td>
 														<td>{{totalUnstockOutCount}}</td>
 														<td></td>

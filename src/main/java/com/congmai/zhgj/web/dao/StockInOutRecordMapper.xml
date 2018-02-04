@@ -659,7 +659,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -669,7 +669,7 @@
 				
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum} AND s.status=1;
     </select>
     <!--代管库存获取库存所在仓库数  -->
     <select id="getBelongWarehouseNumForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -686,7 +686,7 @@
 		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -704,7 +704,7 @@
 				)
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}AND s.status=1;
     </select>
     <!--自建库存获取库存关联采购单数  -->
     <select id="countBuyNumForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -712,7 +712,7 @@
 	exists  (select  DISTINCT om.orderSerial from
 	orderMateriel  om  
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and o.serialNum=om.orderSerial and  o.buyComId is  NULL and o.status=5) -->
-	 SELECT
+	<!--  SELECT
 		COUNT(o.serialNum)
 		FROM
 			stockInbatch sib
@@ -728,17 +728,35 @@
 				AND  o.orderType != '委托采购'
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}; -->
+		SELECT
+		COUNT(o.serialNum)
+		FROM
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+				stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum} AND s.status=1; 
     </select>
       <!--代管库存获取库存关联采购单数  -->
     <select id="countBuyNumForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
-   <!--  select COUNT(o.serialNum ) from orderInfo o where
+  <!--   select COUNT(o.serialNum ) from orderInfo o where
 	exists  (select  DISTINCT om.orderSerial from
 	orderMateriel  om  
 	LEFT JOIN orderinfo o  ON   o.serialNum=om.orderSerial
 	LEFT JOIN stock  s  ON   s.materielOwner= o.buyComId
 	where s.serialNum= #{serialNum,jdbcType=VARCHAR}  and o.status=5  ) -->
-SELECT
+<!-- SELECT
 		COUNT(DISTINCT o.serialNum)
 		FROM
 			stockInbatch sib
@@ -763,15 +781,42 @@ SELECT
 				)
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}; -->
+		 SELECT
+		COUNT(DISTINCT o.serialNum)
+		FROM
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+				stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum = #{serialNum}AND s.status=1;
     </select>
     <!--自建库存获取库存关联销售单数  -->
     <select id="countSaleNumForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
-  <!--     select COUNT(o.serialNum ) from orderInfo o where
+      <!-- select COUNT(o.serialNum ) from orderInfo o where
 	exists (select  DISTINCT om.orderSerial from
 	orderMateriel  om  
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR}and o.serialNum=om.orderSerial and  o.buyComId is not  NULL and o.supplyComId IS NULL  and o.status=4) -->
-		  SELECT
+		<!--   SELECT
 		COUNT(DISTINCT o.serialNum) 
 		FROM
 			stockoutbatch sob
@@ -786,18 +831,35 @@ SELECT
 				AND  o.orderType != '委托采购'
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} -->
+		  SELECT
+		COUNT(DISTINCT o.serialNum) 
+		FROM
+		deliveryMateriel dm
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} AND s.status=1
     </select>
     <!--代管库存获取库存关联销售单数  -->
     <select id="countSaleNumForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
-    <!--   select COUNT(o.serialNum ) from orderInfo o where
+     <!--  select COUNT(o.serialNum ) from orderInfo o where
 	exists (select  DISTINCT om.orderSerial from
 	orderMateriel  om  
 	LEFT JOIN orderinfo  o ON   o.serialNum=om.orderSerial
 	LEFT JOIN stock  s  ON   s.materielOwner= o.buyComId
 	where s.serialNum= #{serialNum,jdbcType=VARCHAR} 
 	and  o.buyComId is not  NULL and o.supplyComId IS NULL and o.status=4) -->
-			  SELECT
+			<!--   SELECT
 		COUNT(DISTINCT o.serialNum) 
 		FROM
 			stockoutbatch sob
@@ -812,11 +874,28 @@ SELECT
 				AND o.orderType = '委托采购'
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} -->
+		  SELECT
+		COUNT(DISTINCT o.serialNum) 
+		FROM
+		deliveryMateriel dm 
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial  
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}AND s.status=1
     </select>
     <!--自建库存获取库存最后入库日期  -->
     <select id="getLastInDateForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
-<!-- 		SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+		<!-- SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
 SELECT td.serialNum FROM takeDelivery td, (
 	SELECT d.serialNum FROM delivery d
 	LEFT JOIN orderMateriel om ON om.orderSerial = d.orderSerial
@@ -826,7 +905,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	) tb  
 	WHERE td.deliverSerial = tb.serialNum and  td.serialNum =sir.takeDeliverSerial
 	)  -->
-	  SELECT
+	 <!--  SELECT
 		MAX(s.stockDate)
 		FROM
 			stockInbatch sib
@@ -842,11 +921,29 @@ SELECT td.serialNum FROM takeDelivery td, (
 				AND  o.orderType != '委托采购'
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}; -->
+		 SELECT
+		MAX(s.stockDate)
+		FROM
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+		stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum} AND s.status=1; 
     </select>
      <!--代管库存获取库存最后入库日期  -->
     <select id="getLastInDateForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
-		<!-- SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+	<!-- 	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
 	SELECT td.serialNum FROM takeDelivery td, (
 	SELECT d.serialNum FROM delivery d
 	LEFT JOIN orderMateriel om ON om.orderSerial = d.orderSerial
@@ -856,7 +953,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	) tb  
 	WHERE td.deliverSerial = tb.serialNum and  td.serialNum =sir.takeDeliverSerial
 	)  -->
-	  SELECT
+	  <!-- SELECT
 		MAX(s.stockDate)
 		FROM
 			stockInbatch sib
@@ -881,11 +978,38 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}; -->
+		SELECT
+		MAX(s.stockDate)
+		FROM
+		deliveryMateriel dm 
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum = #{serialNum} AND s.status=1;
     </select>
     <!--自建库存获取库存最后出库日期-->
     <select id="getLastOutDateForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
-<!-- 	SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
+	<!-- SELECT MAX(sir.stockDate) FROM stockInOutRecord sir WHERE EXISTS (
 SELECT td.serialNum FROM takeDelivery td, (
 	SELECT d.serialNum FROM delivery d
 	LEFT JOIN orderMateriel om ON om.orderSerial = d.orderSerial
@@ -895,7 +1019,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	) tb  
 	WHERE td.deliverSerial = tb.serialNum and  td.serialNum =sir.takeDeliverSerial
 	) -->
-	  SELECT
+	 <!--  SELECT
 		MAX(s.stockDate) 
 		FROM
 			stockoutbatch sob
@@ -911,7 +1035,25 @@ SELECT td.serialNum FROM takeDelivery td, (
 		
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} -->
+		SELECT
+		MAX(s.stockDate) 
+		FROM
+		deliveryMateriel dm
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		
+		)
+		
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} AND s.status=1
     </select>
     <!--代管库存获取库存最后出库日期-->
     <select id="getLastOutDateForDaiguan"  parameterType="java.lang.String"   resultType="java.lang.String">
@@ -925,7 +1067,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 	) tb WHERE d.serialNum = tb.serialNum
 	)tc  where tc.serialNum=sir.deliverSerial
 	) -->
-		  SELECT
+		<!--   SELECT
 		MAX(s.stockDate) 
 		FROM
 			stockoutbatch sob
@@ -949,15 +1091,41 @@ SELECT td.serialNum FROM takeDelivery td, (
 				)
 		)
 		
-		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} -->
+		 SELECT
+		MAX(s.stockDate) 
+		FROM
+		deliveryMateriel dm 
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} AND s.status=1
     </select>
      <!--自建库存获取累计出库数量 -->
     <select id="countOutAmountForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
-    SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
+   <!--  SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
 	EXISTS (select om.serialNum from
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
-	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL)
+	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
 <!-- 	SELECT SUM(a.outCount ) from (
 	SELECT
 			DISTINCT sob.serialNum,
@@ -977,15 +1145,35 @@ sob.outCount
 		)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a -->
+		SELECT SUM(a.stockCount ) from (
+	SELECT
+			DISTINCT dm.serialNum,
+dm.stockCount
+		FROM
+		deliveryMateriel dm
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+				
+		)
+		
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1)a
     </select>
      <!--代管库存获取累计出库数量 -->
     <select id="countOutAmountForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
-  <!--   SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
+   <!--  SELECT  SUM( IFNULL(dm.stockCount,0)  )  from deliveryMateriel  dm where
 	EXISTS (select om.serialNum from
 	orderMateriel om  
 	LEFT JOIN orderInfo o ON  o.serialNum=om.orderSerial
 	where om.materielSerial= #{serialNum,jdbcType=VARCHAR} and dm.orderMaterielSerial=om.serialNum  and  o.buyComId is not NULL) -->
-	SELECT SUM(a.outCount ) from (
+	<!-- SELECT SUM(a.outCount ) from (
 	  SELECT
 	  	DISTINCT sob.serialNum,
 sob.outCount
@@ -1011,11 +1199,39 @@ sob.outCount
 				)
 		)
 		
-		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR})a
+		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR})a -->
+		SELECT SUM(a.stockCount ) from (
+	  SELECT
+	  	DISTINCT dm.serialNum,
+dm.stockCount
+		FROM
+		deliveryMateriel dm
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
+		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum  = #{serialNum,jdbcType=VARCHAR} AND s.status=1)a 
     </select>
      <!--自建库存获取累计入库数量   -->
      <select id="countInAmountForZijian"  parameterType="java.lang.String"   resultType="java.lang.String">
-	select SUM( IFNULL(dm.stockCount,0) ) from deliveryMateriel dm where
+<!-- 	select SUM( IFNULL(dm.stockCount,0) ) from deliveryMateriel dm where
 	EXISTS (
 	SELECT serialNum FROM (
 	SELECT td.serialNum FROM takeDelivery td WHERE EXISTS (
@@ -1033,7 +1249,7 @@ sob.outCount
 	td.deliverSerial = tb.serialNum
 	)
 	)temp where temp.serialNum=dm.deliverSerial
-	)
+	) -->
 	<!-- SELECT SUM(a.stockInCount ) from (SELECT
 		DISTINCT sib.serialNum,
 sib.stockInCount
@@ -1053,6 +1269,26 @@ sib.stockInCount
 		)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR})a -->
+		 SELECT SUM(a.stockCount ) from (SELECT
+		DISTINCT dm.serialNum,
+dm.stockCount
+
+		FROM
+		deliveryMateriel dm 
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '1'
+				AND o.orderType != '委托采购'
+		)
+		
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1)a
 	  
      </select>
      <!--代管库存获取累计入库数量   -->
@@ -1076,7 +1312,7 @@ sib.stockInCount
 	)
 	)temp where temp.serialNum=dm.deliverSerial
 	) -->
-		SELECT SUM(a.stockInCount ) from (
+	<!-- 	SELECT SUM(a.stockInCount ) from (
 		  SELECT
 		DISTINCT sib.serialNum,
 sib.stockInCount
@@ -1103,7 +1339,36 @@ sib.stockInCount
 				)
 		)
 		
-		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR})a
+		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR})a -->
+		 	SELECT SUM(a.stockCount ) from (
+		  SELECT
+		DISTINCT dm.serialNum,
+dm.stockCount
+		FROM
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+			stock.manageType = '2'
+				AND o.orderType = '委托采购'
+				AND stock.materielOwner = (
+					SELECT
+						orderInfo.buyComId
+					FROM
+						orderInfo
+					WHERE
+						orderInfo.orderNum = o.orderSerial and orderInfo.delFlg = 0
+						limit 1
+				)
+		)
+		
+		WHERE stock.serialNum  =  #{serialNum,jdbcType=VARCHAR}AND s.status=1)a
      </select>
      <!-- 自建库存获取库存出库记录-->
      <select id="getStockOutRecordForZijian"  parameterType="java.lang.String"  resultMap="BaseResultMap" >
@@ -1217,7 +1482,7 @@ sib.stockInCount
      </select>
       <!--自建库存获取库存最早入库日期  -->
     <select id="getFirstInDateForZijian" parameterType="java.lang.String"   resultType="java.lang.String">
-	  SELECT
+	<!--   SELECT
 		MIN(s.stockDate)
 		FROM
 			stockInbatch sib
@@ -1233,7 +1498,24 @@ sib.stockInCount
 				AND  o.orderType != '委托采购'
 		)
 		
-		WHERE stock.serialNum = #{serialNum};
+		WHERE stock.serialNum = #{serialNum}; -->
+		SELECT
+		MIN(s.stockDate)
+		FROM
+			deliveryMateriel dm
+		<!-- LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
+		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
+		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
+		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
+		AND (
+		stock.manageType = '1'
+				AND  o.orderType != '委托采购'
+		)
+		
+		WHERE stock.serialNum = #{serialNum}; 
     </select>
      <!--代管库存获取库存最早入库日期  -->
     <select id="getFirstInDateForDaiguan" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -1241,8 +1523,8 @@ sib.stockInCount
 	  SELECT
 		MIN(s.stockDate)
 		FROM
-			stockInbatch sib
-		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+			deliveryMateriel dm
+	<!-- 	LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
 		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial  AND s.status=1
@@ -1319,16 +1601,17 @@ sib.stockInCount
      <select id="getMaterielZiJianStock"  parameterType="java.lang.String"   resultType="java.lang.String">
 	
 select (
-SELECT IFNULL(SUM(a.stockInCount ),0) from (SELECT
-		DISTINCT sib.serialNum,
-			sib.stockInCount
+SELECT IFNULL(SUM(a.stockCount ),0) from (SELECT
+		DISTINCT dm.serialNum,
+			dm.stockCount
 
 		FROM
-			stockInbatch sib
-		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
-		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
+		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -1337,19 +1620,20 @@ SELECT IFNULL(SUM(a.stockInCount ),0) from (SELECT
 				AND o.orderType != '委托采购'
 		)
 		
-		  WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+		  WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1
 )a)
 	  -
 	(  
-	 SELECT IFNULL(SUM(a.outCount ),0) from (
+	 SELECT IFNULL(SUM(a.stockCount ),0) from (
 	SELECT
-			DISTINCT sob.serialNum,
-sob.outCount
+			DISTINCT dm.serialNum,
+dm.stockCount
 		FROM
-			stockoutbatch sob
-		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial
+		deliveryMateriel dm 
+			<!-- stockoutbatch sob
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sob.stockOutMaterielSerial -->
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
-		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial AND s.status=1
+		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
@@ -1359,7 +1643,7 @@ sob.outCount
 				
 		)
 		
-		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR}
+		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1
 )a)
      </select>
 </mapper>

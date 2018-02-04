@@ -20,6 +20,7 @@ import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.SendEmail;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.core.util.Constants;
@@ -41,6 +42,7 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryExample;
@@ -68,6 +70,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.MaterielService;
@@ -129,6 +132,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
     private OrderService  orderService;
 	@Resource
 	private ContractService contractService;
+	@Resource
+	private CompanyContactService companyContactService;
+	
 	
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
@@ -595,6 +601,26 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			}
 			if("1".equals(record.getStatus())){
 			createStock(materiel,new StockExample(),currenLoginName);
+			String  orderSerial=old_delivery.getOrderSerial();//取订单流水
+			OrderInfo order=orderInfoMapper.selectByPrimaryKey(orderSerial);
+				// 入库计划入库成功通过发邮件通知供应商
+				if (StringUtil.isNotEmpty(order.getSupplyComId())) {
+					List<CompanyContact> companyContacts = companyContactService
+							.selectListByComId(order.getSupplyComId());// 获取企业联系人
+					if (org.apache.commons.collections.CollectionUtils
+							.isNotEmpty(companyContacts)) {
+						for (CompanyContact companyContact : companyContacts) {
+							if (StringUtil.isNotEmpty(companyContact
+									.getContactEmail())) {
+								SendEmail.sendHtmlMail(
+										companyContact.getContactEmail(),
+										"平台收货计划入库成功",
+										"平台入库成功,"+
+										"关联发货计划单号" + old_delivery.getDeliverNum());
+							}
+						}
+					}
+				}
 			}
 		}
 		//更新入库数量(订单)
@@ -683,11 +709,29 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		String nodeString = ClauseSettlementDetail.CKH;
 		contractService.findPaymentNode(orderString, nodeString);	
 		
-		//更新出库单实际入库数量
+		//更新出库单实际出库数量
 		StockInOutRecordExample example = new StockInOutRecordExample();
 		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
 		record.setRealCount(totalOutCount.toString());//实际出库数量
 		stockInOutRecordMapper.updateByExampleSelective(record, example);
+			// 出库计划出库成功通过发邮件通知采购商
+			if (StringUtil.isNotEmpty(order.getBuyComId())) {
+				List<CompanyContact> companyContacts = companyContactService
+						.selectListByComId(order.getBuyComId());// 获取企业联系人
+				if (org.apache.commons.collections.CollectionUtils
+						.isNotEmpty(companyContacts)) {
+					for (CompanyContact companyContact : companyContacts) {
+						if (StringUtil.isNotEmpty(companyContact
+								.getContactEmail())) {
+							SendEmail.sendHtmlMail(
+									companyContact.getContactEmail(),
+									"平台发货计划出库成功",
+									"平台出库成功,"+
+									"关联收货计划单号" + old_delivery.getDeliverNum());
+						}
+					}
+				}
+			}
 		}else{
 			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
 			for(DeliveryMateriel materiel : materiels){

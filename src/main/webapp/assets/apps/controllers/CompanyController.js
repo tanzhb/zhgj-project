@@ -645,7 +645,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					department:{required:"部门/公司不能为空！"},
 					responsibility:{required:"管理职责不能为空！"},
 					contactTel:{required:"电话不能为空！"},
-					contactEmail:{email:"请输入正确的邮箱！"}
+					contactEmail:{required:"邮箱不能为空！",email:"请输入正确的邮箱！"}
 				},
 				rules: {
 					contactName: {
@@ -665,6 +665,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 						isPhone: !0
 					},
 					contactEmail:{
+						required:true,
 						email:true
 					}
 				},

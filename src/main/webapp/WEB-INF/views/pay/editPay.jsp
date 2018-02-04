@@ -40,7 +40,7 @@
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane fade active in" id="tab_1_1">
-								<div class="portlet-title" style="min-height: 48px;">
+								<div class="portlet-title" style="min-height: 18px;">
 									<div class="tools" style="float: right" id="noprintdiv">
 										<button type="submit" ng-click="editBasicInfo('pay')"
 											class="btn green  btn-circle  btn-sm" ng-show="input">

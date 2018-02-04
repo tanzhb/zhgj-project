@@ -62,6 +62,14 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				$scope.input=false;
 				$scope.span =true;
 				$scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
+			}else if($state.current.name=="auditPay"){
+				$scope.input=false;
+				$scope.span =true;
+				$scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
+			}else if($state.current.name=="editAuditPay"){
+				$scope.input=true;
+				$scope.span =false;
+				$scope.getPayInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
 			}
 		 
 		 
@@ -117,12 +125,16 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   		    		$scope.chnAmount=$scope.paymentRecord.applyPaymentAmount;
   		    		$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
   		    	}
-  		    	$scope.clauseSettlementList=data.paymentRecordclauseSettList;
-  		    	$scope.paymentRecord.payType=data.paymentRecordpayType;
+  		    	$scope.clauseSettlementList=data.clauseSettlementList;
+  		    	$scope.paymentRecord.payType=data.paymentRecord.paymentType;
   		    	$scope.comFinances=data.paymentRecordcomFinances//收付款信息
   		    	$scope.paymentRecord.bank=data.paymentRecord.bank;
   		    	$scope.verificationList=data.rvList;
   		    	$scope.queryForPage();
+  		    	if($state.current.name=="applyPay"||$state.current.name=="editAuditPay"){//在修改或者重新申请时加载节点,联系人....
+  		    		$scope.getBuyOrderInfo(data.paymentRecord.orderSerial);
+  		    	}
+  		    	
       		    	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
 					$("#taskId").val(ids);//赋值给隐藏input，通过和不通过时调用
 
@@ -1058,8 +1070,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 				);
 		$state.go('paymentRecordC');//返回申请列表
-//		$state.go('paymentRecordC',{},{reload:true});
 		$("#sample_2").DataTable().ajax.reload();
+	//$state.go('paymentRecordC',{},{reload:true});
+		
 	};
 	
 	$scope.toApply = function() {
@@ -1123,35 +1136,35 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	$scope.apApplyAngain = function() {		
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
-			fd.append('serialNum',$scope.pay.serialNum);
-			fd.append('paymentType',$scope.pay.paymentType);
-			fd.append('paymentNum',$scope.pay.paymentNum); 
-			fd.append('orderSerial',$scope.pay.orderSerial); 
+			fd.append('serialNum',$scope.paymentRecord.serialNum);
+			fd.append('paymentType',$scope.paymentRecord.paymentType);
+			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
+			fd.append('orderSerial',$scope.paymentRecord.orderSerial); 
 			if(supplyComId!=null){
 				fd.append('supplyComId',supplyComId);
 			}else{
-				fd.append('supplyComId',$scope.pay.supplyComId);
+				fd.append('supplyComId',$scope.paymentRecord.supplyComId);
 			}
-			fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
-			fd.append('applyCurrency',$scope.pay.applyCurrency);
-			fd.append('playPaymentDate',$scope.pay.playPaymentDate);
-			fd.append('payType',$scope.pay.payType);
-			fd.append('paymentNode',$scope.pay.paymentNode);
-			fd.append('nodeNum',$scope.pay.nodeNum);
-			fd.append('billStyle',"先款后票"); 
-			fd.append('isBill',$("input[name='isBill']:checked").val());
-			fd.append('applyDate',$scope.pay.applyDate);
-			fd.append('applicant',$scope.pay.applicant);
-			fd.append('applyDept',$scope.pay.applyDept);
-			fd.append('remark',$scope.pay.remark);
+			fd.append('applyPaymentAmount',$scope.paymentRecord.applyPaymentAmount); 
+			fd.append('applyCurrency',$scope.paymentRecord.applyCurrency);
+			fd.append('playPaymentDate',$scope.paymentRecord.playPaymentDate);
+			fd.append('payType',$scope.paymentRecord.payType);
+			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
+			fd.append('nodeNum',$scope.paymentRecord.nodeNum);
+			fd.append('billType',$scope.paymentRecord.billType); 
+			fd.append('isBill',$scope.paymentRecord.isBill);
+			fd.append('applyDate',$scope.paymentRecord.applyDate);
+			fd.append('applicant',$scope.paymentRecord.applicant);
+			fd.append('applyDept',$scope.paymentRecord.applyDept);
+			fd.append('remark',$scope.paymentRecord.remark);
 			
-			fd.append('payee',$scope.pay.payee);
-			fd.append('contact',$scope.pay.contact);
-			fd.append('contactNum',$scope.pay.contactNum);
-			fd.append('bank',$scope.pay.bank);
-			fd.append('accountName',$scope.pay.accountName);
-			fd.append('accountNumber',$scope.pay.accountNumber);
-			fd.append('reason',$scope.pay.reason);
+			fd.append('payee',$scope.paymentRecord.payee);
+			fd.append('contact',$scope.paymentRecord.contact);
+			fd.append('contactNum',$scope.paymentRecord.contactNum);
+			fd.append('bank',$scope.paymentRecord.bank);
+			fd.append('accountName',$scope.paymentRecord.accountName);
+			fd.append('accountNumber',$scope.paymentRecord.accountNumber);
+			fd.append('reason',$scope.paymentRecord.reason);
 			$http({
 				method:'POST',
 				url:ctx + "rest/pay/modifyApplyAp",
@@ -1164,10 +1177,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
 				$("#dbTable").DataTable().ajax.reload();
 				showToastr('toast-bottom-right', 'success', data);
-				$scope.pay= data;
+				$scope.paymentRecord= data;
 				$scope.span = true;
 				$scope.input = false;
-				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+				$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
 					});
 		}
 	};
@@ -1186,35 +1199,35 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	$scope.apCancelApply = function() {		
 		if($('#form_sample_1').valid()){
 			var fd = new FormData();
-			fd.append('serialNum',$scope.pay.serialNum);
-			fd.append('paymentType',$scope.pay.paymentType);
-			fd.append('paymentNum',$scope.pay.paymentNum); 
-			fd.append('orderSerial',$scope.pay.orderSerial); 
+			fd.append('serialNum',$scope.paymentRecord.serialNum);
+			fd.append('paymentType',$scope.paymentRecord.paymentType);
+			fd.append('paymentNum',$scope.paymentRecord.paymentNum); 
+			fd.append('orderSerial',$scope.paymentRecord.orderSerial); 
 			if(supplyComId!=null){
 				fd.append('supplyComId',supplyComId);
 			}else{
-				fd.append('supplyComId',$scope.pay.supplyComId);
+				fd.append('supplyComId',$scope.paymentRecord.supplyComId);
 			}
-			fd.append('applyPaymentAmount',$scope.pay.applyPaymentAmount); 
-			fd.append('applyCurrency',$scope.pay.applyCurrency);
-			fd.append('playPaymentDate',$scope.pay.playPaymentDate);
-			fd.append('payType',$scope.pay.payType);
-			fd.append('paymentNode',$scope.pay.paymentNode);
-			fd.append('nodeNum',$scope.pay.nodeNum);
-			fd.append('billStyle',"先款后票"); 
-			fd.append('isBill',$("input[name='isBill']:checked").val());
-			fd.append('applyDate',$scope.pay.applyDate);
-			fd.append('applicant',$scope.pay.applicant);
-			fd.append('applyDept',$scope.pay.applyDept);
-			fd.append('remark',$scope.pay.remark);
+			fd.append('applyPaymentAmount',$scope.paymentRecord.applyPaymentAmount); 
+			fd.append('applyCurrency',$scope.paymentRecord.applyCurrency);
+			fd.append('playPaymentDate',$scope.paymentRecord.playPaymentDate);
+			fd.append('payType',$scope.paymentRecord.payType);
+			fd.append('paymentNode',$scope.paymentRecord.paymentNode);
+			fd.append('nodeNum',$scope.paymentRecord.nodeNum);
+			fd.append('billType',$scope.paymentRecord.billType); 
+			fd.append('isBill',$scope.paymentRecord.isBill);
+			fd.append('applyDate',$scope.paymentRecord.applyDate);
+			fd.append('applicant',$scope.paymentRecord.applicant);
+			fd.append('applyDept',$scope.paymentRecord.applyDept);
+			fd.append('remark',$scope.paymentRecord.remark);
 			
-			fd.append('payee',$scope.pay.payee);
-			fd.append('contact',$scope.pay.contact);
-			fd.append('contactNum',$scope.pay.contactNum);
-			fd.append('bank',$scope.pay.bank);
-			fd.append('accountName',$scope.pay.accountName);
-			fd.append('accountNumber',$scope.pay.accountNumber);
-			fd.append('reason',$scope.pay.reason);
+			fd.append('payee',$scope.paymentRecord.payee);
+			fd.append('contact',$scope.paymentRecord.contact);
+			fd.append('contactNum',$scope.paymentRecord.contactNum);
+			fd.append('bank',$scope.paymentRecord.bank);
+			fd.append('accountName',$scope.paymentRecord.accountName);
+			fd.append('accountNumber',$scope.paymentRecord.accountNumber);
+			fd.append('reason',$scope.paymentRecord.reason);
 			$http({
 				method:'POST',
 				url:ctx + "rest/pay/modifyApplyAp",
@@ -1227,10 +1240,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				$state.go('paymentRecordC',{tabHref:1});//返回到待办列表
 				$("#dbTable").DataTable().ajax.reload();
 				showToastr('toast-bottom-right', 'success', data);
-				$scope.pay= data;
+				$scope.paymentRecord= data;
 				$scope.span = true;
 				$scope.input = false;
-				$scope.applyPaymentAmountChn=convertCurrency($scope.pay.applyPaymentAmount);
+				$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
 				
 					});
 		}

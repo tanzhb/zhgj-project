@@ -47,6 +47,8 @@ import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.SendEmail;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
@@ -56,6 +58,7 @@ import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
@@ -314,6 +317,9 @@ public class TakeDeliveryController {
         	if(delivery.getOrderSerial()!=null&&sr!=null){
         		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
         		sr.setOrder(o);
+    			if("1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
+    				delivery.setHasCheckData(true);
+    			}
         		delivery.setStockInOutRecord(sr);
         	}
     	}
@@ -523,6 +529,7 @@ public class TakeDeliveryController {
         				//2、通知关联采购计划的制单人
         				//3、通知关联销售订单的制单人
         			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY_TO_SALE));
+        			
         			}
         		}else{
         		/*	takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);*/
@@ -553,6 +560,7 @@ public class TakeDeliveryController {
         	try{
         		Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		takeDeliveryParams.getRecord().setStockDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(takeDeliveryParams.getRecord().getDateStock()));
         		if(StringUtils.isNotEmpty(takeDeliveryParams.getRecord().getSerialNum())){//确认出库
         			//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams, currenLoginName);
         			takeDeliveryService.updateStockOutData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),takeDeliveryParams.getStockOutMateriels(),currenLoginName,"out");

@@ -640,6 +640,11 @@ function initPageBar($rootScope, path,judgeString){
  		"<li><a>采购订单</a><i class='fa fa-angle-right'></i></li>" +
  		"<li><a ui-sref='buyOrder'>采购订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>新增付款计划</a></li>";
+	}else if(path == 'addGatheringMoneyForSaleOrder'){
+		$("#loadPageBar").innerHTML ="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+ 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
+				 		"<li><a>新增收款计划</a></li>"	;
 	}
 }
 

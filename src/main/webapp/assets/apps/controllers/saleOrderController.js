@@ -13,6 +13,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         	loadMainTable();// 加载订单列表(普通订单)
 //        	loadMainFramTable();// 框架订单列表
         	loadDeliveryTable();// 发货计划列表
+        	loadGatheringTable();// 收款计划列表
         	
         	//***************************************流程处理相关start
         	var dbtable;//待办table
@@ -4952,6 +4953,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 	     $scope.jumpToUrl= function(judgeString) {
 		 	    	  $state.go('addDelivery',{oprateType:judgeString,orderSerialNum:null});
 		 	     }
+		 	    $scope.jumpToSkUrl= function(judgeString) {//新建收款
+		 	    	  $state.go(judgeString,{serialNum:null,orderSerialNum:null});
+		 	     }
 		 		$scope.showSX=function(judgeString,index){
 		 			debugger;
 		 			if(index==undefined){
@@ -5584,4 +5588,204 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 										}
 									});
 			        }
+			        
+			      //收款计划列表
+			    	var tableGather;
+			    	var loadGatheringTable = function() {
+			    		var a = 0;
+			    		App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
+			    			$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
+
+			    			tableGather = $("#sample_4").DataTable(
+			    					{
+			    						language : {
+			    							aria : {
+			    								sortAscending : ": 以升序排列此列",
+			    								sortDescending : ": 以降序排列此列"
+			    							},
+			    							emptyTable : "空表",
+			    							info : "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+			    							infoEmpty : "没有数据",
+			    							infoFiltered : "(从 _MAX_ 条数据中检索)",
+			    							lengthMenu : "每页显示 _MENU_ 条数据",
+			    							search : "查询:",
+			    							zeroRecords : "抱歉， 没有找到！&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+			    							paginate : {
+			    								"sFirst" : "首页",
+			    								"sPrevious" : "前一页",
+			    								"sNext" : "后一页",
+			    								"sLast" : "尾页"
+			    							}
+			    						},
+			    						order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+			    						bRetrieve : true,
+			    						// searching: true,//是否过滤检索
+			    						// ordering: true,//是否排序
+			    						lengthMenu : [
+			    						              [ 5, 10, 15,15, 30, -1 ],
+			    						              [ 5, 10, 15, 15,30, "All" ] ],
+			    						              pageLength : 10,// 每页显示数量
+			    						              processing : true,// loading等待框
+			    						              // serverSide: true,
+			    						              ajax: "rest/pay/findAllGatheringMoneyRecord",//加载数据中user表数据
+			    						              "aoColumns": [
+			    						                            { mData: 'serialNum'},
+			    						                            { mData: 'paymentNum' },//paymentType
+			    						                            { mData: 'paymentType' },//paymentType
+			    						                            { mData: 'applyCurrency' },
+			    						                            { mData: 'applyPaymentAmount' },
+			    						                            { mData: 'playPaymentDate' },
+			    						                            { mData: 'buyComId'},
+			    						                            { mData: 'paymentDate'},
+			    						                            { mData: 'paymentAmount'},
+			    						                            { mData: 'isBill',
+			    						                            	mRender:function(data){
+			    						                            		if(data=='0'){
+			    						                            				return '否';
+			    						                            		}else{
+			    						                            			return "是";
+			    						                            		}
+			    						                            	}
+			    						                            	},
+			    						                            { mData: 'status',
+			    						                            	mRender:function(data){
+			    						                            		if(data!=""&&data!=null){
+			    						                            			if(data=='0'){
+			    						                            				return '初始';
+			    						                            			}else if(data=='1'){
+			    						                            				return '部分核销';
+			    						                            			}else if(data=='2'){
+			    						                            				return '已完成';
+			    						                            			}
+			    						                            		}else{
+			    						                            			return "";
+			    						                            		}
+			    						                            	}
+			    						                            },
+			    						                            { mData: 'status'
+			    						                            	},
+			    						                            ],
+			    						                            'aoColumnDefs': [ {
+			    						                            	'targets' : 0,
+			    						                            	'searchable' : false,
+			    						                            	'orderable' : false,
+			    						                            	'className' : 'dt-body-center',
+			    						                            	'render' : function(data,type, full, meta) {
+			    						                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
+			    					                            	}
+			    						                            } ,
+			    						                            {
+			    						                            	'targets' : 1,
+			    						                            	'className' : 'dt-body-center',
+			    						                            	'render' : function(data,
+			    						                            			type, row, meta) {
+			    						                            		return '<a  data-toggle="modal" ng-click="jumpToGetPayInfo(\''+row.serialNum+'\')" ">'+data+'</a>';
+			    						                            	},
+			    						                            	"createdCell": function (td, cellData, rowData, row, col) {
+			    						                            		$compile(td)($scope);
+			    						                            	}
+			    						                            } ,
+			    						                            {
+			    						                            	'targets' : 5,
+			    						                            	'className' : 'dt-body-center',
+			    						                            	'render' : function(data,
+			    						                            			type, row, meta) {
+			    						                            		if(data==null||data==''){
+			    						                            			return row.applyDate;
+			    						                            		}else{
+			    						                            			return data;
+			    						                            		}
+			    						                            	},
+			    						                            	
+			    						                            } ,
+			    						                            {
+			    						                            	'targets' : 11,
+			    						                            	'className' : 'dt-body-center',
+			    						                            	'render' : function(data,
+			    						                            			type, row, meta) {
+			    						                            	if(row.status=='1'){
+			    						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+			    						                            		}else{
+			    						                            			return '';	
+			    						                            		}
+			    						                            	},
+			    						                            	"createdCell": function (td, cellData, rowData, row, col) {
+			    						                            		$compile(td)($scope);
+			    						                            	}
+			    						                            }
+			    						                            ]}).on('order.dt',
+			    						                            		function() {
+			    						                            	console.log('排序');
+			    						                            })
+			    	}
+			    	//修改
+			    	$scope.jumpToEditGather = function() {
+			    		var ids = '';
+			    		// Iterate over all checkboxes in the table
+			    		tableGather.$('input[type="checkbox"]').each(
+			    				function() {
+			    					// If checkbox exist in DOM
+			    					if ($.contains(document, this)) {
+			    						// If checkbox is checked
+			    						if (this.checked) {
+			    							// 将选中数据id放入ids中
+			    							if (ids == '') {
+			    								ids = this.value;
+			    							} else{
+			    								ids = "more"
+			    							}
+			    						}
+			    					}
+			    				});
+			    		if(ids==''){
+			    			toastr.warning('请选择一个收款！');return;
+			    		}else if(ids=='more'){
+			    			toastr.warning('只能选择一个收款！');return;
+			    		}
+			    		$state.go('addGatheringMoney',{serialNum:ids});
+			    	};
+			    	//删除
+			    	$scope.delGather = function() {
+			    		var ids = '';
+			    		// Iterate over all checkboxes in the table
+			    		tableGather.$('input[type="checkbox"]').each(function() {
+			    			// If checkbox exist in DOM
+			    			if ($.contains(document, this)) {
+			    				// If checkbox is checked
+			    				if (this.checked) {
+			    					// 将选中数据id放入ids中
+			    					if (ids == '') {
+			    						ids = this.value;
+			    					} else
+			    						ids = ids + ',' + this.value;
+			    				}
+			    			}
+			    		});
+
+			    		if (ids == '') {// 未勾选删除数据									
+			    			toastr.warning("未勾选要删除数据！");
+			    		} else {
+			    			$('#delUsersModal').modal('show');// 打开确认删除模态框
+
+			    			$scope.confirmDel = function() {										
+			    				GatheringMoneyService.delPaymentRecord(ids).then(
+			    						function(data) {
+			    							$('#delUsersModal').modal('hide');// 删除成功后关闭模态框
+			    							$(".modal-backdrop").remove();
+			    							toastr.success("删除成功！");
+			    							$state.go('saleOrder',{},{reload:true}); // 重新加载datatables数据
+			    						},
+			    						function(errResponse) {
+			    							/*console.error('Error while deleting Users');*/
+			    							alert(123);
+			    						}
+
+			    				);
+			    			}
+			    		}								
+			    	};
+			    	$scope.jumpToGetPayInfo  = function(serialNum) {//查看收款计划详情
+			        	$state.go('viewGatheringMoney',{serialNum:serialNum});
+			        }; 
+
 }]);

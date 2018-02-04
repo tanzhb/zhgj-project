@@ -861,7 +861,6 @@
 							<th rowspan="2">单位</th>
 							<th rowspan="2">订单数量</th>
 							<th rowspan="2">未发数量</th>
-							<th rowspan="2">未发数量</th>
 							<th colspan="2" style="text-align: center;">发货</th>
 							<th colspan="2" style="text-align: center;" ng-if="hasCheckData">质检</th>
 							<!-- <th rowspan="2">合格数量</th>
@@ -880,8 +879,8 @@
 							<th ng-if="hasCheckData">备注</th>
 							<th ng-if="hasOutData">实际出库</th>
 							<th  ng-if="hasOutData">备注</th>
-							<th ng-if="hasInData">实际入库</th>
-							<th  ng-if="hasInData">备注</th>
+							<!-- <th ng-if="hasInData">实际入库</th>
+							<th  ng-if="hasInData">备注</th> -->
 							
 						</tr>
 					</thead>
@@ -901,15 +900,21 @@
 							<td  ng-if="hasCheckData">{{materiel.checkRemark}}</td>
 							<td ng-if="hasOutData">{{materiel.stockCount}}</td>
 							<td  ng-if="hasOutData">{{materiel.stockRemark}}</td>
-							<td ng-if="hasInData">{{materiel.stockCount}}</td>
-							<td ng-if="hasInData">{{materiel.stockRemark}}</td>
+						<!-- 	<td ng-if="hasInData">{{materiel.stockCount}}</td>
+							<td ng-if="hasInData">{{materiel.stockRemark}}</td> -->
 							
 							<td>
 								<a href="javascript:;" ng-click="downloadFile1(item.file)" ng-repeat="item in materiel.files">{{item.file|limitTo:30:item.file.indexOf('_')+1}}&nbsp;</a>
 							</td>
 							
 						
-							<td></td>
+							<td ng-if="hasOutData"><!--  已出过库-->
+							<span ng-if="materiel.stockCount==0||materiel.stockCount==null">未出库</span>
+							<span  ng-if="materiel.stockCount!=0&&materiel.stockCount!=materiel.deliverCount&&materiel.stockCount!=null">部分出库</span>
+							<span ng-if="materiel.stockCount==materiel.deliverCount">已完成</span>
+							</td>
+							<td ng-if="!hasOutData"><!--  未出过库-->
+							</td>
 						</tr>
 						<tr
 							ng-if="dispalyDeliveryMateriel==0">
@@ -930,8 +935,8 @@
 															<th ng-if="hasCheckData"></th>
 															<th ng-if="hasOutData">{{totalStockCount}}</th>
 															<th  ng-if="hasOutData"></th>
-															<th ng-if="hasInData">{{totalStockCount}}</th>
-															<th  ng-if="hasInData"></th>
+															<!-- <th ng-if="hasInData">{{totalStockCount}}</th>
+															<th  ng-if="hasInData"></th> -->
 														<td></td>
 														<td></td>
 													</tr>
