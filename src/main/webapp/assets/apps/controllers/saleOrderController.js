@@ -5742,7 +5742,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    		}else if(ids=='more'){
 			    			toastr.warning('只能选择一个收款！');return;
 			    		}
-			    		$state.go('addGatheringMoney',{serialNum:ids});
+			    		$state.go('addForSaleOrderGatheringMoney',{serialNum:ids});
 			    	};
 			    	//删除
 			    	$scope.delGather = function() {
@@ -5785,7 +5785,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    		}								
 			    	};
 			    	$scope.jumpToGetPayInfo  = function(serialNum) {//查看收款计划详情
-			        	$state.go('viewGatheringMoney',{serialNum:serialNum});
+			        	$state.go('viewForSaleOrderGatheringMoney',{serialNum:serialNum});
 			        }; 
 			      //导出收款
 			    	$scope.exportPay = function(){

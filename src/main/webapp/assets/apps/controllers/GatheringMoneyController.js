@@ -37,7 +37,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	}
 			    }
 	
-	}else if($state.current.name=="viewGatheringMoney"){
+	}else if($state.current.name=="viewGatheringMoney"||$state.current.name=="viewForSaleOrderGatheringMoney"){
 		$scope.getPayInfo($stateParams.serialNum);	
 		$scope.input=false;
 		$scope.span=true;
