@@ -12,7 +12,7 @@
 							<li class="active bold"><a data-target="#tab_1_1"
 								data-toggle="tab">收款信息</a></li>
 							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">付款信息</a> -->
-							<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a>
+							<!-- <li class="bold"><a data-target="#tab_1_2" data-toggle="tab">核销记录</a> -->
 							<li class="dropdown pull-right tabdrop">
 								<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 							</li>							
@@ -188,6 +188,7 @@
 																	输入
 																</button>
 															</span>
+															<p class="form-control-static" ng-show="span">{{memoRecord.bank}}</p>
 														</div>
 													</div>
 												</div>

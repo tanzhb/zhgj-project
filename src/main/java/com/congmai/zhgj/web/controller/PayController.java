@@ -3,6 +3,7 @@ package com.congmai.zhgj.web.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import net.sf.json.JSONObject;
+import net.sf.json.util.NewBeanInstanceStrategy;
 
 import org.activiti.engine.ActivitiException;
 import org.activiti.engine.ActivitiObjectNotFoundException;
@@ -77,6 +79,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.RelationFile;
 import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
@@ -655,9 +658,25 @@ public class PayController {
 			} else {
 				paymentRecord.setBillStyle(PaymentRecord.XKHP);
 			}
-
+			if ("1".equals(paymentRecord.getIsBill())) {
+				paymentRecord.setIsBill("是");
+			} else {
+				paymentRecord.setIsBill("否");
+			}
 			if ("0".equals(paymentRecord.getStatus())) {
-				paymentRecord.setStatus("初始");
+				paymentRecord.setStatus("未审批");
+			}else if("1".equals(paymentRecord.getStatus())) {
+				paymentRecord.setStatus("部分核销");
+			}else if("2".equals(paymentRecord.getStatus())) {
+				paymentRecord.setStatus("已完成");
+			}else if("PENDING".equals(paymentRecord.getStatus())){
+				paymentRecord.setStatus("审批中");
+			}else if("WAITING_FOR_APPROVAL".equals(paymentRecord.getStatus())){
+				paymentRecord.setStatus("待审批");
+			}else if("APPROVAL_SUCCESS".equals(paymentRecord.getStatus())){
+				paymentRecord.setStatus("审批成功");
+			}else if("APPROVAL_FAILED".equals(paymentRecord.getStatus())){
+				paymentRecord.setStatus("审批失败");
 			}
 
 		}
@@ -684,9 +703,17 @@ public class PayController {
 			} else {
 				paymentRecord.setBillStyle(PaymentRecord.XKHP);
 			}
-
+			if ("1".equals(paymentRecord.getIsBill())) {
+				paymentRecord.setIsBill("是");
+			} else {
+				paymentRecord.setIsBill("否");
+			}
 			if ("0".equals(paymentRecord.getStatus())) {
 				paymentRecord.setStatus("初始");
+			}else if("1".equals(paymentRecord.getStatus())) {
+				paymentRecord.setStatus("部分核销");
+			}else if("2".equals(paymentRecord.getStatus())) {
+				paymentRecord.setStatus("已完成");
 			}
 
 		}
@@ -1124,4 +1151,53 @@ public class PayController {
         	}
     	return flag;
     }
+    
+	/**
+	 * @Description (导出收款水单/付款水单信息)
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("exportPayReceiveMemo")
+	public void exportPayReceiveMemo(Map<String, Object> map,
+			HttpServletRequest request, HttpServletResponse response,
+			String type) {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		Subject currentUser = SecurityUtils.getSubject();
+		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
+		List<MemoRecord> memoRecordlist = new ArrayList<MemoRecord>();
+		if ("receive".equals(type)) {
+			memoRecordlist = payService.findReceiveMemoRecord(currenLoginName);
+		} else if ("pay".equals(type)) {
+			memoRecordlist = payService.findPayMemoRecord(currenLoginName);
+		}
+		for (MemoRecord memoRecord : memoRecordlist) {
+			if ("0".equals(memoRecord.getStatus())) {
+				memoRecord.setStatus("待核销");
+			} else if ("1".equals(memoRecord.getStatus())) {
+				memoRecord.setStatus("部分核销");
+			} else if ("2".equals(memoRecord.getStatus())) {
+				memoRecord.setStatus("已完成");
+			}
+
+			if (StringUtil.isEmpty(memoRecord.getSupplyComId())) {
+				memoRecord.setComName(companyService.selectOne(
+						memoRecord.getBuyComId()).getComName());
+			} else if (StringUtil.isEmpty(memoRecord.getBuyComId())) {
+				memoRecord.setComName(companyService.selectOne(
+						memoRecord.getSupplyComId()).getComName());
+			}
+			memoRecord.setRemainMoneyAmount((new BigDecimal(memoRecord
+					.getMoneyAmount()).subtract(new BigDecimal(memoRecord
+					.getVerificationMoneyAmount()))).toString());
+		}
+
+		dataMap.put("memoRecord", memoRecordlist);
+		if ("receive".equals(type)) {
+			ExcelUtil.export(request, response, dataMap, "receiveMemo",
+					"收款水单信息");
+		} else if ("pay".equals(type)) {
+			ExcelUtil.export(request, response, dataMap, "payMemo", "付款水单信息");
+		}
+
+	}
 }

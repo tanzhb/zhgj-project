@@ -308,6 +308,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
    			totalPaymentAmount+=Number($scope.verificationList[i].moneyAmount);
    		}
    		$scope.totalPaymentAmount=totalPaymentAmount;
+   }else{
+	   $scope.totalPaymentAmount=0;
    }
  }
    /**

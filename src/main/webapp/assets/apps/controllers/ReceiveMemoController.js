@@ -239,6 +239,8 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
     			totalPaymentAmount+=Number($scope.verificationList[i].paymentRecord.paymentAmount);
     		}
     		$scope.totalPaymentAmount=totalPaymentAmount;
+    }else{
+    	$scope.totalPaymentAmount=0;
     }
   }
     /********************************核算记录模糊检索及分页 START *********************************/
@@ -680,8 +682,8 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		    	        fd.append("files", file);
 		    			}
 	    			if($scope.showSXf!=1){
-	    				$scope.memoRecord.accountName=$("input[name='accountName1']").val();
-	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber1']").val();
+	    				$scope.memoRecord.accountName=$("input[name='accountName']").val();
+	    				$scope.memoRecord.accountNumber=$("input[name='accountNumber']").val();
 	    				$scope.memoRecord.bank=$("input[name='bank1']").val();
 	    			}else if($scope.showSXf==1){
 	    				$scope.memoRecord.accountName=$("input[name='accountName']").val();
@@ -1454,6 +1456,14 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	        		
 	        	});
 	       }
+	       
+	       $scope.exportPayReceiveMemo = function(type){
+	    	   debugger;
+		    	 handle.blockUI("正在导出数据，请稍后"); 
+		    	 window.location.href=$rootScope.basePath+"/rest/pay/exportPayReceiveMemo?type="+type;
+		    	 handle.unblockUI(); 
+		       }
+	       
 	//销售订单列表
 	var table2;
 	var loadBgTable= function() {

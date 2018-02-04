@@ -39,7 +39,7 @@
 									
 				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del('pay')"> <i class="fa fa-minus"></i> 删除</label>
 									
-				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportReceiveMemo('pay')"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPayReceiveMemo('pay')"> <i class="fa fa-file-excel-o"></i> 导出</label>
 				</div>
 			</div>
 

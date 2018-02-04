@@ -1258,6 +1258,11 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 		$scope.paymentRecord.accountName='';
 		$scope.paymentRecord.accountNumber='';
 	}
+	 $scope.exportPayReceiveMemo = function(type){
+    	 handle.blockUI("正在导出数据，请稍后"); 
+    	 window.location.href=$rootScope.basePath+"/rest/pay/exportPayReceiveMemo?type="+type;
+    	 handle.unblockUI(); 
+       }
 }]);
 
 
