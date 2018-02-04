@@ -5787,5 +5787,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	$scope.jumpToGetPayInfo  = function(serialNum) {//查看收款计划详情
 			        	$state.go('viewGatheringMoney',{serialNum:serialNum});
 			        }; 
+			      //导出收款
+			    	$scope.exportPay = function(){
+			    		handle.blockUI("正在导出数据，请稍后"); 
+			    		window.location.href=$rootScope.basePath+"/rest/pay/exportGatheringMoney";
+			    		handle.unblockUI(); 
+			    	}
 
 }]);

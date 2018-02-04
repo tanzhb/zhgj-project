@@ -5752,6 +5752,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					);
 			$("#sample_4 ").DataTable().ajax.reload();
 		};
+		//导出付款
+		$scope.exportPay = function(){
+			handle.blockUI("正在导出数据，请稍后"); 
+			window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
+			handle.unblockUI(); 
+		}
 }]);
 
 
