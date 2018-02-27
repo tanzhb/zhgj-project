@@ -411,7 +411,7 @@
 
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliver.takeDelivery.takeDeliverAddress}}</p>
+															<!-- {{deliver.takeDelivery.takeDeliverAddress}} -->{{takeDeliver.warehouseName}}</p>
 													</div>
 												</div>
 											</div>

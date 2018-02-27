@@ -291,7 +291,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
              
             
           };
-  		$scope.showUnPaymentAmount=function(serialNum,paymentAmount){//选中checkbox显示输入框
+  		$scope.showUnPaymentAmount=function(serialNum,unPaymentAmount){//选中checkbox显示输入框
 			var value;
 			if($scope.totalVerificateCount==undefined){
 				$scope.totalVerificateCount=0;
@@ -303,6 +303,8 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
+				$("#up"+serialNum).val(unPaymentAmount);
+				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");
 				$("#up"+serialNum).attr("readonly",true);
@@ -941,7 +943,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            	mRender:function(data){
 						                            		if(data!=""&&data!=null){
 						                            			if(data=='0'){
-						                            				return '初始';
+						                            				return '待核销';
 						                            			}else if(data=='1'){
 						                            				return '部分核销';
 						                            			}else if(data=='2'){
@@ -993,7 +995,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            	if(row.status=='1'){
+						                            	if(row.status=='1'||row.status=='0'){
 						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
 						                            		}else{
 						                            			return '';	

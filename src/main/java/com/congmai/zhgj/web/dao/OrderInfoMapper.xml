@@ -240,6 +240,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 <if test="tradeType != null" >
 		 	AND orderInfo.tradeType =  #{tradeType,jdbcType=VARCHAR}
 		 </if>
+		  <if test="orderType!= null" >
+		 	AND orderInfo.orderType =  #{orderType,jdbcType=VARCHAR}
+		 </if>
 		ORDER BY
 			updateTime DESC 
   </select>

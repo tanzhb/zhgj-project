@@ -868,7 +868,8 @@ public class PayController {
 		Map<String,Object>map=new HashMap<String,Object>();
 		PaymentRecord c = payService.selectPayById(serialNum);
 		String orderSerial = c.getOrderSerial();
-		String paiedMoney = payService.selectPaiedMoney(orderSerial);
+		//String paiedMoney = payService.selectPaiedMoney(orderSerial);
+		String paiedMoney=c.getPaymentAmount()==null?"0":c.getPaymentAmount();
 		String billedMoney = payService.selectBilledMoney(orderSerial);
 		c.setPaiedMoney(paiedMoney);
 		c.setBilledMoney(billedMoney);

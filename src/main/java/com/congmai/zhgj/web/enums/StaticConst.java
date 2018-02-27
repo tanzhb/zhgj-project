@@ -83,7 +83,20 @@ public enum StaticConst {
 	
 	BUYGETMERCHANT("buygetmerchant", "采购发货"),
 
-	CHANGETIPS("changePlease", "请重新编辑发货物料数量后再确认发货!");
+	CHANGETIPS("changePlease", "请重新编辑发货物料数量后再确认发货!"),
+	
+	FAHUO("fahuo", "发货"),
+	
+	DAIFAHUO("daifahuo", "代发货"),
+	
+	CHECK("check", "检验"),
+	
+	DECLARATION("declaration", "检验"),
+	
+	INRECORD("inrecord", "入库"),
+	
+	OUTRECORD("outrecord", "出库");
+	
 
 	private String value;
 	private String info;

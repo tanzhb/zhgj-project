@@ -8,10 +8,14 @@
     <result column="materielNum" property="materielNum" jdbcType="VARCHAR" />
     <result column="specifications" property="specifications" jdbcType="VARCHAR" />
     <result column="unit" property="unit" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DATE" />
+    <result column="amount" property="amount" jdbcType="VARCHAR" />
     <result column="orderMaterielSerialNum" property="orderMaterielSerialNum" jdbcType="VARCHAR"/>
     <result column="orderSerial" property="orderSerial" jdbcType="VARCHAR"/>
      <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR"/><!--  基本物料流水-->
+      <result column="deliveryDate" property="deliveryDate" jdbcType="TIMESTAMP"/><!--  交付日期-->
+     <result column="deliveryAddress" property="deliveryAddress" jdbcType="VARCHAR"/><!--  交付地址-->
+     <result column="isBOM" property="isBOM" jdbcType="VARCHAR"/><!-- 是否BOM物料-->
+     
     <association property="currentCount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
     <association column="orderMaterielSerialNum" property="deliveredCount" select="com.congmai.zhgj.web.dao.DeliveryMapper.selectDeliveredCountByOmSerial"  /><!-- 根订单物料流水查已发数量 -->
   </resultMap>
@@ -157,7 +161,8 @@
     <!--查询订单物料集合  -->
     <select id="selectByExample"  resultMap="BaseResultMap"   parameterType="java.lang.String">
     SELECT
-	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate,o.serialNum as  orderSerial,b.serialNum as  materielSerial
+	b.materielName,b.materielNum,b.specifications,b.unit,a.amount,a.serialNum AS orderMaterielSerialNum,b.manufactureDate,o.serialNum as  orderSerial,b.serialNum as  materielSerial,
+	a.deliveryDate,a.deliveryAddress,b.isBOM,b.serialNum
 	FROM
 	orderMateriel a
 	LEFT JOIN materiel b ON a.materielSerial=b.serialNum

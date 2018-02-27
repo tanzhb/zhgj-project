@@ -236,7 +236,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
     	if($scope.verificationList!=undefined&&$scope.verificationList.length>0){
     		var totalPaymentAmount=0;
     		for(var i=0;i<$scope.verificationList.length;i++){
-    			totalPaymentAmount+=Number($scope.verificationList[i].paymentRecord.paymentAmount);
+    			totalPaymentAmount+=Number($scope.verificationList[i].moneyAmount);
     		}
     		$scope.totalPaymentAmount=totalPaymentAmount;
     }else{
@@ -1252,7 +1252,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 									unPaymentAmount=Number(row.applyPaymentAmount)-Number(row.paymentAmount);
 								}
    									return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-	                                     '<input type="checkbox" data-check="false"  name="'+unPaymentAmount+'"       class="checkboxes" ng-click="showUnPaymentAmount(\''+row.serialNum+'\',\''+judgeString+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_receivePaymentRecord .checkboxes" />'+
+	                                     '<input type="checkbox" data-check="false"  name="'+unPaymentAmount+'"       class="checkboxes" ng-click="showUnPaymentAmount(\''+row.serialNum+'\',\''+judgeString+'\',\''+unPaymentAmount+'\')" id="'+data+'" value="'+data+'" data-set="#select_sample_receivePaymentRecord .checkboxes" />'+
 	                                     '<span></span></label>';
    							},
    							"createdCell": function (td, cellData, rowData, row, col) {
@@ -1349,7 +1349,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
               
              
            };
-   		$scope.showUnPaymentAmount=function(serialNum,judgeString){//选中checkbox显示输入框
+   		$scope.showUnPaymentAmount=function(serialNum,judgeString,unPaymentAmount){//选中checkbox显示输入框
 			var value;
 			if($scope.totalVerificateCount==undefined){
 				$scope.totalVerificateCount=0;
@@ -1365,6 +1365,8 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
+				$("#up"+serialNum).val(unPaymentAmount);
+				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");
 				$("#up"+serialNum).attr("readonly",true);

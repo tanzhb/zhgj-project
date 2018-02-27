@@ -53,7 +53,7 @@
 					<li class="dropdown pull-right tabdrop" >
                        <button    class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery()"   ng-if="deliver.status=='0'||deliver.status==undefined">
                               <i class="fa fa-check"></i> 代发货 </button>
-                               <button    class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery('notice')"  ng-hide="deliverAdd" >
+                               <button    class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery('notice')"  ng-hide="deliverAddForNotice" >
                               <i class="fa fa-check"></i> 通知发货 </button>
                               <button   ng-hide="deliverAdd" class="btn green  btn-sm btn-circle" ng-click="saveTakeDelivery(0)">
                               <i class="fa fa-check"></i> 保存 </button>

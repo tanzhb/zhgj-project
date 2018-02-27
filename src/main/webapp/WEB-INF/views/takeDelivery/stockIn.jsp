@@ -353,7 +353,8 @@
 													<i class="fa fa-edit"></i>修改
 												</button> -->
 												<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount"   ng-if="materiel.stockInCount==null"   ng-init="materiel.stockInCount=materiel.deliverCount"  ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount"   ng-if="materiel.stockInCount!=null"  ng-hide="deliverAdd" >
                                                  <p class="form-control-static" ng-show="deliverView">
 															{{materiel.stockInCount}}</p>
                                             </div>

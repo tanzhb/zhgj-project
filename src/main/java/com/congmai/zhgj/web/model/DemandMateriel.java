@@ -2,11 +2,7 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-public class ProcurementPlanMateriel {
+public class DemandMateriel {
     private String serialNum;
 
     private String procurementPlanSerial;
@@ -14,27 +10,18 @@ public class ProcurementPlanMateriel {
     private String materielSerial;
 
     private String supplyMaterielSerial;
-    
-    private Materiel materiel;
-    
-    private SupplyMateriel supplyMateriel;
 
     private String planCount;
 
-    private String buyCount;
+    private String completeCount;
 
     private String orderUnitPrice;
 
-    private String orderRateUnit;
-
-    private String money;
-
-    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date deliveryDate;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date lastDeliveryDate;
 
     private String deliveryAddress;
+
+    private String status;
 
     private Integer sort;
 
@@ -49,17 +36,6 @@ public class ProcurementPlanMateriel {
     private Date updateTime;
 
     private String remark;
-    
-    private String supplyName;
-    
-    private String sets;//台套
-    
-    private String singleDose;//单套用量
-    
-    private String demandMaterielSerial;//需求物料流水
-    
-    
-    
 
     public String getSerialNum() {
         return serialNum;
@@ -101,12 +77,12 @@ public class ProcurementPlanMateriel {
         this.planCount = planCount == null ? null : planCount.trim();
     }
 
-    public String getBuyCount() {
-        return buyCount;
+    public String getCompleteCount() {
+        return completeCount;
     }
 
-    public void setBuyCount(String buyCount) {
-        this.buyCount = buyCount == null ? null : buyCount.trim();
+    public void setCompleteCount(String completeCount) {
+        this.completeCount = completeCount == null ? null : completeCount.trim();
     }
 
     public String getOrderUnitPrice() {
@@ -117,36 +93,12 @@ public class ProcurementPlanMateriel {
         this.orderUnitPrice = orderUnitPrice == null ? null : orderUnitPrice.trim();
     }
 
-    public String getOrderRateUnit() {
-        return orderRateUnit;
-    }
-
-    public void setOrderRateUnit(String orderRateUnit) {
-        this.orderRateUnit = orderRateUnit == null ? null : orderRateUnit.trim();
-    }
-
-    public String getMoney() {
-        return money;
-    }
-
-    public void setMoney(String money) {
-        this.money = money == null ? null : money.trim();
-    }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getDeliveryDate() {
         return deliveryDate;
     }
 
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
-    }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getLastDeliveryDate() {
-        return lastDeliveryDate;
-    }
-
-    public void setLastDeliveryDate(Date lastDeliveryDate) {
-        this.lastDeliveryDate = lastDeliveryDate;
     }
 
     public String getDeliveryAddress() {
@@ -155,6 +107,14 @@ public class ProcurementPlanMateriel {
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress == null ? null : deliveryAddress.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public Integer getSort() {
@@ -212,53 +172,4 @@ public class ProcurementPlanMateriel {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
-
-	public Materiel getMateriel() {
-		return materiel;
-	}
-
-	public void setMateriel(Materiel materiel) {
-		this.materiel = materiel;
-	}
-
-	public SupplyMateriel getSupplyMateriel() {
-		return supplyMateriel;
-	}
-
-	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
-		this.supplyMateriel = supplyMateriel;
-	}
-
-	public String getSupplyName() {
-		return supplyName;
-	}
-
-	public void setSupplyName(String supplyName) {
-		this.supplyName = supplyName;
-	}
-
-	public String getSets() {
-		return sets;
-	}
-
-	public String getSingleDose() {
-		return singleDose;
-	}
-
-	public void setSets(String sets) {
-		this.sets = sets;
-	}
-
-	public void setSingleDose(String singleDose) {
-		this.singleDose = singleDose;
-	}
-
-	public String getDemandMaterielSerial() {
-		return demandMaterielSerial;
-	}
-
-	public void setDemandMaterielSerial(String demandMaterielSerial) {
-		this.demandMaterielSerial = demandMaterielSerial;
-	}
-    
 }

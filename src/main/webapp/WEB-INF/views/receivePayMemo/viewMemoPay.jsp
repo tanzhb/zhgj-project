@@ -219,7 +219,7 @@
 															name="verificationMoneyAmount" ng-model="memoRecord.verificationMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.verificationMoneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
@@ -233,7 +233,7 @@
 															name="remainMoneyAmount" ng-model="memoRecord.remainMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
@@ -304,7 +304,7 @@
 							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentType}}</td>
 							<td style="text-align: center">{{verificationRecord.paymentRecord.applyPaymentAmount|currency:''}}</td>
 							<td style="text-align: center">{{verificationRecord.paymentRecord.playPaymentDate==null?verificationRecord.paymentRecord.applyDate:verificationRecord.paymentRecord.playPaymentDate}}</td>
-							<td style="text-align: center">{{verificationRecord.paymentRecord.paymentAmount|currency:''}}</td>
+							<td style="text-align: center">{{verificationRecord.moneyAmount|currency:''}}</td>
 							<td  style="text-align: center">{{verificationRecord.paymentRecord.paymentDate}}</td>
 							<td style="text-align: center" ng-if="verificationRecord.paymentRecord.status=='2'">已完成</td>
 							<td style="text-align: center" ng-if="verificationRecord.paymentRecord.status!='2'">部分完成</td>

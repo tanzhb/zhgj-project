@@ -59,6 +59,21 @@ MetronicApp.factory('settings', [ '$rootScope','$q', function($rootScope,$q) {
 	         toastr.error('连接服务器出错！');
 	     });
 	}
+	
+	$rootScope.getSerialNum = function(callback){//采购计划需求物料(非BOM)分解获取流水
+		var deferred = $q.defer();
+		$.get(ctx + "/rest/order/getSerialNum/").success(function (data) {
+		    // 如果连接成功，延时返回给调用者  
+		    deferred.resolve(data);
+		}).error(function () {  
+		    deferred.reject('连接服务器出错！');  
+		})
+		return deferred.promise.then(function(data){
+			callback(data);
+		},function(error){
+	         toastr.error('连接服务器出错！');
+	     });
+	}
 	$rootScope.judgeIsExist = function(codeType,num,serialNum,callback){
 		var deferred = $q.defer();
 		$.get(ctx + "/rest/order/judgeIsObjExist/" , {codeType:codeType,num:num,serialNum:serialNum}).success(function (data) {
@@ -1099,7 +1114,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/procurementPlanService.js',
-                            'assets/apps/controllers/procurementPlanController.js'
+                            'assets/apps/controllers/procurementPlanController.js',
+                            'assets/apps/service/DeliveryService.js'
 //                            'assets/apps/service/TakeDeliveryService.js',
                           //流程申请
 //							'assets/global/css/dialog.css',
@@ -1312,7 +1328,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 新增采购计划
         .state('addProcurementPlan', {
-            url: "/addProcurementPlan?:serialNum&:view",
+            url: "/addProcurementPlan?:newSerialNum&:view",
             templateUrl: "rest/page/addProcurementPlan",
             data: {pageTitle: '新增采购计划'},
             controller: "procurementPlanController",
@@ -1331,7 +1347,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/service/materielService.js',
 //				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/procurementPlanService.js',
-				'assets/apps/controllers/procurementPlanController.js'
+				'assets/apps/controllers/procurementPlanController.js',
+				'assets/apps/service/DeliveryService.js'
                       ]
                     });
                 }]
@@ -1422,7 +1439,8 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
 	        	'assets/apps/service/procurementPlanService.js',
-				'assets/apps/controllers/procurementPlanController.js'
+				'assets/apps/controllers/procurementPlanController.js',
+				'assets/apps/service/DeliveryService.js'
 	        	
 	        	//流程申请
 //				'assets/global/css/dialog.css',

@@ -36,8 +36,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
@@ -45,6 +47,8 @@ import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
+import com.congmai.zhgj.web.model.BOMMateriel;
+import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
@@ -53,6 +57,9 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliveryMaterielVO;
+import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
@@ -63,7 +70,12 @@ import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanExample;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.ProcurementPlanMaterielExample;
+import com.congmai.zhgj.web.model.RelationFile;
+import com.congmai.zhgj.web.model.StockInOutRecord;
+import com.congmai.zhgj.web.model.SupplyMateriel;
+import com.congmai.zhgj.web.model.SupplyMaterielExample;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
@@ -71,6 +83,7 @@ import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
 import com.congmai.zhgj.web.service.ProcurementPlanService;
+import com.congmai.zhgj.web.service.BOMMaterielService;
 
 
 /**
@@ -89,6 +102,13 @@ public class ProcurementPlanController {
     private ProcurementPlanService procurementPlanService;
     @Resource
     private ProcurementPlanMaterielService procurementPlanMaterielService;
+    @Resource
+    private com.congmai.zhgj.web.service.BOMMaterielService BOMMaterielService;
+    @Resource
+    private com.congmai.zhgj.web.service.MaterielService materielService;
+    @Resource
+    private com.congmai.zhgj.web.service.SupplyMaterielService supplyMaterielService;
+    
 
     /**
      * 保存订单
@@ -648,5 +668,51 @@ public class ProcurementPlanController {
     	//采购计划发布2采购人员
     	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.PALN_TO_BUY));
 		return procurementPlan;
+	}
+	@RequestMapping(value = "/getProcurementPlanMateriels")
+	@ResponseBody
+	public Map<String, Object> getProcurementPlanMateriels(String serialNum) {//将选中bom物料分解
+		Map<String, Object> map = new HashMap<String, Object>();
+		serialNum="5b929e45c6f84edabae69e4483728331";
+		List<ProcurementPlanMateriel>procurementPlanMateriels=new ArrayList<ProcurementPlanMateriel>();
+		List<BOMMateriel>allBomMateriels=new ArrayList<BOMMateriel>();
+		List<String> demandMaterielSerialNums = java.util.Arrays.asList(serialNum.split(","));
+		if(org.apache.commons.collections.CollectionUtils.isNotEmpty(demandMaterielSerialNums)){//
+			for(String demandMaterielSerialNum:demandMaterielSerialNums){
+				BOMMaterielExample m1 =new BOMMaterielExample();
+		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria1 =  m1.createCriteria();
+		    	criteria1.andBomMaterielSerialEqualTo(demandMaterielSerialNum);
+		    	List<BOMMateriel> bomMateriels = BOMMaterielService.selectList(m1);
+		    	allBomMateriels.addAll(bomMateriels);
+			}
+		}
+		if(org.apache.commons.collections.CollectionUtils.isNotEmpty(allBomMateriels)){
+			for(BOMMateriel bomMateriel:allBomMateriels){
+				ProcurementPlanMateriel  pMateriel = new ProcurementPlanMateriel();
+    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
+    			pMateriel.setMaterielSerial(bomMateriel.getMaterielSerial());
+    			pMateriel.setDemandMaterielSerial(bomMateriel.getBomMaterielSerial());
+    			pMateriel.setSingleDose(bomMateriel.getSingleDose());
+    			String materielId=bomMateriel.getMateriel().getMaterielId();//获取基本物料id
+    			SupplyMaterielExample m2 =new SupplyMaterielExample();
+		    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
+		    	criteria2.andMaterielIdEqualTo(materielId);
+		    	criteria2.andDelFlgEqualTo("0");
+		    	List<SupplyMateriel> supplyMateriels = supplyMaterielService.selectList(m2);
+		    	if(org.apache.commons.collections.CollectionUtils.isNotEmpty(supplyMateriels)){
+		    		pMateriel.setSupplyMaterielSerial(supplyMateriels.get(0).getSerialNum());
+		    	}
+		    	procurementPlanMateriels.add(pMateriel);
+    			/*pMateriel.setProcurementPlanSerial(newSerialNum);
+    			pMateriel.setPlanCount(o.getAmount());
+    			pMateriel.setBuyCount(o.getAmount());
+    			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
+    			pMateriel.setDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));//采购计划中交付日期提前10天
+    			pMateriel.setLastDeliveryDate(o.getLastDeliveryDate());*/
+			}
+			
+		}
+		map.put("procurementPlanMateriels", procurementPlanMateriels);
+		return map;
 	}
 }

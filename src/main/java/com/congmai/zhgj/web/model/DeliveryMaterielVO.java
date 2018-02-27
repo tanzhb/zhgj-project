@@ -119,9 +119,29 @@ public class DeliveryMaterielVO  {
 	 private String  currentCount;//当前自建库存数量
 	 
 	 private String materielSerial;//基本物料流水
+	 @DateTimeFormat(pattern="yyyy-MM-dd")
+	 private Date deliveryDate;//交付日期(采购计划需求物料用)
+	 
+	 private String  deliveryAddress;//交付地址(采购计划需求物料用)
 	
-	
+	 private String  isBOM;//
 
+	 @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+	public Date getDeliveryDate() {
+		return deliveryDate;
+	}
+
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+
+	public void setDeliveryDate(Date deliveryDate) {
+		this.deliveryDate = deliveryDate;
+	}
+
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
+	}
 
 	public String getSerialNum() {
 		return serialNum;
@@ -426,6 +446,14 @@ public class DeliveryMaterielVO  {
 
 	public void setMaterielSerial(String materielSerial) {
 		this.materielSerial = materielSerial;
+	}
+
+	public String getIsBOM() {
+		return isBOM;
+	}
+
+	public void setIsBOM(String isBOM) {
+		this.isBOM = isBOM;
 	}
 
 }

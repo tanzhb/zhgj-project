@@ -27,7 +27,7 @@
 	                            <th> 物料名称 </th>
 	                            <th> 规格型号 </th>
 	                            <th> 单位 </th>
-	                            <th ng-if="saleOrder.orderType!='自主销售'"> 供应商 </th>
+	                            <!-- <th ng-if="saleOrder.orderType!='自主销售'"> 供应商 </th> -->
 	                            <!-- <th> 库存数量 </th> -->
 	                            
 	                        </tr>

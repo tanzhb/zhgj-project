@@ -27,7 +27,7 @@
 											<i class="fa fa-save"></i> 保存
 										</button>
 										<button type="button" ng-click="verificateInfo()"
-											class="btn blue btn-sm btn-circle" ng-show="span"  ng-if="paymentRecord.status=='1'&&paymentRecord.status!='2'">
+											class="btn blue btn-sm btn-circle" ng-show="span"  ng-if="paymentRecord.status=='1'||paymentRecord.status=='APPROVAL_SUCCESS'">
 											<i class="fa fa-plus"></i>核销
 										</button>
 										<!-- <button ng-click="goBack()" type="button"
@@ -186,13 +186,13 @@
 														    ng-show="input">
 															<option value="">支付类型</option>
 															
-															<option value="{{item.paymentType}}" ng-repeat="item in clauseSettlementList"  ng-bind="item.paymentType"  ></option>
+															<option value="{{item.paymentType}}" ng-repeat="item in clauseSettlementList"   >{{item.paymentType}}</option>
 															<!-- <option value="预付款">预付款</option>
 															<option value="中期款">中期款</option>
 															<option value="全款">全款</option>
 															<option value="尾款">尾款</option> -->
 														</select>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentType}}</p>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.payType}}</p>
 													</div>
 												</div>
 											</div>
@@ -246,7 +246,7 @@
 														<input type="text" name="chnAmount" class="form-control"
 															readonly ng-model="chnAmount" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{chnAmount}}</p>
+														<p class="form-control-static" ng-show="span">{{applyPaymentAmountChn}}</p>
 													</div>
 												</div>
 											</div>
@@ -294,7 +294,8 @@
 														data-date-format="yyyy-mm-dd"
 													    data-date-viewmode="years" size="16"
 															ng-model="paymentRecord.accountPeriod" ng-show="input" id="accountPeriod"/>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.accountPeriod}}</p>
+														<p class="form-control-static" ng-show="span" ng-if="paymentRecord.accountPeriod!='null'">{{paymentRecord.accountPeriod}}</p>
+														<p class="form-control-static" ng-show="span" ng-if="paymentRecord.accountPeriod=='null'">无</p>
 														<div class="form-control-focus"></div>
 													</div>
 
@@ -400,9 +401,14 @@
 													<div class="">
 														
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='0'">待核销</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='0'">未审批</p>
 														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='2'">已完成</p>
 														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='1'">部分核销</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='PENDING'">审批中</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='WAITING_FOR_APPROVAL'">待审批</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='APPROVAL_SUCCESS'">审批成功</p>
+														<p class="form-control-static" ng-show="span"  ng-if="paymentRecord.status=='APPROVAL_FAILED'">审批失败</p>
+														
 													</div>
 												</div>
 											</div>
@@ -654,7 +660,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">订单应收金额<span
+													<label class="control-label bold">订单应付金额<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">{{paymentRecord.orderAmount| currency:'￥'}}</div>
 
@@ -663,7 +669,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">预收金额 <span
+													<label class="control-label bold">预付金额 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">{{0| currency:'￥'}}</div>
 
@@ -672,7 +678,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">已收金额 <span
+													<label class="control-label bold">已付金额 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">{{paymentRecord.paiedMoney| currency:'￥'}}</div>
 												</div>
@@ -683,7 +689,7 @@
 										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">未收金额 <span
+													<label class="control-label bold">未付金额 <span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">{{paymentRecord.orderAmount-paymentRecord.paiedMoney|
 														currency:'￥'}}</div>

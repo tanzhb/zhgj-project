@@ -482,7 +482,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        		}else{
 	                        			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
 	                        		}
-									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
+									//return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';
 								}else if(row.status==2){
 									if(row.contract.contractType=='采购订单'){
 										return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已审批</span>';
@@ -659,7 +659,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'targets' : 9,
 							'render' : function(data,
 									type, row, meta) {
-								var clickhtm = ''
+								
+								var clickhtm = '';
+								debugger;
+									if(isNull(row.status)){
+										return clickhtm;
+									}
 								if(row.status==0){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>'
@@ -675,7 +680,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 											return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a>'
 										}
 	                        		}else{
-	                        			return clickhtm + '';
+	                        			return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a>';
 	                        		}
 								}else if(row.status==2){
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
@@ -685,11 +690,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
+											}else{
+												return clickhtm + '';
 											}
 									}else if(Number(row.materielCount)==Number(row.deliveryCount)){
 										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
+											}else{
+												return clickhtm + '';
 											}
 									}else{
 										return clickhtm + '';
@@ -4238,29 +4247,46 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	var logTable 
 	$scope.viewOrderLog = function (serialNum){
 		$("#operateLogInfo").modal("show");
-		if(logTable){
+		//控制日志显示(数量日期和金额日期)
+		/*if(logTable){
 			logTable.ajax.url(ctx+"/rest/order/findOrderLog?serialNum=" + serialNum).load()
 		}else{
 			showLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
-		}
+		}*/
+		if(logTable){
+ 			logTable.destroy();
+ 		}
+ 		showOrderLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
 	}
 	
 	$scope.viewDeliverLog = function (serialNum){
 		$("#operateLogInfo").modal("show");
-		if(logTable){
+		//控制日志显示(数量日期和金额日期)
+		$scope.showTakeDeliver=true;
+		/*if(logTable){
 			logTable.ajax.url(ctx+"/rest/order/findDeliverLog?serialNum=" + serialNum).load()
 		}else{
 			showLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
-		}
+		}*/
+		if(logTable){
+ 			logTable.destroy();
+ 		}
+ 		showDeliverLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
 	}
 	
 	$scope.viewPayLog = function (serialNum){
 		$("#operateLogInfo").modal("show");
-		if(logTable){
+		//控制日志显示(数量日期和金额日期)
+		$scope.showPay=true;
+		/*if(logTable){
 			logTable.ajax.url(ctx+"/rest/order/findPayLog?serialNum=" + serialNum).load()
 		}else{
 			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
-		}
+		}*/
+		if(logTable){
+ 			logTable.destroy();
+ 		}
+ 		showPayLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 	}
 	
 	
@@ -4995,6 +5021,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                });
 		    			$('select[name="paymentType"]').selectpicker('refresh');//刷新插件
 	       };
+	       $scope.goVerificate= function(serialNum) {//去核销
+		    	$state.go('viewPay',{serialNum:serialNum});
+		    };
+		    $scope.viewGraphTrace = function(processInstanceId){
+		    	graphTrace(processInstanceId,ctx);
+		    }
 	       //付款列表
 	   	var tablePay;
 //		var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
@@ -5046,6 +5078,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            },
 							                            { mData: 'paymentNum' },//paymentType
 							                            { mData: 'paymentType' },//paymentType
+							                            { mData: 'orderNum' },
 							                            { mData: 'applyCurrency' },
 							                            { mData: 'applyPaymentAmount' },
 							                            { mData: 'playPaymentDate' },
@@ -5061,7 +5094,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            		}
 							                            	}
 							                            	},
-							                            { mData: 'status',
+							                            { mData: 'status'/*,
 							                            	mRender:function(data){
 							                            		if(data!=""&&data!=null){
 							                            			if(data=='0'){
@@ -5082,9 +5115,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            		}else{
 							                            			return "";
 							                            		}
-							                            	}
-							                            },{ mData: 'status'
-							                            	},
+							                            	}*/
+							                            },{ mData: 'status'}
 							                            ],
 							                            'aoColumnDefs': [ {
 							                            	'targets' : 0,
@@ -5107,7 +5139,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            	}
 							                            },
 							                            {
-							                            	'targets' : 5,
+							                            	'targets' : 6,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
@@ -5123,7 +5155,36 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,
 							                            			type, row, meta) {
-							                            	if(row.status=='1'){
+							                            		if(data!=""&&data!=null){
+							                            			if(data=='0'){
+							                            				return '未审批';
+							                            			}else if(data=='1'){
+							                            				return '部分核销';
+							                            			}else if(data=='2'){
+							                            				return '已完成';
+							                            			}else if(data=='PENDING'){
+							                            				return '<span ng-click="viewGraphTrace('+row.processInstanceId+')" style="color:#fcb95b">审批中</span>';
+							                            			}else if(data=='WAITING_FOR_APPROVAL'){
+							                            				return '待审批';					                            				
+																	}else if(data=='APPROVAL_SUCCESS'){
+																		return '审批成功';
+																	}else if(data=='APPROVAL_FAILED'){
+																		return '审批失败';
+																	}
+							                            		}else{
+							                            			return "";
+							                            		}
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            },
+							                            {
+							                            	'targets' : 12,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            	if(row.status=='1'||row.status=='APPROVAL_SUCCESS'){
 							                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
 							                            		}else{
 							                            			return '';	
