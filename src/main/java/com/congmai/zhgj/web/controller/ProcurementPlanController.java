@@ -673,7 +673,6 @@ public class ProcurementPlanController {
 	@ResponseBody
 	public Map<String, Object> getProcurementPlanMateriels(String serialNum) {//将选中bom物料分解
 		Map<String, Object> map = new HashMap<String, Object>();
-		serialNum="5b929e45c6f84edabae69e4483728331";
 		List<ProcurementPlanMateriel>procurementPlanMateriels=new ArrayList<ProcurementPlanMateriel>();
 		List<BOMMateriel>allBomMateriels=new ArrayList<BOMMateriel>();
 		List<String> demandMaterielSerialNums = java.util.Arrays.asList(serialNum.split(","));

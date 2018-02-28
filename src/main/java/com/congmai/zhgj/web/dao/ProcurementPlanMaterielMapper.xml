@@ -5,6 +5,7 @@
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="procurementPlanSerial" property="procurementPlanSerial" jdbcType="VARCHAR" />
     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+     <result column="demandMaterielSerial" property="demandMaterielSerial" jdbcType="VARCHAR" />
     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
     <result column="planCount" property="planCount" jdbcType="VARCHAR" />
     <result column="buyCount" property="buyCount" jdbcType="VARCHAR" />
@@ -119,14 +120,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
-    insert into procurementPlanMateriel (serialNum, procurementPlanSerial, 
+    insert into procurementPlanMateriel (serialNum, procurementPlanSerial, demandMaterielSerial,
       materielSerial, supplyMaterielSerial, planCount, 
       buyCount, orderUnitPrice, orderRateUnit, 
       money, deliveryDate, lastDeliveryDate, 
       deliveryAddress, sort,  
       creator, createTime, updater, 
       updateTime, remark)
-    values (#{serialNum,jdbcType=VARCHAR}, #{procurementPlanSerial,jdbcType=VARCHAR}, 
+    values (#{serialNum,jdbcType=VARCHAR}, #{procurementPlanSerial,jdbcType=VARCHAR},#{demandMaterielSerial,jdbcType=VARCHAR}, 
       #{materielSerial,jdbcType=VARCHAR}, #{supplyMaterielSerial,jdbcType=VARCHAR}, #{planCount,jdbcType=VARCHAR}, 
       #{buyCount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR}, 
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
@@ -142,6 +143,9 @@
       </if>
       <if test="procurementPlanSerial != null" >
         procurementPlanSerial,
+      </if>
+      <if test="demandMaterielSerial != null" >
+        demandMaterielSerial,
       </if>
       <if test="materielSerial != null" >
         materielSerial,
@@ -201,6 +205,9 @@
       </if>
       <if test="procurementPlanSerial != null" >
         #{procurementPlanSerial,jdbcType=VARCHAR},
+      </if>
+       <if test="demandMaterielSerial != null" >
+        #{demandMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="materielSerial != null" >
         #{materielSerial,jdbcType=VARCHAR},
@@ -270,6 +277,9 @@
       <if test="record.procurementPlanSerial != null" >
         procurementPlanSerial = #{record.procurementPlanSerial,jdbcType=VARCHAR},
       </if>
+      <if test="record.demandMaterielSerial != null" >
+        demandMaterielSerial = #{record.demandMaterielSerial,jdbcType=VARCHAR},
+      </if>
       <if test="record.materielSerial != null" >
         materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       </if>
@@ -330,6 +340,7 @@
     update procurementPlanMateriel
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       procurementPlanSerial = #{record.procurementPlanSerial,jdbcType=VARCHAR},
+      demandMaterielSerial=#{record.demandMaterielSerial,jdbcType=VARCHAR},
       materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       supplyMaterielSerial = #{record.supplyMaterielSerial,jdbcType=VARCHAR},
       planCount = #{record.planCount,jdbcType=VARCHAR},
@@ -356,6 +367,9 @@
     <set >
       <if test="procurementPlanSerial != null" >
         procurementPlanSerial = #{procurementPlanSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="demandMaterielSerial != null" >
+        demandMaterielSerial = #{demandMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="materielSerial != null" >
         materielSerial = #{materielSerial,jdbcType=VARCHAR},
@@ -416,6 +430,7 @@
     set procurementPlanSerial = #{procurementPlanSerial,jdbcType=VARCHAR},
       materielSerial = #{materielSerial,jdbcType=VARCHAR},
       supplyMaterielSerial = #{supplyMaterielSerial,jdbcType=VARCHAR},
+      demandMaterielSerial= #{demandMaterielSerial,jdbcType=VARCHAR},
       planCount = #{planCount,jdbcType=VARCHAR},
       buyCount = #{buyCount,jdbcType=VARCHAR},
       orderUnitPrice = #{orderUnitPrice,jdbcType=VARCHAR},

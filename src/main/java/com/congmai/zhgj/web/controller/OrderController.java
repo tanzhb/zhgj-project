@@ -2428,6 +2428,7 @@ public class OrderController {
 	    			pMateriel.setProcurementPlanSerial(newSerialNum);
 	    			pMateriel.setPlanCount(o.getAmount());
 	    			pMateriel.setBuyCount(o.getAmount());
+	    			pMateriel.setDemandMaterielSerial(o.getMaterielSerial());//为采购清单物料赋值需求物料流水
 	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 	    			
 	    			
@@ -2451,6 +2452,7 @@ public class OrderController {
 		    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
 		    			pMateriel.setMaterielSerial(b.getMaterielSerial());//采购订单物料为标准物料
 		    			pMateriel.setProcurementPlanSerial(newSerialNum);
+		    			pMateriel.setDemandMaterielSerial(b.getMaterielSerial());//为采购清单物料赋值需求物料流水
 		    			pMateriel.setPlanCount(
 		    					String.valueOf(Double.parseDouble(o.getAmount()==null?"0":o.getAmount())
 		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
