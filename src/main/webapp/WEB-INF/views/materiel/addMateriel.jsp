@@ -583,7 +583,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                        <!--   <div class="col-md-4">
+				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">包含下级物料</label>
 				                                  <div class="">
@@ -595,8 +595,12 @@
 				                                        <p class="form-control-static" ng-show="materielShow" > {{materiel.isBOM=="1"?'是':'否'}} </p>
 				                                  </div>
 				                              </div>
-				                          </div> -->
-				                          <div class="col-md-4">
+				                          </div>
+				                          
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">备注</label>
 				                                  <div class="">
@@ -607,10 +611,6 @@
 				                                  </div>
 				                              </div>
 				                          </div>
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
-				                      	
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">版本</label>

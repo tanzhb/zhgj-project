@@ -136,8 +136,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		dateSelectSetting();//日期选择限制
             		//加载客户
                 	initCustomers();
-                	initWarehouse();
-                	//initPtWarehouseAddress();
+//                	initWarehouse();
+//                	initPtWarehouseAddress();
             	}
             	
             	$scope.noShow = true;
@@ -1424,7 +1424,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		    	$scope.copyMateriels = angular.copy($scope.orderMateriel);
           		    	//加载客户
                     	initCustomers();
-                    	initWarehouse();
+                    	//initWarehouse($scope.saleOrder.buyComId);
                     	//initPtWarehouseAddress();
                     	$("#serialNum").val(serialNum);//赋值给隐藏input，通过和不通过时调用
     					$("#taskId").val(taskId);//赋值给隐藏input，通过和不通过时调用
@@ -1829,6 +1829,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         				$scope.orderMateriel[$scope.materielSelectedIndex].materiel = data.data[0].materiel;
         				$scope.orderMateriel[$scope.materielSelectedIndex].supplyMateriel = data.data[0];
         			}
+        			initBuyComAddress($scope.saleOrder.buyComId);
         			$("#basicMaterielInfo").modal("hide");
         		},function(data){
         			// 调用承诺接口reject();
@@ -1954,6 +1955,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							$scope["orderMaterielShow" + ($scope.orderMateriel.length-1)] = true;*/
 		        		}
         			}
+        			initBuyComAddress($scope.saleOrder.buyComId);
         			$scope.copyMateriels = angular.copy($scope.orderMateriel);
         			$("#basicMaterielInfo").modal("hide");
         		},function(data){
@@ -3790,12 +3792,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			 * 加载仓库数据
 			 */
 			var initWarehouse = function(){
-			var promise = orderService.initWarehouse();
+			/*var promise = orderService.initWarehouse();
 			promise.then(function(data){
 				$scope.warehouses = data.data;
 			},function(data){
 				//调用承诺接口reject();
-			});
+			});*/
+				var promise = orderService.getCompanyAddress();
+				promise.then(function(data){
+					$scope.warehouses = data.data;
+				},function(data){
+					//调用承诺接口reject();
+				});
 			}
 			/**
 			 * 加载平台仓库数据

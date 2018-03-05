@@ -412,7 +412,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[9, "asc"],[1, "desc"]],// 默认排序列及排序方式
+                order: [[8, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -423,14 +423,15 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'orderNum' },
-                              { mData: 'buyName' },
+                             /* { mData: 'buyName' },*/
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               /*{ mData: 'deliveryMode' },*/
                               { mData: 'orderType' },
-                              { mData: 'saleApplySerial' },
+                            /*  { mData: 'saleApplySerial' },*/
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
+                              { mData: 'status' },//采购订单增加操作
                               { bVisible: false }
                         ],
                'aoColumnDefs' : [ {
@@ -486,7 +487,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						},{
+						},/*{
 							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
@@ -496,8 +497,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						},{
-							'targets' : 3,
+						},*/{
+							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>';
@@ -544,7 +545,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 4,
+							'targets' : 3,
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
@@ -574,13 +575,13 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								 $compile(td)($scope);
 						       }
 						}, {
-							'targets' : 5,
+							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
 								return "委托采购"+'</br>' + row.tradeType;
 							}
-						}, {
-							'targets' : 6,
+						}, /*{
+							'targets' : 5,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(row.contract)){
@@ -593,8 +594,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						}, {
-							'targets' : 7,
+						},*/ {
+							'targets' : 5,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(data)){
@@ -604,13 +605,19 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								}
 							}
 						}, {
-							'targets' : 8,
+							'targets' :6,
 							'render' : function(data,
 									type, row, meta) {
 								return data +'</br>' + row.maker;
 							}
 						}, {
-							'targets' : 9,
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								return "";
+							}
+						},{
+							'targets' : 8,
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];

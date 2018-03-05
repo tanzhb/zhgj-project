@@ -412,6 +412,216 @@ public class ProcurementPlanMaterielExample {
             return (Criteria) this;
         }
 
+        public Criteria andSupplyComIdIsNull() {
+            addCriterion("supplyComId is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdIsNotNull() {
+            addCriterion("supplyComId is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdEqualTo(String value) {
+            addCriterion("supplyComId =", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdNotEqualTo(String value) {
+            addCriterion("supplyComId <>", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdGreaterThan(String value) {
+            addCriterion("supplyComId >", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdGreaterThanOrEqualTo(String value) {
+            addCriterion("supplyComId >=", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdLessThan(String value) {
+            addCriterion("supplyComId <", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdLessThanOrEqualTo(String value) {
+            addCriterion("supplyComId <=", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdLike(String value) {
+            addCriterion("supplyComId like", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdNotLike(String value) {
+            addCriterion("supplyComId not like", value, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdIn(List<String> values) {
+            addCriterion("supplyComId in", values, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdNotIn(List<String> values) {
+            addCriterion("supplyComId not in", values, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdBetween(String value1, String value2) {
+            addCriterion("supplyComId between", value1, value2, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSupplyComIdNotBetween(String value1, String value2) {
+            addCriterion("supplyComId not between", value1, value2, "supplyComId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialIsNull() {
+            addCriterion("demandMaterielSerial is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialIsNotNull() {
+            addCriterion("demandMaterielSerial is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialEqualTo(String value) {
+            addCriterion("demandMaterielSerial =", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialNotEqualTo(String value) {
+            addCriterion("demandMaterielSerial <>", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialGreaterThan(String value) {
+            addCriterion("demandMaterielSerial >", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialGreaterThanOrEqualTo(String value) {
+            addCriterion("demandMaterielSerial >=", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialLessThan(String value) {
+            addCriterion("demandMaterielSerial <", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialLessThanOrEqualTo(String value) {
+            addCriterion("demandMaterielSerial <=", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialLike(String value) {
+            addCriterion("demandMaterielSerial like", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialNotLike(String value) {
+            addCriterion("demandMaterielSerial not like", value, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialIn(List<String> values) {
+            addCriterion("demandMaterielSerial in", values, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialNotIn(List<String> values) {
+            addCriterion("demandMaterielSerial not in", values, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialBetween(String value1, String value2) {
+            addCriterion("demandMaterielSerial between", value1, value2, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andDemandMaterielSerialNotBetween(String value1, String value2) {
+            addCriterion("demandMaterielSerial not between", value1, value2, "demandMaterielSerial");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseIsNull() {
+            addCriterion("singleDose is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseIsNotNull() {
+            addCriterion("singleDose is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseEqualTo(String value) {
+            addCriterion("singleDose =", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseNotEqualTo(String value) {
+            addCriterion("singleDose <>", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseGreaterThan(String value) {
+            addCriterion("singleDose >", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseGreaterThanOrEqualTo(String value) {
+            addCriterion("singleDose >=", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseLessThan(String value) {
+            addCriterion("singleDose <", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseLessThanOrEqualTo(String value) {
+            addCriterion("singleDose <=", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseLike(String value) {
+            addCriterion("singleDose like", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseNotLike(String value) {
+            addCriterion("singleDose not like", value, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseIn(List<String> values) {
+            addCriterion("singleDose in", values, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseNotIn(List<String> values) {
+            addCriterion("singleDose not in", values, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseBetween(String value1, String value2) {
+            addCriterion("singleDose between", value1, value2, "singleDose");
+            return (Criteria) this;
+        }
+
+        public Criteria andSingleDoseNotBetween(String value1, String value2) {
+            addCriterion("singleDose not between", value1, value2, "singleDose");
+            return (Criteria) this;
+        }
+
         public Criteria andPlanCountIsNull() {
             addCriterion("planCount is null");
             return (Criteria) this;

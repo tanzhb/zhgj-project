@@ -2,6 +2,10 @@ package com.congmai.zhgj.web.model;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class DemandMateriel {
     private String serialNum;
 
@@ -14,9 +18,7 @@ public class DemandMateriel {
     private String planCount;
 
     private String completeCount;
-
-    private String orderUnitPrice;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date deliveryDate;
 
     private String deliveryAddress;
@@ -36,6 +38,16 @@ public class DemandMateriel {
     private Date updateTime;
 
     private String remark;
+    
+    private Materiel materiel;
+    
+    private String materielNum;
+
+    private String materielName;
+
+    private String specifications;
+
+    private String unit;  
 
     public String getSerialNum() {
         return serialNum;
@@ -84,15 +96,7 @@ public class DemandMateriel {
     public void setCompleteCount(String completeCount) {
         this.completeCount = completeCount == null ? null : completeCount.trim();
     }
-
-    public String getOrderUnitPrice() {
-        return orderUnitPrice;
-    }
-
-    public void setOrderUnitPrice(String orderUnitPrice) {
-        this.orderUnitPrice = orderUnitPrice == null ? null : orderUnitPrice.trim();
-    }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getDeliveryDate() {
         return deliveryDate;
     }
@@ -172,4 +176,45 @@ public class DemandMateriel {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
+
+	public Materiel getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(Materiel materiel) {
+		this.materiel = materiel;
+	}
+
+	public String getMaterielNum() {
+		return materielNum;
+	}
+
+	public String getMaterielName() {
+		return materielName;
+	}
+
+	public String getSpecifications() {
+		return specifications;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setMaterielNum(String materielNum) {
+		this.materielNum = materielNum;
+	}
+
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
+	}
+
+	public void setSpecifications(String specifications) {
+		this.specifications = specifications;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+    
 }

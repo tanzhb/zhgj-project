@@ -88,7 +88,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
             		}else{
             			$scope.opration = '修改';
             			//新建的采购计划修改
-            			$scope.getProcurementPlanInfoForNew($stateParams.serialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
+            			$scope.getProcurementPlanInfo($stateParams.newSerialNum,$stateParams.taskId, $stateParams.comments,$stateParams.processInstanceId);
             		}
             		loadZizhuSaleTable();//加载自主销售订单,在新增或者修改用户自建采购计划
             		// 加载数据
@@ -515,7 +515,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
     			}/*else if(table.row('.active').data().status==1){
     				showToastr('toast-top-center', 'warning', '该订单已确认，不能修改！')
-    			}*/else $state.go('addProcurementPlan',{serialNum:table.row('.active').data().serialNum});
+    			}*/else $state.go('addProcurementPlan',{newSerialNum:table.row('.active').data().serialNum});
     		}
     		
         };
@@ -743,6 +743,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
           		     function(data){//加载页面对象
           		    	$scope.procurementPlan=data.procurementPlan;
           		    	$scope.procurementPlanMateriel=data.procurementPlanMateriel;
+          		    	$scope.demandMateriel=data.demandMateriel;
           		    	$scope.cancelAllProcurementPlanMateriel();
           		    	if($state.current.name=="viewProcurementPlan"){//查看页面构造物料查询分页
           		    		$scope.queryForPage();
@@ -832,7 +833,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
    												.html()
    										+ '">';*/
      	  								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.serialNum +" />" +
+     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.isBOM +" />" +
      									"<span></span></label>";
 
      								}
@@ -1012,6 +1013,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     		}
 		}
         $scope.chooseDemandMateriel=function(){//选中需求物料分解
+        	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
+   	    		toastr.error('请先保存采购计划信息！');return
+    		}
+   	    	if(!$scope.reservedDm){//在分解需求物料时需确保需求物料先保存过
+   	    		toastr.warning('请先保存需求物料！');return
+   	    	}
         	var id_count = $('input[type="checkbox"][class="group-checkable1"]:checked').length;
         	var ids='';//全部选中的需求物料流水
         	var bom_ids='';//全部选中的需求物料流水中的bom物料流水
@@ -1034,21 +1041,23 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 									+ this.id;
 								}
 								var  param={};
-								bom_ids = this.id;
-								if(this.value!=1){
+								/*bom_ids = this.id;*/
+								if($scope["isBOM"+this.id]!=1){
 									$rootScope.getSerialNum(function(newCode){
 										param.serialNum = newCode;//设置非bom物料产生采购清单物料流水
 									});
 										param.singleDose = 1;
-										param.materielNum=$scope.demandMateriel[this.name].materielNum;
-										param.materielName=$scope.demandMateriel[this.name].materielName;
-										param.specifications=$scope.demandMateriel[this.name].specifications;
-										param.unit=$scope.demandMateriel[this.name].unit;
+										param.materielNum=$scope.demandMateriel[this.name].materielNum==undefined?$scope.demandMateriel[this.name].materiel.materielNum:$scope.demandMateriel[this.name].materielNum;
+										param.materielName=$scope.demandMateriel[this.name].materielName==undefined?$scope.demandMateriel[this.name].materiel.materielName:$scope.demandMateriel[this.name].materielName;
+										param.specifications=$scope.demandMateriel[this.name].specifications==undefined?$scope.demandMateriel[this.name].materiel.specifications:$scope.demandMateriel[this.name].specifications;
+										param.unit=$scope.demandMateriel[this.name].unit==undefined?$scope.demandMateriel[this.name].materiel.unit:$scope.demandMateriel[this.name].unit;
 										param.sets=$scope.demandMateriel[this.name].planCount;//设置台套
 										param.deliveryDate=$scope.demandMateriel[this.name].deliveryDate;
 										param.deliveryAddress=$scope.demandMateriel[this.name].deliveryAddress;
 										param.buyCount=$scope.demandMateriel[this.name].planCount;//设置初始采购数量
-										param.demandMaterielSerial=$scope.demandMateriel[this.name].serialNum;//设置需求物料流水
+										param.planCount=$scope.demandMateriel[this.name].planCount;//设置初始采购数量
+										param.demandMaterielSerial=$scope.demandMateriel[this.name].materielSerial;//设置需求物料流水
+										param.materielSerial=$scope.demandMateriel[this.name].materielSerial;//设置物料流水
 										param.procurementPlanSerial=$scope.procurementPlan.serialNum;//设置采购计划流水
 										$scope.procurementPlanMateriel.push(param);//采购清单物料
 									if($scope.procurementPlanMateriels){
@@ -1070,6 +1079,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 					});
         	if(bom_ids!=''){
         		$scope.decomposeMateriel(bom_ids);//分解选中BOM物料
+        	}else{
+        		handle.unblockUI();
+        		toastr.success("分解成功");
         	}
         	
         }
@@ -1077,14 +1089,109 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         	var promise = procurementPlanService.getProcurementPlanMateriels(ids);
     		promise.then(function(data){
     			handle.unblockUI();
-    			var procurementPlanMateriels=data.procurementPlanMateriels;
+    			var procurementPlanMateriels=data.procurementPlanMateriels;//返回的采购清单物料
+    			if(procurementPlanMateriels.length==0){//如果查不出采购清单物料,结束
+    				return;
+    			}
+    			if(!$scope.procurementPlanMateriels){
+    				$scope.procurementPlanMateriels=[];//采购清单物料
+				}
+    				for(var j=0;j<$scope.demandMateriel.length;j++){
+    					for(var m=0;m<procurementPlanMateriels.length;m++){
+							if(procurementPlanMateriels[m].demandMaterielSerial==$scope.demandMateriel[j].materielSerial){
+								procurementPlanMateriels[m].sets=$scope.demandMateriel[j].planCount;
+								procurementPlanMateriels[m].planCount=$scope.demandMateriel[j].planCount;
+								procurementPlanMateriels[m].buyCount=procurementPlanMateriels[m].singleDose*($scope.demandMateriel[j].planCount);
+								procurementPlanMateriels[m].deliveryDate=$scope.demandMateriel[j].deliveryDate;
+								procurementPlanMateriels[m].deliveryAddress=$scope.demandMateriel[j].deliveryAddress;
+								procurementPlanMateriels[m].procurementPlanSerial=$scope.procurementPlan.serialNum;//设置采购计划流水
+								//procurementPlanMateriels[m].singleDose=procurementPlanMateriels[m].singleDose;
+								$scope.procurementPlanMateriel.push(procurementPlanMateriels[m]);//加入采购清单物料
+							}
+						}
+    					
+    				}
+    				toastr.success("分解成功");
+    			/*var array=ids.split(",");//返回被选中的bom物料
+    			for(var i=0;i<array.length;i++){
+    				var serialNum=array[i];
+    				for(var j=0;j<$scope.demandMateriel.length;j++){
+    					if(){
+    						
+    					}
+    					for(var m=0;m<procurementPlanMateriels.length;m++){
+							if(procurementPlanMateriels[m].materielSerial==serialNum){
+								procurementPlanMateriels[m].sets=
+							}
+						}
+    					if($scope.demandMateriel[j].materielSerial==serialNum){
+    						for(var m=0;m<procurementPlanMateriels.length;m++){
+    							
+    						}
+    						
+    					}
+    				}
+    			}*/
     		},function(data){
     			// 调用承诺接口reject();
     		});
 			return;
 		}
-        
-        	
+        $scope.releaseProcurementPlanMateriel=function(){//选中采购清单物料分解
+        	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
+   	    		toastr.error('请先保存采购计划信息！');return
+    		}
+   	    	if(!$scope.reservedPpm){//在发布采购(采购清单物料)时需确保采购清单物料先保存过
+   	    		toastr.warning('请先保存采购清单物料！');return
+   	    	}
+        	var id_count = $('input[type="checkbox"][class="group-checkable2"]:checked').length;
+        	var indexs='';//全部选中的需求物料流水
+        	if(id_count==0){
+        		toastr.warning("请先选择采购清单物料！");
+				return;
+			}
+        	handle.blockUI();
+        	$('input[type="checkbox"][class="group-checkable2"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (indexs == '') {
+									indexs = this.id;
+								} else{
+									indexs = indexs + ','
+									+ this.id;
+								}
+							
+									
+							}
+						}
+					});
+        	var indexArray=indexs.split(",");
+        	$scope.choosedProcurementPlanMateriel=[];
+        	for(var i=0;i<indexArray.length;i++){
+        		$scope.choosedProcurementPlanMateriel.push($scope.procurementPlanMateriel[indexArray[i]]);
+        	}
+        	 $scope.releaseChoosedProcurementPlanMateriel();
+        }
+        $scope.releaseChoosedProcurementPlanMateriel  = function() {//发布采购(采购清单物料)
+	   	    	procurementPlanService.releaseProcurementPlanMateriel($scope.choosedProcurementPlanMateriel).then(
+	   	       		     function(data){
+	   	       		    	toastr.success('发布采购清单物料数据成功！');
+	   	       		    	handle.unblockUI();
+	   	       		    	$scope.cancelAllProcurementPlanMateriel();
+		  	   	     
+			  	   	    
+	   	       		     },
+	   	       		     function(error){
+	   	       		    	toastr.error('数据保存出错！');
+	   	       		         $scope.error = error;
+	   	       		     }
+	   	       		 );
+	   	    	
+	   	    };
         $scope.copyMateriels = {};
     	$scope.confirmSelect = function(){
     		if($scope.modalType=='single'){
@@ -1115,44 +1222,49 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 				toastr.warning("请选择物料");
 				return;
 			}
-//        		var ids = '';
-//				// Iterate over all checkboxes in the table
-//				table.$('input[type="checkbox"]').each(
-//						function() {
-//							// If checkbox exist in DOM
-//							if ($.contains(document, this)) {
-//								// If checkbox is checked
-//								if (this.checked) {
-//									// 将选中数据id放入ids中
-//									if (ids == '') {
-//										ids = this.value;
-//									} else
-//										ids = ids + ','
-//												+ this.value;
-//								}
-//							}
-//						});
+        		var ids = '';
+				// Iterate over all checkboxes in the table
+				table.$('input[type="checkbox"]').each(
+						function() {
+							// If checkbox exist in DOM
+							if ($.contains(document, this)) {
+								// If checkbox is checked
+								if (this.checked) {
+									// 将选中数据id放入ids中
+									if (ids == '') {
+										ids = this.id;
+									} else
+										ids = ids + ','
+												+ this.id;
+									$scope["isBOM"+this.id]=this.value;
+									
+								}
+							}
+						});
 	    		//--------批量增加物料信息START--------------
-    			var ids = '';
+    			/*var ids = '';
 				for(var i=0;i<$scope.serialNums.length;i++){
 					if (ids == '') {
 						ids = $scope.serialNums[i].materiel.serialNum;
 					} else{
 						ids = ids + ',' + $scope.serialNums[i].materiel.serialNum;
 					}
-				}
+				}*/
         		handle.blockUI();
         		var promise = materielService.chooseBasicMateriels(ids);
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
-        			if($scope.procurementPlanMateriel.length==0){
+        			if($scope.demandMateriel==undefined){
         				for(var i = 0;i < data.data.length;i++){// data.data为选择的标准物料
         					$scope.tempMateriel = {};
+        					if(!$scope.demandMateriel){
+        						$scope.demandMateriel=[];
+        					}
         					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.procurementPlanSerial = $scope.procurementPlan.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
-        					$scope.procurementPlanMateriel.push($scope.tempMateriel);
+        					$scope.demandMateriel.push($scope.tempMateriel);
         					$scope["procurementPlanMaterielInput"+i] = false;
         					$scope["procurementPlanMaterielShow"+i] = false;
         				}
@@ -1162,7 +1274,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.procurementPlanSerial = $scope.procurementPlan.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
-        					$scope.procurementPlanMateriel.push($scope.tempMateriel);
+        					$scope.demandMateriel.push($scope.tempMateriel);
 	        				$scope["procurementPlanMaterielInput"+(length+i)] = false;
 							$scope["procurementPlanMaterielShow"+(length+i)] = false;
 							/*$scope["procurementPlanMaterielInput" + ($scope.procurementPlanMateriel.length-1)] = true;
@@ -1232,19 +1344,59 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	    	   }
 	    	   $scope[call]= false;
 	       };
-    	 
-	       
-	       $scope.saveAllProcurementPlanMateriel  = function() {//保存所有物料
+	       $scope.saveAllDemandMateriel  = function() {//保存所有采购清单物料
+ 	   	    	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
+ 	   	    		toastr.error('请先保存采购计划信息！');return
+ 	    		}
+ 	   	    	for(var i=0;i<$scope.demandMateriel.length;i++){
+ 	   	    	$scope.demandMateriel[i].procurementPlanSerial=$scope.procurementPlan.serialNum;
+ 	   	    	}
+ 	   	    	procurementPlanService.saveAllDemandMateriel($scope.demandMateriel).then(
+ 	   	       		     function(data){
+ 	   	       		    	toastr.success('数据保存成功！');
+ 	   	       		    	$scope.demandMateriel=data.data.demandMateriel;
+ 	   	       		    	$scope.cancelAllDemandMateriel();
+ 	   	       		         $scope.reservedDm=true;
+			  	   	       		//更新采购计划数量数据
+//	  	   		        	$scope.updateProcurementPlanAmount();	
+				  	   	    
+ 	   	       		     },
+ 	   	       		     function(error){
+ 	   	       		    	toastr.error('数据保存出错！');
+ 	   	       		         $scope.error = error;
+ 	   	       		     }
+ 	   	       		 );
+ 	   	    	
+ 	   	    };
+ 	   	$scope.changeSupplyName=function(obj,attr){
+ 	   		var attrs='supplyName';
+ 	   		for(var i=0;i<$scope.suppliers.length;i++){
+ 	   			if($scope.suppliers[i].comId==obj[attr]){
+ 	   			obj[attrs]=$scope.suppliers[i].comName;
+ 	   			return;
+ 	   			}
+ 	   		}
+ 	   		
+ 	   	}
+	       $scope.saveAllProcurementPlanMateriel  = function() {//保存所有采购清单物料
   	   	    	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
   	   	    		toastr.error('请先保存采购计划信息！');return
   	    		}
+  	   		for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
+ 	   	    	$scope.procurementPlanMateriel[i].procurementPlanSerial=$scope.procurementPlan.serialNum;
+ 	   	    	if(isNull($scope.procurementPlanMateriel[i].supplyComId)){
+ 	   	    	toastr.warning('请为采购清单物料选择供应商信息！');return
+ 	   	    	}
+ 	   	    	}
   	   	    	if($('#form_sample_5').valid()){
   	   	    	procurementPlanService.saveAllProcurementPlanMateriel($scope.procurementPlanMateriel).then(
   	   	       		     function(data){
   	   	       		    	toastr.success('数据保存成功！');
+  	   	       		    	$scope.procurementPlanMateriel=data.data.procurementPlanMateriel;
   	   	       		    	$scope.cancelAllProcurementPlanMateriel();
+  	   	       		    	$scope.reservedPpm=true;
 			  	   	       		//更新采购计划数量数据
-	  	   		        	$scope.updateProcurementPlanAmount();	
+//	  	   		        	$scope.updateProcurementPlanAmount();	
 				  	   	    
   	   	       		     },
   	   	       		     function(error){
@@ -1312,7 +1464,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        /**
 			 * 撤销物料编辑
 			 */
-	        $scope.cancelProcurementPlanMateriel=function (materiel,index) {
+	        $scope.cancelProcurementPlanMateriel =function (materiel,index) {
 	        	// .show_materiels = false;
 	        	$scope["procurementPlanMaterielInput"+index] = true;
 				$scope["procurementPlanMaterielShow"+index] = true;
@@ -1333,7 +1485,43 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        };  
 	        
 	        /**
-			 * 撤销所有物料编辑
+			 * 撤销所有需求物料编辑
+			 */
+	        $scope.cancelAllDemandMateriel=function () {
+	        	$scope.demandMaterielInput = true;
+	        	$scope.demandMaterielShow = true;
+	        	for(var i=0;i<$scope.demandMateriel.length;i++){
+	        		$scope["demandMaterielInput"+i] = true;
+					$scope["demandMaterielShow"+i] = true;
+	        	}
+	        }; 
+	        /**
+			 * 打开所有需求物料编辑
+			 */
+	        $scope.editAllDemandMateriel=function () {
+	        	$scope.demandMaterielInput = false;
+	        	$scope.demandMaterielShow = false;
+	        	$scope.reservedDm=false;
+	        	for(var i=0;i<$scope.demandMateriel.length;i++){
+	        		$scope["demandMaterielInput"+i] = false;
+					$scope["demandMaterielShow"+i] = false;
+	        	}
+	        }; 
+	        
+	        /**
+			 * 打开所有采购清单物料编辑
+			 */
+	        $scope.editAllProcurementPlanMateriel=function () {
+	        	$scope.procurementPlanMaterielInput = false;
+	        	$scope.procurementPlanMaterielShow = false;
+	        	$scope.reservedPpm=false;
+	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
+	        		$scope["procurementPlanMaterielInput"+i] = false;
+					$scope["procurementPlanMaterielShow"+i] = false;
+	        	}
+	        }; 
+	        /**
+			 * 撤销所有采购清单物料编辑
 			 */
 	        $scope.cancelAllProcurementPlanMateriel=function () {
 	        	$scope.procurementPlanMaterielInput = true;
@@ -1341,18 +1529,6 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
 	        		$scope["procurementPlanMaterielInput"+i] = true;
 					$scope["procurementPlanMaterielShow"+i] = true;
-	        	}
-	        }; 
-	        
-	        /**
-			 * 打开所有物料编辑
-			 */
-	        $scope.editAllProcurementPlanMateriel=function () {
-	        	$scope.procurementPlanMaterielInput = false;
-	        	$scope.procurementPlanMaterielShow = false;
-	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
-	        		$scope["procurementPlanMaterielInput"+i] = false;
-					$scope["procurementPlanMaterielShow"+i] = false;
 	        	}
 	        }; 
 	        //选择第一个，设置后面的数据
@@ -1667,10 +1843,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     		 obj[attr]=0;
     		 return;
     	 }
-    	 if(!isNaN(obj[attr])&&Number(obj[attr])>Number(obj[attr1])){
+    	/* if(!isNaN(obj[attr])&&Number(obj[attr])>Number(obj[attr1])){
     		 toastr.warning('采购数量不得大于需求数量！');
     		 obj[attr]=0;
-    	 }
+    	 }*/
     	 
 	 }     
    
@@ -1681,7 +1857,13 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	      		return 0;
 	      	}
 	  };
-	  
+	  $scope.totalDemandCount  = function() {
+	      	if($scope.demandMateriel){
+	      		return $scope.demandMateriel.length;
+	      	}else{
+	      		return 0;
+	      	}
+	  };
 	  $scope.totalMaterielCount  = function(scope) {
 		   if($scope.procurementPlanMateriel){
 			    var total = 0 ; 
@@ -1696,13 +1878,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	      		return 0;
 	      	}
 	  };
-	  
-	  $scope.totalMaterielPlanCount  = function(scope) {
-		   if($scope.procurementPlanMateriel){
+	  $scope.totalDemandMaterielCount  = function(scope) {
+		   if($scope.demandMateriel){
 			    var total = 0 ; 
-	      		for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
-	      			if(!isNull($scope.procurementPlanMateriel[i].planCount)){
-	      				total = total + Number($scope.procurementPlanMateriel[i].planCount);
+	      		for(var i=0;i<$scope.demandMateriel.length;i++){
+	      			if(!isNull($scope.demandMateriel[i].planCount)){
+	      				total = total + Number($scope.demandMateriel[i].planCount);
 	      			}
 	      			
 	      		}
@@ -1711,12 +1892,38 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	      		return 0;
 	      	}
 	  };
-	  $scope.totalEndCount = function(scope) {
+	  $scope.totalMaterielPlanCount  = function(scope) {
 		   if($scope.procurementPlanMateriel){
 			    var total = 0 ; 
 	      		for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
-	      			if(!isNull($scope.procurementPlanMateriel[i].planCount)){
+	      			total = total + Number($scope.procurementPlanMateriel[i].singleDose*$scope.procurementPlanMateriel[i].sets);
+	      			/*if(!isNull($scope.procurementPlanMateriel[i].planCount)){
 	      				total = total + Number($scope.procurementPlanMateriel[i].planCount);
+	      			}*/
+	      			
+	      		}
+	      		return total
+	      	}else{
+	      		return 0;
+	      	}
+	  };
+	  $scope.totalMaterielPlanCountForView  = function(scope) {
+		   if($scope.procurementPlanMateriel){
+			    var total = 0 ; 
+	      		for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
+	      			total = total + Number($scope.procurementPlanMateriel[i].singleDose*$scope.procurementPlanMateriel[i].planCount);
+	      		}
+	      		return total
+	      	}else{
+	      		return 0;
+	      	}
+	  };
+	  $scope.totalEndCount = function(scope) {
+		   if($scope.demandMateriel){
+			    var total = 0 ; 
+	      		for(var i=0;i<$scope.demandMateriel.length;i++){
+	      			if(!isNull($scope.demandMateriel[i].completeCount)){
+	      				total = total + Number($scope.demandMateriel[i].completeCount);
 	      			}
 	      			
 	      		}

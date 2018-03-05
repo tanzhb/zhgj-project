@@ -194,7 +194,7 @@ angular.module('MetronicApp').service('procurementPlanService',
 			            })  
 			        return deferred.promise;  
 			          
-			    },//保存所有订单物料
+			    },//保存所有采购清单物料
 			    saveAllProcurementPlanMateriel : function (procurementPlanMateriel){
 					var deferred = $q.defer();
 					var params = {};
@@ -207,7 +207,21 @@ angular.module('MetronicApp').service('procurementPlanService',
 						deferred.reject(err);//请求失败
 					});
 					return deferred.promise;//返回承诺
-				},//保存订单物料
+				},//
+				releaseProcurementPlanMateriel : function (procurementPlanMateriel){
+					var deferred = $q.defer();
+					var params = {};
+					params = JSON.stringify(procurementPlanMateriel);
+					$http.post("rest/procurementPlan/releaseProcurementPlanMateriel", 
+							params//传整个表单数据  
+					).then(function success(result) {
+						deferred.resolve(result);//请求成功
+					}, function error(err) {
+						deferred.reject(err);//请求失败
+					});
+					return deferred.promise;//返回承诺
+				},
+				//保存订单物料
 			    saveProcurementPlanMateriel : function (procurementPlanMateriel){
 					var deferred = $q.defer();
 					$http.post("rest/procurementPlan/saveProcurementPlanMateriel", 
@@ -229,7 +243,20 @@ angular.module('MetronicApp').service('procurementPlanService',
 			                deferred.reject(err);//请求失败
 			            });
 			            return deferred.promise;//返回承诺
-				},//订单保存合同
+				},
+				 saveAllDemandMateriel : function (demandMateriel){
+						var deferred = $q.defer();
+						var params = {};
+						params = JSON.stringify(demandMateriel);
+						$http.post("rest/procurementPlan/saveAllDemandMateriel", 
+								params//传整个表单数据  
+						).then(function success(result) {
+							deferred.resolve(result);//请求成功
+						}, function error(err) {
+							deferred.reject(err);//请求失败
+						});
+						return deferred.promise;//返回承诺
+					},//订单保存合同
 				saveContract : function (contract){
 					var deferred = $q.defer();
 					$http.post("rest/procurementPlan/saveContract", 

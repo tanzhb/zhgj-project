@@ -59,6 +59,8 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.DemandMateriel;
+import com.congmai.zhgj.web.model.DemandMaterielExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -253,6 +255,15 @@ public class ProcurementPlanController {
 
     	map.put("procurementPlanMateriel", procurementPlanMateriel);
     	
+    	List<DemandMateriel> demandMateriels=null;
+    	DemandMaterielExample dme =new DemandMaterielExample();
+    	//and 条件1
+    	com.congmai.zhgj.web.model.DemandMaterielExample.Criteria criteria1 =  dme.createCriteria();
+    	criteria1.andDelFlgEqualTo("0");
+    	criteria1.andProcurementPlanSerialEqualTo(serialNum);
+    	m.setOrderByClause(" sort asc");
+    	demandMateriels = procurementPlanMaterielService.selecDemandtList(dme);
+    	map.put("demandMateriel", demandMateriels);
     	return map;
 	}
 	
@@ -296,16 +307,17 @@ public class ProcurementPlanController {
     
     /**
      * 
-     * @Description 保存所有订单物料
+     * @Description 保存所有采购清单物料
      * @param params
      * @return
      */
     @RequestMapping(value = "/saveAllProcurementPlanMateriel", method = RequestMethod.POST)
     @ResponseBody
-    public void saveAllProcurementPlanMateriel(@RequestBody String params) {
+    public Map<String,Object> saveAllProcurementPlanMateriel(@RequestBody String params) {
     	params = params.replace("\\", "");
 /*		ObjectMapper objectMapper = new ObjectMapper();  
         JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, ProcurementPlanMateriel.class);  */
+    	Map<String,Object>map=new HashMap<String,Object>();
         List<ProcurementPlanMateriel> procurementPlanMateriel;
 		try {
 			procurementPlanMateriel = JSON.parseArray(params, ProcurementPlanMateriel.class);
@@ -318,17 +330,52 @@ public class ProcurementPlanController {
 	    			f.setUpdater(currenLoginName);
 	    			f.setCreateTime(new Date());
 	    			f.setUpdateTime(new Date());
+	    			f.setDelFlg("0");
 		    	}
 		    	//填充File******↑↑↑↑↑↑********
 		    	procurementPlanMaterielService.betchInsertProcurementPlanMateriel(procurementPlanMateriel);
 		    	//数据插入******↑↑↑↑↑↑********
 	        }
+	    	map.put("procurementPlanMateriel", procurementPlanMateriel);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    	
+		return map;
     }
-    
+    /**
+     * 
+     * @Description 保存所有需求物料
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveAllDemandMateriel", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String,Object> saveAllDemandMateriel(@RequestBody String params) {
+    	params = params.replace("\\", "");
+        List<DemandMateriel> demandMateriels;
+        Map<String,Object>map=new HashMap<String,Object>();
+		try {
+			demandMateriels = JSON.parseArray(params, DemandMateriel.class);
+	    	if(!CollectionUtils.isEmpty(demandMateriels)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(DemandMateriel f:demandMateriels){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+	    			f.setDelFlg("0");
+		    	}
+		    	procurementPlanMaterielService.betchInsertDemandMateriel(demandMateriels);
+		    	//数据插入******↑↑↑↑↑↑********
+		    	map.put("demandMateriel", demandMateriels);
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+    }
     /**
      * @Description (查看订单物料信息)
      * @param request
@@ -692,7 +739,8 @@ public class ProcurementPlanController {
     			pMateriel.setMaterielSerial(bomMateriel.getMaterielSerial());
     			pMateriel.setDemandMaterielSerial(bomMateriel.getBomMaterielSerial());
     			pMateriel.setSingleDose(bomMateriel.getSingleDose());
-    			String materielId=bomMateriel.getMateriel().getMaterielId();//获取基本物料id
+    			pMateriel.setMateriel(bomMateriel.getMateriel());
+    			/*String materielId=bomMateriel.getMateriel().getMaterielId();//获取基本物料id
     			SupplyMaterielExample m2 =new SupplyMaterielExample();
 		    	com.congmai.zhgj.web.model.SupplyMaterielExample.Criteria criteria2 =  m2.createCriteria();
 		    	criteria2.andMaterielIdEqualTo(materielId);
@@ -700,7 +748,7 @@ public class ProcurementPlanController {
 		    	List<SupplyMateriel> supplyMateriels = supplyMaterielService.selectList(m2);
 		    	if(org.apache.commons.collections.CollectionUtils.isNotEmpty(supplyMateriels)){
 		    		pMateriel.setSupplyMaterielSerial(supplyMateriels.get(0).getSerialNum());
-		    	}
+		    	}*/
 		    	procurementPlanMateriels.add(pMateriel);
     			/*pMateriel.setProcurementPlanSerial(newSerialNum);
     			pMateriel.setPlanCount(o.getAmount());
@@ -714,4 +762,127 @@ public class ProcurementPlanController {
 		map.put("procurementPlanMateriels", procurementPlanMateriels);
 		return map;
 	}
+	 @RequestMapping(value = "/releaseProcurementPlanMateriel", method = RequestMethod.POST)
+	    @ResponseBody
+	    public void releaseProcurementPlanMateriel(@RequestBody String params) {
+	    	params = params.replace("\\", "");
+	        List<ProcurementPlanMateriel> procurementPlanMateriel;
+	        ProcurementPlan procurementPlan=null;
+			try {
+				procurementPlanMateriel = JSON.parseArray(params, ProcurementPlanMateriel.class);
+		    	if(!CollectionUtils.isEmpty(procurementPlanMateriel)){
+		    		Subject currentUser = SecurityUtils.getSubject();
+		    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    		Set<String> supplySet = new HashSet<String>();//存入所有物料供应商，不会重复
+		    		if(procurementPlan==null){
+		    			procurementPlan=procurementPlanService.selectById(procurementPlanMateriel.get(0).getProcurementPlanSerial());//获取采购计划
+		    		}
+		    		if(procurementPlanMateriel!=null){//循环供应物料，集合所有的供应商
+		        		for(ProcurementPlanMateriel o:procurementPlanMateriel){
+		        			if(o.getSupplyComId()!=null){
+		        				supplySet.add(o.getSupplyComId());
+		        			}
+		        		}
+		        	}
+		        	if(supplySet.size()>0){
+		        		for(String supplyComId : supplySet){//对于某一供应商生成采购订单
+		        			String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购订单流水号
+		        			String newContractSerialNum = ApplicationUtils.random32UUID();//生成新的采购合同流水号
+		        			
+		        			OrderInfo newOrderInfo = new OrderInfo();//生成新的采购订单
+		        			
+		        
+		        			newOrderInfo.setSerialNum(newSerialNum);//设置新的流水号
+		        			String temp = orderService.getNumCode("PO");
+		        			newOrderInfo.setOrderNum(temp);
+		        			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
+		        			newOrderInfo.setContractSerial(newContractSerialNum);
+		        			newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());//
+		        			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
+		        			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
+		        			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购
+		        			
+		        			Company supply =  companyService.selectOne(supplyComId);
+		        			if(supply!=null&&StaticConst.getInfo("waimao").equals(supply.getTradeType())){
+		        				newOrderInfo.setTradeType(StaticConst.getInfo("waimao"));//设置为外贸
+		        			}else {
+		        				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
+		    				}
+		        			
+		        			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
+		        			newOrderInfo.setOrderDate(new Date());
+		        			newOrderInfo.setRate("17");
+		        			newOrderInfo.setCurrency("人民币");
+		        			
+		        			newOrderInfo.setCreator(currenLoginName);
+		        			newOrderInfo.setUpdater(currenLoginName);
+		        			newOrderInfo.setMaker(currenLoginName);
+		        			newOrderInfo.setCreateTime(new Date());
+		        			newOrderInfo.setUpdateTime(new Date());
+		        			newOrderInfo.setMakeDate(new Date());
+		        			newOrderInfo.setStatus("0");
+		        			orderService.insert(newOrderInfo);
+		        			
+		        			ContractVO newcontract = new ContractVO();
+		    				newcontract.setId(newContractSerialNum);
+		    				newcontract.setComId(supplyComId);
+		    				newcontract.setContractNum(orderService.getNumCode("CA"));
+		    				newcontract.setContractType(StaticConst.getInfo("buyContract"));//设置合同类型为采购合同
+		    				newcontract.setCreator(currenLoginName);
+		    				newcontract.setUpdater(currenLoginName);
+		    				newcontract.setCreateTime(new Date());
+		    				newcontract.setUpdateTime(new Date());
+		    				newcontract.setStatus(ContractVO.WAIT_SIGN);
+		    				
+		    				contractService.insertContract(newcontract);
+		    				
+		        			List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
+		        			Double materielCount = 0D;
+		        			for(ProcurementPlanMateriel o:procurementPlanMateriel){
+		            			if(o.getSupplyComId()!=null){
+		            				if(supplyComId.equals(o.getSupplyComId())){
+		            					OrderMateriel orderMateriel = new OrderMateriel();
+		            					orderMateriel.setSerialNum(ApplicationUtils.random32UUID());
+		            					orderMateriel.setSupplyMaterielSerial(null);//采购订单物料为标准物料
+		            					orderMateriel.setOrderSerial(newSerialNum);
+		            					orderMateriel.setCreator(currenLoginName);
+		            					orderMateriel.setUpdater(currenLoginName);
+		            					orderMateriel.setCreateTime(new Date());
+		            					orderMateriel.setUpdateTime(new Date());
+		            					orderMateriel.setMaterielSerial(o.getMaterielSerial());
+		            					orderMateriel.setAmount(o.getBuyCount());
+		            					orderMateriel.setDeliveryAddress(o.getDeliveryAddress());
+		            					orderMateriel.setDeliveryDate(o.getDeliveryDate());
+		            					orderMateriel.setLastDeliveryDate(DateUtil.addDay(o.getDeliveryDate(), -10));
+		            					newMaterielList.add(orderMateriel);
+		            					
+		            					materielCount = materielCount + Double.parseDouble(o.getBuyCount());
+		            				}
+		            			}
+		            		}
+		        			orderMaterielService.betchInsertOrderMateriel(newMaterielList);//插入新的订单物料
+		        			
+		        			OrderInfo updateOrderMaterielCount = new OrderInfo();//修改销售订单的关联采购订单号
+		        			updateOrderMaterielCount.setSerialNum(newSerialNum);
+		        			updateOrderMaterielCount.setMaterielCount(materielCount.toString());
+		            		orderService.updateStatus(updateOrderMaterielCount);
+		        			
+		        	    	
+		        		}
+		        		
+		        		
+		        		ProcurementPlan updateProcurementPlan = new ProcurementPlan();
+		        		updateProcurementPlan.setSerialNum(procurementPlan.getSerialNum());
+		        		updateProcurementPlan.setStatus("1");
+		        		updateProcurementPlan.setBuyDate(new Date());
+		        		procurementPlanService.update(updateProcurementPlan);
+		        	}
+			    	
+		        }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+	    	
+	    }
+	
 }

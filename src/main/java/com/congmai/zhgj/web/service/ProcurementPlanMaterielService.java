@@ -3,8 +3,11 @@ package com.congmai.zhgj.web.service;
 import java.util.List;
 
 import com.congmai.zhgj.core.generic.GenericService;
+import com.congmai.zhgj.web.model.DemandMateriel;
+import com.congmai.zhgj.web.model.DemandMaterielExample;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.ProcurementPlanMaterielExample;
+import com.congmai.zhgj.web.model.DemandMaterielExample;
 
 /**
  * 
@@ -25,6 +28,14 @@ public interface ProcurementPlanMaterielService extends GenericService<Procureme
 	public void deleteProcurementPlanMateriels(String ids);
 
 	void betchInsertProcurementPlanMateriel(List<ProcurementPlanMateriel> procurementPlanMateriel);
+	
+	void betchInsertDemandMateriel(List<DemandMateriel> demandMateriels);//保存需求物料
+	
+	public void deleteDemandMateriels(String procurementPlanSerial);//删除需求物料通过采购计划流水
+	
+	public void deleteAllProcurementPlanMateriels(String procurementPlanSerial);//删除采购清单物料通过采购计划流水
+	
+	  List<DemandMateriel> selecDemandtList(DemandMaterielExample m);
 
 
 }

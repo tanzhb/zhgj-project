@@ -4217,12 +4217,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 * 加载仓库数据
 	 */
 	var initWarehouse = function(){
-	var promise = orderService.initWarehouse();
+	/*var promise = orderService.initWarehouse();
 	promise.then(function(data){
 		$scope.warehouses = data.data;
 	},function(data){
 		//调用承诺接口reject();
-	});
+	});*/
+		var promise = orderService.initPtWarehouseAddress();
+		promise.then(function(data){
+			$scope.warehouses = data.data;//cai
+		},function(data){
+			//调用承诺接口reject();
+		});
 	}
 	/**
 	 * 加载平台仓库数据

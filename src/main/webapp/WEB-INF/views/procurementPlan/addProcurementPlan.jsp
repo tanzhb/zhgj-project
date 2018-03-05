@@ -191,15 +191,15 @@
 		<!-- 销售订单物料 start-->
          <div class="portlet-title" style="min-height: 48px;">
               <div class="tools" style="float:right">
-              <button ng-click="addDemandMateriel()" type="button"     ng-if="saleOrder.orderNum==undefined" ng-hide="procurementPlanMaterielInput" class="btn blue  btn-circle  btn-sm">
+              <button ng-click="addDemandMateriel()" type="button"     ng-if="saleOrder.orderNum==undefined" ng-hide="demandMaterielInput" class="btn blue  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i> 添加物料 </button><!--未选择销售订单时,可新增物料  -->
-                 <button ng-click="chooseDemandMateriel()" type="button"  ng-hide="procurementPlanMaterielInput" class="btn blue  btn-circle  btn-sm">
+                 <button ng-click="chooseDemandMateriel()" type="button"  ng-hide="demandMaterielInputDecompose" class="btn blue  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i>分解采购 </button>
-                 <button type="submit" ng-click="saveAllProcurementPlanMateriel()" ng-hide="procurementPlanMaterielInput"  class="btn green  btn-circle  btn-sm">
+                 <button type="submit" ng-click="saveAllDemandMateriel()" ng-hide="demandMaterielInput"  class="btn green  btn-circle  btn-sm">
                  		<i class="fa fa-save"></i> 保存 </button>
-                 <button ng-click="cancelAllProcurementPlanMateriel()" type="button" ng-hide="procurementPlanMaterielInput" class="btn defualt  btn-circle  btn-sm">
+                 <button ng-click="cancelAllDemandMateriel()" type="button" ng-hide="demandMaterielInput" class="btn defualt  btn-circle  btn-sm">
                  		<i class="fa fa-undo"></i> 取消 </button>
-                 <button ng-click="editAllProcurementPlanMateriel()" type="button" ng-show="procurementPlanMaterielShow" class="btn purple  btn-circle  btn-sm">
+                 <button ng-click="editAllDemandMateriel()" type="button" ng-show="demandMaterielShow" class="btn purple  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i> 编辑 </button>
                </div>
            </div>
@@ -221,36 +221,41 @@
 								<th>交付日期</th>
 								<th>交付地址</th>
 								<th  style="display:inline-block;">状态</th>
-								<th><span style="display:inline-block;width:80px;">操作</span></th>
+								<!-- <th><span style="display:inline-block;width:80px;">操作</span></th> -->
                                  </tr>
                              </thead>
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in demandMateriel track by $index" ng-mouseover="showOperation('procurementPlanMateriel',$index)" ng-mouseleave="hideOperation('procurementPlanMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
 		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                        <input type="checkbox" class="group-checkable1"  name="{{$index}}"  id="{{_procurementPlanMateriel.serialNum}}"  value="{{_procurementPlanMateriel.isBOM}}" />
+                                        <input type="checkbox" class="group-checkable1"  name="{{$index}}"  id="{{_procurementPlanMateriel.materielSerial}}"  value="{{_procurementPlanMateriel.isBOM}}" />
                                         <span></span>
                                     </label>
 		                          </td>
 		                          <td>
                                            <!-- <span ng-hide="procurementPlanMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_procurementPlanMateriel.materiel.materielNum}}</a></span> -->
-		                                <p class="form-control-static" > {{_procurementPlanMateriel.materielNum}} </p>
+		                                <p class="form-control-static"   ng-if="saleOrder.orderNum!=undefined" > {{_procurementPlanMateriel.materielNum}} </p>
+		                                 <p class="form-control-static"   ng-if="saleOrder.orderNum==undefined" > {{_procurementPlanMateriel.materiel.materielNum}} </p>
 		                          </td>
 		                          <td>
-	                                 	<p class="form-control-static" > {{_procurementPlanMateriel.materielName}} </p>
+	                                 	<p class="form-control-static"   ng-if="saleOrder.orderNum!=undefined" > {{_procurementPlanMateriel.materielName}} </p>
+	                                 	<p class="form-control-static"   ng-if="saleOrder.orderNum==undefined" > {{_procurementPlanMateriel.materiel.materielName}} </p>
 		                          </td>
 		                           <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.specifications}} </p>
+                                     		<p class="form-control-static"   ng-if="saleOrder.orderNum!=undefined" > {{_procurementPlanMateriel.specifications}} </p>
+                                     		<p class="form-control-static"   ng-if="saleOrder.orderNum==undefined" > {{_procurementPlanMateriel.materiel.specifications}} </p>
 		                          </td>
 		                          <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.unit}} </p>
+                                     		<p class="form-control-static"   ng-if="saleOrder.orderNum!=undefined" > {{_procurementPlanMateriel.unit}} </p>
+                                     		<p class="form-control-static"   ng-if="saleOrder.orderNum==undefined" > {{_procurementPlanMateriel.materiel.unit}}</p>
 		                          </td>
 		                          <td>
                                      		<p class="form-control-static" > 1 </p>
 		                          </td>
 		                             <td>  
-		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"    ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount" ng-keyup="clearNoNum(procurementPlanMateriel[$index],'planCount')"   ><!--内有验证采购数量不得大于需求数量  -->
-                                     		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.planCount}} </p>
+		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount==null"  ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount" ng-keyup="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   ><!--已注释内有验证采购数量不得大于需求数量  -->
+                                     	<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount!=null"   ng-keyup="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   >	
+                                     		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.planCount}} </p>
                                      		<!-- <p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
 		                          </td>
 		                          <td>
@@ -259,13 +264,13 @@
 		                       
 		                          <td>  
 		                          		<input type="text"  style="width: 100px!important" name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryDate"  >
-                                     		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryDate}} </p>
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryDate"  >
+                                     		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryDate}} </p>
 		                          </td>
 		                        
 		                          <td>  
-		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryAddress"  >
-                                     		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryAddress}} </p>
+		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryAddress"  >
+                                     		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
                                       <td>  
                                      		<p class="form-control-static"  style="color:#fcb95b" ng-if="_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0"> 待采购 </p>
@@ -287,18 +292,18 @@
                                        	<a ng-show="procurementPlanMaterielShow{{$index}}"  title="删除" ng-click="deleteProcurementPlanMateriel(_procurementPlanMateriel)"><i class="fa fa-minus"></i></a>
                                       	</span>
                                       	</div> -->
-                                      	<p class="form-control-static"> 分解采购 </p>
+                                      	<!-- <p class="form-control-static"> 分解采购 </p> -->
                                      </td>
                                  </tr>
                                  <tr>
 								<th></th>
 								<th>合计</th>
-								<th>{{totalCount()}}</th>
+								<th>{{totalDemandCount()}}</th>
 								<th></th>
-								<th>{{totalMaterielPlanCount()}}</th>
-								<th>{{totalMaterielCount()}}</th>
+								<th><!-- {{totalMaterielPlanCount()}} --></th>
+								<th><!-- {{totalMaterielCount()}} --></th>
+								<th>{{totalDemandMaterielCount()}}</th>
 								<th>{{totalEndCount()}}</th>
-								<th></th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -315,7 +320,7 @@
 		<!-- 订单物料 start-->
          <div class="portlet-title" style="min-height: 48px;">
               <div class="tools" style="float:right">
-              <button ng-click="chooseDemandMateriel()" type="button"  ng-hide="procurementPlanMaterielInput" class="btn blue  btn-circle  btn-sm">
+              <button ng-click="releaseProcurementPlanMateriel()" type="button"  ng-hide="procurementPlanMaterielInputAfterRelease" class="btn blue  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i>发布采购 </button>
                  <button type="submit" ng-click="saveAllProcurementPlanMateriel()" ng-hide="procurementPlanMaterielInput"  class="btn green  btn-circle  btn-sm">
                  		<i class="fa fa-save"></i> 保存 </button>
@@ -345,38 +350,38 @@
 								<th>交付日期</th>
 								<th>交付地址</th>
 								<th  style="display:inline-block;">状态</th>
-								<th><span style="display:inline-block;width:80px;">操作</span></th>
+								<!-- <th><span style="display:inline-block;width:80px;">操作</span></th> -->
                                  </tr>
                              </thead>
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in procurementPlanMateriel track by $index" ng-mouseover="showOperation('procurementPlanMateriel',$index)" ng-mouseleave="hideOperation('procurementPlanMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
 		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                        <input type="checkbox" class="group-checkable2" id="{{_procurementPlanMateriel.serialNum}}"/>
+                                        <input type="checkbox"  class="group-checkable2"   id="{{$index}}"/>
                                         <span></span>
                                     </label>
 		                          </td>
 		                          <td>
                                            <!-- <span ng-hide="procurementPlanMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_procurementPlanMateriel.materiel.materielNum}}</a></span> -->
-		                                <p class="form-control-static" > {{_procurementPlanMateriel.materielNum}} </p>
+		                                <p class="form-control-static" > {{_procurementPlanMateriel.materielNum==null?_procurementPlanMateriel.materiel.materielNum:_procurementPlanMateriel.materielNum}} </p>
 		                          </td>
 		                          <td>
-	                                 	<p class="form-control-static" > {{_procurementPlanMateriel.materielName}} </p>
+	                                 	<p class="form-control-static" > {{_procurementPlanMateriel.materielName==null?_procurementPlanMateriel.materiel.materielName:_procurementPlanMateriel.materielName}} </p>
 		                          </td>
 		                           <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.specifications}} {{_procurementPlanMateriel.isBOM}}  </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.specifications==null?_procurementPlanMateriel.materiel.specifications:_procurementPlanMateriel.specifications}}   </p>
 		                          </td>
 		                          <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.unit}} </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.unit==null?_procurementPlanMateriel.materiel.unit:_procurementPlanMateriel.unit}} </p>
 		                          </td>
 		                          <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.sets}} </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets}} </p>
 		                          </td>
 		                            <td>
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}} </p>
 		                          </td>
 		                            <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*_procurementPlanMateriel.sets}} </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*(_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets)}} </p>
 		                          </td>
 		                          <td>  
 		                          		<input style="padding:6px 3px"   type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.buyCount"    ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   /> 
@@ -384,8 +389,12 @@
                                      		<!-- <p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
 		                          </td>
 		                          <td>  
-		                          		<select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="procurementPlanMateriel.supplyMaterielSerial" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
-		                          		ng-change="changeSupplyName(this,procurementPlanMateriel,'supplyName')">
+		                          		<select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}"  ng-if="$first"  ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
+		                          		ng-change="changeSupplyName(_procurementPlanMateriel,'supplyComId')">
+                                               <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
+                                         </select>
+                                         <select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}"  ng-if="!$first"  ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
+		                          		ng-change="changeSupplyName(_procurementPlanMateriel,'supplyComId')">
                                                <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
                                          </select>
                                      	<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.supplyName}} </p>
@@ -416,7 +425,7 @@
                                        	<a ng-show="procurementPlanMaterielShow{{$index}}"  title="删除" ng-click="deleteProcurementPlanMateriel(_procurementPlanMateriel)"><i class="fa fa-minus"></i></a>
                                       	</span>
                                       	</div> -->
-                                      	<a href="javascript:void(0);"    ng-click="viewProcurementPlan()"   ng-if="">发布采购</a>
+                                      	<!-- <a href="javascript:void(0);"    ng-click="viewProcurementPlan()"   ng-if="">发布采购</a> -->
                                       	
                                      </td>
                                  </tr>
@@ -426,10 +435,10 @@
 								<th>{{totalCount()}}</th>
 								<th></th>
 								<th></th>
+								<th><!-- {{totalMaterielPlanCount()}} --></th>
+								<th><!-- {{totalMaterielCount()}} --></th>
 								<th>{{totalMaterielPlanCount()}}</th>
 								<th>{{totalMaterielCount()}}</th>
-								<th>{{totalEndCount()}}</th>
-								<th></th>
 								<th></th>
 								<th></th>
 								<th></th>

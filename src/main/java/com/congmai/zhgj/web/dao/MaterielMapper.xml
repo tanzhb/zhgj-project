@@ -78,6 +78,7 @@
     <result column="productionPlace" property="productionPlace" jdbcType="VARCHAR" />
     <result column="brand" property="brand" jdbcType="VARCHAR" />
     <result column="typeName" property="typeName" jdbcType="VARCHAR" />
+    <result column="isBOM" property="isBOM" jdbcType="VARCHAR" />
     <!-- <result column="category1" property="category1" jdbcType="VARCHAR" />
     <result column="category2" property="category2" jdbcType="VARCHAR" />
     <result column="category3" property="category3" jdbcType="VARCHAR" />
@@ -345,6 +346,7 @@ m.type,
 ca.categoryName as typeName,
 m.productionPlace,
 m.brand,
+m.isBOM,
 <!-- m.category1,
 m.category2,
 m.category3,

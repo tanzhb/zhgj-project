@@ -58,10 +58,52 @@ public class ProcurementPlanMateriel {
     
     private String demandMaterielSerial;//需求物料流水
     
+    private String supplyComId;//供应商id
+    
+    private String materielNum;
+
+    private String materielName;
+
+    private String specifications;
+
+    private String unit;  
+    
     
     
 
-    public String getSerialNum() {
+    public String getMaterielNum() {
+		return materielNum;
+	}
+
+	public String getMaterielName() {
+		return materielName;
+	}
+
+	public String getSpecifications() {
+		return specifications;
+	}
+
+	public String getUnit() {
+		return unit;
+	}
+
+	public void setMaterielNum(String materielNum) {
+		this.materielNum = materielNum;
+	}
+
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
+	}
+
+	public void setSpecifications(String specifications) {
+		this.specifications = specifications;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 
@@ -259,6 +301,14 @@ public class ProcurementPlanMateriel {
 
 	public void setDemandMaterielSerial(String demandMaterielSerial) {
 		this.demandMaterielSerial = demandMaterielSerial;
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId;
 	}
     
 }

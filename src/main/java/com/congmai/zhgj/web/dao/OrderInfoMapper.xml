@@ -1009,7 +1009,7 @@ billStatus,
     <include refid="Base_Column_List" />
     from orderInfo
     WHERE
-	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount
+	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) > CONVERT(IFNULL(orderInfo.receiveCount,0),SIGNED)
     
   </select>
   <select id="selectUnfinishedSaleOrderList" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -1017,7 +1017,7 @@ billStatus,
     <include refid="Base_Column_List" />
     from orderInfo
     WHERE
-	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount   and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
+	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >CONVERT(IFNULL(orderInfo.receiveCount,0),SIGNED)  and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
     
   </select>
 </mapper>

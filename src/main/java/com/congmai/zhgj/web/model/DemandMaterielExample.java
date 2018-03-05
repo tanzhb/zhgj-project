@@ -487,7 +487,7 @@ public class DemandMaterielExample {
             return (Criteria) this;
         }
 
-        public Criteria andcompleteCountIsNotNull() {
+        public Criteria andCompleteCountIsNotNull() {
             addCriterion("completeCount is not null");
             return (Criteria) this;
         }
@@ -549,76 +549,6 @@ public class DemandMaterielExample {
 
         public Criteria andCompleteCountNotBetween(String value1, String value2) {
             addCriterion("completeCount not between", value1, value2, "completeCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceIsNull() {
-            addCriterion("orderUnitPrice is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceIsNotNull() {
-            addCriterion("orderUnitPrice is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceEqualTo(String value) {
-            addCriterion("orderUnitPrice =", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceNotEqualTo(String value) {
-            addCriterion("orderUnitPrice <>", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceGreaterThan(String value) {
-            addCriterion("orderUnitPrice >", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceGreaterThanOrEqualTo(String value) {
-            addCriterion("orderUnitPrice >=", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceLessThan(String value) {
-            addCriterion("orderUnitPrice <", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceLessThanOrEqualTo(String value) {
-            addCriterion("orderUnitPrice <=", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceLike(String value) {
-            addCriterion("orderUnitPrice like", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceNotLike(String value) {
-            addCriterion("orderUnitPrice not like", value, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceIn(List<String> values) {
-            addCriterion("orderUnitPrice in", values, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceNotIn(List<String> values) {
-            addCriterion("orderUnitPrice not in", values, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceBetween(String value1, String value2) {
-            addCriterion("orderUnitPrice between", value1, value2, "orderUnitPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andOrderUnitPriceNotBetween(String value1, String value2) {
-            addCriterion("orderUnitPrice not between", value1, value2, "orderUnitPrice");
             return (Criteria) this;
         }
 
