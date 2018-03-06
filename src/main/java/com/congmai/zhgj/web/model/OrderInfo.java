@@ -70,6 +70,8 @@ public class OrderInfo extends BaseVO {
 	
 	public static final String WAIT_PT_CONFIRMED= "77";//供应商确认后，待平台
 	
+//	public static final String WAIT_SUPPLLY_CONFIRMED= "99";//平台提交代发货给供应商通知供应商发货
+	
 	private String serialNum;
 
     private String contractSerial;

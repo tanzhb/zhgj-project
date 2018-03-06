@@ -33,6 +33,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentFile;
 import com.congmai.zhgj.web.model.PaymentPlan;
 import com.congmai.zhgj.web.model.PaymentRecord;
+import com.congmai.zhgj.web.model.PaymentRecordExample;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.MaterielFileExample.Criteria;
@@ -458,6 +459,14 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		com.congmai.zhgj.web.model.VerificationRecordExample.Criteria c=mre.createCriteria();
 		c.andPaymentRecordSerialEqualTo(serialNum);
 		return verificationRecordMapper.selectByExampleForPaymentRecord(mre);
+	}
+
+	@Override
+	public List<PaymentRecord> findPaymentRecordList(String orderSerial) {
+		PaymentRecordExample pre=new PaymentRecordExample();
+		com.congmai.zhgj.web.model.PaymentRecordExample.Criteria c=pre.createCriteria();
+		c.andDelFlgEqualTo("0").andOrderSerialEqualTo(orderSerial);
+		return paymentRecordMapper.selectByExample(pre);
 	}
 
 	

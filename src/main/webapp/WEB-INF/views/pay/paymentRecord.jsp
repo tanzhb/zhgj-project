@@ -297,7 +297,27 @@
 	</div>
 </div>
 <!-- 基本信息modal 结束 -->
-
+<div id="delUsersModal" class="modal fade" tabindex="-1"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title">确认</h4>
+						</div>
+						<div class="modal-body">
+							<p>是否删除已选条目?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-dismiss="modal"
+								class="btn dark btn-outline">取消</button>
+							<button type="button" ng-click="confirmDel()" class="btn green">确定
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
 <!-- 导入modal START -->
 <div class="modal fade" id="import" role="import" aria-hidden="true">
 	<div class="modal-dialog">

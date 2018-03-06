@@ -2436,6 +2436,7 @@ public class OrderController {
 			dm.setUpdater(currenLoginName);
 			dm.setCreateTime(new Date());
 			dm.setUpdateTime(new Date());
+			dm.setDelFlg("0");
 			i++;
 			demandMaterielList.add(dm);
 			if("1".equals(o.getMateriel().getIsBOM())){//如果是bom物料
@@ -2475,6 +2476,7 @@ public class OrderController {
 		    			pMateriel.setMaterielSerial(b.getMaterielSerial());//采购订单物料为标准物料
 		    			pMateriel.setProcurementPlanSerial(newSerialNum);
 		    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
+		    			pMateriel.setSingleDose(b.getSingleDose());
 		    			pMateriel.setPlanCount(
 		    					String.valueOf(Double.parseDouble(o.getAmount()==null?"0":o.getAmount())
 		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
@@ -2502,6 +2504,7 @@ public class OrderController {
     			pMateriel.setMaterielSerial(o.getMaterielSerial());//采购订单物料为标准物料
     			pMateriel.setProcurementPlanSerial(newSerialNum);
     			pMateriel.setPlanCount(o.getAmount());
+    			pMateriel.setSingleDose("1");
     			pMateriel.setBuyCount(o.getAmount());
     			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
     			pMateriel.setDeliveryAddress(o.getDeliveryAddress());

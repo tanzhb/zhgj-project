@@ -746,7 +746,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
           		    	$scope.demandMateriel=data.demandMateriel;
           		    	$scope.cancelAllProcurementPlanMateriel();
           		    	if($state.current.name=="viewProcurementPlan"){//查看页面构造物料查询分页
-          		    		$scope.queryForPage();
+          		    		$scope.queryForPage();//采购清单物料构造分页
+          		    		$scope.queryForPage1();//需求物料构造分页
           		    	}
           		    	
           		    	$scope.copyMateriels = angular.copy($scope.procurementPlanMateriel);
@@ -1768,9 +1769,63 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	});
 	}
 	
+	/** *************需求物料明细可检索化  start*************** */
+	 $scope.pageIndex1 = 1; //记录当前页
+	 $scope.pageSize1 = '10'; //每页的记录数
+	 $scope.totalPage1 = '1'; //记录总页数
+	 $scope.dispalyDemandMateriel = [];//页面显示结果
+	 $scope.filterDemandMateriel = [];//查询筛选结果
 	 
+	 $scope.createFilterList1 = function(){
+		 $scope.filterDemandMateriel = [];
+		if($scope.demandMateriel.length>0&&$scope.queryStr1&&!isNull($scope.queryStr1)){
+			for(var i = 0;i < $scope.demandMateriel.length;i++){//
+				if(!isNull(($scope.demandMateriel)[i].materiel.materielNum)&&($scope.demandMateriel)[i].materiel.materielNum.indexOf($scope.queryStr1)>=0){
+					$scope.filterDemandMateriel.push(angular.copy(($scope.demandMateriel)[i]));
+				}else if(!isNull(($scope.demandMateriel)[i].materiel.materielName)&&($scope.demandMateriel)[i].materiel.materielName.indexOf($scope.queryStr1)>=0){
+					$scope.filterDemandMateriel.push(angular.copy(($scope.demandMateriel)[i]));
+				}else if(!isNull(($scope.demandMateriel)[i].materiel.specifications)&&($scope.demandMateriel)[i].materiel.specifications.indexOf($scope.queryStr1)>=0){
+					$scope.filterDemandMateriel.push(angular.copy(($scope.demandMateriel)[i]));
+				}
+			}
+		}else{
+			$scope.filterDemandMateriel = angular.copy($scope.demandMateriel);
+		}
+		
+	 };
 	 
-	 /** *************订单物料明细可检索化  start*************** */
+	 $scope.createDispalyList1 = function(){
+		 $scope.dispalyDemandMateriel = $scope.filterDemandMateriel.slice(
+				 ($scope.pageIndex1-1)*$scope.pageSize1,
+				 $scope.pageIndex1*$scope.pageSize1);
+		 
+		 $scope.totalPage1 = Math.ceil($scope.filterDemandMateriel.length/$scope.pageSize1);
+	 };
+	 
+	 $scope.queryForPage1 = function(){
+		 $scope.createFilterList1();
+		 $scope.pageIndex1 = 1; //设置为第一页
+		 $scope.createDispalyList1();
+	 };
+	 
+	 $scope.link2ThisPage1 = function(index){
+		 $scope.pageIndex1 = index;
+		 $scope.createDispalyList1();
+	 }
+	 
+	 $scope.link2PreviousPage1 = function(){
+		 $scope.pageIndex1--;
+		 $scope.createDispalyList1();
+	 }
+	 
+	 $scope.link2NextPage1 = function(){
+		 $scope.pageIndex1++;
+		 $scope.createDispalyList1();
+	 }
+	 
+	/** *************需求物料明细可检索化  end*************** */
+	 
+	 /** *************采购清单物料明细可检索化  start*************** */
 	 $scope.pageIndex = 1; //记录当前页
 	 $scope.pageSize = '10'; //每页的记录数
 	 $scope.totalPage = '1'; //记录总页数
@@ -1824,7 +1879,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		 $scope.createDispalyList();
 	 }
 	 
-	/** *************订单物料明细可检索化  end*************** */
+	/** *************采购清单物料明细可检索化  end*************** */
 	 $scope.clearNoNumPoint = function(obj,attr){
     	 //先把非数字的都替换掉，除了数字和.
     	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");

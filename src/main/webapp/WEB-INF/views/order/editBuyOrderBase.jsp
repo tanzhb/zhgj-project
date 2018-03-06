@@ -1720,9 +1720,11 @@ margin-right: 20px;
                               		</div>
                              </div>
                          </div>
+                         </div>
                          <!--/span-->
                    
                          <!--/span-->
+                         <div class="row">
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">包装规格型号：</label>

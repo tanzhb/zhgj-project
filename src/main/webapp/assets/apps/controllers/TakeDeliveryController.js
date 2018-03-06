@@ -1037,9 +1037,9 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                 /* { mData: 'takeDelivery.takeDeliverNum' },*/
 	                                  { mData: 'inOutNum' },
 	                                  { mData: 'inOutType'},
-	                                  { mData: 'orderNum' },
+	                                 /* { mData: 'orderNum' },*/
 	                                  { mData: 'shipper' },
-	                                  { mData: 'inOutPackageCount' },
+	                                 /* { mData: 'inOutPackageCount' },*/
 	                                  //{ mData: 'materielCount' },物料条目数
 			                          { mData: 'materielTotalCount' },//物料总数
 			                          { mData: 'realCount' },//实际入库物料总数
@@ -1047,8 +1047,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                                  { mData: 'takeDelivery.takeDeliverDate' },//packageType
 	                                 { mData: 'takeDeliverAddress' },//deliverAddress
 	                                 { mData: 'inOutRemark' },
-	                                  { mData: 'status' },
-	                                  { mData: 'status' }
+	                                  { mData: 'status' }/*,
+	                                  { mData: 'status' }*/
 	                            ],
 	                   'aoColumnDefs' : [ {
 	    							'targets' : 0,
@@ -1087,7 +1087,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	    							"createdCell": function (td, cellData, rowData, row, col) {
 	    								 $compile(td)($scope);
 	    						       }
-	    						},{
+	    						},/*{
 	    							'targets' : 3,
 	    							'render' : function(data,
 	    									type, row, meta) {
@@ -1097,8 +1097,8 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	  								return row.docNum;
 	  	
 	    							}
-	    						},{
-	    							'targets' : 7,
+	    						},*/{
+	    							'targets' : 5,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									if(!isNull(data)){
@@ -1108,7 +1108,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  	
 	    							}
 	    						},{
-	    							'targets' : 12,
+	    							'targets' : 10,
 	    							'searchable' : false,
 	    							'orderable' : false,
 	    							'className' : 'dt-body-center',
@@ -1136,15 +1136,15 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	      										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
 	      									}
 	    							}
-	    						},{
-	    							'targets' : 13,
+	    						}/*,{
+	    							'targets' : 11,
 	    							'render' : function(data,
 	    									type, row, meta) {
 	    									
 	  	  								return '';
 	  	
 	    							}
-	    						}]
+	    						}*/]
 
 	                }).on('order.dt',
 	                function() {

@@ -133,7 +133,7 @@ margin-right: 20px;
 				<div class="col-md-6 col-sm-6">
 					<div class="dataTables_length" id="sample_5_length">
 						<label>每页显示 <select name="sample_5_length"
-							aria-controls="sample_5" ng-model="pageSize" ng-change="createDispalyList()"
+							aria-controls="sample_5" ng-model="pageSize1" ng-change="createDispalyList1()"
 							class="form-control input-sm input-xsmall input-inline">
 							<option value="5">5</option>
 							<option value="10">10</option>
@@ -146,7 +146,7 @@ margin-right: 20px;
 				</div>
 				<div class="col-md-6 col-sm-6">
 					<div id="sample_5_filter" style="text-align: right;">
-						<label>查询:<input type="search" ng-model="queryStr"  ng-change="queryForPage()"
+						<label>查询:<input type="search" ng-model="queryStr1"  ng-change="queryForPage1()"
 							class="form-control input-sm input-small input-inline"
 							placeholder="" aria-controls="sample_5"></label>
 					</div>
@@ -169,7 +169,7 @@ margin-right: 20px;
                                  </tr>
                              </thead>
                              <tbody>
-                                 <tr ng-repeat="_procurementPlanMateriel in demandMateriel track by $index" >
+                                 <tr ng-repeat="_procurementPlanMateriel in dispalyDemandMateriel track by $index" >
 		                          <td>
 		                                <p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielNum}} </p>
 		                          </td>
@@ -210,11 +210,9 @@ margin-right: 20px;
 								<th>合计</th>
 								<th>{{totalDemandCount()}}</th>
 								<th></th>
+								<th></th>
 								<th>{{totalDemandMaterielCount()}}</th>
 								<th>{{totalEndCount()}}</th>
-								<th></th>
-								<th></th>
-								<th></th>
 								<th></th>
 								<th></th>
 								<th></th>
@@ -225,24 +223,24 @@ margin-right: 20px;
 			<div class="row">
 				<div class="col-md-5 col-sm-5">
 					<div class="dataTables_info" id="sample_5_info" role="status"
-						aria-live="polite">从 {{(pageIndex-1)*pageSize+1>filterProcurementPlanMateriel.length?filterProcurementPlanMateriel.length:(pageIndex-1)*pageSize+1}}
-						到 {{pageIndex*pageSize>filterProcurementPlanMateriel.length?filterProcurementPlanMateriel.length:pageIndex*pageSize}} /共 {{filterProcurementPlanMateriel.length}} 条数据（从{{procurementPlanMateriel.length}}条数据中筛选）</div>
+						aria-live="polite">从 {{(pageIndex1-1)*pageSize1+1>filterDemandMateriel.length?filterDemandMateriel.length:(pageIndex1-1)*pageSize1+1}}
+						到 {{pageIndex1*pageSize1>filterDemandMateriel.length?filterDemandMateriel.length:pageIndex1*pageSize1}} /共 {{filterDemandMateriel.length}} 条数据（从{{filterDemandMateriel.length}}条数据中筛选）</div>
 				</div>
 				<div class="col-md-7 col-sm-7">
 					<div  style="text-align: right;" id="sample_5_paginate">
 						<ul class="pagination" style="visibility: visible;">
-							<li class="prev" ng-if="pageIndex>1"><a href="#" ng-click="link2PreviousPage()" title="前一页"><i
+							<li class="prev" ng-if="pageIndex1>1"><a href="#" ng-click="link2PreviousPage1()" title="前一页"><i
 									class="fa fa-angle-left"></i></a></li>
-							<li class="prev disabled" ng-if="1>=pageIndex"><a href="#" title="前一页"><i
+							<li class="prev disabled" ng-if="1>=pageIndex1"><a href="#" title="前一页"><i
 									class="fa fa-angle-left"></i></a></li>
-							<li ng-if="pageIndex-2>0"><a href="#" ng-click="link2ThisPage(pageIndex-2)">{{pageIndex-2}}</a></li>
-							<li ng-if="pageIndex-1>0"><a href="#" ng-click="link2ThisPage(pageIndex-1)">{{pageIndex-1}}</a></li>
-							<li class="active"><a href="#">{{pageIndex}}</a></li>
-							<li ng-if="totalPage>pageIndex"><a href="#" ng-click="link2ThisPage(pageIndex+1)">{{pageIndex+1}}</a></li>
-							<li ng-if="totalPage>pageIndex+1"><a href="#" ng-click="link2ThisPage(pageIndex+2)">{{pageIndex+2}}</a></li>
-							<li class="next disabled" ng-if="pageIndex>=totalPage"><a href="#" ><i
+							<li ng-if="pageIndex1-2>0"><a href="#" ng-click="link2ThisPage1(pageIndex1-2)">{{pageIndex1-2}}</a></li>
+							<li ng-if="pageIndex1-1>0"><a href="#" ng-click="link2ThisPage1(pageIndex1-1)">{{pageIndex1-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex1}}</a></li>
+							<li ng-if="totalPage1>pageIndex1"><a href="#" ng-click="link2ThisPage1(pageIndex1+1)">{{pageIndex1+1}}</a></li>
+							<li ng-if="totalPage1>pageIndex1+1"><a href="#" ng-click="link2ThisPage1(pageIndex1+2)">{{pageIndex1+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex1>=totalPage1"><a href="#" ><i
 									class="fa fa-angle-right"></i></a></li>
-							<li class="next" ng-if="totalPage>pageIndex"><a href="#" ng-click="link2NextPage()" title="后一页"><i
+							<li class="next" ng-if="totalPage1>pageIndex1"><a href="#" ng-click="link2NextPage1()" title="后一页"><i
 									class="fa fa-angle-right"></i></a></li>
 						</ul>
 					</div>

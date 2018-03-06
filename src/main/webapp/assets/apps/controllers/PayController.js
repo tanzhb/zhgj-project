@@ -47,6 +47,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
 					$scope.paymentRecord.isBill='0';
 					$scope.paymentRecord.status='0';
+					$scope.paymentRecord.applyCurrency='人民币';
+					$scope.paymentRecord.paymentType='采购付款';
 					getCurrentUser();
 				});
 			if(!isNull($stateParams.orderSerialNum)){
@@ -1831,7 +1833,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            			}else if(data=='WAITING_FOR_APPROVAL'){
 						                            				return '待审批';					                            				
 																}else if(data=='APPROVAL_SUCCESS'){
-																	return '审批成功';
+																	return '待付款';
 																}else if(data=='APPROVAL_FAILED'){
 																	return '审批失败';
 																}
@@ -1849,7 +1851,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            	'render' : function(data,
 						                            			type, row, meta) {
 						                            	if(row.status=='1'||row.status=='APPROVAL_SUCCESS'){
-						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">确认付款</a>';
 						                            		}else{
 						                            			return '';	
 						                            		}

@@ -996,7 +996,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            	'render' : function(data,
 						                            			type, row, meta) {
 						                            	if(row.status=='1'||row.status=='0'){
-						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">确认收款</a>';
 						                            		}else{
 						                            			return '';	
 						                            		}
