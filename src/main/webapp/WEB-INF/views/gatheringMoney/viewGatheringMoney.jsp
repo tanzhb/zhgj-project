@@ -61,7 +61,7 @@
 														<div class="input-group" data-target="#basicMaterielInfo"
 															data-toggle="modal" ng-click="selectMateriel()"
 															onclick="return false;">
-															<input id="orderSerial" name="orderNum" type="text" ng-show="input"
+															<input id="orderSerial1" name="orderNum" type="text" ng-show="input"
 																class="form-control" ng-model="saleOrder.orderNum"
 																readonly="readonly"> <span
 																class="input-group-btn" ng-show="input" style="vertical-align: top;">
@@ -248,7 +248,7 @@
 													<label class="control-label bold">支付方式<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="applyCurrency"  disabled="disabled"
+														<select class="form-control" id="applyCurrency1"  disabled="disabled"
 															name="applyCurrency"
 															ng-model="paymentRecord.applyCurrency"
 															 ng-show="input">

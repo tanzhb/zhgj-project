@@ -653,7 +653,15 @@
 															<p class="form-control-static">{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}
 															</p>
 														</td>
-														<td class="form-group"><input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
+														<td class="form-group">
+														<input type="text"  ng-if="!otherMode&&oprateType=='forSupplyOrder'"
+															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
+															class="form-control"
+															ng-hide="orderMaterielInput{{$index}}"
+															ng-model="deliveryMaterielE[$index].deliverCount"
+															data-ordercount="{{_deliveryMateriel.amount-_deliveryMateriel.deliveredCount}}"
+															/>
+														<input type="text"  ng-if="!otherMode&&oprateType=='forSaleOrder'&&(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)<=_deliveryMateriel.currentCount&&_deliveryMateriel.deliverCount==null"
 															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"

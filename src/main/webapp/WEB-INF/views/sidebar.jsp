@@ -173,13 +173,13 @@
                 <span class="arrow "></span>
             </a>
             <ul class="sub-menu">
-            	<%-- <shiro:hasPermission name="zhgj:purchaseForecast:*">
+            	<shiro:hasPermission name="zhgj:purchaseForecast:*">
 	                <li>
 	                    <a ui-sref="purchaseForecast">
 	                         采购预测</span>
 	                    </a>
 	                </li>
-                </shiro:hasPermission> --%>
+                </shiro:hasPermission>
                 <shiro:hasPermission name="zhgj:procurementPlan:*">
 	                <li>
 	                    <a ui-sref="procurementPlan">

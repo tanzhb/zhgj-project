@@ -392,8 +392,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
  									type, row, meta) {
  								var  unPaymentAmount;
  								if(row.paymentAmount==null){
+ 									debugger
 									unPaymentAmount=Number(row.moneyAmount);
 								}else{
+									debugger
 									unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
 								}
  									return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
@@ -407,9 +409,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								'targets' : 2,
 								'render' : function(data,
 										type, row, meta) {
-									if(row.currency=='RMB'){
+									if(row.currency=='人民币'){
+										debugger
 	  									return  $filter('currency')(data,'￥');
-	  								}else if(row.currency=='USD'){
+	  								}else if(row.currency=='美元'){
+	  									debugger
 	  									return $filter('currency')(data,'$'); 
 	  								}
 								}
@@ -417,9 +421,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								'targets' : 5,
 								'render' : function(data,
 										type, row, meta) {
-									if(row.currency=='RMB'){
+									if(row.currency=='人民币'){
+										debugger;
 										return  $filter('currency')(Number(row.moneyAmount)-Number(data),'￥');
-	  								}else if(row.currency=='USD'){
+	  								}else if(row.currency=='美元'){
+	  									debugger;
 	  									return  $filter('currency')(Number(row.moneyAmount)-Number(data),'$');
 	  								}
 								}
@@ -430,8 +436,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 										type, row, meta) {
 									var  unPaymentAmount;
 									if(row.verificationMoneyAmount==null){
+										debugger
 										unPaymentAmount=Number(row.moneyAmount);
 									}else{
+										debugger
 										unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
 									}// ng-init="unPaymentAmount'+row.serialNum+'=\''+unPaymentAmount+'\'" 
 									return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"  '+ 
@@ -463,7 +471,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
             
            
          };
- 		$scope.showUnPaymentAmount=function(serialNum,unPaymentAmount){//选中checkbox显示输入框
+ 		$scope.showUnPaymentAmount=function(serialNum,verificationMoneyAmount,unPaymentAmount){//选中checkbox显示输入框
 			var value;
 			if($scope.totalVerificateCount==undefined){
 				$scope.totalVerificateCount=0;
@@ -475,7 +483,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
-				$("#up"+serialNum).val(unPaymentAmount);//
+				if(Number($scope.remainMoneyAmount)<=unPaymentAmount){//如果付款单剩余未付金额小与等于水单余额
+					$("#up"+serialNum).val(Number($scope.remainMoneyAmount)-Number($scope.totalVerificateCount));
+				}else{
+					$("#up"+serialNum).val(unPaymentAmount-Number($scope.totalVerificateCount));
+				}
 				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");

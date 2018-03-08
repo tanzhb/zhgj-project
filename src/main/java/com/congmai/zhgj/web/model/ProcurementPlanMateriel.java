@@ -70,6 +70,8 @@ public class ProcurementPlanMateriel {
     
     
     
+    
+    
 
     public String getMaterielNum() {
 		return materielNum;

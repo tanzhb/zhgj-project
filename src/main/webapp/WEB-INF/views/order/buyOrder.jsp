@@ -571,4 +571,6 @@
 <!-- 导入订单modal 开始 -->
 <jsp:include  page="importOrder.jsp"/>
 <jsp:include  page="viewOperateLog.jsp"/>
+<jsp:include  page="viewDeliverOperateLog.jsp"/>
+<jsp:include  page="viewPayOperateLog.jsp"/>
 <jsp:include page="showInRecord.jsp"/>

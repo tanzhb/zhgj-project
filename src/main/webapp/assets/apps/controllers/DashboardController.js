@@ -44,7 +44,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
-		}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"){
+		}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"||actionName=="beReceiveSaleOrder"){
 			$state.go("saleOrder");
 		}else if(actionName=="sale2paln"){
 			$state.go("procurementPlan");
@@ -56,6 +56,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("customsClearanceForm");
 		}else if(actionName=="declaration"){
 			$state.go("customsDeclarationForm");
+		}else if(actionName=="beConfirmPayMemoRecord"){
+			$state.go("paymentRecordC");
 		}
 	}
     $scope.changeReadFlg = function(serialNum,readFlg){

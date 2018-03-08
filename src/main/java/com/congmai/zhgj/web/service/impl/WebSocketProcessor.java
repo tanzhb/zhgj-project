@@ -39,7 +39,15 @@ public class WebSocketProcessor implements MessageProcessor {
 	//  采购订单审批发送给销售订单制单人消息模板
 		private static String message007 = "尊敬的${paramer_a}，您好！</br>销售订单&nbsp;${paramer_b}&nbsp;关联的采购订单&nbsp;${paramer_c}&nbsp;通过审批并发布成功。"+
 				"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
-	
+	// 付款申请通过通知付款单制单人消息模板
+			private static String message008 = "尊敬的${paramer_a}，您好！</br>你的付款申清单&nbsp;${paramer_b}&nbsp;通过审批并发布成功。"+
+					"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";
+	//  采购商发布采购订单通知平台销售组人员消息模板
+		private static String message009 = "尊敬的${paramer_a}，您好！</br>${paramer_b}&nbsp;发布了委托采购订单,订单号&nbsp;${paramer_c}等待你的确认。"+
+								"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
+	//  提示平台采购组人员委托销售订单分解成功提示发起采购消息模板
+			private static String message010 = "尊敬的${paramer_a}，您好！</br>${paramer_b}&nbsp;分解委托销售订单,订单号为&nbsp;${paramer_c}&nbsp;等待你的采购申请。"+
+									"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
 	// 销售订单申请消息模板
 		private static String message07 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建销售订单&nbsp;${paramer_c}&nbsp;等待您的审批。"+
 										 "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
@@ -216,6 +224,9 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("109", DEFAULT_MSG_TEMPLATE, null, message109);
 		MessageTemplate.register("110", DEFAULT_MSG_TEMPLATE, null, message110);
 		MessageTemplate.register("007", DEFAULT_MSG_TEMPLATE, null, message007);
+		MessageTemplate.register("008", DEFAULT_MSG_TEMPLATE, null, message008);
+		MessageTemplate.register("009", DEFAULT_MSG_TEMPLATE, null, message009);
+		MessageTemplate.register("010", DEFAULT_MSG_TEMPLATE, null, message010);
 
 	}
 	

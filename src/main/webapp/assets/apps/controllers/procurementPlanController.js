@@ -1051,7 +1051,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 										param.materielNum=$scope.demandMateriel[this.name].materielNum==undefined?$scope.demandMateriel[this.name].materiel.materielNum:$scope.demandMateriel[this.name].materielNum;
 										param.materielName=$scope.demandMateriel[this.name].materielName==undefined?$scope.demandMateriel[this.name].materiel.materielName:$scope.demandMateriel[this.name].materielName;
 										param.specifications=$scope.demandMateriel[this.name].specifications==undefined?$scope.demandMateriel[this.name].materiel.specifications:$scope.demandMateriel[this.name].specifications;
-										param.unit=$scope.demandMateriel[this.name].unit==undefined?$scope.demandMateriel[this.name].materiel.unit:$scope.demandMateriel[this.name].unit;
+										param.unit=$scope.demandMateriel[this.name].unit==undefined?($scope.demandMateriel[this.name].materiel==null?null:$scope.demandMateriel[this.name].materiel.unit):$scope.demandMateriel[this.name].unit;
 										param.sets=$scope.demandMateriel[this.name].planCount;//设置台套
 										param.deliveryDate=$scope.demandMateriel[this.name].deliveryDate;
 										param.deliveryAddress=$scope.demandMateriel[this.name].deliveryAddress;

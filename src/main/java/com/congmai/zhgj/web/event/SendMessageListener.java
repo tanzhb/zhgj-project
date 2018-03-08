@@ -21,6 +21,7 @@ import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.AlertVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyAddress;
@@ -187,6 +188,12 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			inToWaitCustomsform(event);
 		}else if(MessageConstants.NOTICESUPPLY.equals(event.getAction())){ //平台代发货通知供应商修改消息
 			inToSupply(event);
+		}else if(MessageConstants.BE_CONFIRM_PAY.equals(event.getAction())){ //付款申请被确认(审批通过)
+			inToPayOwner(event);
+		}else if(MessageConstants.BE_RECEIVE_SALE_ORDER.equals(event.getAction())){ //采购商发布采购订单通知平台接收(销售订单)并分解采购
+			buy2SaleGroupMessage(event);
+		}else if(MessageConstants.BE_CONFIRM_APPLY_BUY_ORDER.equals(event.getAction())){ //采购商发布采购订单通知平台接收(销售订单)并分解采购
+			sale2BuyGroupMessage(event);
 		}
 
 	}
@@ -284,57 +291,35 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	}
 	/**
 	 * 
-	 * @Description (采购订单通过消息)
+	 * @Description (付款申请通过消息发给付款制单人)
 	 * @param event
 	 */
-	private void agreeBuyOrderMessage(SendMessageEvent event) {
+	private void inToPayOwner(SendMessageEvent event) {
 		try {
 			initService();
 			User user = UserUtil.getUserFromSession();
 			if(user != null){
 				Message messageVO = this.createMessage(event,user);
 
-				messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
-				messageVO.setTempleteType(MessageConstants.TEMP_AGREE_BUY_ORDER); //采购订单申请消息
-				OrderInfo order = (OrderInfo) event.getSource();
-				messageVO.setObjectSerial(order.getSerialNum());
+				messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+				messageVO.setTempleteType(MessageConstants.TEMP_AGREE_PAYMENTRECORD); // 付款申请通过通知付款单制单人消息模板
+				PaymentRecord  paymentRecord = (PaymentRecord) event.getSource();
+				messageVO.setObjectSerial(paymentRecord.getSerialNum());
 
-
+				User maker = userService.selectByUsername(paymentRecord.getCreator());
 				Properties properties = new Properties();
-				User maker = userService.selectByUsername(order.getMaker());
 				if( maker!=null ){
 					messageVO.setReceiverId(maker.getUserId().toString());
 					properties.put("paramer_a", maker.getUserName());
 				}else{
 					throw new Exception("没有找到消息接受者！");
 				}
-				properties.put("paramer_b", order.getOrderNum());
-				properties.put("paramer_c", user.getUserName());
-				properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
-				properties.put("paramer_e", messageVO.getSerialNum());
-
-				properties.put("paramer_f", "无"); //这里得去找审批评论
-
+				properties.put("paramer_b", paymentRecord.getPaymentNum());
+				properties.put("paramer_c", MessageConstants.URL_AGREE_PAYMENTRECORD);
+				properties.put("paramer_d", messageVO.getSerialNum());
 				messageVO.setProperties(properties);
 				messageProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
-				//向采购订单关联销售订单制单人发消息
-				if(StringUtil.isNotEmpty(order.getOrderSerial())){//获取采购订单关联销售订单
-					OrderInfo o=orderService.selectByOrderNum(order.getOrderSerial());
-					User u= userService.selectByUsername(o.getMaker());
-					Message messageVO1 = this.createMessage(event,user);
-					messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);
-					messageVO1.setTempleteType(MessageConstants.TEMP_AGREE_BUY_SALEORDER); //
-					messageVO1.setObjectSerial(order.getSerialNum());
-					properties.put("paramer_a", u.getUserName());
-					properties.put("paramer_b", o.getOrderNum());
-					properties.put("paramer_c", order.getOrderNum());
-					properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
-					properties.put("paramer_e", messageVO.getSerialNum());
-					messageVO1.setProperties(properties);
-					messageProcessor.sendMessageToUser(messageVO1);
-					messageService.insert(messageVO1);		
-				}
 			}
 		} catch (Exception e) {
 //			logger.warn(e.getMessage(), e);
@@ -2044,6 +2029,143 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 //			logger.warn(e.getMessage(), e);
 		}
 
+	}
+	
+	/**
+	 * 
+	 * @Description (采购订单通过消息)
+	 * @param event
+	 */
+	private void agreeBuyOrderMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				Message messageVO = this.createMessage(event,user);
+
+				messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+				messageVO.setTempleteType(MessageConstants.TEMP_AGREE_BUY_ORDER); //采购订单申请消息
+				OrderInfo order = (OrderInfo) event.getSource();
+				messageVO.setObjectSerial(order.getSerialNum());
+
+
+				Properties properties = new Properties();
+				User maker = userService.selectByUsername(order.getMaker());
+				if( maker!=null ){
+					messageVO.setReceiverId(maker.getUserId().toString());
+					properties.put("paramer_a", maker.getUserName());
+				}else{
+					throw new Exception("没有找到消息接受者！");
+				}
+				properties.put("paramer_b", order.getOrderNum());
+				properties.put("paramer_c", user.getUserName());
+				properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
+				properties.put("paramer_e", messageVO.getSerialNum());
+
+				properties.put("paramer_f", "无"); //这里得去找审批评论
+
+				messageVO.setProperties(properties);
+				messageProcessor.sendMessageToUser(messageVO);
+				messageService.insert(messageVO);
+				//向采购订单关联销售订单制单人发消息
+				if(StringUtil.isNotEmpty(order.getOrderSerial())){//获取采购订单关联销售订单
+					OrderInfo o=orderService.selectByOrderNum(order.getOrderSerial());
+					User u= userService.selectByUsername(o.getMaker());
+					Message messageVO1 = this.createMessage(event,user);
+					messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+					messageVO1.setTempleteType(MessageConstants.TEMP_AGREE_BUY_SALEORDER); //
+					messageVO1.setObjectSerial(order.getSerialNum());
+					properties.put("paramer_a", u.getUserName());
+					properties.put("paramer_b", o.getOrderNum());
+					properties.put("paramer_c", order.getOrderNum());
+					properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
+					properties.put("paramer_e", messageVO.getSerialNum());
+					messageVO1.setProperties(properties);
+					messageProcessor.sendMessageToUser(messageVO1);
+					messageService.insert(messageVO1);		
+				}
+			}
+		} catch (Exception e) {
+//			logger.warn(e.getMessage(), e);
+		}
+	}
+	/**
+	 * 
+	 * @Description (采购商发布采购订单通知  to 销售组接收分解销售订单)
+	 * @param event
+	 */
+	private void buy2SaleGroupMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				OrderInfo  order = (OrderInfo) event.getSource();
+				OrderInfo orderInfo=orderService.selectById(order.getSerialNum());//取订单编号
+				Company buyCom=companyService.selectById(order.getBuyComId());//获取订单采购商
+				Properties properties = new Properties();
+				List<User> users = groupService.selectUserIdsByGroupType(Constants.SALES);
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_BE_RECEIVE_SALE_ORDER); //采购商发布采购订单通知
+							messageVO.setObjectSerial(order.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", buyCom==null?"":buyCom.getComName());
+							properties.put("paramer_c", orderInfo.getOrderNum());
+							properties.put("paramer_d", MessageConstants.URL_BE_RECEIVE_SALE_ORDER);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
+	}
+	
+	/**
+	 * 
+	 * @Description (平台委托销售订单分解成功提示  to 采购组进行采购操作)
+	 * @param event
+	 */
+	private void sale2BuyGroupMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				OrderInfo  order = (OrderInfo) event.getSource();
+				Properties properties = new Properties();
+				List<User> users =new ArrayList<User>();
+				if(StaticConst.getInfo("waimao").equals(order.getTradeType())){//取国际采购组
+					users = groupService.selectUserIdsByGroupType(Constants.INTERNATIONALPURCHASE);
+				}else if(StaticConst.getInfo("neimao").equals(order.getTradeType())){//取国内采购组
+					users= groupService.selectUserIdsByGroupType(Constants.PURCHASE);
+				}
+					if(CollectionUtils.isNotEmpty(users)){
+						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_BE_CONFIRM_APPLY_BUY_ORDER); //平台委托销售订单分解成功提示  to 采购组进行采购通知
+							messageVO.setObjectSerial(order.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", order.getUpdater());
+							properties.put("paramer_c", order.getOrderNum());
+							properties.put("paramer_d", MessageConstants.URL_BE_CONFIRM_APPLY_BUY_ORDER);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							messageVO.setProperties(properties);
+							messageProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
 	}
 	/**
 	 * 

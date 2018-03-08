@@ -547,7 +547,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 						return;
 					}
 				}else{//未发数量大于等于库存数
-					if(Number(deliveryMateriel.currentCount)<Number(deliveryMateriel.deliverCount)){
+					if(Number(deliveryMateriel.currentCount)<Number(deliveryMateriel.deliverCount)&&$scope.oprateType=='forSaleOrder'){//仅在平台发货时考虑库存数量,供应商发货时不需考虑
 						toastr.error("发货数量不能大于库存数量！");	
 						return;
 					}
@@ -2240,6 +2240,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	var totalOrderCount=0,totalDeliveryedCount=0,totalUnDeliveryCount=0;
 	          		    	var array=new Array();
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
+	          		    		$scope.deliveryMaterielE[i].serialNum=null;
 	          		    		if($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount!=0){//未发数量不为0,统计
 	          		    			totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
 		          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);

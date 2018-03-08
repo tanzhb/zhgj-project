@@ -152,4 +152,10 @@ public class ProcurementPlanMaterielServiceImpl implements ProcurementPlanMateri
 		return DemandMaterielMapper.selectByExample(m);
 	}
 
+	@Override
+	public void updateProcurementPlanMateriel(ProcurementPlanMateriel record) {
+		ProcurementPlanMaterielMapper.updateByPrimaryKeySelective(record);
+		
+	}
+
 }

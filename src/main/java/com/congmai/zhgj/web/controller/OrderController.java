@@ -268,6 +268,8 @@ public class OrderController {
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
 		orderService.submitOrder(orderInfo);
+		//发给平台销售组人员提示接收分解销售订单
+		 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_RECEIVE_SALE_ORDER));
 		return orderInfo;
     }
     
@@ -2368,10 +2370,13 @@ public class OrderController {
     		OrderInfo updateOrderInfo = new OrderInfo();//修改销售订单的关联采购订单号
     		updateOrderInfo.setSerialNum(serialNum);
     		updateOrderInfo.setOrderSerial(numCode);
+    		updateOrderInfo.setUpdater(currenLoginName);//记录谁发起分解采购
     		orderService.updateOrderRelation(updateOrderInfo);
     	}
     	
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
+    	//发给平台采购组人员提示采购组人员采购
+		 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_CONFIRM_APPLY_BUY_ORDER));
 		return orderInfo;
 	}
 	
@@ -2504,6 +2509,7 @@ public class OrderController {
     			pMateriel.setMaterielSerial(o.getMaterielSerial());//采购订单物料为标准物料
     			pMateriel.setProcurementPlanSerial(newSerialNum);
     			pMateriel.setPlanCount(o.getAmount());
+    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
     			pMateriel.setSingleDose("1");
     			pMateriel.setBuyCount(o.getAmount());
     			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());

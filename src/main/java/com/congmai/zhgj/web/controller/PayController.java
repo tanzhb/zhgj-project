@@ -272,9 +272,10 @@ public class PayController {
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
 					paymentRecord.setStatus(BaseVO.APPROVAL_SUCCESS);
-					
 					//修改订单状态
 					this.payService.updateOrderStatus(paymentRecord);
+					//发消息给付款制单人通知审批通过
+					 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(paymentRecord,MessageConstants.BE_CONFIRM_PAY));
 				}
 			}
 

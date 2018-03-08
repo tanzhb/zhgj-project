@@ -782,7 +782,10 @@ public class ProcurementPlanController {
 		        			if(o.getSupplyComId()!=null){
 		        				supplySet.add(o.getSupplyComId());
 		        			}
-		        		}
+		        			/*ProcurementPlanMateriel ppm=new ProcurementPlanMateriel();
+		        			ppm.setSerialNum(o.getSerialNum());
+		        			ppm.setStatus("1");//
+*/		        		}
 		        	}
 		        	if(supplySet.size()>0){
 		        		for(String supplyComId : supplySet){//对于某一供应商生成采购订单
