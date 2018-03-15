@@ -95,7 +95,10 @@ public enum StaticConst {
 	
 	INRECORD("inrecord", "入库"),
 	
-	OUTRECORD("outrecord", "出库");
+	OUTRECORD("outrecord", "出库"),
+	MAOYIFAHUO("maoyifahuo", "贸易发货"),
+	BEFOREWITHOUTCONTRACTDELIVERY("beforewithoutcontractdelivery", "出库"),
+	AFTERWITHOUTCONTRACTDELIVERY("afterwithoutcontractdelivery", "出库");
 	
 
 	private String value;

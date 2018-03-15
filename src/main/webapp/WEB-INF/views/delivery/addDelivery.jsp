@@ -84,7 +84,9 @@
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="贸易发货">贸易发货</option>
-															<option value="个人借用">个人借用</option>
+															<!-- <option value="个人借用">个人借用</option> -->
+															<option value="售前无合同发货">售前无合同发货</option>
+															<option value="售后无合同发货">售后无合同发货</option>
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -375,8 +377,8 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货仓库<!-- <span  ng-hide="span"
-														class="required" aria-required="true"> * </span> --></label>
+													<label class="control-label bold">收货仓库<span  ng-hide="span"
+														class="required" aria-required="true"> * </span></label>
 													<div class="">
 													<div  ng-hide="span">
 														<select class="form-control"  data-live-search="true" data-size=""   

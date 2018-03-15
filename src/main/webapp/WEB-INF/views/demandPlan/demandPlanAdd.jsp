@@ -30,7 +30,7 @@
 								<button ng-hide="demandPlanAdd"
 										class="btn green btn-sm btn-circle"
 										ng-click="saveDemandPlan()">
-										<i class="fa fa-check"></i> 保存
+										<i class="fa fa-check"></i> 发布
 									</button>
 									<button ng-show="demandPlanView"
 										class="btn purple  btn-sm btn-circle"
@@ -204,7 +204,7 @@
 														<input type="text" set-date
 															class="form-control date-picker" size="16"
 															data-date-format="yyyy-mm-dd" data-date-viewmode="years"
-															id="releaseDate" ng-model="demandPlan.updateDate"
+															id="updateDate" ng-model="demandPlan.updateDate"
 															ng-hide="demandPlanAdd" readonly="readonly">
 														<div class="form-control-focus"></div>
 														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.updateDate}}</p>
@@ -279,7 +279,7 @@
                                                     <td>
 	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" ng-change="countSupplyCount()" >
 	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
-	                                                    		{{m.supply.comName}}
+	                                                    		{{m.supply.comName}}{{m.supply.supplyComId}}
 	                                                    	</option>
 	                                                    </select>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>

@@ -481,11 +481,11 @@ angular
 			  		                                   { mData: 'stockInOutRecord.inOutNum' },
 	  		                                           { mData: 'stockInOutRecord.inOutType' },
 	  		                                          { mData: 'stockInOutRecord.order' },
-	  		                                          { mData: 'batchNum' },
+	  		                                         /* { mData: 'batchNum' },*/
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
 	 	  		                                      { mData: 'stockCount' },
 	 	  		                                      { mData: 'warehouseName' },
-		  		                                      { mData: 'positionNum' },
+		  		                                     /* { mData: 'positionNum' },*/
 		  		                                       { mData: 'remark' }//备注
                                                      
 			  		                            ],
@@ -602,11 +602,11 @@ angular
 			  		                                    { mData: 'stockInOutRecord.inOutNum' },
                                                         { mData: 'stockInOutRecord.inOutType' },
                                                         { mData: 'stockInOutRecord.inOutNum' },
-                                                        { mData: 'batchNum' },
+                                                      /*  { mData: 'batchNum' },*/
                                                         { mData: 'stockInOutRecord.stockDate' },
                                                         { mData: 'stockCount' },
 			  		                                  { mData: 'warehouseName' },
-			  		                                  { mData: 'positionNum' },
+			  		                                 /* { mData: 'positionNum' },*/
 			  		                                  { mData: 'remark' }//备注
 			  		                            ],
 			  		                   'aoColumnDefs' : [{
@@ -697,7 +697,7 @@ angular
 										headerOffset : a
 									},*/
 									// select: true,行多选
-									order : [ [ 3, "desc" ] ],// 默认排序列及排序方式
+									order : [ [ 2, "desc" ] ],// 默认排序列及排序方式
 									bRetrieve : true,
 									// searching: true,//是否过滤检索
 									// ordering: true,//是否排序
@@ -709,12 +709,12 @@ angular
 									// serverSide: true,
 								     ajax :tableAjaxUrl,
 			  		                    "aoColumns": [
-			  		                                   { mData: 'batchNum' },
+			  		                                  /* { mData: 'batchNum' },*/
 	  		                                           { mData: 'stockInOutRecord.inOutType' },
 	  		                                          { mData: 'stockInOutRecord.inOutNum' },
 	  		                                          { mData: 'stockInOutRecord.shipperOrReceiverName' },
 	  		                                          { mData: 'stockInOutRecord.stockDate' },
-	 	  		                                      { mData: 'warehouse' },
+	 	  		                                      { mData: 'warehouseName' },
 	 	  		                                      { mData: 'stockCount' },
 		  		                                      { mData: 'sumStockOutCount' },
 		  		                                       { mData: 'remark' },//结存数量
@@ -723,7 +723,7 @@ angular
                                                      
 			  		                            ],
 			  		                   'aoColumnDefs' : [ {
-											'targets' : 2,
+											'targets' : 1,
 											'render' : function(data,
 													type, row, meta) {
 												debugger;
@@ -735,7 +735,7 @@ angular
 												
 											}
 										},{
-											'targets' : 7,
+											'targets' : 6,
 											'render' : function(data,
 													type, row, meta) {
 		 	    								if(data==''||data==null){
@@ -746,7 +746,7 @@ angular
 												
 											}
 										},{
-											'targets' : 8,
+											'targets' : 7,
 											'render' : function(data,
 													type, row, meta) {
 												if(row.sumStockOutCount!=undefined){
@@ -756,30 +756,31 @@ angular
 												}
 											}
 										},{
-											'targets' : 5,
+											'targets' : 4,
 											'render' : function(data,
 													type, row, meta) {
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									if(row.position==''||row.position==null){
+		 	    									return data;
+		 	    								/*	if(row.position==''||row.position==null){
 		 	    										return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库区:&nbsp;&nbsp;暂无">'+data.warehouseName+'</span>';
 		 	    									}else{
 		 	    									return '<span title="仓库:'+row.warehouse.warehouseName+'&nbsp;&nbsp;&nbsp;&nbsp;\n库区:'+row.position.positionName+'">'+data.warehouseName+'</span>';
-		 	    									}
+		 	    									}*/
 		 	    								}
 											},"createdCell": function (td, cellData, rowData, row, col) {
 												 $compile(td)($scope);
 										    }
 										},{
-											'targets' : 9,
+											'targets' : 8,
 											'render' : function(data,
 													type, row, meta) {
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
 		 	    									debugger;
-		 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
+		 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data.substring(0,10));
 		 	    								}
 												
 											}

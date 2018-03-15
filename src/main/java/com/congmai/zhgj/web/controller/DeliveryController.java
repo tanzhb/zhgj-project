@@ -1308,6 +1308,7 @@ public class DeliveryController {
 		deliveryVO.setBusinessType(BaseVO.DELIVERY); 			//业务类型：发货计划
 		deliveryVO.setStatus(BaseVO.PENDING);					//审批中
 		deliveryVO.setApplyDate(new Date());
+		deliveryVO.setDeliverType(delivery.getDeliverType());
     	processBaseService.insert(deliveryVO);
 		String businessKey = deliveryVO.getSerialNum().toString();
 		deliveryVO.setBusinessKey(businessKey);

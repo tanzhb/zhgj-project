@@ -188,4 +188,10 @@ public class MaterielServiceImpl implements MaterielService {
 		return stockInOutRecordMapper.getMaterielZiJianStock(serialNum);
 	}
 
+	@Override
+	public Materiel getMaterielInfoByMaterielSerial(String materielSerial) {
+		
+		return MaterielMapper.selectByPrimaryKey(materielSerial);
+	}
+
 }

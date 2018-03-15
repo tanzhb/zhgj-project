@@ -433,7 +433,7 @@ public class OrderController {
     	orderInfo.setUpdateTime(new Date());
     	orderInfo.setStatus("1");//在未确认状态提交申请的订单，设置为已确认
     	orderService.updateStatus(orderInfo);//更新备注
-    	
+    	OrderInfo  o=orderService.selectById(orderInfo.getSerialNum());//获取订单信息
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUserId(user.getUserId());
@@ -443,6 +443,9 @@ public class OrderController {
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
     	orderInfo.setReason(orderInfo.getRemark());
+    	orderInfo.setOrderNum(o.getOrderNum());
+    	orderInfo.setTradeType(o.getTradeType());
+    	orderInfo.setOrderType(o.getOrderType());
     	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
@@ -513,6 +516,9 @@ public class OrderController {
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
     	orderInfo.setReason(orderInfo.getRemark());
+    	orderInfo.setOrderNum(o.getOrderNum());
+    	orderInfo.setTradeType(o.getTradeType());
+    	orderInfo.setOrderType(o.getOrderType());
     	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
@@ -675,9 +681,9 @@ public class OrderController {
     			
     			this.orderService.updateStatus(oi);
     			//自主销售订单审批完成，分解BOM
-    			if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
+    			/*if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
     				saleGenerateProcurementPlan(order.getSerialNum());
-	    		}
+	    		}*/
         		
     		}
     		

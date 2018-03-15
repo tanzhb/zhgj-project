@@ -3671,6 +3671,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	$scope.submitOrder.remark = $scope.buyOrder.remark;
 		        	$scope.submitOrder.orderNum = $scope.buyOrder.orderNum;
 		        	$scope.submitOrder.tradeType = $scope.buyOrder.tradeType;
+		        	$scope.submitOrder.orderType = $scope.buyOrder.orderType;
 		        	//启动流程
 		        	orderService.startBuyOrderProcess($scope.submitOrder).then(
 		          		     function(data){

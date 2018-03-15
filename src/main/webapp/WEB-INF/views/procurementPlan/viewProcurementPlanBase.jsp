@@ -171,7 +171,7 @@ margin-right: 20px;
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in dispalyDemandMateriel track by $index" >
 		                          <td>
-		                                <p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielNum}} </p>
+		                                <p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielNum}}{{_procurementPlanMateriel.materielNum}} </p>
 		                          </td>
 		                          <td>
 	                                 	<p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielName}} </p>

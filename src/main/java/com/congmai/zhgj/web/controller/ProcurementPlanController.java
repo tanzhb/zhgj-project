@@ -1,5 +1,6 @@
 package com.congmai.zhgj.web.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -359,6 +360,7 @@ public class ProcurementPlanController {
 	    	if(!CollectionUtils.isEmpty(demandMateriels)){
 	    		Subject currentUser = SecurityUtils.getSubject();
 	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    		BigDecimal totalDemandCount=BigDecimal.ZERO;
 		    	for(DemandMateriel f:demandMateriels){
 		    		f.setSerialNum(ApplicationUtils.random32UUID());
 		    		f.setCreator(currenLoginName);
@@ -366,10 +368,16 @@ public class ProcurementPlanController {
 	    			f.setCreateTime(new Date());
 	    			f.setUpdateTime(new Date());
 	    			f.setDelFlg("0");
+	    			totalDemandCount=totalDemandCount.add(new  BigDecimal(f.getPlanCount()));
 		    	}
 		    	procurementPlanMaterielService.betchInsertDemandMateriel(demandMateriels);
+		    	ProcurementPlan procurementPlan=new ProcurementPlan();
+		    	procurementPlan.setSerialNum(demandMateriels.get(0).getProcurementPlanSerial());
+		    	procurementPlan.setBuyCount(totalDemandCount.toString());
+		    	procurementPlanService.update(procurementPlan);
 		    	//数据插入******↑↑↑↑↑↑********
 		    	map.put("demandMateriel", demandMateriels);
+		    	map.put("totalDemandCount", totalDemandCount.toString());
 	        }
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -800,7 +808,7 @@ public class ProcurementPlanController {
 		        			newOrderInfo.setOrderNum(temp);
 		        			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
 		        			newOrderInfo.setContractSerial(newContractSerialNum);
-		        			newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());//
+		        		//	newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());现在采购计划与销售无关
 		        			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
 		        			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
 		        			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购

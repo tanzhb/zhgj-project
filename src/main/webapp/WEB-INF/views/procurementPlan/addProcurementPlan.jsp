@@ -57,6 +57,24 @@
                              </div>
                          </div>
                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">计划生成日期：</label>
+                                 <div class="">
+                                  <input type="text" readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.buyDate" >
+	                                 <p class="form-control-static"  ng-show="procurementPlanShow"> {{procurementPlan.buyDate}} </p>
+                                 </div>
+                             </div>
+                         </div> 
+                         <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">物料条目：</label>
+                                 <div class="">
+                                  <input type="text" readonly class="form-control" ng-hide="procurementPlanInput" ng-model="materielCount" >
+	                                 <p class="form-control-static"  ng-show="procurementPlanShow"> {{materielCount}} </p>
+                                 </div>
+                             </div>
+                         </div> 
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">关联销售订单号：</label>
                                  <div class="">
@@ -67,9 +85,9 @@
                                      <p class="form-control-static"  ng-show="procurementPlanShow"> {{saleOrder.orderNum}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                         
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                          	<div class="form-group ">
                                  <label class="control-label bold">销售下单日期：</label>
                                  <div class="">
@@ -77,11 +95,11 @@
 	                                 <p class="form-control-static"  ng-show="procurementPlanShow"> {{saleOrder.orderDate}} </p>
                                  </div>
                              </div>
-                         </div>
+                         </div> -->
                      </div>
                      <div class="row">
                          
-                         <div class="col-md-4" >
+                         <!-- <div class="col-md-4" >
                              <div class="form-group ">
                                  <label class="control-label bold">客户：</label>
                                  <div class="">
@@ -90,18 +108,43 @@
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label bold">需求数量：</label>
+                                 <label class="control-label bold">计划采购数量：</label>
                                  <div class="">
-                                 <!-- <input type="text" readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.buyCount" > -->
-                                     <p class="form-control-static" >{{procurementPlan.buyCount}} </p><!-- ng-show="procurementPlanShow" -->
+                                 <input type="text" readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.buyCount"   >
+                                     <p class="form-control-static"  ng-show="procurementPlanShow">{{procurementPlan.buyCount}} </p>
                                  </div>
                                  
                              </div>
                          </div>
+                         
                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">齐套数量：</label>
+                                 <div class="">
+                                 <input type="text" readonly  class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.endCount"  > 
+                                     <p class="form-control-static"  ng-show="procurementPlanShow" >0 </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         
+                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label bold">关联采购订单：</label>
+                                 <div class="">
+                                 <input type="text" readonly class="form-control" ng-hide="procurementPlanInput"  ng-model="procurementPlan.buyOrderCount"  > 
+                                     <p class="form-control-static"  ng-show="procurementPlanShow" >0 </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                         
+                     </div>
+                     <div class="row">
+                     <div class="col-md-4">
                          <div class="form-group ">
                                  <label class="control-label bold">备注：</label>
                                  <div class="">
@@ -112,9 +155,7 @@
                                  
                              </div>
                              </div>
-                     </div>
-                     <div class="row">
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">计划发布日期：</label>
                                   <div class="">
@@ -125,7 +166,7 @@
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <div class="col-md-4">
                               <div class="form-group ">
                               <label class="control-label bold"> 制单人：</label>
@@ -137,21 +178,31 @@
                              </div>
                          </div>
                          <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label bold">采购订单：</label>
+                              <div class="form-group ">
+                              <label class="control-label bold"> 更新日期：</label>
                                  <div class="">
-                                 <!-- <input type="text"  readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.buyOrderCount" > -->
-                                  <p class="form-control-static"  > {{procurementPlan.buyOrderCount}} </p><!-- ng-show="procurementPlanShow" -->
+                                 <input type="text"  readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.updateTime" >
+                                     <p class="form-control-static" ng-show="procurementPlanShow"> {{procurementPlan.updateTime}} </p>
                                  </div>
                                  
                              </div>
                          </div>
+                         <!-- <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label bold">采购订单：</label>
+                                 <div class="">
+                                 <input type="text"  readonly class="form-control" ng-hide="procurementPlanInput" ng-model="procurementPlan.buyOrderCount" >
+                                  <p class="form-control-static"  > {{procurementPlan.buyOrderCount}} </p>ng-show="procurementPlanShow"
+                                 </div>
+                                 
+                             </div>
+                         </div> -->
                          
                          
                      </div>
                      <!--/row-->
                       <div class="row">
-                         <div class="col-md-4">
+                         <!-- <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">
                                   <label class="control-label bold">采购齐套：</label>
@@ -169,7 +220,7 @@
                                  </div>
                                  
                              </div>
-                         </div>
+                         </div> -->
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label bold">状态：</label>

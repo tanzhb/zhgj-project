@@ -110,6 +110,10 @@ public class MessageConstants {
 	 * 确认入库to采购订单制单人/采购计划制单人/销售订单制单人
 	 */
 	public static final String IN_TO_INSTOCK = "in2Instock";
+	/**
+	 * 提交需求计划后通知产品经理
+	 */
+	public static final String DEMANDPLAN_TO_PROMANAGER= "demandplan2Promanager";
 	/*========================销售订单相关消息Start==============================*/
 	//1
 	
@@ -298,6 +302,12 @@ public class MessageConstants {
 	 * 提示平台采购组人员委托销售订单分解成功提示发起采购URL
 	 */
 	public static final String URL_BE_CONFIRM_APPLY_BUY_ORDER = "buyOrder";
+	/**
+	 * 提交需求计划后通知产品经理URL
+	 */
+	public static final String URL_DEMANDPLAN_TO_PROMANAGER = "demandPlan";
+	
+	
 	
 	
 	
@@ -475,6 +485,10 @@ public class MessageConstants {
 	 * 提示平台采购组人员委托销售订单分解成功提示发起采购
 	 */
 	public static final String TEMP_BE_CONFIRM_APPLY_BUY_ORDER = "010";
+	/**
+	 * 自主采购订单审核通过消息模板
+	 */
+	public static final String TEMP_AGREE_ZZ_BUY_ORDER = "22"; 
 	
 	/*========================采购订单相关消息End==============================*/
 	
@@ -500,6 +514,10 @@ public class MessageConstants {
 	 * 销售订单审核通过消息模板(通知除制单人外其他人)
 	 */
 	public static final String TEMP_AGREE_SALE_ORDER1 = "11"; 
+	/**
+	 * 发布需求计划通知产品经理
+	 */
+	public static final String TEMP_DEMANDPLAN_TO_PROMANAGER = "21"; 
 	
 	/*========================销售订单相关消息End==============================*/
 	

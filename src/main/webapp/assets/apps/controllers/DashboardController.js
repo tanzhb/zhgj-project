@@ -40,7 +40,7 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			||actionName=="inCheckToBuy"
 			||actionName=="outToBuy"
 			||actionName=="inToBuy"
-			||actionName=="in2stock"){
+			||actionName=="in2stock"||actionName=="inToBuyToSale"){
 			$state.go("takeDelivery");
 		}else if(actionName=="shoukuan"){
 			$state.go("gatheringMoneyRecord");
@@ -58,6 +58,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("customsDeclarationForm");
 		}else if(actionName=="beConfirmPayMemoRecord"){
 			$state.go("paymentRecordC");
+		}else if(actionName=="demandplan2Promanager"){
+			$state.go("demandPlan");
 		}
 	}
     $scope.changeReadFlg = function(serialNum,readFlg){

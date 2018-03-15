@@ -75,5 +75,11 @@ public class ProcurementPlanServiceImpl implements ProcurementPlanService {
 
 	}
 
+	@Override
+	public void updateProcurementPlan(ProcurementPlan p) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

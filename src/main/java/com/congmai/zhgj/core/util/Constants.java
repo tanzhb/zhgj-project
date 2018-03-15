@@ -63,13 +63,17 @@ public class Constants {
 	public static final String WTBUYORDER = "com.congmai.zhgj.wtBuyOrder";
 	/***************** 委托销售订单内贸流程key *****************/
 	public static final String WTSALEORDER = "com.congmai.zhgj.wtSaleOrder";
-	
+	/***************** 自主销售订单内贸流程key *****************/
+	public static final String ZZSALEORDERIN = "com.congmai.zhgj.zzSaleOrderIn";
 	
 	/***************** 外贸采购订单流程key *****************/
 	public static final String FOREIGN_TRADE_ORDER = "com.congmai.zhgj.foreignTradeOrder";
 	
 	/***************** FT外贸采购订单流程key *****************/
 	public static final String FT_BUY_ORDER = "com.congmai.zhgj.FTBuyOrder";
+	
+	/***************** 自主采购订单流程key *****************/
+	public static final String ZZBUYORDER= "com.congmai.zhgj.zzBuyOrder";
 	
 	/***************** 采购框架流程key *****************/
 	public static final String BUYFRAME = "com.congmai.zhgj.buyFrame";
@@ -80,11 +84,17 @@ public class Constants {
 	
 	/***************** 销售订单流程key *****************/
 	public static final String SALEORDER = "com.congmai.zhgj.saleOrder";
-
+	
 
 	/***************** 销项票KEY *****************/
 	public static final String OUTINVOICE_KEY = "com.congmai.zhgj.outInvoice";
+	
 	public static final String DELIVERY_KEY = "com.congmai.zhgj.delivery";
+	/***************** 售前无合同发货流程key  *****************/
+	public static final String BEFOREWITHOUTCONTRACTDELIVERY = "com.congmai.zhgj.beforeWithOutContractDelivery";
+	
+	/***************** 售后无合同发货流程key *****************/
+	public static final String AFTERWITHOUTCONTRACTDELIVERY= "com.congmai.zhgj.afterWithoutContractDelivery";
 	
 	
 	
@@ -116,6 +126,18 @@ public class Constants {
 	 * 供应链管理组
 	 */
 	public static final String MANAGER =  "manager";
+	/**
+	 * 产品经理/总监组
+	 */
+	public static final String PRODUCT_MANAGER =  "productManager";
+	/**
+	 * 综管部负责人组
+	 */
+	public static final String FULL_DEPARTMENT_LEADER  =  "fullDepartmentLeader ";
+	/**
+	 * 财务部负责人组
+	 */
+	public static final String FINANCIAL_LEADER  =  "financialLeader";
 	/******************************=======用户组类型END=====**********************************/
 	
 	

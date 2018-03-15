@@ -384,4 +384,11 @@
       remark = #{remark,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <!--根据采购计划物料流水查物料名称  -->
+  <select id="selectMaterielNameByProcurementPlanSerial"   parameterType="java.lang.String"  resultType="java.lang.String">
+  select  GROUP_CONCAT(m.materielName  separator  '、' ) from demandMateriel dm
+  left join materiel  m on m.serialNum=dm.materielSerial
+  where dm.procurementPlanSerial=#{serialNum,jdbcType=VARCHAR} and  dm.delFlg='0'
+  </select>
+  
 </mapper>

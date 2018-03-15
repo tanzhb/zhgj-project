@@ -1020,4 +1020,11 @@ billStatus,
 	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >CONVERT(IFNULL(orderInfo.receiveCount,0),SIGNED)  and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
     
   </select>
+  <select id="getBuyOrderCountByProcurementPlanSerial"  parameterType="java.lang.String"  resultType="java.lang.String">
+  select count(o.serialNum) from  orderInfo  o 
+  left join procurementPlan  p  on p.procurementPlanNum=o.demandPlanSerial 
+  where o.delFlg='0' and p.serialNum=#{serialNum,jdbcType=VARCHAR}
+  
+  
+  </select>
 </mapper>

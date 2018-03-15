@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.dao.DeliveryMaterielMapper;
 import com.congmai.zhgj.web.dao.StockInBatchMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
@@ -111,18 +112,21 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 			List<String> takeDeliverSerialList,String buyComId,Stock   stock) {
 		List<DeliveryMateriel>deliverMateriels=new ArrayList<DeliveryMateriel>();
 		if (CollectionUtils.isNotEmpty(takeDeliverSerialList)) {
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("idList",takeDeliverSerialList);
+			map.put("materielSerial",stock.getMaterielSerial());
 			if (StringUtils.isEmpty(buyComId)) {
 				if ("1".equals(stock.getManageType())) {// 自建
 					deliverMateriels = deliveryMaterielMapper
-							.getDetailByRelationTakeDeliverSerialListForZijian(takeDeliverSerialList);
+							.getDetailByRelationTakeDeliverSerialListForZijian(map);
 				} else if ("2".equals(stock.getManageType())) {
 					deliverMateriels = deliveryMaterielMapper
-							.getDetailByRelationTakeDeliverSerialListForDaiguan(takeDeliverSerialList);
+							.getDetailByRelationTakeDeliverSerialListForDaiguan(map);
 				}
 
 			} else {
 				deliverMateriels = deliveryMaterielMapper
-						.getDetailByRelationTakeDeliverSerialList(takeDeliverSerialList);
+						.getDetailByRelationTakeDeliverSerialList(map);
 				List<DeliveryMateriel> deliverMaterielsTwo = new ArrayList<DeliveryMateriel>();
 				for (DeliveryMateriel deliverMateriel : deliverMateriels) {
 					if (StringUtils.isEmpty(deliverMateriel
@@ -135,7 +139,13 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 				deliverMateriels = deliverMaterielsTwo;
 			}
 		}
+		
 		for(DeliveryMateriel d:deliverMateriels){
+			if(StringUtil.isNotEmpty(d.getWarehouseSerial())){
+				d.setWarehouseName(warehouseMapper.selectByPrimaryKey(d.getWarehouseSerial()).getWarehouseName());
+			}
+		}
+		/*for(DeliveryMateriel d:deliverMateriels){
 			List<StockInBatch> stockInBatchs=d.getStockInBatchs();
 			String  batchNum="";
 			String  warehouseName="";
@@ -165,7 +175,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 				d.setWarehouseName(warehouseName);
 				}
 				
-			}
+			}*/
 		return deliverMateriels;
 	}
 
@@ -174,16 +184,25 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 			List<String> deliverSerialList,Stock   stock) {
 		List<DeliveryMateriel> deliveryMateriels=new  ArrayList<DeliveryMateriel>();
 		if (CollectionUtils.isNotEmpty(deliverSerialList)) {
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("idList",deliverSerialList);
+			map.put("materielSerial",stock.getMaterielSerial());
 			if ("1".equals(stock.getManageType())) {// 自建
 				deliveryMateriels = deliveryMaterielMapper
-						.getDetailByRelationDeliverSerialListForZijian(deliverSerialList);
+						.getDetailByRelationDeliverSerialListForZijian(map);
 			} else if ("2".equals(stock.getManageType())) {// 代管
 				deliveryMateriels = deliveryMaterielMapper
-						.getDetailByRelationDeliverSerialListForDaiguan(deliverSerialList);
+						.getDetailByRelationDeliverSerialListForDaiguan(map);
+			}
+		}
+		
+		for(DeliveryMateriel d:deliveryMateriels){
+			if(StringUtil.isNotEmpty(d.getWarehouseSerial())){
+				d.setWarehouseName(warehouseMapper.selectByPrimaryKey(d.getWarehouseSerial()).getWarehouseName());
 			}
 		}
 		/*return deliveryMaterielMapper.getDetailByRelationDeliverSerialList(deliverSerialList);*/
-		for(DeliveryMateriel d:deliveryMateriels){
+	/*	for(DeliveryMateriel d:deliveryMateriels){//原来选择出入库批次时显示库存里面仓库,库区,批次号
 			List<StockOutBatch> stockOutMateriels=d.getStockOutMateriels();
 			String  batchNum="";
 			String  warehouseName="";
@@ -213,7 +232,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 				d.setWarehouseName(warehouseName);
 				}
 				
-			}
+			}*/
 		return deliveryMateriels;
 	}
 
@@ -283,7 +302,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	@Override
 	public List<DeliveryMateriel> getStockInBatchListByMaterielOwn(
 			String serialNum, String orderSerial) {
-		Map m = new HashMap<String, String>();
+		HashMap<String, String> m = new HashMap<String, String>();
 		m.put("serialNum", serialNum);
 		m.put("orderSerial", orderSerial);
 		return deliveryMaterielMapper.getStockInBatchListByMaterielOwn(m);

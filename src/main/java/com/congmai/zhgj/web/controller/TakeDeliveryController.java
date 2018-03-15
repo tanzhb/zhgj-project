@@ -521,9 +521,9 @@ public class TakeDeliveryController {
         			takeDeliveryService.updateStockInData(takeDeliveryParams.getRecord(),takeDeliveryParams.getDeliveryMateriels(),currenLoginName,"in");
         			if("1".equals(takeDeliveryParams.getRecord().getStatus())){
         			//入库消息  to 采购
-        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
+//        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_BUY));
         			//入库消息  to 供应
-        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
+//        			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(takeDeliveryParams,MessageConstants.IN_TO_SALE));
         			//入库完成的采购订单，通知关联的销售订单制单人
         				//1、通知采购订单的制单人
         				//2、通知关联采购计划的制单人

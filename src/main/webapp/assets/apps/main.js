@@ -1114,6 +1114,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 							'assets/apps/scripts/angular-file-upload.min.js',
 							'assets/apps/service/materielService.js',
                             'assets/apps/service/procurementPlanService.js',
+                            'assets/apps/service/CommonService.js',
                             'assets/apps/controllers/procurementPlanController.js',
                             'assets/apps/service/DeliveryService.js'
 //                            'assets/apps/service/TakeDeliveryService.js',
@@ -1345,6 +1346,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
+				 'assets/apps/service/CommonService.js',
 //				 'assets/apps/service/TakeDeliveryService.js',
 	        	'assets/apps/service/procurementPlanService.js',
 				'assets/apps/controllers/procurementPlanController.js',
@@ -1438,6 +1440,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 				'assets/apps/scripts/angular-file-upload.min.js',
 				'assets/apps/scripts/pageHandle.js',
 				'assets/apps/service/materielService.js',
+				 'assets/apps/service/CommonService.js',
 	        	'assets/apps/service/procurementPlanService.js',
 				'assets/apps/controllers/procurementPlanController.js',
 				'assets/apps/service/DeliveryService.js'

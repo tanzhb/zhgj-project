@@ -1552,8 +1552,9 @@ dm.stockCount
 	   SELECT
 		GROUP_CONCAT(DISTINCT w.warehouseName)
 		FROM
-			stockInbatch sib
-		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
 		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
@@ -1565,7 +1566,7 @@ dm.stockCount
 				AND   o.orderType != '委托采购'
 				
 		)
-		LEFT JOIN warehouse w  ON w.serialNum = sib.warehouseSerial
+		LEFT JOIN warehouse w  ON w.serialNum = dm.warehouseSerial
 		WHERE stock.serialNum = #{serialNum};
     </select>
     <!--代管库存获取库存所在仓库名称  -->
@@ -1573,8 +1574,9 @@ dm.stockCount
 	  SELECT
 		GROUP_CONCAT(DISTINCT w.warehouseName)
 		FROM
-			stockInbatch sib
-		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial
+		deliveryMateriel dm
+			<!-- stockInbatch sib
+		LEFT JOIN deliveryMateriel dm ON dm.serialNum = sib.stockInMaterielSerial -->
 		LEFT JOIN takeDelivery td ON td.serialNum = dm.deliverSerial
 		LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
 		LEFT JOIN stockInOutRecord s ON td.serialNum = s.takeDeliverSerial AND s.status=1
@@ -1594,7 +1596,7 @@ dm.stockCount
 						limit 1
 				)
 		)
-		LEFT JOIN warehouse w  ON w.serialNum = sib.warehouseSerial
+		LEFT JOIN warehouse w  ON w.serialNum = dm.warehouseSerial
 		WHERE stock.serialNum = #{serialNum};
     </select>
     

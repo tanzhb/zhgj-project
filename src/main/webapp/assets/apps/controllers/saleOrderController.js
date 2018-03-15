@@ -3856,8 +3856,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					    		   return;
 					    	   }
 			    			var processBase = table.row('.active').data().processBase;
+			    			var status = table.row('.active').data().status;
 			    			 if(processBase != null){
 			    				showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
+			    			}else if(status=='55'){
+			    				showToastr('toast-top-center', 'warning', '该销售订单还未接收,请先接收!')
 			    			}else $state.go('submitSaleApply',{serialNum:table.row('.active').data().serialNum});
 			    		}  
 		    	   }else{
@@ -3884,6 +3887,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        	$scope.submitOrder = {}
 		        	$scope.submitOrder.serialNum = $scope.saleOrder.serialNum;
 		        	$scope.submitOrder.remark = $scope.saleOrder.remark;
+		        	$scope.submitOrder.orderNum = $scope.saleOrder.orderNum;
+		        	$scope.submitOrder.tradeType = $scope.saleOrder.tradeType;
+		        	$scope.submitOrder.orderType = $scope.saleOrder.orderType;
 		        	//启动流程
 		        	orderService.startSaleOrderProcess($scope.submitOrder).then(
 		          		     function(data){
@@ -4961,7 +4967,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			return "";
 		 							                            		}
 		 							                            	}
-		 							                            }, { mData: 'status'/* ,
+		 							                            }, { mData: 'status' ,
 				 					                            	mRender:function(data,row){
 				 							                            		if(data!=""&&data!=null){
 				 							                            			if(data=='8' ||data=='10'){
@@ -4972,7 +4978,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				 							                            		}else{
 				 							                            			return "";
 				 							                            		}
-				 							                            	}*/
+				 							                            	}
 		 							                            	}
 		 							                            ],
 		 							                            'aoColumnDefs': [ {
@@ -5013,8 +5019,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			type, row, meta) {
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='8' ||data=='10'){
-		 							                            				return '';
-		 							                            				//return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">代收货</a>';
+		 							                            				/*return '';*/
+		 							                            				return '<a href="javascript:void(0);" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')">代收货</a>';
 		 							                            			//	return '<span style="color:#fcb95b" ng-click="jumpToGetDeliveryInfo(\''+row.serialNum+'\')"></span>';
 		 							                            			}else{
 		 																		return '';
@@ -5369,6 +5375,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 
 			    		 	if(deliveryTable.rows('.active').data().length != 1){
 				    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
+				    		}else if(deliveryTable.rows('.active').data().deliverType=='贸易发货'||deliveryTable.rows('.active').data().deliverType=='采购发货'){//如果是贸易发货类型/采购发货类型不需要审批
+				    			showToastr('toast-top-center', 'warning', '该发货计划不需要流程审批！');
 				    		}else{
 				    			var materielCount= deliveryTable.row('.active').data().materielCount;
 				    			  if(materielCount==null||materielCount==0){
@@ -5376,7 +5384,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						    		   return;
 						    	   }
 				    			var status = deliveryTable.row('.active').data().status;
-				    			 if(status != '00'&&status != '100'){
+				    			 if(status!='0'){//status != '00'&&status != '100'
 				    				showToastr('toast-top-center', 'warning', '该发货计划已发起流程审批，不能再次申请！')
 				    			}else {
 				    				//调取发货申请判断

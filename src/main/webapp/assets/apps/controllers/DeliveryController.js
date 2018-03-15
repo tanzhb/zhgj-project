@@ -64,12 +64,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}else if($stateParams.oprateType == "forSupplyOrder"){
 			$scope.confirmDeliverybtn = false;
 		}
-		//根据参数查询对象
+		/*//根据参数查询对象
 	    if($stateParams.orderSerialNum){
 	    	$scope.getDeliveryInfo($stateParams.orderSerialNum,$stateParams.taskId, $stateParams.comments);	
-	    }
+	    }*/
 		//根据参数查询对象
     if($stateParams.serialNum){
+    	getCurrentUserName();
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     
@@ -172,6 +173,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			if($stateParams.oprateType=="forSaleOrder"||$stateParams.oprateType=="forSupplyOrder"){
 				$scope.deliver.maker= data.data.userName;
 			}
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
+	
+	 /**
+	 * 加载当前用户信息
+	 */
+	var getCurrentUserName = function(){
+		var promise = commonService.getCurrentUser();
+		promise.then(function(data){
+			debugger;
+			$scope.user = data.data;
+			$scope.currentUserName=data.data.userName;
+			
 			
 		},function(data){
 			//调用承诺接口reject();
@@ -2820,7 +2837,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
-            /*	warehouseSerial:{required:"收货仓库不能为空！"},*/
+            	warehouseSerial:{required:"收货仓库不能为空！"},
             	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
@@ -2891,8 +2908,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 	digits:true,
                 	rangelength:[7,20]
                 },
-              /*  warehouseSerial:{required:true,
-                },*/
+                warehouseSerial:{required:true,
+                },
                 takeDeliveryContactNum:{
                 	digits:true,
                 	rangelength:[7,20]
@@ -3507,6 +3524,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	        	$scope.submitOrder = {}
 	        	$scope.submitOrder.serialNum = $scope.deliveryDetail.serialNum;
 	        	$scope.submitOrder.remark = $scope.deliveryDetail.reason;
+	        	$scope.submitOrder.deliverType = $scope.deliveryDetail.deliverType;
 	        	//启动流程
 	        	DeliveryService.startDeliveryPlanProcess($scope.submitOrder).then(
 	          		     function(data){

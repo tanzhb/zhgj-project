@@ -43,6 +43,7 @@ public class ProcurementPlan {
     private String endCount;//齐套数量
     
     private String buyOrderCount;//采购订单数量
+    private String materielName;//采购计划物料名称(多个拼接加 ,连接)
     
     public String getBuyOrderCount() {
 		return buyOrderCount;
@@ -189,6 +190,14 @@ public class ProcurementPlan {
 
 	public void setMaker(String maker) {
 		this.maker = maker;
+	}
+
+	public String getMaterielName() {
+		return materielName;
+	}
+
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
 	}
     
 }

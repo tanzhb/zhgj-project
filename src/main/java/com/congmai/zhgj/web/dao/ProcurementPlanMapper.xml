@@ -17,7 +17,27 @@
     <result column="endCount" property="endCount" jdbcType="VARCHAR" />
     <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
-    <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/> 
+    <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
+  </resultMap>
+  <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.ProcurementPlan" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="saleOrderSerial" property="saleOrderSerial" jdbcType="VARCHAR" />
+    <result column="procurementPlanNum" property="procurementPlanNum" jdbcType="VARCHAR" />
+    <result column="buyCount" property="buyCount" jdbcType="VARCHAR" />
+    <result column="buyDate" property="buyDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="endCount" property="endCount" jdbcType="VARCHAR" />
+    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
+    <association property="materielName" column="serialNum" select="com.congmai.zhgj.web.dao.DemandMaterielMapper.selectMaterielNameByProcurementPlanSerial"/>
+  	<association property="buyOrderCount" column="serialNum" select="com.congmai.zhgj.web.dao.OrderInfoMapper.getBuyOrderCountByProcurementPlanSerial"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -81,7 +101,7 @@
     serialNum, saleOrderSerial,procurementPlanNum, buyCount, buyDate, status, remark, delFlg, creator, createTime, 
     updater, updateTime,endCount,endDate,maker
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanExample" >
+  <select id="selectByExample" resultMap="BaseResultMap1" parameterType="com.congmai.zhgj.web.model.ProcurementPlanExample" >
     select
     <if test="distinct" >
       distinct

@@ -75,6 +75,7 @@ public class DeliveryMateriel {
     private String  deliveredCount;//已发数量
     private Delivery delivery;
     private String buyComId;//物权方comId
+    private String supplyComId;//供应方comId
     private  String stockInSerialNum;
     private  String stockInQualifiedCount;
     private  String stockInUnqualifiedCount;
@@ -599,6 +600,14 @@ public class DeliveryMateriel {
 
 	public void setDeliverDate(Date deliverDate) {
 		this.deliverDate = deliverDate;
+	}
+
+	public String getSupplyComId() {
+		return supplyComId;
+	}
+
+	public void setSupplyComId(String supplyComId) {
+		this.supplyComId = supplyComId;
 	}
 
 	

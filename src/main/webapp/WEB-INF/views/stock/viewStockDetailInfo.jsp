@@ -290,7 +290,7 @@ margin-right: 20px;
 					<thead>
 						<tr>
 						
-							<td >物料批次号</td>
+						<!-- 	<td >物料批次号</td> -->
                               <td >批次类型</td>
                                <td  >入库单号</td>
                                 <td  >供应方</td>
@@ -322,11 +322,11 @@ margin-right: 20px;
 							<th>入库明细号</th>
                             <th> 入库类型</th>
                             <th> 关联单据</th>
-                            <th>物料批次号 </th>
+                            <!-- <th>物料批次号 </th> -->
                             <th>入库日期</th>
                             <th>入库数量</th>
                             <th>仓库 </th>
-                             <th>库区 </th>
+                             <!-- <th>库区 </th> -->
                             <th>备注</th>
 						</tr>
 						
@@ -350,11 +350,11 @@ margin-right: 20px;
 							<th  style="text-align: center">出库明细号</th>
                             <th style="text-align: center"> 出库类型</th>
                             <th style="text-align: center"> 关联单据</th>
-                            <th  style="text-align: center">物料批次号 </th>
+                           <!--  <th  style="text-align: center">物料批次号 </th> -->
                             <th style="text-align: center">出库日期</th>
                             <th style="text-align: center">出库数量</th>
                             <th style="text-align: center">仓库 </th>
-                            <th style="text-align: center">库区</th>
+                            <!-- <th style="text-align: center">库区</th> -->
                             <th style="text-align: center">备注</th>
 						</tr>
 						

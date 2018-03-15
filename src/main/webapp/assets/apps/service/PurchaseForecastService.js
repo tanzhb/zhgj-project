@@ -8,6 +8,7 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
     		fetchAllPurchaseForecast: fetchAllPurchaseForecast,
     		//添加
     		/*saveUserContract: saveUserContract,*/
+    		savePurchaseForecast:savePurchaseForecast,
     		//删除
     		delPurchaseForecast:delPurchaseForecast
     		/*//单个查找
@@ -73,7 +74,20 @@ angular.module('MetronicApp').factory('PurchaseForecastService', ['$rootScope', 
         return deferred.promise;  
           
     };
-    
+    //保存选中的采购预测生成采购计划
+    function savePurchaseForecast(ids){
+        var deferred = $q.defer();  
+
+        $http.post($rootScope.basePath + "/rest/purchaseForecast/savePurchaseForecast", ids).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };   
     /* //通过用户id查找用户
     function selectPurchaseForecast(ids){
         var deferred = $q.defer();  

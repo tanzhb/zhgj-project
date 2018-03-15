@@ -37,10 +37,13 @@ import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
+import com.congmai.zhgj.web.event.EventExample;
+import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
@@ -137,6 +140,7 @@ public class DemandPlanController {
         			demandPlan.setUpdateTime(new Date());
         			demandPlan.setUpdater(currenLoginName);
         			demandPlanService.insert(demandPlan);
+        			
         		}else{
         			demandPlan.setUpdateTime(new Date());
         			demandPlan.setUpdater(currenLoginName);
@@ -148,6 +152,8 @@ public class DemandPlanController {
         		logger.warn(e.getMessage(), e);
         		return null;
         	}
+        	//发给提交需求计划后通知产品经理
+			 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(demandPlan,MessageConstants.DEMANDPLAN_TO_PROMANAGER));
     	return demandPlan;
     }
     

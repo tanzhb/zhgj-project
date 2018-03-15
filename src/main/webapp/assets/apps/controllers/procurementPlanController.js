@@ -1,6 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('procurementPlanController', ['$rootScope', '$scope', 'settings','procurementPlanService','DeliveryService','$filter',
-    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,procurementPlanService,DeliveryService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
+angular.module('MetronicApp').controller('procurementPlanController', ['$rootScope', '$scope', 'settings','procurementPlanService','DeliveryService','commonService','$filter',
+    '$state',"$stateParams",'$compile','$location','materielService','FileUploader', function($rootScope, $scope, settings,procurementPlanService,DeliveryService,commonService,$filter,$state,$stateParams,$compile,$location,materielService,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -81,10 +81,14 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
             		$scope.opration = '新增';
             		$scope.procurementPlanMateriel=[];
             		$scope.procurementPlan={};
-            		$scope.procurementPlan.procurementPlanNum = '';
+            		$scope.procurementPlan.buyDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+            		$scope.procurementPlan.endCount=0;
+            		$scope.procurementPlan.buyOrderCount=0;
             		$rootScope.setNumCode("PL",function(newCode){
             			$scope.procurementPlan.procurementPlanNum = newCode;
             		});
+            		getCurrentUser();
+            		
             		}else{
             			$scope.opration = '修改';
             			//新建的采购计划修改
@@ -176,7 +180,15 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			language: "zh-CN"
    	})
   };
-   
+  var getCurrentUser = function(){
+		var promise = commonService.getCurrentUser();
+		promise.then(function(data){
+			$scope.procurementPlan.maker = data.data.userName;
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
     $scope.save  = function() {
     	if($('#form_sample_1').valid()){//
     		if($scope.procurementPlan.orderDate=='') {// 日期为空的处理
@@ -284,12 +296,11 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
                 "aoColumns": [
                               { mData: 'serialNum'},
                               { mData: 'procurementPlanNum' },
-                              { mData: 'saleOrder' },
-                              { mData: 'saleOrder' },
-                              { mData: 'saleOrder' },
-                              { mData: 'saleOrder' },
-                              { mData: 'buyDate' },
+                              { mData: 'createTime' },
+                              { mData: 'materielName' },
                               { mData: 'buyCount' },
+                              { mData: 'endCount' },
+                              { mData: 'buyOrderCount' },
                               { mData: 'status' },
                               { mData: 'status' }
                         ],
@@ -322,7 +333,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								if(isNull(data)){
 									return '---';
 								}else{
-									return data.orderNum;
+									return timeStamp2ShortString(data);
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -335,20 +346,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								if(isNull(data)){
 									return '---';
 								}else{
-									return data.orderDate;
-								}
-							},
-							"createdCell": function (td, cellData, rowData, row, col) {
-								 $compile(td)($scope);
-						       }
-						},{
-							'targets' : 4,
-							'render' : function(data,
-									type, row, meta) {
-								if(isNull(data)){
-									return '---';
-								}else{
-									return data.buyName;
+									return data;
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -359,16 +357,29 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(data)){
-									return '---';
+									return 0;
 								}else{
-									return data.materielCount;
+									return data;
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 8,
+							'targets' : 6,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(data)){
+									return 0;
+								}else{
+									return data;
+								}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
+						},{
+							'targets' : 7,
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
@@ -379,7 +390,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								}
 							}
 						},{
-							'targets' : 9,
+							'targets' : 8,
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, row, meta) {
@@ -1356,6 +1367,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
  	   	       		     function(data){
  	   	       		    	toastr.success('数据保存成功！');
  	   	       		    	$scope.demandMateriel=data.data.demandMateriel;
+ 	   	       			$scope.demandMateriel=data.data.demandMateriel;
+ 	   	       		$scope.procurementPlan.buyCount=data.data.totalDemandCount;
  	   	       		    	$scope.cancelAllDemandMateriel();
  	   	       		         $scope.reservedDm=true;
 			  	   	       		//更新采购计划数量数据
@@ -1928,6 +1941,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	      			}
 	      			
 	      		}
+	      		$scope.procurementPlan.buyCount=total;
+	      		$scope.materielCount=$scope.procurementPlanMateriel.length;
 	      		return total
 	      	}else{
 	      		return 0;

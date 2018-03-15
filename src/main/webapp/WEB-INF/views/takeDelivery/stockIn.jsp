@@ -162,8 +162,8 @@
                                                     <div class="">
                                                     	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
                                                     	<input type="hidden" class="form-control" value="{{WarehouseName}}" disabled="disabled">
-                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.takeDeliverAddress}}" disabled="disabled"  ng-hide="deliverAdd">
-                                                         <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}</p>
+                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.warehouse.warehouseName}}" disabled="disabled"  ng-hide="deliverAdd">
+                                                         <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}{{deliver.takeDelivery.warehouse.serialNum}}</p>
                                                     </div>
                                             </div>
 										</div>
@@ -318,7 +318,6 @@
 										<th  rowspan="2">发货数量</th>
 										<th  rowspan="2">合格数量</th>
 										<!-- <th  rowspan="2">生产批次</th> -->
-										<!-- <th  rowspan="2">入库仓库</th> -->
 										<th  rowspan="2">入库数量</th>
 										<th  rowspan="2">未入数量</th>
 										<th  rowspan="2">备注</th>
@@ -341,7 +340,6 @@
 										<td>{{materiel.stockInQualifiedCount}}</td>
 										<td>{{materiel.stockInUnqualifiedCount}}</td>
 										<td>{{materiel.stockInCheckRemark}}</td> -->
-									<!-- 	<td>入库仓库</td> -->
 										<td >
 												<!-- <span ng-repeat="stockInBatch in materiel.stockInBatchs track by $index">
 												<span ng-if="!$first">;</span> {{stockInBatch.batchNum}}({{stockInBatch.stockInCount}})
@@ -421,7 +419,6 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalQualifiedCount}}</td>
-													<!-- 	<td></td> -->
 														<td>{{totalStockCount()}}</td><!--{{totalStockInCount}}  -->
 														<td>{{totalUnStockInCount()}}</td><!--{{totalUnstockInCount}}  -->
 														<td></td>

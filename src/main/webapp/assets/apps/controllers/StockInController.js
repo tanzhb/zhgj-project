@@ -335,7 +335,9 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 										param.supplyMaterielSerial = $scope.takeDeliveryMateriels[i].supplyMaterielSerial;
 									}
 								}
-								param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+								//param.warehouseSerial = $scope.takeDeliveryMateriels[i].warehouseSerial;
+								//取发货单里面收货仓库作为库存里的仓库
+								param.warehouseSerial =$scope.deliver.takeDelivery.warehouse==null?"": $scope.deliver.takeDelivery.warehouse.serialNum;
 								param.positionSerial = $scope.takeDeliveryMateriels[i].positionSerial;
 								param.stockRemark = $scope.takeDeliveryMateriels[i].stockRemark;
 								params.deliveryMateriels.push(param);
@@ -413,7 +415,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 
 	        //重写indexOf方法
 			function indexOf(arr, item) {
-				for (var i = 0; i < arr.length; i++) {f
+				for (var i = 0; i < arr.length; i++) {
 						if (arr[i] === item)
 							return i;
 						else
