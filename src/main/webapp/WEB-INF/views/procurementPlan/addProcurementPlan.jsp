@@ -315,12 +315,17 @@
 		                       
 		                          <td>  
 		                          		<input type="text"  style="width: 100px!important" name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
-                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryDate"  >
+                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryDate"  
+                                       ng-change="setAllDeliveryDate(demandMateriel[$index] ,$index)" >
+                                     
                                      		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryDate}} </p>
 		                          </td>
 		                        
 		                          <td>  
-		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryAddress"  >
+		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryAddress"  
+		                           ng-if="$first"    ng-change="setAllDeliveryAddress(demandMateriel[$index] ,$index)" />
+		                           <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].deliveryAddress"  
+		                           ng-if="!$first"     />
                                      		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
                                       <td>  

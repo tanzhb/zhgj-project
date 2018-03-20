@@ -225,6 +225,12 @@ public class OrderController {
 	//采购订单
 	public static final String BUYORDER = "buy";
 	
+	//可开发票销售订单
+		public static final String SALEORDER2 = "sale2";
+		
+		//可收发票采购订单
+		public static final String BUYORDER2 = "buy2";
+	
 /*	//供应商订单（因为是平台方创建，显示需限制为已发布）
 	public static final String SUPPLYORDER = "supply";*/
 	/**
@@ -1018,6 +1024,12 @@ public class OrderController {
     		if("delivery".equals(selectFor)){
     			parm.setStatus("2");
     		}
+    	}else if(BUYORDER2.equals(type)){//查找可收发票采购订单
+    		parm.setBuyComId(comId);
+//    		parm.setStatus("2");
+    	}else if(SALEORDER2.equals(type)){//查找可开发票销售订单
+    		parm.setSupplyComId(comId);
+//    		parm.setStatus("2");
     	}
     	
     	if("1".equals(fram)){
@@ -2072,8 +2084,14 @@ public class OrderController {
     	ListSort(operateLogList);
     	for(OperateLog op:operateLogList){
     		PaymentRecord  pr=payService.selectPayById(op.getObjectSerial());
-    		op.setTimeData(pr.getPaymentDate());
-    		op.setPayMoneyCount(pr.getApplyPaymentAmount());
+    		if(pr==null){
+    			Invoice  iv=invoiceService.selectById(op.getObjectSerial());
+    			op.setTimeData(iv.getBillingDate());
+        		op.setPayMoneyCount(iv.getInvoiceAmount());
+    		}else{
+    			op.setTimeData(pr.getPaymentDate());
+        		op.setPayMoneyCount(pr.getApplyPaymentAmount());
+    		}
     	}
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();

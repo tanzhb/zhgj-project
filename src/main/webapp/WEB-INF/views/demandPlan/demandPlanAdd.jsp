@@ -45,7 +45,13 @@
                                 
 			</li>
 			<li ng-show="materielButton" class="dropdown pull-right tabdrop" >
-                   <button class="btn blue btn-sm btn-circle" ng-click="addMateriel()">
+					<button class="btn blue btn-sm btn-circle"  ng-hide="showSaveBtn"  ng-click="saveAllDemandMateriel()">
+                              <i class="fa fa-save"></i>保存
+					</button>
+					<button class="btn blue btn-sm btn-circle"  ng-show="showSaveBtn"  ng-click="editAllDemandMateriel()">
+                              <i class="fa fa-save"></i>编辑
+					</button>
+                   <button class="btn blue btn-sm btn-circle"  ng-hide="showSaveBtn"  ng-click="addMateriel()">
                               <i class="fa fa-plus"></i>新增物料
 					</button>
 					<!-- <li>
@@ -260,8 +266,8 @@
 	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" input-medium class="input-group date date-picker"
 															 data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years">
-															<input type="text" class="form-control" style="min-width: 110px;" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"
-																> <span class="input-group-btn">
+															<input type="text" class="form-control" style="min-width: 110px;" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"   
+																ng-change="setAllDeliveryDate(materiel ,$index)"  > <span class="input-group-btn">
 																<button class="btn default " type="button">
 																	<i class="fa fa-calendar"></i>
 																</button>
@@ -272,16 +278,20 @@
                                                     </td>
                                                     <td>{{materiel.remainTime}}</td>
                                                     <td>
-                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value="">
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value=""
+                                                    	ng-if="$first"    ng-change="setAllDeliveryAddress(materiel ,$index)" >
+                                                    	<input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value=""
+                                                    	ng-if="!$first"   >
                                                     	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
                                                     <td>
-	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  class="form-control" ng-model="materiel.supplyMaterielSerial" ng-change="countSupplyCount()" >
+	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"  ng-if="materiel.supplyMateriels.length!=0">
 	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
 	                                                    		{{m.supply.comName}}{{m.supply.supplyComId}}
 	                                                    	</option>
 	                                                    </select>
+	                                                    <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">无供应商</span>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
                                                     <td style="width: 140px;min-width: 120px;">

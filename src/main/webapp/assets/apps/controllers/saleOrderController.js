@@ -620,7 +620,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'targets' : 1,
 							'render' : function(data,
 									type, row, meta) {
-								var clickhtm = '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
+								var clickhtm = '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+row.serialNum+'\')">'+data+'</a></br>';
+								if((Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
+									return clickhtm+ '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:green">已完成</span>';
+								}
 								if(row.status==55){
 									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待接收</span>';
 								}else if(row.processBase!=""&&row.processBase!=null){
@@ -807,16 +810,42 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 											if(isNull(row.deliveryCount)||row.deliveryCount==0){
 												return clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 											}else if(Number(row.materielCount)>Number(row.deliveryCount)){
-												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+												
+												if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
 													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
 													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'
 													+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+													} else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+														return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+														+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+														}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+															return clickhtm + '<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'
+															+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+															}else{
+														return clickhtm + '';
 													}
+												
+												/*if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'
+													+'<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
+													}*/
 											}else if(Number(row.materielCount)==Number(row.deliveryCount)){
-												if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+												
+												if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>'
+													}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
+														return clickhtm + '<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\',\''+row.unBillOrReceiptMoney+'\')">开票</a><br/>'
+														}else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+														return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
+														}else{
+														return clickhtm + '';
+													}
+												/*if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
 													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
 													+'<a href="javascript:void(0);" ng-click="goOpenInvoice(\''+row.serialNum+'\')">开票</a><br/>';
-													}
+													}*/
 											}else{
 												return clickhtm + '';
 											}
@@ -4504,7 +4533,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	}
 		    	
 		    	$scope.viewDeliverLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
+		    		$("#deliverOperateLogInfo").modal("show");
 		    		//控制日志显示(数量日期和金额日期)
 		    		$scope.showDeliver=true;
 		    		/*if(logTable){
@@ -4519,7 +4548,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	}
 		    	
 		    	$scope.viewPayLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
+		    		$("#payOperateLogInfo").modal("show");
 		    		//控制日志显示(数量日期和金额日期)
 		    		$scope.showReceive=true;
 		    		/*if(logTable){

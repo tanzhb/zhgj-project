@@ -52,7 +52,7 @@
     <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
-    <association property="frame" column="frameSerial" select="com.congmai.zhgj.web.dao.ContractMapper.selectContractById"></association>
+    <association property="payReceiptMoney" column="serialNum" select="com.congmai.zhgj.web.dao.InvoiceMapper.getPayReceiptMoney"></association><!-- 发票未收/未开金额 -->
     
   </resultMap>
   <sql id="Example_Where_Clause" >

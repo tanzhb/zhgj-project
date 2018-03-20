@@ -180,6 +180,23 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			language: "zh-CN"
    	})
   };
+  //设置发货日期
+	$scope.setAllDeliveryDate = function(materiel,index){
+		if(index==0){
+			for(var i=1;i<$scope.demandMateriel.length;i++){
+					 $scope.demandMateriel[i].deliveryDate = materiel.deliveryDate;
+			 }
+		}
+	}
+	
+	 //设置交付地址
+	$scope.setAllDeliveryAddress = function(materiel,index){
+		if(index==0){
+			for(var i=1;i<$scope.demandMateriel.length;i++){
+					 $scope.demandMateriel[i].deliveryAddress = materiel.deliveryAddress;
+			 }
+		}
+	}
   var getCurrentUser = function(){
 		var promise = commonService.getCurrentUser();
 		promise.then(function(data){
@@ -1546,9 +1563,26 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	}
 	        }; 
 	        //选择第一个，设置后面的数据
-			$scope.setAllDeliveryAddress = function(procurementPlanMateriel){
+	        
+	        $scope.setAllDeliveryDate = function(materiel,index){
+	    		if(index==0){
+	    			for(var i=1;i<$scope.demandMateriel.length;i++){
+	    					 $scope.demandMateriel[i].deliveryDate = materiel.deliveryDate;
+	    			 }
+	    		}
+	    	}
+	    	
+	    	 //设置交付地址
+	    	$scope.setAllDeliveryAddress = function(materiel,index){
+	    		if(index==0){
+	    			for(var i=1;i<$scope.demandMateriel.length;i++){
+	    					 $scope.demandMateriel[i].deliveryAddress = materiel.deliveryAddress;
+	    			 }
+	    		}
+	    	}
+			/*$scope.setAllDeliveryAddress = function(procurementPlanMateriel){
 				 for(var i=1;i<$scope.procurementPlanMateriel.length;i++){
-					 if($scope["procurementPlanMaterielInput"+i] != true/*&&isNull($scope.procurementPlanMateriel[i].deliveryAddress)*/){
+					 if($scope["procurementPlanMaterielInput"+i] != true&&isNull($scope.procurementPlanMateriel[i].deliveryAddress)){
 						 $scope.procurementPlanMateriel[i].deliveryAddress = procurementPlanMateriel.deliveryAddress;
 					 }
 				 }
@@ -1562,12 +1596,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		    	}
 				if(index==0&&$scope.changeFlag){
 					for(var i=1;i<$scope.procurementPlanMateriel.length;i++){
-						 if($scope["procurementPlanMaterielInput"+i] != true/*&&isNull($scope.procurementPlanMateriel[i].deliveryAddress)*/){
+						 if($scope["procurementPlanMaterielInput"+i] != true&&isNull($scope.procurementPlanMateriel[i].deliveryAddress)){
 							 $scope.procurementPlanMateriel[i].deliveryDate = procurementPlanMateriel.deliveryDate;
 						 }
 					 }
 				}
-			}
+			}*/
 			
 			$scope.setAllLastDeliveryDate = function(procurementPlanMateriel,index){
 				if(!isNull($scope.procurementPlanMateriel[index].deliveryDate)&&$scope.procurementPlanMateriel[index].deliveryDate>$scope.procurementPlanMateriel[index].lastDeliveryDate){
@@ -1907,10 +1941,14 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
    $scope.clearNoNum = function(obj,attr,attr1){
     	 //把非数字的都替换掉
     	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
-    	 if(isNull(obj[attr] )){
+    	 if(!handle.isInteger(obj[attr])||Number(obj[attr])<=0){
+			   handle.paramCheck("amount"+index,"数量只能是正整数！");
+			   obj[attr]=0;
+		}
+    	/* if(isNull(obj[attr] )){
     		 obj[attr]=0;
     		 return;
-    	 }
+    	 }*/
     	/* if(!isNaN(obj[attr])&&Number(obj[attr])>Number(obj[attr1])){
     		 toastr.warning('采购数量不得大于需求数量！');
     		 obj[attr]=0;

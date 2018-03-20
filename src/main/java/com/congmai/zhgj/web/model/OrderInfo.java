@@ -181,6 +181,9 @@ public class OrderInfo extends BaseVO {
     
     private String applyCount;//已申请数量
     
+   private String payReceiptMoney;//已付/已收金额(订单列表用);
+    
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -618,6 +621,16 @@ public class OrderInfo extends BaseVO {
 	public void setApplyCount(String applyCount) {
 		this.applyCount = applyCount;
 	}
+
+	public String getPayReceiptMoney() {
+		return payReceiptMoney;
+	}
+
+	public void setPayReceiptMoney(String payReceiptMoney) {
+		this.payReceiptMoney = payReceiptMoney;
+	}
+
+	
 
 	
 }

@@ -754,4 +754,7 @@
             #{idList}
         </foreach>
     </delete>
+    <select id="getPayReceiptMoney"  parameterType="java.lang.String"   resultType="java.lang.String">
+    select SUM(IFNULL(invoiceAmount,0)) from invoice  where   delFlg=0  and    orderSerial = #{orderSerial,jdbcType=VARCHAR}  and status='2' 
+    </select>
 </mapper>

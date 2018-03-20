@@ -219,7 +219,7 @@
 															name="verificationMoneyAmount" ng-model="memoRecord.verificationMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.verificationMoneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>
@@ -233,7 +233,7 @@
 															name="remainMoneyAmount" ng-model="memoRecord.remainMoneyAmount"
 															ng-show="input" />
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount|currency:''}}</p>
+														<p class="form-control-static" ng-show="span" >{{memoRecord.moneyAmount-memoRecord.verificationMoneyAmount|currency:''}}</p>
 													</div>
 												</div>
 											</div>

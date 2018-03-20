@@ -20,6 +20,7 @@ import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,7 @@ import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
@@ -639,6 +641,45 @@ public class DemandPlanController {
 		}
     	
     }
-    
+    /**
+     * @Description (保存企业资质信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveAllDemandPlanMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public List<DemandPlanMateriel> saveAllDemandPlanMateriel(Map<String, Object> map,@RequestBody String params,HttpServletRequest request) {
+    	//List<CompanyQualification> companyQualificationArrays =Arrays.asList(companyQualifications);
+    	String flag ="0"; //默认失败
+    	List<DemandPlanMateriel> demandPlanMateriels = null;
+	   	try{
+	   		Subject currentUser = SecurityUtils.getSubject();
+    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+    		params = params.replace("\\", "");
+    		ObjectMapper objectMapper = new ObjectMapper();  
+            JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DemandPlanMateriel.class);  
+            demandPlanMateriels = objectMapper.readValue(params, javaType);
+            if(!CollectionUtils.isEmpty(demandPlanMateriels)){
+            	demandPlanMaterielService.insertAllDemandPlanMateriel(demandPlanMateriels, currenLoginName);
+            	for(DemandPlanMateriel materiel :demandPlanMateriels){
+            		materiel.setSupplyName(demandPlanMaterielService.selectSupplyName(materiel.getSupplyMaterielSerial()));
+            		int remainTime = 0;
+    				try {
+    					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
+    				} catch (Exception e) {
+    					logger.warn(e.getMessage(), e);
+    				}
+    				materiel.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
+            		
+            	}
+            }
+            
+    		flag = "1";
+    	}catch(Exception e){
+    		return null;
+    	}
+ 
+    	return demandPlanMateriels;
+    }
 
 }

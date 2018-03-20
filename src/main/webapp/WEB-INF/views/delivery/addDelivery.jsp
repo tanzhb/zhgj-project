@@ -36,10 +36,10 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 20px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery('add')"   ng-hide="confirmDeliverybtn"   ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<!-- <button type="button" ng-click="goDelivery('add')"   ng-hide="confirmDeliverybtn"   ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button>
+							</button> -->
                   <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
@@ -80,13 +80,21 @@
 													<div class="">
 														<select class="form-control" id="deliverType"
 															name="deliverType" ng-model="delivery.deliverType"
-															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
+															ng-change="changeTakeDeliveryMode(delivery.deliverType)" ng-if="delivery.deliverType!='采购发货'"  
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="贸易发货">贸易发货</option>
 															<!-- <option value="个人借用">个人借用</option> -->
 															<option value="售前无合同发货">售前无合同发货</option>
 															<option value="售后无合同发货">售后无合同发货</option>
+														</select>
+														<select class="form-control" id="deliverType"
+															name="deliverType" ng-model="delivery.deliverType"  disabled="disabled"
+															ng-change="changeTakeDeliveryMode(delivery.deliverType)"  ng-if="delivery.deliverType=='采购发货'"
+															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
+															<option   value=""></option>
+															<option   selected value="采购发货">采购发货</option>
+															
 														</select>
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
@@ -97,7 +105,7 @@
 											<!--/span-->
 
 											<div class="col-md-4">
-												<div class="form-group" ng-if="!otherMode">
+												<div class="form-group" ng-if="(delivery.deliverType!='售前无合同发货'&&delivery.deliverType!='售后无合同发货')">
 													<label class="control-label bold">销售订单号<span  ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
 													<div class=""><!--ng-click="selectMateriel()"  -->
@@ -121,11 +129,11 @@
 															{{delivery.orderNum}}</p>
 													</div>
 												</div>
-												<div class="form-group" ng-if="otherMode">
+												<div class="form-group" ng-if="otherMode||(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')">
 													<label class="control-label bold">关联单据号</label>
 													<div class="">
 														<input type="text" class="form-control"
-															ng-model="delivery.orderSerial" ng-show="inputDeliveryInfo" />
+															ng-model="delivery.docNum" ng-show="inputDeliveryInfo" />
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-show="span">
 															{{delivery.orderNum}}</p>
@@ -586,13 +594,14 @@
 								<!-- 物料信息 start-->
 								<div class="portlet-title">
 									<!-- <div class="caption">物料信息</div> -->
-									<div class="actions" ng-if="otherMode">
+									<div class="actions" ng-if="otherMode||(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')">
 										<button class="btn blue btn-sm btn-circle"
 											ng-click="addMateriel()" onclick="return false;">
 											<i class="fa fa-plus"></i> 添加物料
 										</button>
 									</div>
 								</div>
+									</br>
 								<div class="portlet-body form">
 									<form action="#" id="form_sample_3" class="">
 										<div class="table-scrollable">
@@ -725,9 +734,10 @@
 														<td></td>
 														<td></td>
 														<td></td>
-														<td>{{totalOrderCount}}</td>
+														<td  ng-if="!otherMode">{{totalOrderCount}}</td><td  ng-if="otherMode"></td>
+														<td  ng-if="!otherMode">{{totalUnDeliveryCount}}</td><td  ng-if="otherMode"></td>
 														<td>{{totalUnDeliveryCount}}</td>
-														<td>{{calcTotalDeliveryCount()}} {{totalDeliveryCount}}</td>
+														<td>{{calcTotalDeliveryCount()}} </td>
 														<td></td>
 													</tr>
 												</tfoot>

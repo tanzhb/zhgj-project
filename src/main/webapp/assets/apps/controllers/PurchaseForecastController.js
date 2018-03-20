@@ -220,8 +220,8 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 							$state.go('procurementPlan',{},{reload:true}); // 重新加载datatables数据
 						},
 						function(errResponse) {
-							/*console.error('Error while deleting Users');*/
-							alert(123);
+							console.error('生成采购计划错误!');
+//							alert(123);
 						}
 
 				);

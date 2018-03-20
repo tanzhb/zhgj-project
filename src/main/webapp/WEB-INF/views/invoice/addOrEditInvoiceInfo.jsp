@@ -285,7 +285,7 @@
                                                                     </div> -->
 												</div>
 											</div>
-											<div class="col-md-4">
+											<%-- <div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold" for="billWay"><span
 														class="required"> * </span>开票方式 :</label>
@@ -340,10 +340,7 @@
 															ng-if="invoice.paymentStatus=='是'&&inOrOut.indexOf('confirm')>-1">是</p>
 													</div>
 												</div>
-											</div>
-										</div>
-
-										<div class="row">
+											</div> --%>
 											<div class="col-md-4" ng-hide="inOrOut.indexOf('confirm')>-1">
 												<div class="form-group">
 													<label class="control-label bold" for="status">
@@ -397,6 +394,10 @@
 													</div>
 												</div>
 											</div>
+										</div>
+
+										<div class="row">
+											
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold" for="checker">
@@ -413,11 +414,6 @@
 													</div>
 												</div>
 											</div>
-											<!--/span-->
-
-											<!--/span-->
-										</div>
-										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold" for="checker">
@@ -445,6 +441,8 @@
 													</div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
 											<div class="col-md-4"
 												ng-show="inOrOut.indexOf('out')>-1&&inOrOut.indexOf('confirm')<0">
 												<div class="form-group">
@@ -857,7 +855,7 @@
 															id="invoiceAmount" name="invoiceAmount"
 															ng-hide="invoiceAdd"
 															data-unBillOrReceiptMoney="{{invoice.unBillOrReceiptMoney}}"
-															ng-model="invoice.invoiceAmount">
+															ng-model="invoice.invoiceAmount" ng-blur="clearNoNum()">
 														<div class="form-control-focus"></div>
 														<p class="control-label left" ng-show="invoiceView">{{invoice.invoiceAmount|currency:'￥'}}</p>
 													</div>

@@ -466,6 +466,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
+								
+								if(!isNull(row.deliveryCount)&&(Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
+									return clickhtm+ '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:green">已完成</span>';
+								}
+								
 								if(row.status==0){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >待申请</span>';
 								}else if(row.status==1){
@@ -585,10 +590,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
+								
+							/*	if(isNull(row.receiveCount)||row.receiveCount==0){
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已收'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'//<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\'0\')"></a>
+								}else{
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\''+row.receiveCount+'\')">已收</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
+								}*/
 								if(isNull(row.payAmount)||row.payAmount==0){
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付 '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="viewPayLog(\''+row.serialNum+'\')">已付</a>'+'<span style="color:#FCB95B">'+row.payReceiptMoney+'</span>'+'）'+'</br>'
 								}
 								
                     			if(row.payStatus=="0"){
@@ -686,18 +697,28 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									if(isNull(row.deliveryCount)||row.deliveryCount==0){
 										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>'//代发货
 									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
-										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+										if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
-											}else{
+											} else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+												return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+												+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
+												}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
+													+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
+													}else{
 												return clickhtm + '';
 											}
 									}else if(Number(row.materielCount)==Number(row.deliveryCount)){
-										if(isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount)){
+										if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
 											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
-											}else{
+											}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
+												return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\',\''+row.unBillOrReceiptMoney+'\')">收票</a><br/>'
+												}else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
+												return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+												}else{
 												return clickhtm + '';
 											}
 									}else{
@@ -854,8 +875,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                   "aoColumns": [
                                 { mData: 'stockInOutRecord.inOutNum' },
                                   { mData: 'stockInOutRecord.inOutType' },
-                                  { mData: 'orderMateriel'},
-                                  { mData: 'orderMateriel'},
+                                  { mData: 'materiel'},
+                                  { mData: 'materiel'},
                                   { mData: 'deliverDate' },
                                   { mData: 'deliverCount' },//orderMateriel
                                   { mData: 'stockInOutRecord.stockDate' },
@@ -881,8 +902,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								
 								if(data==null){
 									return "";
-								}else if(data.materiel!=null){
-									return data.materiel.materielName;
+								}else if(data.materielName!=null){
+									return data.materielName;
 								}
 								
 							}
@@ -893,8 +914,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								if(data==null){
 									return "";
 									
-								}else{
-									return data.materiel.specifications;
+								}else if(data.specifications!=null){
+									return data.specifications;
 								}
 							}
 						}],
@@ -4267,7 +4288,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	}
 	
 	$scope.viewDeliverLog = function (serialNum){
-		$("#operateLogInfo").modal("show");
+		$("#deliverOperateLogInfo").modal("show");
 		//控制日志显示(数量日期和金额日期)
 		$scope.showTakeDeliver=true;
 		/*if(logTable){
@@ -4282,14 +4303,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	}
 	
 	$scope.viewPayLog = function (serialNum){
-		$("#operateLogInfo").modal("show");
+		$("#payOperateLogInfo").modal("show");
 		//控制日志显示(数量日期和金额日期)
 		$scope.showPay=true;
-		/*if(logTable){
-			logTable.ajax.url(ctx+"/rest/order/findPayLog?serialNum=" + serialNum).load()
-		}else{
-			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
-		}*/
 		if(logTable){
  			logTable.destroy();
  		}

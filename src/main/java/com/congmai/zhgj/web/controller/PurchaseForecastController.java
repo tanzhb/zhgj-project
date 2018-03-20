@@ -47,6 +47,7 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
+import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.BOMMaterielService;
 import com.congmai.zhgj.web.service.DemandPlanMaterielService;
@@ -382,7 +383,11 @@ public class PurchaseForecastController {
 		    			pMateriel.setUpdateTime(new Date());
 		    			
 		    			if(demandPlanMateriel.getSupplyMaterielSerial()!=null){
-		    				pMateriel.setSupplyMaterielSerial(supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial()).getSupplyComId());//设置供应商id
+		    				SupplyMateriel supplyMateriel=supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial());
+		    				pMateriel.setSupplyMaterielSerial(demandPlanMateriel.getSupplyMaterielSerial());
+		    				if(supplyMateriel!=null){
+		    					pMateriel.setSupplyComId(supplyMateriel.getSupplyComId());//设置供应商id
+		    				}
 		    			}
 		    			newMaterielList.add(pMateriel);
 			    	}else{
@@ -407,9 +412,9 @@ public class PurchaseForecastController {
 			    			pMateriel.setCreateTime(new Date());
 			    			pMateriel.setUpdateTime(new Date());
 			    			
-			    			if(demandPlanMateriel.getSupplyMaterielSerial()!=null){
+			    			/*if(demandPlanMateriel.getSupplyMaterielSerial()!=null){
 			    				pMateriel.setSupplyMaterielSerial(supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial()).getSupplyComId());//设置供应商id
-			    			}
+			    			}*/
 			    			newMaterielList.add(pMateriel);
 			    		}
 			    	}
@@ -430,9 +435,11 @@ public class PurchaseForecastController {
 	    			pMateriel.setCreateTime(new Date()); 
 	    			pMateriel.setUpdateTime(new Date());
 	    			if(demandPlanMateriel.getSupplyMaterielSerial()!=null){
-	    				//pMateriel.setSupplyMaterielSerial(supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial()).getSupplyComId());//设置供应商id
-	    				pMateriel.setSupplyComId(supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial()).getSupplyComId());//设置供应商id
-	    				pMateriel.setSupplyMaterielSerial(dm.getSupplyMaterielSerial());
+	    				SupplyMateriel supplyMateriel=supplyMaterielService.selectById(demandPlanMateriel.getSupplyMaterielSerial());
+	    				pMateriel.setSupplyMaterielSerial(demandPlanMateriel.getSupplyMaterielSerial());
+	    				if(supplyMateriel!=null){
+	    					pMateriel.setSupplyComId(supplyMateriel.getSupplyComId());//设置供应商id
+	    				}
 	    			}
 	    			newMaterielList.add(pMateriel);
 		    	}

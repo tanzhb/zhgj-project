@@ -3933,7 +3933,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	}
 		    	
 		    	$scope.viewDeliverLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
+		    		$("#deliverOperateLogInfo").modal("show");
 		    		//控制日志显示(数量日期和金额日期)
 		    		$scope.showReceive=true;
 		    		/*if(logTable){
@@ -3948,7 +3948,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	}
 		    	
 		    	$scope.viewPayLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
+		    		$("#payOperateLogInfo").modal("show");
 		    		//控制日志显示(数量日期和金额日期)
 		    		$scope.showPay=true;
 		    	/*	if(logTable){
