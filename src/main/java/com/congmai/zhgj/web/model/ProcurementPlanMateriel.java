@@ -68,12 +68,22 @@ public class ProcurementPlanMateriel {
 
     private String unit;  
     
+    private String status;  
+    
     
     
     
     
 
-    public String getMaterielNum() {
+    public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getMaterielNum() {
 		return materielNum;
 	}
 

@@ -272,7 +272,7 @@ public class ProcurementPlanController {
 	
 	
 	/**
-     * @Description (保存订单物料信息)
+     * @Description (保存采购清单物料信息)
      * @param request
      * @return
      */
@@ -343,6 +343,41 @@ public class ProcurementPlanController {
 		}
 		return map;
     }
+    
+    /**
+     * @Description (保存采购清单物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="saveDemandMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public DemandMateriel saveDemandMateriel(Map<String, Object> map,@RequestBody DemandMateriel demandMateriel,HttpServletRequest request) {
+    	String flag ="0"; //默认失败
+        	try{
+        		Subject currentUser = SecurityUtils.getSubject();
+        		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+        		if(StringUtils.isEmpty(demandMateriel.getSerialNum())){
+        			demandMateriel.setSerialNum(ApplicationUtils.random32UUID());
+        			demandMateriel.setCreateTime(new Date());
+        			demandMateriel.setCreator(currenLoginName);
+        			demandMateriel.setUpdateTime(new Date());
+        			demandMateriel.setUpdater(currenLoginName);
+        			List<DemandMateriel>demandMateriels=new ArrayList<DemandMateriel>();
+        			demandMateriels.add(demandMateriel);
+        			procurementPlanMaterielService.betchInsertDemandMateriel(demandMateriels);
+        			
+        		}else{
+        			demandMateriel.setUpdateTime(new Date());
+        			demandMateriel.setUpdater(currenLoginName);
+        			procurementPlanMaterielService.updateDemandMateriel(demandMateriel);
+        		}
+        		flag = "1";
+        	}catch(Exception e){
+        		//20180110 qhzhao System.out.println(e.getMessage());
+        		return null;
+        	}
+    	return demandMateriel;
+    }
     /**
      * 
      * @Description 保存所有需求物料
@@ -407,7 +442,7 @@ public class ProcurementPlanController {
     }
 
     /**
-     * @Description (删除订单物料信息)
+     * @Description (删除采购清单物料信息)
      * @param request
      * @return
      */
@@ -426,7 +461,26 @@ public class ProcurementPlanController {
     	}
     	return flag;
     }
-	
+    /**
+     * @Description (删除需求物料信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value="deleteDemandMateriel",method=RequestMethod.POST)
+    @ResponseBody
+    public String deleteDemandMateriel(Map<String, Object> map,@RequestBody String serialNums,HttpServletRequest request) {
+    	String flag = "0"; //默认失败
+    	try{
+    		if(StringUtils.isNotEmpty(serialNums)){
+    			procurementPlanMaterielService.deleteDemandMateriel(serialNums);
+    		}
+    		flag = "1";
+    	}catch(Exception e){
+    		//20180110 qhzhao System.out.println(e.getMessage());
+    		
+    	}
+    	return flag;
+    }
     
     /**
      * @Description (导出订单信息)
@@ -637,7 +691,7 @@ public class ProcurementPlanController {
     			newOrderInfo.setOrderNum(temp);
     			newOrderInfo.setSupplyComId(supplyComId);//设置新的供应商
     			newOrderInfo.setContractSerial(newContractSerialNum);
-    			newOrderInfo.setOrderSerial(procurementPlan.getSaleOrder().getOrderNum());//
+    			newOrderInfo.setOrderSerial(null);//
     			newOrderInfo.setDemandPlanSerial(procurementPlan.getProcurementPlanNum());
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("zizhuBuy"));//设置为自主采购
@@ -745,7 +799,7 @@ public class ProcurementPlanController {
 				ProcurementPlanMateriel  pMateriel = new ProcurementPlanMateriel();
     			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
     			pMateriel.setMaterielSerial(bomMateriel.getMaterielSerial());
-    			pMateriel.setDemandMaterielSerial(bomMateriel.getBomMaterielSerial());
+//    			pMateriel.setDemandMaterielSerial(bomMateriel.getBomMaterielSerial());
     			pMateriel.setSingleDose(bomMateriel.getSingleDose());
     			pMateriel.setMateriel(bomMateriel.getMateriel());
     			/*String materielId=bomMateriel.getMateriel().getMaterielId();//获取基本物料id

@@ -661,17 +661,25 @@ public class DemandPlanController {
             demandPlanMateriels = objectMapper.readValue(params, javaType);
             if(!CollectionUtils.isEmpty(demandPlanMateriels)){
             	demandPlanMaterielService.insertAllDemandPlanMateriel(demandPlanMateriels, currenLoginName);
-            	for(DemandPlanMateriel materiel :demandPlanMateriels){
-            		materiel.setSupplyName(demandPlanMaterielService.selectSupplyName(materiel.getSupplyMaterielSerial()));
-            		int remainTime = 0;
-    				try {
-    					remainTime = DateUtil.daysBetween(new Date(), materiel.getDeliveryDate());
-    				} catch (Exception e) {
-    					logger.warn(e.getMessage(), e);
-    				}
-    				materiel.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
-            		
-            	}
+				for (DemandPlanMateriel materiel : demandPlanMateriels) {
+					materiel.setSupplyName(demandPlanMaterielService
+							.selectSupplyName(materiel
+									.getSupplyMaterielSerial()) == null ? companyService
+							.selectById(materiel.getSupplyMaterielSerial())
+							.getComName() : demandPlanMaterielService
+							.selectSupplyName(materiel
+									.getSupplyMaterielSerial()));
+					int remainTime = 0;
+					try {
+						remainTime = DateUtil.daysBetween(new Date(),
+								materiel.getDeliveryDate());
+					} catch (Exception e) {
+						logger.warn(e.getMessage(), e);
+					}
+					materiel.setRemainTime(String.valueOf(remainTime < 0 ? 0
+							: remainTime));
+
+				}
             }
             
     		flag = "1";

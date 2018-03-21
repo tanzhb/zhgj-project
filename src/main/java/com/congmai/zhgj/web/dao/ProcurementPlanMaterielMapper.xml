@@ -89,7 +89,7 @@
   <sql id="Base_Column_List" >
     serialNum, procurementPlanSerial, materielSerial, supplyMaterielSerial, planCount, 
     buyCount, orderUnitPrice, orderRateUnit, money, deliveryDate, lastDeliveryDate, deliveryAddress, 
-    sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose
+    sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose,demandMaterielSerial
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" >
     select

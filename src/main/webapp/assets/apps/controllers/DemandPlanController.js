@@ -28,6 +28,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		selectParentMateriel();//加载物料列表
 	    		handle.datePickersInit("bottom");
 	    		initCustomers();
+	    		initSuppliers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
 	 			selectParentMateriel();
@@ -539,12 +540,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        		handle.blockUI();
         			if($scope.rootMateriels.length==0){//如果需求物料列表为空
         				for(var i = 0;i < $scope.serialNums.length;i++){ //将选中物料放入列表，并设置为编辑状态
+        					($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
         					$scope.rootMateriels.push(($scope.serialNums)[i].materiel);
         					$scope["demandPlanMaterielEdit"+i] = false;
         					$scope["demandPlanMaterielView"+i] = false;
         				}
         			}else{
 		        		for(var i = 0;i < $scope.serialNums.length;i++){
+		        			($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
 	        				$scope.rootMateriels.splice(0,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
 	        				$scope["demandPlanMaterielEdit"+i] = false;
 							$scope["demandPlanMaterielView"+i] = false;
@@ -618,7 +621,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    				var demandPlanMateriel={};
 	    				demandPlanMateriel.demandPlanSerial=$scope.demandPlan.serialNum;
 //	    				$scope.rootMateriels[index].materielSerial=$scope.rootMateriels[index].serialNum
-	    				if(isNull(materiel.materielSerial)){ //如果供应物料id不存在，则为新增物料，否则为编辑需求物料
+	    				if(isNull(materiel.serialNum)){ 
 							demandPlanMateriel.supplyMaterielSerial =materiel.supplyMaterielSerial;
 							demandPlanMateriel.materielSerial =materiel.serialNum;
 						}else{
@@ -894,10 +897,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    			   handle.paramCheck("deliveryAddress"+index,"交付地点不能为空！");
 		    			   flag = false;
 		    		}
-		    	/*	if(isNull($scope.rootMateriels[index].supplyMaterielSerial)){
-		    			   handle.paramCheck("supplyMaterielSerial"+index,"供应商未选择！");
+		    		if(isNull($scope.rootMateriels[index].supplyMaterielSerial)){
+		    			toastr.warning("未选择供应商!");
 		    			   flag = false;
-		    		}*/
+		    		}
 		    	   return flag;
 		    }
 	        

@@ -288,10 +288,15 @@
                                                     <td>
 	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"  ng-if="materiel.supplyMateriels.length!=0">
 	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
-	                                                    		{{m.supply.comName}}{{m.supply.supplyComId}}
+	                                                    		{{m.supply.comName}}
 	                                                    	</option>
 	                                                    </select>
-	                                                    <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">无供应商</span>
+	                                                    <!-- <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">无供应商</span> -->
+	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"   ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">
+	                                                    	<option ng-repeat="com in suppliers" value="{{com.comId}}"  >
+	                                                    		{{com.comName}}
+	                                                    	</option>
+	                                                    </select>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
                                                     </td>
                                                     <td style="width: 140px;min-width: 120px;">

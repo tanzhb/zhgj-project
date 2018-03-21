@@ -82,7 +82,17 @@ public class ProcurementPlanMaterielServiceImpl implements ProcurementPlanMateri
 		}
 
 	}
-
+	@Override
+	public void deleteDemandMateriel(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		for(String id : idList){
+			DemandMateriel dm  = new DemandMateriel();
+			dm.setSerialNum(id);
+			dm.setDelFlg("1");
+			dm.setUpdateTime(new Date());
+			DemandMaterielMapper.updateByPrimaryKeySelective(dm);
+		}
+	}
 	@Override
 	public void betchInsertProcurementPlanMateriel(List<ProcurementPlanMateriel> procurementPlanMateriel) {
 		if(!CollectionUtils.isEmpty(procurementPlanMateriel)){
@@ -156,6 +166,11 @@ public class ProcurementPlanMaterielServiceImpl implements ProcurementPlanMateri
 	public void updateProcurementPlanMateriel(ProcurementPlanMateriel record) {
 		ProcurementPlanMaterielMapper.updateByPrimaryKeySelective(record);
 		
+	}
+
+	@Override
+	public void updateDemandMateriel(DemandMateriel demandMateriel) {
+		DemandMaterielMapper.updateByPrimaryKeySelective(demandMateriel);
 	}
 
 }

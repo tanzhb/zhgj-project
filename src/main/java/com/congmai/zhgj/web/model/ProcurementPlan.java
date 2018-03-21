@@ -30,7 +30,7 @@ public class ProcurementPlan {
     private Date createTime;
 
     private String updater;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateTime;
     
     private OrderInfo saleOrder;
@@ -151,7 +151,7 @@ public class ProcurementPlan {
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
     }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getUpdateTime() {
         return updateTime;
     }
