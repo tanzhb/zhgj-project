@@ -483,41 +483,61 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
-				if(Number($scope.remainMoneyAmount)<=unPaymentAmount){//如果付款单剩余未付金额小与等于水单余额
+				$("#up"+serialNum).val(unPaymentAmount);
+				/*if(Number($scope.remainMoneyAmount)<=unPaymentAmount){//如果付款单剩余未付金额小与等于水单余额
 					$("#up"+serialNum).val(Number($scope.remainMoneyAmount)-Number($scope.totalVerificateCount));
 				}else{
 					$("#up"+serialNum).val(unPaymentAmount-Number($scope.totalVerificateCount));
-				}
+				}*/
 				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");
 				$("#up"+serialNum).attr("readonly",true);
 				value=$("#up"+serialNum).val();
 				$("#up"+serialNum).val(0);//重新置为0
-				$scope.totalVerificateCount=($scope.totalVerificateCount-Number(value));
+				$scope.totalVerificateValue();
+				/*$scope.totalVerificateCount=($scope.totalVerificateCount-Number(value));*/
 				/* toastr.warning("重新选择出库,数量为"+value+"!");*/
 				
 			}
 			//$scope.judgeNumber(stockCount,stockOutCount,serialNum);
 		}
  		$scope.judgeNumber=function(remainMoneyAmount,unPaymentAmount,serialNum){
-			 var value=$("#up"+serialNum).val();//核销金额
+			 var value=$scope['unPaymentAmount'+serialNum];//核销金额;
 			 if(isNaN(value)||value<=0){
 				 toastr.warning("核销金额必须为大于0的数字！");
+				 $("#up"+serialNum).val(remainMoneyAmount);
 				 return;
 			 }
 			 if(Number(value)>Number(unPaymentAmount)){
 				toastr.warning("当前核销金额不得大于付款水单余额！");
-				  $("#up"+serialNum).empty();
+				  $("#up"+serialNum).val(0);
 				 $("#up"+serialNum).focus(); 
 				 return;
 			 }else if(Number(value)>Number(remainMoneyAmount)){
 				 toastr.warning("当前核销金额不得大于付款单余额！");
-				  $("#up"+serialNum).empty();
+				 $("#up"+serialNum).val(remainMoneyAmount);
 				 $("#up"+serialNum).focus(); 
 				 return;
 			 }
-			 var checkboxs=$('input[class="checkboxes"]:checked');
+			/* var checkboxs=$('input[class="checkboxes"]:checked');
+			 var count=0;
+			 for(var i=0;i<checkboxs.length;i++){
+				  var serialNum=$(checkboxs[i]).val();
+				  var value=$("#up"+serialNum).val();
+				  count=count+Number(value);//累加核销金额
+			 }*/
+			 $scope.totalVerificateValue();
+//			 $scope.totalVerificateCount=count;
+			 if($scope.totalVerificateCount>remainMoneyAmount){
+				 toastr.warning("当前核销总金额不得大于付款水单余额！");
+				 $("#up"+serialNum).val(0);
+				 $("#up"+serialNum).focus(); 
+			 }
+		 }
+ 		
+ 		$scope.totalVerificateValue=function(){
+ 			 var checkboxs=$('input[class="checkboxes"]:checked');
 			 var count=0;
 			 for(var i=0;i<checkboxs.length;i++){
 				  var serialNum=$(checkboxs[i]).val();
@@ -525,12 +545,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				  count=count+Number(value);//累加核销金额
 			 }
 			 $scope.totalVerificateCount=count;
-			 if(count>remainMoneyAmount){
-				 toastr.warning("当前核销总金额不得大于付款水单余额！");
-				 $("#up"+serialNum).empty();
-				 $("#up"+serialNum).focus(); 
-			 }
-		 }
+			 return count;
+ 		}
  	    /**
 	        * 确认核销
 	        */

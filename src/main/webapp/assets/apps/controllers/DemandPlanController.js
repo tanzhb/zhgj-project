@@ -623,7 +623,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 //	    				$scope.rootMateriels[index].materielSerial=$scope.rootMateriels[index].serialNum
 	    				if(isNull(materiel.serialNum)){ 
 							demandPlanMateriel.supplyMaterielSerial =materiel.supplyMaterielSerial;
-							demandPlanMateriel.materielSerial =materiel.serialNum;
+							demandPlanMateriel.materielSerial =materiel.materielSerial;
 						}else{
 							demandPlanMateriel.serialNum = materiel.serialNum;
 							demandPlanMateriel.supplyMaterielSerial = materiel.supplyMaterielSerial;
@@ -1240,6 +1240,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       var s_table;
 	       var tableAjaxUrl = "rest/order/findOrderList?type=sale&demandPlanSerial="+$stateParams.serialNum;
 	       var selectSaleOrderTable = function() {
+	    	   handle.blockUI("正在加载中..........");
 	               a = 0;
 	               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
 	               s_table = $("#sample_2")
@@ -1391,7 +1392,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-   						} ]
+   						} ],//stateSave:false,
+						"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+							 handle.unblockUI();
+		                   }
 
 	               }).on('order.dt',
 	               function() {

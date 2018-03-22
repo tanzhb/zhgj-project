@@ -621,9 +621,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'render' : function(data,
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewSaleOrder(\''+row.serialNum+'\')">'+data+'</a></br>';
-								if((Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
+								/*if((Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
 									return clickhtm+ '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:green">已完成</span>';
-								}
+								}*/
 								if(row.status==55){
 									return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">待接收</span>';
 								}else if(row.processBase!=""&&row.processBase!=null){
@@ -1510,7 +1510,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 
 							}else{
 								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' class='checkboxes' data-checked=false name='material_serial'  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' value="+ row.supplyMateriels[0].serialNum +" />" +
+								"<input type='checkbox' class='checkboxes' data-checked=false   name='"+meta.row+"'   id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' value="+ row.supplyMateriels[0].serialNum +" />" +
 								"<span></span></label>";
 							}
 						}else{
@@ -1575,7 +1575,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     					'render' : function(data,
     							type, row, meta) {
     						return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='ziZhuGetCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.serialNum +" />" +
+								"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='ziZhuGetCheckedIds(\""+data+"\","+meta.row+")' name='"+meta.row+"' value="+ row.serialNum +" />" +
 								"<span></span></label>";
 						},
     					"createdCell": function (td, cellData, rowData, row, col) {
@@ -1649,6 +1649,24 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
      	            jQuery(e).each(function() {
      	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
      	            })
+     	            if(t){//选中
+     	            	$('input[type="checkbox"]:checked').each(
+        						function() {
+        							if ($.contains(document, this)) {
+        								if(this.className!='group-checkable'){
+        									$scope.ziZhuGetCheckedIds(this.id,this.name);
+        								}
+        							}
+        			});
+     	            }else{
+     	            	$('input[type="checkbox"]:checked').each(
+        						function() {
+        							if ($.contains(document, this)) {
+        								this.checked=false;
+        								$scope.serialNums=[];
+        							}
+        			});
+     	            }
      	        }),
      	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
      	        function() {
@@ -1725,7 +1743,35 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
       			}
       			
       		}
-      		
+      		/**
+      		 * checkbox点击事件（生成选中内容）（自主销售）
+      		 */
+      		$scope.ziZhuGetCheckedIdsOther = function(serialNum,index){
+      			var data={};
+      			data.serialNum = serialNum;
+      			data.materiel = table.row(index).data();
+      			data.materiel.materielSerial = data.materiel.serialNum; //为保存操作做准备，新增物料serialNum为空
+      			$scope.serialNums=[];
+      			$scope.serialNums.push(data);
+      			$("#"+serialNum).data("checked",true);
+      			$("#"+serialNum).attr("checked",true)
+      			/*if($("."+group-checkable).data("checked")||$("."+group-checkable).data("checked")==undefined){
+      				$scope.serialNums.push(data);
+      				$("#"+serialNum).data("checked",true);
+      				$("#"+serialNum).attr("checked",true);
+      			}else{
+      				for(var i=0;i<$scope.serialNums.length;i++){
+      					if($scope.serialNums[i].serialNum==serialNum){
+      						$scope.serialNums.splice(i,1);
+      						$("#"+serialNum).attr("checked",false);
+      						$("#"+serialNum).data("checked",false);
+      						break;
+      					}
+      				}
+      			
+      			}*/
+      			
+      		}
               /**
   	    	 * 更换供应物料流水号
   	    	 */
@@ -1844,7 +1890,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         $scope.copyMateriels = {};
     	$scope.confirmSelect = function(){//非自主销售订单，选择供应物料确认
     		if($scope.modalType=='single'){
-    			var id_count = table.$('input[name="serialNum"]:checked').length;
+    			c
     			if(id_count==0){
 					toastr.warning("请选择物料");
 					return;
@@ -1943,19 +1989,35 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	}
     	
     	$scope.ziZhuConfirmSelect = function(){//自主销售订单，选择基本物料确认
-    		if($scope.serialNums.length==0){ //判断是否选择了物料
+    		var id_count = table.$('input[type="checkbox"]:checked').length;
+    		if($scope.serialNums.length==0&&id_count==0){ //判断是否选择了物料
 				toastr.warning("请选择物料");
 				return;
 			}
 	    		//--------批量增加物料信息START--------------
     			var ids = '';
-				for(var i=0;i<$scope.serialNums.length;i++){
-					if (ids == '') {
-						ids = $scope.serialNums[i].materiel.serialNum;
-					} else{
-						ids = ids + ',' + $scope.serialNums[i].materiel.serialNum;
-					}
-				}
+    			if($scope.serialNums.length!=0){
+    				for(var i=0;i<$scope.serialNums.length;i++){
+    					if (ids == '') {
+    						ids = $scope.serialNums[i].materiel.serialNum;
+    					} else{
+    						ids = ids + ',' + $scope.serialNums[i].materiel.serialNum;
+    					}
+    				}
+    			}else{
+    				table.$('input[type="checkbox"]:checked').each(
+    						function() {
+    							if ($.contains(document, this)) {
+    									// 将选中数据id放入ids中
+    									if (ids == '') {
+    										ids = this.id;
+    									} else
+    										ids = ids + ','
+    												+ this.id;
+    									$scope.ziZhuGetCheckedIds(this.id,this.name);
+    							}
+    			});
+    			}	
         		handle.blockUI();
         		var promise = materielService.chooseBasicMateriels(ids,$scope.saleOrder.buyComId);
         		promise.then(function(data){
@@ -1994,6 +2056,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
      	 //关闭物料列表时，清除选中状态START--------------
     	 $('#basicMaterielInfo').on('hide.bs.modal', function (e) { 
     		 clearChecked();
+    		 $('input[type="checkbox"][class="group-checkable"]').attr("checked",false);
     		 $scope.serialNums=[];
 	     })
     	
@@ -2621,6 +2684,11 @@ var e = $("#form_clauseSettlement"),
     	if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
     		toastr.error('请填写结算条款后保存！');return
 		}
+    	for(var i=0; i<$scope.clauseSettlement.CSD.length;i++){
+    		if($scope.clauseSettlement.CSD[i].deliveryRate<0){
+    			toastr.error('支付比率不小于0！');return
+    		}
+    	}
     	if($('#form_clauseSettlement').valid()){
     		$scope.clauseSettlement.contractSerial = $scope.contract.id;
     		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
@@ -2637,6 +2705,7 @@ var e = $("#form_clauseSettlement"),
        		    		if(!isNull($scope.clauseSettlementDetail)){
        		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
           		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+          		    			$scope["showSXf"+i]=false;
           		    		}
           		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
           		        		     function(data){
@@ -2703,6 +2772,10 @@ var e = $("#form_clauseSettlement"),
 	   var flag=false;
 	   if($scope.clauseSettlement.CSD[index].paymentType=='预付款'){
 		   for(var i in $scope.clauseSettlement.CSD){
+			   if(($scope.clauseSettlement.CSD[i].paymentType==$scope.clauseSettlement.CSD[index].paymentType)&&(i!=index)){
+				   toastr.warning('支付类型重复,请重新选择！');
+				   return;
+			   }
 			   if($scope.clauseSettlement.CSD[i].paymentType=='尾款'){
 				   flag=true;
 				   return;
@@ -3716,6 +3789,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+			    	 if(obj[attr]<0||obj[attr]>100){
+			    		 obj[attr]=0;
+			    	 }
 		    	 }
 		       
 		       $scope.clearNoNum = function(obj,attr){

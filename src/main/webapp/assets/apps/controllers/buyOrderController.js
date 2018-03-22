@@ -467,9 +467,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									type, row, meta) {
 								var clickhtm = '<a href="javascript:void(0);" ng-click="viewBuyOrder(\''+row.serialNum+'\')">'+data+'</a></br>'
 								
-								if(!isNull(row.deliveryCount)&&(Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
+								/*if(!isNull(row.deliveryCount)&&(Number(row.receiveCount)==Number(row.deliveryCount))&&(Number(row.payAmount)==Number(row.orderAmount))){
 									return clickhtm+ '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:green">已完成</span>';
-								}
+								}*/
 								
 								if(row.status==0){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >待申请</span>';
@@ -2485,6 +2485,11 @@ var e = $("#form_clauseSettlement"),
     	if(isNull($scope.clauseSettlement)){// 结算条款为空的处理
     		toastr.error('请填写结算条款后保存！');return
 		}
+    	for(var i=0; i<$scope.clauseSettlement.CSD.length;i++){
+    		if($scope.clauseSettlement.CSD[i].deliveryRate<0){
+    			toastr.error('支付比率不小于0！');return
+    		}
+    	}
     	if($('#form_clauseSettlement').valid()){
     		$scope.clauseSettlement.contractSerial = $scope.contract.id;
     		$scope.clauseSettlementDetail = $scope.clauseSettlement.CSD;
@@ -2500,6 +2505,7 @@ var e = $("#form_clauseSettlement"),
        		    		if(!isNull($scope.clauseSettlementDetail)){
        		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
           		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+          		    			$scope["showSXf"+i]=false;
           		    		}
           		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
           		        		     function(data){
@@ -3589,6 +3595,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+			    	 if(obj[attr]<0||obj[attr]>100){
+			    		 obj[attr]=0;
+			    	 }
 		    	 }
 		       
 		       $scope.clearNoNum = function(obj,attr){

@@ -29,8 +29,8 @@
 	                    <tbody>
 	                    </tbody>
 	                    <tfoot>
-	                    <tr><td/><td/><td/><td/><td>合计:</td><td>{{totalUnVerificateCount}}</td><td>{{totalVerificateCount}}</td></tr>
-	                    <tr><td/><td>收款单金额:</td><td>{{totalUnVerificateCount}}</td><td>核销金额:</td><td>{{totalVerificateCount}}</td></td><td/><td/></tr>
+	                    <tr><td/><td/><td/><td/><td>合计:</td><td>{{totalUnVerificateCount}}</td><td>{{totalVerificateValue()}}</td></tr>
+	                    <!-- <tr><td/><td>收款单金额:</td><td>{{totalUnVerificateCount}}</td><td>核销金额:</td><td>{{totalVerificateCount}}</td></td><td/><td/></tr> -->
 	                    </tfoot>
 	                </table>
 	            </div>

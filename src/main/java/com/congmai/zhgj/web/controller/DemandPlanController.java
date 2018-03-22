@@ -680,8 +680,9 @@ public class DemandPlanController {
 							: remainTime));
 
 				}
+				 demandPlanService.updateDemandPlanInfo(demandPlanMateriels.get(0).getDemandPlanSerial());
             }
-            
+           
     		flag = "1";
     	}catch(Exception e){
     		return null;
