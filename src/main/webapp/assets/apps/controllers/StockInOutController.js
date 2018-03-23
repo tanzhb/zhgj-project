@@ -572,6 +572,11 @@ angular
 									}else{toastr.warning("只能选择一条数据进行编辑");}
 									
 								}else{
+									if(table.row(".active").data().status==1){
+										toastr.warning("该检验单已检验");
+										return;
+									}
+									table.row(".active").data();
 									var serialNum = table.$('input[type="checkbox"]:checked').val();
 									if(judgeString.indexOf("edit")>-1){
 										$state.go("addOrEditStockInOutCheck",{inOrOut:serialNum+judgeString});

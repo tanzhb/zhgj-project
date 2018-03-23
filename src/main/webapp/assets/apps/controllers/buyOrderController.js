@@ -727,7 +727,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else if(row.status==3){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>'
 								}else if(row.status=="66"){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
+									return clickhtm //+ '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
 								}else if(row.status=="77"){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a><br/>'
@@ -4856,7 +4856,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        
 	        $scope.pingTaiSubmit  = function(serialNum,orderAmount) {// 平台提交给供应商
 	        	  if(orderAmount=='null'){
-		    		   showToastr('toast-top-center', 'warning', '该采购订单没有采购物料，不能提交！');
+		    		   showToastr('toast-top-center', 'warning', '该采购订金额为0，不能提交！');
 		    		   return;
 		    	   }
 	        	$scope.submitOrder = {}

@@ -1654,7 +1654,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         						function() {
         							if ($.contains(document, this)) {
         								if(this.className!='group-checkable'){
-        									$scope.ziZhuGetCheckedIds(this.id,this.name);
+        									$scope.ziZhuGetCheckedIdsOther(this.id,this.name);
         								}
         							}
         			});
@@ -5029,12 +5029,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            { mData: 'orderNum' },
 		 							                           //{ mData: 'materielCount' },物料条目数
 		 							                           { mData: 'receiver'},
+		 							                          { mData: 'deliverType'},
 		 								                          { mData: 'materielTotalCount' },//物料总数
 		 							                            { mData: 'packageType' },
 		 							                            { mData: 'deliveryAddress'},
-		 							                            { mData: 'deliverDate'},
 		 							                            { mData: 'transportType'},
-		 							                            { mData: 'status',
+		 							                            { mData: 'status'/*,
 		 					                            	mRender:function(data){
 		 							                            		if(data!=""&&data!=null){
 		 							                            			if(data=='0'){
@@ -5063,15 +5063,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
 		 																	}else if(data=='10'){
 		 																		return '<span  class="label label-sm label-warning ng-scope">待收货</span>';
-		 																	}/*else if(data=='00'||data=='100'){
+		 																	}else if(data=='00'||data=='100'){
 		 																		return '<span  class="label label-sm label-warning ng-scope">待申请</span>';		
-		 																	}*/else{
+		 																	}else{
 		 																		return '';
 		 																	}
 		 							                            		}else{
 		 							                            			return "";
 		 							                            		}
-		 							                            	}
+		 							                            	}*/
 		 							                            }, { mData: 'status' ,
 				 					                            	mRender:function(data,row){
 				 							                            		if(data!=""&&data!=null){
@@ -5112,6 +5112,51 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            	'render' : function(data,
 		 							                            			type, row, meta) {
 		 							                            		return '<a data-toggle="modal" ng-click="viewSaleOrder(\''+row.orderSerial+'\')" ">'+data+'</a>';
+		 							                            	},
+		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
+		 							                            		$compile(td)($scope);
+		 							                            	}
+		 							                            },
+		 							                           {
+		 							                            	'targets' : 9,
+		 							                            	'className' : 'dt-body-center',
+		 							                            	'render' : function(data,
+		 							                            			type, row, meta) {
+		 							                            		if(data!=""&&data!=null){
+		 							                            			if(data=='0'){
+		 							                            				return '<span  class="label label-sm label-success ng-scope">待发货</span>';
+		 							                            			}else if(data=='PENDING'){
+		 							                            				return '<span  class="label label-sm label-success ng-scope"  ng-click="viewGraphTrace('+row.processInstanceId+')">审批中</span>';
+		 							                            			}else if(data=='WAITING_FOR_APPROVAL'){
+		 							                            				return '<span  class="label label-sm label-warning ng-scope">待审批</span>';				                            				
+		 																	}else if(data=='3'){
+		 																		return  '<span  class="label label-sm label-warning ng-scope">待收货</span>';
+		 																	}else if(data=='APPROVAL_FAILED'){
+		 																		return '<span  class="label label-sm label-danger ng-scope">审批失败</span>';
+		 																	}else if(data=='4'){
+		 																		return '<span  class="label label-sm label-success ng-scope">已收货</span>';
+		 																	}else if(data=='1'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待检验</span>';
+		 																	}else if(data=='2'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
+		 																	}else if(data=='6'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待清关</span>';
+		 																	}else if(data=='7'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待报关</span>';
+		 																	}else if(data=='8'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
+		 																	}else if(data=='9'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
+		 																	}else if(data=='10'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待收货</span>';
+		 																	}/*else if(data=='00'||data=='100'){
+		 																		return '<span  class="label label-sm label-warning ng-scope">待申请</span>';		
+		 																	}*/else{
+		 																		return '';
+		 																	}
+		 							                            		}else{
+		 							                            			return "";
+		 							                            		}
 		 							                            	},
 		 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 		 							                            		$compile(td)($scope);
@@ -5480,10 +5525,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 
 			    		 	if(deliveryTable.rows('.active').data().length != 1){
 				    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
-				    		}else if(deliveryTable.rows('.active').data().deliverType=='贸易发货'||deliveryTable.rows('.active').data().deliverType=='采购发货'){//如果是贸易发货类型/采购发货类型不需要审批
-				    			showToastr('toast-top-center', 'warning', '该发货计划不需要流程审批！');
 				    		}else{
 				    			var materielCount= deliveryTable.row('.active').data().materielCount;
+				    			var  deliverType=deliveryTable.row('.active').data().deliverType;
+				    			 if(deliverType=='贸易发货'||deliverType=='采购发货'){////如果是贸易发货类型/采购发货类型不需要审批
+						    		   showToastr('toast-top-center', 'warning', '该发货计划不需要流程审批！');
+						    		   return;
+						    	   }
 				    			  if(materielCount==null||materielCount==0){
 						    		   showToastr('toast-top-center', 'warning', '该发货计划没有物料，不能发起流程申请！');
 						    		   return;

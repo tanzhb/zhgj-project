@@ -616,7 +616,7 @@ angular
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									return data;
+		 	    									return data+"------"+row.stockCount;
 		 	    								}
 												
 											}

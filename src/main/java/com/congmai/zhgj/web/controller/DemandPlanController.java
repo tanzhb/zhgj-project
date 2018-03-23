@@ -155,7 +155,7 @@ public class DemandPlanController {
         		return null;
         	}
         	//发给提交需求计划后通知产品经理
-			 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(demandPlan,MessageConstants.DEMANDPLAN_TO_PROMANAGER));
+//			 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(demandPlan,MessageConstants.DEMANDPLAN_TO_PROMANAGER));
     	return demandPlan;
     }
     
@@ -662,13 +662,13 @@ public class DemandPlanController {
             if(!CollectionUtils.isEmpty(demandPlanMateriels)){
             	demandPlanMaterielService.insertAllDemandPlanMateriel(demandPlanMateriels, currenLoginName);
 				for (DemandPlanMateriel materiel : demandPlanMateriels) {
-					materiel.setSupplyName(demandPlanMaterielService
+					/*materiel.setSupplyName(demandPlanMaterielService
 							.selectSupplyName(materiel
 									.getSupplyMaterielSerial()) == null ? companyService
 							.selectById(materiel.getSupplyMaterielSerial())
 							.getComName() : demandPlanMaterielService
 							.selectSupplyName(materiel
-									.getSupplyMaterielSerial()));
+									.getSupplyMaterielSerial()));*/
 					int remainTime = 0;
 					try {
 						remainTime = DateUtil.daysBetween(new Date(),

@@ -185,9 +185,9 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	var getCurrentUserName = function(){
 		var promise = commonService.getCurrentUser();
 		promise.then(function(data){
-			debugger;
 			$scope.user = data.data;
-			$scope.currentUserName=data.data.userName;
+			$scope.department=data.data.department;
+//			$scope.currentUserName=data.data.userName;
 			
 			
 		},function(data){
@@ -2804,6 +2804,13 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 			takeDeliveryWarehouseAddressFlag=false;
 			takeDeliveryWarehouseAddress1Flag=true;
 		}
+		/*if($scope.delivery.deliverType=='售前无合同发货'||$scope.delivery.deliverType=='售后无合同发货'){
+			takeDeliveryWarehouseAddressFlag=false;
+			takeWarehouseNameFlag=false;
+		}else{
+			takeWarehouseNameFlag=true;
+			takeDeliveryWarehouseAddressFlag=true;
+		}*/
 		var e = $("#form_sample_deliverInfo"),
 		
         r = $(".alert-danger", e),

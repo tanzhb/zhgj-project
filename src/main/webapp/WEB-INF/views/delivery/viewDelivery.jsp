@@ -25,8 +25,7 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 48px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery('view')"     ng-if="(deliveryDetail.status=='0'||deliveryDetail.status==undefined||deliveryDetail.status=='10')
-               	&&(currentUserName!=deliveryDetail.maker)"
+               	<button type="button" ng-click="goDelivery('view')"     ng-if="(deliveryDetail.status=='0'||deliveryDetail.status==undefined||deliveryDetail.status=='10')&&(department=='产品经理/产品总监')"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
 							</button>
@@ -55,7 +54,7 @@
 															ng-model="delivery.deliverNum" ng-hide="inputDeliveryInfo" >
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliveryDetail.deliverNum}}{{currentUserName}}
+															{{deliveryDetail.deliverNum}}
 															</p>
 													</div>
 												</div>

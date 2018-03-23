@@ -186,6 +186,7 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 					demandPlanMateriel.setCreator(userId);
 					demandPlanMateriel.setUpdateTime(new Date());
 					demandPlanMateriel.setUpdater(userId);
+					demandPlanMateriel.setSupplyMaterielSerial("");
 	    		}
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -36,10 +36,10 @@
 							<div class="tab-pane fade active in" id="tab_1_1">
 							 <div class="portlet-title" style="min-height: 20px;">
                <div class="tools" style="float:right"><!-- ng-if="deliveryDetail.status=='0'" -->
-               	<button type="button" ng-click="goDelivery('add')"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
+               	<!-- <button type="button" ng-click="goDelivery('add')"     ng-if="(delivery.status=='0'||delivery.status==undefined)&&delivery.deliverType=='贸易发货'"
 								class="btn blue  btn-circle  btn-sm">
 								<i class="fa fa-save"></i> 确认发货
-							</button>
+							</button> -->
                   <button ng-click="saveDeliveryInfo()" type="button"   ng-show="inputDeliveryInfo"   class="btn blue  btn-circle  btn-sm">
                   		<i class="fa fa-edit"></i> 保存 </button>
                   		 <button ng-click="editDeliveryInfo()" type="button"   ng-hide="inputDeliveryInfo"   class="btn purple  btn-circle  btn-sm">
@@ -84,7 +84,9 @@
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
 															<option   value=""></option>
 															<option   value="贸易发货">贸易发货</option>
-															<option value="个人借用">个人借用</option>
+															<!-- <option value="个人借用">个人借用</option> -->
+															<option value="售前无合同发货">售前无合同发货</option>
+															<option value="售后无合同发货">售后无合同发货</option>
 														</select>
 															<select class="form-control" id="deliverType"  ng-if="delivery.deliverType=='代发货'"
 															name="deliverType"   disabled="disabled"

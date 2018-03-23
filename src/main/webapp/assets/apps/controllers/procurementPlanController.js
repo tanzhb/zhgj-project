@@ -773,6 +773,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
           		    	$scope.procurementPlanMateriel=data.procurementPlanMateriel;
           		    	$scope.demandMateriel=data.demandMateriel;
 //          		    	$scope.cancelAllProcurementPlanMateriel();
+          		    	if(isNull($scope.procurementPlan.buyOrderCount)){
+          		    		$scope.procurementPlan.buyOrderCount=0;
+          		    	}
+          		    	if(isNull($scope.procurementPlan.endCount)){
+          		    		$scope.procurementPlan.endCount=0;
+          		    	}
           		    	if($state.current.name=="viewProcurementPlan"){//查看页面构造物料查询分页
           		    		$scope.cancelAllProcurementPlanMateriel();
           		    		$scope.queryForPage();//采购清单物料构造分页
@@ -2218,10 +2224,16 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
       		toastr.info('已有对应采购单，不能再次分解！');
       		return;
       	}
+      	for(var i=0;i<$scope.dispalyProcurementPlanMateriel.length;i++){
+      		if(isNull($scope.dispalyProcurementPlanMateriel[i].supplyName)){
+      			toastr.info('请为采购物料选供应商!');
+          		return;
+      		}
+      	}
       	procurementPlanService.procurementPlanGenerateBuy($scope.procurementPlan.serialNum).then(
         		     function(data){
         		    	$scope.procurementPlan = data
-        		    	toastr.info('采购计划分解成功！');
+        		    	toastr.info('采购计划生成采购订单成功！');
         		     },
         		     function(error){
         		         $scope.error = error;

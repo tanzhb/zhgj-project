@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$stateParams,commonService) {
+angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$filter','$stateParams','commonService',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$filter,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -25,13 +25,13 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		}
 	    		
 	    		
-	    		selectParentMateriel();//加载物料列表
+//	    		selectParentMateriel();//加载物料列表
 	    		handle.datePickersInit("bottom");
 	    		initCustomers();
 	    		initSuppliers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
-	 			selectParentMateriel();
+//	 			selectParentMateriel();
 	 			$scope.serialNums = [];
 	 			selectSaleOrderTable();//加载物料列表
 	 			handle.datePickersInit("auto bottom");
@@ -53,6 +53,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 /***选择物料列表初始化START***/
      var table;
      var selectParentMateriel = function() {
+//    	 handle.blockUI("正在加载中..........");
+    	 if(table){
+    		 table.destroy();
+    	 }
               a = 0;
               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
               table = $("#select_sample_2").DataTable({
@@ -168,7 +172,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
      								 $compile(td)($scope);
      						       }
 
-  						}]
+  						}],
+  						"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+//		                	   handle.unblockUI();
+		                   }
 
               }).on('order.dt',
               function() {
@@ -476,11 +483,13 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		if(type=="single"){
 	    			$scope.modalType = type;
 	    			$scope.materielSelectedIndex = index;
-	    			table.ajax.reload();
+//	    			table.ajax.reload();
+	    			selectParentMateriel();
 	    			$("#basicMaterielInfo").modal("show");
 	    		}else{
 	    			$scope.modalType = 'multiple';
-	    			table.ajax.reload();
+//	    			table.ajax.reload();
+	    			selectParentMateriel();
 	    			if(!isNull($scope.demandPlan)&&!isNull($scope.demandPlan.serialNum)){
 		    			$("#basicMaterielInfo").modal("show");
 		    		}else{
@@ -590,6 +599,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	 }
 	    	 //设置发货日期
 	    		$scope.setAllDeliveryDate = function(materiel,index){
+	    			var date1=$filter('date')(new Date(), 'yyyy-MM-dd');
+	    			if( daysBetween(materiel.deliveryDate,date1)<=0){
+	    				toastr.warning("请选择当前日期之后的日期!");
+	    				materiel.deliveryDate=null;
+	    				return;
+	    			}
 					if(index==0){
 						for(var i=1;i<$scope.rootMateriels.length;i++){
 								 $scope.rootMateriels[i].deliveryDate = materiel.deliveryDate;
@@ -897,10 +912,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    			   handle.paramCheck("deliveryAddress"+index,"交付地点不能为空！");
 		    			   flag = false;
 		    		}
-		    		if(isNull($scope.rootMateriels[index].supplyMaterielSerial)){
+		    		/*if(isNull($scope.rootMateriels[index].supplyMaterielSerial)){
 		    			toastr.warning("未选择供应商!");
 		    			   flag = false;
-		    		}
+		    		}*/
 		    	   return flag;
 		    }
 	        

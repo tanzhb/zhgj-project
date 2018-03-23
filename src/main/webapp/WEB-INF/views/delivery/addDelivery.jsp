@@ -385,10 +385,10 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货仓库<span  ng-hide="span"
+													<label class="control-label bold">收货仓库<span   ng-hide="(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')||span"
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-													<div  ng-hide="span">
+													<div  ng-hide="span"       >
 														<select class="form-control"  data-live-search="true" data-size=""   
 															name="warehouseSerial"  id="takeDeliverWarehouse"
 															ng-model="takeDelivery.warehouseSerial"
@@ -407,7 +407,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货地址<span  ng-hide="span"
+													<label class="control-label bold">收货地址<span    ng-hide="(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')||span"
 														class="required" aria-required="true"> * </span></label>
 											
 																	  	<div class="" >

@@ -45,61 +45,48 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售订单号：</label>
+                                 <label class="control-label col-md-5 bold">计划生成日期：</label>
                                  <div class="control-label col-md-7">
-	                                 <p  > {{procurementPlan.saleOrder.orderNum}} </p>
+	                                 <p  > {{procurementPlan.buyDate}} </p>
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                       <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售下单日期：</label>
+                                 <label class="control-label col-md-5 bold">物料条目：</label>
                                  <div class="control-label col-md-7">
-	                                 <p  > {{procurementPlan.saleOrder.orderDate}} </p>
+	                                 <p  > {{materielCount}} </p>
                                  </div>
                              </div>
                          </div>
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售数量：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.saleOrder.materielCount}} </p>
-                                 </div>
-                                 
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4" >
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">客户：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.saleOrder.buyName}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
+                      <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购下单日期：</label>
+                                 <label class="control-label col-md-5 bold">计划采购数量：</label>
                                  <div class="control-label col-md-7">
-                                     <p  >{{procurementPlan.buyDate}} </p>
+	                                 <p  > {{procurementPlan.buyCount}} </p>
                                  </div>
-                                 
+                             </div>
+                         </div>
+                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">齐套数量：</label>
+                                 <div class="control-label col-md-7">
+	                                 <p  > {{procurementPlan.endCount}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">关联采购订单：</label>
+                                 <div class="control-label col-md-7">
+	                                 <p  > {{procurementPlan.buyOrderCount}} </p>
+                                 </div>
                              </div>
                          </div>
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购数量：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.buyCount}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">备注：</label>
@@ -111,16 +98,35 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">状态：</label>
+                                 <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
-                                 	<p ng-if="procurementPlan.status==1" style="color:#fcb95b"> 已完成 </p>
-                                 	<p ng-if="procurementPlan.status!=1" style="color:green"> 待采购 </p>
+                                     <p  > {{procurementPlan.maker}} </p>
                                  </div>
                                  
                              </div>
                          </div>
-                         
-                         
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">更新日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{procurementPlan.updateTime}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                        
+                     </div>
+                     <div class="row">
+                     <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">状态：</label>
+                                 <div class="control-label col-md-7">
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p>
+                                 </div>
+                             </div>
+                         </div>
                      </div>
                  </div>
 			</form>

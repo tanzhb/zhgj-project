@@ -239,7 +239,7 @@
                                                     <th width="15%">交付日期</th>
                                                     <th>距离交付</th>
                                                     <th>交付地点</th>
-                                                    <th style="min-width: 100px;">供应商</th>
+                                                    <!-- <th style="min-width: 100px;">供应商</th> -->
                                                     <th style="width: 140px;"></th>
                                                 </tr>
                                             </thead>
@@ -285,20 +285,20 @@
                                                     	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>
+                                                   <!--  <td>
 	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"  ng-if="materiel.supplyMateriels.length!=0">
 	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
 	                                                    		{{m.supply.comName}}
 	                                                    	</option>
 	                                                    </select>
-	                                                    <!-- <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">无供应商</span> -->
+	                                                    <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">无供应商</span>
 	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"   ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">
 	                                                    	<option ng-repeat="com in suppliers" value="{{com.comId}}"  >
 	                                                    		{{com.comName}}
 	                                                    	</option>
 	                                                    </select>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
-                                                    </td>
+                                                    </td> -->
                                                     <td style="width: 140px;min-width: 120px;">
                                                     	<span ng-if="materiel.orderSerial == null">
 	                                                    	<span>
@@ -369,5 +369,14 @@
 <!-- BEGIN MAIN JS -->
  <script>
 // FormRepeater.init();
+$('input[name="deliveryDate"]').datepicker({
+		rtl : App.isRTL(),
+		orientation : "left",
+		autoclose : true,
+		dateFormat : "yyyy-mm-dd",
+		language : "zh-CN",
+	    todayHighlight : true,  
+	    minDate: new Date()
+	})
 </script> 
 <!-- END MAIN JS -->

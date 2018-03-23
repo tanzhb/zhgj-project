@@ -79,6 +79,7 @@
     warehouseSerial=#{warehouseSerial},
     deliverAddress=#{deliveryAddress},
     status=#{status},
+    deliverType=#{deliverType},
     shipper=#{shipper},
     receiver=#{receiver},
     maker=#{maker},
@@ -246,7 +247,7 @@
    <select id="findAllDeliveryList" parameterType="com.congmai.zhgj.web.model.DeliveryVO" resultType="com.congmai.zhgj.web.model.DeliveryVO">
    SELECT
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount, SUM(IFNULL(c.deliverCount,0)) AS materielTotalCount,a.packageCount,
-	a.receiver,a.deliverAddress deliveryAddress,a.status,a.packageType,
+	a.receiver,a.deliverAddress deliveryAddress,a.status,a.packageType,a.deliverType,
 	d.takeDeliverAddress AS takeAddress,a.deliverDate,
 	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName,
 	sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial,sr.realCount as realCount

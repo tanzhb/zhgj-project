@@ -455,15 +455,13 @@ public class StockController {
 						for(int ii=0;ii<stockInList.size();ii++){
 							DeliveryMateriel dm1 = stockInList.get(ii);
 							if(new BigDecimal(dm.getStockCount()).compareTo(new BigDecimal(dm1.getStockCount()))>0 &&!"0".equals(dm.getStockCount())){//出库比入库多
-								dm.setStockCount(new BigDecimal(dm.getStockCount()).subtract(new BigDecimal(dm1.getStockCount())).toString());
+//								dm.setStockCount(new BigDecimal(dm.getStockCount()).subtract(new BigDecimal(dm1.getStockCount())).toString());
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());
 								}else{
 									dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
 								}
-								dm1.setStockCount("0");
 							}else if(new BigDecimal(dm.getStockCount()).compareTo(new BigDecimal(dm1.getStockCount()))<=0 &&!"0".equals(dm.getStockCount())){//出库比入库少
-								dm.setStockCount("0");
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());
 								}else{

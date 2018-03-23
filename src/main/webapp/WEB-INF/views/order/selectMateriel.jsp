@@ -19,7 +19,7 @@
 	                        <tr>
 	                            <th>
                                     <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                        <input type="checkbox" class="group-checkable" data-set="#select_sample_2 .checkboxes" />
+                                        <input type="checkbox" class="group-checkable" data-set="#select_sample_2 .checkboxes"  />
                                         <span></span>
                                     </label>
                                 </th>

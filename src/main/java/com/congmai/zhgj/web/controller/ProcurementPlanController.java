@@ -145,6 +145,8 @@ public class ProcurementPlanController {
 		procurementPlanInfo.setUpdater(currenLoginName);
 		procurementPlanInfo.setCreateTime(new Date());
 		procurementPlanInfo.setUpdateTime(new Date());
+		procurementPlanInfo.setBuyDate(new Date());
+		procurementPlanInfo.setMaker(currenLoginName);
 		procurementPlanInfo.setStatus("0");
 		
 		procurementPlanService.insert(procurementPlanInfo);
@@ -673,8 +675,8 @@ public class ProcurementPlanController {
     	Set<String> supplySet = new HashSet<String>();//存入所有物料供应商，不会重复
     	if(procurementPlanMateriel!=null){//循环供应物料，集合所有的供应商
     		for(ProcurementPlanMateriel o:procurementPlanMateriel){
-    			if(o.getSupplyMaterielSerial()!=null){
-    				supplySet.add(o.getSupplyMaterielSerial());
+    			if(o.getSupplyComId()!=null){
+    				supplySet.add(o.getSupplyComId());
     			}
     		}
     	}
@@ -733,8 +735,8 @@ public class ProcurementPlanController {
     			List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
     			Double materielCount = 0D;
     			for(ProcurementPlanMateriel o:procurementPlanMateriel){
-        			if(o.getSupplyMaterielSerial()!=null){
-        				if(supplyComId.equals(o.getSupplyMaterielSerial())){
+        			if(o.getSupplyComId()!=null){
+        				if(supplyComId.equals(o.getSupplyComId())){
         					OrderMateriel orderMateriel = new OrderMateriel();
         					orderMateriel.setSerialNum(ApplicationUtils.random32UUID());
         					orderMateriel.setSupplyMaterielSerial(null);//采购订单物料为标准物料
