@@ -163,7 +163,7 @@
                                                     	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
                                                     	<input type="hidden" class="form-control" value="{{WarehouseName}}" disabled="disabled">
                                                     	<input type="text" class="form-control"      value="{{deliver.takeDelivery.warehouse.warehouseName}}" disabled="disabled"  ng-hide="deliverAdd">
-                                                         <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}{{deliver.takeDelivery.warehouse.serialNum}}</p>
+                                                         <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}</p>
                                                     </div>
                                             </div>
 										</div>

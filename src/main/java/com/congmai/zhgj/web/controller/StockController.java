@@ -451,21 +451,32 @@ public class StockController {
 				// 根据入库时间先进先出原则为出库记录附上出库仓库
 				if (totalOutCount.compareTo(BigDecimal.ZERO) > 0) {
 					for (int i = 0; i < stockOutList.size(); i++) {
-						DeliveryMateriel dm = stockOutList.get(i);
+						DeliveryMateriel  dm=stockOutList.get(i);
+						BigDecimal stockOutCount=new  BigDecimal(dm.getStockCount());
 						for(int ii=0;ii<stockInList.size();ii++){
 							DeliveryMateriel dm1 = stockInList.get(ii);
-							if(new BigDecimal(dm.getStockCount()).compareTo(new BigDecimal(dm1.getStockCount()))>0 &&!"0".equals(dm.getStockCount())){//出库比入库多
-//								dm.setStockCount(new BigDecimal(dm.getStockCount()).subtract(new BigDecimal(dm1.getStockCount())).toString());
+							if("0".equals(dm1.getStockCount())){
+								continue;
+							}
+							if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))>0 &&!"0".equals(stockOutCount.toString())){//出库比入库多
+								dm1.setStockCount("0");
+								stockOutCount=stockOutCount.subtract(new BigDecimal(dm1.getStockCount()));
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());
 								}else{
-									dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									if(!(dm.getWarehouseName().indexOf(dm1.getWarehouseName())>-1)){//已有该仓库
+										dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									}
 								}
-							}else if(new BigDecimal(dm.getStockCount()).compareTo(new BigDecimal(dm1.getStockCount()))<=0 &&!"0".equals(dm.getStockCount())){//出库比入库少
+							}else if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))<=0 &&!"0".equals(stockOutCount.toString())){//出库比入库少
+								dm1.setStockCount(new BigDecimal(dm1.getStockCount()).subtract(stockOutCount).toString());
+								stockOutCount=BigDecimal.ZERO;
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());
 								}else{
-									dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									if(!(dm.getWarehouseName().indexOf(dm1.getWarehouseName())>-1)){//已有该仓库
+										dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									}
 								}
 							}
 						}
