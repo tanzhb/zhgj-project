@@ -1,5 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +47,11 @@ import com.congmai.zhgj.web.model.Category;
 import com.congmai.zhgj.web.model.CategoryExample;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyCode;
+import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.Search;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
 import com.congmai.zhgj.web.model.MaterielFile;
@@ -402,14 +408,17 @@ public class MaterielController {
      * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
      * @param type 销售订单选择物料，筛选有供应商的物料
      * @param supplyComId 物料关联供应商
+     * @param 分页查询参数
      * @return
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(String parent,String isLatestVersion,String type,String supplyComId) {
+    public ResponseEntity<Map> findMaterielList(HttpServletRequest request,String params,String parent,String isLatestVersion,String type,String supplyComId) {
     	//MaterielExample m =new MaterielExample();
     	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
+    	
+    	String recordsTotal = null;
     	
     	User user = UserUtil.getUserFromSession();
     	List<String> comIds = null;
@@ -420,7 +429,7 @@ public class MaterielController {
     	if(comIds!=null){
     		company = companyService.selectById(comIds.get(0));
     	}
-    	
+    	DataTablesParams  dataTablesParams = null;
     	if(parent==null||parent.isEmpty()){//查询全部物料
     		//and 条件1
         	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
@@ -436,7 +445,7 @@ public class MaterielController {
             	m.or(criteria2);
         	}
         	//排序字段
-        	m.setOrderByClause("updateTime DESC");
+        	m.setOrderByClause("materielNum DESC");
         	if(supplyComId!=null){
         		comIds = new ArrayList<String>();
         		comIds.add(supplyComId);
@@ -446,6 +455,25 @@ public class MaterielController {
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
         		criteria.andBuyComIdIn(comIds);
         	}
+        	
+        	//TODO分页查询
+        	ObjectMapper objectMapper = new ObjectMapper();
+        	
+        	try {
+        		
+        		recordsTotal = materielService.selectListCount(m);
+        		
+        		params = URLDecoder.decode(params, "UTF-8");
+				dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+				m.setStart(dataTablesParams.getStart());
+				m.setLength(dataTablesParams.getLength());
+				m.setSearchStr(dataTablesParams.getSearch().getValue());
+						
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
         	materielList = materielService.selectList(m);
     	}else{//根据父节点查询
     		
@@ -484,12 +512,31 @@ public class MaterielController {
         	//or 条件
         	m.or(criteria2);
         	//排序字段
-        	m.setOrderByClause("updateTime DESC");
+        	m.setOrderByClause("materielNum DESC");
         	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
         		criteria.andBuyComIdIn(comIds);
         	}
+        	//TODO分页查询
+        	ObjectMapper objectMapper = new ObjectMapper();
+        	try {
+        		
+        		recordsTotal = materielService.selectListCount(m);
+        		
+        		params = URLDecoder.decode(params, "UTF-8");
+				dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+				m.setStart(dataTablesParams.getStart());
+				m.setLength(dataTablesParams.getLength());
+				
+				m.setSearchStr(dataTablesParams.getSearch().getValue());
+				
+						
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
         	materielList = materielService.selectList(m);
         	
         	//查询下级物料
@@ -506,9 +553,9 @@ public class MaterielController {
     		}
     	}
 		Map pageMap = new HashMap();
-		pageMap.put("draw", 1);
-		pageMap.put("recordsTotal", materielList==null?0:materielList.size());
-		pageMap.put("recordsFiltered", materielList==null?0:materielList.size());
+		pageMap.put("draw", dataTablesParams.getDraw());
+		pageMap.put("recordsTotal", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
+		pageMap.put("recordsFiltered", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
 		pageMap.put("data", materielList);
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 

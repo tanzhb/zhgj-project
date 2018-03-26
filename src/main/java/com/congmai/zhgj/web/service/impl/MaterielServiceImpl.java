@@ -188,4 +188,9 @@ public class MaterielServiceImpl implements MaterielService {
 		return stockInOutRecordMapper.getMaterielZiJianStock(serialNum);
 	}
 
+	@Override
+	public String selectListCount(MaterielSelectExample m) {
+		return MaterielMapper.selectListCountBySelectExample(m);
+	}
+
 }

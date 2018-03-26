@@ -38,4 +38,6 @@ public interface MaterielMapper {
     
     List<Materiel> selectMaterielByOrderSerial(Map<String,String>map);//根据订单流水和发票流水查找订单物料
 
+	String selectListCountBySelectExample(MaterielSelectExample m);
+
 }

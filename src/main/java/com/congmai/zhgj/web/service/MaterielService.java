@@ -37,4 +37,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	List<Materiel> selectMaterielByOrderSerial (String orderSerial,String invoiceSerial,String deliverSerial, String customsFormType );
 	
 	String  getCurrentCount (String serialNum );//获取自建库存物料数量
+	
+	String  selectListCount (MaterielSelectExample m);//获取总的物料数量
 }
