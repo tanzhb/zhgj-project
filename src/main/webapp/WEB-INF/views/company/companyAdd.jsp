@@ -815,9 +815,9 @@
 				                                  <tr ng-repeat="_buyCompany in supplies track by $index" ng-mouseover="showOperation('_buyCompany',$index)" ng-mouseleave="hideOperation('_buyCompany',$index)" >
 							                          <td>
 						                                 	<div ng-hide="CompanyInfoInput">
-							                                 	<select class="form-control" id="buyComId[$index]"  class="bs-select form-control diySelectCss"  ng-change="fuzhi('supply',$index)"   name="buyComId" data-live-search="true" data-size="8"  ng-model="supplies[$index].comId"  >
+							                                 	<select class="form-control" id="buyComId[$index]"    ng-mouseenter ="repeatDone('buy')"    ng-change="fuzhi('supply',$index)"   name="buyComId" data-live-search="true" data-size="8"  ng-model="supplies[$index].comId"  >
 							                                 	 <option value=""></option>
-					                                              	<option ng-repeat="_buy in buyCompanys" value="{{_buy.comId}}" repeat-done="repeatDone('buy')">{{_buy.comName}}</option>
+					                                              	<option ng-repeat="_buy in buyCompanys" value="{{_buy.comId}}" >{{_buy.comName}}</option>
 					                                             </select>
 				                                             </div>
 							                                <p class="form-control-static" ng-show="CompanyInfoShow"> {{_buyCompany.comName}} </p>
@@ -857,9 +857,9 @@
 				                                  <tr ng-repeat="_supplyCompany in buyComs track by $index" ng-mouseover="showOperation('_supplyCompany',$index)" ng-mouseleave="hideOperation('_supplyCompany',$index)" >
 							                          <td>
 						                                 	<div ng-hide="CompanyInfoInput">
-							                                 	<select class="form-control" id="buyComId[$index]" name="supplyComId"    ng-change="fuzhi('buy',$index)"    data-live-search="true" data-size="8"  ng-model="buyComs[$index].comId"  >
+							                                 	<select class="form-control" id="supplyComId[$index]" name="supplyComId"  ng-change="fuzhi('buy',$index)"     ng-mouseenter ="repeatDone('supply')"     data-live-search="true" data-size="8"  ng-model="buyComs[$index].comId"  >
 							                                 	 <option value=""></option>
-					                                              	<option ng-repeat="_buy in supplyCompanys" value="{{_buy.comId}}" repeat-done="repeatDone('supply')">{{_buy.comName}}</option>
+					                                              	<option ng-repeat="buy in supplyCompanys"   value="{{buy.comId}}"  >{{buy.comName}}</option><!-- ng-change="fuzhi('buy',$index)"  -->
 					                                             </select>
 				                                             </div>
 							                                <p class="form-control-static" ng-show="CompanyInfoShow"> {{_supplyCompany.comName}} </p>
@@ -978,7 +978,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="contactEmail">邮箱：</label>
+                                 <label class="col-md-4 control-label" for="contactEmail"><span class="required"> * </span>邮箱：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" id="contactEmail" name="contactEmail" ng-model="companyContact.contactEmail"  >
                                      <div class="form-control-focus"> </div>

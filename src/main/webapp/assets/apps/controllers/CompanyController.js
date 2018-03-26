@@ -1343,7 +1343,7 @@ $scope.showCompany=function(judgeString){
 	        */
 	       var  flagContact,flagAddress;
 	       $scope.saveCompanyContact = function(){
-		    	if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&flagContact!=undefined){//handle.isNull($scope.company)||handle.isNull($scope.company.comId)
+		    	if((handle.isNull($scope.company)||handle.isNull($scope.company.comId))&&(flagContact!=true||flagContact==undefined)){//handle.isNull($scope.company)||handle.isNull($scope.company.comId)
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		    	}else{
