@@ -40,7 +40,7 @@
 	              		</li>
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">包装信息</a>
 						</li>
-						<li class="bold" ng-show="BOMShow"><a data-target="#tab_1_4" data-toggle="tab">下级物料</a></li>
+						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">下级物料</a></li><!-- ng-show="BOMShow"  -->
 						<shiro:hasRole name="admin">
 							<li class="bold"><a data-target="#tab_1_5" data-toggle="tab">供应商</a></li>
 							<li class="bold"><a data-target="#tab_1_6" data-toggle="tab">采购商</a></li>
@@ -596,6 +596,7 @@
 				                                  </div>
 				                              </div>
 				                          </div>
+				                          
 				                      </div>
 				                      <!--/row-->
 				                      <div class="row">
@@ -843,9 +844,9 @@
 				          </div>
 				          <!-- 附件 end-->
 						</div>
-						<div class="tab-pane fade" id="tab_1_4" ng-show="BOMShow">
+						<div class="tab-pane fade" id="tab_1_4" ><!--  ng-show="BOMShow"-->
 						<!-- BOM start-->
-				          <div class="portlet-title" ng-show="BOMShow" style="min-height: 48px;">
+				          <div class="portlet-title"  style="min-height: 48px;"><!--  ng-show="BOMShow"-->
 				               <div class="tools" style="float:right">
 				               	 	<button type="submit" ng-click="saveBOM()" ng-hide="BOMInfoInput" class="btn green  btn-circle  btn-sm">
 				                  		<i class="fa fa-save"></i> 保存 </button>
@@ -855,7 +856,7 @@
 				                  		<i class="fa fa-edit"></i> 编辑 </button>
 				                </div>
 				            </div>
-				           <div class="portlet-body form"  ng-show="BOMShow">
+				           <div class="portlet-body form"  ><!--  ng-show="BOMShow"-->
 							     <form id="form_sample_3"   >
 							         <div class="table-scrollable">
 				                          <table class="table table-bordered table-hover">
@@ -885,9 +886,9 @@
 				                                      <td><p class="form-control-static"> {{_BOM.materiel.unit}} </p></td>
 				                                      <td><p class="form-control-static"> {{_BOM.materiel.brand}} </p></td>
 				                                      <td>
-				                                      		<input type="text" name="singleDose[$index]" name="singleDose" class="form-control" ng-hide="BOMInfoInput" ng-model="BOM[$index].singleDose"  >
-							                                <!-- <div class="form-control-focus"> </div>
-							                                <span class="help-block">请输入用量</span> -->
+				                                      		<input type="text" name="singleDose[$index]"  class="form-control" ng-hide="BOMInfoInput" ng-model="BOM[$index].singleDose"  >
+							                                <div class="form-control-focus"> </div>
+							                                <!-- <span class="help-block">请输入用量</span> -->
 							                                <p class="form-control-static" ng-show="BOMInfoShow"> {{_BOM.singleDose}} </p>
 							                          </td>
 				                                      <td ng-show="operation_b{{$index}}">

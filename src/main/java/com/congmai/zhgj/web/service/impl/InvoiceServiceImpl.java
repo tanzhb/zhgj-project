@@ -101,7 +101,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 				}else{
 					price=new BigDecimal(orderMateriel.getOrderUnitPrice());
 				}
-				billOrReceiptMoney=billOrReceiptMoney.add(new BigDecimal(i.getBillCount()).multiply(price));
+				billOrReceiptMoney=billOrReceiptMoney.add(new BigDecimal(i.getBillCount()==null?"0":i.getBillCount()).multiply(price));
 			}
 		}
 		invoice.setBillOrReceiptMoney(billOrReceiptMoney.toString());
@@ -209,8 +209,17 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 			List<InvoiceBillingRecord> list, String currenLoginName,
 			String serialNum) {
 		if(!CollectionUtils.isEmpty(list)){
+			InvoiceBillingRecordExample ire=new  InvoiceBillingRecordExample();
+			com.congmai.zhgj.web.model.InvoiceBillingRecordExample.Criteria  c=ire.createCriteria();
+			c.andInvoiceSerialEqualTo(list.get(0).getInvoiceSerial());
+			invoiceBillingRecordMapper.deleteByExample(ire);
 			for(InvoiceBillingRecord v:list){
-				if(StringUtil.isEmpty(v.getSerialNum())||"null".equals(v.getSerialNum())){
+				v.setSerialNum(ApplicationUtils.random32UUID());
+				v.setCreateTime(new Date());
+				v.setDelFlg("0");
+				v.setCreator(currenLoginName);
+				invoiceBillingRecordMapper.insert(v);//保存收开票记录
+				/*if(StringUtil.isEmpty(v.getSerialNum())||"null".equals(v.getSerialNum())){
 					v.setSerialNum(ApplicationUtils.random32UUID());
 					v.setCreateTime(new Date());
 					v.setDelFlg("0");
@@ -220,7 +229,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 					v.setUpdateTime(new Date());
 					v.setUpdater(currenLoginName);
 					invoiceBillingRecordMapper.updateByPrimaryKey(v);//更新收开票记录
-				}
+				}*/
 			}
 		}
 		return true;

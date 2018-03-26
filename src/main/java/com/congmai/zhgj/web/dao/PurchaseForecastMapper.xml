@@ -17,8 +17,9 @@
 	demandPlanMateriel a 
 	LEFT JOIN demandPlan b ON a.demandPlanSerial=b.serialNum AND a.delFlg='0' AND b.delFlg='0'
 	LEFT JOIN materiel c ON a.materielSerial=c.serialNum  AND c.delFlg='0'
-	WHERE a.deliveryDate&gt;=NOW()
-	AND a.delFlg='0'
+	<!-- WHERE a.deliveryDate&gt;=NOW()
+	AND a.delFlg='0' -->
+	WHERE a.delFlg='0'
     </select>
     
     <!--删除采购预测  -->

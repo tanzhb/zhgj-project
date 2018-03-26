@@ -23,6 +23,8 @@ public class TakeDeliveryParams {
 	
 	private List<InvoiceBillingRecord> invoiceBillingRecords;//发票物料收开票记录
 	
+	private List<DemandPlanMateriel> demandPlanMateriels;//需求计划物料
+	
 	
 	
 	private StockInOutRecord record;
@@ -90,6 +92,14 @@ public class TakeDeliveryParams {
 	public void setInvoiceBillingRecords(
 			List<InvoiceBillingRecord> invoiceBillingRecords) {
 		this.invoiceBillingRecords = invoiceBillingRecords;
+	}
+
+	public List<DemandPlanMateriel> getDemandPlanMateriels() {
+		return demandPlanMateriels;
+	}
+
+	public void setDemandPlanMateriels(List<DemandPlanMateriel> demandPlanMateriels) {
+		this.demandPlanMateriels = demandPlanMateriels;
 	}
 	
 	

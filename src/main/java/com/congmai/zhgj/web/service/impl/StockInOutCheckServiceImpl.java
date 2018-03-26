@@ -171,6 +171,18 @@ public class StockInOutCheckServiceImpl extends GenericServiceImpl<StockInOutChe
 		
 	}
 
+	@Override
+	public StockInOutCheck getStockInOutCheck(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutCheckMapper.selectByPrimaryKey(serialNum);
+	}
+
+	@Override
+	public StockInOutRecord getStockInOutRecord(String serialNum) {
+		// TODO Auto-generated method stub
+		return stockInOutRecordMapper.selectByPrimaryKey(serialNum);
+	}
+
 	
 	
 	}

@@ -31,7 +31,6 @@ public interface StockService extends GenericService<Stock, String>{
 	List<DeliveryMateriel> getStockInBatchListByMaterielOwn(String serialNum,
 			String orderSerial);
 	List<StockOutBatch> getStockOutBatchListByDmSerialNum(String serialNum);//通过发货物料查关连出库批次
-
 	
 	
 }

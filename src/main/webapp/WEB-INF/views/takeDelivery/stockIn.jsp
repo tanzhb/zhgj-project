@@ -162,7 +162,7 @@
                                                     <div class="">
                                                     	<input type="hidden" class="form-control" value="{{warehouseCount}}" disabled="disabled">
                                                     	<input type="hidden" class="form-control" value="{{WarehouseName}}" disabled="disabled">
-                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.takeDeliverAddress}}" disabled="disabled"  ng-hide="deliverAdd">
+                                                    	<input type="text" class="form-control"      value="{{deliver.takeDelivery.warehouse.warehouseName}}" disabled="disabled"  ng-hide="deliverAdd">
                                                          <p class="control-label left"   ng-show="deliverView">{{deliver.takeDelivery.takeDeliverAddress}}</p>
                                                     </div>
                                             </div>
@@ -353,7 +353,8 @@
 													<i class="fa fa-edit"></i>修改
 												</button> -->
 												<div class="col-md-12 form-group">
-                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount" ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount"   ng-if="materiel.stockInCount==null"   ng-init="materiel.stockInCount=materiel.deliverCount"  ng-hide="deliverAdd" >
+                                                 <input type="text" class="form-control input-small" id="stockCount{{$index}}" name="stockCount" data-acceptcount="{{materiel.acceptCount}}"  ng-model="materiel.stockInCount"   ng-if="materiel.stockInCount!=null"  ng-hide="deliverAdd" >
                                                  <p class="form-control-static" ng-show="deliverView">
 															{{materiel.stockInCount}}</p>
                                             </div>
@@ -418,7 +419,6 @@
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
 														<td>{{totalQualifiedCount}}</td>
-														<!-- <td></td> -->
 														<td>{{totalStockCount()}}</td><!--{{totalStockInCount}}  -->
 														<td>{{totalUnStockInCount()}}</td><!--{{totalUnstockInCount}}  -->
 														<td></td>

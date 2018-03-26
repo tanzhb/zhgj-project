@@ -1079,7 +1079,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     			}
     	    	if($('#form_sample_3').valid()){
     	    		for(var i=0;i<$scope.BOM.length;i++){
-    	    			$scope.BOM[i].materiel = null
+    	    			//$scope.BOM[i].materiel = null
+    	    			if(isNull($scope.BOM[i].singleDose)||isNaN($scope.BOM[i].singleDose)||$scope.BOM[i].singleDose==0){
+    	    				toastr.error('单套物料的数量只能为大于0的正整数！');return
+    	    			}
     		    	}
 
     	    		materielService.saveBOM($scope.BOM).then(
@@ -1182,7 +1185,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
  		            },
  	            	rules: {
  	            			'BOMMaterielNum': {required: !0,maxlength: 20},
- 	            			'singleDose': {required: !0,maxlength: 20,number:!0}
+ 	            			'singleDose': {required: true,maxlength: 20,number:!0}
  	            			},
  	            		invalidHandler: function(e, t) {
  	                    i.hide(), r.show(), App.scrollTo(r, -200)

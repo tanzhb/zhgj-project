@@ -38,4 +38,6 @@ public interface DemandPlanService extends GenericService<DemandPlan, String>{
 		 * @param demandPlanMateriels
 		 */
 		public void insertDemandPlanInfo(DemandPlan demandPlan,List<DemandPlanMateriel> demandPlanMateriels);
+		
+		public void updateDemandPlanInfo(String  demandPlanSerial);
 }

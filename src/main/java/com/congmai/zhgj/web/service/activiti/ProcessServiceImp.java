@@ -715,10 +715,12 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", orderInfo);
 
         String businessKey = orderInfo.getBusinessKey();
-        ProcessInstance processInstance;
+        ProcessInstance processInstance ;
         if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸
         	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTBUYORDER, businessKey, variables);
-		}else if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())) {
+		}else if (StaticConst.getInfo("zizhuBuy").equals(orderInfo.getOrderType())) {//自主采购订单
+			processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZBUYORDER, businessKey, variables);
+		}else if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&!StaticConst.getInfo("zizhuBuy").equals(orderInfo.getOrderType())) {
         	if("4a6d7471644248dbb057298d141413ee".equals(orderInfo.getSupplyComId()))//如果是FT公司，走特殊流程
         	{
         		processInstance = runtimeService.startProcessInstanceByKey(Constants.FT_BUY_ORDER, businessKey, variables);
@@ -753,6 +755,8 @@ public class ProcessServiceImp implements IProcessService{
         ProcessInstance processInstance=null;
         if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())) {//委托销售内贸
         	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTSALEORDER, businessKey, variables);
+		} else if (StaticConst.getInfo("neimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("zizhuSale").equals(orderInfo.getOrderType())) {//自主销售内贸
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
 		}else{
 			processInstance = runtimeService.startProcessInstanceByKey(Constants.SALEORDER, businessKey, variables);
 		}
@@ -887,7 +891,14 @@ public class ProcessServiceImp implements IProcessService{
         variables.put("entity", deliveryVO);
 
         String businessKey = deliveryVO.getBusinessKey();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.DELIVERY_KEY, businessKey, variables);
+        ProcessInstance processInstance;
+       /* if(StaticConst.getInfo("maoyifahuo").equals(deliveryVO.getDeliverType())){
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.DELIVERY_KEY, businessKey, variables);
+        }else*/ if(StaticConst.getInfo("beforewithoutcontractdelivery").equals(deliveryVO.getDeliverType())){
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.BEFOREWITHOUTCONTRACTDELIVERY, businessKey, variables);
+        }else {
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.AFTERWITHOUTCONTRACTDELIVERY, businessKey, variables);
+        }
 		String processInstanceId = processInstance.getId();
 		deliveryVO.setProcessInstanceId(processInstanceId);
         this.processBaseService.update(deliveryVO);

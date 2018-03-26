@@ -31,6 +31,9 @@
 					<i class="fa fa-globe"></i>采购预测列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
+				<label class="btn btn-transparent blue btn-circle btn-sm"
+							ng-click="newProcurementPlan()">  生成采购计划
+						</label>
 					<shiro:hasPermission name="purchaseForecast:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm"
 							ng-click="del()"> <i class="fa fa-minus"></i> 删除
@@ -84,7 +87,27 @@
 					</div>
 				</div>
 			</div>
-
+<div id="confirmModal" class="modal fade" tabindex="-1"
+				data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal"
+								aria-hidden="true"></button>
+							<h4 class="modal-title">确认</h4>
+						</div>
+						<div class="modal-body">
+							<p>是否确认生成采购计划?</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" data-dismiss="modal"
+								class="btn dark btn-outline">取消</button>
+							<button type="button" ng-click="confirmNewProcurementPlan()" class="btn green">确定
+								</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="portlet-body" >
 				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_2">
 					<thead>

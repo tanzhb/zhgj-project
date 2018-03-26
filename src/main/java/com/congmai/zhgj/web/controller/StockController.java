@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.dao.StockOutBatchMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
@@ -156,9 +158,9 @@ public class StockController {
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
 			if("1".equals(manageType)){//自建
-				if("0e2523c32dd1415cac89999ccad52b83".equals(stock.getMaterielSerial())){
+				/*if("0e2523c32dd1415cac89999ccad52b83".equals(stock.getMaterielSerial())){
 					System.out.println("当前入库数是:"+stock.getCountInAmountZijian());
-				}
+				}*/
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountZijian()==null?"0":stock.getCountInAmountZijian())-Integer.parseInt(stock.getCountOutAmountZijian()==null?"0":stock.getCountOutAmountZijian()))+"");
 			}else if("2".equals(manageType)){//代管
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountDaiguan()==null?"0":stock.getCountInAmountDaiguan())-Integer.parseInt(stock.getCountOutAmountDaiguan()==null?"0":stock.getCountOutAmountDaiguan()))+"");
@@ -351,16 +353,46 @@ public class StockController {
 		 }
 	    
 	    /**
-		  * @Description (获取入库批次)
+		  * @Description (获取入库批次/在库数量)
 		  * @param request
 		  * @return
 		  */
 		 @RequestMapping(value="stockInBatchList",method=RequestMethod.GET)
 		 public ResponseEntity<Map<String,Object>> stockInBatchList(String serialNum,String orderSerial,String  dmSerialNum) {
 			 //借用DeliveryMateriel bean
+			 Stock stock=stockService.selectById(serialNum);
 			 List<DeliveryMateriel> stockInBatchList=new  ArrayList<DeliveryMateriel>();
+			 List<String>takeDeliverSerialList=new  ArrayList<String>();
+			 List<DeliveryMateriel> stockOutList=new  ArrayList<DeliveryMateriel>();
 			 if(StringUtils.isEmpty(orderSerial)){//查询入库批次记录
-				 stockInBatchList=stockService.getStockInBatchList(serialNum);
+				 takeDeliverSerialList=stockService.getRelationTakeDeliverSerialList(stock);
+				 stockInBatchList=stockService.getDeliverMaterialListForIn(takeDeliverSerialList,null,stock);//查到所有入库记录
+				 //查该物料当前出库总数
+				 List<String>deliverSerialList=stockService.getRelationDeliverSerialList(stock);
+				 stockOutList=stockService.getDeliverMaterialListForOut(deliverSerialList,stock);
+				BigDecimal totalOutCount=BigDecimal.ZERO ;
+				if(org.apache.commons.collections.CollectionUtils.isNotEmpty(stockOutList)){
+					for(DeliveryMateriel dm:stockOutList){
+						totalOutCount=totalOutCount.add(new BigDecimal(dm.getStockCount()==null?"0":dm.getStockCount()));
+					}
+					//根据入库时间先进先出原则为入库记录附上出库数量
+					if(totalOutCount.compareTo(BigDecimal.ZERO)>0){
+						for(int i=0;i<stockInBatchList.size();i++){
+							DeliveryMateriel dm=stockInBatchList.get(i);
+							if(totalOutCount.compareTo(new BigDecimal(dm.getStockCount()))>0){
+								dm.setSumStockOutCount(dm.getStockCount());
+								totalOutCount=totalOutCount.subtract(new BigDecimal(dm.getStockCount()) );
+							}else{
+								dm.setSumStockOutCount(totalOutCount.toString());
+								break;
+							}
+						}
+					}
+				
+				}
+				
+				
+				 //stockInBatchList=stockService.getStockInBatchList(serialNum);
 			 }else{//出库选择入库批次记录(根据物权方及基本物料)
 				 stockInBatchList=stockService.getStockInBatchListByMaterielOwn(serialNum,orderSerial);//dmSerialNum发货物料流水
 				 if(org.apache.commons.lang3.StringUtils.isNotBlank(dmSerialNum)){//获取出库批次
@@ -392,19 +424,77 @@ public class StockController {
 		  * @return
 		  */
 		 @RequestMapping(value="stockOutList",method=RequestMethod.GET)
-		 public ResponseEntity<Map<String,Object>> stockOutList( String serialNum) {
-			 Stock stock=stockService.selectById(serialNum);
-			 List<String>deliverSerialList=stockService.getRelationDeliverSerialList(stock);
-			 List<DeliveryMateriel>stockOutList=new  ArrayList<DeliveryMateriel>();
-			 if(!CollectionUtils.isEmpty(deliverSerialList)){
-				 stockOutList=stockService.getDeliverMaterialListForOut(deliverSerialList,stock);
-			 }
-				 // 封装datatables数据返回到前台
-				 Map<String,Object> pageMap = new HashMap<String,Object>();
-				 pageMap.put("draw", 1);
-				 pageMap.put("recordsTotal", stockOutList==null?0:stockOutList.size());
-				 pageMap.put("recordsFiltered", stockOutList==null?0:stockOutList.size());
-				 pageMap.put("data", stockOutList);
-				 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
-		 }
+	public ResponseEntity<Map<String, Object>> stockOutList(String serialNum) {
+		Stock stock = stockService.selectById(serialNum);
+		List<String> deliverSerialList = stockService
+				.getRelationDeliverSerialList(stock);
+		List<DeliveryMateriel> stockOutList = new ArrayList<DeliveryMateriel>();
+		List<String> takeDeliverSerialList = new ArrayList<String>();
+		List<DeliveryMateriel> stockInList = new ArrayList<DeliveryMateriel>();
+		if (!CollectionUtils.isEmpty(deliverSerialList)) {
+			takeDeliverSerialList = stockService
+					.getRelationTakeDeliverSerialList(stock);
+			stockInList = stockService.getDeliverMaterialListForIn(
+					takeDeliverSerialList, null, stock);
+			stockOutList = stockService.getDeliverMaterialListForOut(
+					deliverSerialList, stock);
+			// 查该物料当前出库总数
+			BigDecimal totalOutCount = BigDecimal.ZERO;
+			if (org.apache.commons.collections.CollectionUtils
+					.isNotEmpty(stockOutList)) {
+				for (DeliveryMateriel dm : stockOutList) {
+					totalOutCount = totalOutCount
+							.add(new BigDecimal(
+									dm.getStockCount() == null ? "0" : dm
+											.getStockCount()));
+				}
+				// 根据入库时间先进先出原则为出库记录附上出库仓库
+				if (totalOutCount.compareTo(BigDecimal.ZERO) > 0) {
+					for (int i = 0; i < stockOutList.size(); i++) {
+						DeliveryMateriel  dm=stockOutList.get(i);
+						BigDecimal stockOutCount=new  BigDecimal(dm.getStockCount());
+						for(int ii=0;ii<stockInList.size();ii++){
+							DeliveryMateriel dm1 = stockInList.get(ii);
+							if("0".equals(dm1.getStockCount())){
+								continue;
+							}
+							if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))>0 &&!"0".equals(stockOutCount.toString())){//出库比入库多
+								dm1.setStockCount("0");
+								stockOutCount=stockOutCount.subtract(new BigDecimal(dm1.getStockCount()));
+								if(StringUtil.isEmpty(dm.getWarehouseName())){
+									dm.setWarehouseName(dm1.getWarehouseName());
+								}else{
+									if(!(dm.getWarehouseName().indexOf(dm1.getWarehouseName())>-1)){//已有该仓库
+										dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									}
+								}
+							}else if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))<=0 &&!"0".equals(stockOutCount.toString())){//出库比入库少
+								dm1.setStockCount(new BigDecimal(dm1.getStockCount()).subtract(stockOutCount).toString());
+								stockOutCount=BigDecimal.ZERO;
+								if(StringUtil.isEmpty(dm.getWarehouseName())){
+									dm.setWarehouseName(dm1.getWarehouseName());
+								}else{
+									if(!(dm.getWarehouseName().indexOf(dm1.getWarehouseName())>-1)){//已有该仓库
+										dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
+									}
+								}
+							}
+						}
+					
+					}
+				}
+
+			}
+
+		}
+		// 封装datatables数据返回到前台
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("draw", 1);
+		pageMap.put("recordsTotal",
+				stockOutList == null ? 0 : stockOutList.size());
+		pageMap.put("recordsFiltered",
+				stockOutList == null ? 0 : stockOutList.size());
+		pageMap.put("data", stockOutList);
+		return new ResponseEntity<Map<String, Object>>(pageMap, HttpStatus.OK);
+	}
 }

@@ -272,9 +272,10 @@ public class PayController {
 						.singleResult();
 				if (BeanUtils.isBlank(pi)) {
 					paymentRecord.setStatus(BaseVO.APPROVAL_SUCCESS);
-					
 					//修改订单状态
 					this.payService.updateOrderStatus(paymentRecord);
+					//发消息给付款制单人通知审批通过
+					 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(paymentRecord,MessageConstants.BE_CONFIRM_PAY));
 				}
 			}
 
@@ -398,6 +399,18 @@ public class PayController {
 		
 		List<ClauseSettlementDetail> clauseSettlementDetail = payService
 				.selectClauseSettlementDetailList2(serialNum);
+		//获取所有已经新建的该订单的应收/应付款节点信息
+		List<PaymentRecord>paymentRecords=payService.findPaymentRecordList(serialNum);
+		if(org.apache.commons.collections.CollectionUtils.isNotEmpty(paymentRecords)){
+			for(PaymentRecord p:paymentRecords){
+				for(ClauseSettlementDetail csd:clauseSettlementDetail){
+					if(p.getPaymentNode().equals(csd.getDeliveryNode())){
+						clauseSettlementDetail.remove(csd);
+						break;
+					}
+				}
+			}
+		}
 		map.put("clauseSettlementDetail", clauseSettlementDetail);
 		return map;
 	}
@@ -868,7 +881,8 @@ public class PayController {
 		Map<String,Object>map=new HashMap<String,Object>();
 		PaymentRecord c = payService.selectPayById(serialNum);
 		String orderSerial = c.getOrderSerial();
-		String paiedMoney = payService.selectPaiedMoney(orderSerial);
+		//String paiedMoney = payService.selectPaiedMoney(orderSerial);
+		String paiedMoney=c.getPaymentAmount()==null?"0":c.getPaymentAmount();
 		String billedMoney = payService.selectBilledMoney(orderSerial);
 		c.setPaiedMoney(paiedMoney);
 		c.setBilledMoney(billedMoney);

@@ -44,8 +44,38 @@ public class OperateLog {
     private Date updateTime;
 
     private String remark;
+    
+    private Date  timeData;//订单中日志显示日期
+    
+    private String deliverCount;//订单中日志显示数量
+    
+    private String payMoneyCount;//订单中日志显示金额
 
-    public String getSerialNum() {
+    public Date getTimeData() {
+		return timeData;
+	}
+
+	public String getDeliverCount() {
+		return deliverCount;
+	}
+
+	public String getPayMoneyCount() {
+		return payMoneyCount;
+	}
+
+	public void setTimeData(Date timeData) {
+		this.timeData = timeData;
+	}
+
+	public void setDeliverCount(String deliverCount) {
+		this.deliverCount = deliverCount;
+	}
+
+	public void setPayMoneyCount(String payMoneyCount) {
+		this.payMoneyCount = payMoneyCount;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 

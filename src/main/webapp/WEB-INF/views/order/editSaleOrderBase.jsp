@@ -1217,25 +1217,30 @@ margin-right: 20px;
 	                                     data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].lastDeliveryDate"  ng-change="setAllLastDeliveryDate(_orderMateriel,$index)" >
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.lastDeliveryDate}} </p>
 			                          </td>
-			                          <td>  
-			                          <select  ng-if="$first&&(stateParamserialNum==undefined||stateParamserialNum=='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
-	                                              <!--  <option value=""></option> -->
-	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+			                          <td> 
+			                          <select  ng-if="$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
+	                                         </select>
+	                                         <select  ng-if="!$first" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
+	                                              
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
+	                                         </select> 
+			                          <!-- <select  ng-if="$first&&(stateParamserialNum==undefined||stateParamserialNum=='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
 	                                         </select>
 	                                         <select  ng-if="!$first&&(stateParamserialNum==undefined||stateParamserialNum=='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
-	                                              <!--  <option value=""></option> -->
-	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+	                                              
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
 	                                         </select>
 			                          		<select  ng-if="$first&&(stateParamserialNum!=undefined&&stateParamserialNum!='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" ng-change="setAllDeliveryAddress(_orderMateriel)"  data-size="8">
-	                                              <!--  <option value=""></option> -->
-	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
+	                                         
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
 	                                         </select>
 	                                         <select  ng-if="!$first&&(stateParamserialNum!=undefined&&stateParamserialNum!='')" name="deliveryAddress{{$index}}" ng-hide="orderMaterielInput{{$index}}||orderMateriel[$index].deliveryAddress!=undefined" ng-model="orderMateriel[$index].deliveryAddress" class="bs-select form-control order" data-live-search="true"  ng-init="warehouses[0].serialNum" data-size="8">
-	                                              <!--  <option value=""></option> -->
-	                                               <option  ng-repeat="warehouse in warehouses" value="{{warehouse.warehouseName}}">{{warehouse.warehouseName}}</option>
-	                                         </select>
+	                                               <option  ng-repeat="warehouse in buyComAddresses" value="{{warehouse.address}}">{{warehouse.address}}</option>
+	                                         </select> -->
 	                                     		<p class="form-control-static" ng-show="orderMaterielShow{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
-	                                     		<p class="form-control-static" ng-show="orderMaterielEdit{{$index}}"> {{_orderMateriel.deliveryAddress}} </p>
+	                                     		<!-- <p class="form-control-static" ng-show="orderMaterielEdit{{$index}}"> {{_orderMateriel.deliveryAddress}} </p> -->
 			                          </td>
                                       
                                       <td>
@@ -1417,7 +1422,7 @@ margin-right: 20px;
                                      <th style="width:150px">支付节点</th>
                                      <th style="width:150px">开票方式</th>
                                      <th style="width:70px">账期（天）</th>
-                                     <th style="width:50px">支付比率%</th>
+                                     <th style="width:100px">支付比率%</th>
                                      <th style="width:150px">支付金额{{arithmeticAllDeliveryAmount()}}</th>
                                      <th style="width:150px">支付方式</th>
                                     <!--  <th style="width:150px">开票方式</th> -->

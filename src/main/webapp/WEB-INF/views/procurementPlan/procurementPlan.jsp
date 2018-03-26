@@ -36,11 +36,11 @@
 							<div class="actions">
 								<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label> -->
-								<%-- <shiro:hasPermission name="buyNormalOrder:add">
+								<shiro:hasPermission name="buyNormalOrder:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addProcurementPlan"> <i class="fa fa-plus"></i> 添加
 									</label>
-								</shiro:hasPermission> --%>
+								</shiro:hasPermission>
 								<shiro:hasPermission name="procurementPlan:edit">
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="editProcurementPlan()"> <i class="fa fa-edit"></i>
@@ -85,12 +85,11 @@
                                             </label>
                                         </th>
 			                            <th> 采购计划号 </th>
-			                            <th> 销售订单号 </th>
-			                            <th> 销售下单日期 </th>
-			                            <th> 客户 </th>
-			                            <th> 销售数量 </th>
-			                            <th> 采购生成日期 </th>
-			                            <th> 采购数量 </th>
+			                            <th> 生成日期 </th>
+			                            <th> 物料名称</th>
+			                            <th> 计划数量 </th>
+			                            <th>齐套数量 </th>
+			                            <th>关联采购订单 </th>
 			                            <th> 状态 </th>
 			                            <th> 操作 </th>
 			                        </tr>

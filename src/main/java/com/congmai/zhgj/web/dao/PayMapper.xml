@@ -66,7 +66,7 @@
     <select id="selectAllPaymentRecordList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
     SELECT
 	a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
-	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.applyDate,a.isBill
+	(SELECT comName FROM company WHERE comId=a.supplyComId) AS supplyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.applyDate,a.isBill,a.processInstanceId
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -100,7 +100,7 @@
 	b.orderAmount,a.applyPaymentAmount,a.applyCurrency,a.playPaymentDate,a.payType,a.paymentNode,a.nodeNum,
 	a.billStyle,a.isBill,a.applyDate,a.applicant,a.applyDept,a.remark,a.paymentAmount,a.paymentDate,
     a.payee,a.contact,a.contactNum,a.bank,a.accountName,a.accountNumber,a.status,a.reason,a.processInstanceId,a.userId,a.billType,b.orderDate,a.accountPeriod,.b.orderAmount,b.orderNum,a.deliveryRate,
-    a.customsFormSerial
+    a.customsFormSerial,a.creator
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -206,7 +206,6 @@
 	userId=#{userId},
 	<if test="status != null" >
 	status=#{status},
-	paymentDate=NOW(),
 	</if>
 	updateTime=NOW()
 	WHERE
@@ -266,12 +265,12 @@
 	FROM
 	paymentRecord a
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
-	WHERE a.delFlg='0'  and a.status!=2
+	WHERE a.delFlg='0'  
 	<if test="type=='receive'">
-	and  a.buyComId=#{comId}
+	and  a.buyComId=#{comId} and a.status!='2' <!-- 未核销完成的收款单  -->
 	</if>
 	<if test="type=='pay'">
-	and  a.supplyComId=#{comId}
+	and  a.supplyComId=#{comId}  and (a.status='1' or a.status='APPROVAL_SUCCESS'  )<!--审批成功或者部分核销的付款单  -->
 	</if>
     </select>
       <!--查找应收付款账单对应的收付款水单 -->

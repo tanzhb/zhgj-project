@@ -6,7 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ProcurementPlanMateriel {
+public class DemandMateriel {
     private String serialNum;
 
     private String procurementPlanSerial;
@@ -14,27 +14,16 @@ public class ProcurementPlanMateriel {
     private String materielSerial;
 
     private String supplyMaterielSerial;
-    
-    private Materiel materiel;
-    
-    private SupplyMateriel supplyMateriel;
 
     private String planCount;
 
-    private String buyCount;
-
-    private String orderUnitPrice;
-
-    private String orderRateUnit;
-
-    private String money;
-
+    private String completeCount;
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date deliveryDate;
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    private Date lastDeliveryDate;
 
     private String deliveryAddress;
+
+    private String status;
 
     private Integer sort;
 
@@ -50,15 +39,7 @@ public class ProcurementPlanMateriel {
 
     private String remark;
     
-    private String supplyName;
-    
-    private String sets;//台套
-    
-    private String singleDose;//单套用量
-    
-    private String demandMaterielSerial;//需求物料流水
-    
-    private String supplyComId;//供应商id
+    private Materiel materiel;
     
     private String materielNum;
 
@@ -67,55 +48,8 @@ public class ProcurementPlanMateriel {
     private String specifications;
 
     private String unit;  
-    
-    private String status;  
-    
-    
-    
-    
-    
 
-    public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getMaterielNum() {
-		return materielNum;
-	}
-
-	public String getMaterielName() {
-		return materielName;
-	}
-
-	public String getSpecifications() {
-		return specifications;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setMaterielNum(String materielNum) {
-		this.materielNum = materielNum;
-	}
-
-	public void setMaterielName(String materielName) {
-		this.materielName = materielName;
-	}
-
-	public void setSpecifications(String specifications) {
-		this.specifications = specifications;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public String getSerialNum() {
+    public String getSerialNum() {
         return serialNum;
     }
 
@@ -155,36 +89,12 @@ public class ProcurementPlanMateriel {
         this.planCount = planCount == null ? null : planCount.trim();
     }
 
-    public String getBuyCount() {
-        return buyCount;
+    public String getCompleteCount() {
+        return completeCount;
     }
 
-    public void setBuyCount(String buyCount) {
-        this.buyCount = buyCount == null ? null : buyCount.trim();
-    }
-
-    public String getOrderUnitPrice() {
-        return orderUnitPrice;
-    }
-
-    public void setOrderUnitPrice(String orderUnitPrice) {
-        this.orderUnitPrice = orderUnitPrice == null ? null : orderUnitPrice.trim();
-    }
-
-    public String getOrderRateUnit() {
-        return orderRateUnit;
-    }
-
-    public void setOrderRateUnit(String orderRateUnit) {
-        this.orderRateUnit = orderRateUnit == null ? null : orderRateUnit.trim();
-    }
-
-    public String getMoney() {
-        return money;
-    }
-
-    public void setMoney(String money) {
-        this.money = money == null ? null : money.trim();
+    public void setCompleteCount(String completeCount) {
+        this.completeCount = completeCount == null ? null : completeCount.trim();
     }
     @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getDeliveryDate() {
@@ -194,14 +104,6 @@ public class ProcurementPlanMateriel {
     public void setDeliveryDate(Date deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
-    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
-    public Date getLastDeliveryDate() {
-        return lastDeliveryDate;
-    }
-
-    public void setLastDeliveryDate(Date lastDeliveryDate) {
-        this.lastDeliveryDate = lastDeliveryDate;
-    }
 
     public String getDeliveryAddress() {
         return deliveryAddress;
@@ -209,6 +111,14 @@ public class ProcurementPlanMateriel {
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress == null ? null : deliveryAddress.trim();
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status == null ? null : status.trim();
     }
 
     public Integer getSort() {
@@ -275,52 +185,36 @@ public class ProcurementPlanMateriel {
 		this.materiel = materiel;
 	}
 
-	public SupplyMateriel getSupplyMateriel() {
-		return supplyMateriel;
+	public String getMaterielNum() {
+		return materielNum;
 	}
 
-	public void setSupplyMateriel(SupplyMateriel supplyMateriel) {
-		this.supplyMateriel = supplyMateriel;
+	public String getMaterielName() {
+		return materielName;
 	}
 
-	public String getSupplyName() {
-		return supplyName;
+	public String getSpecifications() {
+		return specifications;
 	}
 
-	public void setSupplyName(String supplyName) {
-		this.supplyName = supplyName;
+	public String getUnit() {
+		return unit;
 	}
 
-	public String getSets() {
-		return sets;
+	public void setMaterielNum(String materielNum) {
+		this.materielNum = materielNum;
 	}
 
-	public String getSingleDose() {
-		return singleDose;
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
 	}
 
-	public void setSets(String sets) {
-		this.sets = sets;
+	public void setSpecifications(String specifications) {
+		this.specifications = specifications;
 	}
 
-	public void setSingleDose(String singleDose) {
-		this.singleDose = singleDose;
-	}
-
-	public String getDemandMaterielSerial() {
-		return demandMaterielSerial;
-	}
-
-	public void setDemandMaterielSerial(String demandMaterielSerial) {
-		this.demandMaterielSerial = demandMaterielSerial;
-	}
-
-	public String getSupplyComId() {
-		return supplyComId;
-	}
-
-	public void setSupplyComId(String supplyComId) {
-		this.supplyComId = supplyComId;
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
     
 }

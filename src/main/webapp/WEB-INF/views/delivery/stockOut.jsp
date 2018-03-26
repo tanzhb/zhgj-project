@@ -395,6 +395,7 @@
 										<th  rowspan="2">订单数量</th>
 										<th rowspan="2">发货数量</th>
 									<!-- 	<th  rowspan="2">生产批次</th> -->
+										<!-- <th  rowspan="2">出库仓库</th> -->
 										<th  rowspan="2">出库数量</th>
 										<th rowspan="2">未出数量</th>
 										<th rowspan="2">当前库存</th>
@@ -411,6 +412,7 @@
 										<td>{{materiel.orderMateriel.materiel.unit}}</td>
 										<td>{{materiel.orderMateriel.amount}}</td>
 										<td>{{materiel.deliverCount}}</td>
+										<!-- <td>出库仓库</td> -->
 										<!-- <td>{{materiel.orderMateriel.amount}}</td>
 										<td>{{materiel.deliverRemark}}</td> -->
 									<!-- 	<td >
@@ -474,6 +476,7 @@
 														<td></td>
 														<td>{{totalOrderCount}}</td>
 														<td>{{totalDeliveryCount}}</td>
+													<!-- 	<td></td> -->
 														<td>{{totalStockCount()}}</td>
 														<td>{{totalUnStockOutCount()}}</td>
 														<td></td>

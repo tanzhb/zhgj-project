@@ -411,7 +411,7 @@
 
 														<div class="form-control-focus"></div>
 														<p class="form-control-static" ng-hide="span">
-															{{deliver.takeDelivery.takeDeliverAddress}}</p>
+															<!-- {{deliver.takeDelivery.takeDeliverAddress}} -->{{takeDeliver.warehouseName}}</p>
 													</div>
 												</div>
 											</div>
@@ -465,7 +465,7 @@
 													<div class="">
 														<!-- <input type="text" class="form-control" name="transportType"
 													ng-model="deliveryTransport.transportType" ng-show="input" /> -->
-														<select class="form-control" id="transportType"
+														<select class="form-control" id="transportType1"
 															name="transportType" ng-model="transportType"
 															ng-show="inputDeliveryInfo">
 															<option value="水路运输">水路运输</option>
@@ -566,7 +566,7 @@
                 
                 </div>
             </div>
-            	<form action="#" id="form_sample_deliverInfo" class="">
+            	<form action="#" id="form_sample_deliverInfo1" class="">
 								<div class="portlet-body form">
 									<!-- BEGIN FORM-->
 								
@@ -594,7 +594,7 @@
 												<div class="form-group">
 													<label class="control-label bold">发货类型<!--<span class="required" aria-required="true"> * </span>--></label>
 													<div class="">
-														<select class="form-control" id="deliverType"
+														<select class="form-control" id="deliverType1"
 															name="deliverType" ng-model="delivery.deliverType"
 															ng-change="changeTakeDeliveryMode(delivery.deliverType)"
 															ng-show="inputDeliveryInfo" ><!--ng-init="delivery.deliverType='贸易发货'"  -->
@@ -618,7 +618,7 @@
 														<div class="input-group" data-target="#basicMaterielInfo"
 															data-toggle="modal" ng-click="selectMateriel()"
 															onclick="return false;">
-															<input id="orderSerial" name="orderSerial" type="text"
+															<input id="orderSerial1" name="orderSerial" type="text"
 																ng-show="inputDeliveryInfo" class="form-control"
 																ng-model="saleOrder.orderNum" >
 															<span ng-show="inputDeliveryInfo" class="input-group-btn"
@@ -671,7 +671,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="handWay">交付方式</label>
                                                     <div class=""><!-- 包装类型暂时先做为交付方式 -->
-                                                        <select class="form-control" id="packageType"   ng-model="deliver.packageType" ng-show="inputDeliveryInfo"    ng-init="deliver.packageType='配送'">
+                                                        <select class="form-control" id="packageType1"   ng-model="deliver.packageType" ng-show="inputDeliveryInfo"    ng-init="deliver.packageType='配送'">
 	                                                    	<option value=""></option>
 	                                                    	<option value="配送">配送</option>
 	                                                    	<option value="自提">自提</option>
@@ -699,7 +699,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverer">联系人 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="deliverer"  ng-model="deliver.deliverer" ng-show="inputDeliveryInfo" >
+                                                        <input type="text" class="form-control" id="deliverer1"  ng-model="deliver.deliverer" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-hide="span">{{deliver.deliverer}}</p>
                                                     </div>
@@ -735,7 +735,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="maker">制单人 <!-- <span class="required"> * </span> --></label>
                                                     <div class="">
-                                                        <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.maker" ng-show="inputDeliveryInfo" >
+                                                        <input type="text" class="form-control" id="maker1" name="maker" ng-model="deliver.maker" ng-show="inputDeliveryInfo" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-hide="span">{{deliver.maker}}</p>
                                                     </div>
@@ -745,7 +745,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="createTime">制单日期 </label>
                                                     <div class="">
-                                 <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate"  ng-model="deliver.approvalDate" ng-show="inputDeliveryInfo" readonly="readonly">
+                                 <input type="text" class="form-control date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="approvalDate1"  ng-model="deliver.approvalDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                       <!--   <input type="text" class="form-control" id="maker" name="maker" ng-model="deliver.createTime" ng-hide="deliverAdd" > -->
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-hide="span">{{deliver.approvalDate}}</p>
@@ -802,7 +802,7 @@
 											<div class="form-group">
                                                     <label class="control-label bold" for="deliverDate"><span ng-if="deliver.packageType=='配送'">发货</span><span ng-if="deliver.packageType=='自提'">提货</span>日期 </label>
                                                     <div class="">
-                                                        <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate"  name="deliverDate" ng-model="deliver.deliverDate" ng-show="inputDeliveryInfo" readonly="readonly">
+                                                        <input type="text" class="form-control  date-picker"  data-date-format="yyyy-mm-dd" data-date-viewmode="years" id="deliverDate1"  name="deliverDate" ng-model="deliver.deliverDate" ng-show="inputDeliveryInfo" readonly="readonly">
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left" ng-hide="span">{{deliver.deliverDate}}</p>
                                                     </div>
@@ -818,7 +818,7 @@
 														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 													<div  ng-hide="span">
-														<select class="form-control"  data-live-search="true" data-size=""   id="takeDeliverWarehouse"
+														<select class="form-control"  data-live-search="true" data-size=""   id="takeDeliverWarehouse1"
 															name="warehouseSerial"
 															ng-model="takeDelivery.warehouseSerial"
 															ng-change="selectAddressTakeDelivery()" ng-show="inputDeliveryInfo">
@@ -854,7 +854,7 @@
 													<label class="control-label bold">预计到货日期</label>
 													<div class="">
 														<input type="text" name="takeDeliverDate"
-															id="takeDeliverDate" data-date-format="yyyy-mm-dd"
+															id="takeDeliverDate1" data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years" size="16" class="form-control"
 															ng-model="takeDelivery.takeDeliverDate" ng-show="inputDeliveryInfo"
 															readonly="readonly" />
@@ -1642,7 +1642,7 @@
 </div>
 
 <script type="text/javascript">
-	$('#playArrivalDate').datepicker({
+	 $('#playArrivalDate').datepicker({
 		rtl : App.isRTL(),
 		orientation : "left",
 		autoclose : true,
@@ -1688,5 +1688,5 @@
 		autoclose : true,
 		dateFormat : "yyyy-mm-dd",
 		language : "zh-CN"
-	});
+	}); 
 </script>

@@ -77,13 +77,16 @@ import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.ContractFile;
 import com.congmai.zhgj.web.model.ContractFileExample;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
+import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
+import com.congmai.zhgj.web.model.DemandMateriel;
 import com.congmai.zhgj.web.model.DemandPlanMateriel;
 import com.congmai.zhgj.web.model.Group;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
@@ -99,12 +102,16 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
+import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.SupplyMateriel;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
+import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.service.ClauseAdvanceService;
 import com.congmai.zhgj.web.service.ClauseAfterSalesService;
 import com.congmai.zhgj.web.service.ClauseCheckAcceptService;
@@ -112,6 +119,7 @@ import com.congmai.zhgj.web.service.ClauseDeliveryService;
 import com.congmai.zhgj.web.service.ClauseFrameworkService;
 import com.congmai.zhgj.web.service.ClauseSettlementDetailService;
 import com.congmai.zhgj.web.service.ClauseSettlementService;
+import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractFileService;
@@ -127,10 +135,12 @@ import com.congmai.zhgj.web.service.OperateLogService;
 import com.congmai.zhgj.web.service.OrderFileService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
 import com.congmai.zhgj.web.service.ProcurementPlanService;
+import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 
@@ -201,6 +211,12 @@ public class OrderController {
 	private GroupService groupService;
     @Autowired
 	private CompanyContactService  companyContactService;
+    @Autowired
+	private PayService payService;
+    @Autowired
+	private StockInOutCheckService stockInOutCheckService;
+    @Autowired
+   	private CompanyAddressService companyAddressService;
     
     
 	//销售订单
@@ -208,6 +224,12 @@ public class OrderController {
 	
 	//采购订单
 	public static final String BUYORDER = "buy";
+	
+	//可开发票销售订单
+		public static final String SALEORDER2 = "sale2";
+		
+		//可收发票采购订单
+		public static final String BUYORDER2 = "buy2";
 	
 /*	//供应商订单（因为是平台方创建，显示需限制为已发布）
 	public static final String SUPPLYORDER = "supply";*/
@@ -252,6 +274,8 @@ public class OrderController {
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
 		orderService.submitOrder(orderInfo);
+		//发给平台销售组人员提示接收分解销售订单
+		 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_RECEIVE_SALE_ORDER));
 		return orderInfo;
     }
     
@@ -415,7 +439,7 @@ public class OrderController {
     	orderInfo.setUpdateTime(new Date());
     	orderInfo.setStatus("1");//在未确认状态提交申请的订单，设置为已确认
     	orderService.updateStatus(orderInfo);//更新备注
-    	
+    	OrderInfo  o=orderService.selectById(orderInfo.getSerialNum());//获取订单信息
 		//启动订单审批测试流程-start
 		User user = UserUtil.getUserFromSession();
 		orderInfo.setUserId(user.getUserId());
@@ -425,6 +449,9 @@ public class OrderController {
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
     	orderInfo.setReason(orderInfo.getRemark());
+    	orderInfo.setOrderNum(o.getOrderNum());
+    	orderInfo.setTradeType(o.getTradeType());
+    	orderInfo.setOrderType(o.getOrderType());
     	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
@@ -495,6 +522,9 @@ public class OrderController {
 		orderInfo.setStatus(BaseVO.PENDING);					//审批中
     	orderInfo.setApplyDate(new Date());
     	orderInfo.setReason(orderInfo.getRemark());
+    	orderInfo.setOrderNum(o.getOrderNum());
+    	orderInfo.setTradeType(o.getTradeType());
+    	orderInfo.setOrderType(o.getOrderType());
     	processBaseService.insert(orderInfo);
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
@@ -657,9 +687,9 @@ public class OrderController {
     			
     			this.orderService.updateStatus(oi);
     			//自主销售订单审批完成，分解BOM
-    			if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
+    			/*if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//自主销售
     				saleGenerateProcurementPlan(order.getSerialNum());
-	    		}
+	    		}*/
         		
     		}
     		
@@ -994,6 +1024,12 @@ public class OrderController {
     		if("delivery".equals(selectFor)){
     			parm.setStatus("2");
     		}
+    	}else if(BUYORDER2.equals(type)){//查找可收发票采购订单
+    		parm.setBuyComId(comId);
+//    		parm.setStatus("2");
+    	}else if(SALEORDER2.equals(type)){//查找可开发票销售订单
+    		parm.setSupplyComId(comId);
+//    		parm.setStatus("2");
     	}
     	
     	if("1".equals(fram)){
@@ -1001,7 +1037,12 @@ public class OrderController {
     	}else{
     		orderInfoList = orderService.selectCommenList(parm);
     	}
-    	
+    	if("sale".equals(type)&&"zizhuSale".equals(selectFor)){//采购计划查自主销售订单
+    		parm =new OrderInfo();
+    		parm.setOrderType(StaticConst.getInfo("zizhuSale"));
+    		parm.setStatus("2");
+    		orderInfoList = orderService.selectCommenList(parm);
+    	}
 
     	
     	//封装datatables数据返回到前台
@@ -1982,7 +2023,7 @@ public class OrderController {
     
     
     /**
-     * @Description (查询订单（收货发货检验出库入库）操作日志)
+     * @Description (查询订单（收货发货检验出库入库清报关）操作日志)
      * @param serialNum
      * @return
      */
@@ -1993,6 +2034,32 @@ public class OrderController {
     	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
     	operateLogList = operateLogService.findDeliverLogByOrderSerialNum(serialNum);
     	ListSort(operateLogList);
+    	BigDecimal totalCount=BigDecimal.ZERO;
+    	for(OperateLog op:operateLogList){
+    		if(StaticConst.getInfo("fahuo").equals(op.getOperationDesc())||StaticConst.getInfo("daifahuo").equals(op.getOperationDesc())){
+    			DeliveryVO deliveryvo=deliveryService.selectDetailById(op.getObjectSerial());
+    			op.setTimeData(deliveryvo.getDeliverDate());
+    			List<DeliveryMaterielVO> deliveryMateriels = deliveryService.selectListForDetail2(deliveryvo.getSerialNum());
+    			for(DeliveryMaterielVO dm:deliveryMateriels){
+    				totalCount=totalCount.add(new BigDecimal(dm.getDeliverCount()));
+    			}
+    			op.setDeliverCount(totalCount.toString());
+    		}else if(StaticConst.getInfo("check").equals(op.getOperationDesc())){
+    			StockInOutCheck stockInOutCheck=stockInOutCheckService.getStockInOutCheck(op.getObjectSerial());
+    			op.setTimeData(stockInOutCheck.getCheckDate());
+    			List<DeliveryMaterielVO> deliveryMateriels=deliveryService.selectListForDetailForStockCheck(stockInOutCheck.getTakeDeliverSerial(),StringUtil.isEmpty(stockInOutCheck.getDeliverSerial())?"in":"out");
+   			for(DeliveryMaterielVO dm:deliveryMateriels){
+   				totalCount=totalCount.add(new BigDecimal(dm.getQualifiedCount()));
+   			}
+    			op.setDeliverCount(totalCount.toString());
+    		}else if(StaticConst.getInfo("inrecord").equals(op.getOperationDesc())||StaticConst.getInfo("outrecord").equals(op.getOperationDesc())){//出入库记录
+    			StockInOutRecord stockInOutRecord = stockInOutCheckService.getStockInOutRecord(op.getObjectSerial());
+    			op.setTimeData(stockInOutRecord.getStockDate());
+    			op.setDeliverCount(stockInOutRecord.getRealCount());
+    		}/*else if("".equals(op.getOperationDesc())){//清报关
+    			
+    		}*/
+    	}
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
@@ -2015,6 +2082,17 @@ public class OrderController {
     	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
     	operateLogList = operateLogService.findPayLogByOrderSerialNum(serialNum);
     	ListSort(operateLogList);
+    	for(OperateLog op:operateLogList){
+    		PaymentRecord  pr=payService.selectPayById(op.getObjectSerial());
+    		if(pr==null){
+    			Invoice  iv=invoiceService.selectById(op.getObjectSerial());
+    			op.setTimeData(iv.getBillingDate());
+        		op.setPayMoneyCount(iv.getInvoiceAmount());
+    		}else{
+    			op.setTimeData(pr.getPaymentDate());
+        		op.setPayMoneyCount(pr.getApplyPaymentAmount());
+    		}
+    	}
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
 		pageMap.put("draw", 1);
@@ -2316,10 +2394,13 @@ public class OrderController {
     		OrderInfo updateOrderInfo = new OrderInfo();//修改销售订单的关联采购订单号
     		updateOrderInfo.setSerialNum(serialNum);
     		updateOrderInfo.setOrderSerial(numCode);
+    		updateOrderInfo.setUpdater(currenLoginName);//记录谁发起分解采购
     		orderService.updateOrderRelation(updateOrderInfo);
     	}
     	
     	orderInfo = orderService.selectById(orderInfo.getSerialNum());
+    	//发给平台采购组人员提示采购组人员采购
+		 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_CONFIRM_APPLY_BUY_ORDER));
 		return orderInfo;
 	}
 	
@@ -2368,9 +2449,25 @@ public class OrderController {
 		newProcurementPlan.setStatus("0");
 		
 		List<ProcurementPlanMateriel> newMaterielList = new ArrayList<ProcurementPlanMateriel>();//生成新的采购订单物料
+		List<DemandMateriel> demandMaterielList = new ArrayList<DemandMateriel>();//生成新的采购订单物料
 		Double materielCount = 0D;
+		int i=0;
 		for(OrderMateriel o:orderMateriel){
-			
+			DemandMateriel dm=new DemandMateriel();
+			dm.setSerialNum(ApplicationUtils.random32UUID());
+			dm.setProcurementPlanSerial(newSerialNum);
+			dm.setMaterielSerial(o.getMaterielSerial());
+			dm.setPlanCount(o.getAmount());
+			dm.setDeliveryAddress(o.getDeliveryAddress());
+			dm.setDeliveryDate(o.getDeliveryDate());
+			dm.setSort(i);
+			dm.setCreator(currenLoginName);
+			dm.setUpdater(currenLoginName);
+			dm.setCreateTime(new Date());
+			dm.setUpdateTime(new Date());
+			dm.setDelFlg("0");
+			i++;
+			demandMaterielList.add(dm);
 			if("1".equals(o.getMateriel().getIsBOM())){//如果是bom物料
 		    	BOMMaterielExample m1 =new BOMMaterielExample();
 		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria1 =  m1.createCriteria();
@@ -2383,6 +2480,7 @@ public class OrderController {
 	    			pMateriel.setProcurementPlanSerial(newSerialNum);
 	    			pMateriel.setPlanCount(o.getAmount());
 	    			pMateriel.setBuyCount(o.getAmount());
+	    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
 	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 	    			
 	    			
@@ -2406,6 +2504,8 @@ public class OrderController {
 		    			pMateriel.setSerialNum(ApplicationUtils.random32UUID());
 		    			pMateriel.setMaterielSerial(b.getMaterielSerial());//采购订单物料为标准物料
 		    			pMateriel.setProcurementPlanSerial(newSerialNum);
+		    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
+		    			pMateriel.setSingleDose(b.getSingleDose());
 		    			pMateriel.setPlanCount(
 		    					String.valueOf(Double.parseDouble(o.getAmount()==null?"0":o.getAmount())
 		    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
@@ -2433,6 +2533,8 @@ public class OrderController {
     			pMateriel.setMaterielSerial(o.getMaterielSerial());//采购订单物料为标准物料
     			pMateriel.setProcurementPlanSerial(newSerialNum);
     			pMateriel.setPlanCount(o.getAmount());
+    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
+    			pMateriel.setSingleDose("1");
     			pMateriel.setBuyCount(o.getAmount());
     			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
     			pMateriel.setDeliveryAddress(o.getDeliveryAddress());
@@ -2453,6 +2555,7 @@ public class OrderController {
 		newProcurementPlan.setBuyCount(String.valueOf(materielCount));
 		procurementPlanService.insert(newProcurementPlan);
 		procurementPlanMaterielService.betchInsertProcurementPlanMateriel(newMaterielList);//插入新的订单物料
+		procurementPlanMaterielService.betchInsertDemandMateriel(demandMaterielList);//插入需求物料
 	
     		
 		OrderInfo updateOrderInfo = new OrderInfo();//修改销售订单的关联采购订单号
@@ -2526,6 +2629,7 @@ public class OrderController {
 		newOrderInfo.setDeliverStatus(null);
 		newOrderInfo.setPayStatus(null);
 		newOrderInfo.setBillStatus(null);
+		newOrderInfo.setReceiveCount(null);
 		
 		orderService.insert(newOrderInfo);
 		List<OrderMateriel> newMaterielList = new ArrayList<OrderMateriel>();//生成新的采购订单物料
@@ -3217,16 +3321,21 @@ public class OrderController {
 				criteria1.andDelFlgEqualTo("0");
 				criteria1.andOrderSerialEqualTo(o.getSerialNum());
 				List<OrderMateriel> saleOrderMateriels = orderMaterielService.selectList(m);
+				Boolean isRepeat=false;
 				for (OrderMateriel om : saleOrderMateriels) {
 					String materielSerial = om.getMaterielSerial();
-					for (OrderMateriel om1 : orderMateriels) {
-						if (materielSerial.equals(om1.getMaterielSerial())) {
-							orderInfoList.add(o);
-							break;
+					if(isRepeat){
+						break;
+					}else{
+						for (OrderMateriel om1 : orderMateriels) {
+							if (materielSerial.equals(om1.getMaterielSerial())) {
+								orderInfoList.add(o);
+								isRepeat=true;
+								break;
+							}
+
 						}
-
 					}
-
 				}
 
 			}
@@ -3243,4 +3352,16 @@ public class OrderController {
 		return new ResponseEntity<Map<String, Object>>(pageMap, HttpStatus.OK);
 
 	}
+	    /**
+	     * @Description 采购计划分解物料(非BOM物料)后的采购清单物料赋值流水
+	     * @param request
+	     * @return
+	     */
+	    @RequestMapping(value="/getSerialNum")
+	    @ResponseBody
+	    public String getSerialNum() {
+	    	String serialNum = ApplicationUtils.random32UUID();
+	    	return serialNum;
+	    }
+	   
 }

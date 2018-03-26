@@ -2,7 +2,7 @@
  * 
  */
 
-angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$stateParams','commonService',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$stateParams,commonService) {
+angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$scope','$state','$http','demandPlanService','$location','$compile','$filter','$stateParams','commonService',function($rootScope,$scope,$state,$http,demandPlanService,$location,$compile,$filter,$stateParams,commonService) {
 	 $scope.$on('$viewContentLoaded', function() {   
 	    	// initialize core components
 		    handle = new pageHandle();
@@ -16,19 +16,22 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    			$scope.demandPlanAdd = true;
 	    			$scope.demandPlanView =true;
 	    		}
-	    		if($scope.demandPlan==undefined){
+	    		if($stateParams.serialNum==undefined){
 	    			 $rootScope.setNumCode("PL",function(newCode){//
 	    		 			$scope.demandPlan.demandPlanNum= newCode;//需求计划号
 	    		 		});
+	    		}else{
+	    			$scope.showSaveBtn=true;
 	    		}
 	    		
 	    		
-	    		selectParentMateriel();//加载物料列表
+//	    		selectParentMateriel();//加载物料列表
 	    		handle.datePickersInit("bottom");
 	    		initCustomers();
+	    		initSuppliers();
 	 		}else if($location.path()=="/demandPlanView"){
 	 			getDemandPlanInfo($stateParams.serialNum);
-	 			selectParentMateriel();
+//	 			selectParentMateriel();
 	 			$scope.serialNums = [];
 	 			selectSaleOrderTable();//加载物料列表
 	 			handle.datePickersInit("auto bottom");
@@ -50,6 +53,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 /***选择物料列表初始化START***/
      var table;
      var selectParentMateriel = function() {
+//    	 handle.blockUI("正在加载中..........");
+    	 if(table){
+    		 table.destroy();
+    	 }
               a = 0;
               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
               table = $("#select_sample_2").DataTable({
@@ -100,7 +107,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
   							
   							'render' : function(data,
   									type, row, meta) {
-  								if(row.supplyMateriels.length>0){
+//  								if(row.supplyMateriels.length>0){
 	  								if($scope.modalType=='single'){
 //	  	  								return '<input type="radio" id='+data+' data-radio=true ng-click="getCheckedIds(\''+data+'\','+meta.row+')"  name="serialNum" value="'
 //											+ $('<div/>')
@@ -120,14 +127,14 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 													.html()
 											+ '">';*/
 	  									return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-	                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+row.supplyMateriels[0].serialNum+'" data-set="#select_sample_2 .checkboxes" />'+
+	                                     '<input type="checkbox"  name="material_serial" data-checked=false id='+data+' ng-click="getCheckedIds(\''+data+'\','+meta.row+')" class="checkboxes"  id="'+data+'" value="'+row.serialNum+'" data-set="#select_sample_2 .checkboxes" />'+
 	                                     '<span></span>'+
 	                                 '</label>';
 	
 	  								}
-  								}else{
+  							/*	}else{
   									return '';
-  								}
+  								}*/
   							},
   							"createdCell": function (td, cellData, rowData, row, col) {
   								 $compile(td)($scope);
@@ -165,7 +172,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
      								 $compile(td)($scope);
      						       }
 
-  						}]
+  						}],
+  						"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+//		                	   handle.unblockUI();
+		                   }
 
               }).on('order.dt',
               function() {
@@ -473,11 +483,13 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		if(type=="single"){
 	    			$scope.modalType = type;
 	    			$scope.materielSelectedIndex = index;
-	    			table.ajax.reload();
+//	    			table.ajax.reload();
+	    			selectParentMateriel();
 	    			$("#basicMaterielInfo").modal("show");
 	    		}else{
 	    			$scope.modalType = 'multiple';
-	    			table.ajax.reload();
+//	    			table.ajax.reload();
+	    			selectParentMateriel();
 	    			if(!isNull($scope.demandPlan)&&!isNull($scope.demandPlan.serialNum)){
 		    			$("#basicMaterielInfo").modal("show");
 		    		}else{
@@ -537,22 +549,24 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        		handle.blockUI();
         			if($scope.rootMateriels.length==0){//如果需求物料列表为空
         				for(var i = 0;i < $scope.serialNums.length;i++){ //将选中物料放入列表，并设置为编辑状态
+        					($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
         					$scope.rootMateriels.push(($scope.serialNums)[i].materiel);
         					$scope["demandPlanMaterielEdit"+i] = false;
         					$scope["demandPlanMaterielView"+i] = false;
         				}
         			}else{
 		        		for(var i = 0;i < $scope.serialNums.length;i++){
+		        			($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
 	        				$scope.rootMateriels.splice(0,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
 	        				$scope["demandPlanMaterielEdit"+i] = false;
 							$scope["demandPlanMaterielView"+i] = false;
-							$scope["demandPlanMaterielEdit" + ($scope.rootMateriels.length-1)] = true;
-							$scope["demandPlanMaterielView" + ($scope.rootMateriels.length-1)] = true;
+							/*$scope["demandPlanMaterielEdit" + ($scope.rootMateriels.length-1)] = true;
+							$scope["demandPlanMaterielView" + ($scope.rootMateriels.length-1)] = true;*/
 		        		}
         				//之前的物料显示状态需要维持原状，以下添加代码
 		        		
         			}
-        			$scope.countSupplyCount();
+//        			$scope.countSupplyCount();
         			$scope.copyMateriels = angular.copy($scope.rootMateriels);//复制需求物料列表，以便撤销
         			$("#basicMaterielInfo").modal("hide");
         			toastr.success("添加成功！");
@@ -583,7 +597,107 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	 $scope.searchDemandPlan = function(){
 	    		 createTable(5,1,true,$scope.params);
 	    	 }
-	    	
+	    	 //设置发货日期
+	    		$scope.setAllDeliveryDate = function(materiel,index){
+	    			var date1=$filter('date')(new Date(), 'yyyy-MM-dd');
+	    			if( daysBetween(materiel.deliveryDate,date1)<=0){
+	    				toastr.warning("请选择当前日期之后的日期!");
+	    				materiel.deliveryDate=null;
+	    				return;
+	    			}
+					if(index==0){
+						for(var i=1;i<$scope.rootMateriels.length;i++){
+								 $scope.rootMateriels[i].deliveryDate = materiel.deliveryDate;
+						 }
+					}
+				}
+	    		
+	    		 //设置交付地址
+	    		$scope.setAllDeliveryAddress = function(materiel,index){
+					if(index==0){
+						for(var i=1;i<$scope.rootMateriels.length;i++){
+								 $scope.rootMateriels[i].deliveryAddress = materiel.deliveryAddress;
+						 }
+					}
+				}
+	    		//批量保存需求计划物料
+	    		$scope.saveAllDemandMateriel=function(){
+	    			if(isNull($scope.rootMateriels)||$scope.rootMateriels.length==0){
+	    				toastr.warning("请先添加物料!");
+	    				return;
+	    			}
+	    			//验证所填数据
+	    			var  demandPlanMateriels=[];
+	    			for(var index=0;index<$scope.rootMateriels.length;index++){
+	    				if(!demandPlanMaterielValid(index)){
+							return;
+						}
+	    				var materiel=$scope.rootMateriels[index];
+	    				var demandPlanMateriel={};
+	    				demandPlanMateriel.demandPlanSerial=$scope.demandPlan.serialNum;
+//	    				$scope.rootMateriels[index].materielSerial=$scope.rootMateriels[index].serialNum
+	    				if(isNull(materiel.serialNum)){ 
+							demandPlanMateriel.supplyMaterielSerial =materiel.supplyMaterielSerial;
+							demandPlanMateriel.materielSerial =materiel.materielSerial;
+						}else{
+							demandPlanMateriel.serialNum = materiel.serialNum;
+							demandPlanMateriel.supplyMaterielSerial = materiel.supplyMaterielSerial;
+							demandPlanMateriel.materielSerial = materiel.materielSerial;
+						}
+						demandPlanMateriel.deliveryDate = materiel.deliveryDate;
+						demandPlanMateriel.deliveryAddress = materiel.deliveryAddress;
+						demandPlanMateriel.amount = materiel.amount;
+						demandPlanMateriel.materielNum = materiel.materielNum;
+						demandPlanMateriel.materielName = materiel.materielName;
+						demandPlanMateriel.specifications = materiel.specifications;
+						demandPlanMateriel.unit = materiel.unit;
+//						demandPlanMateriel.supplyMateriels = materiel.supplyMateriels;
+						demandPlanMateriels.push(demandPlanMateriel);
+	    			}
+					handle.blockUI();
+					
+					var promise = demandPlanService
+					.saveAllDemandPlanMateriel(demandPlanMateriels);
+					promise.then(function(data) {
+						if (!handle.isNull(data.data)) {
+							$(".modal-backdrop").remove();
+							toastr.success("保存成功");
+							handle.unblockUI();
+		 		    			for(var i=0;i<data.data.length;i++){
+		 			        			$scope["demandPlanMaterielEdit"+i] = true;
+		 								$scope["demandPlanMaterielView"+i] = true;
+		 								$scope.rootMateriels[i].remainTime = data.data[i].remainTime;
+			 		    				$scope.rootMateriels[i].supplyName = data.data[i].supplyName;
+		 			        	}
+		 		    			$scope.showSaveBtn=true;
+							$(".alert-danger").hide();
+							// $stateParams.comId =
+							// company.comId;
+							// $location.search('comId',company.comId);
+						} else {
+							$(".modal-backdrop").remove();
+							handle.unblockUI();
+							toastr.error("保存失败！请联系管理员");
+							console.log(data);
+						}
+						
+					}, function(data) {
+						// 调用承诺接口reject();
+						$(".modal-backdrop").remove();
+						handle.unblockUI();
+						toastr.error("保存失败！请联系管理员");
+						console.log(data);
+					});
+	    			
+	    		}
+	    		//编辑需求物料
+	    		$scope.editAllDemandMateriel= function(){
+	    			$scope.showSaveBtn=false;
+	    			for(var i=0;i<$scope.rootMateriels.length;i++){
+		        			$scope["demandPlanMaterielEdit"+i] = false;
+							$scope["demandPlanMaterielView"+i] = false;
+		        	}
+	    		}
 	        /**
 	         * 保存需求计划
 	         */
@@ -798,7 +912,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		    			   handle.paramCheck("deliveryAddress"+index,"交付地点不能为空！");
 		    			   flag = false;
 		    		}
-		    	   
+		    		/*if(isNull($scope.rootMateriels[index].supplyMaterielSerial)){
+		    			toastr.warning("未选择供应商!");
+		    			   flag = false;
+		    		}*/
 		    	   return flag;
 		    }
 	        
@@ -1138,6 +1255,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       var s_table;
 	       var tableAjaxUrl = "rest/order/findOrderList?type=sale&demandPlanSerial="+$stateParams.serialNum;
 	       var selectSaleOrderTable = function() {
+	    	   handle.blockUI("正在加载中..........");
 	               a = 0;
 	               App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
 	               s_table = $("#sample_2")
@@ -1289,7 +1407,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-   						} ]
+   						} ],//stateSave:false,
+						"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+							 handle.unblockUI();
+		                   }
 
 	               }).on('order.dt',
 	               function() {

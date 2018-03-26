@@ -52,7 +52,7 @@
     <association property="buyName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association>
     <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
-    <association property="frame" column="frameSerial" select="com.congmai.zhgj.web.dao.ContractMapper.selectContractById"></association>
+    <association property="payReceiptMoney" column="serialNum" select="com.congmai.zhgj.web.dao.InvoiceMapper.getPayReceiptMoney"></association><!-- 发票未收/未开金额 -->
     
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -239,6 +239,9 @@ orderInfo.billStatus, orderInfo.delFlg,
 		 </if>
 		 <if test="tradeType != null" >
 		 	AND orderInfo.tradeType =  #{tradeType,jdbcType=VARCHAR}
+		 </if>
+		  <if test="orderType!= null" >
+		 	AND orderInfo.orderType =  #{orderType,jdbcType=VARCHAR}
 		 </if>
 		ORDER BY
 			updateTime DESC 
@@ -1006,7 +1009,7 @@ billStatus,
     <include refid="Base_Column_List" />
     from orderInfo
     WHERE
-	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount
+	 orderInfo.supplyComId = #{comId,jdbcType=VARCHAR} and orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) > CONVERT(IFNULL(orderInfo.receiveCount,0),SIGNED)
     
   </select>
   <select id="selectUnfinishedSaleOrderList" resultMap="BaseResultMap" parameterType="java.lang.String" >
@@ -1014,7 +1017,14 @@ billStatus,
     <include refid="Base_Column_List" />
     from orderInfo
     WHERE
-	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >orderInfo.receiveCount   and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
+	 orderInfo.status='2' and delFlg = '0' and CONVERT(orderInfo.materielCount,SIGNED) >CONVERT(IFNULL(orderInfo.receiveCount,0),SIGNED)  and  orderInfo.supplyComId is  null  and  orderInfo.buyComId  is not null
     
+  </select>
+  <select id="getBuyOrderCountByProcurementPlanSerial"  parameterType="java.lang.String"  resultType="java.lang.String">
+  select count(o.serialNum) from  orderInfo  o 
+  left join procurementPlan  p  on p.procurementPlanNum=o.demandPlanSerial 
+  where o.delFlg='0' and p.serialNum=#{serialNum,jdbcType=VARCHAR}
+  
+  
   </select>
 </mapper>

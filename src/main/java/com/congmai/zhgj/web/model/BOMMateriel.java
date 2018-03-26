@@ -22,8 +22,18 @@ public class BOMMateriel {
     private Date updateTime;
     
     private Materiel materiel;
+    
+    private Integer number;//倍数
 
-    public String getSerialNum() {
+    public Integer getNumber() {
+		return number;
+	}
+
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
+
+	public String getSerialNum() {
         return serialNum;
     }
 

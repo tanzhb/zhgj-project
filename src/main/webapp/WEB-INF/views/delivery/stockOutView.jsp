@@ -567,7 +567,7 @@
                                                     <label class="control-label bold" for="supplyComId"> 出库仓库</label>
                                                     <div class="">
                                                     <div class="form-control-focus"> </div>
-                                                         <p class="control-label left"   >{{deliver.deliveryAddress}}</p>
+                                                         <p class="control-label left"   >{{deliver.deliveryWarehouseName==null?deliver.deliveryAddress:deliver.deliveryWarehouseName}}</p>
                                                     </div>
                                             </div>
 										</div>

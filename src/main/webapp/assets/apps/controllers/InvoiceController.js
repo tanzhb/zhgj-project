@@ -45,6 +45,7 @@ angular
 													$scope.invoice.billWay='0';
 													$rootScope.setNumCode($scope.inOrOut=="in"?"OT":"IT",function(newCode){
 											 			$scope.invoice.invoiceNum= newCode;//进/销项票
+											 			$scope.invoice.submitDate=$filter('date')(new Date(), 'yyyy-MM-dd');//进/销项票
 											 			getCurrentUser();
 											 		});
 													if(!isNull($stateParams.orderSerialNum)){
@@ -176,6 +177,18 @@ angular
 									//调用承诺接口reject();
 								});
 							}
+							 /**
+							 * 加载当前用户附上开票人或收票人
+							 */
+							var getCurrentUserForReceiveOrOpen = function(){
+								var promise = commonService.getCurrentUser();
+								promise.then(function(data){
+									$scope.invoice.approver= data.data.userName;
+									$scope.invoice.billingDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+								},function(data){
+									//调用承诺接口reject();
+								});
+							}
 							// 构建datatables开始***************************************
 							var tableAjaxUrl ;
 							 var table ;
@@ -258,7 +271,7 @@ angular
 															},{
 																mData : 'invoiceAmount'
 															}, {
-																mData : 'invoiceCount'
+																mData : 'invoiceNO'//invoiceCount
 															}, { 
 																mData : 'billingDate',
 																mRender:function(data){
@@ -268,7 +281,7 @@ angular
 								                            			return "";
 								                            		}
 								                            	}
-															}, {
+															},/* {
 																mData : 'receiptDate',//
 																mRender:function(data){
 								                            		if(data!=""&&data!=null){
@@ -277,7 +290,7 @@ angular
 								                            			return "";
 								                            		}
 								                            	}
-															},{
+															},*/{
 																mData : 'submitter'
 															},{
 																mData : 'status'
@@ -331,7 +344,7 @@ angular
 																 $compile(td)($scope);
 														    }
 														},{
-															'targets' : 10,
+															'targets' : 9,
 															'render' : function(data,
 																	type, row, meta) {
 																var statusIcon='';//状态
@@ -480,7 +493,7 @@ angular
 											},{
 												mData : 'invoiceAmount'
 											}, {
-												mData : 'invoiceCount'
+												mData : 'invoiceNO'// invoiceCount
 											}, { 
 												mData : 'billingDate',
 												mRender:function(data){
@@ -490,7 +503,7 @@ angular
 				                            			return "";
 				                            		}
 				                            	}
-											}, {
+											}, /*{
 												mData : 'receiptDate',//
 												mRender:function(data){
 				                            		if(data!=""&&data!=null){
@@ -499,7 +512,7 @@ angular
 				                            			return "";
 				                            		}
 				                            	}
-											},{
+											},*/{
 												mData : 'submitter'
 											},/*{
 												mData : 'status'
@@ -739,6 +752,9 @@ angular
 													if(serialNum.indexOf("view")>-1){
 														return data;
 													}else{
+														if(isNull(row.billAmount)||row.billAmount==0){
+															return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+														}else
 														return '<input  type="text"  value="'+row.billAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 													}
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -749,9 +765,9 @@ angular
 												'render' : function(data,
 														type, row, meta) {
 													if(data==null){
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(0,'￥')+'</span>';
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(row.canBillAmount*row.orderUnitPrice,'￥')+'</span>';
 													}else{
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(data,'￥')+'</span>';
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(Number($("#"+row.serialNum).val())*row.orderUnitPrice,'￥')+'</span>';
 													}
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -892,6 +908,9 @@ function loadMaterielOutTable(orderSerial,serialNum){
 									if(serialNum.indexOf("view")>-1){
 										return data;
 									}else{
+										if(isNull(row.billAmount)||row.billAmount==0){
+											return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceOut"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+										}else
 										return '<input  type="text"  value="'+row.billAmount+'"    name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"  class="invoiceOut"    id="'+row.serialNum+'"    onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 									}
 								
@@ -1000,14 +1019,13 @@ $scope.saveBillingRecord=function (serialNum,judgeString,invoiceBillingRecordSer
 		toastr.warning("开票数量不能大于可开数量！");
 		 return;
 	}
-	debugger;
 	$scope.invoiceBillingRecord = {};
 	$scope.invoiceBillingRecord.serialNum=invoiceBillingRecordSerial;
 	$scope.invoiceBillingRecord.orderMaterielSerial=serialNum;
 	$scope.invoiceBillingRecord.invoiceSerial=$scope.invoice.serialNum;
 	$scope.invoiceBillingRecord.billCount=$("#"+serialNum).val();
 	InvoiceService.saveInvoiceBillingRecord($scope.invoiceBillingRecord).then(
-			function(data) {debugger;
+			function(data) {
 				toastr.success("保存成功！");
 				$("#"+serialNum).attr("readonly",true);
 				$("#"+serialNum).css("border","none");
@@ -1111,8 +1129,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 																			toastr.success("保存发票数据成功！");
 																		}else if(judgeString=='confirmIn'){
 																			toastr.success("确认收票成功！");
+																			$state.go("invoice");
 																		}else if(judgeString=='confirmOut'){
 																			toastr.success("确认开票成功！");
+																			$state.go("invoice");
 																		}else if(judgeString=='applyIn'){
 																			toastr.success("申请收票成功！");
 																		}else if(judgeString=='applyOut'){
@@ -1170,7 +1190,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        	}
 							        	var params = {};
 							        	params.invoiceBillingRecords = [];
-							        	var param;
+							        	var param,totalBillCount=0;
 							        	for(var i=0;i<$scope.serialNums.length;i++){
 							        		param = {};
 							        		var val=$scope.serialNums[i].split(",")[1];
@@ -1180,6 +1200,14 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        		param.invoiceSerial=$scope.invoice.serialNum;
 							        		param.billCount=$("#"+serialNum).val();
 							        		params.invoiceBillingRecords.push(param);
+							        		totalBillCount+=Number(param.billCount);
+							        	}
+							        	if(totalBillCount==0&&$scope.inOrOut.indexOf("in")>-1){
+							        		toastr.warning("收票总数量必须大于0！");
+							        		 return;
+							        	}else if(totalBillCount==0&&$scope.inOrOut.indexOf("out")>-1){
+							        		toastr.warning("开票总数量必须大于0！");
+							        		 return;
 							        	}
 							        	/*$scope.invoiceBillingRecord = {};
 							        	$scope.invoiceBillingRecord.serialNum=invoiceBillingRecordSerial;
@@ -1199,7 +1227,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 								        				$("#save"+serialNum).css("display","none");
 								        				$("#edit"+serialNum).css("display","inline-block");
 								        				$("#cancel"+serialNum).css("display","none");
-								        				var nowMoney=Number($("#"+serialNum).val())*Number($scope.serialNums[i].split(",")[1]);
+								        				var nowMoney=Number($("#"+serialNum).val())*Number($scope.serialNums[i].split(",")[2]);
 								        				billOrReceiptMoney+=nowMoney;
 								        				$("#money"+serialNum).html($filter('currency')(nowMoney,''));
 							        				}
@@ -1227,6 +1255,17 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        	$scope.orderMaterielShow=false;
 				        				$scope.orderMaterielInput=false;
 							        }
+							        
+							        $scope.clearNoNum = function(){
+							       	 //先把非数字的都替换掉，除了数字和.
+							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(/[^\d.]/g,"");
+							       	 //必须保证第一个为数字而不是.
+							        	$scope.invoice.invoiceAmount =$scope.invoice.invoiceAmount.replace(/^\./g,"");
+							       	 //保证只有出现一个.而没有多个.
+							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(/\.{2,}/g,"");
+							       	 //保证.只出现一次，而不能出现两次以上
+							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+							   	 }
 							// 添加发票结束***************************************
 							
 							// 修改发票开始***************************************							
@@ -1314,7 +1353,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					 	    		selectBuyOrSaleOrderTable.destroy();
 					 	    	 }
 					 	    	 if(judgeString=='buy'){
-					 	    		 ajaxUrl="rest/order/findOrderList?type=buy";
+					 	    		 ajaxUrl="rest/order/findOrderList?type=buy2";
 					 	    		aoColumnsForBuyOrSale=  [
 					 	    		                                    { mData: 'serialNum' },
 					 	    		                                   { mData: 'orderNum' },
@@ -1346,7 +1385,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 					 	   						       }
 					 	   						} ];
 					 	    	  }else if(judgeString=='sale'){
-					 	    		 ajaxUrl="rest/order/findOrderList?type=sale";
+					 	    		 ajaxUrl="rest/order/findOrderList?type=sale2";
 					 	    		aoColumnsForBuyOrSale=[
 					 	                                { mData: 'serialNum' },
 					 	                               { mData: 'orderNum' },
@@ -1588,7 +1627,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 								}
 								if($scope.inOrOut!=undefined&&$scope.inOrOut.indexOf('confirm')>-1){
 									billingDate={required:true};
-									invoiceAmount={required:true,digits:true};
+									invoiceAmount={required:true};
 									invoiceNO={required:true};
 								}else{
 									billingDate={};
@@ -1609,7 +1648,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	comName:comName,
 						            	relationBuyOrSaleNum:relationBuyOrSaleNum,
 						            	receiptDate:{required:" 申请开票日期不能为空！"},
-						            	invoiceAmount:{required:"发票金额不能为空！",digits:"必须为数字！"},
+						            	invoiceAmount:{required:"发票金额不能为空！"},
 						            	invoiceType: { required:"发票类型未选择！"},
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
@@ -1679,6 +1718,10 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						 	        			 $scope.invoice.approvalDate=timeStamp2ShortString(data.invoice.approvalDate);
 						 	        			 $scope.invoice.capitalMoney=convertCurrency(data.invoice.billOrReceiptMoney);
 						 	        			getOrderInfoBySerialNum($scope.invoice.orderSerial);//获取订单信息
+						 	        			if($scope.inOrOut.indexOf("confirm")>-1){
+						 	        				$scope.invoice.invoiceAmount=$scope.invoice.billOrReceiptMoney;
+						 	        				getCurrentUserForReceiveOrOpen();
+						 	        			}
 							 	            	if(serialNum.indexOf("in")>-1){	loadMaterielInTable($scope.invoice.orderSerial,serialNum, $scope.invoice.serialNum);//加载发票物料
 							 	            	}else{loadMaterielOutTable($scope.invoice.orderSerial,serialNum, $scope.invoice.serialNum);}
 						 	        			

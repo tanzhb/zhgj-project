@@ -19,10 +19,10 @@
 	                        <tr>
 	                            <th style="text-align: center">
 	                            	<!-- <input ng-if="modalType!='single'" ng-click="allClick" name="select_all" value="1" id="example-select-all" type="checkbox"/> -->
-	                            	<label ng-if="modalType!='single'" class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+	                            	<!-- <label ng-if="modalType!='single'" class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
 	                                     <input type="checkbox" ng-click="allClick" class="group-checkable" data-set="#select_sample_2 .checkboxes" />
 	                                     <span></span>
-	                                 </label>
+	                                 </label> -->
 	                            </th>
 	                            <th> 物料编码 </th>
 	                            <th> 物料名称 </th>

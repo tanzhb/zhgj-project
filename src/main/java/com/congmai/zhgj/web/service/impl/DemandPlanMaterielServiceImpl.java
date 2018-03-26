@@ -3,12 +3,14 @@ package com.congmai.zhgj.web.service.impl;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Service;
 
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
@@ -18,6 +20,7 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.DemandPlanMaterielMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
+import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DemandPlan;
 import com.congmai.zhgj.web.model.DemandPlanExample;
@@ -164,6 +167,35 @@ public class DemandPlanMaterielServiceImpl extends GenericServiceImpl<DemandPlan
 		DemandPlanMaterielExample example = new DemandPlanMaterielExample();
 		example.createCriteria().andSerialNumIn(Arrays.asList(ids.split(",")));
 		return demandPlanMaterielMapper.selectMaterielsByExample(example);
+	}
+
+	@Override
+	public void insertAllDemandPlanMateriel(
+			List<DemandPlanMateriel> insertList, String userId) {
+		if(!CollectionUtils.isEmpty(insertList)){
+			try {
+				DemandPlanMaterielExample dpe=new DemandPlanMaterielExample();
+				com.congmai.zhgj.web.model.DemandPlanMaterielExample.Criteria c=dpe.createCriteria();
+				c.andDemandPlanSerialEqualTo(insertList.get(0).getDemandPlanSerial());
+				demandPlanMaterielMapper.deleteByExample(dpe);
+				//String s=null;
+				//s.split(",");
+				for(DemandPlanMateriel demandPlanMateriel:insertList){
+					demandPlanMateriel.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+					demandPlanMateriel.setCreateTime(new Date());
+					demandPlanMateriel.setCreator(userId);
+					demandPlanMateriel.setUpdateTime(new Date());
+					demandPlanMateriel.setUpdater(userId);
+					demandPlanMateriel.setSupplyMaterielSerial("");
+	    		}
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new RuntimeException();
+			}
+				
+			}
+		demandPlanMaterielMapper.insertBatch(insertList);
+		
 	}
 	
 

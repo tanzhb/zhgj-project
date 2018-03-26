@@ -14,7 +14,7 @@ import com.congmai.zhgj.web.model.ProcurementPlanExample;
  * @Date 2017年7月28日 下午3:04:17
  * @version 1.0.0
  */
-public interface ProcurementPlanService extends GenericService<ProcurementPlan, String> {
+public  interface ProcurementPlanService extends GenericService<ProcurementPlan, String> {
 	/**
      * 查询多个对象
      *
@@ -23,6 +23,8 @@ public interface ProcurementPlanService extends GenericService<ProcurementPlan, 
     List<ProcurementPlan> selectList(ProcurementPlanExample m);
 
 	public void deleteProcurementPlans(String ids);
+	
+	public void updateProcurementPlan(ProcurementPlan p);
 
 
 }

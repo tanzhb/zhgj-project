@@ -444,6 +444,7 @@
 												
 							<th style="white-space: nowrap;">应付帐单号</th>
 							<th style="white-space: nowrap;">付款类型</th>
+							<th style="white-space: nowrap;"> 采购订单号 </th>
 							<th style="white-space: nowrap;">币种</th>
 							<th style="white-space: nowrap;">应付金额</th>
 							<th style="white-space: nowrap;">应付日期</th>
@@ -570,4 +571,6 @@
 <!-- 导入订单modal 开始 -->
 <jsp:include  page="importOrder.jsp"/>
 <jsp:include  page="viewOperateLog.jsp"/>
+<jsp:include  page="viewDeliverOperateLog.jsp"/>
+<jsp:include  page="viewPayOperateLog.jsp"/>
 <jsp:include page="showInRecord.jsp"/>

@@ -95,8 +95,8 @@
 														<select class="form-control"
 															id="paymentType" ng-show="input"
 															name="paymentType"
-															ng-model="paymentRecord.paymentType">
-															<option value="">收款类型</option>
+															ng-model="paymentRecord.paymentType"   >
+															<!-- <option value="">收款类型</option> -->
 															<option value="采购付款">采购付款</option>
 															<option value="垫资款">垫资款</option>
 															<option value="销售退款">销售退款</option>
@@ -147,11 +147,11 @@
 													<label class="control-label bold">币种<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
-														<select class="form-control" id="applyCurrency"
+														<select class="form-control" id="applyCurrency1"
 															name="applyCurrency"
-															ng-model="paymentRecord.applyCurrency"
+															ng-model="paymentRecord.applyCurrency"   
 															 ng-show="input">
-															<option value="">币种</option>
+															<!-- <option value="">币种</option> -->
 															<option value="人民币">人民币</option>
 															<option value="美元">美元</option>
 															<option value="欧元">欧元</option>
@@ -264,7 +264,7 @@
 															name="applyCurrency"
 															ng-model="paymentRecord.applyCurrency"
 															 ng-show="input">
-															<option value="">币种</option>
+															 <!-- <option value="">币种</option> -->
 															<option value="人民币">人民币</option>
 															<option value="美元">美元</option>
 															<option value="欧元">欧元</option>

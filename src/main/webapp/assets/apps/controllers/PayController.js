@@ -47,6 +47,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
 					$scope.paymentRecord.isBill='0';
 					$scope.paymentRecord.status='0';
+					$scope.paymentRecord.applyCurrency='人民币';
+					$scope.paymentRecord.paymentType='采购付款';
 					getCurrentUser();
 				});
 			if(!isNull($stateParams.orderSerialNum)){
@@ -102,7 +104,6 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	}
 	//根据参数查询付款对象
 	$scope.getPayInfo  = function(serialNum, ids, comments) {
-		debugger
 		PayService.selectPay(serialNum).then(
       		     function(data){
       		   	$scope.paymentRecord=data.paymentRecord;
@@ -126,7 +127,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
   		    		$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
   		    	}
   		    	$scope.clauseSettlementList=data.clauseSettlementList;
-  		    	$scope.paymentRecord.payType=data.paymentRecord.paymentType;
+  		    	$scope.paymentRecord.payType=data.paymentRecord.payType;
   		    	$scope.comFinances=data.paymentRecordcomFinances//收付款信息
   		    	$scope.paymentRecord.bank=data.paymentRecord.bank;
   		    	$scope.verificationList=data.rvList;
@@ -391,8 +392,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
  									type, row, meta) {
  								var  unPaymentAmount;
  								if(row.paymentAmount==null){
+ 									debugger
 									unPaymentAmount=Number(row.moneyAmount);
 								}else{
+									debugger
 									unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
 								}
  									return  '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
@@ -406,9 +409,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								'targets' : 2,
 								'render' : function(data,
 										type, row, meta) {
-									if(row.currency=='RMB'){
+									if(row.currency=='人民币'){
+										debugger
 	  									return  $filter('currency')(data,'￥');
-	  								}else if(row.currency=='USD'){
+	  								}else if(row.currency=='美元'){
+	  									debugger
 	  									return $filter('currency')(data,'$'); 
 	  								}
 								}
@@ -416,9 +421,11 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 								'targets' : 5,
 								'render' : function(data,
 										type, row, meta) {
-									if(row.currency=='RMB'){
+									if(row.currency=='人民币'){
+										debugger;
 										return  $filter('currency')(Number(row.moneyAmount)-Number(data),'￥');
-	  								}else if(row.currency=='USD'){
+	  								}else if(row.currency=='美元'){
+	  									debugger;
 	  									return  $filter('currency')(Number(row.moneyAmount)-Number(data),'$');
 	  								}
 								}
@@ -429,8 +436,10 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 										type, row, meta) {
 									var  unPaymentAmount;
 									if(row.verificationMoneyAmount==null){
+										debugger
 										unPaymentAmount=Number(row.moneyAmount);
 									}else{
+										debugger
 										unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
 									}// ng-init="unPaymentAmount'+row.serialNum+'=\''+unPaymentAmount+'\'" 
 									return '<input  type="text"  class="form-control"   style="border:none" readonly="readonly"  '+ 
@@ -462,7 +471,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
             
            
          };
- 		$scope.showUnPaymentAmount=function(serialNum,paymentAmount){//选中checkbox显示输入框
+ 		$scope.showUnPaymentAmount=function(serialNum,verificationMoneyAmount,unPaymentAmount){//选中checkbox显示输入框
 			var value;
 			if($scope.totalVerificateCount==undefined){
 				$scope.totalVerificateCount=0;
@@ -474,35 +483,61 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
+				$("#up"+serialNum).val(unPaymentAmount);
+				/*if(Number($scope.remainMoneyAmount)<=unPaymentAmount){//如果付款单剩余未付金额小与等于水单余额
+					$("#up"+serialNum).val(Number($scope.remainMoneyAmount)-Number($scope.totalVerificateCount));
+				}else{
+					$("#up"+serialNum).val(unPaymentAmount-Number($scope.totalVerificateCount));
+				}*/
+				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");
 				$("#up"+serialNum).attr("readonly",true);
 				value=$("#up"+serialNum).val();
 				$("#up"+serialNum).val(0);//重新置为0
-				$scope.totalVerificateCount=($scope.totalVerificateCount-Number(value));
+				$scope.totalVerificateValue();
+				/*$scope.totalVerificateCount=($scope.totalVerificateCount-Number(value));*/
 				/* toastr.warning("重新选择出库,数量为"+value+"!");*/
 				
 			}
 			//$scope.judgeNumber(stockCount,stockOutCount,serialNum);
 		}
  		$scope.judgeNumber=function(remainMoneyAmount,unPaymentAmount,serialNum){
-			 var value=$("#up"+serialNum).val();//核销金额
+			 var value=$scope['unPaymentAmount'+serialNum];//核销金额;
 			 if(isNaN(value)||value<=0){
 				 toastr.warning("核销金额必须为大于0的数字！");
+				 $("#up"+serialNum).val(remainMoneyAmount);
 				 return;
 			 }
 			 if(Number(value)>Number(unPaymentAmount)){
 				toastr.warning("当前核销金额不得大于付款水单余额！");
-				  $("#up"+serialNum).empty();
+				  $("#up"+serialNum).val(0);
 				 $("#up"+serialNum).focus(); 
 				 return;
 			 }else if(Number(value)>Number(remainMoneyAmount)){
 				 toastr.warning("当前核销金额不得大于付款单余额！");
-				  $("#up"+serialNum).empty();
+				 $("#up"+serialNum).val(remainMoneyAmount);
 				 $("#up"+serialNum).focus(); 
 				 return;
 			 }
-			 var checkboxs=$('input[class="checkboxes"]:checked');
+			/* var checkboxs=$('input[class="checkboxes"]:checked');
+			 var count=0;
+			 for(var i=0;i<checkboxs.length;i++){
+				  var serialNum=$(checkboxs[i]).val();
+				  var value=$("#up"+serialNum).val();
+				  count=count+Number(value);//累加核销金额
+			 }*/
+			 $scope.totalVerificateValue();
+//			 $scope.totalVerificateCount=count;
+			 if($scope.totalVerificateCount>remainMoneyAmount){
+				 toastr.warning("当前核销总金额不得大于付款水单余额！");
+				 $("#up"+serialNum).val(0);
+				 $("#up"+serialNum).focus(); 
+			 }
+		 }
+ 		
+ 		$scope.totalVerificateValue=function(){
+ 			 var checkboxs=$('input[class="checkboxes"]:checked');
 			 var count=0;
 			 for(var i=0;i<checkboxs.length;i++){
 				  var serialNum=$(checkboxs[i]).val();
@@ -510,12 +545,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 				  count=count+Number(value);//累加核销金额
 			 }
 			 $scope.totalVerificateCount=count;
-			 if(count>remainMoneyAmount){
-				 toastr.warning("当前核销总金额不得大于付款水单余额！");
-				 $("#up"+serialNum).empty();
-				 $("#up"+serialNum).focus(); 
-			 }
-		 }
+			 return count;
+ 		}
  	    /**
 	        * 确认核销
 	        */
@@ -1072,7 +1103,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 
 				);
 		$state.go('paymentRecordC');//返回申请列表
+		//location.reload();
 		$("#sample_2").DataTable().ajax.reload();
+		location.reload();
 	//$state.go('paymentRecordC',{},{reload:true});
 		
 	};
@@ -1669,6 +1702,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	 $scope.goVerificate= function(serialNum) {//去核销
 	    	$state.go('viewPay',{serialNum:serialNum});
 	    };
+	    $scope.viewGraphTrace = function(processInstanceId){
+	    	graphTrace(processInstanceId,ctx);
+	    }
 	//付款列表
 	var table;
 //	var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
@@ -1720,7 +1756,9 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            },
 						                            { mData: 'paymentNum' },//paymentType
 						                            { mData: 'paymentType' },//paymentType
-						                            { mData: 'applyCurrency' },
+						                         //   { mData: 'paymentNode' },//paymentType
+						                            { mData: 'orderNum' },
+						                            { mData: 'paymentNode' },// applyCurrency
 						                            { mData: 'applyPaymentAmount' },
 						                            { mData: 'playPaymentDate' },
 						                            { mData: 'supplyComId'},
@@ -1735,7 +1773,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            		}
 						                            	}
 						                            	},
-						                            { mData: 'status',
+						                            { mData: 'status'/*,
 						                            	mRender:function(data){
 						                            		if(data!=""&&data!=null){
 						                            			if(data=='0'){
@@ -1745,7 +1783,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            			}else if(data=='2'){
 						                            				return '已完成';
 						                            			}else if(data=='PENDING'){
-						                            				return '审批中';
+						                            				return '<span ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" style="color:#fcb95b">审批中</span>';
 						                            			}else if(data=='WAITING_FOR_APPROVAL'){
 						                            				return '待审批';					                            				
 																}else if(data=='APPROVAL_SUCCESS'){
@@ -1756,7 +1794,8 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            		}else{
 						                            			return "";
 						                            		}
-						                            	}
+						                            	
+						                            	}*/
 						                            },{ mData: 'status'
 						                            	},
 						                            ],
@@ -1786,6 +1825,19 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            	'render' : function(data,
 						                            			type, row, meta) {
 						                            		if(data==null||data==''){
+						                            			return '';
+						                            		}else{
+						                            			return $filter('currency')(data,'');	
+						                            		}
+						                            		
+						                            	},
+						                            },
+						                            {
+						                            	'targets' : 6,
+						                            	'className' : 'dt-body-center',
+						                            	'render' : function(data,
+						                            			type, row, meta) {
+						                            		if(data==null||data==''){
 						                            			return row.applyDate;
 						                            		}else{
 						                            			return data;
@@ -1797,8 +1849,37 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
-						                            	if(row.status=='1'){
-						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">核销</a>';
+						                            		if(data!=""&&data!=null){
+						                            			if(data=='0'){
+						                            				return '未审批';
+						                            			}else if(data=='1'){
+						                            				return '部分核销';
+						                            			}else if(data=='2'){
+						                            				return '已完成';
+						                            			}else if(data=='PENDING'){
+						                            				return '<span ng-click="viewGraphTrace('+row.processInstanceId+')" style="color:#fcb95b">审批中</span>';
+						                            			}else if(data=='WAITING_FOR_APPROVAL'){
+						                            				return '待审批';					                            				
+																}else if(data=='APPROVAL_SUCCESS'){
+																	return '待付款';
+																}else if(data=='APPROVAL_FAILED'){
+																	return '审批失败';
+																}
+						                            		}else{
+						                            			return "";
+						                            		}
+						                            	},
+						                            	"createdCell": function (td, cellData, rowData, row, col) {
+						                            		$compile(td)($scope);
+						                            	}
+						                            },
+						                            {
+						                            	'targets' : 12,
+						                            	'className' : 'dt-body-center',
+						                            	'render' : function(data,
+						                            			type, row, meta) {
+						                            	if(row.status=='1'||row.status=='APPROVAL_SUCCESS'){
+						                            			return '<a href="javascript:void(0);" ng-click="goVerificate(\''+row.serialNum+'\')">确认付款</a>';
 						                            		}else{
 						                            			return '';	
 						                            		}

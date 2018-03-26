@@ -28,7 +28,7 @@
 	                    </thead>
 	                    <tbody>
 	                    </tbody>
-	                    <tfoot><tr><td/><td/><td/><td/><td>合计:</td><td>{{totalUnVerificateCount}}</td><td>{{totalVerificateCount}}</td></tr></tfoot>
+	                    <tfoot><tr><td/><td/><td/><td/><td>合计:</td><td>{{totalUnVerificateCount}}</td><td>{{totalVerificateValue()}}</td></tr></tfoot>
 	                </table>
 	            </div>
 	            <div class="modal-footer">

@@ -189,7 +189,45 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 		}								
 	};
 
+	//生成采购计划
+	$scope.newProcurementPlan = function() {
+		var ids = '';
+		// Iterate over all checkboxes in the table
+		table.$('input[type="checkbox"]').each(function() {
+			// If checkbox exist in DOM
+			if ($.contains(document, this)) {
+				// If checkbox is checked
+				if (this.checked) {
+					// 将选中数据id放入ids中
+					if (ids == '') {
+						ids = this.value;
+					} else
+						ids = ids + ',' + this.value;
+				}
+			}
+		});
 
+		if (ids == '') {// 未勾选删除数据									
+			toastr.warning("未勾选要生成采购计划的条目！");
+		} else {
+			$('#confirmModal').modal('show');// 打开确认删除模态框
+
+			$scope.confirmNewProcurementPlan = function() {	
+				$('#confirmModal').modal('hide');// 隐藏确认删除模态框
+				PurchaseForecastService.savePurchaseForecast(ids).then(
+						function(data) {
+							
+							$state.go('procurementPlan',{},{reload:true}); // 重新加载datatables数据
+						},
+						function(errResponse) {
+							console.error('生成采购计划错误!');
+//							alert(123);
+						}
+
+				);
+			}
+		}								
+	};
 	//查看上传的文件
 	$scope.download=function(name) {
 		/* $http({

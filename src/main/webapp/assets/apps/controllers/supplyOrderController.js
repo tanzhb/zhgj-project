@@ -268,7 +268,10 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
     	}
     	
     };
-    
+    $scope.deliveryAdd= function(serialNum) {
+   	 
+    	$state.go('addDelivery',{oprateType:"forSupplyOrder",orderSerialNum:serialNum});
+      }
     
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=sale&selectFor=supplyOrder";
@@ -556,7 +559,11 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						if(data==66){
 							return '<a href="javascript:void(0);" ng-click="supplyConfirmed(\''+row.serialNum+'\')">确认</a></br>'
 							+'<a href="javascript:void(0);" ng-click="editOrder(\''+row.serialNum+'\')">修改</a>';
-						}else{
+						}/*else if(data==77){
+							
+							
+						}*/else{
+							return '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 							return "";
 						}
 					},
@@ -3062,34 +3069,51 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     /***************日志表格 start************************/
 		 	var logTable 
 		 	$scope.viewOrderLog = function (serialNum){
+		 		//控制日志显示(数量日期和金额日期)
 		 		$("#operateLogInfo").modal("show");
-		 		if(logTable){
+		 		/*if(logTable){
 		 			logTable.ajax.url(ctx+"/rest/order/findOrderLog?serialNum=" + serialNum).load()
 		 		}else{
-		 			showLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
+		 			showOrderLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
+		 		}*/
+		 		if(logTable){
+		 			logTable.destroy();
 		 		}
+		 		showOrderLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
 		 	}
 		 	
 		 	$scope.viewDeliverLog = function (serialNum){
-		 		$("#operateLogInfo").modal("show");
-		 		if(logTable){
+		 		//控制日志显示(数量日期和金额日期)
+				$scope.showDeliver=true;
+		 		$("#deliverOperateLogInfo").modal("show");
+		 		
+		 	/*	if(logTable){
 		 			logTable.ajax.url(ctx+"/rest/order/findDeliverLog?serialNum=" + serialNum).load()
 		 		}else{
 		 			showLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
+		 		}*/
+		 		if(logTable){
+		 			logTable.destroy();
 		 		}
+		 		showDeliverLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
 		 	}
 		 	
 		 	$scope.viewPayLog = function (serialNum){
-		 		$("#operateLogInfo").modal("show");
-		 		if(logTable){
+		 		//控制日志显示(数量日期和金额日期)
+				$scope.showReceive=true;
+		 		$("#payOperateLogInfo").modal("show");
+		 	
+		 		/*if(logTable){
 		 			logTable.ajax.url(ctx+"/rest/order/findPayLog?serialNum=" + serialNum).load()
 		 		}else{
 		 			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
+		 		}*/
+		 		if(logTable){
+		 			logTable.destroy();
 		 		}
+		 		showPayLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 		 	}
-		 	
-		 	
-		 	 function showLogTable(url){
+		 	 function showOrderLogTable(url){
 		 		logTable = $("#select_operateLog")
 		      	.DataTable(
 		      			{
@@ -3145,6 +3169,386 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      									{
 		      										mData : 'remark'
 		      									}]
+		      			})
+		      }
+		 	 
+		 	 function showDeliverLogTable(url){
+			 		logTable = $("#select_deliverOperateLog")
+			      	.DataTable(
+			      			{
+			      				language: {
+			                         aria: {
+			                             sortAscending: ": 以升序排列此列",
+			                             sortDescending: ": 以降序排列此列"
+			                         },
+			                         emptyTable: "空表",
+			                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+			                         infoEmpty: "没有数据",
+			                         // infoFiltered: "(filtered1 from _MAX_ total
+			 							// entries)",
+			                         lengthMenu: "每页显示 _MENU_ 条数据",
+			                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+			                         zeroRecords: "抱歉， 没有找到！",
+			                         paginate: {
+			                             "sFirst": "首页",
+			                             "sPrevious": "前一页",
+			                             "sNext": "后一页",
+			                             "sLast": "尾页"
+			                          }
+			                     },
+			      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+			      				bRetrieve : true,
+			      				lengthMenu : [
+			      						[ 5, 10, 15, 30, -1 ],
+			      						[ 5, 10, 15, 30,
+			      								"All" ] ],
+			      				pageLength : 10,// 每页显示数量
+			      				processing : true,// loading等待框
+			      				ajax : ctx+url,// 加载待办列表数据
+			      				"aoColumns" : [
+		      									{
+		      										mData : 'operationDesc'
+		      									},
+		      									{
+		    										mData : 'deliverCount',
+		    	        							mRender : function(
+		    	        									data) {
+		    	        								if (data != null) {
+		    	        									return data;
+		    	        								} else
+		    	        									return '---';
+		    	        							}
+		    									},
+		    									{
+		    										mData : 'timeData',
+		    	        							mRender : function(
+		    	        									data) {
+		    	        								if (data != null) {
+		    	        									return timeStamp2String(data);
+		    	        								} else
+		    	        									return '---';
+		    	        							}
+		    									},
+		      									{
+		      										mData : 'operator'
+		      									},
+		      									{
+		      										mData : 'operationTime',
+		 		        							mRender : function(
+		 		        									data) {
+		 		        								if (data != null) {
+		 		        									return timeStamp2String(data);
+		 		        								} else
+		 		        									return '';
+		 		        							}
+		      									},
+		      									{
+		      										mData : 'remark'
+		      									}]
+			      			
+			      			})
+			      }
+			 function showPayLogTable(url){
+			 		logTable = $("#select_payOperateLog")
+			      	.DataTable(
+			      			{
+			      				language: {
+			                         aria: {
+			                             sortAscending: ": 以升序排列此列",
+			                             sortDescending: ": 以降序排列此列"
+			                         },
+			                         emptyTable: "空表",
+			                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+			                         infoEmpty: "没有数据",
+			                         // infoFiltered: "(filtered1 from _MAX_ total
+			 							// entries)",
+			                         lengthMenu: "每页显示 _MENU_ 条数据",
+			                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+			                         zeroRecords: "抱歉， 没有找到！",
+			                         paginate: {
+			                             "sFirst": "首页",
+			                             "sPrevious": "前一页",
+			                             "sNext": "后一页",
+			                             "sLast": "尾页"
+			                          }
+			                     },
+			      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+			      				bRetrieve : true,
+			      				lengthMenu : [
+			      						[ 5, 10, 15, 30, -1 ],
+			      						[ 5, 10, 15, 30,
+			      								"All" ] ],
+			      				pageLength : 10,// 每页显示数量
+			      				processing : true,// loading等待框
+			      				ajax : ctx+url,// 加载待办列表数据
+			      				"aoColumns" : [
+		      									{
+		      										mData : 'operationDesc'
+		      									},
+		      									{
+		    										mData : 'payMoneyCount',
+		    	        							mRender : function(
+		    	        									data) {
+		    	        								if (data != null) {
+		    	        									return $filter('currency')(data,'');
+		    	        								} else
+		    	        									return '---';
+		    	        							}
+		    									},
+		    									{
+		    										mData : 'timeData',
+		    	        							mRender : function(
+		    	        									data) {
+		    	        								if (data != null) {
+		    	        									return timeStamp2String(data);
+		    	        								} else
+		    	        									return '---';
+		    	        							}
+		    									},
+		      									{
+		      										mData : 'operator'
+		      									},
+		      									{
+		      										mData : 'operationTime',
+		 		        							mRender : function(
+		 		        									data) {
+		 		        								if (data != null) {
+		 		        									return timeStamp2String(data);
+		 		        								} else
+		 		        									return '';
+		 		        							}
+		      									},
+		      									{
+		      										mData : 'remark'
+		      									}]
+			      			
+			      			})
+			      }
+		 	 var aoColumns,tableId;
+		 	 function showLogTable(url){
+		 		 if($scope.showMoneyData){//显示金额和日期
+		 			aoColumns =[
+								{
+										mData : 'operationDesc'
+									},
+									{
+										mData : 'payMoneyCount'
+									},
+									{
+										mData : 'timeData'
+									},
+									{
+										mData : 'operator'
+									},
+									{
+										mData : 'operationTime',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return timeStamp2String(data);
+	        								} else
+	        									return '';
+	        							}
+									},
+									{
+										mData : 'remark'
+									}];
+		 			tableId="select_payOperateLog";
+		 		 }else if($scope.showNumberData){//显示数量和日期
+		 			aoColumns=[
+								{
+										mData : 'operationDesc',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return data;
+	        								} else
+	        									return '';
+	        							}
+									},
+									{
+										mData : 'deliverCount',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return data;
+	        								} else
+	        									return '';
+	        							}
+									},
+									{
+										mData : 'timeData',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return timeStamp2String(data);
+	        								} else
+	        									return '';
+	        							}
+									},
+									{
+										mData : 'operator'
+									},
+									{
+										mData : 'operationTime',
+	        							mRender : function(
+	        									data) {
+	        								if (data != null) {
+	        									return timeStamp2String(data);
+	        								} else
+	        									return '';
+	        							}
+									},
+									{
+										mData : 'remark'
+									}];
+		 			tableId="select_deliverOperateLog";
+		 		 }else{
+		 			aoColumns= [
+						{
+							mData : 'operationDesc'
+						},
+						{
+							mData : 'operator'
+						},
+						{
+							mData : 'operationTime',
+							mRender : function(
+									data) {
+								if (data != null) {
+									return timeStamp2String(data);
+								} else
+									return '';
+							}
+						},
+						{
+							mData : 'remark'
+						}];
+		 			/*aoColumns=[
+									{
+  										mData : 'operationDesc'
+  									},
+  									{
+  										mData : 'operator'
+  									},
+  									{
+  										mData : 'operationTime',
+		        							mRender : function(
+		        									data) {
+		        								if (data != null) {
+		        									return timeStamp2String(data);
+		        								} else
+		        									return '';
+		        							}
+  									},
+  									{
+  										mData : 'remark'
+  									}];*/
+		 			tableId="select_deliverOperateLog";
+		 		 }
+		 		logTable = $("#"+tableId)
+		      	.DataTable(
+		      			{
+		      				language: {
+		                         aria: {
+		                             sortAscending: ": 以升序排列此列",
+		                             sortDescending: ": 以降序排列此列"
+		                         },
+		                         emptyTable: "空表",
+		                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+		                         infoEmpty: "没有数据",
+		                         // infoFiltered: "(filtered1 from _MAX_ total
+		 							// entries)",
+		                         lengthMenu: "每页显示 _MENU_ 条数据",
+		                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+		                         zeroRecords: "抱歉， 没有找到！",
+		                         paginate: {
+		                             "sFirst": "首页",
+		                             "sPrevious": "前一页",
+		                             "sNext": "后一页",
+		                             "sLast": "尾页"
+		                          }
+		                     },
+		      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+		      				bRetrieve : true,
+		      				lengthMenu : [
+		      						[ 5, 10, 15, 30, -1 ],
+		      						[ 5, 10, 15, 30,
+		      								"All" ] ],
+		      				pageLength : 10,// 每页显示数量
+		      				processing : true,// loading等待框
+
+		      				ajax : ctx+url,// 加载待办列表数据
+		      				"aoColumns" : aoColumns/*[
+		      										{
+		      											mData : 'operationDesc',
+		      		        							mRender : function(
+		      		        									data) {
+		      		        								if (data != null) {
+		      		        									return data;
+		      		        								} else
+		      		        									return '';
+		      		        							}
+		      										},
+		      										{
+		      											mData : 'deliverCount',
+		      		        							mRender : function(
+		      		        									data) {
+		      		        								if (data != null) {
+		      		        									return data;
+		      		        								} else
+		      		        									return '';
+		      		        							}
+		      										},
+		      										{
+		      											mData : 'timeData',
+		      		        							mRender : function(
+		      		        									data) {
+		      		        								if (data != null) {
+		      		        									return timeStamp2String(data);
+		      		        								} else
+		      		        									return '';
+		      		        							}
+		      										},
+		      										{
+		      											mData : 'operator'
+		      										},
+		      										{
+		      											mData : 'operationTime',
+		      		        							mRender : function(
+		      		        									data) {
+		      		        								if (data != null) {
+		      		        									return timeStamp2String(data);
+		      		        								} else
+		      		        									return '';
+		      		        							}
+		      										},
+		      										{
+		      											mData : 'remark'
+		      										}]*/
+		      				/*"aoColumns" : [
+		      									{
+		      										mData : 'operationDesc'
+		      									},
+		      									{
+		      										mData : 'operator'
+		      									},
+		      									{
+		      										mData : 'operationTime',
+		 		        							mRender : function(
+		 		        									data) {
+		 		        								if (data != null) {
+		 		        									return timeStamp2String(data);
+		 		        								} else
+		 		        									return '';
+		 		        							}
+		      									},
+		      									{
+		      										mData : 'remark'
+		      									}]*/
 		      			})
 		      }
 		 	 
@@ -3816,6 +4220,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 																		return '完成发货';
 																	}else if(data=='9'){
 																		return '待入库';
+																	}else if(data=='10'){
+																		return '待确认';//平台通知供应商发货待确认
 																	}else{
 																		return '';
 																	}
@@ -3926,7 +4332,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			showToastr('toast-top-center', 'warning', '请选择一条数据进行确认发货！')
 		}else{
 			
-			if(deliveryTable.row('.active').data().status == '0'){
+			if(deliveryTable.row('.active').data().status == '0'||deliveryTable.row('.active').data().status == '10'){//供应商自建的发货或者平台通知供应商发货
 				$state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSupplyOrder"});
 			}else showToastr('toast-top-center', 'warning', '已确认发货')
 		} 

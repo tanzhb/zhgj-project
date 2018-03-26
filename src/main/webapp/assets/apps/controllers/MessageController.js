@@ -188,11 +188,11 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					||actionName=="inCheckToBuy"
 					||actionName=="outToBuy"
 					||actionName=="inToBuy"
-					||actionName=="in2stock"){
+					||actionName=="in2stock"||actionName=="inToBuyToSale"){
 					$state.go("takeDelivery");
 				}else if(actionName=="shoukuan"){
 					$state.go("gatheringMoneyRecord");
-				}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"){
+				}else if(actionName=="inToBuyToSale"||actionName=="outToSaleGroup"||actionName=="beReceiveSaleOrder"){
 					$state.go("saleOrder");
 				}else if(actionName=="sale2paln"){
 					$state.go("procurementPlan");
@@ -204,6 +204,10 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("customsClearanceForm");
 				}else if(actionName=="declaration"){
 					$state.go("customsDeclarationForm");
+				}else if(actionName=="beConfirmPayMemoRecord"){
+					$state.go("paymentRecordC");
+				}else if(actionName=="demandplan2Promanager"){
+					$state.go("demandPlan");
 				}
 			}
 			

@@ -62,7 +62,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	}
 	
 	/**
-	 * 编辑
+	 * 查看
 	 */
 	this.viewDemandPlan = function(serialNum){
 		var deferred = $q.defer();
@@ -96,7 +96,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 
 	
 	/**
-	 * 保存物料
+	 * 保存单个需求物料
 	 */
 	this.saveDemandPlanMateriel = function (materiel){
 		var deferred = $q.defer();
@@ -109,9 +109,24 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 		});
 		return deferred.promise;//返回承诺
 	}
-	
 	/**
-	 * 编辑
+	 * 保存所有需求物料
+	 */
+	this.saveAllDemandPlanMateriel = function (materiels){
+		var deferred = $q.defer();
+		var params = {};  
+	    params = JSON.stringify(materiels); 
+		$http.post("rest/demandPlan/saveAllDemandPlanMateriel", 
+				params//传整个表单数据  
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	/**
+	 * 编辑单个需求物料
 	 */
 	this.editDemandPlanMateriel = function(serialNum){
 		var deferred = $q.defer();
@@ -127,7 +142,7 @@ angular.module('MetronicApp').service('demandPlanService',['$http','$q',function
 	}
 	
 	/**
-	 * 删除
+	 * 删除单个需求物料
 	 */
 	this.deleteDemandPlanMateriel = function(serialNum){
 		var deferred = $q.defer();

@@ -56,7 +56,18 @@ public class MessageConstants {
 	 */
 	public static final String NOTICESUPPLY = "noticeSupply";
 	
-	
+	/**
+	 * 付款申请被确认(审批通过)
+	 */
+	public static final String BE_CONFIRM_PAY = "beConfirmPayMemoRecord";
+	/**
+	 * 提示平台销售组人员采购商发布采购订单(接收)
+	 */
+	public static final String BE_RECEIVE_SALE_ORDER = "beReceiveSaleOrder";
+	/**
+	 * 提示平台采购组人员委托销售订单分解成功提示发起采购
+	 */
+	public static final String BE_CONFIRM_APPLY_BUY_ORDER = "beConfirmApplyBuyOrder";
 	/*========================销售订单相关消息End==============================*/
 	/**
 	 * 销售订单申请消息
@@ -99,6 +110,10 @@ public class MessageConstants {
 	 * 确认入库to采购订单制单人/采购计划制单人/销售订单制单人
 	 */
 	public static final String IN_TO_INSTOCK = "in2Instock";
+	/**
+	 * 提交需求计划后通知产品经理
+	 */
+	public static final String DEMANDPLAN_TO_PROMANAGER= "demandplan2Promanager";
 	/*========================销售订单相关消息Start==============================*/
 	//1
 	
@@ -256,6 +271,11 @@ public class MessageConstants {
 	public static final String URL_BE_CONFIRM_BUY_ORDER = "buyOrder";
 	
 	/**
+	 *付款申请通过URL
+	 */
+	public static final String URL_AGREE_PAYMENTRECORD = "paymentRecordC";
+	
+	/**
 	 * 销售订单URL
 	 */
 	public static final String URL_SALE_ORDER = "saleOrder";//
@@ -273,6 +293,21 @@ public class MessageConstants {
 	 * 销售订单审核通过消息URL
 	 */
 	public static final String URL_CONFIRM_SALE_ORDER= "saleOrder";
+	/**
+	 * 提示平台销售组人员采购商发布采购订单(接收)URL
+	 */
+	public static final String URL_BE_RECEIVE_SALE_ORDER= "saleOrder";
+	
+	/**
+	 * 提示平台采购组人员委托销售订单分解成功提示发起采购URL
+	 */
+	public static final String URL_BE_CONFIRM_APPLY_BUY_ORDER = "buyOrder";
+	/**
+	 * 提交需求计划后通知产品经理URL
+	 */
+	public static final String URL_DEMANDPLAN_TO_PROMANAGER = "demandPlan";
+	
+	
 	
 	
 	
@@ -438,6 +473,22 @@ public class MessageConstants {
 	 * 采购订单审批发送给销售订单制单人消息模板
 	 */
 	public static final String TEMP_AGREE_BUY_SALEORDER = "007"; 
+	/**
+	 * 付款申请通过通知付款单制单人消息模板
+	 */
+	public static final String TEMP_AGREE_PAYMENTRECORD= "008"; 
+	/**
+	 * 采购商发布采购订单通知平台销售组人员
+	 */
+	public static final String TEMP_BE_RECEIVE_SALE_ORDER= "009"; 
+	/**
+	 * 提示平台采购组人员委托销售订单分解成功提示发起采购
+	 */
+	public static final String TEMP_BE_CONFIRM_APPLY_BUY_ORDER = "010";
+	/**
+	 * 自主采购订单审核通过消息模板
+	 */
+	public static final String TEMP_AGREE_ZZ_BUY_ORDER = "22"; 
 	
 	/*========================采购订单相关消息End==============================*/
 	
@@ -463,6 +514,10 @@ public class MessageConstants {
 	 * 销售订单审核通过消息模板(通知除制单人外其他人)
 	 */
 	public static final String TEMP_AGREE_SALE_ORDER1 = "11"; 
+	/**
+	 * 发布需求计划通知产品经理
+	 */
+	public static final String TEMP_DEMANDPLAN_TO_PROMANAGER = "21"; 
 	
 	/*========================销售订单相关消息End==============================*/
 	

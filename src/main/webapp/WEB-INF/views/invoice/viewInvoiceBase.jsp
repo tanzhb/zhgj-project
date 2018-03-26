@@ -95,7 +95,7 @@
                                                 
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4">
+                                                          <!--   <div class="col-md-4">
                                                             <div class="form-group">
                                                     <label class="control-label bold" for="billWay"><span class="required"> * </span>开票方式 :</label>
                                                     <div class=" " >
@@ -112,11 +112,8 @@
                                                                           <p class="control-label left"   ng-if="invoice.paymentStatus=='是'" >是</p> 
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                         <div class="row">
-                                                            <div class="col-md-4">
+                                                            </div> -->
+                                                             <div class="col-md-4">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="status">  申请日期: </label>
                                                  <div class=" ">
@@ -133,6 +130,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        
+                                                         <div class="row">
+                                                           
                                                               <div class="col-md-4">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 申请人:</label>
@@ -142,11 +143,27 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <!--/span-->
-                                                            
-                                                            <!--/span-->
+                                                            <div class="col-md-4">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 备注:</label>
+                                                    <div class=" ">
+                                                      
+                                                                        <p class="control-label left"    ng-if="inOrOut.indexOf('in')>-1"  >{{invoice.billingRemark}}</p> 
+                                                                         <p class="control-label left"  ng-if="inOrOut.indexOf('out')>-1"  >{{invoice.receiptRemark}}</p> 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                             <div class="col-md-4"  ng-show="inOrOut.indexOf('out')>-1">
+                                                             <div class="form-group">
+                                                    <label class="control-label bold" for="checker"> 申请开票日期:</label>
+                                                    <div class=" ">
+												  
+                                                                        <p class="control-label left" >{{invoice.receiptDate | date:'yyyy-MM-dd'}}</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                            <div class="row">
+                                                           <!--  <div class="row">
                                                             <div class="col-md-4">
                                                              <div class="form-group">
                                                     <label class="control-label bold" for="checker"> 备注:</label>
@@ -167,7 +184,7 @@
                                                                 </div>
                                                             </div>
                                               
-                                                        </div>
+                                                        </div> -->
                                                      <div class="row"  ng-if="inOrOut.indexOf('in')>-1" >
                                                              <div class="col-md-4"  >
                                                                 <div class="form-group">

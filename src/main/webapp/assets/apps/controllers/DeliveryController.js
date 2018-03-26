@@ -64,8 +64,13 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}else if($stateParams.oprateType == "forSupplyOrder"){
 			$scope.confirmDeliverybtn = false;
 		}
+		/*//根据参数查询对象
+	    if($stateParams.orderSerialNum){
+	    	$scope.getDeliveryInfo($stateParams.orderSerialNum,$stateParams.taskId, $stateParams.comments);	
+	    }*/
 		//根据参数查询对象
     if($stateParams.serialNum){
+    	getCurrentUserName();
     	$scope.getDeliveryInfo($stateParams.serialNum,$stateParams.taskId, $stateParams.comments);	
     }
     
@@ -168,6 +173,22 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 			if($stateParams.oprateType=="forSaleOrder"||$stateParams.oprateType=="forSupplyOrder"){
 				$scope.deliver.maker= data.data.userName;
 			}
+			
+		},function(data){
+			//调用承诺接口reject();
+		});
+	}
+	
+	 /**
+	 * 加载当前用户信息
+	 */
+	var getCurrentUserName = function(){
+		var promise = commonService.getCurrentUser();
+		promise.then(function(data){
+			$scope.user = data.data;
+			$scope.department=data.data.department;
+//			$scope.currentUserName=data.data.userName;
+			
 			
 		},function(data){
 			//调用承诺接口reject();
@@ -543,7 +564,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 						return;
 					}
 				}else{//未发数量大于等于库存数
-					if(Number(deliveryMateriel.currentCount)<Number(deliveryMateriel.deliverCount)){
+					if(Number(deliveryMateriel.currentCount)<Number(deliveryMateriel.deliverCount)&&$scope.oprateType=='forSaleOrder'){//仅在平台发货时考虑库存数量,供应商发货时不需考虑
 						toastr.error("发货数量不能大于库存数量！");	
 						return;
 					}
@@ -2236,6 +2257,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    	var totalOrderCount=0,totalDeliveryedCount=0,totalUnDeliveryCount=0;
 	          		    	var array=new Array();
 	          		    	for(var i=0;i< $scope.deliveryMaterielE.length;i++){
+	          		    		$scope.deliveryMaterielE[i].serialNum=null;
 	          		    		if($scope.deliveryMaterielE[i].amount-$scope.deliveryMaterielE[i].deliveredCount!=0){//未发数量不为0,统计
 	          		    			totalOrderCount+=Number($scope.deliveryMaterielE[i].amount);
 		          		    		totalDeliveryedCount+=Number($scope.deliveryMaterielE[i].deliveredCount);
@@ -2782,6 +2804,13 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 			takeDeliveryWarehouseAddressFlag=false;
 			takeDeliveryWarehouseAddress1Flag=true;
 		}
+		/*if($scope.delivery.deliverType=='售前无合同发货'||$scope.delivery.deliverType=='售后无合同发货'){
+			takeDeliveryWarehouseAddressFlag=false;
+			takeWarehouseNameFlag=false;
+		}else{
+			takeWarehouseNameFlag=true;
+			takeDeliveryWarehouseAddressFlag=true;
+		}*/
 		var e = $("#form_sample_deliverInfo"),
 		
         r = $(".alert-danger", e),
@@ -2815,7 +2844,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
-            /*	warehouseSerial:{required:"收货仓库不能为空！"},*/
+            	warehouseSerial:{required:"收货仓库不能为空！"},
             	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
             	
             	
@@ -2886,8 +2915,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 	digits:true,
                 	rangelength:[7,20]
                 },
-              /*  warehouseSerial:{required:true,
-                },*/
+                warehouseSerial:{required:true,
+                },
                 takeDeliveryContactNum:{
                 	digits:true,
                 	rangelength:[7,20]
@@ -3502,6 +3531,7 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	        	$scope.submitOrder = {}
 	        	$scope.submitOrder.serialNum = $scope.deliveryDetail.serialNum;
 	        	$scope.submitOrder.remark = $scope.deliveryDetail.reason;
+	        	$scope.submitOrder.deliverType = $scope.deliveryDetail.deliverType;
 	        	//启动流程
 	        	DeliveryService.startDeliveryPlanProcess($scope.submitOrder).then(
 	          		     function(data){

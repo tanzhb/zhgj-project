@@ -142,4 +142,14 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		
 	}
 
+	@Override
+	public void updateDemandPlanInfo(String demandPlanSerial) {
+		DemandPlanExample example = new DemandPlanExample();
+		DemandPlan record = new DemandPlan();
+		record.setDelFlg("1");
+		example.createCriteria().andSerialNumEqualTo(demandPlanSerial);
+		demandPlanMapper.updateByExampleSelective(record, example);
+		
+	}
+
 }

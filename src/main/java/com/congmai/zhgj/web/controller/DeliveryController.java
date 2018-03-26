@@ -980,7 +980,9 @@ public class DeliveryController {
     @RequestMapping(value="saveBasicInfo",method=RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<DeliveryVO>  saveBasicInfo(DeliveryVO delivery,DeliveryTransportVO deliveryTransport,TakeDeliveryVO takeDeliveryVO){
-    	
+    	/*if(){
+    		
+    	}*/
     	//保存前判断发货数量是否满足条件
 		Boolean  isDel=false;//是否删除当前发货单
 		 Boolean flag=false;//还可以发
@@ -1308,6 +1310,7 @@ public class DeliveryController {
 		deliveryVO.setBusinessType(BaseVO.DELIVERY); 			//业务类型：发货计划
 		deliveryVO.setStatus(BaseVO.PENDING);					//审批中
 		deliveryVO.setApplyDate(new Date());
+		deliveryVO.setDeliverType(delivery.getDeliverType());
     	processBaseService.insert(deliveryVO);
 		String businessKey = deliveryVO.getSerialNum().toString();
 		deliveryVO.setBusinessKey(businessKey);

@@ -28,7 +28,7 @@ public class WebSocketProcessor implements MessageProcessor {
 	private static String message03 = "尊敬的${paramer_a}，您好！</br>您的采购订单&nbsp;${paramer_b}&nbsp;被${paramer_c}通过审批。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>备注：${paramer_f}。</br>祝您工作愉快！";	
 	// 采购订单审核通过消息模板
-	private static String message04 = "尊敬的${paramer_a}，您好！</br>您的采购订单&nbsp;${paramer_b}&nbsp;被${paramer_c}通过审批并发布成功，等待对方接收。"+
+	private static String message04 = "尊敬的${paramer_a}，您好！</br>采购订单&nbsp;${paramer_b}&nbsp;被${paramer_c}通过审批并发布成功。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>备注：${paramer_f}。</br>祝您工作愉快！";
 	// 采购订单待确认消息模板（发给供应商）
 	private static String message05 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购订单&nbsp;${paramer_c}&nbsp;等待您的确认。"+
@@ -39,7 +39,15 @@ public class WebSocketProcessor implements MessageProcessor {
 	//  采购订单审批发送给销售订单制单人消息模板
 		private static String message007 = "尊敬的${paramer_a}，您好！</br>销售订单&nbsp;${paramer_b}&nbsp;关联的采购订单&nbsp;${paramer_c}&nbsp;通过审批并发布成功。"+
 				"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
-	
+	// 付款申请通过通知付款单制单人消息模板
+			private static String message008 = "尊敬的${paramer_a}，您好！</br>你的付款申清单&nbsp;${paramer_b}&nbsp;通过审批并发布成功。"+
+					"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";
+	//  采购商发布采购订单通知平台销售组人员消息模板
+		private static String message009 = "尊敬的${paramer_a}，您好！</br>${paramer_b}&nbsp;发布了委托采购订单,订单号&nbsp;${paramer_c}等待你的确认。"+
+								"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
+	//  提示平台采购组人员委托销售订单分解成功提示发起采购消息模板
+			private static String message010 = "尊敬的${paramer_a}，您好！</br>${paramer_b}&nbsp;分解委托销售订单,订单号为&nbsp;${paramer_c}&nbsp;等待你的采购申请。"+
+									"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a> </br>祝您工作愉快！";
 	// 销售订单申请消息模板
 		private static String message07 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建销售订单&nbsp;${paramer_c}&nbsp;等待您的审批。"+
 										 "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
@@ -70,6 +78,13 @@ public class WebSocketProcessor implements MessageProcessor {
 				//平台代发货通知供应商修改
 				private static String message20 = "尊敬的${paramer_a}，您好！</br>发货单&nbsp;${paramer_b}&nbsp;等待您的修改。"+
 								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
+				
+				//发给提交需求计划后通知产品经理
+				private static String message21 = "尊敬的${paramer_a}，您好！</br>需求计划&nbsp;${paramer_b}&nbsp;已发布。"+
+								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
+				//自主采购订单审批通过发送给相关人员
+				private static String message22 = "尊敬的${paramer_a}，您好！</br>采购订单&nbsp;${paramer_b}&nbsp;通过审批并发布成功。"+
+								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";
 	
 	//逾期未到货
 	private static String message71 = "尊敬的${paramer_a}，您好！</br>采购订单${paramer_b} 逾期未到货 。"+
@@ -189,6 +204,8 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("18", DEFAULT_MSG_TEMPLATE, null, message18);
 		MessageTemplate.register("19", DEFAULT_MSG_TEMPLATE, null, message19);
 		MessageTemplate.register("20", DEFAULT_MSG_TEMPLATE, null, message20);
+		MessageTemplate.register("21", DEFAULT_MSG_TEMPLATE, null, message21);
+		MessageTemplate.register("22", DEFAULT_MSG_TEMPLATE, null, message22);
 		
 		
 		MessageTemplate.register("71", DEFAULT_MSG_TEMPLATE, null, message71);
@@ -216,6 +233,9 @@ public class WebSocketProcessor implements MessageProcessor {
 		MessageTemplate.register("109", DEFAULT_MSG_TEMPLATE, null, message109);
 		MessageTemplate.register("110", DEFAULT_MSG_TEMPLATE, null, message110);
 		MessageTemplate.register("007", DEFAULT_MSG_TEMPLATE, null, message007);
+		MessageTemplate.register("008", DEFAULT_MSG_TEMPLATE, null, message008);
+		MessageTemplate.register("009", DEFAULT_MSG_TEMPLATE, null, message009);
+		MessageTemplate.register("010", DEFAULT_MSG_TEMPLATE, null, message010);
 
 	}
 	

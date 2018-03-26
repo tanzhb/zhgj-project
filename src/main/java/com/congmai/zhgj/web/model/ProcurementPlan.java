@@ -30,12 +30,47 @@ public class ProcurementPlan {
     private Date createTime;
 
     private String updater;
-
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updateTime;
     
     private OrderInfo saleOrder;
     
-    private  List<ProcurementPlanMateriel> materielList;
+    private String maker;//制单人
+    
+    @DateTimeFormat(pattern="yyyy-MM-dd")
+    private Date endDate;//齐套日期
+    
+    private String endCount;//齐套数量
+    
+    private String buyOrderCount;//采购订单数量
+    private String materielName;//采购计划物料名称(多个拼接加 ,连接)
+    
+    public String getBuyOrderCount() {
+		return buyOrderCount;
+	}
+
+	public void setBuyOrderCount(String buyOrderCount) {
+		this.buyOrderCount = buyOrderCount;
+	}
+
+	public String getEndCount() {
+		return endCount;
+	}
+
+	public void setEndCount(String endCount) {
+		this.endCount = endCount;
+	}
+
+	@JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
+    public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	private  List<ProcurementPlanMateriel> materielList;
 
     public String getSerialNum() {
         return serialNum;
@@ -116,7 +151,7 @@ public class ProcurementPlan {
     public void setUpdater(String updater) {
         this.updater = updater == null ? null : updater.trim();
     }
-
+    @JsonFormat(timezone="GMT+8",pattern="yyyy-MM-dd")
     public Date getUpdateTime() {
         return updateTime;
     }
@@ -147,6 +182,22 @@ public class ProcurementPlan {
 
 	public void setMaterielList(List<ProcurementPlanMateriel> materielList) {
 		this.materielList = materielList;
+	}
+
+	public String getMaker() {
+		return maker;
+	}
+
+	public void setMaker(String maker) {
+		this.maker = maker;
+	}
+
+	public String getMaterielName() {
+		return materielName;
+	}
+
+	public void setMaterielName(String materielName) {
+		this.materielName = materielName;
 	}
     
 }

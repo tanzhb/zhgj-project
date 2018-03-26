@@ -339,3 +339,5 @@
  </div>
  </div>
 <jsp:include  page="viewOperateLog.jsp"/>
+<jsp:include  page="viewDeliverOperateLog.jsp"/>
+<jsp:include  page="viewPayOperateLog.jsp"/>

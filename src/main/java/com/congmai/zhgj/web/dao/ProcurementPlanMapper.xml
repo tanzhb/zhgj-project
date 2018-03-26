@@ -14,7 +14,30 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
-    <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/> 
+    <result column="endCount" property="endCount" jdbcType="VARCHAR" />
+    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
+  </resultMap>
+  <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.ProcurementPlan" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="saleOrderSerial" property="saleOrderSerial" jdbcType="VARCHAR" />
+    <result column="procurementPlanNum" property="procurementPlanNum" jdbcType="VARCHAR" />
+    <result column="buyCount" property="buyCount" jdbcType="VARCHAR" />
+    <result column="buyDate" property="buyDate" jdbcType="DATE" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="endCount" property="endCount" jdbcType="VARCHAR" />
+    <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
+    <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
+    <association property="materielName" column="serialNum" select="com.congmai.zhgj.web.dao.DemandMaterielMapper.selectMaterielNameByProcurementPlanSerial"/>
+  	<association property="buyOrderCount" column="serialNum" select="com.congmai.zhgj.web.dao.OrderInfoMapper.getBuyOrderCountByProcurementPlanSerial"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -76,9 +99,9 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, saleOrderSerial,procurementPlanNum, buyCount, buyDate, status, remark, delFlg, creator, createTime, 
-    updater, updateTime
+    updater, updateTime,endCount,endDate,maker
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanExample" >
+  <select id="selectByExample" resultMap="BaseResultMap1" parameterType="com.congmai.zhgj.web.model.ProcurementPlanExample" >
     select
     <if test="distinct" >
       distinct
@@ -112,11 +135,11 @@
     insert into procurementPlan (serialNum, saleOrderSerial,procurementPlanNum, buyCount, 
       buyDate, status, remark, 
       creator, createTime, 
-      updater, updateTime)
+      updater, updateTime,endCount,endDate,maker)
     values (#{serialNum,jdbcType=VARCHAR}, #{saleOrderSerial,jdbcType=VARCHAR}, #{procurementPlanNum,jdbcType=VARCHAR}, #{buyCount,jdbcType=VARCHAR}, 
       #{buyDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{endCount,jdbcType=VARCHAR},#{endDate,jdbcType=TIMESTAMP},#{maker,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ProcurementPlan" >
     insert into procurementPlan
@@ -156,6 +179,15 @@
       </if>
       <if test="updateTime != null" >
         updateTime,
+          </if>
+        <if test="endCount != null" >
+        endCount,
+      </if>
+      <if test="endDate != null" >
+        endDate,
+      </if>
+      <if test="maker != null" >
+        maker,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -194,6 +226,15 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+       <if test="endCount != null" >
+         #{endCount,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+       #{endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="maker != null" >
+        #{maker,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -242,6 +283,15 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+        <if test="record.endCount != null" >
+        endCount = #{record.endCount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.endDate != null" >
+      endDate = #{record.endDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.maker != null" >
+      maker = #{record.maker,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -260,7 +310,10 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+        endCount = #{record.endCount,jdbcType=VARCHAR},
+      endDate = #{record.endDate,jdbcType=TIMESTAMP},
+      maker = #{record.maker,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -301,6 +354,15 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+       <if test="endCount != null" >
+        endCount = #{endCount,jdbcType=VARCHAR},
+      </if>
+       <if test="endDate != null" >
+        endDate = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+       <if test="maker != null" >
+        maker = #{maker,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -316,7 +378,10 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        endCount = #{endCount,jdbcType=VARCHAR},
+        endDate = #{endDate,jdbcType=TIMESTAMP},
+        maker = #{maker,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>

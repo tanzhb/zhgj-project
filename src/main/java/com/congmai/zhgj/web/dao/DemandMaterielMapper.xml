@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.congmai.zhgj.web.dao.ProcurementPlanMaterielMapper" >
-  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
+<mapper namespace="com.congmai.zhgj.web.dao.DemandMaterielMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.DemandMateriel" >
     <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
     <result column="procurementPlanSerial" property="procurementPlanSerial" jdbcType="VARCHAR" />
     <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
-     <result column="demandMaterielSerial" property="demandMaterielSerial" jdbcType="VARCHAR" />
     <result column="supplyMaterielSerial" property="supplyMaterielSerial" jdbcType="VARCHAR" />
     <result column="planCount" property="planCount" jdbcType="VARCHAR" />
-    <result column="buyCount" property="buyCount" jdbcType="VARCHAR" />
-    <result column="orderUnitPrice" property="orderUnitPrice" jdbcType="VARCHAR" />
-    <result column="orderRateUnit" property="orderRateUnit" jdbcType="VARCHAR" />
-    <result column="money" property="money" jdbcType="VARCHAR" />
+    <result column="completeCount" property="completeCount" jdbcType="VARCHAR" />
     <result column="deliveryDate" property="deliveryDate" jdbcType="DATE" />
-    <result column="lastDeliveryDate" property="lastDeliveryDate" jdbcType="DATE" />
     <result column="deliveryAddress" property="deliveryAddress" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <result column="sort" property="sort" jdbcType="INTEGER" />
     <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
     <result column="creator" property="creator" jdbcType="VARCHAR" />
@@ -22,11 +18,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
-     <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
-    <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/> <!-- 订单物料显示供应商或采购商或基础物料 -->
-    <!-- <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey"/> -->
-   <!--  <association property="supplyName" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"></association> -->
-   <association property="supplyName" column="supplyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"/> <!--获取采购物料所属供应商  -->
+    <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -88,16 +80,16 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, procurementPlanSerial, materielSerial, supplyMaterielSerial, planCount, 
-    buyCount, orderUnitPrice, orderRateUnit, money, deliveryDate, lastDeliveryDate, deliveryAddress, 
-    sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose,demandMaterielSerial
+    completeCount, deliveryDate, deliveryAddress, status, sort, delFlg, creator, createTime, 
+    updater, updateTime, remark
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandMaterielExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from procurementPlanMateriel
+    from demandmateriel
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -108,46 +100,41 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from procurementPlanMateriel
+    from demandmateriel
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from procurementPlanMateriel
+    delete from demandmateriel
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
-  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" >
-    delete from procurementPlanMateriel
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.DemandMaterielExample" >
+    delete from demandmateriel
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
-    insert into procurementPlanMateriel (serialNum, procurementPlanSerial, demandMaterielSerial,
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.DemandMateriel" >
+    insert into demandmateriel (serialNum, procurementPlanSerial, 
       materielSerial, supplyMaterielSerial, planCount, 
-      buyCount, orderUnitPrice, orderRateUnit, 
-      money, deliveryDate, lastDeliveryDate, 
-      deliveryAddress, sort,  
+      completeCount, deliveryDate, deliveryAddress, 
+      status, sort, delFlg, 
       creator, createTime, updater, 
-      updateTime, remark,supplyComId,singleDose)
-    values (#{serialNum,jdbcType=VARCHAR}, #{procurementPlanSerial,jdbcType=VARCHAR},#{demandMaterielSerial,jdbcType=VARCHAR}, 
+      updateTime, remark)
+    values (#{serialNum,jdbcType=VARCHAR}, #{procurementPlanSerial,jdbcType=VARCHAR}, 
       #{materielSerial,jdbcType=VARCHAR}, #{supplyMaterielSerial,jdbcType=VARCHAR}, #{planCount,jdbcType=VARCHAR}, 
-      #{buyCount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR}, 
-      #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
-      #{deliveryAddress,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
+      #{completeCount,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{deliveryAddress,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},#{supplyComId,jdbcType=VARCHAR},#{singleDose,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
-    insert into procurementPlanMateriel
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.DemandMateriel" >
+    insert into demandmateriel
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
       </if>
       <if test="procurementPlanSerial != null" >
         procurementPlanSerial,
-      </if>
-      <if test="demandMaterielSerial != null" >
-        demandMaterielSerial,
       </if>
       <if test="materielSerial != null" >
         materielSerial,
@@ -158,26 +145,17 @@
       <if test="planCount != null" >
         planCount,
       </if>
-      <if test="buyCount != null" >
-        buyCount,
-      </if>
-      <if test="orderUnitPrice != null" >
-        orderUnitPrice,
-      </if>
-      <if test="orderRateUnit != null" >
-        orderRateUnit,
-      </if>
-      <if test="money != null" >
-        money,
+      <if test="completeCount != null" >
+        completeCount,
       </if>
       <if test="deliveryDate != null" >
         deliveryDate,
       </if>
-      <if test="lastDeliveryDate != null" >
-        lastDeliveryDate,
-      </if>
       <if test="deliveryAddress != null" >
         deliveryAddress,
+      </if>
+      <if test="status != null" >
+        status,
       </if>
       <if test="sort != null" >
         sort,
@@ -200,9 +178,6 @@
       <if test="remark != null" >
         remark,
       </if>
-        <if test="supplyComId != null" >
-        supplyComId,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -210,9 +185,6 @@
       </if>
       <if test="procurementPlanSerial != null" >
         #{procurementPlanSerial,jdbcType=VARCHAR},
-      </if>
-       <if test="demandMaterielSerial != null" >
-        #{demandMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="materielSerial != null" >
         #{materielSerial,jdbcType=VARCHAR},
@@ -223,26 +195,17 @@
       <if test="planCount != null" >
         #{planCount,jdbcType=VARCHAR},
       </if>
-      <if test="buyCount != null" >
-        #{buyCount,jdbcType=VARCHAR},
-      </if>
-      <if test="orderUnitPrice != null" >
-        #{orderUnitPrice,jdbcType=VARCHAR},
-      </if>
-      <if test="orderRateUnit != null" >
-        #{orderRateUnit,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null" >
-        #{money,jdbcType=VARCHAR},
+      <if test="completeCount != null" >
+        #{completeCount,jdbcType=VARCHAR},
       </if>
       <if test="deliveryDate != null" >
         #{deliveryDate,jdbcType=DATE},
       </if>
-      <if test="lastDeliveryDate != null" >
-        #{lastDeliveryDate,jdbcType=DATE},
-      </if>
       <if test="deliveryAddress != null" >
         #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
       <if test="sort != null" >
         #{sort,jdbcType=INTEGER},
@@ -265,28 +228,22 @@
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="supplyComId != null" >
-        #{supplyComId,jdbcType=VARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" resultType="java.lang.Integer" >
-    select count(*) from procurementPlanMateriel
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.DemandMaterielExample" resultType="java.lang.Integer" >
+    select count(*) from demandmateriel
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update procurementPlanMateriel
+    update demandmateriel
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
       </if>
       <if test="record.procurementPlanSerial != null" >
         procurementPlanSerial = #{record.procurementPlanSerial,jdbcType=VARCHAR},
-      </if>
-      <if test="record.demandMaterielSerial != null" >
-        demandMaterielSerial = #{record.demandMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="record.materielSerial != null" >
         materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
@@ -297,26 +254,17 @@
       <if test="record.planCount != null" >
         planCount = #{record.planCount,jdbcType=VARCHAR},
       </if>
-      <if test="record.buyCount != null" >
-        buyCount = #{record.buyCount,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderUnitPrice != null" >
-        orderUnitPrice = #{record.orderUnitPrice,jdbcType=VARCHAR},
-      </if>
-      <if test="record.orderRateUnit != null" >
-        orderRateUnit = #{record.orderRateUnit,jdbcType=VARCHAR},
-      </if>
-      <if test="record.money != null" >
-        money = #{record.money,jdbcType=VARCHAR},
+      <if test="record.completeCount != null" >
+        completeCount = #{record.completeCount,jdbcType=VARCHAR},
       </if>
       <if test="record.deliveryDate != null" >
         deliveryDate = #{record.deliveryDate,jdbcType=DATE},
       </if>
-      <if test="record.lastDeliveryDate != null" >
-        lastDeliveryDate = #{record.lastDeliveryDate,jdbcType=DATE},
-      </if>
       <if test="record.deliveryAddress != null" >
         deliveryAddress = #{record.deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
       </if>
       <if test="record.sort != null" >
         sort = #{record.sort,jdbcType=INTEGER},
@@ -339,49 +287,38 @@
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.supplyComId != null" >
-        remark = #{record.supplyComId,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update procurementPlanMateriel
+    update demandmateriel
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       procurementPlanSerial = #{record.procurementPlanSerial,jdbcType=VARCHAR},
-      demandMaterielSerial=#{record.demandMaterielSerial,jdbcType=VARCHAR},
       materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
       supplyMaterielSerial = #{record.supplyMaterielSerial,jdbcType=VARCHAR},
       planCount = #{record.planCount,jdbcType=VARCHAR},
-      buyCount = #{record.buyCount,jdbcType=VARCHAR},
-      orderUnitPrice = #{record.orderUnitPrice,jdbcType=VARCHAR},
-      orderRateUnit = #{record.orderRateUnit,jdbcType=VARCHAR},
-      money = #{record.money,jdbcType=VARCHAR},
+      completeCount = #{record.completeCount,jdbcType=VARCHAR},
       deliveryDate = #{record.deliveryDate,jdbcType=DATE},
-      lastDeliveryDate = #{record.lastDeliveryDate,jdbcType=DATE},
       deliveryAddress = #{record.deliveryAddress,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
       sort = #{record.sort,jdbcType=INTEGER},
       delFlg = #{record.delFlg,jdbcType=VARCHAR},
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      remark = #{record.remark,jdbcType=VARCHAR},
-      supplyComId= #{record.supplyComId,jdbcType=VARCHAR}
+      remark = #{record.remark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
-    update procurementPlanMateriel
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.DemandMateriel" >
+    update demandmateriel
     <set >
       <if test="procurementPlanSerial != null" >
         procurementPlanSerial = #{procurementPlanSerial,jdbcType=VARCHAR},
-      </if>
-      <if test="demandMaterielSerial != null" >
-        demandMaterielSerial = #{demandMaterielSerial,jdbcType=VARCHAR},
       </if>
       <if test="materielSerial != null" >
         materielSerial = #{materielSerial,jdbcType=VARCHAR},
@@ -392,26 +329,17 @@
       <if test="planCount != null" >
         planCount = #{planCount,jdbcType=VARCHAR},
       </if>
-      <if test="buyCount != null" >
-        buyCount = #{buyCount,jdbcType=VARCHAR},
-      </if>
-      <if test="orderUnitPrice != null" >
-        orderUnitPrice = #{orderUnitPrice,jdbcType=VARCHAR},
-      </if>
-      <if test="orderRateUnit != null" >
-        orderRateUnit = #{orderRateUnit,jdbcType=VARCHAR},
-      </if>
-      <if test="money != null" >
-        money = #{money,jdbcType=VARCHAR},
+      <if test="completeCount != null" >
+        completeCount = #{completeCount,jdbcType=VARCHAR},
       </if>
       <if test="deliveryDate != null" >
         deliveryDate = #{deliveryDate,jdbcType=DATE},
       </if>
-      <if test="lastDeliveryDate != null" >
-        lastDeliveryDate = #{lastDeliveryDate,jdbcType=DATE},
-      </if>
       <if test="deliveryAddress != null" >
         deliveryAddress = #{deliveryAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
       </if>
       <if test="sort != null" >
         sort = #{sort,jdbcType=INTEGER},
@@ -434,34 +362,33 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="supplyComId != null" >
-        supplyComId = #{supplyComId,jdbcType=VARCHAR},
-      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
-    update procurementPlanMateriel
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.DemandMateriel" >
+    update demandmateriel
     set procurementPlanSerial = #{procurementPlanSerial,jdbcType=VARCHAR},
       materielSerial = #{materielSerial,jdbcType=VARCHAR},
       supplyMaterielSerial = #{supplyMaterielSerial,jdbcType=VARCHAR},
-      demandMaterielSerial= #{demandMaterielSerial,jdbcType=VARCHAR},
       planCount = #{planCount,jdbcType=VARCHAR},
-      buyCount = #{buyCount,jdbcType=VARCHAR},
-      orderUnitPrice = #{orderUnitPrice,jdbcType=VARCHAR},
-      orderRateUnit = #{orderRateUnit,jdbcType=VARCHAR},
-      money = #{money,jdbcType=VARCHAR},
+      completeCount = #{completeCount,jdbcType=VARCHAR},
       deliveryDate = #{deliveryDate,jdbcType=DATE},
-      lastDeliveryDate = #{lastDeliveryDate,jdbcType=DATE},
       deliveryAddress = #{deliveryAddress,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
       sort = #{sort,jdbcType=INTEGER},
       delFlg = #{delFlg,jdbcType=VARCHAR},
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR},
-      supplyComId= #{supplyComId,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <!--根据采购计划物料流水查物料名称  -->
+  <select id="selectMaterielNameByProcurementPlanSerial"   parameterType="java.lang.String"  resultType="java.lang.String">
+  select  GROUP_CONCAT(m.materielName  separator  '、' ) from demandMateriel dm
+  left join materiel  m on m.serialNum=dm.materielSerial
+  where dm.procurementPlanSerial=#{serialNum,jdbcType=VARCHAR} and  dm.delFlg='0'
+  </select>
+  
 </mapper>

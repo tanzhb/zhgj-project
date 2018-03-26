@@ -22,7 +22,8 @@ margin-right: 20px;
 		<li class="active bold">
                		<a data-target="#tab_1_1" data-toggle="tab">基本信息</a>
            		</li>
-		<li class="bold" ng-hide="tab_1_1Hide"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+           		<li class="bold" ><a data-target="#tab_1_5" data-toggle="tab">需求物料信息</a></li>
+		<li class="bold" ng-hide="tab_1_1Hide"><a data-target="#tab_1_4" data-toggle="tab">采购清单物料信息</a></li>
 		<li class="dropdown pull-right tabdrop">
 			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 		</li>
@@ -44,61 +45,48 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售订单号：</label>
+                                 <label class="control-label col-md-5 bold">计划生成日期：</label>
                                  <div class="control-label col-md-7">
-	                                 <p  > {{procurementPlan.saleOrder.orderNum}} </p>
+	                                 <p  > {{procurementPlan.buyDate}} </p>
                                  </div>
                              </div>
                          </div>
-                         <div class="col-md-4">
+                       <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售下单日期：</label>
+                                 <label class="control-label col-md-5 bold">物料条目：</label>
                                  <div class="control-label col-md-7">
-	                                 <p  > {{procurementPlan.saleOrder.orderDate}} </p>
+	                                 <p  > {{materielCount}} </p>
                                  </div>
                              </div>
                          </div>
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">销售数量：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.saleOrder.materielCount}} </p>
-                                 </div>
-                                 
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4" >
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">客户：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.saleOrder.buyName}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
-                         <div class="col-md-4">
+                      <div class="col-md-4">
                          	<div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购下单日期：</label>
+                                 <label class="control-label col-md-5 bold">计划采购数量：</label>
                                  <div class="control-label col-md-7">
-                                     <p  >{{procurementPlan.buyDate}} </p>
+	                                 <p  > {{procurementPlan.buyCount}} </p>
                                  </div>
-                                 
+                             </div>
+                         </div>
+                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">齐套数量：</label>
+                                 <div class="control-label col-md-7">
+	                                 <p  > {{procurementPlan.endCount}} </p>
+                                 </div>
+                             </div>
+                         </div>
+                          <div class="col-md-4">
+                         	<div class="form-group ">
+                                 <label class="control-label col-md-5 bold">关联采购订单：</label>
+                                 <div class="control-label col-md-7">
+	                                 <p  > {{procurementPlan.buyOrderCount}} </p>
+                                 </div>
                              </div>
                          </div>
                      </div>
                      <div class="row">
-                         <div class="col-md-4">
-                             <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">采购数量：</label>
-                                 <div class="control-label col-md-7">
-                                     <p  > {{procurementPlan.buyCount}} </p>
-                                 </div>
-                                 
-                             </div>
-                         </div>
                          <div class="col-md-4">
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">备注：</label>
@@ -110,20 +98,162 @@ margin-right: 20px;
                          </div>
                          <div class="col-md-4">
                              <div class="form-group ">
-                                 <label class="control-label col-md-5 bold">状态：</label>
+                                 <label class="control-label col-md-5 bold">制单人：</label>
                                  <div class="control-label col-md-7">
-                                 	<p ng-if="procurementPlan.status==1" style="color:#fcb95b"> 已完成 </p>
-                                 	<p ng-if="procurementPlan.status!=1" style="color:green"> 待采购 </p>
+                                     <p  > {{procurementPlan.maker}} </p>
                                  </div>
                                  
                              </div>
                          </div>
-                         
-                         
+                         <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">更新日期：</label>
+                                 <div class="control-label col-md-7">
+                                     <p  > {{procurementPlan.updateTime}} </p>
+                                 </div>
+                                 
+                             </div>
+                         </div>
+                        
+                     </div>
+                     <div class="row">
+                     <div class="col-md-4">
+                             <div class="form-group ">
+                                 <label class="control-label col-md-5 bold">状态：</label>
+                                 <div class="control-label col-md-7">
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p>
+                                 </div>
+                             </div>
+                         </div>
                      </div>
                  </div>
 			</form>
             </div>   
+	</div>
+	<div class="tab-pane fade " id="tab_1_5">
+		<!-- 订单物料 start-->
+          <div class="portlet-body form">
+			<div class="row">
+				<div class="col-md-6 col-sm-6">
+					<div class="dataTables_length" id="sample_5_length">
+						<label>每页显示 <select name="sample_5_length"
+							aria-controls="sample_5" ng-model="pageSize1" ng-change="createDispalyList1()"
+							class="form-control input-sm input-xsmall input-inline">
+							<option value="5">5</option>
+							<option value="10">10</option>
+							<option value="15">15</option>
+							<option value="30">30</option>
+							<option value="99999">All</option>
+							</select> 条数据
+						</label>
+					</div>
+				</div>
+				<div class="col-md-6 col-sm-6">
+					<div id="sample_5_filter" style="text-align: right;">
+						<label>查询:<input type="search" ng-model="queryStr1"  ng-change="queryForPage1()"
+							class="form-control input-sm input-small input-inline"
+							placeholder="" aria-controls="sample_5"></label>
+					</div>
+				</div>
+			</div>
+			<div class="table-scrollable">
+                         <table class="table table-bprocurementPlaned table-hover" id="form_sample_5" >
+                             <thead>
+								<tr>
+								<th>商品编号</th>
+								<th>物料名称</th>
+								<th>规格型号</th>
+								<th>单位</th>
+								<th>单套用量</th>
+								<th><span style="display:inline-block;width:100px;">需求数量</span></th>
+								<th>齐套数量</th>
+								<th>交付日期</th>
+								<th>交付地址</th>
+								<th>状态</th>
+                                 </tr>
+                             </thead>
+                             <tbody>
+                                 <tr ng-repeat="_procurementPlanMateriel in dispalyDemandMateriel track by $index" >
+		                          <td>
+		                                <p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielNum}}{{_procurementPlanMateriel.materielNum}} </p>
+		                          </td>
+		                          <td>
+	                                 	<p class="form-control-static" > {{_procurementPlanMateriel.materiel.materielName}} </p>
+		                          </td>
+		                           <td>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.materiel.specifications}} </p>
+		                          </td>
+		                          <td>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.materiel.unit}} </p>
+		                          </td>
+		                          <td>
+                                     		<p class="form-control-static" > 1</p>
+		                          </td>
+		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.planCount}} </p>
+		                          </td>
+		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.completeCount==null?0:_procurementPlanMateriel.completeCount}} </p>
+		                          </td>
+		                          
+		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.deliveryDate}} </p>
+		                          </td>
+		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.deliveryAddress}} </p>
+		                          </td>
+		                          <td>  
+                                     		<p class="form-control-static"  ng-if="_procurementPlanMateriel.status==null">待采购 </p>
+                                     		<p class="form-control-static"  ng-if="_procurementPlanMateriel.status==1"> 部分入库 </p>
+                                     		<p class="form-control-static"  ng-if="_procurementPlanMateriel.status==2"> 已入库 </p>
+		                          </td>
+                                     
+                                 </tr>
+                                  <tr>
+								<th></th>
+								<th>合计</th>
+								<th>{{totalDemandCount()}}</th>
+								<th></th>
+								<th></th>
+								<th>{{totalDemandMaterielCount()}}</th>
+								<th>{{totalEndCount()}}</th>
+								<th></th>
+								<th></th>
+								<th></th>
+                                 </tr>
+                             </tbody>
+                         </table>
+            </div>
+			<div class="row">
+				<div class="col-md-5 col-sm-5">
+					<div class="dataTables_info" id="sample_5_info" role="status"
+						aria-live="polite">从 {{(pageIndex1-1)*pageSize1+1>filterDemandMateriel.length?filterDemandMateriel.length:(pageIndex1-1)*pageSize1+1}}
+						到 {{pageIndex1*pageSize1>filterDemandMateriel.length?filterDemandMateriel.length:pageIndex1*pageSize1}} /共 {{filterDemandMateriel.length}} 条数据（从{{filterDemandMateriel.length}}条数据中筛选）</div>
+				</div>
+				<div class="col-md-7 col-sm-7">
+					<div  style="text-align: right;" id="sample_5_paginate">
+						<ul class="pagination" style="visibility: visible;">
+							<li class="prev" ng-if="pageIndex1>1"><a href="#" ng-click="link2PreviousPage1()" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li class="prev disabled" ng-if="1>=pageIndex1"><a href="#" title="前一页"><i
+									class="fa fa-angle-left"></i></a></li>
+							<li ng-if="pageIndex1-2>0"><a href="#" ng-click="link2ThisPage1(pageIndex1-2)">{{pageIndex1-2}}</a></li>
+							<li ng-if="pageIndex1-1>0"><a href="#" ng-click="link2ThisPage1(pageIndex1-1)">{{pageIndex1-1}}</a></li>
+							<li class="active"><a href="#">{{pageIndex1}}</a></li>
+							<li ng-if="totalPage1>pageIndex1"><a href="#" ng-click="link2ThisPage1(pageIndex1+1)">{{pageIndex1+1}}</a></li>
+							<li ng-if="totalPage1>pageIndex1+1"><a href="#" ng-click="link2ThisPage1(pageIndex1+2)">{{pageIndex1+2}}</a></li>
+							<li class="next disabled" ng-if="pageIndex1>=totalPage1"><a href="#" ><i
+									class="fa fa-angle-right"></i></a></li>
+							<li class="next" ng-if="totalPage1>pageIndex1"><a href="#" ng-click="link2NextPage1()" title="后一页"><i
+									class="fa fa-angle-right"></i></a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+         <!-- 订单物料 end-->
 	</div>
 	<div class="tab-pane fade " id="tab_1_4">
 		<!-- 订单物料 start-->
@@ -155,16 +285,18 @@ margin-right: 20px;
                          <table class="table table-bprocurementPlaned table-hover" id="form_sample_5" >
                              <thead>
 								<tr>
-								<th>商品编号</th>
+								<th>物料编号</th>
 								<th>物料名称</th>
 								<th>规格型号</th>
 								<th>单位</th>
+								<th>台套</th>
+								<th>单套用量</th>
 								<th><span style="display:inline-block;width:100px;">需求数量</span></th>
 								<th><span style="display:inline-block;width:100px;">采购数量</span></th>
 								<th>供应商</th>
 								<th>交付日期</th>
-								<th>最晚交付日期</th>
 								<th>交付地址</th>
+								<th>状态</th>
                                  </tr>
                              </thead>
                              <tbody>
@@ -185,6 +317,12 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.planCount}} </p>
 		                          </td>
 		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}} </p>
+		                          </td>
+		                          <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.planCount*_procurementPlanMateriel.singleDose}} </p>
+		                          </td>
+		                          <td>  
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.buyCount}} </p>
 		                          </td>
 		                          <td>  
@@ -195,19 +333,20 @@ margin-right: 20px;
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.deliveryDate}} </p>
 		                          </td>
 		                          <td>  
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.lastDeliveryDate}} </p>
-		                          </td>
-		                          <td>  
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
-                                     
+                                     <td>  
+                                     		<p class="form-control-static" >  </p>
+		                          </td>
                                  </tr>
                                  <tr>
 								<th></th>
 								<th>合计</th>
 								<th>{{totalCount()}}</th>
 								<th></th>
-								<th>{{totalMaterielPlanCount()}}</th>
+								<th></th>
+								<th></th>
+								<th>{{totalMaterielPlanCountForView()}}</th>
 								<th>{{totalMaterielCount()}}</th>
 								<th></th>
 								<th></th>

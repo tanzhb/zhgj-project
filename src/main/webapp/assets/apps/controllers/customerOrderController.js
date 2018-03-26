@@ -412,7 +412,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 /*
  * fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
  */
-                order: [[9, "asc"],[1, "desc"]],// 默认排序列及排序方式
+                order: [[8, "asc"],[1, "desc"]],// 默认排序列及排序方式
                 searching: true,// 是否过滤检索
                 ordering:  true,// 是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
@@ -423,14 +423,15 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
                 "aoColumns": [
                               { mData: 'serialNum' },
                               { mData: 'orderNum' },
-                              { mData: 'buyName' },
+                             /* { mData: 'buyName' },*/
                               { mData: 'materielCount' },
                               { mData: 'orderAmount' },
                               /*{ mData: 'deliveryMode' },*/
                               { mData: 'orderType' },
-                              { mData: 'saleApplySerial' },
+                            /*  { mData: 'saleApplySerial' },*/
                               { mData: 'orderSerial' },
                               { mData: 'orderDate' },
+                              { mData: 'status' },//采购订单增加操作
                               { bVisible: false }
                         ],
                'aoColumnDefs' : [ {
@@ -482,13 +483,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
                         		}else{
                         			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
                         		}
-								
-							
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						},{
+						},/*{
 							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
@@ -498,8 +497,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						},{
-							'targets' : 3,
+						},*/{
+							'targets' : 2,
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>';
@@ -546,7 +545,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								 $compile(td)($scope);
 						       }
 						},{
-							'targets' : 4,
+							'targets' : 3,
 							'render' : function(data,
 									type, row, meta) {
 								var htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'</br>'
@@ -576,27 +575,27 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								 $compile(td)($scope);
 						       }
 						}, {
-							'targets' : 5,
+							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
 								return "委托采购"+'</br>' + row.tradeType;
 							}
-						}, {
-							'targets' : 6,
+						}, /*{
+							'targets' : 5,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(row.contract)){
 									return ""
 								}else{
-									/*return '<a href="javascript:void(0);" ng-click="goContract()">'+row.contract.contractNum+'</a>' */
+									return '<a href="javascript:void(0);" ng-click="goContract()">'+row.contract.contractNum+'</a>' 
 									return row.contract.contractNum;
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
 						       }
-						}, {
-							'targets' : 7,
+						},*/ {
+							'targets' : 5,
 							'render' : function(data,
 									type, row, meta) {
 								if(isNull(data)){
@@ -606,17 +605,23 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								}
 							}
 						}, {
-							'targets' : 8,
+							'targets' :6,
 							'render' : function(data,
 									type, row, meta) {
 								return data +'</br>' + row.maker;
 							}
 						}, {
-							'targets' : 9,
+							'targets' : 7,
+							'render' : function(data,
+									type, row, meta) {
+								return "";
+							}
+						},{
+							'targets' : 8,
 							'render' : function(data,
 									type, row, meta) {
 								var renderRow = meta.settings.aoData[meta.row];
-								return 1 ;
+								return "" ;
 //								return returnMin(
 //											returnMin(
 //													diySortFlag(renderRow.anCells[1].textContent),diySortFlag(renderRow.anCells[3].textContent)
@@ -2911,6 +2916,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        	$scope.submitOrder = {}
 	        	$scope.submitOrder.serialNum = $scope.customerOrder.serialNum;
 	        	$scope.submitOrder.status = 55;
+	        	$scope.submitOrder.buyComId = $scope.customerOrder.buyComId;
 	        	$scope.customerOrder.status = 55;
 	        	orderService.submitOrder($scope.submitOrder).then(
 	          		     function(data){
@@ -3914,31 +3920,260 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	var logTable 
 		    	$scope.viewOrderLog = function (serialNum){
 		    		$("#operateLogInfo").modal("show");
-		    		if(logTable){
+		    		//控制日志显示(数量日期和金额日期)
+		    	/*	if(logTable){
 		    			logTable.ajax.url(ctx+"/rest/order/findOrderLog?serialNum=" + serialNum).load()
 		    		}else{
 		    			showLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
-		    		}
+		    		}*/
+		    		if(logTable){
+			 			logTable.destroy();
+			 		}
+			 		showOrderLogTable("/rest/order/findOrderLog?serialNum=" + serialNum);
 		    	}
 		    	
 		    	$scope.viewDeliverLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
-		    		if(logTable){
+		    		$("#deliverOperateLogInfo").modal("show");
+		    		//控制日志显示(数量日期和金额日期)
+		    		$scope.showReceive=true;
+		    		/*if(logTable){
 		    			logTable.ajax.url(ctx+"/rest/order/findDeliverLog?serialNum=" + serialNum).load()
 		    		}else{
 		    			showLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
-		    		}
+		    		}*/
+		    		if(logTable){
+			 			logTable.destroy();
+			 		}
+			 		showDeliverLogTable("/rest/order/findDeliverLog?serialNum=" + serialNum);
 		    	}
 		    	
 		    	$scope.viewPayLog = function (serialNum){
-		    		$("#operateLogInfo").modal("show");
-		    		if(logTable){
+		    		$("#payOperateLogInfo").modal("show");
+		    		//控制日志显示(数量日期和金额日期)
+		    		$scope.showPay=true;
+		    	/*	if(logTable){
 		    			logTable.ajax.url(ctx+"/rest/order/findPayLog?serialNum=" + serialNum).load()
 		    		}else{
 		    			showLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
-		    		}
+		    		}*/
+		    		if(logTable){
+			 			logTable.destroy();
+			 		}
+			 		showPayLogTable("/rest/order/findPayLog?serialNum=" + serialNum);
 		    	}
-		    	
+		    	 function showOrderLogTable(url){
+				 		logTable = $("#select_operateLog")
+				      	.DataTable(
+				      			{
+				      				language: {
+				                         aria: {
+				                             sortAscending: ": 以升序排列此列",
+				                             sortDescending: ": 以降序排列此列"
+				                         },
+				                         emptyTable: "空表",
+				                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+				                         infoEmpty: "没有数据",
+				                         // infoFiltered: "(filtered1 from _MAX_ total
+				 							// entries)",
+				                         lengthMenu: "每页显示 _MENU_ 条数据",
+				                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+				                         zeroRecords: "抱歉， 没有找到！",
+				                         paginate: {
+				                             "sFirst": "首页",
+				                             "sPrevious": "前一页",
+				                             "sNext": "后一页",
+				                             "sLast": "尾页"
+				                          }
+				                     },
+				      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+				      				bRetrieve : true,
+				      				lengthMenu : [
+				      						[ 5, 10, 15, 30, -1 ],
+				      						[ 5, 10, 15, 30,
+				      								"All" ] ],
+				      				pageLength : 10,// 每页显示数量
+				      				processing : true,// loading等待框
+
+				      				ajax : ctx+url,// 加载待办列表数据
+
+				      				"aoColumns" : [
+				      									{
+				      										mData : 'operationDesc'
+				      									},
+				      									{
+				      										mData : 'operator'
+				      									},
+				      									{
+				      										mData : 'operationTime',
+				 		        							mRender : function(
+				 		        									data) {
+				 		        								if (data != null) {
+				 		        									return timeStamp2String(data);
+				 		        								} else
+				 		        									return '';
+				 		        							}
+				      									},
+				      									{
+				      										mData : 'remark'
+				      									}]
+				      			})
+				      }
+				 	 
+				 	 function showDeliverLogTable(url){
+					 		logTable = $("#select_deliverOperateLog")
+					      	.DataTable(
+					      			{
+					      				language: {
+					                         aria: {
+					                             sortAscending: ": 以升序排列此列",
+					                             sortDescending: ": 以降序排列此列"
+					                         },
+					                         emptyTable: "空表",
+					                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					                         infoEmpty: "没有数据",
+					                         // infoFiltered: "(filtered1 from _MAX_ total
+					 							// entries)",
+					                         lengthMenu: "每页显示 _MENU_ 条数据",
+					                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+					                         zeroRecords: "抱歉， 没有找到！",
+					                         paginate: {
+					                             "sFirst": "首页",
+					                             "sPrevious": "前一页",
+					                             "sNext": "后一页",
+					                             "sLast": "尾页"
+					                          }
+					                     },
+					      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+					      				bRetrieve : true,
+					      				lengthMenu : [
+					      						[ 5, 10, 15, 30, -1 ],
+					      						[ 5, 10, 15, 30,
+					      								"All" ] ],
+					      				pageLength : 10,// 每页显示数量
+					      				processing : true,// loading等待框
+					      				ajax : ctx+url,// 加载待办列表数据
+					      				"aoColumns" : [
+				      									{
+				      										mData : 'operationDesc'
+				      									},
+				      									{
+				    										mData : 'deliverCount',
+				    	        							mRender : function(
+				    	        									data) {
+				    	        								if (data != null) {
+				    	        									return data;
+				    	        								} else
+				    	        									return '---';
+				    	        							}
+				    									},
+				    									{
+				    										mData : 'timeData',
+				    	        							mRender : function(
+				    	        									data) {
+				    	        								if (data != null) {
+				    	        									return timeStamp2String(data);
+				    	        								} else
+				    	        									return '---';
+				    	        							}
+				    									},
+				      									{
+				      										mData : 'operator'
+				      									},
+				      									{
+				      										mData : 'operationTime',
+				 		        							mRender : function(
+				 		        									data) {
+				 		        								if (data != null) {
+				 		        									return timeStamp2String(data);
+				 		        								} else
+				 		        									return '';
+				 		        							}
+				      									},
+				      									{
+				      										mData : 'remark'
+				      									}]
+					      			
+					      			})
+					      }
+					 function showPayLogTable(url){
+					 		logTable = $("#select_payOperateLog")
+					      	.DataTable(
+					      			{
+					      				language: {
+					                         aria: {
+					                             sortAscending: ": 以升序排列此列",
+					                             sortDescending: ": 以降序排列此列"
+					                         },
+					                         emptyTable: "空表",
+					                         info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+					                         infoEmpty: "没有数据",
+					                         // infoFiltered: "(filtered1 from _MAX_ total
+					 							// entries)",
+					                         lengthMenu: "每页显示 _MENU_ 条数据",
+					                         search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+					                         zeroRecords: "抱歉， 没有找到！",
+					                         paginate: {
+					                             "sFirst": "首页",
+					                             "sPrevious": "前一页",
+					                             "sNext": "后一页",
+					                             "sLast": "尾页"
+					                          }
+					                     },
+					      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+
+					      				bRetrieve : true,
+					      				lengthMenu : [
+					      						[ 5, 10, 15, 30, -1 ],
+					      						[ 5, 10, 15, 30,
+					      								"All" ] ],
+					      				pageLength : 10,// 每页显示数量
+					      				processing : true,// loading等待框
+					      				ajax : ctx+url,// 加载待办列表数据
+					      				"aoColumns" : [
+				      									{
+				      										mData : 'operationDesc'
+				      									},
+				      									{
+				    										mData : 'payMoneyCount',
+				    	        							mRender : function(
+				    	        									data) {
+				    	        								if (data != null) {
+				    	        									return $filter('currency')(data,'');
+				    	        								} else
+				    	        									return '---';
+				    	        							}
+				    									},
+				    									{
+				    										mData : 'timeData',
+				    	        							mRender : function(
+				    	        									data) {
+				    	        								if (data != null) {
+				    	        									return timeStamp2String(data);
+				    	        								} else
+				    	        									return '---';
+				    	        							}
+				    									},
+				      									{
+				      										mData : 'operator'
+				      									},
+				      									{
+				      										mData : 'operationTime',
+				 		        							mRender : function(
+				 		        									data) {
+				 		        								if (data != null) {
+				 		        									return timeStamp2String(data);
+				 		        								} else
+				 		        									return '';
+				 		        							}
+				      									},
+				      									{
+				      										mData : 'remark'
+				      									}]
+					      			
+					      			})
+					      }
 		    	
 		    	 function showLogTable(url){
 		    		logTable = $("#select_operateLog")
