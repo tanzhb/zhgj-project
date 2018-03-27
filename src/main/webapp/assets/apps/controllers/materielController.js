@@ -525,30 +525,51 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
                     headerOffset: a
                 },*/
                 order: [[1, "desc"]],//默认排序列及排序方式
-                searching: true,//是否过滤检索
-                ordering:  true,//是否排序
+//                searching: true,//是否过滤检索
+//                ordering:  true,//是否排序
                 lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
                 pageLength: 10,//每页显示数量
                 processing: true,//loading等待框
-//                serverSide: true,
-                ajax: tableAjaxUrl,//加载数据中
+                serverSide: true,
+                paging: true,
+//                ajax: tableAjaxUrl,//加载数据中
+                ajax :{ "url":$rootScope.basePath + "/"
+					+ tableAjaxUrl,// 加载数据中    
+//					"contentType": "application/json",
+				    "type": "POST",
+				    "data": function ( d ) {
+				      return {params : JSON.stringify( d )};
+				    }
+//                ,
+//                	"dataType" : "json",
+//			         "dataFilter": function (json) {//json是服务器端返回的数据
+//			               json = JSON.parse(json);
+//			               var returnData = {};
+//			               debugger
+//			               returnData.draw = json.draw;
+//			               returnData.recordsTotal = json.recordsTotal;//返回数据全部记录
+//			               returnData.recordsFiltered = json.recordsFiltered;//后台不实现过滤功能，每次查询均视作全部结果
+//			               returnData.data = json.data;//返回的数据列表
+//			               return JSON.stringify(returnData);//这几个参数都是datatable需要的，必须要
+//			           }
+                },
                 "aoColumns": [
-                              { mData: 'serialNum' },
-                              { mData: 'materielNum' },
-                              { mData: 'materielName' },
-                              { mData: 'specifications' },
-                              { mData: 'unit' },
-                              { mData: 'typeName' },
-                              { mData: 'originCountry' },
-                              { mData: 'brand' },
+                              { mData: 'serialNum','orderable' : false, },
+                              { mData: 'materielNum' ,'orderable' : false,},
+                              { mData: 'materielName','orderable' : false,},
+                              { mData: 'specifications' ,'orderable' : false,},
+                              { mData: 'unit' ,'orderable' : false,},
+                              { mData: 'typeName' ,'orderable' : false,},
+                              { mData: 'originCountry' ,'orderable' : false,},
+                              { mData: 'brand' ,'orderable' : false,},
                               /*{ mData: null },*/
-                              { mData: 'versionNO' },
-                              { mData: 'status' }
+                              { mData: 'versionNO' ,'orderable' : false,},
+                              { mData: 'status','orderable' : false, }
                         ],
                'aoColumnDefs' : [ {
 							'targets' : 0,
-							'searchable' : false,
-							'orderable' : false,
+//							'searchable' : false,
+							/*'orderable' : false,*/
 							'render' : function(data,
 									type, full, meta) {
 								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +

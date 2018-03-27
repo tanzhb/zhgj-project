@@ -334,7 +334,7 @@
   </select>
   
   <select id="selectBySelectExample" resultMap="BaseResultMap4list" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
-    SELECT DISTINCT
+ select * from(   SELECT DISTINCT
 m.serialNum,
 m.materielId,
 m.materielNum,
@@ -428,7 +428,35 @@ LEFT JOIN category ca on ca.categoryId = m.type
       group by m.serialNum
       order by ${orderByClause}
     </if>
+  ) t
+  <if test="searchStr != null" >
+  	where 
+  	t.materielNum  like CONCAT('%',#{searchStr,jdbcType=VARCHAR},'%')
+  	or t.materielName  like CONCAT('%',#{searchStr,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="length != 0" >
+      limit #{start},#{length}
+    </if>
   </select>
+  
+  
+  <select id="selectListCountBySelectExample" resultType="java.lang.String" parameterType="com.congmai.zhgj.web.model.MaterielSelectExample" >
+SELECT count(t.serialNum) from(
+    SELECT DISTINCT m.serialNum
+from materiel m 
+    left join supplyMateriel sm on sm.materielId = m.materielId and sm.delFlg = '0'
+    left join company supply on supply.comId = sm.supplyComId
+    left join buyMateriel bm on bm.materielId = m.materielId and bm.delFlg = '0'
+LEFT JOIN category ca on ca.categoryId = m.type
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      group by m.serialNum
+    </if>
+) t
+  </select>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

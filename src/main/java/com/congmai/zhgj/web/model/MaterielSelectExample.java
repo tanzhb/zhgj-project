@@ -12,7 +12,12 @@ public class MaterielSelectExample {
 
     protected boolean distinct;
 
+	private int start;
+	private int length;
+    
     protected List<Criteria> oredCriteria;
+    
+    private String searchStr;
 
     public MaterielSelectExample() {
         oredCriteria = new ArrayList<Criteria>();
@@ -3498,4 +3503,31 @@ public class MaterielSelectExample {
             this(condition, value, secondValue, null);
         }
     }
+
+	public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getLength() {
+		return length;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
+	}
+
+	public String getSearchStr() {
+		return searchStr;
+	}
+
+	public void setSearchStr(String searchStr) {
+		this.searchStr = searchStr;
+	}
+    
+    
+    
 }

@@ -194,4 +194,8 @@ public class MaterielServiceImpl implements MaterielService {
 		return MaterielMapper.selectByPrimaryKey(materielSerial);
 	}
 
+	@Override
+	public String selectListCount(MaterielSelectExample m) {
+		return MaterielMapper.selectListCountBySelectExample(m);
+	}
 }
