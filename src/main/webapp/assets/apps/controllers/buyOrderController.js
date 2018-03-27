@@ -3595,7 +3595,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-			    	 if(obj[attr]<0||obj[attr]>100){
+			    	 if((obj[attr]<0||obj[attr]>100)&&attr=='orderRateUnit'){
 			    		 obj[attr]=0;
 			    	 }
 		    	 }

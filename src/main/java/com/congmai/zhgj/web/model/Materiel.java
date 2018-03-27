@@ -124,6 +124,8 @@ public class Materiel {
     
     private String  orderUnitPrice;//不含税单价
     
+    private String  orderRateUnit;//含税单价
+    
     private String amount ;//订单数量
     
     private String deliverCount ;//发货数量
@@ -737,6 +739,14 @@ public class Materiel {
 
 	public void setGuideUnitPrice(String guideUnitPrice) {
 		this.guideUnitPrice = guideUnitPrice;
+	}
+
+	public String getOrderRateUnit() {
+		return orderRateUnit;
+	}
+
+	public void setOrderRateUnit(String orderRateUnit) {
+		this.orderRateUnit = orderRateUnit;
 	}
     
 }

@@ -140,7 +140,7 @@
 														class="required" aria-required="true"> * </span></label>
 													<div class=""    ng-hide="span">
 														<select class="form-control"
-															name="buyComId"  id="buyComId"
+															name="buyComId"  id="buyComId"  
 															ng-model="memoRecord.buyComId"    
 															ng-change="getBankInfo()" ng-show="input">
 															<option ng-repeat="item in companyList"

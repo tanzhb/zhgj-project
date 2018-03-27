@@ -351,7 +351,7 @@
 														<th style="white-space: nowrap;">发货计划号</th>
 														<th style="white-space: nowrap;">关联销售单号</th>
 														<th style="white-space: nowrap;">收货方</th>
-														<th style="white-space: nowrap;">发货类型</th>
+														<!-- <th style="white-space: nowrap;">发货类型</th> -->
 														<th style="white-space: nowrap;">发货数量</th>
 														<th style="white-space: nowrap;">交付方式</th>
 														<th style="white-space: nowrap;">发货/提货地址</th>

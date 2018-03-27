@@ -1231,7 +1231,7 @@ LEFT JOIN category ca on ca.categoryId = m.type
   </update>
   <select id="selectMaterielByOrderSerial"   parameterType="java.util.Map"   resultType="com.congmai.zhgj.web.model.Materiel">
   select   DISTINCT om.serialNum as serialNum,m.materielNum,m.materielName,m.unit , m.specifications, om.amount  as amount ,
-  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,o.rate,o.currency,om.customsCode,om.customsRate
+  IFNULL(om.canBillAmount,om.amount)  AS canBillAmount,om.orderUnitPrice  as orderUnitPrice,o.rate,o.currency,om.customsCode,om.customsRate,om.orderRateUnit  as orderRateUnit
   <if test="invoiceSerial!=null">
   , IFNULL(ibr.billCount,0) as billAmount
   ,ibr.serialNum as invoiceBillingRecordSerial

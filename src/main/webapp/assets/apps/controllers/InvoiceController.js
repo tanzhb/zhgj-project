@@ -723,7 +723,7 @@ angular
 												}, {
 													mData : 'billAmount'
 												}, { 
-													mData : 'orderUnitPrice',
+													mData : 'orderRateUnit',//  orderUnitPrice
 													mRender:function(data){
 					                            		if(data!=""&&data!=null){
 					                            			return $filter('currency')(data,'￥');
@@ -753,9 +753,9 @@ angular
 														return data;
 													}else{
 														if(isNull(row.billAmount)||row.billAmount==0){
-															return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+															return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderRateUnit+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 														}else
-														return '<input  type="text"  value="'+row.billAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+														return '<input  type="text"  value="'+row.billAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderRateUnit+','+row.billAmount+'"    class="invoiceIn"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 													}
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
@@ -765,9 +765,9 @@ angular
 												'render' : function(data,
 														type, row, meta) {
 													if(data==null){
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(row.canBillAmount*row.orderUnitPrice,'￥')+'</span>';
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(row.canBillAmount*row.orderRateUnit,'￥')+'</span>';
 													}else{
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(Number($("#"+row.serialNum).val())*row.orderUnitPrice,'￥')+'</span>';
+														return '<span id="money'+row.serialNum+'">'+$filter('currency')(Number($("#"+row.serialNum).val())*row.orderRateUnit,'￥')+'</span>';
 													}
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -782,7 +782,7 @@ angular
 													if(serialNum.indexOf("view")>-1){
 														return "";
 													}else{
-													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+													return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderRateUnit+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 													+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 													}//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
@@ -879,7 +879,7 @@ function loadMaterielOutTable(orderSerial,serialNum){
 								}, {
 									mData : 'billAmount'
 								}, { 
-									mData : 'orderUnitPrice',
+									mData : 'orderRateUnit',//   orderUnitPrice
 									mRender:function(data){
 	                            		if(data!=""&&data!=null){
 	                            			return $filter('currency')(data,'￥');
@@ -909,9 +909,9 @@ function loadMaterielOutTable(orderSerial,serialNum){
 										return data;
 									}else{
 										if(isNull(row.billAmount)||row.billAmount==0){
-											return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"    class="invoiceOut"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+											return '<input  type="text"  value="'+row.canBillAmount+'"   name="'+row.invoiceBillingRecordSerial+','+row.orderRateUnit+','+row.billAmount+'"    class="invoiceOut"   id="'+row.serialNum+'"      onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 										}else
-										return '<input  type="text"  value="'+row.billAmount+'"    name="'+row.invoiceBillingRecordSerial+','+row.orderUnitPrice+','+row.billAmount+'"  class="invoiceOut"    id="'+row.serialNum+'"    onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
+										return '<input  type="text"  value="'+row.billAmount+'"    name="'+row.invoiceBillingRecordSerial+','+row.orderRateUnit+','+row.billAmount+'"  class="invoiceOut"    id="'+row.serialNum+'"    onchange="judgeNumber(\''+row.canBillAmount+'\',\''+row.serialNum+'\',\''+judgeString+'\')" />';
 									}
 								
 									//return data;
@@ -938,7 +938,7 @@ function loadMaterielOutTable(orderSerial,serialNum){
 									if(serialNum.indexOf("view")>-1){
 										return "";
 									}else{
-									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderUnitPrice+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
+									return '<a   id="save'+row.serialNum+'" ng-click="saveBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.invoiceBillingRecordSerial+'\',\''+row.canBillAmount+'\',\''+row.orderRateUnit+'\',\''+row.money+'\')">  <i class="fa fa-save" title="保存"></i> </a>&nbsp;<a   style="display:none"  id="edit'+row.serialNum+'"  ng-click="editBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\')"><i class="fa fa-edit" title="编辑"></i></a>'
 									+ '&nbsp;<a  id="cancel'+row.serialNum+'" ng-click="cancelEditBillingRecord(\''+row.serialNum+'\',\''+judgeString+'\',\''+row.billAmount+'\')"><i class="fa fa-undo"  title="取消"></i></a>';
 									}
 									

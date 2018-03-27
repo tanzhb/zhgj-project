@@ -81,7 +81,8 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
         		$scope.companyList = data.data;
         		setTimeout(function () {
         			$("#buyComId").selectpicker({
-                        showSubtext: true
+                        showSubtext: true,
+                        size : 5
                     });
         			$('#buyComId').selectpicker('refresh');//刷新插件
         			
@@ -100,7 +101,8 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
         		$scope.companyList = data.data;
         		setTimeout(function () {
         			$("#buyComId").selectpicker({
-                        showSubtext: true
+                        showSubtext: true,
+                        size : 5
                     });
         			$('#buyComId').selectpicker('refresh');//刷新插件
         			
