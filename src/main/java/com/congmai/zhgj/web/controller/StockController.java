@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -262,25 +263,54 @@ public class StockController {
 	     * @Description (导出库存信息)
 	     * @param request
 	     * @return
+		 * @throws ParseException 
 	     */
 	    @RequestMapping("exportStock")
-	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    @ResponseBody
+	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  type) throws ParseException {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		/*List<PriceList> priceListList= priceListService.selectPriceList(new PriceListExample());
-	    		for(PriceList p:priceListList){
-	    			if("buyPrice".equals(p.getPriceType())){
-	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());
-	    			}else{
-	    				p.setComName(companyService.selectOne(p.getBuyComId()).getComName());
-	    			}
-	    			Materiel m=materielService.selectById(p.getMaterielSerial());
-	    			p.setMaterielNum(m.getMaterielNum());
-	    			p.setMaterielName(m.getMaterielName());
-	    			p.setSpecifications(m.getSpecifications());
-	    			p.setUnit(m.getUnit());
-	    		}
-	    		dataMap.put("priceListList",priceListList);*/
-	    		ExcelUtil.export(request, response, dataMap, "stockList", "库存信息");
+	    		String comId = null;
+    	    	User user = UserUtil.getUserFromSession();
+    	    	if(user!=null){
+    				comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+    			}
+		if ("zijian".equals(type)) {
+			List<Stock> stocks = stockService
+					.selectStockListByComId("1", comId);
+			if (stocks.size() != 0) {
+				for (Stock stock : stocks) {
+					Materiel m = materielService.selectById(stock
+							.getMaterielSerial());
+					stock.setMaterielName(m.getMaterielName());
+					stock.setMaterielNum(m.getMaterielNum());
+					stock.setSpecifications(m.getSpecifications());
+					stock.setCurrentAmount((Integer.parseInt(stock
+							.getCountInAmountZijian() == null ? "0" : stock
+							.getCountInAmountZijian()) - Integer.parseInt(stock
+							.getCountOutAmountZijian() == null ? "0" : stock
+							.getCountOutAmountZijian()))
+							+ "");
+					stock.setAverrageWhAge("0");
+					stock.setPreSaleAmount("0");
+					stock.setOnRoadAmount("0");
+					stock.setCanSaleAmount("0");
+					if(stock.getFirstInDateZijian()!=null){
+						stock.setFirstInDateZijian(DateUtil.daysBetween(new SimpleDateFormat("yyyy-MM-dd").parse(stock.getFirstInDateZijian()), new Date())+"");
+					}
+					if(!StringUtil.isEmpty(stock.getMinStock())&&new BigDecimal(stock.getCurrentAmount()).compareTo(new BigDecimal(stock.getMinStock()==null?"0":stock.getMinStock()))<=0){
+						stock.setStatus(StaticConst.getInfo("queliao"));
+					}else{
+						stock.setStatus(StaticConst.getInfo("zhengchang"));
+					}
+					stock.setRiskGrade("");
+				}
+				dataMap.put("stocks",stocks);
+				ExcelUtil.export(request, response, dataMap, "zijianStock",
+						"自建库存信息");
+
+			}
+		}
+	    		
 	    }
 	    
 	    /**

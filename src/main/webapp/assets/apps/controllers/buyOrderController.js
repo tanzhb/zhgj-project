@@ -3595,7 +3595,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-			    	 if((obj[attr]<0||obj[attr]>100)&&attr=='orderRateUnit'){
+			    	 if((obj[attr]<0||obj[attr]>100)&&(attr!='orderRateUnit'&&attr!='orderUnitPrice')){
 			    		 obj[attr]=0;
 			    	 }
 		    	 }
@@ -5740,6 +5740,29 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					})
 		 return ybTablePay;
 		}
+		
+		  $scope.viewPayApply=function(taskId,assign){//点击付款编号跳转至审批办理页面
+		       	if(assign==''){
+		       		claimTask(taskId, 'dbTableForPay');
+		       	}
+		       	PayService
+					.getAuditInfos(taskId)
+					.then(
+							function(result) {													
+								var comments = ""//添加评论
+									for (var i=0;i<result.commentList.length;i++){
+										comments += "<tr><td>" + result.commentList[i].userName + "</td><td>" 
+										+ (result.commentList[i].position==null?'':result.commentList[i].position) + "</td><td>"
+										+ timeStamp2String(result.commentList[i].time) + "</td><td>" + result.commentList[i].content + "</td></tr>";														
+									}
+									if(result.actionType == 'audit'){//审批流程
+										$state.go('auditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments,processInstanceId:result.paymentRecord.processInstanceId});
+									}else{
+										$state.go('editAuditPay',{serialNum:result.paymentRecord.serialNum, taskId:taskId, comments:comments,processInstanceId:result.paymentRecord.processInstanceId});
+									}
+								}
+					);
+		       }
 		function showDbTablePay(){
 			
 			var t = $("#dbTableForPay")
@@ -5846,7 +5869,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 									className : "btn default"
 								}*/ ],
 						dom : "<'row' <'col-md-12'B>><'row'<'col-md-6 col-sm-12'l><'col-md-6 col-sm-12'f>r><'table-scrollable't><'row'<'col-md-5 col-sm-12'i><'col-md-7 col-sm-12'p>>",
-						order : [ [ 6, "asc" ] ],// 默认排序列及排序方式
+						order : [ [ 7, "desc" ] ],// 默认排序列及排序方式
 
 						bRetrieve : true,
 						lengthMenu : [
@@ -5881,6 +5904,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 											return "待办理";
 										}
 									}
+								},
+								{
+									mData : 'num'
 								},
 								{
 									mData : 'userName'
@@ -5953,7 +5979,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                    	'render' : function(data,type, full, meta) {
 		                    		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
 		                    	}
-		                    } 
+		                    },
+		                    {
+	 	                    	'targets' : 2,
+	 	                    	'searchable' : false,
+	 	                    	'orderable' : false,
+	 	                    	'className' : 'dt-body-center',
+	 	                    	'render' : function(data,type, full, meta) {
+	 								return '<a href="javascript:void(0);" ng-click="viewPayApply(\''+full.taskId+'\',\''+full.assign+'\')">'+data+'</a>';
+	 							
+	 	                    	},
+	 	                    	"createdCell": function (td, cellData, rowData, full, col) {
+										 $compile(td)($scope);
+								       }
+	 	                    } 
 		                    ]
 
 					})

@@ -23,7 +23,7 @@ public class DemandMateriel {
 
     private String deliveryAddress;
 
-    private String status;
+    private String status;//(0待采购 1 已分解  2 部分入库  3 已入库)
 
     private Integer sort;
 

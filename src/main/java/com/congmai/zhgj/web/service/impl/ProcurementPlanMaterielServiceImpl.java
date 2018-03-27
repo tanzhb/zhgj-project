@@ -173,4 +173,17 @@ public class ProcurementPlanMaterielServiceImpl implements ProcurementPlanMateri
 		DemandMaterielMapper.updateByPrimaryKeySelective(demandMateriel);
 	}
 
+	@Override
+	public void updateDemandMateriels(String ids) {
+		List<String> idList = ApplicationUtils.getIdList(ids);
+		for(String id : idList){
+			DemandMateriel dm  = new DemandMateriel();
+			dm.setSerialNum(id);
+			dm.setStatus("1");
+			dm.setUpdateTime(new Date());
+			DemandMaterielMapper.updateByPrimaryKeySelective(dm);
+		}
+		
+	}
+
 }

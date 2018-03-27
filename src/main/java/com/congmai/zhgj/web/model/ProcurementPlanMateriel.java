@@ -68,7 +68,7 @@ public class ProcurementPlanMateriel {
 
     private String unit;  
     
-    private String status;  
+    private String status;  //(0 待采购 1已采购)
     
     
     

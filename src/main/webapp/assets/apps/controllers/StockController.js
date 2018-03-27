@@ -166,9 +166,9 @@ angular
 													}, {
 														mData : 'canSaleAmount'
 													},{
-														mData : 'riskGrade'
+														mData : 'minStock'
 													}, {
-														mData : 'status'
+														mData : 'riskGrade'//
 													}
 													],
 												'aoColumnDefs' : [ {
@@ -232,7 +232,7 @@ angular
 													'targets' : 11,
 													'render' : function(data,
 															type, row, meta) {
-														var statusIcon='';//状态
+														/*var statusIcon='';//状态
 				 	    								if(row.status==0){
 				 	    									statusIcon = '<span class="label label-sm label-success"  >缺料</span> '
 				 	    								}else if(row.status==1){
@@ -240,8 +240,18 @@ angular
 				 	    								}else if(row.status==2){
 				 	    									statusIcon = '<span class="label label-sm label-success">正常</span> '
 				 	    								}
-				 	    								return statusIcon ;
-														
+				 	    								return statusIcon ;*/
+														if(!isNull(data)&&(row.currentAmount<=data)){
+				 	    									return '<span class="label label-sm label-success"  >缺料</span> ';
+				 	    								}else {
+				 	    									return '<span class="label label-sm label-success">正常</span> ';
+				 	    								}
+													}
+												},{
+													'targets' : 12,
+													'render' : function(data,
+															type, row, meta) {
+														return "";
 													}
 												}  ],
 
@@ -1223,9 +1233,9 @@ angular
 							            });
 							    	   
 							       }
-							       $scope.exportStock = function(){
+							       $scope.exportStock = function(stockType){
 								    	 handle.blockUI("正在导出数据，请稍后"); 
-								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock";
+								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+stockType;
 								    	 handle.unblockUI(); 
 								       }
 								       

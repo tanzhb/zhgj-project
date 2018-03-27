@@ -16,6 +16,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+     <result column="status" property="status" jdbcType="VARCHAR" />
     <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey" ></association>
     <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
     <association property="supplyName" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.DemandPlanMaterielMapper.selectSupplyName" ></association>
@@ -36,6 +37,7 @@
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
     <association property="supplyMateriel" column="supplyMaterielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectByPrimaryKey" ></association>
   </resultMap>
   <sql id="Example_Where_Clause" >
@@ -98,12 +100,12 @@
   </sql>
 	<sql id="Base_Column_List" >
     serialNum, orderSerial, demandPlanSerial, materielSerial, supplyMaterielSerial, amount, 
-    deliveryDate, deliveryAddress, delFlg, creator, createTime, updater, updateTime, 
+    deliveryDate, deliveryAddress, delFlg, creator, createTime, updater, updateTime,status
     remark
   </sql>
   <sql id="Base_Column_List2" >
     dm.serialNum,dm.orderSerial,dm.demandPlanSerial, dm.materielSerial, dm.supplyMaterielSerial, dm.amount, dm.deliveryDate, 
-    dm.deliveryAddress, dm.delFlg, dm.creator, dm.createTime, dm.updater, dm.updateTime, dm.remark
+    dm.deliveryAddress, dm.delFlg, dm.creator, dm.createTime, dm.updater, dm.updateTime, dm.remark,dm.status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanMaterielExample" >
     select
@@ -157,12 +159,12 @@
       supplyMaterielSerial, amount, deliveryDate, 
       deliveryAddress, creator, 
       createTime, updater, updateTime, 
-      remark)
+      remark,status)
     values (#{serialNum,jdbcType=VARCHAR}, #{orderSerial,jdbcType=VARCHAR}, #{demandPlanSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{supplyMaterielSerial,jdbcType=VARCHAR}, #{amount,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, 
       #{deliveryAddress,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{remark,jdbcType=VARCHAR})
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR})
   </insert>
   
    <insert id="insertBatch"  parameterType="java.util.List"> 
@@ -170,14 +172,14 @@
       	supplyMaterielSerial, amount, deliveryDate, 
       	deliveryAddress, creator, 
       	createTime, updater, updateTime, 
-      	remark)
+      	remark,status)
     	values 
 	    <foreach collection="list" item="item" index="index" separator="," >  
 	     (	#{item.serialNum,jdbcType=VARCHAR}, #{item.orderSerial,jdbcType=VARCHAR},#{item.demandPlanSerial,jdbcType=VARCHAR}, #{item.materielSerial,jdbcType=VARCHAR}, 
       		#{item.supplyMaterielSerial,jdbcType=VARCHAR}, #{item.amount,jdbcType=VARCHAR}, #{item.deliveryDate,jdbcType=DATE}, 
       		#{item.deliveryAddress,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, 
      		#{item.createTime,jdbcType=TIMESTAMP}, #{item.updater,jdbcType=VARCHAR}, #{item.updateTime,jdbcType=TIMESTAMP}, 
-     		#{item.remark,jdbcType=VARCHAR})
+     		#{item.remark,jdbcType=VARCHAR},#{item.status,jdbcType=VARCHAR})
 	    </foreach>  
 	</insert>  
 
@@ -223,6 +225,9 @@
       <if test="remark != null" >
         remark,
       </if>
+       <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -263,6 +268,9 @@
       </if>
       <if test="remark != null" >
         #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -317,6 +325,9 @@
       <if test="record.remark != null" >
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -336,7 +347,8 @@
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
-      remark = #{record.remark,jdbcType=VARCHAR}
+      remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -383,6 +395,9 @@
       <if test="remark != null" >
         remark = #{remark,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -399,7 +414,8 @@
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+       status = #{status,jdbcType=VARCHAR},
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   

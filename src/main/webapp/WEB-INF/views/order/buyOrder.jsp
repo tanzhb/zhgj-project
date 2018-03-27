@@ -465,7 +465,7 @@
 									<div class="col-md-12">
 				
 										<!-- BEGIN EXAMPLE TABLE PORTLET-->
-										<div class="portlet box green">
+										<div class="portlet box">
 											<div class="portlet-title" style="height:50px"></div>
 				
 											<div class="portlet-body">
@@ -484,6 +484,7 @@
 			                                                </th>
 															
 															<th style="white-space: nowrap;">任务状态</th>
+															<th style="white-space: nowrap;">应付帐单号</th>
 															<th style="white-space: nowrap;">申请人</th>
 															<th style="white-space: nowrap;">标题</th>
 															<th style="white-space: nowrap;">当前节点</th>

@@ -383,9 +383,9 @@
 
 												</div>
 											</div>
-											<div class="col-md-4">
+											<div class="col-md-4"   ng-if="delivery.deliverType=='贸易发货'">
 												<div class="form-group">
-													<label class="control-label bold">收货仓库<span   ng-hide="(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')||span"
+													<label class="control-label bold">收货仓库<span   
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 													<div  ng-hide="span"       >
@@ -407,7 +407,7 @@
 											<!--/span-->
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">收货地址<span    ng-hide="(delivery.deliverType=='售前无合同发货'||delivery.deliverType=='售后无合同发货')||span"
+													<label class="control-label bold">收货地址<span    ng-hide="span"
 														class="required" aria-required="true"> * </span></label>
 											
 																	  	<div class="" >
@@ -416,7 +416,7 @@
 															class="form-control"
 															ng-model="takeDeliveryWarehouseAddress"   ng-show="inputDeliveryInfo"  ng-if="showSXs!='1'"/>
 															<div  ng-show="showSXs=='1'">
-																<select class="form-control"   data-live-search="true" data-size=""   ng-show="inputDeliveryInfo"
+																<select class="form-control"   data-live-search="true" data-size=""   ng-show="inputDeliveryInfo"  ng-if="delivery.deliverType=='贸易发货'"
 															name="takeDeliveryWarehouseAddress1"
 															ng-model="takeDeliveryWarehouseAddress"
 															 >
@@ -425,7 +425,7 @@
 															<option value=""></option>
 														</select>
 														</div>
-															<span ng-show="inputDeliveryInfo"  class="input-group-btn" ng-click="showSX('s')"
+															<span ng-show="inputDeliveryInfo"  class="input-group-btn" ng-click="showSX('s')"   ng-if="delivery.deliverType=='贸易发货'"
 																style="vertical-align: top;">
 																<button class="btn default" type="button"  ng-if="showSXs!='1'">
 																	筛选

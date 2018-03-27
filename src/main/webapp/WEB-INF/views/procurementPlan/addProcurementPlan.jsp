@@ -283,9 +283,9 @@
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in demandMateriel track by $index" ng-mouseover="showOperation('procurementPlanMateriel',$index)" ng-mouseleave="hideOperation('procurementPlanMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
-		                          <div  ng-hide="showCheckBoxForDm{{$index}}" >
-		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                        <input type="checkbox" class="group-checkable1"    name="{{$index}}"  id="{{_procurementPlanMateriel.materielSerial}}"  value="{{_procurementPlanMateriel.isBOM}}" />
+		                          <div  ng-hide="showCheckBoxForDm{{$index}}"   ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined">
+		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"  >
+                                        <input type="checkbox" class="group-checkable1"      name="{{$index}}"  id="{{_procurementPlanMateriel.materielSerial}}"  value="{{_procurementPlanMateriel.isBOM}}" />
                                         <span></span>
                                     </label>
                                     </div>
@@ -434,8 +434,8 @@
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in procurementPlanMateriel track by $index" ng-mouseover="showOperation('procurementPlanMateriel',$index)" ng-mouseleave="hideOperation('procurementPlanMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
-		                           <div  ng-hide="showCheckBoxForPpm{{$index}}" >
-		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+		                           <div   ng-hide="showCheckBoxForPpm{{$index}}"     ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined" ><!--  (_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==null)-->
+		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"   >
                                         <input type="checkbox"  class="group-checkable2"   id="{{$index}}"/>
                                         <span></span>
                                     </label>
@@ -458,7 +458,7 @@
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets}} </p>
 		                          </td>
 		                            <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}} </p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}} -------------{{_procurementPlanMateriel.status}}</p>
 		                          </td>
 		                            <td>
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*(_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets)}} </p>

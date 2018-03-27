@@ -359,6 +359,7 @@ public class PurchaseForecastController {
 				dm.setCreateTime(new Date());
 				dm.setUpdateTime(new Date());
 				dm.setDelFlg("0");
+				dm.setStatus("0");
 				i++;
 				demandMaterielList.add(dm);
 				Materiel materiel=materielService.selectById(demandPlanMateriel.getMaterielSerial());
@@ -374,6 +375,7 @@ public class PurchaseForecastController {
 		    			pMateriel.setProcurementPlanSerial(newSerialNum);
 		    			pMateriel.setPlanCount(demandPlanMateriel.getAmount());
 		    			pMateriel.setSingleDose("1");
+		    			pMateriel.setStatus("0");
 		    			pMateriel.setBuyCount(demandPlanMateriel.getAmount());
 		    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
 		    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
@@ -402,6 +404,7 @@ public class PurchaseForecastController {
 			    			pMateriel.setProcurementPlanSerial(newSerialNum);
 			    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
 			    			pMateriel.setSingleDose(b.getSingleDose());
+			    			pMateriel.setStatus("0");
 			    			pMateriel.setPlanCount(
 			    					String.valueOf(Double.parseDouble(demandPlanMateriel.getAmount()==null?"0":demandPlanMateriel.getAmount())
 			    							*Double.parseDouble(b.getSingleDose()==null?"0":b.getSingleDose())));
@@ -436,6 +439,7 @@ public class PurchaseForecastController {
 	    			pMateriel.setPlanCount(demandPlanMateriel.getAmount());
 	    			pMateriel.setDemandMaterielSerial(dm.getSerialNum());//为采购清单物料赋值需求物料流水
 	    			pMateriel.setSingleDose("1");
+	    			pMateriel.setStatus("0");
 	    			pMateriel.setBuyCount(demandPlanMateriel.getAmount());
 	    			materielCount = materielCount + Double.parseDouble(pMateriel.getBuyCount());
 	    			pMateriel.setDeliveryAddress(demandPlanMateriel.getDeliveryAddress());

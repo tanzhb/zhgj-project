@@ -55,12 +55,14 @@ import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.OrderInfo;
+import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ActRuTaskService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
@@ -103,6 +105,8 @@ public class ProcessAction {
 	    private ActRuTaskService actRuTaskService ;
 	 @Resource
 	    private DeliveryService deliveryService;
+	 @Resource
+	    private PayService payService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -260,6 +264,11 @@ public class ProcessAction {
 				}else{
 					map.put("comName", "");
 				}
+			}
+			if("accountPayable".equals(businessType)){
+				PaymentRecord paymentRecord = payService.selectPayById(base.getBusinessKey());
+				map.put("num", paymentRecord==null?"":paymentRecord.getPaymentNum());
+				map.put("serialNum", paymentRecord==null?"":paymentRecord.getSerialNum());
 			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){

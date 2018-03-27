@@ -98,6 +98,8 @@ public enum StaticConst {
 	OUTRECORD("outrecord", "出库"),
 	MAOYIFAHUO("maoyifahuo", "贸易发货"),
 	BEFOREWITHOUTCONTRACTDELIVERY("beforewithoutcontractdelivery", "出库"),
+	ZHENGCHANG("zhengchang", "正常"),
+	QUELIAO("queliao", "缺料"),
 	AFTERWITHOUTCONTRACTDELIVERY("afterwithoutcontractdelivery", "出库");
 	
 

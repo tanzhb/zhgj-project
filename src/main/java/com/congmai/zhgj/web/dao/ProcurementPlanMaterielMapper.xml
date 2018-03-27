@@ -20,6 +20,7 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="status"    property="status"    jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
      <result column="supplyComId" property="supplyComId" jdbcType="VARCHAR" />
@@ -89,7 +90,7 @@
   <sql id="Base_Column_List" >
     serialNum, procurementPlanSerial, materielSerial, supplyMaterielSerial, planCount, 
     buyCount, orderUnitPrice, orderRateUnit, money, deliveryDate, lastDeliveryDate, deliveryAddress, 
-    sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose,demandMaterielSerial
+    sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose,demandMaterielSerial,status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" >
     select
@@ -128,14 +129,14 @@
       money, deliveryDate, lastDeliveryDate, 
       deliveryAddress, sort,  
       creator, createTime, updater, 
-      updateTime, remark,supplyComId,singleDose)
+      updateTime, remark,supplyComId,singleDose,status)
     values (#{serialNum,jdbcType=VARCHAR}, #{procurementPlanSerial,jdbcType=VARCHAR},#{demandMaterielSerial,jdbcType=VARCHAR}, 
       #{materielSerial,jdbcType=VARCHAR}, #{supplyMaterielSerial,jdbcType=VARCHAR}, #{planCount,jdbcType=VARCHAR}, 
       #{buyCount,jdbcType=VARCHAR}, #{orderUnitPrice,jdbcType=VARCHAR}, #{orderRateUnit,jdbcType=VARCHAR}, 
       #{money,jdbcType=VARCHAR}, #{deliveryDate,jdbcType=DATE}, #{lastDeliveryDate,jdbcType=DATE}, 
       #{deliveryAddress,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},#{supplyComId,jdbcType=VARCHAR},#{singleDose,jdbcType=VARCHAR})
+      #{updateTime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},#{supplyComId,jdbcType=VARCHAR},#{singleDose,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMateriel" >
     insert into procurementPlanMateriel
@@ -203,6 +204,9 @@
         <if test="supplyComId != null" >
         supplyComId,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -267,6 +271,9 @@
       </if>
       <if test="supplyComId != null" >
         #{supplyComId,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -342,6 +349,9 @@
       <if test="record.supplyComId != null" >
         remark = #{record.supplyComId,jdbcType=VARCHAR},
       </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -369,7 +379,8 @@
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       remark = #{record.remark,jdbcType=VARCHAR},
-      supplyComId= #{record.supplyComId,jdbcType=VARCHAR}
+      supplyComId= #{record.supplyComId,jdbcType=VARCHAR},
+      status= #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -437,6 +448,9 @@
       <if test="supplyComId != null" >
         supplyComId = #{supplyComId,jdbcType=VARCHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -461,7 +475,8 @@
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       remark = #{remark,jdbcType=VARCHAR},
-      supplyComId= #{supplyComId,jdbcType=VARCHAR}
+      supplyComId= #{supplyComId,jdbcType=VARCHAR},
+      status= #{status,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>

@@ -41,6 +41,8 @@ public interface ProcurementPlanMaterielService extends GenericService<Procureme
 	  public void deleteDemandMateriel(String ids);//删除需求物料通过需求物料流水
 	  
 	  public void updateDemandMateriel(DemandMateriel demandMateriel);//删除采购清单物料通过采购计划流水
+	  
+	  public void updateDemandMateriels(String  ids);//更新需求物料状态
 
 
 }

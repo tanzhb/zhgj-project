@@ -1121,18 +1121,32 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 						}
 					});
         	if(bom_ids!=''){
-        		$scope.decomposeMateriel(bom_ids,indexs);//分解选中BOM物料
+        		$scope.decomposeMateriel(bom_ids,indexs,ids);//分解选中BOM物料
         	}else{
         		handle.unblockUI();
         		var array=indexs.split(',');
     			//隐藏选中checkbox
     			for(var i=0;i<array.length;i++){
     				$scope['showCheckBoxForDm'+array[i]]=true;
+    				$scope.demandMateriel[array[i]].status=1;
     			}
+    			$scope.updateDemandMateriel(ids);//更新需求物料状态为1
         		toastr.success("分解成功");
         	}
         	
         }
+        $scope.updateDemandMateriel= function(ids){//更新需求物料状态为1(已分解)
+        	var promise = procurementPlanService.updateDemandMateriel(ids);
+    		promise.then(function(result){
+    			if(result.flag!=1){
+    				toastr.error("更新需求物料状态失败!");	
+    			}
+    		
+    		},function(data){
+    			// 调用承诺接口reject();
+    		});
+			return;
+		}
         $scope.decomposeMateriel= function(ids,indexs){//单个或多个bom物料分解
         	var promise = procurementPlanService.getProcurementPlanMateriels(ids);
     		promise.then(function(data){
@@ -1148,6 +1162,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     			//隐藏选中checkbox
     			for(var i=0;i<array.length;i++){
     				$scope['showCheckBoxForDm'+array[i]]=true;
+    				$scope.demandMateriel[array[i]].status=1;
     			}
     				for(var j=0;j<$scope.demandMateriel.length;j++){
     					for(var m=0;m<procurementPlanMateriels.length;m++){
@@ -1235,6 +1250,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	   	       		     function(data){
 	   	       		    	toastr.success('发布采购清单物料数据成功！');
 	   	       		    	handle.unblockUI();
+	   	       		    	for(var i=0;i<$scope.choosedProcurementPlanMateriel.length;i++){
+	   	       		    	$scope.choosedProcurementPlanMateriel[i].status=1;
+	   	       		    	}
 	   	       		    	$scope.cancelAllProcurementPlanMateriel();
 		  	   	     
 			  	   	    
