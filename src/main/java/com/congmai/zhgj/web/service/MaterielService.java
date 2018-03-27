@@ -1,5 +1,4 @@
-package com.congmai.zhgj.web.service;	String  selectListCount (MaterielSelectExample m);//获取总的物料数量
-	String  selectListCount (MaterielSelectExample m);//获取总的物料数量
+package com.congmai.zhgj.web.service;
 
 import java.util.List;
 

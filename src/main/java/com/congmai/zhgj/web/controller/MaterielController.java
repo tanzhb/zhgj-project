@@ -456,24 +456,23 @@ public class MaterielController {
         		criteria.andBuyComIdIn(comIds);
         	}
         	
-        	//TODO分页查询
-        	ObjectMapper objectMapper = new ObjectMapper();
-        	
-        	try {
-        		
-        		recordsTotal = materielService.selectListCount(m);
-        		
-        		params = URLDecoder.decode(params, "UTF-8");
-				dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
-				m.setStart(dataTablesParams.getStart());
-				m.setLength(dataTablesParams.getLength());
-				m.setSearchStr(dataTablesParams.getSearch().getValue());
-						
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-        	
+        	if(params!=null){
+	        	//TODO分页查询
+	        	ObjectMapper objectMapper = new ObjectMapper();
+	        	
+	        	try {
+	        		recordsTotal = materielService.selectListCount(m);
+	        		params = URLDecoder.decode(params, "UTF-8");
+					dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+					m.setStart(dataTablesParams.getStart());
+					m.setLength(dataTablesParams.getLength());
+					m.setSearchStr(dataTablesParams.getSearch().getValue());
+							
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
         	materielList = materielService.selectList(m);
     	}else{//根据父节点查询
     		
@@ -520,22 +519,24 @@ public class MaterielController {
         	}
         	//TODO分页查询
         	ObjectMapper objectMapper = new ObjectMapper();
-        	try {
-        		
-        		recordsTotal = materielService.selectListCount(m);
-        		
-        		params = URLDecoder.decode(params, "UTF-8");
-				dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
-				m.setStart(dataTablesParams.getStart());
-				m.setLength(dataTablesParams.getLength());
-				
-				m.setSearchStr(dataTablesParams.getSearch().getValue());
-				
-						
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	if(params!=null){
+	        	try {
+	        		
+	        		recordsTotal = materielService.selectListCount(m);
+	        		
+	        		params = URLDecoder.decode(params, "UTF-8");
+					dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
+					m.setStart(dataTablesParams.getStart());
+					m.setLength(dataTablesParams.getLength());
+					
+					m.setSearchStr(dataTablesParams.getSearch().getValue());
+					
+							
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
         	
         	materielList = materielService.selectList(m);
         	
@@ -552,11 +553,19 @@ public class MaterielController {
     			}
     		}
     	}
-		Map pageMap = new HashMap();
-		pageMap.put("draw", dataTablesParams.getDraw());
-		pageMap.put("recordsTotal", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
-		pageMap.put("recordsFiltered", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
-		pageMap.put("data", materielList);
+    	Map pageMap = new HashMap();
+    	if(dataTablesParams==null){
+    		pageMap.put("draw", 1);
+    		pageMap.put("recordsTotal", materielList==null?0:materielList.size());
+    		pageMap.put("recordsFiltered", materielList==null?0:materielList.size());
+    		pageMap.put("data", materielList);
+    	}else{
+    		pageMap.put("draw", dataTablesParams.getDraw());
+    		pageMap.put("recordsTotal", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
+    		pageMap.put("recordsFiltered", recordsTotal==null?(materielList==null?0:materielList.size()):recordsTotal);
+    		pageMap.put("data", materielList);
+    	}
+		
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 
     }
