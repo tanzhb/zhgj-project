@@ -168,7 +168,7 @@ angular.module('MetronicApp').controller('buyFrameController', ['$rootScope', '$
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),"frameId":$scope.buyFrame.id,"content":$("#content").val(),
 				"completeFlag":true};
 	    var _url = ctx + "rest/order/complateFrame/" + $("#taskId").val();
-	    doOrder(_url, mydata, 'audit');
+	    doFrame(_url, mydata, 'audit');
 	};
 	//审批不通过
 	$scope.frameUnPass = function() {

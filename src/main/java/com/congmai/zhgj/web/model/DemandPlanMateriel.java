@@ -66,6 +66,8 @@ public class DemandPlanMateriel {
     
     private SupplyMateriel supplyMateriel;
     
+    private String  status;
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -289,5 +291,13 @@ public class DemandPlanMateriel {
 
 	public void setOrderSerial(String orderSerial) {
 		this.orderSerial = orderSerial;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	}

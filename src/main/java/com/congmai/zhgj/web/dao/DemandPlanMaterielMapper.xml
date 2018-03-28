@@ -100,7 +100,7 @@
   </sql>
 	<sql id="Base_Column_List" >
     serialNum, orderSerial, demandPlanSerial, materielSerial, supplyMaterielSerial, amount, 
-    deliveryDate, deliveryAddress, delFlg, creator, createTime, updater, updateTime,status
+    deliveryDate, deliveryAddress, delFlg, creator, createTime, updater, updateTime,status,
     remark
   </sql>
   <sql id="Base_Column_List2" >

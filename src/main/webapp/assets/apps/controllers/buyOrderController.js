@@ -677,7 +677,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 										return clickhtm;
 									}
 								if(row.status==0){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\',\''+row.orderAmount+'\')">申请</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>'
 								}else if(row.status==1){
 									if(row.processBase!=""&&row.processBase!=null){
@@ -3660,7 +3660,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
-		       $scope.submitBuyApply  = function(serialNum,materielCount) {// 进入申请审批页面
+		       $scope.submitBuyApply  = function(serialNum,materielCount,orderAmount) {// 进入申请审批页面
+		    	   if(orderAmount=='null'){
+		    		   showToastr('toast-top-center', 'warning', '该采购订单金额为0，不能提交！');
+		    		   return;
+		    	   }
 		    	   if(serialNum==undefined){//从列表头上申请
 		    		 	if(table.rows('.active').data().length != 1){
 			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')

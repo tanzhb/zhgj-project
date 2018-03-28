@@ -1138,7 +1138,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         $scope.updateDemandMateriel= function(ids){//更新需求物料状态为1(已分解)
         	var promise = procurementPlanService.updateDemandMateriel(ids);
     		promise.then(function(result){
-    			if(result.flag!=1){
+    			if(result!=1){
     				toastr.error("更新需求物料状态失败!");	
     			}
     		
@@ -1613,6 +1613,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        $scope.cancelAllDemandMateriel=function () {
 	        	$scope.demandMaterielInput = true;
 	        	$scope.demandMaterielShow = true;
+	        	$scope.reservedDm=true;
 	        	for(var i=0;i<$scope.demandMateriel.length;i++){
 	        		$scope["demandMaterielInput"+i] = true;
 					$scope["demandMaterielShow"+i] = true;
@@ -1649,6 +1650,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        $scope.cancelAllProcurementPlanMateriel=function () {
 	        	$scope.procurementPlanMaterielInput = true;
 	        	$scope.procurementPlanMaterielShow = true;
+	        	$scope.reservedPpm=true;
 	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
 	        		$scope["procurementPlanMaterielInput"+i] = true;
 					$scope["procurementPlanMaterielShow"+i] = true;

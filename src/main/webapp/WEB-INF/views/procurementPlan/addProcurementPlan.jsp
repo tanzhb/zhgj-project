@@ -344,7 +344,8 @@
 		                          </td>
                                       <td>  
                                      		<p class="form-control-static"  style="color:#fcb95b" ng-if="_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0"> 待采购 </p>
-                                     		<p class="form-control-static"  style="color:#fcb95b"  ng-if="_procurementPlanMateriel.status==1"> 部分入库 </p>
+                                     		<p class="form-control-static"  style="color:#fcb95b"  ng-if="_procurementPlanMateriel.status==1"> 已分解 </p>
+                                     		<p class="form-control-static"  style="color:#fcb95b"  ng-if="_procurementPlanMateriel.status==2"> 部分入库 </p>
                                      		<p class="form-control-static"  style="color:green" ng-if="_procurementPlanMateriel.status==2"> 已入库</p>
 		                          </td>
                                      <td>
@@ -489,7 +490,10 @@
 		                          		<input style="padding:6px 3px" type="text"  name="deliveryAddress{{$index}}" class="form-control"   disabled="disabled" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.deliveryAddress"    >
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
-                                     <td ><span style="color:#fcb95b"> 待采购</span></td>
+                                     <td >
+                                     <p class="form-control-static"  style="color:#fcb95b" ng-if="_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0"> 待采购 </p>
+                                     		<p class="form-control-static"  style="color:#fcb95b"  ng-if="_procurementPlanMateriel.status==1"> 已采购 </p>
+                                     		</td>
                                      <td>
                                      	<div style="width:100px">
                                      	<!-- <span ng-hide="procurementPlanMaterielInput{{$index}}">

@@ -396,7 +396,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
                     		}else{
                     			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
                     		}*/
-							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">已确认</span>';//待签合同
+							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';//待签合同
 						}else if(row.status==2){
 							if(row.contract.contractType=='采购订单'){
 								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
@@ -409,7 +409,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						}else if(row.status=="66"){
             				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待确认</span>';
 						}else if(row.status=="77"){
-            				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">已确认</span>';
+            				return clickhtm + '<span style="color:green" ng-click="viewOrderLog(\''+row.serialNum+'\')">待客户确认</span>';
 						}else{
 							/*if(row.processBase!=""&&row.processBase!=null){
                     			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
