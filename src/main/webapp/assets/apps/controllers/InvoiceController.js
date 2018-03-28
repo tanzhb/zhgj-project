@@ -1653,9 +1653,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
 						            	 tel: { 
-						                    	digits:'请输入正确的电话, 必须为数字！',
-						                    	required:"电话不能为空！",
-				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+						            		 isPhone:"请输入正确的联系电话！"
 						                    },
 						                    companyName:{required:"发票号不能为空！"},
 						                    address:{required:"地址不能为空！"},
@@ -1676,7 +1674,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	invoiceType:{required:true},
 						            	billingDate:billingDate,
 						            	invoiceNO:invoiceNO,
-						            	 tel: {required:true,digits:true, rangelength:[7,20] }/*,
+						            	 tel: {isPhone: true }/*,
 						            	 contact:{required:true}
 						            	submitter:{required:true},
 						            	submitDate:{required:true},*/

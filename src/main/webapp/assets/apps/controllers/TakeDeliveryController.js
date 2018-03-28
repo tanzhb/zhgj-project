@@ -1285,7 +1285,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	materielWeight:{required:"物料重量不能为空！"},
 	  						            	serviceMoney:{required:"服务费不能为空！",digits:"包装件数必须为数字！"},
 	  						            	deliverer:{required:"联系人不能为空！"},
-	  						            	dContactNum:{required:"联系电话不能为空！"},
+	  						            	dContactNum:{isPhone:"联系电话不能为空！"},
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	/*transport:{required:"运输方不能为空！"},*/
 	  						            	port:{required:"港口不能为空！"},
@@ -1295,19 +1295,19 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
-	  						            	dtContactNum:{required:"联系电话不能为空！"},
+	  						            	dtContactNum:{isPhone:"联系电话不能为空！"},
 	  						            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"联系人不能为空！"},
-	  						            	tdContactNum:{required:"联系电话不能为空！"},
+	  						            	tdContactNum:{isPhone:"联系电话不能为空！"},
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
 	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
 	  						            	actualDate:{required:"实际收货日期不能为空！"},
 	  						            	taker:{required:"收货人不能为空！"},
-	  						            	deContactNum:{required:"联系电话不能为空！"},
-	  						            	takeContactNum:{required:"联系电话不能为空！"}
+	  						            	deContactNum:{isPhone:"联系电话不能为空！"},
+	  						            	takeContactNum:{isPhone:"联系电话不能为空！"}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
@@ -1342,11 +1342,11 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                },
 	  						              deContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						              takeContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						            	isPhone: true
 	  						                },
 	  						               /* dWarehouseSerial: {
 	  						                	required: !0
@@ -1379,7 +1379,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                },
 	  						                dContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						                transportType: {
 	  						                	required: !0
@@ -1410,7 +1410,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	  						                },
 	  						                dtContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						               /* warehouseSerial: {
 	  						                	required: !0

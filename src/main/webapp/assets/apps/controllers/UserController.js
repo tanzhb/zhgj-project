@@ -302,8 +302,7 @@ angular
 					                         equalTo: "请再次输入相同的值!"},
 					                    email: { email:"E-Mail格式不正确"},
 					                    telphone: { 
-					                    	digits:'请输入正确的电话, 必须为数字！',
-			                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+					                    	isPhone:'请输入正确的电话, 必须为数字！')
 					                    },
 						                payment: {
 						                    maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
@@ -334,8 +333,7 @@ angular
 						                	rangelength:[6,12]
 						                },
 						                telphone: {
-						                	digits:true,
-						                    rangelength:[7,20]
+						                	isPhone:true
 						                },
 						                twoPass: {
 						                    required: true,

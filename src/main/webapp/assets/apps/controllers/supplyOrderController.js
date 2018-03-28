@@ -383,7 +383,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						if(row.status==0){
 							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  >未开始</span>';
 						}else if(row.status==1){
-							/*if(row.processBase!=""&&row.processBase!=null){
+							if(row.processBase!=""&&row.processBase!=null){
                     			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:#fcb95b">审核中</span>';
 								}else if(row.processBase.status=="APPROVAL_SUCCESS"){
@@ -394,9 +394,9 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 									return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未发布</span>';
 								}
                     		}else{
-                    			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">未审批</span>';
-                    		}*/
-							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';//待签合同
+                    			return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')">待审批</span>';
+                    		}
+//							return clickhtm + '<span ng-click="viewOrderLog(\''+row.serialNum+'\')"  style="color:#fcb95b">待审批</span>';//待签合同
 						}else if(row.status==2){
 							if(row.contract.contractType=='采购订单'){
 								return clickhtm + '<span  ng-click="viewOrderLog(\''+row.serialNum+'\')" style="color:green">已确认</span>';
@@ -559,12 +559,12 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 						if(data==66){
 							return '<a href="javascript:void(0);" ng-click="supplyConfirmed(\''+row.serialNum+'\')">确认</a></br>'
 							+'<a href="javascript:void(0);" ng-click="editOrder(\''+row.serialNum+'\')">修改</a>';
-						}/*else if(data==77){
-							
-							
-						}*/else{
+						}else if(data==77){
+							return '' ;
+						}else if(data==2||data==3){
 							return '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
-							return "";
+						}else{
+							return '' ;
 						}
 					},
 					"createdCell": function (td, cellData, rowData, row, col) {
@@ -1378,6 +1378,11 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
   	   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
   	   	    		toastr.error('请先保存订单信息！');return
   	    		}
+  	   	   for(var i=0;i<$scope.orderMateriel.length;i++){
+  	    		if(isNull($scope.orderMateriel[i].orderRateUnit)||isNull($scope.orderMateriel[i].orderUnitPrice)){
+  	    		toastr.warning('含税价格或不含税价格必填！');return
+  	    		}
+  	    		}
   	   	    	if($('#form_sample_5').valid()){
   	   	    	orderService.saveAllOrderMateriel($scope.orderMateriel).then(
   	   	       		     function(data){
@@ -1458,6 +1463,9 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 				if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
   	   	    		toastr.error('请先保存订单信息！');return
   	    		}
+				if(isNull(orderMateriel.orderRateUnit)||isNull(orderMateriel.orderUnitPrice)){
+ 	   	    		toastr.warning('含税价格或不含税价格必填！');return
+ 	   	    		}
 				delete orderMateriel.materiel;
 				delete orderMateriel.supplyMateriel;
 				delete orderMateriel.supply;

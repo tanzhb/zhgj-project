@@ -1086,9 +1086,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								var  param={};
 								/*bom_ids = this.id;*/
 								if($scope["isBOM"+this.id]!=1){
-									$rootScope.getSerialNum(function(newCode){
+									/*$rootScope.getSerialNum(function(newCode){
 										param.serialNum = newCode;//设置非bom物料产生采购清单物料流水
-									});
+									});*/
 										param.singleDose = 1;
 										param.materielNum=$scope.demandMateriel[this.name].materielNum==undefined?$scope.demandMateriel[this.name].materiel.materielNum:$scope.demandMateriel[this.name].materielNum;
 										param.materielName=$scope.demandMateriel[this.name].materielName==undefined?$scope.demandMateriel[this.name].materiel.materielName:$scope.demandMateriel[this.name].materielName;
@@ -1647,7 +1647,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        /**
 			 * 撤销所有采购清单物料编辑
 			 */
-	        $scope.cancelAllProcurementPlanMateriel=function () {
+	        $scope.cancelAllProcurementPlanMateriel=function (judgeString) {
 	        	$scope.procurementPlanMaterielInput = true;
 	        	$scope.procurementPlanMaterielShow = true;
 	        	$scope.reservedPpm=true;

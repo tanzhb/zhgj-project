@@ -637,7 +637,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  						            	materielWeight:{required:"物料重量不能为空！"},
 	  						            	serviceMoney:{required:"服务费不能为空！",digits:"包装件数必须为数字！"},
 	  						            	deliverer:{required:"发货人不能为空！"},
-	  						            	dContactNum:{required:"联系电话不能为空！"},
+	  						            	dContactNum:{isPhone:"请输入正确的联系电话！",},
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	transport:{required:"运输方不能为空！"},
 	  						            	port:{required:"港口不能为空！"},
@@ -645,11 +645,11 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
-	  						            	dtContactNum:{required:"联系电话不能为空！"},
+	  						            	dtContactNum:{isPhone:"请输入正确的联系电话！"},
 	  						            	warehouseSerial:{required:"收货仓库不能为空！"},
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"收货人不能为空！"},
-	  						            	tdContactNum:{required:"联系电话不能为空！"},
+	  						            	tdContactNum:{isPhone:"请输入正确的联系电话！",},
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
@@ -716,8 +716,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  						                	required: !0
 	  						                },
 	  						                dContactNum: {
-	  						                	required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						                transportType: {
 	  						                	required: !0
@@ -741,8 +740,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  						                	required: !0
 	  						                },
 	  						                dtContactNum: {
-	  						                	required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						                warehouseSerial: {
 	  						                	required: !0
@@ -770,8 +768,7 @@ angular.module('MetronicApp').controller('PaymentRecordController',['$rootScope'
 	  						                	acceptNumCheck:!0
 	  						                },
 	  						                tdContactNum: {
-	  						                	required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                }
 	  						            },
 	  						            invalidHandler: function(e, t) {

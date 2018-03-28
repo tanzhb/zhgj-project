@@ -1631,6 +1631,11 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
  	   	    	if($scope.customerOrder.serialNum==null||$scope.customerOrder.serialNum=='') {// 订单信息为空的处理
  	   	    		toastr.error('请先保存订单信息！');return
  	    		}
+ 	   	    for(var i=0;i<$scope.orderMateriel.length;i++){
+	   	    		if(isNull($scope.orderMateriel[i].orderRateUnit)||isNull($scope.orderMateriel[i].orderUnitPrice)){
+	   	    		toastr.warning('含税价格或不含税价格必填！');return
+	   	    		}
+	   	    		}
  	   	    	if($('#form_sample_5').valid()){
  	   	    	orderService.saveAllOrderMateriel($scope.orderMateriel).then(
  	   	       		     function(data){
@@ -1711,6 +1716,9 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 				if($scope.customerOrder.serialNum==null||$scope.customerOrder.serialNum=='') {// 订单信息为空的处理
  	   	    		toastr.error('请先保存订单信息！');return
  	    		}
+				if(isNull(orderMateriel.orderRateUnit)||isNull(orderMateriel.orderUnitPrice)){
+ 	   	    		toastr.warning('含税价格或不含税价格必填！');return
+ 	   	    		}
 				delete orderMateriel.materiel;
 				delete orderMateriel.supplyMateriel;
 				delete orderMateriel.supply;
@@ -4955,7 +4963,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	materielWeight:{required:"物料重量不能为空！"},
 	  						            	serviceMoney:{required:"服务费不能为空！",digits:"包装件数必须为数字！"},
 	  						            	deliverer:{required:"联系人不能为空！"},
-	  						            	dContactNum:{required:"联系电话不能为空！"},
+	  						            	dContactNum:{isPhone:"请输入正确的联系电话！"},
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	/*transport:{required:"运输方不能为空！"},*/
 	  						            	port:{required:"港口不能为空！"},
@@ -4965,26 +4973,26 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
-	  						            	dtContactNum:{required:"联系电话不能为空！"},
+	  						            	dtContactNum:{isPhone:"请输入正确的联系电话！",},
 	  						            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"联系人不能为空！"},
-	  						            	tdContactNum:{required:"联系电话不能为空！"},
+	  						            	tdContactNum:{isPhone:"请输入正确的联系电话！",},
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
 	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
 	  						            	actualDate:{required:"实际收货日期不能为空！"},
 	  						            	taker:{required:"收货人不能为空！"},
-	  						            	deContactNum:{required:"联系电话不能为空！"},
-	  						            	takeContactNum:{required:"联系电话不能为空！"}
+	  						            	deContactNum:{isPhone:"请输入正确的联系电话！",},
+	  						            	takeContactNum:{isPhone:"请输入正确的联系电话！",}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
-	  						                    required: !0
+	  						            		isPhone: true
 	  						                },
 	  						                deliverNum: {
-	  						                    required: !0
+	  						                	isPhone: true
 	  						                },
 	  						                orderSerial: {
 	  						                	required: !0
@@ -5041,7 +5049,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                dContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						                transportType: {
 	  						                	required: !0
@@ -5072,11 +5080,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                dtContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						              deContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						            	isPhone: true
 	  						                },
 	  						              takeContactNum: {
 	  						                	//required: !0,
@@ -5109,7 +5117,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                tdContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: true
 	  						                },
 	  						                actualDate: {
 	  						                	required: !0

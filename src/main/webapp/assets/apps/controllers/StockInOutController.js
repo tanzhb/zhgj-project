@@ -1193,7 +1193,7 @@ angular
 						            	checkParty:{required:"检验方不能为空！"},
 						            	checkDate:{required:"检验日期不能为空！"},
 						            	checker: { required:"检验员不能为空！"},
-						            	contactNum:{required:"联系电话不能为空！",digits:"请输入正确的联系电话, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+						            	contactNum:{required:"联系电话不能为空！",isPhone:"请输入正确的联系电话！")},
 						            	qualifiedCount:{required:"合格数量不能为空！",digits:"请输入正确的合格数量, 必须为数字！"}
 						            },
 						            rules: {
@@ -1203,7 +1203,7 @@ angular
 						            	checkParty:{required:true},
 						            	checkDate:{required:true},
 						            	checker:{required:true},
-						            	contactNum:{required:true,digits:true,rangelength:[7,20]},
+						            	contactNum:{required:true,isPhone:true},
 						            	qualifiedCount:qualifiedCountData
 						            },
 						            invalidHandler: function(e, t) {

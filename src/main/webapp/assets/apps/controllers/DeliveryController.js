@@ -2836,16 +2836,16 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	
             	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
-            	contactNum:{required:"联系电话不能为空！"},
-	          takeContactNum:{required:"联系电话不能为空！"},
+            	contactNum:{isPhone:"请输入正确的联系电话！",},
+	          takeContactNum:{isPhone:"请输入正确的联系电话！",},
             	
             	/*transport:{required:"运输方不能为空！"},
             	shipNumber:{required:"运单号不能为空！"},*/
-            	deliveryTransportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	deliveryTransportContactNum:{isPhone:"请输入正确的联系电话！"},
             	
             	
             	warehouseSerial:{required:"收货仓库不能为空！"},
-            	takeDeliveryContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+            	takeDeliveryContactNum:{isPhone:"请输入正确的联系电话！"},
             	
             	
             	
@@ -2901,10 +2901,10 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 takeDeliveryWarehouseAddress1:{required:takeDeliveryWarehouseAddress1Flag,
                 },
                 contactNum:{
-                	isPhone: !0
+                	isPhone: true
                 },
                 takeContactNum:{
-                	isPhone: !0
+                	isPhone: true
                 },
                 
               /*  transport:{required:true,
@@ -2912,14 +2912,12 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 shipNumber:{required:true,
                 },*/
                 deliveryTransportContactNum:{
-                	digits:true,
-                	rangelength:[7,20]
+                	isPhone: true
                 },
                 warehouseSerial:{required:true,
                 },
                 takeDeliveryContactNum:{
-                	digits:true,
-                	rangelength:[7,20]
+                	isPhone: true
                 },
                 email: {
                     required: !0,

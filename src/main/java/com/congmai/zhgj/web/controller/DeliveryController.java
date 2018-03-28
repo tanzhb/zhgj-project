@@ -1220,7 +1220,7 @@ public class DeliveryController {
 			delivery=deliveryService.selectDetailById2(delivery.getSerialNum());
 		}else{
 			OrderInfo o=orderService.selectById(delivery.getOrderSerial());
-			if("1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
+			if(StringUtil.isNotEmpty(o.getContractContent())&&"1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
 				map.put("hasCheckData", true);
 			}
 		

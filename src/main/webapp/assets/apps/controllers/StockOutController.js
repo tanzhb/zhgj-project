@@ -518,7 +518,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	inOutType:{required:"出库类型不能为空！"},
 					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"},
-					            	transportContactNum:{digits:"请输入正确的联系, 必须为数字！",rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")},
+					            	transportContactNum:{isPhone:"请输入正确的联系, 必须为数字！"},
 					            	//positionSerial:{required:"库区不能为空！"}
 					            },
 					            rules: {
@@ -555,8 +555,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                	isPhone: !0
 					                },
 					                transportContactNum:{
-					                	digits:true,
-					                	rangelength:[7,20]
+					                	isPhone:true
 					                }
 					            },
 					            invalidHandler: function(e, t) {

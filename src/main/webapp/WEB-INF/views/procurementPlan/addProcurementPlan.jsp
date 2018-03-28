@@ -392,7 +392,7 @@
 		<!-- 订单物料 start-->
          <div class="portlet-title" style="min-height: 48px;">
               <div class="tools" style="float:right">
-              <button ng-click="releaseProcurementPlanMateriel()" type="button"  ng-hide="procurementPlanMaterielInputAfterRelease" class="btn blue  btn-circle  btn-sm">
+              <button ng-click="releaseProcurementPlanMateriel()" type="button"  ng-show="procurementPlanMaterielShow" class="btn blue  btn-circle  btn-sm">
                  		<i class="fa fa-edit"></i>发布采购 </button>
                  <button type="submit" ng-click="saveAllProcurementPlanMateriel()" ng-hide="procurementPlanMaterielInput"  class="btn green  btn-circle  btn-sm">
                  		<i class="fa fa-save"></i> 保存 </button>
@@ -459,7 +459,7 @@
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets}} </p>
 		                          </td>
 		                            <td>
-                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}} -------------{{_procurementPlanMateriel.status}}</p>
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose}}</p>
 		                          </td>
 		                            <td>
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*(_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets)}} </p>

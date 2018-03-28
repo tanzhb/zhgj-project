@@ -665,7 +665,7 @@
 															</p>
 														</td>
 														<td class="form-group">
-														<input type="text"  ng-if="!otherMode&&oprateType=='forSupplyOrder'"
+														<input type="text"  ng-if="oprateType=='forSupplyOrder'"
 															name="deliverCount" id="deliverCount{{$index}}"  ng-init="deliveryMaterielE[$index].deliverCount=(_deliveryMateriel.amount-_deliveryMateriel.deliveredCount)"
 															class="form-control"
 															ng-hide="orderMaterielInput{{$index}}"

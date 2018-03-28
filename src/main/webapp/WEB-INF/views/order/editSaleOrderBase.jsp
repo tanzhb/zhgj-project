@@ -1249,7 +1249,7 @@ margin-right: 20px;
                                        		&nbsp;&nbsp;&nbsp;&nbsp;
                                         	<a  ng-click="saveOrderMateriel(_orderMateriel,$index)"><i class="fa fa-save" title="保存"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
-                                        	<a  ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"  title="取消"></i></a>
+                                        	<a     ng-click="cancelOrderMateriel(_orderMateriel,$index)"><i class="fa fa-undo"  title="取消"></i></a>
                                         	&nbsp;&nbsp;&nbsp;
                                         	<a  ng-click="deleteOrderMateriel(_orderMateriel)"><i class="fa fa-minus"  title="删除" ></i></a>
                                         </span>

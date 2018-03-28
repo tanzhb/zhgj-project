@@ -558,9 +558,8 @@ angular
 						            	email: { required:"邮箱不能为空！",email:"E-Mail格式不正确"},
 						            	//email:{required:"邮箱不能为空！"},
 						            	 tel: { 
-						                    	digits:'请输入正确的电话, 必须为数字！',
-						                    	required:"电话不能为空！",
-				                        	    rangelength:jQuery.validator.format("电话必须在{0}到{1}位数字之间！")
+						            		 isPhone:'请输入正确的电话！'
+						                    	
 						                    },
 						                   fax: { 
 						                    	digits:'请输入正确的传真, 必须为数字！',
@@ -581,7 +580,7 @@ angular
 						            	address:{required:true}
 						            	//area:{required:!0,digits:true,},
 						            	 //email: {	required:true,email:true},
-						            	// tel: {required:true,digits:true, rangelength:[7,20] },
+						            	 tel: {isPhone:true },
 				                        // fax: {required:true,digits:true, rangelength:[7,20] },
 						            	//remark:{required:true},
 						            	//admin:{required:true}

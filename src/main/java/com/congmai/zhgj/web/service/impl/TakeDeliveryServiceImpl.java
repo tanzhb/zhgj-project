@@ -262,10 +262,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		d_example.createCriteria().andSerialNumEqualTo(delivery.getSerialNum());
 		delivery2Mapper.updateByExampleSelective(delivery,d_example);
 		if("10".equals(delivery.getStatus())){//平台通知供应商发货
-			OrderInfo o=new OrderInfo();
+		/*	OrderInfo o=new OrderInfo();
 			o.setSerialNum(delivery.getOrderSerial());
 			o.setStatus(OrderInfo.WAIT_SUPPLY_CONFIRMED);
-			orderInfoMapper.updateByPrimaryKeySelective(o);
+			orderInfoMapper.updateByPrimaryKeySelective(o);*/
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.NOTICESUPPLY));//通知供应商修改
 			
 		}
 		if(deliveryTransport!=null){
