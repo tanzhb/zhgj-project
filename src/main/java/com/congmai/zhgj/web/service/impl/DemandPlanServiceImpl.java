@@ -64,6 +64,7 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 			c.andSearchKeyLike(demandPlan.getSearchKey().trim().toUpperCase());
 		}
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
+		List<DemandPlan> listnew=new ArrayList<DemandPlan>();
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){
 				DemandPlanMaterielExample example2 = new DemandPlanMaterielExample();
@@ -74,7 +75,20 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 					example2.setLimit(5);
 				}
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
-				for(DemandPlanMateriel dm : mList){
+				if(CollectionUtils.isNotEmpty(mList)){
+					for(DemandPlanMateriel dm : mList){
+						int remainTime = 0;
+						try {
+							remainTime = DateUtil.daysBetween(new Date(), dm.getDeliveryDate());
+						} catch (Exception e) {
+							System.out.println("deliveryDate-----"+e.getMessage());
+						}
+						dm.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
+					}
+					vo.setMateriels(mList);
+					listnew.add(vo);
+				}
+				/*for(DemandPlanMateriel dm : mList){
 					int remainTime = 0;
 					try {
 						remainTime = DateUtil.daysBetween(new Date(), dm.getDeliveryDate());
@@ -83,12 +97,13 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 					}
 					dm.setRemainTime(String.valueOf(remainTime<0?0:remainTime));
 				}
-				vo.setMateriels(mList);
+				vo.setMateriels(mList);*/
 			}
 		}
 		int count = demandPlanMapper.countByExample(example);
 		Page<DemandPlan> page = new Page<DemandPlan>(start, limit);
-		page.setResult(list);
+//		page.setResult(list);
+		page.setResult(listnew);
 		page.setTotalCount(count);
 		return page;
 	}

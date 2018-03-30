@@ -19,6 +19,8 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    		if($stateParams.serialNum==undefined){
 	    			 $rootScope.setNumCode("PL",function(newCode){//
 	    		 			$scope.demandPlan.demandPlanNum= newCode;//需求计划号
+	    		 			$scope.demandPlan.releaseDate= $filter('date')(new Date(), 'yyyy-MM-dd');
+	    		 			getCurrentUser();
 	    		 		});
 	    		}else{
 	    			$scope.showSaveBtn=true;
@@ -49,7 +51,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	    	
 	 });
-	 
+	  var getCurrentUser = function(){
+			var promise = commonService.getCurrentUser();
+			promise.then(function(data){
+				$scope.demandPlan.maker = data.data.userName;
+				
+			},function(data){
+				//调用承诺接口reject();
+			});
+		}
 	 /***选择物料列表初始化START***/
      var table;
      var selectParentMateriel = function() {
@@ -246,7 +256,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
                                      { mData: 'materiel.specifications' },
                                      { mData: 'materiel.unit' },
                                      { mData: 'amount' },
-                                     { mData: 'supplyName' },
+                                    /* { mData: 'supplyName' },*/
                                      { mData: 'deliveryAddress' },
                                      { mData: 'deliveryDate' },
                                      { mData: 'remainTime' }
@@ -557,7 +567,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
         			}else{
 		        		for(var i = 0;i < $scope.serialNums.length;i++){
 		        			($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
-	        				$scope.rootMateriels.splice(0,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
+	        				$scope.rootMateriels.splice($scope.serialNums.length+1,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
 	        				$scope["demandPlanMaterielEdit"+i] = false;
 							$scope["demandPlanMaterielView"+i] = false;
 							/*$scope["demandPlanMaterielEdit" + ($scope.rootMateriels.length-1)] = true;
@@ -661,7 +671,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 					promise.then(function(data) {
 						if (!handle.isNull(data.data)) {
 							$(".modal-backdrop").remove();
-							toastr.success("保存成功");
+							toastr.success("保存成功,若无物料请新增物料!");
 							handle.unblockUI();
 		 		    			for(var i=0;i<data.data.length;i++){
 		 			        			$scope["demandPlanMaterielEdit"+i] = true;
@@ -701,7 +711,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        /**
 	         * 保存需求计划
 	         */
-			$scope.saveDemandPlan = function() {
+			$scope.saveDemandPlan = function(judgeString) {
 				if($('#demandPlanForm').valid()){
 					 $rootScope.judgeIsExist("demandPlan",$scope.demandPlan.demandPlanNum, $scope.demandPlan.serialNum,function(result){
 			    			var 	isExist = result;
@@ -711,6 +721,12 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 			    			return;
 			    		}else{
 			    			handle.blockUI();
+			    			if(judgeString!=1){
+			    				$scope.demandPlan.status=0;
+			    			}else{
+			    				$scope.demandPlan.status=1;
+			    			}
+			    			
 							$scope.demandPlan.createTime = null;
 							$scope.demandPlan.updateTime = null;
 							var promise = demandPlanService

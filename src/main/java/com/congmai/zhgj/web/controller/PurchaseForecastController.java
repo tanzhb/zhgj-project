@@ -469,6 +469,7 @@ public class PurchaseForecastController {
 		newProcurementPlan.setMaterielList(newMaterielList);//物料list塞入ProcurementPlan中
 		//分解订单发送消息至采购计划操作人
 		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(newProcurementPlan,MessageConstants.SALE_TO_PALN));
+		//先删除采购预测物料
 		purchaseForecastService.deletePurchaseForecast(ids); 
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}

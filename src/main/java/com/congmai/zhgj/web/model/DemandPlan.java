@@ -53,6 +53,8 @@ public class DemandPlan {
     
     private int pageIndex;
     
+    private   String  status;//状态
+    
     //搜索字段
     private String firstCategory;		//一级分类
     private String secondCategory;		//二级分类
@@ -278,6 +280,14 @@ public class DemandPlan {
 
 	public void setUpdateDate(Date updateDate) {
 		this.updateDate = updateDate;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

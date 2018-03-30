@@ -802,7 +802,7 @@
 				            </div> -->
 				           <div class="portlet-body form" ng-if="company.comType=='2'">
 							     <form id="form_sample_6" >
-							         <div class="table-scrollable">
+							         <div class="table">
 				                          <table class="table table-bordered table-hover">
 				                              <thead>
 				                                  <tr>

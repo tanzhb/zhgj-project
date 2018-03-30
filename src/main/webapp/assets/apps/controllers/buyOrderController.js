@@ -330,7 +330,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     	    		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
     	    			$scope.buyOrder.orderDate=null;
     	    		}
-	    			// 如果平台修改了双方已确认的订单，需重新提交
 	    			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
 	    				$scope.buyOrder.status = 0;
 	    			}
@@ -730,7 +729,6 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 									return clickhtm //+ '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">代发货</a>';
 								}else if(row.status=="77"){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>'
-									+'<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\')">提交</a><br/>'
 									+'<a href="javascript:void(0);" ng-click="pingTaiConfirmed(\''+row.serialNum+'\')">确认</a>'
 								}else if(isNull(row.receiveCount)||row.receiveCount<row.materielCount){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';
@@ -3670,8 +3668,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		     //********审批流程start****************//
 		       $scope.submitBuyApply  = function(serialNum,materielCount,orderAmount) {// 进入申请审批页面
-		    	   if(orderAmount=='null'){
-		    		   showToastr('toast-top-center', 'warning', '该采购订单金额为0，不能提交！');
+		    	   if(orderAmount=='null'||Number(orderAmount)==0){
+		    		   showToastr('toast-top-center', 'warning', '该采购订单金额为0，不能申请！');
 		    		   return;
 		    	   }
 		    	   if(serialNum==undefined){//从列表头上申请
@@ -4868,7 +4866,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        
 	        
 	        $scope.pingTaiSubmit  = function(serialNum,orderAmount) {// 平台提交给供应商
-	        	  if(orderAmount=='null'){
+	        	  if((orderAmount=='null'||Number(orderAmount)==0)&&serialNum!=undefined){
+		    		   showToastr('toast-top-center', 'warning', '该采购订金额为0，不能提交！');
+		    		   return;
+		    	   }
+	        	  if(serialNum==undefined&&(isNull($scope.buyOrder.orderAmount)||Number($scope.buyOrder.orderAmount)==0)){
 		    		   showToastr('toast-top-center', 'warning', '该采购订金额为0，不能提交！');
 		    		   return;
 		    	   }

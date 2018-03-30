@@ -30,7 +30,12 @@
 								<button ng-hide="demandPlanAdd"
 										class="btn green btn-sm btn-circle"
 										ng-click="saveDemandPlan()">
-										<i class="fa fa-check"></i> 发布
+										<i class="fa fa-check"></i> 保存
+									</button>
+									<button ng-hide="demandPlanAdd"
+										class="btn green btn-sm btn-circle"  ng-if="demandPlan.status!=1"
+										ng-click="saveDemandPlan('1')">
+										<i class="fa fa-check"></i> 保存并发布
 									</button>
 									<button ng-show="demandPlanView"
 										class="btn purple  btn-sm btn-circle"
@@ -49,7 +54,7 @@
                               <i class="fa fa-save"></i>保存
 					</button>
 					<button class="btn blue btn-sm btn-circle"  ng-show="showSaveBtn"  ng-click="editAllDemandMateriel()">
-                              <i class="fa fa-save"></i>编辑
+                              <i class="fa fa-edit"></i>编辑
 					</button>
                    <button class="btn blue btn-sm btn-circle"  ng-hide="showSaveBtn"  ng-click="addMateriel()">
                               <i class="fa fa-plus"></i>新增物料
@@ -139,6 +144,17 @@
 											</div>
 											<div class="col-md-4">
 												<div class="form-group">
+													<label class="control-label bold" for="description">需求描述</label>
+													<div class="">
+														<input type="text" class="form-control" id="description"
+															ng-model="demandPlan.description" ng-hide="demandPlanAdd">
+														<div class="form-control-focus"></div>
+														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="form-group">
 													<label class="control-label bold" for="customerPrincipal">客户负责人</label>
 													<div class="">
 														<input type="text" class="form-control" id="customerPrincipal"
@@ -148,6 +164,10 @@
 													</div>
 												</div>
 											</div>
+											
+										</div>
+										<!-- row -->
+										<div class="row">
 											<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold" for="maker">制单人</label>
@@ -156,20 +176,6 @@
 															ng-model="demandPlan.maker" ng-hide="demandPlanAdd">
 														<div class="form-control-focus"></div>
 														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.maker}}</p>
-													</div>
-												</div>
-											</div>
-										</div>
-										<!-- row -->
-										<div class="row">
-											<div class="col-md-4">
-												<div class="form-group">
-													<label class="control-label bold" for="description">需求描述</label>
-													<div class="">
-														<input type="text" class="form-control" id="description"
-															ng-model="demandPlan.description" ng-hide="demandPlanAdd">
-														<div class="form-control-focus"></div>
-														<p class="control-label left" ng-show="demandPlanView">{{demandPlan.description}}</p>
 													</div>
 												</div>
 											</div>
@@ -202,7 +208,7 @@
 										</div>
 										<!-- row -->
 										<div class="row">
-											<div class="col-md-4">
+											<div class="col-md-4"  ng-show="demandPlanView">
 												<div class="form-group">
 													<label class="control-label bold" for="updateDate">更新日期
 													</label>
@@ -239,7 +245,7 @@
                                                     <th width="15%">交付日期</th>
                                                     <th>距离交付</th>
                                                     <th>交付地点</th>
-                                                    <th style="min-width: 100px;">供应商</th>
+                                                    <!-- <th style="min-width: 100px;">供应商</th> -->
                                                     <th style="width: 140px;"></th>
                                                 </tr>
                                             </thead>
@@ -285,20 +291,20 @@
                                                     	<span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>
-                                                    <td>
+                                                   <!--  <td>
 	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"  ng-if="materiel.supplyMateriels.length!=0">
 	                                                    	<option ng-repeat="m in materiel.supplyMateriels" value="{{m.serialNum}}"  >
 	                                                    		{{m.supply.comName}}
 	                                                    	</option>
 	                                                    </select>
 	                                                    <span  ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">中航能科</span>
-	                                                   <!--  <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"   ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">
+	                                                    <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"   ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">
 	                                                    	<option ng-repeat="com in suppliers" value="{{com.comId}}"  >
 	                                                    		{{com.comName}}
 	                                                    	</option>
-	                                                    </select> -->
+	                                                    </select>
 	                                                    <label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.supplyName}}</label>
-                                                    </td>
+                                                    </td> -->
                                                     <td style="width: 140px;min-width: 120px;">
                                                     	<span ng-if="materiel.orderSerial == null">
 	                                                    	<span>

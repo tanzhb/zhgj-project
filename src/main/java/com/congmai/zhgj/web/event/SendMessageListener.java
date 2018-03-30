@@ -2131,6 +2131,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					List<User> users1 = groupService.selectUserIdsByGroupType(Constants.PRODUCT_MANAGER);//产品经理
 					List<User> users2 = groupService.selectUserIdsByGroupType(Constants.FULL_DEPARTMENT_LEADER);//财务负责人（组）
 					List<User> users3 = groupService.selectUserIdsByGroupType(Constants.FINANCIAL_LEADER);//综管负责人（组）
+					List<User> users4 = groupService.selectUserIdsByGroupType(Constants.FINANCIAL);//财务部（huhui）
 					if(StaticConst.getInfo("neimao").equals(order.getTradeType())){
 						users=groupService.selectUserIdsByGroupType(Constants.PURCHASE);
 					}else{
@@ -2139,6 +2140,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					users.addAll(users1);
 					users.addAll(users2);
 					users.addAll(users3);
+					users.addAll(users4);
 					for(User u : users){
 						Message messageVO1 = this.createMessage(event,user);
 						messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);

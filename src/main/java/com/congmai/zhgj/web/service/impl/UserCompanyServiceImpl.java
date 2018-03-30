@@ -35,8 +35,12 @@ public class UserCompanyServiceImpl extends GenericServiceImpl<UserCompanyKey, S
 	
 	
 	@Override
-	public String getUserComId(String user_id) {
-		return userCompanyMapper.selectComIdByUserId(user_id);
+	public String getUserComId(String user_id) {//这里加上特殊的平台com_id作为判断
+		String comId=userCompanyMapper.selectComIdByUserId(user_id);
+		if("daf3e5685cae4bf883f2ec8237a0c8ce".equals(comId)){
+			comId=null;
+		}
+		return  comId;
 	}
 
 

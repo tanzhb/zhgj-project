@@ -385,6 +385,15 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 					 toastr.warning("未勾选收款水单"); 
 					 return;
 				 }
+				 for(var i=0;i<inputs.length;i++){
+	        			param={};
+	        			var input=inputs[i];
+	        			param.moneyAmount=$("#up"+$(input).attr("id")).val();
+	        			if(isNull(param.moneyAmount)||param.moneyAmount==0){
+	        			toastr.warning("请输入正确的核销金额!"); 
+	   					return;
+	        			}
+	        		}
 	    	   handle.confirm("确认核销吗？",function(){
 	    		   handle.blockUI();
 	        		var inputs=verificateTable.$('input[type="checkbox"]:checked');

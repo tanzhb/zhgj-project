@@ -541,9 +541,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     			var processBase = table.row('.active').data().processBase;
     			if(processBase != null){
     				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能修改！')
-    			}/*else if(table.row('.active').data().status==1){
-    				showToastr('toast-top-center', 'warning', '该订单已确认，不能修改！')
-    			}*/else $state.go('addProcurementPlan',{newSerialNum:table.row('.active').data().serialNum});
+    			}else if(table.row('.active').data().status==1){
+    				showToastr('toast-top-center', 'warning', '该采购计划已完成，不能修改！')
+    			}else $state.go('addProcurementPlan',{newSerialNum:table.row('.active').data().serialNum});
     		}
     		
         };

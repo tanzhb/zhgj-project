@@ -325,6 +325,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		if(isExist){
 			toastr.error('订单编号重复！');
 		}else{
+			//先验证订单价格
 			if($state.current.name=="addSaleOrder"&&$scope.saleOrderInput != true&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
 				orderService.save($scope.saleOrder).then(
 	         		     function(data){
@@ -794,9 +795,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 									type, row, meta) {
 								var clickhtm = ''
 								if(row.status==55){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitPage(\''+row.serialNum+'\')">接收</a>';//orderAmount
 								} else if(row.status==0&&(row.processBase==null)){
-									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a><br/>';
+									return clickhtm + '<a href="javascript:void(0);" ng-click="submitSaleApply(\''+row.serialNum+'\',\''+row.orderAmount+'\')">申请</a><br/>';
 									
 								}else if(row.processBase!=""&&row.processBase!=null){
                         			if(row.processBase.status=="PENDING"||row.processBase.status=="WAITING_FOR_APPROVAL"){
@@ -3957,17 +3958,16 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			});
 			}
 			//********审批流程start****************//
-		       $scope.submitSaleApply  = function(serialNum,materielCount) {// 进入申请审批页面
+		       $scope.submitSaleApply  = function(serialNum,orderAmount) {// 进入申请审批页面
 		    	   
 		    	   if(serialNum==undefined){//从列表头上申请
 		    		 	if(table.rows('.active').data().length != 1){
 			    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 			    		}else{
-			    			var materielCount= table.row('.active').data().materielCount;
-			    			  if(materielCount==null){
-					    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
-					    		   return;
-					    	   }
+			    			 if(isNull($scope.saleOrder.orderAmount)||Number($scope.saleOrder.orderAmount)==0){
+				    				showToastr('toast-top-center', 'warning', '该销售订单金额为0,不能申请！');
+				    				 return;
+				    			}
 			    			var processBase = table.row('.active').data().processBase;
 			    			var status = table.row('.active').data().status;
 			    			 if(processBase != null){
@@ -3978,15 +3978,23 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    		}  
 		    	   }else{
 		    		   if(serialNum=='view'){//详情申请
+		    			   if(isNull($scope.saleOrder.orderAmount)||Number($scope.saleOrder.orderAmount)==0){
+			    				showToastr('toast-top-center', 'warning', '该销售订单金额为0,不能申请！');
+			    				 return;
+			    			}
 		    			   if($scope.saleOrder.materielCount==0||$scope.saleOrder.materielCount==null){
 		    				   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
-				    		   return;
+				    		  
 		    			   }else $state.go('submitSaleApply',{serialNum:$scope.saleOrder.serialNum});
 		    		   }else{
-		    			   if(materielCount=='null'|| materielCount==0){
+			    			 if(Number(orderAmount)==0||orderAmount=='null'){
+				    				showToastr('toast-top-center', 'warning', '该销售订单金额为0,不能申请！');
+				    				 return;
+				    			}
+		    			   /*if(materielCount=='null'|| materielCount==0){
 				    		   showToastr('toast-top-center', 'warning', '该销售订单没有物料，不能发起流程申请！');
 				    		   return;
-				    	   }
+				    	   }*/
 			    		   if(!isNull(processBase)){
 			    			   showToastr('toast-top-center', 'warning', '该销售订单已发起流程审批，不能再次申请！')
 			    		   }else  $state.go('submitSaleApply',{serialNum:serialNum});

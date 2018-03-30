@@ -17,6 +17,7 @@
     <result column="creator" property="creator" jdbcType="VARCHAR" />
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="status" property="status"  jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <association property="buyComName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey" ></association>
   </resultMap>
@@ -80,11 +81,11 @@
   </sql>
   <sql id="Base_Column_List" >
    serialNum, demandPlanNum, buyComId, source, customerPrincipal, customerPlanNum, releaseDate, 
-    maker, description, updateDate, remark, delFlg, creator, createTime, updater, updateTime
+    maker, description, updateDate, remark, delFlg, creator, createTime, updater, updateTime,status
   </sql>
   <sql id="Base_Column_List2" >
     d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.updateDate, d.remark, d.delFlg, d.creator, d.createTime, 
-    d.updater, d.updateTime
+    d.updater, d.updateTime,d.status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" >
     select
@@ -125,13 +126,13 @@
       releaseDate, maker, description, 
       updateDate, remark, delFlg, 
       creator, createTime, updater, 
-      updateTime)
+      updateTime,status)
     values (#{serialNum,jdbcType=VARCHAR}, #{demandPlanNum,jdbcType=VARCHAR}, #{buyComId,jdbcType=VARCHAR}, 
       #{source,jdbcType=VARCHAR}, #{customerPrincipal,jdbcType=VARCHAR}, #{customerPlanNum,jdbcType=VARCHAR}, 
       #{releaseDate,jdbcType=DATE}, #{maker,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{updateDate,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP},#{status,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.DemandPlan" >
     insert into demandPlan
@@ -184,6 +185,9 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="status != null" >
+        status,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -233,6 +237,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status!= null" >
+        #{status,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -294,6 +301,9 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+       <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -316,7 +326,8 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      status= #{record.status,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -369,6 +380,9 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -388,7 +402,8 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
 </mapper>

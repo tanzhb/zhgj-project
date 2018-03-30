@@ -163,7 +163,7 @@
 																						<th>物料编号</th>
 																						<th>产品名称</th>
 																						<th>规格型号</th>
-																						<th>供应商</th>
+																						<!-- <th>供应商</th> -->
 																						<th>交付日期</th>
 																						<th>数量</th>
 																						<th>交付地点</th>
@@ -177,7 +177,7 @@
 									                                                    <td>{{materiel.materiel.materielName}}</td>
 									                                                    <td>{{materiel.materiel.materielName}}</td>
 									                                                    <td>{{materiel.materiel.specifications}}</td>
-									                                                    <td>{{materiel.supplyName}}</td>
+									                                                   <!--  <td>{{materiel.supplyName}}</td> -->
 									                                                    <td>{{materiel.deliveryDate}}</td>
 									                                                    <td>{{materiel.amount}}</td>
 									                                                    <td>{{materiel.deliveryAddress}}</td>
@@ -253,7 +253,7 @@
 				                            <th> 规格型号 </th>
 				                            <th> 单位 </th>
 				                            <th> 数量 </th>
-				                            <th> 供应商 </th>
+				                            <!-- <th> 供应商 </th> -->
 				                            <th> 交付地点 </th>
 				                            <th> 最晚交付日期 </th>
 				                            <th> 距离交付 </th>
