@@ -1059,7 +1059,6 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	        				}
 	        			}
 	        		}
-	        		if(!isNull(materiel.supplyMaterielSerial)){
 	        			var promise = demandPlanService.deleteDemandPlanMateriel(materiel.serialNum);
 		        		promise.then(function(data){
 		        			if(data.data == "1"){
@@ -1075,7 +1074,22 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 		 	            	toastr.error("删除失败！请联系管理员");
 			            	console.log(data);
 		 	            });
-	        		}
+	        		/*if(!isNull(materiel.supplyMaterielSerial)){
+	        			var promise = demandPlanService.deleteDemandPlanMateriel(materiel.serialNum);
+		        		promise.then(function(data){
+		        			if(data.data == "1"){R
+			        			handle.unblockUI(); 
+		        			}else{
+		        				toastr.error("删除失败！请联系管理员");
+				            	console.log(data);
+		        			}
+		        			
+		 	            },function(data){
+		 	               //调用承诺接口reject();
+		 	            	toastr.error("删除失败！请联系管理员");
+			            	console.log(data);
+		 	            });
+	        		}*/
 	        	});
 			   
 	        };

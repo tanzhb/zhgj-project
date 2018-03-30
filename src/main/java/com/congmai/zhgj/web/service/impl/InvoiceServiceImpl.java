@@ -95,12 +95,13 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 		if(list!=null&&list.size()>0){
 			for(InvoiceBillingRecord i:list){
 				OrderMateriel orderMateriel=orderMaterielMapper.selectByPrimaryKey(i.getOrderMaterielSerial());
-				OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
+				/*OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(orderMateriel.getOrderSerial());
 				if(StaticConst.getInfo("orderTypeIn").equalsIgnoreCase(orderInfo.getOrderType())){
 					price=price.add(new BigDecimal(orderInfo.getRate()).multiply(new BigDecimal(orderMateriel.getOrderUnitPrice())));
 				}else{
 					price=new BigDecimal(orderMateriel.getOrderUnitPrice());
-				}
+				}*/
+				price=new BigDecimal(orderMateriel.getOrderRateUnit());
 				billOrReceiptMoney=billOrReceiptMoney.add(new BigDecimal(i.getBillCount()==null?"0":i.getBillCount()).multiply(price));
 			}
 		}

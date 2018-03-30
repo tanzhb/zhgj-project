@@ -4963,7 +4963,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	materielWeight:{required:"物料重量不能为空！"},
 	  						            	serviceMoney:{required:"服务费不能为空！",digits:"包装件数必须为数字！"},
 	  						            	deliverer:{required:"联系人不能为空！"},
-	  						            	dContactNum:{isPhone:"请输入正确的联系电话！"},
+	  						            	dContactNum:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！"},
 	  						            	transportType:{required:"运输方式不能为空！"},
 	  						            	/*transport:{required:"运输方不能为空！"},*/
 	  						            	port:{required:"港口不能为空！"},
@@ -4973,26 +4973,28 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						            	playArrivalDate:{required:"预计到港日期不能为空！"},
 	  						            	playWarehouseDate:{required:"预计到库日期不能为空！"},
 	  						            	dtContact:{required:"联系人不能为空！"},
-	  						            	dtContactNum:{isPhone:"请输入正确的联系电话！",},
+	  						            	dtContactNum:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！",},
 	  						            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
 	  						            	takeDeliverDate:{required:"收货日期不能为空！"},
 	  						            	tdReceiver:{required:"联系人不能为空！"},
-	  						            	tdContactNum:{isPhone:"请输入正确的联系电话！",},
+	  						            	tdContactNum:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！"},
 	  						            	batchNum:{required:"批次号不能为空！"},
 	  						            	manufactureDate:{required:"生产日期不能为空！"},
 	  						            	deliverCount:{required:"发货数量不能为0！",digits:"发货数量必须为数字！"},
 	  						            	acceptCount:{required:"实收数量不能为空！",digits:"实收数量必须为数字！"},
 	  						            	actualDate:{required:"实际收货日期不能为空！"},
 	  						            	taker:{required:"收货人不能为空！"},
-	  						            	deContactNum:{isPhone:"请输入正确的联系电话！",},
-	  						            	takeContactNum:{isPhone:"请输入正确的联系电话！",}
+	  						            	deContactNum:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！"},
+	  						            	takeContactNum:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！"}
 	  						            },
 	  						            rules: {
 	  						            	takeDeliverNum: {
-	  						            		isPhone: true
+	  						            		isPhone: !0,
+	  						            		required:true
 	  						                },
 	  						                deliverNum: {
-	  						                	isPhone: true
+	  						                	isPhone: !0,
+	  						                	required:true
 	  						                },
 	  						                orderSerial: {
 	  						                	required: !0
@@ -5049,7 +5051,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                dContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: true
+	  						                	isPhone: !0,
+	  						                	required:true
 	  						                },
 	  						                transportType: {
 	  						                	required: !0
@@ -5080,15 +5083,18 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                dtContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: true
+	  						                	isPhone: !0,
+	  						                	required:true
 	  						                },
 	  						              deContactNum: {
 	  						                	//required: !0,
-	  						            	isPhone: true
+	  						            	isPhone: !0,
+	  						            	required:true
 	  						                },
 	  						              takeContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: !0
+	  						                	isPhone: !0,
+	  						                	required:true
 	  						                },
 	  						               /* warehouseSerial: {
 	  						                	required: !0
@@ -5117,7 +5123,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	  						                },
 	  						                tdContactNum: {
 	  						                	//required: !0,
-	  						                	isPhone: true
+	  						                	isPhone: !0,
+	  						                	required:true
 	  						                },
 	  						                actualDate: {
 	  						                	required: !0

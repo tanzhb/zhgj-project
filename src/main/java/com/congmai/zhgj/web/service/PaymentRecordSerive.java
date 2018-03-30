@@ -21,5 +21,6 @@ public interface PaymentRecordSerive extends GenericService<PaymentRecord, Strin
      */
     public String selectBilledMoney(String serialNum);
     
+    
 
 }

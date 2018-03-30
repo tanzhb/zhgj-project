@@ -118,12 +118,22 @@ public class Invoice extends BaseVO{
     
     private String capitalMoney;//大写金额
     
+    private String currentAmount;//当前发票金额
+    
     private String  currency;//币种
     
     private ProcessBase processBase;//流程字段类
 
     public String getCapitalMoney() {
 		return capitalMoney;
+	}
+
+	public String getCurrentAmount() {
+		return currentAmount;
+	}
+
+	public void setCurrentAmount(String currentAmount) {
+		this.currentAmount = currentAmount;
 	}
 
 	public void setCapitalMoney(String capitalMoney) {

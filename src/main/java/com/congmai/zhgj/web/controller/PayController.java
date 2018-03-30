@@ -365,8 +365,13 @@ public class PayController {
 			
 		}
 		//获取平台收付款信息
-		String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
-		List<CompanyFinance>comFinances=companyFinanceService.selectListByComId(comId);
+		List<CompanyFinance>comFinances=new ArrayList<CompanyFinance>(); 
+		if(orderInfo.getOrderType().indexOf(StaticConst.getInfo("xiaoshou"))>-1){
+			String comId=companyService.selectComIdByComName(StaticConst.getInfo("comName"));
+			comFinances=companyFinanceService.selectListByComId(comId);
+		}else{
+			comFinances=companyFinanceService.selectListByComId(orderInfo.getSupplyComId());
+		}
 		map.put("comFinances", comFinances);
 		List<CompanyContact>comContacts=null;
 		if(StringUtil.isEmpty(orderInfo.getBuyComId())){

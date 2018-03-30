@@ -64,5 +64,7 @@ public class PaymentRecordServiceImpl extends GenericServiceImpl<PaymentRecord, 
 		return payMapper.selectBilledMoney(serialNum);
 	}
 
+	
+
 
 }

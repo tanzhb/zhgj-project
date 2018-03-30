@@ -556,6 +556,7 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 					 toastr.warning("未勾选付款水单"); 
 					 return;
 				 }
+				 var inputs=verificateTable.$('input[type="checkbox"]:checked');
 				 for(var i=0;i<inputs.length;i++){
 	        			param={};
 	        			var input=inputs[i];

@@ -500,7 +500,7 @@ public class DemandPlanController {
 									m.setSerialNum(serialNum);
 									m.setMaterielId(materiel_id);
 									m.setMaterielName(row.get(1).toString());
-									m.setMaterielNum(row.get(2).toString());
+									m.setMaterielNum(row.get(0).toString());
 									m.setCreator(currenLoginName);
 									m.setDelFlg("0");
 									m.setCreateTime(new Date());

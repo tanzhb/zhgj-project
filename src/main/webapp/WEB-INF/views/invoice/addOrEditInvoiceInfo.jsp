@@ -1118,8 +1118,22 @@
 <!-- END MAIN CONTENT -->
 <!-- BEGIN MAIN JS -->
 <script>
+function clearNoNumPoint(value){
+	 //先把非数字的都替换掉，除了数字和.
+	  var  value = value.replace(/[^\d.]/g,"");
+	 //必须保证第一个为数字而不是.
+	 value = value.replace(/^\./g,"");
+	 //保证只有出现一个.而没有多个.
+	 value = value.replace(/\.{2,}/g,"");
+	 //保证不出现点
+	 value = value.replace(".","");
+	 
+	 return value;
+	
+}
  function judgeNumber(canBillAmount,serialNum,judgeString){
-	 var value=$("#"+serialNum).val();
+	
+	 var value= clearNoNumPoint($("#"+serialNum).val());
 	 debugger;
 	 if(value>Number(canBillAmount)){
 		 if(judgeString=='in'){

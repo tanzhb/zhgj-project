@@ -274,6 +274,10 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <select id="countBilledNum" parameterType="java.lang.String" resultType="java.lang.Integer" >
-   select IFNULL(SUM(IFNULL(billCount,0) ),0)from invoiceBillingRecord where orderMaterielSerial=#{orderMaterielSerial,jdbcType=VARCHAR}
+   select IFNULL(SUM(IFNULL(br.billCount,0) ),0)from   invoiceBillingRecord  br
+     left join invoice  i  on  i.serialNum=br.invoiceSerial
+    where  br.orderMaterielSerial=#{orderMaterielSerial,jdbcType=VARCHAR} and  i.status=2
+    
+ 
   </select>
 </mapper>

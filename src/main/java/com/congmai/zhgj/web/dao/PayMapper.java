@@ -116,7 +116,7 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
      */
     public String selectBilledMoney(String serialNum);
     
-    
+   
     
     /**
      * 查询收付款对象附件集合

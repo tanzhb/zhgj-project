@@ -2836,16 +2836,16 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	
             	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
-            	contactNum:{isPhone:"请输入正确的联系电话！",},
-	          takeContactNum:{isPhone:"请输入正确的联系电话！",},
+            	contactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
+	          takeContactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
             	
             	/*transport:{required:"运输方不能为空！"},
             	shipNumber:{required:"运单号不能为空！"},*/
-            	deliveryTransportContactNum:{isPhone:"请输入正确的联系电话！"},
+            	deliveryTransportContactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
             	
             	
-            	warehouseSerial:{required:"收货仓库不能为空！"},
-            	takeDeliveryContactNum:{isPhone:"请输入正确的联系电话！"},
+            	/*warehouseSerial:{required:"收货仓库不能为空！"},*/
+            	takeDeliveryContactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
             	
             	
             	
@@ -2901,10 +2901,12 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 takeDeliveryWarehouseAddress1:{required:takeDeliveryWarehouseAddress1Flag,
                 },
                 contactNum:{
-                	isPhone: true
+                	isPhone: !0,
+                	required:true
                 },
                 takeContactNum:{
-                	isPhone: true
+                	isPhone: !0,
+                	required:true
                 },
                 
               /*  transport:{required:true,
@@ -2912,12 +2914,14 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 shipNumber:{required:true,
                 },*/
                 deliveryTransportContactNum:{
-                	isPhone: true
+                	isPhone: !0,
+                	required:true
                 },
-                warehouseSerial:{required:true,
-                },
+               /* warehouseSerial:{required:true,
+                },*/
                 takeDeliveryContactNum:{
-                	isPhone: true
+                	isPhone: !0,
+                	required:true
                 },
                 email: {
                     required: !0,

@@ -354,7 +354,7 @@ public class InvoiceController {
 				}
 		}else{
 			for(Materiel materiel:materiels){
-				materiel.setMoney(new BigDecimal(materiel.getOrderUnitPrice()).multiply(new BigDecimal(materiel.getBillAmount()==null?"0":materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
+				materiel.setMoney(new BigDecimal(materiel.getOrderRateUnit()).multiply(new BigDecimal(materiel.getBillAmount()==null?"0":materiel.getBillAmount()).setScale(2,BigDecimal.ROUND_HALF_UP )).toString());
 			}
 		}
 	

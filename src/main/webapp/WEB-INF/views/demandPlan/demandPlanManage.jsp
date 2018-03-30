@@ -174,7 +174,7 @@
 									                                                <tr>
 									                                                   <!--  <td><input name="select_all" class="dt-body-center"
 																								value="1" type="checkbox" /></td> -->
-									                                                    <td>{{materiel.materiel.materielName}}</td>
+									                                                    <td>{{materiel.materiel.materielNum}}</td>
 									                                                    <td>{{materiel.materiel.materielName}}</td>
 									                                                    <td>{{materiel.materiel.specifications}}</td>
 									                                                   <!--  <td>{{materiel.supplyName}}</td> -->

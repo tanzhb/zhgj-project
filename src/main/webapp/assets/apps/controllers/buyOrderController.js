@@ -595,7 +595,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								}else{
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="showInRecord(\''+row.serialNum+'\',\''+row.receiveCount+'\')">已收</a>'+'<span style="color:#FCB95B">'+row.receiveCount+'</span>'+'）'+'</br>'
 								}*/
-								if(isNull(row.payAmount)||row.payAmount==0){
+								if(isNull(row.payAmount)||row.payAmount==0||row.payAmount=='null'){
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="viewPayLog(\''+row.serialNum+'\')">已付</a>'+'<span style="color:#FCB95B">'+row.payReceiptMoney+'</span>'+'）'+'</br>'
@@ -3602,8 +3602,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-			    	 if((obj[attr]<0||obj[attr]>100)&&(attr!='orderRateUnit'&&attr!='orderUnitPrice')){
+			    	 if((obj[attr]<0||obj[attr]>100)&&(attr!='orderRateUnit'&&attr!='orderUnitPrice'&&attr!='otherAmount')){
 			    		 obj[attr]=0;
+			    	 }
+			    	 if(Number(obj[attr])==0&&(attr=='orderRateUnit'||attr=='orderUnitPrice')){
+			    		 obj[attr]=null;
 			    	 }
 		    	 }
 		       

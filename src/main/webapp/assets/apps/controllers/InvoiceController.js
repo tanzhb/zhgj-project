@@ -764,11 +764,16 @@ angular
 												'targets' : 8,
 												'render' : function(data,
 														type, row, meta) {
-													if(data==null){
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(row.canBillAmount*row.orderRateUnit,'￥')+'</span>';
+													if(serialNum.indexOf("view")>-1){
+														return $filter('currency')(row.billAmount*row.orderRateUnit,'￥');
 													}else{
-														return '<span id="money'+row.serialNum+'">'+$filter('currency')(Number($("#"+row.serialNum).val())*row.orderRateUnit,'￥')+'</span>';
+														if(data==null){
+															return '<span id="money'+row.serialNum+'">'+$filter('currency')(row.canBillAmount*row.orderRateUnit,'￥')+'</span>';
+														}else{
+															return '<span id="money'+row.serialNum+'">'+$filter('currency')(Number($("#"+row.serialNum).val())*row.orderRateUnit,'￥')+'</span>';
+														}
 													}
+													
 													//return data;
 												},"createdCell": function (td, cellData, rowData, row, col) {
 													 $compile(td)($scope);
@@ -1165,10 +1170,9 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 												}
 									}
 								
-								
-								 $scope.judgeNumber=function(canBillAmount,serialNum,judgeString){
+								 
+								/* $scope.judgeNumber=function(canBillAmount,serialNum,judgeString){
 							       	 var value=$("#"+serialNum).val();
-							       	 debugger;
 							       	 if(value>Number(canBillAmount)){
 							       		 if(judgeString=='in'){
 							       			 toastr.warning("收票数量不得大于未收数量！");
@@ -1177,7 +1181,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							       		 }
 							       		 $("#"+serialNum).focus();
 							       	 }
-							        }
+							        }*/
 							        //保存全部销项票/进项票
 							        $scope.saveAllBillingRecord=function (){
 							        	if($scope.invoice.serialNum==undefined&&$scope.inOrOut.indexOf("in")>-1){
@@ -1653,7 +1657,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	billingDate:{required:"开票日期不能为空！"},
 						            	invoiceNO:{required:"发票号不能为空！"},
 						            	 tel: { 
-						            		 isPhone:"请输入正确的联系电话！"
+						            		 isPhone:"请输入正确的联系电话！",
+						            		 required:"联系电话不能为空！"
 						                    },
 						                    companyName:{required:"发票号不能为空！"},
 						                    address:{required:"地址不能为空！"},
@@ -1674,7 +1679,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 						            	invoiceType:{required:true},
 						            	billingDate:billingDate,
 						            	invoiceNO:invoiceNO,
-						            	 tel: {isPhone: true }/*,
+						            	 tel: {isPhone: !0,required:true }/*,
 						            	 contact:{required:true}
 						            	submitter:{required:true},
 						            	submitDate:{required:true},*/

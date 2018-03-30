@@ -385,6 +385,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 					 toastr.warning("未勾选收款水单"); 
 					 return;
 				 }
+					var inputs=verificateTable.$('input[type="checkbox"]:checked');
 				 for(var i=0;i<inputs.length;i++){
 	        			param={};
 	        			var input=inputs[i];
@@ -1404,7 +1405,6 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 
 	 }, "请正确填写您的联系电话"); 
 	 
-
 	// 页面加载完成后调用，验证输入框
 	$scope.$watch('$viewContentLoaded', function() {  
 		var e = $("#form_sample_1"),

@@ -1445,6 +1445,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 						}
 					 return;
 				 }
+				 var inputs=verificateTable.$('input[type="checkbox"]:checked');
 				 for(var i=0;i<inputs.length;i++){
 	        			param={};
 	        			var input=inputs[i];

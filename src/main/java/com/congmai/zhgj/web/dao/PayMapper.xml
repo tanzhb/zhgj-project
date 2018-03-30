@@ -216,20 +216,21 @@
     <!--查询订单的已付金额  -->
     <select id="selectPaiedMoney" parameterType="java.lang.String" resultType="java.lang.String">
     SELECT
-	IFNULL(SUM(applyPaymentAmount),0)
+	IFNULL(SUM(paymentAmount),0)
 	FROM
 	paymentRecord
 	WHERE
 	orderSerial=#{serialNum}
 	AND
 	delFlg='0'
+	
     </select>
     
     
     <!--查询订单的已开票金额  -->
     <select id="selectBilledMoney" parameterType="java.lang.String" resultType="java.lang.String">
     SELECT
-	IFNULL(SUM(c.unitPrice*b.billCount),0)
+	IFNULL(SUM(a.orderRateUnit*b.billCount),0)
 	FROM orderMateriel a 
 	LEFT JOIN invoiceBillingRecord b ON a.serialNum=b.orderMaterielSerial
 	LEFT JOIN materiel c ON a.materielSerial=c.serialNum
@@ -237,6 +238,7 @@
 	WHERE a.orderSerial=#{serialNum} and  i.status='2'
 	
     </select>
+    
     
     <!--查询收付款对象的附件集合  -->
     <select id="selectFileList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentFile">
