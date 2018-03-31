@@ -225,9 +225,9 @@
                              <div class="form-group ">
                                  <label class="control-label bold">状态：</label>
                                  <div class="">
-                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
-                                 	<p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p>
-                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.status==undefined||procurementPlan.status==0"    > 未完成</p>
+                                 	<!-- <p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p> -->
+                                 	<p class="form-control-static" ng-if="procurementPlan.status==1"    > 已完成</p>
                                  </div>
                                  
                              </div>
@@ -465,29 +465,31 @@
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*(_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets)}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input style="padding:6px 3px"   type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.buyCount"    ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   /> 
+		                          		<input style="padding:6px 3px"   type="text"  ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.buyCount"    ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   /> 
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.buyCount}} </p>
                                      		<!-- <p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
 		                          </td>
 		                          <td>  
-		                          		<select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}"  ng-if="$first"  ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
+		                          <div   ng-hide="procurementPlanMaterielInput{{$index}}"   ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined">
+		                          		<select name="supplier{{$index}}"     ng-if="$first"  ng-hide="procurementPlanMaterielInput{{$index}}"  ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
 		                          		ng-change="changeSupplyName(_procurementPlanMateriel,'supplyComId')">
                                                <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
                                          </select>
-                                         <select name="supplier{{$index}}" ng-hide="procurementPlanMaterielInput{{$index}}"  ng-if="!$first"  ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
+                                         <select name="supplier{{$index}}"  ng-if="!$first"      ng-hide="procurementPlanMaterielInput{{$index}}"   ng-model="_procurementPlanMateriel.supplyComId" class="bs-select form-control procurementPlan" data-live-search="true"   data-size="8"
 		                          		ng-change="changeSupplyName(_procurementPlanMateriel,'supplyComId')">
                                                <option  ng-repeat="supplier in suppliers" value="{{supplier.comId}}" >{{supplier.comName}}</option>
                                          </select>
+                                         </div>
                                      	<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.supplyName}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input type="text"   name="deliveryDate{{$index}}" class="form-control form-control-inline input-medium date-picker" 
+		                          		<input type="text"   name="deliveryDate{{$index}}"   ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined"  class="form-control form-control-inline input-medium date-picker" 
                                      data-date-format="yyyy-mm-dd" data-date-viewmode="years" size="16" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.deliveryDate"   disabled="disabled">
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryDate}} </p>
 		                          </td>
 		                       
 		                          <td>  
-		                          		<input style="padding:6px 3px" type="text"  name="deliveryAddress{{$index}}" class="form-control"   disabled="disabled" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.deliveryAddress"    >
+		                          		<input style="padding:6px 3px" type="text"   ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined"  name="deliveryAddress{{$index}}" class="form-control"   disabled="disabled" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.deliveryAddress"    >
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
                                      <td >

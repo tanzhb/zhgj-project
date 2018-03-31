@@ -707,7 +707,8 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					address:{required:"地址不能为空！"},
 					/*zipCode:{required:"邮编不能为空！"},*/
 					contactTel:{required:"联系电话不能为空！"},
-					mobileNum:{required:"手机不能为空！"}
+					mobileNum:{required:"手机不能为空！"},
+					warehouseName:{required:"仓库名称不能为空！"}
 				},
 				rules: {
 					address: {
@@ -716,6 +717,9 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				/*	zipCode: {
 						required: !0
 					},*/
+					warehouseName:{
+						required: !0
+					},
 					contactTel: {
 						required: !0,
 					isPhone: !0

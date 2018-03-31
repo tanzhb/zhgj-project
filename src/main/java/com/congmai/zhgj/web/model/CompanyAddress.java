@@ -26,6 +26,8 @@ public class CompanyAddress {
     private String updater;
 
     private Date updateTime;
+    
+    private  String warehouseName;//仓库名称/名称
 
     public String getSerialNum() {
         return serialNum;
@@ -122,4 +124,13 @@ public class CompanyAddress {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	public String getWarehouseName() {
+		return warehouseName;
+	}
+
+	public void setWarehouseName(String warehouseName) {
+		this.warehouseName = warehouseName;
+	}
+    
 }

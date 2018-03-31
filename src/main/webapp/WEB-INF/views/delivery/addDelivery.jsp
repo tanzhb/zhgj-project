@@ -385,8 +385,8 @@
 											</div>
 											<div class="col-md-4"   ng-if="delivery.deliverType=='贸易发货'">
 												<div class="form-group">
-													<label class="control-label bold">收货仓库<span   
-														class="required" aria-required="true"> * </span></label>
+													<label class="control-label bold">收货仓库<!-- <span   
+														class="required" aria-required="true"> * </span> --></label>
 													<div class="">
 													<div  ng-hide="span"       >
 														<select class="form-control"  data-live-search="true" data-size=""   

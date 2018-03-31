@@ -561,7 +561,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 							+'<a href="javascript:void(0);" ng-click="editOrder(\''+row.serialNum+'\')">修改</a>';
 						}else if(data==77){
 							return '' ;
-						}else if(data==2||data==3){
+						}else if((data==2||data==3)&&Number(row.deliveryCount)!=Number(row.materielCount)){
 							return '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a>';
 						}else{
 							return '' ;
@@ -4301,6 +4301,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            	'render' : function(data,
 							                            			type, row, meta) {
 							                            		return '<a data-toggle="modal" ng-click="viewSaleOrder(\''+row.orderSerial+'\')" ">'+data+'</a>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            },
+							                            {
+							                            	'targets' : 3,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		return '<span data-toggle="modal" >'+data+'</span>';
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);

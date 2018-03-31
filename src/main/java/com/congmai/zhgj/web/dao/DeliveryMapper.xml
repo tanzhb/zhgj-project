@@ -482,6 +482,6 @@
 	FROM
 	deliveryMateriel a
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
-	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  f.status!=0
+	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  (f.status!=0 and f.status!=10)
     </select>
     </mapper>

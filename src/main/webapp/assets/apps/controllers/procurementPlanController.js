@@ -1131,6 +1131,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     				$scope.demandMateriel[array[i]].status=1;
     			}
     			$scope.updateDemandMateriel(ids);//更新需求物料状态为1
+    			$("#group-checkable1").attr("checked",false);
         		toastr.success("分解成功");
         	}
         	
@@ -1180,6 +1181,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 						}
     					
     				}
+    				$("#group-checkable1").attr("checked",false);
     				toastr.success("分解成功");
     			/*var array=ids.split(",");//返回被选中的bom物料
     			for(var i=0;i<array.length;i++){
@@ -1253,6 +1255,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	   	       		    	for(var i=0;i<$scope.choosedProcurementPlanMateriel.length;i++){
 	   	       		    	$scope.choosedProcurementPlanMateriel[i].status=1;
 	   	       		    	}
+	   	       		  $("#group-checkable2").attr("checked",false);
 	   	       		    	$scope.cancelAllProcurementPlanMateriel();
 		  	   	     
 			  	   	    
@@ -1626,9 +1629,16 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	$scope.demandMaterielInput = false;
 	        	$scope.demandMaterielShow = false;
 	        	$scope.reservedDm=false;
+	        	var count=0;
 	        	for(var i=0;i<$scope.demandMateriel.length;i++){
-	        		$scope["demandMaterielInput"+i] = false;
-					$scope["demandMaterielShow"+i] = false;
+	        		if($scope.demandMateriel[i].status!=1){
+	        			$scope["demandMaterielInput"+i] = false;
+						$scope["demandMaterielShow"+i] = false;
+						count+=1;
+	        		}
+	        	}
+	        	if(count==0){
+	        		toastr.warning("物料已分解完毕,不能修改!");
 	        	}
 	        }; 
 	        
@@ -1639,9 +1649,16 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	$scope.procurementPlanMaterielInput = false;
 	        	$scope.procurementPlanMaterielShow = false;
 	        	$scope.reservedPpm=false;
+	        	var count=0;
 	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
-	        		$scope["procurementPlanMaterielInput"+i] = false;
-					$scope["procurementPlanMaterielShow"+i] = false;
+	        		if($scope.procurementPlanMateriel[i].status!=1){
+	        			$scope["procurementPlanMaterielInput"+i] = false;
+						$scope["procurementPlanMaterielShow"+i] = false;
+						count+=1;
+	        		}
+	        	}
+	        	if(count==0){
+	        		toastr.warning("物料已发布采购完毕,不能修改!");
 	        	}
 	        }; 
 	        /**
@@ -1749,9 +1766,13 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	$scope.procurementPlanMaterielInput=false;
 	        	
 	        	for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
-	        		if(materiel.serialNum == $scope.procurementPlanMateriel[i].serialNum){
+	        		if((materiel.serialNum == $scope.procurementPlanMateriel[i].serialNum)&&$scope.procurementPlanMateriel[i].status!=1){
 	        			$scope["procurementPlanMaterielInput"+i] = false;
 	        			$scope["procurementPlanMaterielShow"+i] = false;
+	        			return;
+	        		}else if(materiel.serialNum == $scope.procurementPlanMateriel[i].serialNum){
+	        			toastr.warning('该采购清单物料已发布采购,不能修改 ！');
+	        			return;
 	        		}
 	        	}
 	        	
@@ -1765,9 +1786,13 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	        	/*$scope.demandMaterielShow=true;
 	        	$scope.demandMaterielInput=false;*/
 	        	for(var i=0;i<$scope.demandMateriel.length;i++){
-	        		if(materiel.serialNum == $scope.demandMateriel[i].serialNum){
+	        		if((materiel.serialNum == $scope.demandMateriel[i].serialNum)&& $scope.demandMateriel[i].status!=1){
 	        			$scope["demandMaterielInput"+i] = false;
 	        			$scope["demandMaterielShow"+i] = false;
+	        			return;
+	        		}else if(materiel.serialNum == $scope.demandMateriel[i].serialNum){
+	        			showToastr('toast-top-center', 'warning', '该需求物料已经分解,不能编辑！');
+	        			return;
 	        		}
 	        	}
 	        	
@@ -1805,6 +1830,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			 * 删除
 			 */
 	        $scope.deleteProcurementPlanMateriel=function (materiel) {
+	        	if(materiel.status==1){
+	        		showToastr('toast-top-center', 'warning', '该采购清单物料已发布采购,不能删除 ！');
+	        		return;
+	        	}
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.procurementPlanMateriel.length > 0){
 	        			for(var i=0;i<$scope.procurementPlanMateriel.length;i++){
@@ -1840,6 +1869,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			 * 删除
 			 */
 	        $scope.deleteDemandMateriel=function (materiel) {
+	        	if(materiel.status==1){
+	        		showToastr('toast-top-center', 'warning', '该需求物料已经分解,不能删除 ！');
+	        		return;
+	        	}
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.demandMateriel.length > 0){
 	        			for(var i=0;i<$scope.demandMateriel.length;i++){

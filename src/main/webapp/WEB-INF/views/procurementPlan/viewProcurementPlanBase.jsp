@@ -121,9 +121,12 @@ margin-right: 20px;
                              <div class="form-group ">
                                  <label class="control-label col-md-5 bold">状态：</label>
                                  <div class="control-label col-md-7">
-                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
+                                 <p class="form-control-static" ng-if="procurementPlan.status==undefined||procurementPlan.status==0"    > 未完成</p>
+                                 	<!-- <p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p> -->
+                                 	<p class="form-control-static" ng-if="procurementPlan.status==1"    > 已完成</p>
+                                 	<!-- <p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
                                  	<p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p>
-                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p> -->
                                  </div>
                              </div>
                          </div>

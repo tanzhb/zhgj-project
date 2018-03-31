@@ -446,6 +446,7 @@
 			                                        <table class="table table-striped table-bordered table-advance table-hover">
 			                                            <thead>
 			                                                <tr>
+			                                                 	<th>仓库名称</th>
 			                                                    <th>地址</th>
 			                                                    <th>邮编</th>
 			                                                    <th>电话</th>
@@ -461,6 +462,7 @@
 			                                            </tbody>
 			                                            <tbody ng-repeat="_address in companyAddresses track by $index">
 			                                                <tr ng-mouseover="showOperation('address',$index)" ng-mouseleave="hideOperation('address',$index)">
+			                                                	<td>{{_address.warehouseName}}</td>
 			                                                    <td>{{_address.address}}</td>
 			                                                    <td>{{_address.zipCode}}</td>
 			                                                    <td>{{_address.contactTel}}</td>
@@ -1104,6 +1106,17 @@
                <div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>表单数据未填写完整</div>
                <form id="companyAddressForm" class="form-horizontal">
+               <div class="row">
+                     <div class="col-md-12">
+                         <div class="form-group">
+                                 <label class="col-md-4 control-label" for="warehouseName"><span class="required"> * </span>仓库名称：</label>
+                                 <div class="col-md-6">
+                                     <input type="text" class="form-control"  name="warehouseName" ng-model="companyAddress.warehouseName"  >
+                                     <div class="form-control-focus"> </div>
+                                 </div>
+                         </div>
+                     </div>
+                 </div>
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
