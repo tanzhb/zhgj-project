@@ -75,7 +75,12 @@
 										
 										<div class="col-md-4">
                                                             <div class="form-group">
-                                                    <label class="control-label bold" for="contactNum"> <span class="required"> * </span>发票类型 :</label>
+                                                    <label class="control-label bold" for="contactNum"  ng-if="inOrOut.indexOf('in')>-1">
+														<span class="required"> * </span>收票类型 :
+													</label>
+													<label class="control-label bold" for="contactNum"  ng-if="inOrOut.indexOf('out')>-1">
+														<span class="required"> * </span>开票类型 :
+													</label>
                                                     <div class=" ">
                                                                         <p class="control-label left" >{{invoice.invoiceType}}</p> 
                                                                     </div>

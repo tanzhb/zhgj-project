@@ -97,6 +97,8 @@ public class Stock {
 	private String status;// 状态
 
 	private String materielName;
+	
+	private String lastUpdateDate;// 最后更新日期
 
 	private String specifications;
 
@@ -498,6 +500,14 @@ public class Stock {
 
 	public void setFirstInDateDaiguan(String firstInDateDaiguan) {
 		this.firstInDateDaiguan = firstInDateDaiguan;
+	}
+
+	public String getLastUpdateDate() {
+		return lastUpdateDate;
+	}
+
+	public void setLastUpdateDate(String lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 	
 }

@@ -168,7 +168,7 @@
 												<div class="form-group">
 													<label class="control-label bold">支付节点<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  ng-if="clauseSettlementList.length!=0">
 														<select class="form-control" id="paymentNode"  ng-if="paymentRecord.paymentType!='清关'"
 															name="paymentNode"   
 															ng-model="paymentRecord.paymentNode"
@@ -176,43 +176,53 @@
 															<option value="">支付节点</option>
 															<option ng-repeat="item in clauseSettlementList" value="{{item.deliveryNode}}">{{item.deliveryNode}}</option>
 														</select>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.paymentNode}}</p>
+														
 													</div>
+													<div class=""  ng-if="clauseSettlementList.length==0">
+														<input type="text" name="paymentNode" class="form-control" 
+															ng-model="paymentRecord.paymentNode" ng-show="input"/>
+														
+													</div>
+													<p class="form-control-static" ng-show="span">{{paymentRecord.paymentNode}}</p>
 												</div>
 											</div>
 												<div class="col-md-4">
 												<div class="form-group">
 													<label class="control-label bold">支付类型<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  ng-if="clauseSettlementList.length!=0">
 														<select class="form-control" id="payType"   disabled="disabled"
 															name="payType"  
 															ng-model="paymentRecord.payType"
 														    ng-show="input">
 															<option value="">支付类型</option>
-															
 															<option value="{{item.paymentType}}" ng-repeat="item in clauseSettlementList"  ng-bind="item.paymentType"  ></option>
-															<!-- <option value="预付款">预付款</option>
-															<option value="中期款">中期款</option>
-															<option value="全款">全款</option>
-															<option value="尾款">尾款</option> -->
 														</select>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.payType}}</p>
 													</div>
+													<div class=""  ng-if="clauseSettlementList.length==0">
+														<input type="text" name="payType" class="form-control" 
+															ng-model="paymentRecord.payType" ng-show="input"/>
+													</div>
+													<p class="form-control-static" ng-show="span">{{paymentRecord.payType}}</p>
 												</div>
 											</div>
 											<!--/span-->
 											
 											<div class="col-md-4">
 												<div class="form-group">
-													<label class="control-label bold">支付比率<span
+													<label class="control-label bold">支付比率(%)<span
 														class="required" aria-required="true"> * </span></label>
-													<div class="">
+													<div class=""  ng-if="clauseSettlementList.length!=0">
 														<input type="text" name="deliveryRate" class="form-control" ng-if="paymentRecord.paymentType!='清关'"
 															readonly ng-model="paymentRecord.deliveryRate" ng-show="input"/>
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}%</p>
+														
 													</div>
+													<div class=""  ng-if="clauseSettlementList.length==0">
+														<input type="text" name="deliveryRate" class="form-control"   ng-blur="setApplyPaymentAmount(paymentRecord,'deliveryRate')"
+															ng-model="paymentRecord.deliveryRate" ng-show="input"/>
+													</div>
+													<p class="form-control-static" ng-show="span">{{paymentRecord.deliveryRate}}%</p>
 												</div>
 											</div>
 											</div>

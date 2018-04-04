@@ -741,9 +741,10 @@ public class DeliveryController {
        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DeliveryMaterielVO.class);  
        deliveryMateriels = objectMapper.readValue(params, javaType);*/
 	  deliveryMateriels = JSON.parseArray(params, DeliveryMaterielVO.class);
-	  List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(deliveryMateriels.get(0).getOrderSerial());//取最新的数据判断
 	  Boolean flag=false;//还可以发
 	  Boolean isDel=false;//是否删除发货单
+	  if(StringUtil.isNotEmpty(deliveryMateriels.get(0).getOrderSerial())){
+	  List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(deliveryMateriels.get(0).getOrderSerial());//取最新的数据判断
 		OrderInfo o=orderService.selectById(deliveryMateriels.get(0).getOrderSerial());
 		String  deliveryCount=o.getDeliveryCount();//订单已发数量
 		String  materielCount=o.getMaterielCount();//订单总数量
@@ -774,7 +775,7 @@ public class DeliveryController {
 			  }
 		  }
 	  }
-	  
+	  }
 	   try{
    		Subject currentUser = SecurityUtils.getSubject();
    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -987,6 +988,7 @@ public class DeliveryController {
 		Boolean  isDel=false;//是否删除当前发货单
 		 Boolean flag=false;//还可以发
     	String orderSerial=delivery.getOrderSerial();
+    	if(!StringUtil.isEmpty(orderSerial)){
     	DeliveryVO deliveryVO=new  DeliveryVO();
 		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
 		OrderInfo orderInfo=orderService.selectById(orderSerial);
@@ -1026,6 +1028,7 @@ public class DeliveryController {
 				  }
 			  }
 		  }
+    	}
     	//保存基本信息第一部分
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
@@ -1336,7 +1339,7 @@ public class DeliveryController {
 		    deliveryService.updateDelivery(delivery);//更新申请原因和状态
 		    List<DeliveryMaterielVO> list= deliveryService.selectListForDetail(delivery.getSerialNum());
 		  DeliveryVO   d=deliveryService.selectDetailById(delivery.getSerialNum());
-		    OrderInfo o=orderService.selectById(d.getOrderSerial());
+		    /*OrderInfo o=orderService.selectById(d.getOrderSerial());
 		    if(list!=null&&list.size()>0){
 				for(DeliveryMaterielVO deliveryMaterielVO:list){
 					OrderMateriel om=orderMaterielService.selectById(deliveryMaterielVO.getOrderMaterielSerialNum());
@@ -1345,7 +1348,7 @@ public class DeliveryController {
 					o.setApplyCount(StringUtil.sum(o.getApplyCount(),deliveryMaterielVO.getDeliverCount()));
 				}
 			}
-		    orderService.update(o);
+		    orderService.update(o);*/
 		} catch (ActivitiException e) {
 //            	message.setStatus(Boolean.FALSE);
 		    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
@@ -2022,7 +2025,10 @@ public class DeliveryController {
 //申请前判断数量
     @RequestMapping(value = "/goApplyDelivery", method = RequestMethod.GET)
 	public ResponseEntity<Map<String,Object>>goApplyDelivery(String serialNum) {
-    	//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
+    	Map<String,Object> map=new HashMap<String,Object>();
+    	map.put("flag", false);  
+		return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+    	/*//先判断现在的发货数量与未发数量符合条件才可确认发货,否则提示用户修改
     			Map<String,Object> map=new HashMap<String,Object>();
     			Boolean  isDel=false;//是否删除当前发货单
     			 Boolean flag=false;//还可以发
@@ -2068,7 +2074,7 @@ public class DeliveryController {
     				  }
     			  }
     			  map.put("flag", flag);  
-    			  return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
+    			  return  new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);*/
     }
     /**
 	 * 判断订单物料是否均无库存

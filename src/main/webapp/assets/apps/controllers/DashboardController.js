@@ -60,6 +60,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("paymentRecordC");
 		}else if(actionName=="demandplan2Promanager"){
 			$state.go("demandPlan");
+		}else if(actionName=="noticeSupply"){
+			$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
 		}
 	}
     $scope.changeReadFlg = function(serialNum,readFlg){

@@ -98,7 +98,7 @@ margin-right: 20px;
                      </div>
                      <div class="row">
                          <div class="col-md-4">
-                             <div class="form-group ">
+                             <div class="form-group "  id="checkBuyComId">
                                  <label class="control-label bold"><span class="required" aria-required="true"> * </span>采购商：</label>
                                  <div class="">
                                  <div  ng-hide="saleOrderInput">
@@ -1422,7 +1422,7 @@ margin-right: 20px;
                                      <th style="width:150px">支付节点</th>
                                      <th style="width:150px">开票方式</th>
                                      <th style="width:70px">账期（天）</th>
-                                     <th style="width:100px">支付比率%</th>
+                                     <th style="width:50px">支付比例%</th>
                                      <th style="width:150px">支付金额{{arithmeticAllDeliveryAmount()}}</th>
                                      <th style="width:150px">支付方式</th>
                                     <!--  <th style="width:150px">开票方式</th> -->
@@ -1500,7 +1500,7 @@ margin-right: 20px;
 			                          </td>
 			                          <td>
                                      		<input type="text" id="deliveryRate[$index]" name="deliveryRate" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryRate" 
-                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryRate');_arithmeticDeliveryAmount(this)" >
+                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryRate')"   ng-blur="_arithmeticDeliveryAmount(this,$index)">
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryRate}} </p>
 		                          </td>
 		                          <td>

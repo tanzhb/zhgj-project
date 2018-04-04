@@ -311,8 +311,8 @@
                                      		<p class="form-control-static" > 1 </p>
 		                          </td>
 		                             <td>  
-		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount==null"  ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount" ng-keyup="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   ><!--已注释内有验证采购数量不得大于需求数量  -->
-                                     	<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount!=null"   ng-keyup="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   >	
+		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount==null"  ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   ><!--已注释内有验证采购数量不得大于需求数量  -->
+                                     	<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount!=null"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   >	
                                      		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}"> {{_procurementPlanMateriel.planCount}} </p>
                                      		<!-- <p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
 		                          </td>
@@ -465,7 +465,7 @@
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.singleDose*(_procurementPlanMateriel.sets==null?_procurementPlanMateriel.planCount:_procurementPlanMateriel.sets)}} </p>
 		                          </td>
 		                          <td>  
-		                          		<input style="padding:6px 3px"   type="text"  ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.buyCount"    ng-keyup="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   /> 
+		                          		<input style="padding:6px 3px"   type="text"  ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined"  name="buyCount{{$index}}" class="form-control" ng-hide="procurementPlanMaterielInput{{$index}}" ng-model="_procurementPlanMateriel.buyCount"    ng-change="clearNoNum(procurementPlanMateriel[$index],'buyCount','planCount')"   /> 
                                      		<p class="form-control-static" ng-show="procurementPlanMaterielShow{{$index}}"> {{_procurementPlanMateriel.buyCount}} </p>
                                      		<!-- <p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
 		                          </td>

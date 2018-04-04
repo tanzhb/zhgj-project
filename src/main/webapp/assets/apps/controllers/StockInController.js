@@ -323,7 +323,6 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 									param.unstockCount = $scope.takeDeliveryMateriels[i].acceptCount-$scope.takeDeliveryMateriels[i].stockInCount;
 									
 								}else{//
-									debugger;
 									param.deliverSerial = params.record.takeDeliverSerial;
 									param.unstockCount = 0;
 									if(isNull($scope.takeDeliveryMateriels[i].supplyMaterielSerial)){
@@ -346,6 +345,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 							var promise = takeDeliveryService
 									.saveStockInData(params);
 							promise.then(function(data) {
+								handle.unblockUI();
 								if(data.data == "1"){
 									if(judgeString=='save'){
 										toastr.success("保存成功！");
@@ -373,7 +373,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 								}else{
 									toastr.error("入库失败！请联系管理员");
 								}
-								handle.unblockUI();
+							
 							}, function(data) {
 								// 调用承诺接口reject();
 								handle.unblockUI();
@@ -524,7 +524,7 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					            	stockDate:{required:"入库日期不能为空！"},
 					            	inOutType:{required:"入库类型不能为空！"},
 					            	/*operator:{required:"操作员不能为空！"},*/
-					            	contactNum:{required:"联系方式不正确！",isPhone:"联系方式不正确！"},
+					            	contactNum:{/*equired:"联系方式不正确！",*/isPhone:"联系方式不正确！"},
 					            	stockCount:{required:"入库数量不能为空！",digits:"发货数量必须为大于等于0的正整数数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"}
 					            	//positionSerial:{required:"库区不能为空！"}
@@ -555,8 +555,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 					                },
 					                contactNum: {
 					                	//required: !0,
-					                	isPhone: !0,
-					                	required:true
+					                	isPhone: !0/*,
+					                	required:true*/
 					                },
 					                inOutType:{
 					                	required: !0

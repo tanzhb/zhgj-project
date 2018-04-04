@@ -69,6 +69,7 @@
                             </th>
 							<th style="white-space: nowrap;">应收帐单号</th>
 							<th style="white-space: nowrap;">收款类型</th>
+							<th style="white-space: nowrap;">关联销售订单号</th>
 							<th style="white-space: nowrap;">币种</th>
 							<th style="white-space: nowrap;">应收金额</th>
 							<th style="white-space: nowrap;">应收日期</th>

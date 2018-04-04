@@ -171,6 +171,18 @@ public class StockController {
 			stock.setOnRoadAmount("0");
 			stock.setCanSaleAmount("0");
 			stock.setStatus("0");
+			if(StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+				long a=0;
+				try {
+					a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getFirstInDateZijian()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateZijian()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				stock.setLastUpdateDate(a>0?stock.getFirstInDateZijian():stock.getLastOutDateZijian());
+			}else{
+				stock.setLastUpdateDate(stock.getFirstInDateZijian());
+			}
 		}
 		}
 		// 封装datatables数据返回到前台
@@ -267,7 +279,7 @@ public class StockController {
 	     */
 	    @RequestMapping("exportStock")
 	    @ResponseBody
-	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  type) throws ParseException {
+	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  type)  {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
 	    		String comId = null;
     	    	User user = UserUtil.getUserFromSession();
@@ -294,15 +306,34 @@ public class StockController {
 					stock.setPreSaleAmount("0");
 					stock.setOnRoadAmount("0");
 					stock.setCanSaleAmount("0");
-					if(stock.getFirstInDateZijian()!=null){
-						stock.setFirstInDateZijian(DateUtil.daysBetween(new SimpleDateFormat("yyyy-MM-dd").parse(stock.getFirstInDateZijian()), new Date())+"");
-					}
+					
 					if(!StringUtil.isEmpty(stock.getMinStock())&&new BigDecimal(stock.getCurrentAmount()).compareTo(new BigDecimal(stock.getMinStock()==null?"0":stock.getMinStock()))<=0){
 						stock.setStatus(StaticConst.getInfo("queliao"));
 					}else{
 						stock.setStatus(StaticConst.getInfo("zhengchang"));
 					}
 					stock.setRiskGrade("");
+					if(StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+						long a=0;
+						try {
+							a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getFirstInDateZijian()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateZijian()));
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						stock.setLastUpdateDate(a>0?(stock.getFirstInDateZijian().substring(0, 16)):(stock.getLastOutDateZijian()==null?"":stock.getLastOutDateZijian().substring(0, 16)));
+					}else{
+						stock.setLastUpdateDate(stock.getFirstInDateZijian()==null?"":stock.getFirstInDateZijian().substring(0, 16));
+					}
+					if(stock.getFirstInDateZijian()!=null){
+						try {
+							stock.setFirstInDateZijian(DateUtil.daysBetween(new SimpleDateFormat("yyyy-MM-dd").parse(stock.getFirstInDateZijian()), new Date())+"");
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
 				}
 				dataMap.put("stocks",stocks);
 				ExcelUtil.export(request, response, dataMap, "zijianStock",

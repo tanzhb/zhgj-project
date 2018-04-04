@@ -29,6 +29,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			$scope.paymentRecord.applyDate= $filter('date')(new Date(), 'yyyy-MM-dd');//申请日期
 			$scope.paymentRecord.applyDateForBg=$filter('date')(new Date(), 'yyyy-MM-dd');//报关申请日期
 			$scope.paymentRecord.isBill='0';
+			$scope.paymentRecord.applyCurrency='人民币';
 			$scope.paymentRecord.status='0';
 			getCurrentUser();
 		});
@@ -86,7 +87,32 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 		$state.go('addGatheringMoney',{serialNum:ids});
 	};
 
-
+	$scope.clearNoNumPoint = function(obj,attr){
+	   	 //先把非数字的都替换掉，除了数字和.
+	   	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
+	   	 //必须保证第一个为数字而不是.
+	   	 obj[attr] = obj[attr].replace(/^\./g,"");
+	   	 //保证只有出现一个.而没有多个.
+	   	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
+	   	 //保证.只出现一次，而不能出现两次以上
+	   	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+		 }
+		$scope.setApplyPaymentAmount=function(paymentRecord,deliveryRate){
+			$scope.clearNoNumPoint(paymentRecord,deliveryRate);
+			if(Number($scope.paymentRecord.deliveryRate)<0||Number($scope.paymentRecord.deliveryRate)>100){
+				showToastr('toast-top-center', 'warning', '0-100之间！');
+				$scope.paymentRecord.deliveryRate=null;
+				return;
+			}
+			if(Number($scope.paymentRecord.deliveryRate)>Number($scope.canTotalRate)){
+				showToastr('toast-top-center', 'warning', '当前可设最大支付比率为'+$scope.canTotalRate+"!");
+				$scope.paymentRecord.deliveryRate=null;
+				return;
+			}
+			$scope.paymentRecord.applyPaymentAmount=($scope.paymentRecord.deliveryRate*$scope.saleOrder.orderAmount/100).toFixed(2);
+			$scope.chnAmount=$scope.paymentRecord.applyPaymentAmount;
+	    		$scope.applyPaymentAmountChn=convertCurrency($scope.paymentRecord.applyPaymentAmount);
+		}
 	//根据参数查询对象
 	$scope.getPayInfo  = function(serialNum) {
 		GatheringMoneyService.selectPay(serialNum).then(
@@ -158,7 +184,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
      var loadVerificateTable = function(judgeString) {
    		  comId=$scope.paymentRecord.buyComId;
    		  tableId="select_sample_receiveMemo";
-   	  var  remainMoneyAmount=Number($scope.paymentRecord.applyPaymentAmount)-Number($scope.paymentRecord.paymentAmount);//应收款单余额
+   	  var  remainMoneyAmount=(Number($scope.paymentRecord.applyPaymentAmount)-Number($scope.paymentRecord.paymentAmount)).toFixed(2);//应收款单余额
    	  $scope.remainMoneyAmount=remainMoneyAmount;
    	  tableUrl="rest/pay/memoRecordList?comId="+comId+"&type="+judgeString;
               a = 0;
@@ -219,7 +245,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
   							'render' : function(data,
   									type, row, meta) {
   								var  unPaymentAmount;
-  								if(isNull(row.paymentAmount)){
+  								if(isNull(row.verificationMoneyAmount)){
 									unPaymentAmount=Number(row.moneyAmount);
 								}else{
 									unPaymentAmount=Number(row.moneyAmount)-Number(row.verificationMoneyAmount);
@@ -311,7 +337,13 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 			if($("#"+serialNum).is(':checked')){
 				$("#up"+serialNum).css("border","1px solid");
 				$("#up"+serialNum).attr("readonly",false);
-				$("#up"+serialNum).val(unPaymentAmount);
+				if(Number($scope.remainMoneyAmount)>Number(unPaymentAmount)){
+//					$("#up"+serialNum).val(unPaymentAmount);
+					$scope['unPaymentAmount'+serialNum]=unPaymentAmount;
+				}else{
+					$scope['unPaymentAmount'+serialNum]=$scope.remainMoneyAmount;
+//					$("#up"+serialNum).val(remainMoneyAmount);
+				}
 				$scope.judgeNumber($scope.remainMoneyAmount,unPaymentAmount,serialNum);
 			}else{
 				$("#up"+serialNum).css("border","none");
@@ -331,7 +363,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
   		$scope.judgeNumber=function(remainMoneyAmount,unPaymentAmount,serialNum){
 			 var value=$scope['unPaymentAmount'+serialNum];//核销金额
 			 if(isNaN(value)||value<=0){
-				 toastr.warning("核销金额必须为大于0的数字！");
+				 /*toastr.warning("核销金额必须为大于0的数字！");*/
 				 $("#up"+serialNum).val(remainMoneyAmount);
 				 return;
 			 }
@@ -547,6 +579,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						$scope.comFinances=data.comFinances//收付款信息
 						$scope.comContacts=data.comContacts//联系信息
 						$scope.paymentRecord.payee=data.orderInfo.buyName;
+						$scope.canTotalRate=100-data.currentTotalRate;//获取当前可建收付款百分比数
 					}else{
 						/*$scope.pay.orderNum=data.orderInfo.orderNum;
 						$scope.pay.orderSerial=data.orderInfo.serialNum;
@@ -963,6 +996,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            { mData: 'serialNum'},
 						                            { mData: 'paymentNum' },//paymentType
 						                            { mData: 'paymentType' },//paymentType
+						                            { mData: 'orderNum' },//paymentType
 						                            { mData: 'applyCurrency' },
 						                            { mData: 'applyPaymentAmount' },
 						                            { mData: 'playPaymentDate' },
@@ -1017,7 +1051,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            	}
 						                            } ,
 						                            {
-						                            	'targets' : 5,
+						                            	'targets' : 6,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
@@ -1030,7 +1064,7 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 						                            	
 						                            } ,
 						                            {
-						                            	'targets' : 11,
+						                            	'targets' : 12,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
@@ -1423,10 +1457,12 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 				paymentNum:{required:"付款编号不能为空！",rangelength:jQuery.validator.format("付款编号位数必须在{0}到{1}字符之间！")},
 				paymentType:{required:"付款类型不能为空！"},
 				orderNum:{required:"关联订单不能为空！"},
+				billType:{required:"发票方式不能为空！"},
 				/*applyPaymentAmount:{required:"申请付款金额不能为空！",number:"请输入数字（正数）！",min:"必须是正数，且不小于0.01！",minNumber:"小数点后最多为两位！"},*/
 				applyCurrency:{required:"申请币种不能为空！"},
 				playPaymentDate:{required:"申请付款日期不能为空！"},
 				payType:{required:"支付类型不能为空！"},
+				deliveryRate:{required:"支付比率不能为空,0-100之间！"},
 				paymentNode:{required:"支付节点不能为空！"},
 				nodeNum:{required:"支付节点不能为空！"},
 				applicant:{required:"申请人不能为空！"},
@@ -1461,6 +1497,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 					minlength: 6,
 					required: !0
 				},
+				billType:{
+					required:true,
+				},
 				/*qgOrBgNum:{
 					required:flag,
 				},*/
@@ -1470,6 +1509,9 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 				paymentType:{required:true,
 				},
 				orderNum:{required:true,
+				},
+				deliveryRate:{
+					required:!0,
 				},
 			/*	applyPaymentAmount:{
 				    required:true,

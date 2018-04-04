@@ -343,6 +343,7 @@ public class DemandPlanController {
         			materiel.setCreator(currenLoginName);
         			materiel.setUpdateTime(new Date());
         			materiel.setUpdater(currenLoginName);
+        			materiel.setSupplyMaterielSerial("");
         			demandPlanMaterielService.insert(materiel);
         		}else{
         			materiel.setUpdateTime(new Date());

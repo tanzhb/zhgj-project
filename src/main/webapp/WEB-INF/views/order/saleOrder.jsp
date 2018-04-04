@@ -32,7 +32,7 @@
 <%-- 		<shiro:hasPermission name="zhgj:frameOrder">
 			<li><a data-target="" data-toggle="tab">框架合同</a></li>
 		</shiro:hasPermission> --%>
-			<li><a ng-click="return;" href="#fahuojihua" data-target="#tab_15_3" data-toggle="tab">发货计划</a></li>
+			<li  ><a  ng-click="return;"  href="#fahuojihua" data-target="#tab_15_3" data-toggle="tab"  >发货计划</a></li>
 			<li><a data-target="#tab_15_4" data-toggle="tab">收款计划</a></li>
 	</ul>
     <div class="tab-content">
@@ -320,7 +320,7 @@
 										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
-										class="fa fa-plus"></i>发货通知
+										class="fa fa-plus"></i>发货计划
 									</label> 
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货

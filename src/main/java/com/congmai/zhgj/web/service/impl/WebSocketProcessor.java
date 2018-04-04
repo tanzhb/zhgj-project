@@ -76,7 +76,7 @@ public class WebSocketProcessor implements MessageProcessor {
 				private static String message14 = "尊敬的${paramer_a}，您好！</br>报关单&nbsp;${paramer_b}&nbsp;等待您的报关。"+
 								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
 				//平台代发货通知供应商修改
-				private static String message20 = "尊敬的${paramer_a}，您好！</br>发货单&nbsp;${paramer_b}&nbsp;等待您的修改。"+
+				private static String message20 = "尊敬的${paramer_a}，您好！</br>发货单&nbsp;${paramer_b}&nbsp;等待您确认发货。"+
 								"<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a> </br>祝您工作愉快！";	
 				
 				//发给提交需求计划后通知产品经理

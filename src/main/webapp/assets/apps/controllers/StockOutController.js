@@ -276,22 +276,22 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						return
 					}
 					
-					var arraySerialNums=$scope.arraySerialNums;
+					/*var arraySerialNums=$scope.arraySerialNums;
 					var deliveryMaterielSerialNums =$scope.deliveryMaterielSerialNums;
 					
-					/*for(var i=0;i < deliveryMaterielSerialNums.length;i++){
+					for(var i=0;i < deliveryMaterielSerialNums.length;i++){
 						if($scope["arraySerialNums"+deliveryMaterielSerialNums[i]]==undefined&&$scope.takeDeliveryMateriels[i].stockOutMateriels.length==0&&$scope.takeDeliveryMateriels[i].currentStockAmount>0){
 							toastr.warning("存在库存不为0且未选择出库批次的物料!");
 							return;
 						}
 					}*/
 					//handle.blockUI();
-					for(var m=0;m< deliveryMaterielSerialNums.length;m++){
+					/*for(var m=0;m< deliveryMaterielSerialNums.length;m++){
 					if($scope["arraySerialNums"+deliveryMaterielSerialNums[m]]!=undefined){
-				/*	var serialNums=new Array();
+					var serialNums=new Array();
 					for(var i=0;i < arraySerialNums.length;i++){
 						serialNums=serialNums.concat($scope["arraySerialNums"+arraySerialNums[i]]);
-					}*/
+					}
 						var serialNums=new Array();
 						 serialNums=serialNums.concat($scope["arraySerialNums"+deliveryMaterielSerialNums[m]]);
 					for(var i=0;i < serialNums.length;i++){
@@ -321,11 +321,12 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						}
 						
 					}
-					}
+					}*/
 					handle.blockUI();
 					var promise = takeDeliveryService
 							.saveStockOutData(params);
 					promise.then(function(data) {
+						handle.unblockUI();
 						if(data.data == "1"){
 							if(judgeString=='save'){
 								toastr.success("保存成功！");
@@ -370,7 +371,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						}else{
 							toastr.error("出库失败！请联系管理员");
 						}
-						handle.unblockUI();
+						
 					}, function(data) {
 						// 调用承诺接口reject();
 						handle.unblockUI();
@@ -518,7 +519,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					            	inOutType:{required:"出库类型不能为空！"},
 					            	stockCount:{required:"出库数量不能为空！",digits:"发货数量必须为数字！"},
 					            	warehouseSerial:{required:"仓库不能为空！"},
-					            	transportContactNum:{isPhone:"请输入正确的联系电话, 必须为数字！",required:"联系电话不能为空"},
+					            	transportContactNum:{isPhone:"请输入正确的联系电话, 必须为数字！"/*,required:"联系电话不能为空"*/},
 					            	//positionSerial:{required:"库区不能为空！"}
 					            },
 					            rules: {
@@ -555,8 +556,8 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 					                	isPhone: !0
 					                },
 					                transportContactNum:{
-					                	isPhone:!0,
-					                	required:true
+					                	isPhone:!0/*,
+					                	required:true*/
 					                }
 					            },
 					            invalidHandler: function(e, t) {
@@ -939,7 +940,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 																				}else if(data=='APPROVAL_FAILED'){
 																					return '审批失败';
 																				}else if(data=='4'){
-																					return '已收货';
+																					return '已完成';//已收货
 																				}else{
 																					return '';
 																				}

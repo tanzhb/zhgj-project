@@ -417,6 +417,13 @@ public class PayController {
 			}
 		}
 		map.put("clauseSettlementDetail", clauseSettlementDetail);
+		//获取当前订单已建的收付款信息
+		List<PaymentRecord>list=payService.findPaymentRecordList(serialNum);
+		BigDecimal total=BigDecimal.ZERO;
+		for(PaymentRecord p:list){
+			total=total.add(new BigDecimal(p.getDeliveryRate()));
+		}
+		map.put("currentTotalRate", total);
 		return map;
 	}
 	

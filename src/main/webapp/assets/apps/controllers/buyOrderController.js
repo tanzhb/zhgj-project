@@ -265,7 +265,34 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			language: "zh-CN"
    	})
   };
-   
+  var validatorInit= function(){
+		 
+		 if ($.validator) {
+	           $.validator.prototype.elements = function () {
+	               var validator = this,
+	                 rulesCache = {};
+	 
+	               // select all valid inputs inside the form (no submit or reset buttons)
+	               return $(this.currentForm)
+	               .find("input, select, textarea")
+	               .not(":submit, :reset, :image, [disabled]")
+	               .not(this.settings.ignore)
+	               .filter(function () {
+	                   if (!this.name && validator.settings.debug && window.console) {
+	                       console.error("%o has no name assigned", this);
+	                   }
+	                   //注释这行代码
+//	                    select only the first element for each name, and only those with rules specified
+	                   if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+	                       return false;
+	                   }
+	                   rulesCache[this.name] = true;
+	                   return true;
+	               });
+	           }
+	    }
+		 
+	 }
     $scope.save  = function() {
     	if($('#form_sample_1').valid()){//
     		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
@@ -598,7 +625,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 								if(isNull(row.payAmount)||row.payAmount==0||row.payAmount=='null'){
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="viewPayLog(\''+row.serialNum+'\')">已付</a>'+'<span style="color:#FCB95B">'+row.payReceiptMoney+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（<a href="javascript:void(0);" ng-click="viewPayLog(\''+row.serialNum+'\')">已付</a>'+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
 								}
 								
                     			if(row.payStatus=="0"){
@@ -693,36 +720,46 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                        			return clickhtm + '<a href="javascript:void(0);" ng-click="submitBuyApply(\''+row.serialNum+'\',\''+row.materielCount+'\')">申请</a>';
 	                        		}
 								}else if(row.status==2){
-									if(isNull(row.deliveryCount)||row.deliveryCount==0){
-										return clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>'//代发货
-									}else if(Number(row.materielCount)>Number(row.deliveryCount)){
+									if((isNull(row.deliveryCount)||row.deliveryCount==0)||Number(row.materielCount)>Number(row.deliveryCount)){
+										clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a><br/>';
+									}
+									if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))){
+										clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+									}
+									if((isNull(row.payReceiptMoney)||row.payReceiptMoney==0||Number(row.payReceiptMoney)<Number(row.orderAmount))){
+										clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>';
+									}
+								/*	if(isNull(row.deliveryCount)||row.deliveryCount==0){
+										clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>'//代发货
+									}
+									if(Number(row.materielCount)>Number(row.deliveryCount)){
 										if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
-											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+											clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
 											} else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
-												return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+												clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 												+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
 												}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
-													return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
+													clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 													+'<a href="javascript:void(0);" ng-click="takeDeliveryAdd(\''+row.serialNum+'\')">通知发货</a>';//代发货
-													}else{
-												return clickhtm + '';
+													};
 											}
-									}else if(Number(row.materielCount)==Number(row.deliveryCount)){
+									
+									if(Number(row.materielCount)==Number(row.deliveryCount)){
+										debugger;
 										if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
-											return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
+											clickhtm=clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
 											+'<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\')">收票</a><br/>'
 											}else if((Number(row.payAmount)==Number(row.orderAmount))&&(Number(row.payReceiptMoney)<Number(row.orderAmount))){
-												return clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\',\''+row.unBillOrReceiptMoney+'\')">收票</a><br/>'
+												clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goCollectInvoice(\''+row.serialNum+'\',\''+row.unBillOrReceiptMoney+'\')">收票</a><br/>'
 												}else if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))&&(Number(row.payReceiptMoney)==Number(row.orderAmount))){
 												return clickhtm + '<a href="javascript:void(0);" ng-click="goPayMoney(\''+row.serialNum+'\')">付款</a><br/>'
-												}else{
-												return clickhtm + '';
-											}
-									}else{
-										return clickhtm + '';
-									}
+												}
+											}*/
+									
+										return clickhtm ;
+									
 								}else if(row.status==3){
 									return clickhtm + '<a href="javascript:void(0);" ng-click="signContract(\''+row.contract.id+'\',\''+row.contract.comId+'\')">签订</a>'
 								}else if(row.status=="66"){
@@ -1280,8 +1317,35 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 			}
 			
 		}, "框架协议不能为空"); 
-		
-		var validateInit = function() {
+		var validateInit= function(){
+      		 
+      		 if ($.validator) {
+      	           $.validator.prototype.elements = function () {
+      	               var validator = this,
+      	                 rulesCache = {};
+      	 
+      	               // select all valid inputs inside the form (no submit or reset buttons)
+      	               return $(this.currentForm)
+      	               .find("input, select, textarea")
+      	               .not(":submit, :reset, :image, [disabled]")
+      	               .not(this.settings.ignore)
+      	               .filter(function () {
+      	                   if (!this.name && validator.settings.debug && window.console) {
+      	                       console.error("%o has no name assigned", this);
+      	                   }
+      	                   //注释这行代码
+      	                   // select only the first element for each name, and only those with rules specified
+      	                   if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
+      	                       return false;
+      	                   }
+      	                   rulesCache[this.name] = true;
+      	                   return true;
+      	               });
+      	           }
+      	    }
+      		 
+      	 }
+		/*var validateInit = function() {
         	var e = $("#form_sample_1"),
 	        r = $(".alert-danger", e),
 	        i = $(".alert-success", e);
@@ -1340,8 +1404,68 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	                i.show(),
 	                r.hide()
 	            }})
-        };
-        
+        };*/
+     // 页面加载完成后调用，验证输入框
+    	$scope.$watch('$viewContentLoaded', function() { 
+        	var e = $("#form_sample_1"),
+	        r = $(".alert-danger", e),
+	        i = $(".alert-success", e);
+	        e.validate({
+	            errorElement: "span",
+	            errorClass: "help-block help-block-error",
+	            focusInvalid: !1,
+	            ignore: "hidden",
+	            messages: {
+	            	orderNum:{required:"采购订单号不能为空！"},
+	            	orderType:{required:"采购类型不能为空！"},
+	            	supplyComId:{required:"供应商不能为空！"},
+	            	serviceModel:{required:"服务模式不能为空！"},
+	            	settlementClause:{required:"结算条款不能为空！"},
+	            	deliveryMode:{required:"提货方式不能为空！"},
+	            	rate:{required:"税率不能为空！"},
+	            	currency:{required:"币种不能为空！"},
+	            	maker:{required:"制单人不能为空！"},
+	            	seller:{required:"采购商不能为空！"},
+	            	orderDate:{required:"下单日期不能为空！"},
+	            	frameNum:{noFrameFlag:"框架协议不能为空！"}
+	            },
+            	rules: {orderNum: {required: !0,maxlength: 20},
+            		orderType: {required: !0,maxlength: 20},
+            		supplyComId: {required: !0,maxlength: 20},
+            		serviceModel: {required: !0,maxlength: 20},
+            		settlementClause: {required: !0,maxlength: 20},
+            		deliveryMode: {required: !0,maxlength: 20},
+            		rate: {required: !0,maxlength: 20},
+            		maker: {required: !0,maxlength: 20},
+	            	seller:{required: !0,maxlength: 20},
+            		currency: {required: !0,maxlength: 20},
+            		orderDate: {required: !0},
+            		frameNum:{noFrameFlag:true}},
+            		invalidHandler: function(e, t) {
+                    i.hide(), r.show(), App.scrollTo(r, -200)
+                },
+	            invalidHandler: function(e, t) {
+	                i.hide(),
+	                r.show(),
+	                App.scrollTo(r, -200)
+	            },
+	            errorPlacement: function(e, r) {
+	                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	            },
+	            highlight: function(e) {
+	                $(e).closest(".form-group").addClass("has-error")
+	            },
+	            unhighlight: function(e) {
+	                $(e).closest(".form-group").removeClass("has-error")
+	            },
+	            success: function(e) {
+	                e.closest(".form-group").removeClass("has-error")
+	            },
+	            submitHandler: function(e) {
+	                i.show(),
+	                r.hide()
+	            }})
+        });
         
         /**
 		 * 获取订单信息
@@ -1902,6 +2026,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				  	   	       		    		if(!isNull($scope.clauseSettlementDetail)){
 				  	   	       		    			for(var i=0;i<$scope.clauseSettlementDetail.length;i++){
 				  	   	          		    			$scope.clauseSettlementDetail[i].clauseSettlementSerial = data.data.serialNum;
+				  	   	          		    		$scope.clauseSettlementDetail[i].deliveryAmount=$scope.clauseSettlementDetail[i].deliveryRate*$scope.totalOrderAmount()/100;
 				  	   	          		    		}
 				  	   	          		    		orderService.saveClauseSettlementDetail($scope.clauseSettlementDetail).then(//保存结算条款明细
 				  	   	          		        		     function(data){
@@ -1977,6 +2102,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 						$scope["orderMaterielInput"+index] = true;
 						$scope["orderMaterielShow"+index] = true;
 						$scope["orderMaterielEdit"+index] =false;
+						if($scope.clauseSettlement.CSD!=undefined){//有交付条款
+							for(var a=0; a<$scope.clauseSettlement.CSD.length;a++ ){
+								$scope.clauseSettlement.CSD[a].deliveryAmount=$scope.clauseSettlement.CSD[a].deliveryRate*$scope.totalOrderAmount()/100;
+							}
+						}
 						$(".alert-danger").hide();
 					} else {
 						$(".modal-backdrop").remove();
@@ -2646,9 +2776,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	   $scope._arithmeticDeliveryAmount(scope);
   };
   
-    $scope._arithmeticDeliveryAmount  = function(scope) {//计算支付金额
+    $scope._arithmeticDeliveryAmount  = function(scope,index) {//计算支付金额
        	if($scope._totalRate()>100){
        		scope._CSD.deliveryRate = scope._CSD.deliveryRate - $scope._totalRate() + 100
+       	}else if($scope.clauseSettlement.CSD.length==2) {
+       		if(index==0){
+       			$scope.clauseSettlement.CSD[1].deliveryRate=100-scope._CSD.deliveryRate;
+       			$scope.clauseSettlement.CSD[1].deliveryAmount=((100-scope._CSD.deliveryRate)*$scope.totalOrderAmount()/100).toFixed(2);
+       		}else if(index==1){
+       			$scope.clauseSettlement.CSD[0].deliveryRate=100-scope._CSD.deliveryRate;
+       			$scope.clauseSettlement.CSD[0].deliveryAmount=((100-scope._CSD.deliveryRate)*$scope.totalOrderAmount()/100).toFixed(2);
+       		}
        	}
     	
     	if(scope._CSD.deliveryRate){
@@ -3605,9 +3743,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 if((obj[attr]<0||obj[attr]>100)&&(attr!='orderRateUnit'&&attr!='orderUnitPrice'&&attr!='otherAmount')){
 			    		 obj[attr]=0;
 			    	 }
-			    	 if(Number(obj[attr])==0&&(attr=='orderRateUnit'||attr=='orderUnitPrice')){
+			    	 /*if(Number(obj[attr])==0&&(attr=='orderRateUnit'||attr=='orderUnitPrice')){
 			    		 obj[attr]=null;
-			    	 }
+			    	 }*/
 		    	 }
 		       
 		       $scope.clearNoNum = function(obj,attr){
@@ -4820,6 +4958,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
   										return '<span  class="label label-sm label-success ng-scope">待清关</span>';
   									}else if(data=="8"){
   										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
+  									}else if(data=="000"){
+  										return '<span  class="label label-sm label-danger ng-scope">已失效</span>';
   									}
   							}
   						},{

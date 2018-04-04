@@ -704,20 +704,20 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 				focusInvalid: !1,
 				ignore: "",
 				messages: {
-					address:{required:"地址不能为空！"},
+					address:{required:"地址不能为空！"}
 					/*zipCode:{required:"邮编不能为空！"},*/
-					contactTel:{required:"联系电话不能为空！"},
+					/*contactTel:{required:"联系电话不能为空！"},
 					mobileNum:{required:"手机不能为空！"},
-					warehouseName:{required:"仓库名称不能为空！"}
+					warehouseName:{required:"仓库名称不能为空！"}*/
 				},
 				rules: {
 					address: {
 						required: !0
-					},
+					}
 				/*	zipCode: {
 						required: !0
 					},*/
-					warehouseName:{
+					/*warehouseName:{
 						required: !0
 					},
 					contactTel: {
@@ -727,7 +727,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 					mobileNum: {
 						required: !0,
 						isPhone: !0
-					}
+					}*/
 				},
 				invalidHandler: function(e, t) {
 					i.hide(),
@@ -936,11 +936,11 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		    					return;
 		        			}
 	        			}*/
-	        		if($scope.accendants==undefined){
+	        	/*	if($scope.accendants==undefined){
         				$(".alert-danger").html("维护人员至少有一个!");
     					$(".alert-danger").show();
     					return;
-        			}
+        			}*/
 	        		handle.blockUI();
 	        		var promise = companyService.saveCompany($scope.company);
 	        		promise.then(function(data){
@@ -983,7 +983,7 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 		        			 $scope.saveCompanyAddress();
 		        			 $scope.saveCompanyContact();
 		        			}
-		        			$scope.saveCompanyManageInfo();//保存管理信息
+//		        			$scope.saveCompanyManageInfo();//保存管理信息
 	        			}else{
 	        				$(".modal-backdrop").remove();
 		        			handle.unblockUI();

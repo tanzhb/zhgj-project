@@ -306,6 +306,10 @@ public class MessageConstants {
 	 * 提交需求计划后通知产品经理URL
 	 */
 	public static final String URL_DEMANDPLAN_TO_PROMANAGER = "demandPlan";
+	/**
+	 * 提交发货计划后通知供应商确认
+	 */
+	public static final String URL_DELIVERY_TO_SUPPLY= "supplyOrder";
 	
 	
 	

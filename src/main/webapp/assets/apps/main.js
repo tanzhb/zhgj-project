@@ -1193,7 +1193,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         
         //供应商订单列表
         .state('supplyOrder', {
-            url: "/supplyOrder?:tabHref",
+            url: "/supplyOrder?:tabHref&:serialNum",
             templateUrl: "rest/page/supplyOrder",
             data: {pageTitle: '订单'},
             controller: "supplyOrderController",
@@ -4677,9 +4677,17 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a ui-sref='demandPlan'>需求计划列表</a><i class='fa fa-angle-right'></i></li>" + 
 				 		"<li><a>查看需求计划</a></li>";
 			   }else if('saleOrder' == toState.name){//销售订单
-					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				  /* if(toParams.tabHref == "fahuojihua"){
+					   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a>销售订单列表</a></li>";					 
+				 		"<li><a>发货计划</a></li>";	
+				   }else{
+					   
+				   }*/
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>销售订单列表</a></li>";	
+									 
 			   }else if('addSaleOrder' == toState.name){//新增销售订单
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +

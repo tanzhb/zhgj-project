@@ -446,7 +446,7 @@
 			                                        <table class="table table-striped table-bordered table-advance table-hover">
 			                                            <thead>
 			                                                <tr>
-			                                                 	<th>仓库名称</th>
+			                                                 	<!-- <th>仓库名称</th> -->
 			                                                    <th>地址</th>
 			                                                    <th>邮编</th>
 			                                                    <th>电话</th>
@@ -1106,7 +1106,7 @@
                <div class="alert alert-danger display-hide">
                                                 <button class="close" data-close="alert"></button>表单数据未填写完整</div>
                <form id="companyAddressForm" class="form-horizontal">
-               <div class="row">
+               <!-- <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
                                  <label class="col-md-4 control-label" for="warehouseName"><span class="required"> * </span>仓库名称：</label>
@@ -1116,7 +1116,7 @@
                                  </div>
                          </div>
                      </div>
-                 </div>
+                 </div> -->
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
@@ -1144,7 +1144,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="contactTel"><span class="required"> * </span>联系电话：</label>
+                                 <label class="col-md-4 control-label" for="contactTel"><!-- <span class="required"> * </span> -->联系电话：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" name="contactTel" ng-model="companyAddress.contactTel"  >
                                      <div class="form-control-focus"> </div>
@@ -1156,7 +1156,7 @@
                  <div class="row">
                      <div class="col-md-12">
                          <div class="form-group">
-                                 <label class="col-md-4 control-label" for="mobileNum"><span class="required"> * </span>手机：</label>
+                                 <label class="col-md-4 control-label" for="mobileNum"><!-- <span class="required"> * </span> -->手机：</label>
                                  <div class="col-md-6">
                                      <input type="text" class="form-control" id="mobileNum" name="mobileNum" ng-model="companyAddress.mobileNum"  >
                                      <div class="form-control-focus"> </div>

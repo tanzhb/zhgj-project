@@ -1375,7 +1375,7 @@ margin-right: 20px;
                                      <th style="width:150px">支付节点</th>
                                      <th style="width:150px">开票方式</th>
                                      <th style="width:70px">账期（天）</th>
-                                     <th style="width:100px">支付比率%</th>
+                                     <th style="width:50px">支付比例%</th>
                                      <th style="width:150px">支付金额</th>
                                      <th style="width:150px">支付方式</th>
                                      <!-- <th style="width:150px">开票方式</th> -->
@@ -1453,7 +1453,7 @@ margin-right: 20px;
 		                          </td>
 		                          <td>
                                      		<input type="text" id="deliveryRate[$index]" name="deliveryRate" class="form-control" ng-hide="clauseSettlementInput" ng-model="clauseSettlement.CSD[$index].deliveryRate" 
-                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryRate');_arithmeticDeliveryAmount(this)" >
+                                     		ng-keyup="clearNoNumPoint(clauseSettlement.CSD[$index],'deliveryRate')"   ng-blur="_arithmeticDeliveryAmount(this,$index)">
 		                                <p class="form-control-static" ng-show="clauseSettlementShow"> {{_CSD.deliveryRate}} </p>
 		                          </td>
 		                          <td>

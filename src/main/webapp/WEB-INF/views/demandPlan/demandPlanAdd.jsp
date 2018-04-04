@@ -32,11 +32,11 @@
 										ng-click="saveDemandPlan()">
 										<i class="fa fa-check"></i> 保存
 									</button>
-									<button ng-hide="demandPlanAdd"
+									<!-- <button ng-hide="demandPlanAdd"
 										class="btn green btn-sm btn-circle"  ng-if="demandPlan.status!=1"
 										ng-click="saveDemandPlan('1')">
 										<i class="fa fa-check"></i> 保存并发布
-									</button>
+									</button> -->
 									<button ng-show="demandPlanView"
 										class="btn purple  btn-sm btn-circle"
 										ng-click="editDemandPlanBasic()">
@@ -264,7 +264,7 @@
                                                     <td>{{materiel.specifications}}</td>
                                                     <td>{{materiel.unit}}</td>
                                                     <td>
-                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control" id="amount{{$index}}" ng-model="materiel.amount" value="">
+                                                    	<input type="text" ng-hide="demandPlanMaterielEdit{{$index}}" class="form-control" id="amount{{$index}}" ng-model="materiel.amount" value=""  ng-change="clearNoNum(rootMateriels[$index],'amount',$index)" >
                                                    	 	 <span class="help-block"></span>
                                                    	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
                                                     </td>

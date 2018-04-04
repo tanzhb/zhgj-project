@@ -507,7 +507,7 @@ angular.module('MetronicApp').controller('UserInfoController', ['$rootScope','$s
 	                	legalPerson:{required:"企业法人不能为空！",},
 	                	address:{required:"注册地址不能为空！",},
 	                	taxpayeNumber:{required:"纳税人识别号不能为空！",},
-	                	tel:{isPhone:"请输入正确的联系电话！",required:"联系电话不能为空！"},
+	                	tel:{isPhone:"请输入正确的联系电话！"/*,required:"联系电话不能为空！"*/},
 	                    payment: {
 	                        maxlength: jQuery.validator.format("Max {0} items allowed for selection"),
 	                        minlength: jQuery.validator.format("At least {0} items must be selected")

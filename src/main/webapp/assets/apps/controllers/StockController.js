@@ -120,7 +120,7 @@ angular
 													headerOffset : a
 												},*/
 												// select: true,行多选
-												order : [ [ 1, "asc" ] ],// 默认排序列及排序方式
+												order : [ [12, "desc" ] ],// 默认排序列及排序方式
 												bRetrieve : true,
 												// searching: true,//是否过滤检索
 												// ordering: true,//是否排序
@@ -168,7 +168,7 @@ angular
 													},{
 														mData : 'minStock'
 													}, {
-														mData : 'riskGrade'//
+														mData : 'lastUpdateDate'//riskGrade
 													}
 													],
 												'aoColumnDefs' : [ {
@@ -220,10 +220,6 @@ angular
 				 	    								if(data==''||data==null){
 				 	    									return "";
 				 	    								}else{
-				 	    									/*if(row.serialNum=="5bba825cb17144d4874f426b0cd3326e"){
-				 	    										debugger;
-				 	    										return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data);
-				 	    									}*/
 				 	    									return daysBetween(timeStamp2ShortString(Date.parse(new Date())),data.substring(0,10));
 				 	    								}
 														
@@ -251,7 +247,10 @@ angular
 													'targets' : 12,
 													'render' : function(data,
 															type, row, meta) {
-														return "";
+														if(isNull(data)){
+															return "";
+														}else
+														return data.substring(0,16);
 													}
 												}  ],
 
@@ -348,9 +347,9 @@ angular
 										}, {
 											mData : 'canSaleAmount'
 										},{
-											mData : 'riskGrade'
+											mData : 'riskGrade'//lastUpdateDate
 										}, {
-											mData : 'status'
+											mData : 'lastUpdateDate'
 										}
 										],
 									'aoColumnDefs' : [ {
@@ -420,6 +419,15 @@ angular
 	 	    								}
 	 	    								return statusIcon ;
 											
+										}
+									},{
+										'targets' : 12,
+										'render' : function(data,
+												type, row, meta) {
+											if(isNull(data)){
+												return "";
+											}else
+											return data.substring(0,16);
 										}
 									}  ],
 
@@ -626,7 +634,7 @@ angular
 		 	    								if(data==''||data==null){
 		 	    									return "";
 		 	    								}else{
-		 	    									return data+"------"+row.stockCount;
+		 	    									return data;
 		 	    								}
 												
 											}

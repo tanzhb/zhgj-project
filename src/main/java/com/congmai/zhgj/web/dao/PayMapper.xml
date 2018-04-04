@@ -187,6 +187,9 @@
 	billType=#{billType},
 	accountPeriod=#{accountPeriod},
 	paymentAmount=#{paymentAmount},
+	<if test="paymentDate!=null">
+	paymentDate=#{paymentDate},
+	</if>
 	deliveryRate=#{deliveryRate},
 	customsFormSerial=#{customsFormSerial},
 	isBill=#{isBill},

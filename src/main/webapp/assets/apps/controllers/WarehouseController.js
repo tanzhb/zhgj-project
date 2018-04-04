@@ -558,8 +558,8 @@ angular
 						            	email: { required:"邮箱不能为空！",email:"E-Mail格式不正确"},
 						            	//email:{required:"邮箱不能为空！"},
 						            	 tel: { 
-						            		 isPhone:'请输入正确的电话！',
-						            		 required:"电话不能为空!"
+						            		 isPhone:'请输入正确的电话！'/*,
+						            		 required:"电话不能为空!"*/
 						                    	
 						                    },
 						                   fax: { 
@@ -578,10 +578,10 @@ angular
 						            	warehouseType:{required:true},
 						            	warehouseCategory:{required:true},
 						            	owner:{required:true},
-						            	address:{required:true}
+						            	address:{required:true},
 						            	//area:{required:!0,digits:true,},
 						            	 //email: {	required:true,email:true},
-						            	 tel: {isPhone:true ,required:true},
+						            	 tel: {isPhone:true /*,required:true*/}
 				                        // fax: {required:true,digits:true, rangelength:[7,20] },
 						            	//remark:{required:true},
 						            	//admin:{required:true}
@@ -784,7 +784,6 @@ angular
 								    	   $scope.warehousepositions[_index] = {};
 								    	   $scope["warehousepositionAdd"+_index] = false;
 								    	   $scope["warehousepositionEdit"+_index] = false;
-								    	   
 								    	   
 								       }
 							       };

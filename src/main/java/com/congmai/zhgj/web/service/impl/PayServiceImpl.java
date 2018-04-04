@@ -413,6 +413,7 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	public Boolean insertVerificateData(List<VerificationRecord> list,String currenLoginName,String serialNum) {
 		BigDecimal totalVerificationMoneyAmount=BigDecimal.ZERO;//此次水单被核销总金额
 		if(!CollectionUtils.isEmpty(list)){
+			PaymentRecord pr=paymentRecordMapper.selectByPrimaryKey(list.get(0).getPaymentRecordSerial());
 			for(VerificationRecord v:list){
 				v.setSerialNum(ApplicationUtils.random32UUID());
 				v.setCreateTime(new Date());
@@ -420,13 +421,13 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 				v.setCreator(currenLoginName);
 				verificationRecordMapper.insert(v);//保存核销记录
 				totalVerificationMoneyAmount=totalVerificationMoneyAmount.add(new BigDecimal (v.getMoneyAmount()));
-				PaymentRecord pr=paymentRecordMapper.selectByPrimaryKey(v.getPaymentRecordSerial());
 				BigDecimal paymentAmount=new BigDecimal(pr.getPaymentAmount()==null?"0":pr.getPaymentAmount()).add(new BigDecimal(v.getMoneyAmount()));//收付款单当前已付金额
 				PaymentRecord paymentRecord=new PaymentRecord();
 				paymentRecord.setSerialNum(v.getPaymentRecordSerial());
 				if(paymentAmount.compareTo(new BigDecimal(pr.getApplyPaymentAmount()))>-1){
 					pr.setStatus("2");//应收付款账单核销完了,更新为已核销
 					pr.setPaymentAmount(pr.getApplyPaymentAmount());
+					pr.setPaymentDate(new Date());
 				}else{
 					pr.setPaymentAmount(paymentAmount.toString());
 					pr.setStatus("1");
@@ -434,6 +435,12 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 				payMapper.updatePaymentRecord(pr);
 				
 			}
+			//更新订单已收/已付金额
+			OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(pr.getOrderSerial());
+			orderInfo.setPayAmount(new BigDecimal(orderInfo.getPayAmount()==null?"0":orderInfo.getPayAmount()).add(totalVerificationMoneyAmount).toString());
+			orderInfo.setSerialNum(pr.getOrderSerial());
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			
 			MemoRecord mr=memoRecordMapper.selectByPrimaryKey(serialNum);
 			BigDecimal nowVerificationMoneyAmount=new BigDecimal(mr.getVerificationMoneyAmount()).add(totalVerificationMoneyAmount);
 			MemoRecord memoRecord=new MemoRecord();

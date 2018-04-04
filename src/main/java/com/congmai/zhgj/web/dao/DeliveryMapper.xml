@@ -249,7 +249,7 @@
 	a.serialNum,a.deliverNum,a.orderSerial,b.orderNum,COUNT(DISTINCT c.serialNum) AS materielCount, SUM(IFNULL(c.deliverCount,0)) AS materielTotalCount,a.packageCount,
 	a.receiver,a.deliverAddress deliveryAddress,a.status,a.packageType,a.deliverType,
 	d.takeDeliverAddress AS takeAddress,a.deliverDate,
-	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName,
+	e.transportType,a.remark,com.comName AS supplyName,com1.comName AS buyName,a.processInstanceId as processInstanceId,
 	sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial,sr.realCount as realCount
 	FROM delivery a 
 	LEFT JOIN orderInfo b ON a.orderSerial=b.serialNum
@@ -278,8 +278,8 @@
        or (a.supplyComId is null  and a.deliverType='代发货' ) )
       
     </if>
-     <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 -->
-       AND(( a.supplyComId is null  and a.buyComId is not null and  a.status != '0' ) or (a.status= '0' and a.deliverType!='采购商提货'  ))
+     <if test="deliverType == 'mhq'" ><!-- 供应商查看销售订单发货列表发货计划 --><!-- a.status= '0'  and -->
+       AND(( a.supplyComId is null  and a.buyComId is not null and  a.status != '0' ) or ( a.deliverType!='采购商提货'  ))
     </if>
     <if test="orderSerial != null" >
        AND a.orderSerial= #{orderSerial} 
@@ -484,4 +484,9 @@
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
 	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  (f.status!=0 and f.status!=10)
     </select>
+    <!-- 将当前其他未确认发货的发货单更新为已失效 -->
+    <update id="updateOtherDeliveryStatus" parameterType="java.util.HashMap">
+    UPDATE delivery SET status='000',updateTime=NOW() WHERE serialNum!=#{serialNum} and orderSerial=#{orderSerial} and (status='0' or  status='10') and delFlg=0
+   
+    </update>
     </mapper>

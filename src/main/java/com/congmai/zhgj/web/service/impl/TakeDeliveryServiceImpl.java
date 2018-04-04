@@ -196,7 +196,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			String currenLoginName) {
 		//takeDeliveryParams = getTakeDeliveryData(takeDeliveryParams,currenLoginName);
 		if("10".equals(delivery.getStatus())){
-			delivery.setStatus("0");
+//			delivery.setStatus("0");
 			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.NOTICESUPPLY));//通知供应商修改
 		}
 		delivery2Mapper.insert(delivery);
@@ -324,6 +324,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
 					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
 				}
+			}
+			//发完订单数量将其它未发货的发货单更新为已失效
+			if(new BigDecimal(o.getMaterielCount()).compareTo(new BigDecimal(orderInfo.getDeliveryCount()))==0){//发完订单数量
+				Map<String,Object>map=new HashMap<String,Object>();
+				map.put("serialNum", delivery.getSerialNum());
+				map.put("orderSerial",o.getSerialNum());
+				takeDeliveryMapper.updateOtherTakeDeliveryStatus(map);
+				deliveryMapper.updateOtherDeliveryStatus(map);
+				
 			}
 			if(createQG){
 				Map<String,Object>map=new HashMap<String,Object>();

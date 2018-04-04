@@ -60,6 +60,17 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 				//调用承诺接口reject();
 			});
 		}
+	  
+	  $scope.clearNoNum = function(obj,attr,index){
+	    	 //把非数字的都替换掉
+		     obj[attr] = obj[attr].replace(/^\0/g,"");
+	    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
+	    	 if(!handle.isInteger(obj[attr])||Number(obj[attr])<=0){
+				   handle.paramCheck("amount"+index,"数量只能是正整数！");
+				   obj[attr]=0;
+			}
+	    	 
+		 }    
 	 /***选择物料列表初始化START***/
      var table;
      var selectParentMateriel = function() {
@@ -567,7 +578,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
         			}else{
 		        		for(var i = 0;i < $scope.serialNums.length;i++){
 		        			($scope.serialNums)[i].materiel.supplyMaterielSerial=null;
-	        				$scope.rootMateriels.splice($scope.serialNums.length+1,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
+	        				$scope.rootMateriels.splice($scope.serialNums.length+1+$scope.rootMateriels.length,0,($scope.serialNums)[i].materiel); //将选中物料放入列表开头，并设置为编辑状态
 	        				$scope["demandPlanMaterielEdit"+i] = false;
 							$scope["demandPlanMaterielView"+i] = false;
 							/*$scope["demandPlanMaterielEdit" + ($scope.rootMateriels.length-1)] = true;
@@ -673,6 +684,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 							$(".modal-backdrop").remove();
 							toastr.success("保存成功,若无物料请新增物料!");
 							handle.unblockUI();
+							$scope.rootMateriels=data.data;
 		 		    			for(var i=0;i<data.data.length;i++){
 		 			        			$scope["demandPlanMaterielEdit"+i] = true;
 		 								$scope["demandPlanMaterielView"+i] = true;
@@ -948,9 +960,9 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 				demandPlanMateriel.createTime = null;
 				demandPlanMateriel.updateTime = null;
 				demandPlanMateriel.demandPlanSerial = $scope.demandPlan.serialNum;
-				if(isNull(materiel.materielSerial)){ //如果供应物料id不存在，则为新增物料，否则为编辑需求物料
+				if(isNull(materiel.serialNum)){ //如果供应物料id不存在，则为新增物料，否则为编辑需求物料
 					demandPlanMateriel.supplyMaterielSerial = materiel.supplyMaterielSerial;
-					demandPlanMateriel.materielSerial = materiel.serialNum;
+					demandPlanMateriel.materielSerial = materiel.materielSerial;
 				}else{
 					demandPlanMateriel.serialNum = materiel.serialNum;
 					demandPlanMateriel.supplyMaterielSerial = materiel.supplyMaterielSerial;

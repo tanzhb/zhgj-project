@@ -1385,12 +1385,7 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
    		$scope.judgeNumber=function(remainMoneyAmount,unPaymentAmount,serialNum){
 			 var value=$scope['unPaymentAmount'+serialNum];//核销金额
 			 if(isNaN(value)||value<=0){
-				 toastr.warning("核销金额必须为大于0的数字！");
-				 $("#up"+serialNum).val(unPaymentAmount);
-				 return;
-			 }
-			 if(isNaN(value)||value<=0){
-				 toastr.warning("核销金额必须为大于0的数字！");
+				/* toastr.warning("核销金额必须为大于0的数字！");*/
 				 $("#up"+serialNum).val(unPaymentAmount);
 				 return;
 			 }

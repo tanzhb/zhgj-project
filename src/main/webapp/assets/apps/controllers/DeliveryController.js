@@ -1121,7 +1121,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																	}else if(data=='APPROVAL_FAILED'){
 																		return '<span  class="label label-sm label-danger ng-scope">审批失败</span>';
 																	}else if(data=='4'){
-																		return '<span  class="label label-sm label-success ng-scope">已收货</span>';
+																		return '<span  class="label label-sm label-success ng-scope">已出库</span>';//已收货
 																	}else if(data=='1'){
 																		return  '<span  class="label label-sm label-warning ng-scope">待检验</span>';
 																	}else if(data=='2'){
@@ -1234,7 +1234,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				}else{
 					var row = table.row(".active").data();
 					if(table.row('.active').data().status != 2){
-						showToastr('toast-top-center', 'warning', '未处于待出库操作状态！');
+						showToastr('toast-top-center', 'warning', '该出库单已完成出库！');
 					}else{
 						//查找入库记录单流水
 						var promise = DeliveryService
@@ -2836,8 +2836,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
             	
             	/*deliveryWarehouseSerial:{required:"发货仓库不能为空！"},*/
             	deliverDate:{required:"发货日期不能为空！"},
-            	contactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
-	          takeContactNum:{isPhone:"请输入正确的联系电话！",required:"电话不能为空!"},
+            	contactNum:{isPhone:"请输入正确的联系电话！"/*,required:"电话不能为空!"*/},
+	          takeContactNum:{isPhone:"请输入正确的联系电话！"/*,required:"电话不能为空!"*/},
             	
             	/*transport:{required:"运输方不能为空！"},
             	shipNumber:{required:"运单号不能为空！"},*/
@@ -2901,12 +2901,12 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 takeDeliveryWarehouseAddress1:{required:takeDeliveryWarehouseAddress1Flag,
                 },
                 contactNum:{
-                	isPhone: !0,
-                	required:true
+                	isPhone: !0/*,
+                	required:true*/
                 },
                 takeContactNum:{
-                	isPhone: !0,
-                	required:true
+                	isPhone: !0/*,
+                	required:true*/
                 },
                 
               /*  transport:{required:true,
@@ -2914,14 +2914,14 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                 shipNumber:{required:true,
                 },*/
                 deliveryTransportContactNum:{
-                	isPhone: !0,
-                	required:true
+                	isPhone: !0/*,
+                	required:true*/
                 },
                /* warehouseSerial:{required:true,
                 },*/
                 takeDeliveryContactNum:{
-                	isPhone: !0,
-                	required:true
+                	isPhone: !0/*,
+                	required:true*/
                 },
                 email: {
                     required: !0,

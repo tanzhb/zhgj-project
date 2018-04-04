@@ -359,7 +359,7 @@ public class PurchaseForecastController {
 				dm.setCreateTime(new Date());
 				dm.setUpdateTime(new Date());
 				dm.setDelFlg("0");
-				dm.setStatus("0");
+				dm.setStatus("1");//已分解
 				i++;
 				demandMaterielList.add(dm);
 				Materiel materiel=materielService.selectById(demandPlanMateriel.getMaterielSerial());

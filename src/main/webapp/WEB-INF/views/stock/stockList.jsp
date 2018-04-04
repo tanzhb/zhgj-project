@@ -56,10 +56,10 @@
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStock('zijian')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
 	                </shiro:hasPermission>
-	                <shiro:hasPermission name="stock:import">
+	               <%--  <shiro:hasPermission name="stock:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
-	                 </shiro:hasPermission>
+	                 </shiro:hasPermission> --%>
 	                <shiro:hasPermission name="stock:export">                             
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStock('zijian')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
@@ -118,7 +118,7 @@
                             <th> 在途 </th>
                             <th> 可售 </th>
                             <th> 状态 </th>
-                            <th>风险等级</th>
+                            <th>更新日期</th>
 						</tr>
 						
 					</thead>

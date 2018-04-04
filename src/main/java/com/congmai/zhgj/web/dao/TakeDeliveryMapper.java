@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -44,4 +45,5 @@ public interface TakeDeliveryMapper extends GenericDao<TakeDelivery, String>{
 	TakeDelivery selectTakeDeliveryByDeliveryId(String serialNum);
 	
 	Delivery selectByPrimaryDeliveryKey(String serialNum);
+	public void updateOtherTakeDeliveryStatus(Map<String,Object> map);
 }

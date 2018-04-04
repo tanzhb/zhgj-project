@@ -350,7 +350,7 @@ angular
 																var statusIcon='';//状态
 																debugger;
 						 	    								if(row.status==0){
-						 	    									statusIcon = '<span class="label label-sm label-success"  >待收票</span> '
+						 	    									statusIcon = '<span class="label label-sm label-warning"  >待收票</span> '
 						 	    								}else if(row.status==2){
 						 	    									statusIcon = '<span class="label label-sm label-success">已收票</span> '
 						 	    								}else if(row.status==1){
@@ -523,26 +523,26 @@ angular
 				                            		if(data!=""&&data!=null){
 				                            			debugger;
 				                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
-				    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+				    										return '<span  class="label label-sm label-warning">审核中</span>';
 				    									}else if(data.status=="APPROVAL_SUCCESS"){
 				    										if(row.status==0){
-				    											return '<span  class="label label-sm label-success ng-scope">待开票</span>';
+				    											return '<span   class="label label-sm  label-warning">待开票</span>';
 				    										}else if(row.status==1){
-				    											return '<span  class="label label-sm label-success ng-scope">已审批</span>';
+				    											return '<span  class="label label-sm label-success">已审批</span>';
 				    										}else if(row.status==2){
-				    											return '<span  class="label label-sm label-success ng-scope">已开票</span>';
+				    											return '<span  class="label label-sm label-success ">已开票</span>';
 				    										}else if(row.status==3){
-				    											return '<span  class="label label-sm label-success ng-scope">已申请开票</span>';
+				    											return '<span  class="label label-sm label-success">已申请开票</span>';
 				    										}
 				    									}else if(data.status=="APPROVAL_FAILED"){
-				    										return '<span  class="label label-sm label-danger ng-scope">未通过</span>';
+				    										return '<span  class="label label-sm label-danger">未通过</span>';
 				    									}else{
-				    										return '<span  class="label label-sm label-info ng-scope">未审批</span>';
+				    										return '<span  class="label label-sm label-info">未审批</span>';
 				    									}
 				                            		}else if(row.status==3){
-		    											return '<span  class="label label-sm label-success ng-scope">已申请开票</span>';
+		    											return '<span  class="label label-sm label-success ">已申请开票</span>';
 		    										}else{
-				                            			return '<span  class="label label-sm label-success ng-scope">待开票</span>';
+				                            			return '<span  class="label label-sm  label-warning">待开票</span>';//class="label label-sm label-warning"  
 				                            		}
 				                            	}
 				                            }

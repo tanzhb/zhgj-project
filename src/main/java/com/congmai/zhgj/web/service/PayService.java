@@ -232,5 +232,6 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	    public List< VerificationRecord>findVerificationRecordByPaymentRecordSerial(String serialNum);
 	    
 	    public List<PaymentRecord> findPaymentRecordList(String  orderSerial);//根据订单流水查找该订单已建的收付款信息
+	    
 	
 }

@@ -1664,7 +1664,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	
 	/**
 	 * 
-	 * @Description (平台代发货通知供应商修改消息)
+	 * @Description (平台代发货通知供应商确认消息)
 	 * @param event
 	 */
 	private void inToSupply(SendMessageEvent event) {
@@ -1683,10 +1683,9 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						messageVO.setTempleteType(MessageConstants.TEMP_NOTICESUPPLY); //发给通知供应商
 						messageVO.setObjectSerial(record.getSerialNum());
 						messageVO.setReceiverId(u.getUserId()+"");
-						messageVO.setActionName(MessageConstants.URL_CONFIRM_BUY_ORDER);
 						properties.put("paramer_a", u.getUserName());
 						properties.put("paramer_b", record.getDeliverNum());
-						properties.put("paramer_c", MessageConstants.URL_SALE_ORDER);
+						properties.put("paramer_c", MessageConstants.URL_DELIVERY_TO_SUPPLY);
 						properties.put("paramer_d", messageVO.getSerialNum());
 						messageVO.setProperties(properties);
 						messageProcessor.sendMessageToUser(messageVO);

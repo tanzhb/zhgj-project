@@ -173,7 +173,7 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 			
 				if(actionName=="applyBuyOrder"||actionName=="refuseBuyOrder"){
 					$state.go("buyOrder",{tabHref:'1'});
-				}else if(actionName=="confirmBuyOrder"||actionName=="supplyOrder"){
+				}else if(actionName=="confirmBuyOrder"||actionName=="supplyOrder"||actionName=="noticeSupply"){
 					$state.go("supplyOrder");
 				}else if(actionName=="beConfirmBuyOrder"||actionName=="agreeBuyOrder"){
 					$state.go("buyOrder");
@@ -208,6 +208,8 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("paymentRecordC");
 				}else if(actionName=="demandplan2Promanager"){
 					$state.go("demandPlan");
+				}else if(actionName=="noticeSupply"){
+					$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
 				}
 			}
 			

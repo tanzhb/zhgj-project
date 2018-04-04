@@ -418,20 +418,19 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		String serialNum=(String) map.get("serialNum");//发货流水
 		  String currenLoginName=  (String) map.get("updater");
 		Boolean  createQG= (Boolean) map.get("createQG");
+		OrderInfo orderInfo=new OrderInfo();
+		orderInfo.setSerialNum(o.getSerialNum());
+		orderInfo.setDeliveryCount(o.getDeliveryCount());
+		List<DeliveryMaterielVO> deliveryMateriels= deliveryMapper.selectListForDetail(serialNum);
+		if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+			for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+				orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+			}
+		}
 		if(createQG){//外贸 (供应商外贸发货)
 			createCustomsClearanceForm(map);//自动生成清关单
 			//更新订单状态待清关
-			OrderInfo orderInfo=new OrderInfo();
-			orderInfo.setSerialNum(o.getSerialNum());
 			//设置订单发货数量，用于更新
-			orderInfo.setDeliveryCount(o.getDeliveryCount());
-			List<DeliveryMaterielVO> deliveryMateriels=null;
-			deliveryMateriels = deliveryMapper.selectListForDetail(serialNum);
-			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
-				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
-					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
-				}
-			}
 			orderInfo.setDeliverStatus(orderInfo.CLEARANCE);
 			
 			//更新收货单状态
@@ -444,7 +443,11 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 			
 			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
 		}
-			
+		//发完订单数量将其它未发货的发货单更新为已失效
+		if(new BigDecimal(o.getMaterielCount()).compareTo(new BigDecimal(orderInfo.getDeliveryCount()))==0){//发完订单数量
+			takeDeliveryMapper.updateOtherTakeDeliveryStatus(map);
+			deliveryMapper.updateOtherDeliveryStatus(map);
+		}
 		
 	}
 	//自动生成清关单

@@ -851,4 +851,12 @@
     left join deliveryMateriel dm2 on td.serialNum = dm2.deliverSerial and dm.orderMaterielSerial=dm2.orderMaterielSerial and dm.delFlg = "0"
     where d.serialNum = #{serialNum,jdbcType=VARCHAR} 
   </select>
+   <!-- 将当前其他未确认发货的发货单更新为已失效 -->
+    <update id="updateOtherTakeDeliveryStatus" parameterType="java.util.HashMap">
+    UPDATE takeDelivery  td  
+    left join  delivery d on   d.serialNum=td.deliverSerial
+    SET td.status='000',td.updateTime=NOW()
+     WHERE d.serialNum!=#{serialNum} and d .orderSerial=#{orderSerial} and (d.status='0' or  d.status='10') and  d.delFlg=0
+   
+    </update>
 </mapper>
