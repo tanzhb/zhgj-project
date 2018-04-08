@@ -66,16 +66,18 @@
 														ng-click="takeDeliveryDelete()"> <i
 														class="fa fa-minus"></i> 删除
 													</label> --> 
-													<shiro:hasPermission name="stockInRecord:add">
+													<shiro:hasPermission name="stockInRecord:stockIn">
 													<label class="btn btn-transparent yellow btn-circle btn-sm"
 														ng-click="takeDeliveryStockIn()"> <i class="fa fa-arrow-down"></i> 入库
 													</label>
 													</shiro:hasPermission>
+													<shiro:hasPermission name="stockInRecord:export">
 													<label
 														class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 														ng-click="exportTakeDelivery()"> <i
 														class="fa fa-file-excel-o"></i> 导出
 													</label>
+													</shiro:hasPermission>
 												</div>
 											</div>
 										</div>

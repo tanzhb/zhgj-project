@@ -1193,7 +1193,7 @@ angular
 						            	checkParty:{required:"检验方不能为空！"},
 						            	checkDate:{required:"检验日期不能为空！"},
 						            	checker: { required:"检验员不能为空！"},
-						            	contactNum:{required:"联系电话不能为空！",isPhone:"请输入正确的联系电话！")},
+						            	contactNum:{required:"联系电话不能为空！",isPhone:"请输入正确的联系电话！"},
 						            	qualifiedCount:{required:"合格数量不能为空！",digits:"请输入正确的合格数量, 必须为数字！"}
 						            },
 						            rules: {

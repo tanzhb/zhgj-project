@@ -415,9 +415,10 @@ angular
 								getWarehouseInfo(serialNum,'noWarehouseInfo');
 								
 							}
+							//单独保存
 							$scope.savewarehouseposition= function(index,judgeNumber) {
 								debugger;
-								if($('#warehousepositionForm').valid()){//表单验证通过则执行添加功能
+//								if($('#warehousepositionForm').valid()){//表单验证通过则执行添加功能
 									if(handle.isNull($scope.warehouse)||handle.isNull($scope.warehouse.serialNum)){
 				 			    		toastr.warning("您的仓库信息还未保存！");
 				 			    		 return;
@@ -443,7 +444,7 @@ angular
 				 			    		warehouseposition.defaultBearing =$("#defaultBearing"+index).val();
 				 			    			
 				 			    	}
-				 			    	if($('#warehousepositionForm').valid()){//
+//				 			    	if($('#warehousepositionForm').valid()){//
 				 			    		handle.blockUI();
 				 			        	var promise = WarehouseService.saveWarehousePosition(warehouseposition);
 				 			        	promise.then(function(data){
@@ -451,14 +452,17 @@ angular
 				 				        		toastr.success("保存成功");
 				 				        		debugger;
 				 				        		handle.unblockUI();
-				 				        		$scope.warehousepositions = data.data;
-				 				        		$scope.warehousepositionView=true;
+				 				        		/*$scope.warehousepositions = data.data;
+				 				        		$scope.warehousepositionView=true;*/
 				 				        		_index=data.data.length-1;
-				 				        		for(var i=0;i<$scope.warehousepositions.length;i++){
+				 				        		$scope["warehousepositionAdd"+index] = true;
+				 								$scope["warehousepositionView"+index] = true;
+				 								$scope["warehousepositionEdit"+index] = true;
+				 				        	/*	for(var i=0;i<$scope.warehousepositions.length;i++){
 					 			        			$scope["warehousepositionAdd"+i] = true;
 					 								$scope["warehousepositionView"+i] = true;
 					 								$scope["warehousepositionEdit"+i] = true;
-					 			        	}
+					 			        	}*/
 				 				        		//getPriceListInfo($scope.priceList.serialNum);
 				 				        		
 				 			        		}else{
@@ -470,10 +474,56 @@ angular
 				 			            	toastr.error("保存失败！");
 				 			            	console.log(data);
 				 			            });
-				 			    	}
-								}
+//				 			    	}
+//								}
 						};	
-						
+						$scope.saveAllwarehouseposition= function() {
+							debugger;
+//							if($('#warehousepositionForm').valid()){//表单验证通过则执行添加功能
+								if(handle.isNull($scope.warehouse)||handle.isNull($scope.warehouse.serialNum)){
+			 			    		toastr.warning("您的仓库信息还未保存！");
+			 			    		 return;
+			 			    	}else{
+			 			    		for(var i=0;i<$scope.warehousepositions.length;i++){
+			 			    			$scope.warehousepositions[i].warehouseSerial=$scope.warehouse.serialNum;
+			 			    			if(isNull($scope.warehousepositions[i].positionNum)){
+				 			    			toastr.warning("仓库区位编码不能为空！");
+					 			    		 return;
+										}
+			 			    		}
+			 			    		
+			 			    	}
+			 			    		handle.blockUI();
+			 			        	var promise = WarehouseService.saveAllWarehousePosition($scope.warehousepositions);
+			 			        	promise.then(function(data){
+			 			        		if(!handle.isNull(data)){
+			 				        		toastr.success("保存成功");
+			 				        		debugger;
+			 				        		handle.unblockUI();
+			 				        		$scope.warehousepositions = data.data;
+			 				        		$scope.warehousepositionView=true;
+			 				        		$scope.warehousepositionAdd=true;
+			 				        		
+			 				        		_index=data.data.length-1;
+			 				        		for(var i=0;i<$scope.warehousepositions.length;i++){
+				 			        			$scope["warehousepositionAdd"+i] = true;
+				 								$scope["warehousepositionView"+i] = true;
+				 								$scope["warehousepositionEdit"+i] = true;
+				 			        	}
+			 				        		//getPriceListInfo($scope.priceList.serialNum);
+			 				        		
+			 			        		}else{
+			 			        			toastr.error("保存失败！");
+			 				        		handle.unblockUI();
+			 			        		}
+			 			            },function(data){
+			 			            	handle.unblockUI();
+			 			            	toastr.error("保存失败！");
+			 			            	console.log(data);
+			 			            });
+//			 			    	}
+//							}
+					};	
 						  /**
 				         * 删除仓库区位
 				         */
@@ -506,6 +556,33 @@ angular
 				        	$scope["warehousepositionAdd"+index] = false;
 				        	$scope["warehousepositionView"+index] = false;
 				        	$scope["warehousepositionEdit"+index] = false
+				        }
+				        $scope.editAllwarehouseposition=function(){
+				        	$scope.warehousepositionAdd=false;
+				        	$scope.warehousepositionView=false;
+				        	for(var i=0;i<$scope.warehousepositions.length;i++){
+				        		$scope["warehousepositionAdd"+i] = false;
+					        	$scope["warehousepositionView"+i] = false;
+					        	$scope["warehousepositionEdit"+i] = false;
+					        	
+				        	}
+				        }
+				        $scope.cancelAllwarehouseposition=function () {
+				        	$scope.warehousepositionAdd=true;
+				        	$scope.warehousepositionView=true;
+				        	for(var i=0;i<$scope.warehousepositions.length;i++){
+				        		if(isNull($scope.warehousepositions[i].serialNum)){
+				        			$scope.warehousepositions.splice(_index,1);
+							    	   _index--;
+				        		}else{
+				        			getWarehouseInfo($scope.warehouse.serialNum,'');
+				        			$scope["warehousepositionAdd"+i] = true;
+						        	$scope["warehousepositionView"+i] = true;
+						        	$scope["warehousepositionEdit"+i] = true;
+				        		}
+				        		
+					        	
+				        	}
 				        }
 				        /**
 						 * 撤销库区编辑
@@ -728,7 +805,8 @@ angular
 					        					$scope["warehousepositionEdit"+i] = true;
 					        				}
 						 	        		
-						 	        		$scope.warehousepositionEdit=true;
+						 	        		$scope.warehousepositionView=true;
+						 	        		$scope.warehousepositionAdd=true;
 						 	            },function(data){
 						 	               //调用承诺接口reject();
 						 	            });

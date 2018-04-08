@@ -316,25 +316,38 @@
 			        <div class="portlet light">
 			            <div class="portlet-title">
 					<div class="actions" ><!-- ng-controller='MyCtrl' -->
+					<shiro:hasPermission name="deliveryPlan:apply">
 					<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="submitDeliveryPlanApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+										</shiro:hasPermission>
+										<shiro:hasPermission name="deliveryPlan:add">
 										<label class="btn btn-transparent green btn-circle btn-sm"
 										ng-click="jumpToUrl('forSaleOrder')"> <i
 										class="fa fa-plus"></i>发货计划
 									</label> 
+									</shiro:hasPermission>
+									<shiro:hasPermission name="deliveryPlan:confirmDelivey">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货
 								</label>
+								</shiro:hasPermission>
+								<shiro:hasPermission name="deliveryPlan:edit">
 									<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="jumpToEdit()"> <i class="fa fa-edit"></i> 修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+									</label> 
+									</shiro:hasPermission>
+									<shiro:hasPermission name="deliveryPlan:delete">
+									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="deliveryDel()"> <i class="fa fa-minus"></i> 删除
 									</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="deliveryPlan:export">
 									<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportContract()"> <i
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
+									</shiro:hasPermission>
 								</div>
 			            </div>
 			            <div class="portlet-body">

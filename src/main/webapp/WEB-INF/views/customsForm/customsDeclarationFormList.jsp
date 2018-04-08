@@ -18,17 +18,19 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<shiro:hasPermission name="customsDeclarationFormList:confirm">
 				<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="confirmCustomsForm('confirmdeclaration')"> <i class="glyphicon glyphicon-play"></i> 确认</label>
-					<shiro:hasPermission name="buyPrice:add">
+										</shiro:hasPermission>
+					<shiro:hasPermission name="customsDeclarationFormList:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addCustomsForm('declaration')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
 	                </shiro:hasPermission>
-	                <shiro:hasPermission name="buyPrice:edit">
+	                <shiro:hasPermission name="customsDeclarationFormList:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditCustomsFormPage('declaration')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
 	                </shiro:hasPermission>
-	                <shiro:hasPermission name="buyPrice:delete">
+	                <shiro:hasPermission name="customsDeclarationFormList:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delCustomsForm('declaration')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
 	                </shiro:hasPermission>
@@ -36,7 +38,7 @@
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
 					</shiro:hasPermission>	   --%>  
-					<shiro:hasPermission name="buyPrice:export">                                          
+					<shiro:hasPermission name="customsDeclarationFormList:export">                                          
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportCustomsForm('declaration')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
 	                 </shiro:hasPermission>

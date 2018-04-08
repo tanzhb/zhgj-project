@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.UserUtil;
@@ -37,6 +38,7 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.LadderPrice;
+import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
@@ -335,6 +337,34 @@ public class WareHouseController {
     		//20180110 qhzhao System.out.println(e.getMessage());
     	}
     	List <Warehouseposition>warehousepositions=warehousepositionService.selectList(warehouseposition.getWarehouseSerial());
+		return new ResponseEntity<List>(warehousepositions, HttpStatus.OK);
+    }
+    
+    /**
+     * @Description (保存库区信息)
+     * @param request
+     * @return
+     */
+   
+    @RequestMapping(value = "/saveAllWarehousePositionInfo", method = RequestMethod.POST)
+	public ResponseEntity<List> saveWarehousePositionInfo(@RequestBody  String params,UriComponentsBuilder ucBuilder) {
+    	params = params.replace("\\", "");
+    	        List<Warehouseposition> warehousepositions=new ArrayList<Warehouseposition>();
+    	try{
+    		warehousepositions=JSON.parseArray(params, Warehouseposition.class);
+    		for( Warehouseposition  warehouseposition :  warehousepositions){
+    			if(StringUtils.isEmpty(warehouseposition.getSerialNum())){
+        			warehouseposition.setSerialNum(UUID.randomUUID().toString().replace("-",""));
+        			warehousepositionService.insert(warehouseposition);
+        		}else{
+        			warehousepositionService.update(warehouseposition);
+        		}
+    		}
+    		
+    	}catch(Exception e){
+    		System.out.println(e.getMessage());
+    	}
+//    	warehousepositions=warehousepositionService.selectList(warehousepositions.get(0).getWarehouseSerial());
 		return new ResponseEntity<List>(warehousepositions, HttpStatus.OK);
     }
     /**

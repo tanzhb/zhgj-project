@@ -28,13 +28,13 @@
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
     	<shiro:hasPermission name="zhgj:stockInCheck:*">
-        <li  id="in" >
-            <a data-target="#tab_in" data-toggle="tab"  ng-click="showOut('showIn')">入库检验</a>
+        <li  id="in"  >
+            <a data-target="#tab_in" data-toggle="tab"   ng-click="showOut('showIn')">入库检验</a>
         </li>
         </shiro:hasPermission>
         <shiro:hasPermission name="zhgj:stockOutCheck:*">
         <li  id="out">
-            <a data-target="#tab_out" data-toggle="tab"   ng-click="showOut('showOut')">出库检验</a>
+            <a data-target="#tab_out" data-toggle="tab"     ng-click="showOut('showOut')">出库检验</a>
         </li>
         </shiro:hasPermission>
     </ul>

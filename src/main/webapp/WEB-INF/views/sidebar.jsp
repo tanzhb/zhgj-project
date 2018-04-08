@@ -151,7 +151,7 @@
                     </a>
                 </li>
              </shiro:hasPermission>
-                 <shiro:hasPermission name="zhgj:saleOrder:*">
+                 <shiro:hasPermission name="zhgj:customsDeclarationFormList:*">
                 <li>
                     <a ui-sref="customsDeclarationForm">
                         报关单</span>
