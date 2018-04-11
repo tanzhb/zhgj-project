@@ -185,7 +185,7 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
      * @return
      */
 	@Override
-	@OperationLog(operateType = "add" ,operationDesc = "收款" ,objectSerial= "{serialNum}")
+	@OperationLog(operateType = "add" ,operationDesc = "确认收款" ,objectSerial= "{serialNum}")
 	public void confirmGatheringMoney(Map<String, Object> map) {
 		// TODO Auto-generated method stub
 		payMapper.confirmGatheringMoney(map);
@@ -341,7 +341,8 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 		orderInfo.setSerialNum(paymentRecord.getOrderSerial());
 		//设置订单付款金额，用于更新
 		OrderInfo o=orderInfoMapper.selectByPrimaryKey(paymentRecord.getOrderSerial());
-		orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
+//		orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getApplyPaymentAmount()));
+		orderInfo.setPayAmount(StringUtil.sum(o.getPayAmount(),paymentRecord.getPaymentAmount()));
 		orderInfo.setPayStatus(OrderInfo.PAY);//已付款
 		orderInfo.setUpdateTime(new Date());
 		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
@@ -410,7 +411,8 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	}
 
 	@Override
-	public Boolean insertVerificateData(List<VerificationRecord> list,String currenLoginName,String serialNum) {
+	public Map<String,Object> insertVerificateData(List<VerificationRecord> list,String currenLoginName,String serialNum) {
+		Map<String,Object> map=new HashMap<String,Object>();
 		BigDecimal totalVerificationMoneyAmount=BigDecimal.ZERO;//此次水单被核销总金额
 		if(!CollectionUtils.isEmpty(list)){
 			PaymentRecord pr=paymentRecordMapper.selectByPrimaryKey(list.get(0).getPaymentRecordSerial());
@@ -436,10 +438,11 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 				
 			}
 			//更新订单已收/已付金额
-			OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(pr.getOrderSerial());
+			/*OrderInfo orderInfo=orderInfoMapper.selectByPrimaryKey(pr.getOrderSerial());
 			orderInfo.setPayAmount(new BigDecimal(orderInfo.getPayAmount()==null?"0":orderInfo.getPayAmount()).add(totalVerificationMoneyAmount).toString());
 			orderInfo.setSerialNum(pr.getOrderSerial());
-			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);*/
+//			updateOrderStatus(pr);
 			
 			MemoRecord mr=memoRecordMapper.selectByPrimaryKey(serialNum);
 			BigDecimal nowVerificationMoneyAmount=new BigDecimal(mr.getVerificationMoneyAmount()).add(totalVerificationMoneyAmount);
@@ -453,10 +456,12 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 				memoRecord.setStatus("1");
 			}
 			memoRecordMapper.updateByPrimaryKeySelective(memoRecord);
+			map.put("flag", true);
+			map.put("paymentRecord", pr);
 		}
 		
 		
-		return true;
+		return map;
 	}
 
 	@Override

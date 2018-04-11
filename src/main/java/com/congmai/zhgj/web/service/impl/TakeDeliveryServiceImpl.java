@@ -157,11 +157,13 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		}
 		
 		if(StringUtils.isNotEmpty(takeDelivery.getBuyComId())){ //根据用户所在企业筛选收货单
-			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+//			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+			c.andDeliverSupplyComIdEqualTo(takeDelivery.getBuyComId());
 			c.andStatusNotEqualTo("0");//状态不为初始
 		Criteria c2 = example.or();
 		c2.andStatusEqualTo("0");//状态为初始
-		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+//		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
+		c2.andDeliverSupplyComIdEqualTo(takeDelivery.getBuyComId());
 		c2.andDeliverTypeEqualTo("采购发货");
 	
 		}else{

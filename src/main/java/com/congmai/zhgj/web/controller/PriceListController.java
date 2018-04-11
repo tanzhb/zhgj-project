@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -395,14 +396,22 @@ public class PriceListController {
 	     * @return
 	     */
 	    @RequestMapping("exportPriceList")
-	    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String buyOrSale) {
+	    public void exportPriceList(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String buyOrSale,String serialNums) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
 	    		User user = UserUtil.getUserFromSession();
-	        	List<String> comIds = null;
-	        	if(user!=null){
-	    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+	    		List<PriceList> priceListList=new ArrayList<PriceList>();
+	    		if(StringUtils.isEmpty(serialNums)){
+	    			List<String> comIds = null;
+		        	if(user!=null){
+		    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+		    		}
+		    		 priceListList= priceListService.selectPriceList(buyOrSale,comIds);
+	    		}else{
+	    			List<String> idList = ApplicationUtils.getIdList(serialNums);
+        			for(String id:idList){
+        				priceListList.add(priceListService.selectById(id));
+        			}
 	    		}
-	    		List<PriceList> priceListList= priceListService.selectPriceList(buyOrSale,comIds);
 	    		for(PriceList p:priceListList){
 	    			if("buyPrice".equals(p.getPriceType())){
 	    				p.setComName(companyService.selectOne(p.getSupplyComId()).getComName());

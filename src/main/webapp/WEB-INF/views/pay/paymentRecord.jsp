@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -43,15 +44,21 @@
 								<div class="portlet light">
 									<div class="portlet-title">
 										<div class="actions" ng-controller='MyCtrl' id="buttons">
+										<shiro:hasPermission name="accountsPayable:apply">
 											<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+											</shiro:hasPermission>
+											<shiro:hasPermission name="accountsPayable:add">
 											<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPay')"><i class="fa fa-plus"></i> 添加</label>
-																
+													</shiro:hasPermission>		
+													<shiro:hasPermission name="accountsPayable:edit">	
 											<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
-																
-																
+															</shiro:hasPermission>	
+													<shiro:hasPermission name="accountsPayable:delete">				
 											<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
-																
+														</shiro:hasPermission>	
+													<shiro:hasPermission name="accountsPayable:export">	
 											<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+											</shiro:hasPermission>
 										</div>
 									</div>
 								

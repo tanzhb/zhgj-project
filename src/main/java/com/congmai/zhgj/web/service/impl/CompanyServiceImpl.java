@@ -74,7 +74,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			c.andDelFlgEqualTo("0");
 			if("other".equals(company.getComType())){
 				c.andComTypeNotEqualTo("1").andComTypeNotEqualTo("2");
-			}else{c.andComTypeEqualTo(company.getComType()=="buy"?"1":"2");}
+			}else{c.andComTypeEqualTo("buy".equals(company.getComType())?"1":"2");}
 			list=companyMapper.selectByExample(ce);
 			if(CollectionUtils.isNotEmpty(list)){
 				for(Company vo:list){
@@ -85,7 +85,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			}
 			count=list.size();
 		}
-		if(company != null&&"1".equals(company.getComType())){//采购商登录时
+		if(company != null&&"1".equals(company.getComType())&&company.getComId()!=null){//采购商登录时
 			 SupplyBuyVO svo=new SupplyBuyVO();
 			 svo.setCreateId(company.getComId());
 			 svo.setSupplyId("notnull");
@@ -101,7 +101,7 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 			}
 			count = companyMapper.countList(company);
 		}
-		if(company != null&&"2".equals(company.getComType())){//供应商登录时
+		if(company != null&&"2".equals(company.getComType())&&company.getComId()!=null){//供应商登录时
 			 SupplyBuyVO svo=new SupplyBuyVO();
 			 svo.setCreateId(company.getComId());
 			 svo.setBuyId("notnull");

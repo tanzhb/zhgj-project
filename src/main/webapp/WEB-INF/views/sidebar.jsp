@@ -289,8 +289,12 @@
 				<shiro:hasPermission name="zhgj:accountsPayable:*">
 					<li><a ui-sref="paymentRecordC">应付款</a></li>
 				</shiro:hasPermission>
+				<shiro:hasPermission name="zhgj:receiveMemo:*">
 					<li><a ui-sref="receiveMemo">收款水单</a></li>
+					</shiro:hasPermission>
+					<shiro:hasPermission name="zhgj:payMemo:*">
 					<li><a ui-sref="payMemo">付款水单</a></li>
+					</shiro:hasPermission>
 			</ul>
 		</li>  
 		</shiro:hasPermission>  

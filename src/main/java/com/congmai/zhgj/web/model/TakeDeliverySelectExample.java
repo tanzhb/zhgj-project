@@ -1111,6 +1111,10 @@ public class TakeDeliverySelectExample {
         	addCriterion("d.buyComId = ", value1, "buyComId");
         	return (Criteria) this;
         }
+        public Criteria andDeliverSupplyComIdEqualTo(String value1) {
+        	addCriterion("d.supplyComId = ", value1, "buyComId");
+        	return (Criteria) this;
+        }
         
         public Criteria andDeliverBuyComIdIsNull() {
         	addCriterion("d.buyComId is null");

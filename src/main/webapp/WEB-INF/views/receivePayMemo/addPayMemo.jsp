@@ -68,8 +68,8 @@
 														<input type="text" name="moneyAmount" class="form-control"  ng-change="changeMoney()"
 															ng-model="memoRecord.moneyAmount" ng-show="input">
 														<div class="form-control-focus"></div>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='USD'">{{memoRecord.moneyAmount|currency:'$'}}</p>
-														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='RMB'">{{memoRecord.moneyAmount|currency:'¥'}}</p>
+														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='美元'">{{memoRecord.moneyAmount|currency:'$'}}</p>
+														<p class="form-control-static" ng-show="span"  ng-if="memoRecord.currency=='人民币'">{{memoRecord.moneyAmount|currency:'¥'}}</p>
 													</div>
 												</div>
 											</div>
@@ -190,6 +190,7 @@
 															</span>
 														</div>
 													</div>
+													<p class="form-control-static" ng-show="span">{{memoRecord.bank}}</p>
 												</div>
 											</div>
 											<div class="col-md-4">

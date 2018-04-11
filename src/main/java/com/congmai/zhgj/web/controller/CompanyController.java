@@ -628,11 +628,21 @@ public class CompanyController {
      * @return
      */
     @RequestMapping("exportCompany")
-    public void exportCompany(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportCompany(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String type,String serialNums) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		Company company = new Company();
-    		company.setPageSize(-1);
-    		List<Company> companyList = companyService.selectByPage(company).getResult();
+    		List<Company> companyList =new ArrayList<Company>();
+    		if(StringUtil.isEmpty(serialNums)){
+    			Company company = new Company();
+        		company.setPageSize(-1);
+        		company.setComType(type);
+        		companyList = companyService.selectByPage(company).getResult();
+    			}else{
+    				List<String> idList = ApplicationUtils.getIdList(serialNums);
+        			for(String id:idList){
+        				companyList.add(companyService.selectOne(id));
+        			}
+    			}
+    		
     		dataMap.put("companyList",companyList);
     		ExcelUtil.export(request, response, dataMap, "company", "企业信息");
     }

@@ -72,7 +72,7 @@ angular
 
 						 }else if($location.path()=="/priceList"){
 				 			debugger;
-				 			initTabClass();
+				 		
 				 			
 				 			if($stateParams.buyOrSale=='sale'){
 				 				debugger;
@@ -82,12 +82,14 @@ angular
 				 				$("#tab_sale").addClass("active");
 				 				loadPriceListSaleTable();
 				 				//加载采购价格列表
-				 			}else{
+				 			}else if($stateParams.buyOrSale=='buy'){
 				 				$("#buy").addClass("active");
 				 				$("#sale").removeClass("active");
 				 				$("#tab_buy").addClass("active");
 				 				$("#tab_sale").removeClass("active")
 				 				loadPriceListBuyTable();//加载销售价格列表
+				 			}else{
+				 				initTabClass();
 				 			}
 					 		}else{
 					 			 getPriceListInfo($stateParams.buyOrSale);
@@ -399,7 +401,7 @@ angular
 					$('#salePriceTab a[href="#yibanSalePrice"]').tab('show');
 					endTaskSalePriceTable = showYbSalePriceTable();
 				};
-			 
+			
 				// 构建datatables开始***************************************
 				var tableAjaxUrl ;
 				 var table ;
@@ -460,7 +462,7 @@ function loadPriceListBuyTable(){
 											ajax : tableAjaxUrl,// 加载数据中发票表数据
 											   "aoColumns" : [
 								                              {
-								                            	  mData : 'serialNum',
+								                            	  mData : 'serialNum'/*,
 								                            	  mRender : function(
 																			data,
 																			type,
@@ -469,7 +471,7 @@ function loadPriceListBuyTable(){
 																		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 																				"<input type='checkbox' class='checkboxes' value='"+data+"' />" +
 																				"<span></span></label>";
-																	}
+																	}*/
 								                              },
 								                              {
 								                            	  mData : 'priceNum'
@@ -538,7 +540,9 @@ function loadPriceListBuyTable(){
 									                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 									                            		}
 									                            	}
-									                            }
+									                            }/*,{
+									                            	  mData : 'status'
+									                              }*/
 								                              ],
 								                              'aoColumnDefs' : [ 
 								                                                 {
@@ -548,12 +552,17 @@ function loadPriceListBuyTable(){
 								                            	  'className' : 'dt-body-center',
 								                            	  'render' : function(data,
 								                            			  type, full, meta) {
-								                            		  return '<input type="checkbox" name="id[]" value="'
-								                            		  + $('<div/>')
-								                            		  .text(
-								                            				  data)
-								                            				  .html()
-								                            				  + '">';
+								                            		  return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+									                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="choosePriceListInfoModal(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_buy .checkboxes" />'+
+									                                     '<span></span></label>';
+//								                            		  return '<input type="checkbox" name="id[]"   id="'+data+'"   ng-click="choosePriceListInfoModal(\''+row.serialNum+'\')"  value="'  
+//								                            		  + $('<div/>')
+//								                            		  .text(
+//								                            				  data)
+//								                            				  .html()
+//								                            				  + '">';
+								                            	  },"createdCell": function (td, cellData, rowData, row, col) {
+								                            		  $compile(td)($scope);
 								                            	  }
 								                              },{
 								                            	  'targets' : 1,
@@ -678,7 +687,7 @@ function loadPriceListSaleTable(){
 				ajax : tableAjaxUrl,// 加载数据中发票表数据
 				"aoColumns" : [
 	                              {
-	                            	  mData : 'serialNum',
+	                            	  mData : 'serialNum'/*,
 	                            	  mRender : function(
 												data,
 												type,
@@ -687,7 +696,7 @@ function loadPriceListSaleTable(){
 											return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 													"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 													"<span></span></label>";
-										}
+										}*/
 	                              },
 	                              {
 	                            	  mData : 'priceNum'
@@ -781,12 +790,17 @@ function loadPriceListSaleTable(){
 	                            	  'className' : 'dt-body-center',
 	                            	  'render' : function(data,
 	                            			  type, full, meta) {
-	                            		  return '<input type="checkbox" name="id[]" value="'
-	                            		  + $('<div/>')
-	                            		  .text(
-	                            				  data)
-	                            				  .html()
-	                            				  + '">';
+//	                            		  return '<input type="checkbox" name="id[]"   id="'+data+'" ng-click="choosePriceListInfoModal(\''+row.serialNum+'\')" value="'
+//	                            		  + $('<div/>')
+//	                            		  .text(
+//	                            				  data)
+//	                            				  .html()
+//	                            				  + '">';
+	                            		  return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="choosePriceListInfoModal(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_sale .checkboxes" />'+
+		                                     '<span></span></label>';
+	                            	  },"createdCell": function (td, cellData, rowData, row, col) {
+	                            		  $compile(td)($scope);
 	                            	  }
 	                              },{
 	                            	  'targets' : 1,
@@ -1597,7 +1611,21 @@ function loadPriceListSaleTable(){
 			  }
 			  $scope.exportPriceList = function(judgeString){
 				  handle.blockUI("正在导出数据，请稍后"); 
-				  window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList?buyOrSale="+judgeString;
+				  var type = $($('ul[class="nav nav-tabs"]>li[class="active"]')).attr("id");
+			    	 if($scope.serialNums&&$scope.serialNums.length!=0){
+			    		 var serialNums="";
+			    		 for(var i=0;i<$scope.serialNums.length;i++){
+			    			 if(i==$scope.serialNums.length-1){
+			    				 serialNums=serialNums+$scope.serialNums[i]
+			    			 }else{
+			    				 serialNums=serialNums+$scope.serialNums[i]+",";
+			    			 }
+			    		 }
+			    		 window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList?buyOrSale="+type+"&serialNums="+serialNums;
+			    	 }else{//全部导出
+			    		 window.location.href=$rootScope.basePath+"/rest/priceList/exportPriceList?buyOrSale="+type;
+			    	 }
+				 
 				  handle.unblockUI(); 
 			  }
 			  /**
@@ -2012,7 +2040,24 @@ function loadPriceListSaleTable(){
 			          		 );
 			    		
 			        };
-			        
+			    	$scope.choosePriceListInfoModal= function(serialNum) {
+						if($("#"+serialNum).is(':checked')){//选中时加载
+				    		if($scope.serialNums){
+				    			$scope.serialNums.push(serialNum);
+				    		}else{
+				    			$scope.serialNums=[];
+				    			$scope.serialNums.push(serialNum);
+				    		}
+				    	}else{
+				    		if($scope.serialNums.length > 0){
+				    			for(var i=0;i<$scope.serialNums.length;i++){
+				    				if(serialNum == $scope.serialNums[i]){
+				    					$scope.serialNums.splice(i,1);
+				    				}
+				    			}
+				    		}
+				    	}
+					}
 			      //********审批流程列表****************//
 		        function doPrice(_url, mydata, modal){
 		        	$.ajax( {

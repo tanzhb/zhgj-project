@@ -1334,7 +1334,21 @@ $scope.showCompany=function(judgeString){
 	       
 	       $scope.exportCompany = function(){
 	    	 handle.blockUI("正在导出数据，请稍后"); 
-	    	 window.location.href=$rootScope.basePath+"/rest/company/exportCompany";
+	    	 var type = $($('ul[class="nav nav-tabs"]>li[class="active"]')).attr("id");
+	    	 if($scope.serialNums&&$scope.serialNums.length!=0){
+	    		 var serialNums="";
+	    		 for(var i=0;i<$scope.serialNums.length;i++){
+	    			 if(i==$scope.serialNums.length-1){
+	    				 serialNums=serialNums+$scope.serialNums[i]
+	    			 }else{
+	    				 serialNums=serialNums+$scope.serialNums[i]+",";
+	    			 }
+	    		 }
+	    		 window.location.href=$rootScope.basePath+"/rest/company/exportCompany?type="+type+"&serialNums="+serialNums;
+	    	 }else{//全部导出
+	    		 window.location.href=$rootScope.basePath+"/rest/company/exportCompany?type="+type;
+	    	 }
+	    	 
 	    	 handle.unblockUI(); 
 	       }
 	       
@@ -1837,6 +1851,23 @@ $scope.showCompany=function(judgeString){
 	    		   obj.data("check","true");
 	    		   getCompanyInfo(comId);
 	    	   }
+	    		if($("#"+comId).is(':checked')){//选中时加载
+//		    		$scope.getMaterielInfo(serialNum);
+		    		if($scope.serialNums){
+		    			$scope.serialNums.push(comId);
+		    		}else{
+		    			$scope.serialNums=[];
+		    			$scope.serialNums.push(comId);
+		    		}
+		    	}else{
+		    		if($scope.serialNums.length > 0){
+		    			for(var i=0;i<$scope.serialNums.length;i++){
+		    				if(comId == $scope.serialNums[i]){
+		    					$scope.serialNums.splice(i,1);
+		    				}
+		    			}
+		    		}
+		    	}
 	    	 /*  if($scope.companyInfo.length>0){
 	    		   $scope.companyQualifications=[];
 	    		   $scope.companyQualifications = $scope.companyInfo[$scope.companyInfo.length-1].companyQualifications;

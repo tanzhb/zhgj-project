@@ -646,7 +646,7 @@
 													<label class="control-label bold" for=""><span
 														class="required"> * </span> 开户银行 :</label>
 													<div class="">
-														 <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"     
+														 <input type="text" class="form-control"   id="bankName" name ="bankName"       ng-hide="invoiceAdd"      ng-if="inOrOut.indexOf('confirm')<0"
 												ng-model="invoice.bankName" />  
 														<div  ng-hide="invoiceView"     ng-if="inOrOut.indexOf('confirm')<0" >
 															<!-- <select class="form-control" data-live-search="true"

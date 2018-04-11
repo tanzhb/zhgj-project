@@ -51,18 +51,30 @@
 				</div>
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
+				<shiro:hasPermission name="stockInCheck:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('in')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                                              </shiro:hasPermission>
+	                                             <shiro:hasPermission name="stockInCheck:confirmCheck">
 	                                               <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="toEditStockInOutPage('checkin')"> <i class="glyphicon glyphicon-play"></i>检验</label>
+										</shiro:hasPermission>
+										<shiro:hasPermission name="stockInCheck:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('inedit')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                                              </shiro:hasPermission>
+	                                              <shiro:hasPermission name="stockInCheck:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('In')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                                              </shiro:hasPermission>
+	                                              <%-- <shiro:hasPermission name="stockInCheck:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+	                                              </shiro:hasPermission> --%>
+	                                              <shiro:hasPermission name="stockInCheck:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStockInOutCheck('in')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                                              </shiro:hasPermission>
 	                 </div>
 					<!-- <button ng-click="addStockInOutCheck('in')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">
@@ -241,18 +253,30 @@
 				</div>
 				<div class="actions">
 					<div class="btn-group btn-group-devided" data-toggle="buttons">
+					<shiro:hasPermission name="stockOutCheck:add">
 						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStockInOutCheck('out')">
 	                                              <i class="fa fa-plus"></i> 添加</label>
+	                                              </shiro:hasPermission>
+	                                              <shiro:hasPermission name="stockOutCheck:confirmCheck">
 	                    <label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="toEditStockInOutPage('checkout')"> <i class="glyphicon glyphicon-play"></i> 检验</label>
+										 </shiro:hasPermission>
+										 <shiro:hasPermission name="stockOutCheck:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockInOutPage('outedit')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
+	                                              </shiro:hasPermission>
+	                                              <shiro:hasPermission name="stockOutCheck:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStockInOutCheck('Out')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
+	                                              </shiro:hasPermission>
+	                                           <%--    <shiro:hasPermission name="stockOutCheck:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
+	                                              </shiro:hasPermission> --%>
+	                                              <shiro:hasPermission name="stockOutCheck:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStockInOutCheck('out')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+	                                              </shiro:hasPermission>
 	                 </div>
 					<!-- <button ng-click="addStockInOutCheck('out')"
 						data-toggle="modal" class="btn btn-default btn-sm btn-circle">

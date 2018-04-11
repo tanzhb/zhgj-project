@@ -185,7 +185,19 @@ function timeStamp2String2 (time){
      }
      return year + "-" + month + "-" + date;
 };
+/**
+ * 获取当前月的最后一天
+ */
+function getCurrentMonthLastDay(){
+ var date=new Date();
+ var currentMonth=date.getMonth();
+ var nextMonth=++currentMonth;
+ var nextMonthFirstDay=new Date(date.getFullYear(),nextMonth,1);
+ var oneDay=1000*60*60*24;
+// return timeStamp2String(new Date(nextMonthFirstDay-oneDay));
+ return timeStamp2String(new Date(nextMonthFirstDay-oneDay));
 
+}
 
 //初始化toastr开始
 toastr.options = {

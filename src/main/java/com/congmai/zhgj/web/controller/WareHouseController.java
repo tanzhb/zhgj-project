@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.impl.cmd.GetNextIdBlockCmd;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -45,6 +46,7 @@ import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.WarehouseExample.Criteria;
 import com.congmai.zhgj.web.model.Warehouseposition;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.WarehouseService;
 import com.congmai.zhgj.web.service.WarehousepositionService;
@@ -69,6 +71,8 @@ public class WareHouseController {
     private CompanyService  companyService;
     @Resource
     private UserCompanyService   userCompanyService;
+    @Resource
+    private OrderService   orderService;
     
     
     /**
@@ -244,9 +248,20 @@ public class WareHouseController {
      * @return
      */
     @RequestMapping("exportWarehouse")
-    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportWarehouse(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		List<Warehouse> warehouseList = warehouseService.selectList();
+    		List<Warehouse> warehouseList = new ArrayList<Warehouse>();
+    				warehouseService.selectList();
+    		if(StringUtils.isEmpty(serialNums)){
+    			warehouseList=warehouseService.selectList();
+    		}else{
+    			List<String> idList = ApplicationUtils.getIdList(serialNums);
+    			for(String id:idList){
+    				warehouseList	.add(warehouseService.selectOne(id));
+    			}
+    		}
+    		
+//    		List<Warehouse> warehouseList = warehouseService.selectList();
     		for(Warehouse w:warehouseList){
     		w.setOwner("pingtai".equals(w.getOwner())?StaticConst.getInfo("comName"):companyService.selectById(w.getOwner()).getComName());	
     		}
@@ -283,11 +298,29 @@ public class WareHouseController {
 						try{
 							Warehouse  warehouse = new Warehouse();
 							warehouse.setSerialNum(ApplicationUtils.random32UUID());
-							warehouse.setWarehouseNum(row.get(0).toString());
+							warehouse.setWarehouseNum(row.get(0).toString());//
 							warehouse.setWarehouseName(row.get(1).toString());
 							warehouse.setWarehouseType(row.get(2).toString());
 							warehouse.setWarehouseCategory(row.get(3).toString());
-							warehouse.setOwner(row.get(4).toString());
+//							warehouse.setOwner(row.get(4).toString());
+							if(StringUtils.isEmpty(row.get(4).toString())){
+								warehouse.setOwner("pingtai");//默认平台为所有者
+							}else{
+								String comId=companyService.selectComIdByComName(row.get(4).toString());
+								if(StringUtils.isEmpty(comId)){
+									//创建该公司
+									Company com=new Company();
+									com.setComId(ApplicationUtils.random32UUID());
+									com.setComNum(orderService.getNumCode("CO"));
+									com.setComType("9");
+									com.setComName(row.get(4).toString());
+									companyService.insert(com);
+									warehouse.setOwner(com.getComId());
+								}else{
+									warehouse.setOwner(comId);
+								}
+							}
+//							warehouse.setOwner(row.get(4).toString());
 							warehouse.setAddress(row.get(5).toString());
 							warehouse.setArea(row.get(6).toString());
 							warehouse.setAdmin(row.get(7).toString());
@@ -309,7 +342,7 @@ public class WareHouseController {
 					}
 					
 				}
-			}, 1);
+			}, 2);
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());

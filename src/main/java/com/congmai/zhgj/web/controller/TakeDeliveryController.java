@@ -211,6 +211,16 @@ public class TakeDeliveryController {
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取用户的企业ID
 		}
 		takeDelivery.setBuyComId(comId);
+		/*if(StringUtil.isEmpty(comId)){
+			takeDelivery.setBuyComId(comId);
+		}else{
+			takeDelivery.setSupplyComId(comId);
+		}*/
+		
+	/*	if("1buy".equals(noInit)){
+			takeDelivery.setBuyComId(null);
+			takeDelivery.setSupplyComId(comId);
+		}*/
     	Page<Delivery> takeDeliverys = takeDeliveryService.selectByPage(takeDelivery);
     	if(CollectionUtils.isNotEmpty(takeDeliverys.getResult())){
     		List<Delivery>list=takeDeliverys.getResult();

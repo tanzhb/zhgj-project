@@ -314,13 +314,13 @@
 										</thead>
 										<tbody> 
 											<tr ng-repeat="payment in paymentList track by $index">
-												<td>{{payment.paymentPlanNum}}</td>
+												<td>{{payment.paymentNum}}</td>
 												<td>{{payment.orderNum}}</td>
 												<td>{{payment.paymentPlanDate}}</td>
 												<td>{{payment.paymentNode}}</td>
 												<td>{{payment.paymentAmount|currency:'￥'}}</td>
 												<td>{{payment.paymentStatus}}</td>
-												<td>{{payment.period}}</td>
+												<td>{{payment.period==undefined?"未设置":payment.period}}</td>
 												<td>{{payment.interest}}</td>
 												<td>{{payment.isBill}}</td>
 												<td>{{payment.billDate}}</td>
@@ -376,7 +376,7 @@
 												<td>{{payment.paymentNode}}</td>
 												<td>{{payment.paymentAmount|currency:'￥'}}</td>
 												<td>{{payment.paymentStatus}}</td>
-												<td>{{payment.period}}</td>
+												<td>{{payment.period==null?"未设置":payment.period}}</td>
 												<td>{{payment.interest}}</td>
 												<td>{{payment.isBill}}</td>
 												<td>{{payment.billDate}}</td>

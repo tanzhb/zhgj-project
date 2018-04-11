@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+	<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags"%>
 <!-- <div class="page-bar">
 	<ul class="page-breadcrumb">
 		<li><i class="fa fa-home"></i> <a ui-sref="dashboard">首页</a> <i
@@ -22,14 +23,18 @@
 					<span class="caption-subject font-green bold uppercase">收款列表</span>
 				</div>
 				<div class="actions" >
+				<shiro:hasPermission name="accountReceivable:add">
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>
-									
+					</shiro:hasPermission>	
+					<shiro:hasPermission name="accountReceivable:edit">	
 				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
-									
-									
+					<shiro:hasPermission name="accountReceivable:delete">		
+						<shiro:hasPermission name="accountReceivable:add">			
 				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="del()"> <i class="fa fa-minus"></i> 删除</label>
-									
+						</shiro:hasPermission>	
+					<shiro:hasPermission name="accountReceivable:export">	
 				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				</shiro:hasPermission>
 				</div>
 			</div>
 

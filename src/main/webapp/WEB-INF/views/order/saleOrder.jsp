@@ -83,13 +83,13 @@
 												删除
 											</label>
 										</shiro:hasPermission>
-										<shiro:hasPermission name="normalOrder:import">
+										<%-- <shiro:hasPermission name="normalOrder:import">
 											<label
 												class="btn btn-transparent green btn-outline btn-circle btn-sm"
 												data-toggle="modal" data-target="#import"> <i
 												class="fa fa-upload"></i> 导入
 											</label>
-										</shiro:hasPermission>
+										</shiro:hasPermission> --%>
 										<shiro:hasPermission name="normalOrder:export">
 											<label
 												class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
@@ -663,14 +663,19 @@
 					<span class="caption-subject font-green bold uppercase">收款计划列表</span>
 				</div>
 				<div class="actions"  id="buttons"><!--  ng-controller='MyCtrl'-->
+				
+				<shiro:hasPermission name="accountReceivable:add">
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToSkUrl('addForSaleOrderGatheringMoney')"><i class="fa fa-plus"></i> 添加</label>
-									
+							</shiro:hasPermission>	
+							<shiro:hasPermission name="accountReceivable:edit">	
 				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEditGather()"> <i class="fa fa-edit"></i>修改</label>
-									
-									
+								</shiro:hasPermission>	
+							<shiro:hasPermission name="accountReceivable:delelte">		
 				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delGather()"> <i class="fa fa-minus"></i> 删除</label>
-									
+							</shiro:hasPermission>	
+							<shiro:hasPermission name="accountReceivable:export">	
 				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				</shiro:hasPermission>
 				</div>
 			</div>
 

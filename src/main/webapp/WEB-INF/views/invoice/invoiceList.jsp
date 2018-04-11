@@ -61,10 +61,10 @@
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delInvoice('in')">
 	                                              <i class="fa fa-minus"></i> 删除</label>
 	                                              </shiro:hasPermission>
-	                                              <shiro:hasPermission name="incomeBill:import">
+	                                            <%--   <shiro:hasPermission name="incomeBill:import">
 						<label class="btn btn-transparent green btn-outline btn-circle btn-sm" data-toggle="modal" data-target="#import" >
 	                                              <i class="fa fa-upload"></i> 导入</label>
-	                                              </shiro:hasPermission>
+	                                              </shiro:hasPermission> --%>
 	                                              <shiro:hasPermission name="incomeBill:export">
 						<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportInvoice('in')">
 	                                              <i class="fa fa-file-excel-o"></i> 导出</label>

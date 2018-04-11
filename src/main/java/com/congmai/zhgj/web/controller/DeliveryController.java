@@ -305,9 +305,9 @@ public class DeliveryController {
 		if(comId!=null){
 			Company com =companyservice.selectById(comId);
 			if("1".equals(com.getComType())){//采购商
-				query.setBuyComId(comId );
-			}else{//供应商
 				query.setSupplyComId(comId);
+			}else{//供应商
+				query.setBuyComId(comId );
 //				query.setSupplyComIds(comIds);
 			}
 		}else{//平台查看

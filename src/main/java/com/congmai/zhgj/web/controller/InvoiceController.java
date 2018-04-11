@@ -240,8 +240,8 @@ public class InvoiceController {
     	 invoice=invoiceService.getDetailInfo(invoice);//统计数据
     	if(invoice!=null){
     	OrderInfo orderInfo=orderService.selectById(invoice.getOrderSerial());
-    	String payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(serialNum.substring(0, 32));//获取订单已付
-    	String  billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(serialNum.substring(0, 32));//获取订单已开金额或已收金额
+    	String payOrReceiptMoney=paymentRecordSerive.selectPaiedMoney(invoice.getOrderSerial());//获取订单已付
+    	String  billOrReceiptMoney=paymentRecordSerive.selectBilledMoney(invoice.getOrderSerial());//获取订单已开金额或已收金额
     	invoice.setUnBillOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(billOrReceiptMoney)).toString() );
     	invoice.setUnPayOrReceiptMoney(new BigDecimal(orderInfo.getOrderAmount()).subtract(new BigDecimal(payOrReceiptMoney)).toString() );
     		invoice.setRelationBuyOrSaleNum(orderInfo.getOrderNum());

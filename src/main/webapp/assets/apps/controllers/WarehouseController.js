@@ -187,6 +187,9 @@ angular
 														 $compile(td)($scope);
 												    }
 												}  ],
+												"fnInitComplete":function(settings) {//fnInitComplete stateLoadCallback
+//													showDetail();
+								                   }
 
 											})
 							// 构建datatables结束***************************************
@@ -411,9 +414,49 @@ angular
 								}								
 							};
 							$scope.showPosition=function(serialNum){
-								debugger;
-								getWarehouseInfo(serialNum,'noWarehouseInfo');
 								
+								if($("#"+serialNum).is(':checked')){//选中时加载
+//						    		$scope.getMaterielInfo(serialNum);
+						    		getWarehouseInfo(serialNum,'noWarehouseInfo');
+						    		if($scope.serialNums){
+						    			$scope.serialNums.push(serialNum);
+						    		}else{
+						    			$scope.serialNums=[];
+						    			$scope.serialNums.push(serialNum);
+						    		}
+						    	}else{
+						    		if($scope.serialNums.length > 0){
+						    			for(var i=0;i<$scope.serialNums.length;i++){
+						    				if(serialNum == $scope.serialNums[i]){
+						    					$scope.serialNums.splice(i,1);
+						    				}
+						    			}
+						    		}
+						    	}
+//								showDetail();
+							}
+							   /**
+							 * 遍历数组将选中的checkbox展示出来
+							 */
+							function showDetail(){
+								table.$('input[type="checkbox"]').each(function() { //遍历所有checkbox
+									
+										if ($.contains(document, this)) {
+											 var serialNums=$scope.serialNums;
+											 if(serialNums&&serialNums.length!=0){
+										 for(var i=0;i<serialNums.length;i++){
+											  var serialNum=serialNums[i];
+											 if(serialNum==$(this).attr("id")){
+												$("#"+serialNum).attr("checked",true);
+													/*$("#stockOutCount"+arrays[0]).attr("readonly",false);
+													//$("#stockOutCount"+arrays[0]).val(arrays[1]);
+													$scope["stockValue"+arrays[0]] = arrays[1];
+													$("#stockOutCount"+arrays[0]).css("border","1px solid");*/
+											 }
+										 }
+											 }
+										}
+								});
 							}
 							//单独保存
 							$scope.savewarehouseposition= function(index,judgeNumber) {
@@ -921,7 +964,21 @@ angular
 							       }
 							       $scope.exportWarehouse = function(){
 								    	 handle.blockUI("正在导出数据，请稍后"); 
-								    	 window.location.href=$rootScope.basePath+"/rest/warehouse/exportWarehouse";
+								    	 //如果
+								    	 if($scope.serialNums&&$scope.serialNums.length!=0){
+								    		 var serialNums="";
+								    		 for(var i=0;i<$scope.serialNums.length;i++){
+								    			 if(i==$scope.serialNums.length-1){
+								    				 serialNums=serialNums+$scope.serialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.serialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/warehouse/exportWarehouse?serialNums="+serialNums;
+								    	 }else{//全部导出
+								    		 window.location.href=$rootScope.basePath+"/rest/warehouse/exportWarehouse";
+								    	 }
+								    	 
 								    	 handle.unblockUI(); 
 								       }
 								       

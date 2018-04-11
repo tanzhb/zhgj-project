@@ -273,7 +273,7 @@ public class PayController {
 				if (BeanUtils.isBlank(pi)) {
 					paymentRecord.setStatus(BaseVO.APPROVAL_SUCCESS);
 					//修改订单状态
-					this.payService.updateOrderStatus(paymentRecord);
+//					this.payService.updateOrderStatus(paymentRecord);
 					//发消息给付款制单人通知审批通过
 					 EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(paymentRecord,MessageConstants.BE_CONFIRM_PAY));
 				}
@@ -1167,8 +1167,9 @@ public class PayController {
         	Subject currentUser = SecurityUtils.getSubject();
         		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
         		List<VerificationRecord>verList=takeDeliveryParams.getVerificationRecords();
-        		Boolean falg=payService.insertVerificateData(verList, currenLoginName,verList.get(0).getReceiveMemoSerial());
-        		if(falg){
+        		 map =payService.insertVerificateData(verList, currenLoginName,verList.get(0).getReceiveMemoSerial());
+        		payService.updateOrderStatus((PaymentRecord) map.get("paymentRecord"));
+        		if((Boolean) map.get("flag")){
         			flag = "1";
         		}
         	}catch(Exception e){

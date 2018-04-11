@@ -1,6 +1,6 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('statementController', ['$rootScope', '$scope', 'settings','statementService','$filter',
-    '$state',"$stateParams",'$compile','$location', function($rootScope, $scope, settings,statementService,$filter,$state,$stateParams,$compile,$location) {
+angular.module('MetronicApp').controller('statementController', ['$rootScope', '$scope', 'settings','statementService','commonService','$filter',
+    '$state',"$stateParams",'$compile','$location', function($rootScope, $scope, settings,statementService,commonService,$filter,$state,$stateParams,$compile,$location) {
     $scope.$on('$viewContentLoaded', function() {   
     	// initialize core components
     	App.initAjax();
@@ -34,7 +34,8 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
         		initCustomers();    
         		$rootScope.setNumCode("CB",function(newCode){
 		 			$scope.statement.statementNum= newCode;//对账单号
-		 		});
+		 		}); 
+        		getCurrentUser();
         	}else if($state.current.name=="addSupplyStatement"){
         		showdatepicker();
         		buy_validateInit();// 加载表单验证控件
@@ -42,6 +43,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
         		$rootScope.setNumCode("VB",function(newCode){
 		 			$scope.statement.statementNum= newCode;//对账单号
 		 		});
+        		getCurrentUser();
         	}else if($state.current.name=="viewBuyStatement"){
         		$scope.getStatement($stateParams.serialNum);
         	}else if($state.current.name=="viewSupplyStatement"){
@@ -105,7 +107,17 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 			//调用承诺接口reject();
 		});
 	}
-    
+	 var getCurrentUser = function(){
+			var promise = commonService.getCurrentUser();
+			promise.then(function(data){
+				$scope.statement.maker = data.data.userName;
+				$scope.statement.makeDate=$filter('date')(new Date(), 'yyyy-MM-dd');
+				$scope.statement.statementDate=  getCurrentMonthLastDay().substring(0,10);
+				
+			},function(data){
+				//调用承诺接口reject();
+			});
+		}
 	$scope.getOrderRecords = function(){
 		var statementDate = $scope.statement.statementDate;
 		var supplyComId = $scope.statement.supplyComId;

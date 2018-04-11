@@ -81,13 +81,13 @@
 											删除
 										</label>
 									</shiro:hasPermission>
-									<shiro:hasPermission name="buyNormalOrder:import">
+									<%-- <shiro:hasPermission name="buyNormalOrder:import">
 										<label
 											class="btn btn-transparent green btn-outline btn-circle btn-sm"
 											data-toggle="modal" data-target="#import"> <i
 											class="fa fa-upload"></i> 导入
 										</label>
-									</shiro:hasPermission>
+									</shiro:hasPermission> --%>
 									<shiro:hasPermission name="buyNormalOrder:export">
 										<label
 											class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
@@ -309,22 +309,36 @@
 							<div class="actions">
 								<div class="btn-group btn-group-devided"
 									data-toggle="buttons" id="buttons">
+									<shiro:hasPermission name="takeDeliveryPlan:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="takeDeliveryAdd"> <i class="fa fa-plus"></i>
 										发货通知
-									</label><label class="btn btn-transparent yellow btn-circle btn-sm"
+									</label>
+									</shiro:hasPermission>
+									<shiro:hasPermission name="takeDeliveryPlan:confirm">
+									<label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认代发货
-								</label> <label class="btn btn-transparent purple btn-circle btn-sm"
+								</label> 
+								</shiro:hasPermission>
+								<shiro:hasPermission name="takeDeliveryPlan:edit">
+								<label class="btn btn-transparent purple btn-circle btn-sm"
 										ng-click="takeDeliveryEdit()"> <i class="fa fa-edit"></i>
 										修改
-									</label> <label class="btn btn-transparent red btn-circle btn-sm"
+									</label> 
+									</shiro:hasPermission>
+									<shiro:hasPermission name="takeDeliveryPlan:delete">
+									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="takeDeliveryDelete()"> <i
 										class="fa fa-minus"></i> 删除
-									</label> <label
+									</label> 
+									</shiro:hasPermission>
+									<shiro:hasPermission name="takeDeliveryPlan:export">
+									<label
 										class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 										ng-click="exportTakeDelivery()"> <i
 										class="fa fa-file-excel-o"></i> 导出
 									</label>
+									</shiro:hasPermission>
 								</div>
 							</div>
 						</div>
@@ -382,15 +396,21 @@
 					<span class="caption-subject font-green bold uppercase">付款计划列表</span>
 				</div>
 				<div class="actions" ng-controller='MyCtrl' id="buttons">
+				<shiro:hasPermission name="accountsPayable:apply">
 				<label class="btn btn-transparent yellow btn-circle btn-sm" ng-click="jumpToApplyPay()"><i class="glyphicon glyphicon-play"></i> 申请</label>
+				</shiro:hasPermission>
+				<shiro:hasPermission name="accountsPayable:add">
 				<label class="btn btn-transparent green btn-circle btn-sm" ng-click="jumpToUrl('addPayForBuyOrder')"><i class="fa fa-plus"></i> 添加</label>
-									
+						</shiro:hasPermission>	
+					<shiro:hasPermission name="accountsPayable:edit">	
 				<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="jumpToEdit()"> <i class="fa fa-edit"></i>修改</label>
-									
-									
+						</shiro:hasPermission>	
+						<shiro:hasPermission name="accountsPayable:delete">		
 				<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delPay()"> <i class="fa fa-minus"></i> 删除</label>
-									
+						</shiro:hasPermission>		
+					<shiro:hasPermission name="accountsPayable:export">
 				<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportPay()"> <i class="fa fa-file-excel-o"></i> 导出</label>
+				</shiro:hasPermission>
 				</div>
 			</div>
 
