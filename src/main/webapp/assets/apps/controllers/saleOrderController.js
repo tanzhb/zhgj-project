@@ -438,7 +438,25 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     	$state.go("stockOutView",{serialNum:serialNum});
     	
     }
- 	   
+	$scope.chooseSaleOrder=function(serialNum){
+		
+		if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+    		if($scope.serialNums){
+    			$scope.serialNums.push(serialNum);
+    		}else{
+    			$scope.serialNums=[];
+    			$scope.serialNums.push(serialNum);
+    		}
+    	}else{
+    		if($scope.serialNums.length > 0){
+    			for(var i=0;i<$scope.serialNums.length;i++){
+    				if(serialNum == $scope.serialNums[i]){
+    					$scope.serialNums.splice(i,1);
+    				}
+    			}
+    		}
+    	}
+	}
 	 var  outRecordTable,tableUrl,type,tableId;// 出库记录弹框
  var loadOutRecordTable = function(serialNum,count) {
 	 tableId="select_sample_outRecord";
@@ -648,9 +666,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
-								"<span></span></label>";
+//								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+//								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+//								"<span></span></label>";
+								return '<label class="mt-checkbox  mt-checkbox-outline">' +
+								'<input type="checkbox" class="checkboxes"  id="'+data+'" value="'+data+'"   ng-click="chooseSaleOrder(\''+full.serialNum+'\')"/>' +
+								'<span></span></label>';
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -3711,7 +3732,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.exportSaleOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale";
+			    	 //如果
+			    	 if($scope.serialNums&&$scope.serialNums.length!=0){
+			    		 var serialNums="";
+			    		 for(var i=0;i<$scope.serialNums.length;i++){
+			    			 if(i==$scope.serialNums.length-1){
+			    				 serialNums=serialNums+$scope.serialNums[i]
+			    			 }else{
+			    				 serialNums=serialNums+$scope.serialNums[i]+",";
+			    			 }
+			    		 }
+			    		 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale"+"&&serialNums="+serialNums;
+			    	 }else{//全部导出
+			    		 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=sale";
+			    	 }
 			    	 handle.unblockUI(); 
 			   }
 		       

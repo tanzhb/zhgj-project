@@ -44,6 +44,7 @@ import com.congmai.zhgj.web.model.ClauseFrameworkExample;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.Statement;
@@ -265,11 +266,11 @@ public class StatementController {
      * @return
      */
     @RequestMapping("exportStatement")
-    public void exportStatement(String type,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportStatement(String type, String serialNums, Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
     		StatementExample m =new StatementExample();
     		List<Statement> statementList = new ArrayList<Statement>();
-        	//and 条件1
+    		//and 条件1
         	Criteria criteria =  m.createCriteria();
         	criteria.andDelFlgEqualTo("0");
         	if("buy".equals(type)){//平台客户对账单供应商为空
@@ -285,7 +286,15 @@ public class StatementController {
         	m.or(criteria2);*/
         	//排序字段
         	m.setOrderByClause("updateTime DESC");
-        	statementList = statementService.selectList(m);
+        	    if(StringUtils.isEmpty(serialNums)){
+        	    	statementList = statementService.selectList(m);
+    		}else{
+    			List<String> idList = ApplicationUtils.getIdList(serialNums);
+    			for(String id:idList){
+    				statementList	.add(statementService.selectById(id));
+    			}
+    		}
+        	
         	
     		dataMap.put("statementList",statementList);
     		if("supply".equals(type)){

@@ -287,7 +287,7 @@
 					</tbody>
 					<tfoot><tr>
 					<td colspan="3">合计</td>
-                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
+                              <td colspan="10">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
                               </tr></tfoot>
 				</table>
 			</div>
@@ -321,7 +321,7 @@
 					</tbody>
 					<tfoot><tr>
 					<td colspan="3">合计</td>
-                              <td colspan="8">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
+                              <td colspan="10">金额: {{customsForm.deliverAmount |currency:''}} 增值税:{{customsForm.addedTax|currency:''}} 关税:{{customsForm.customsAmount|currency:''}} 税额合计:{{customsForm.totalTax|currency:''}}</td>
                               </tr></tfoot>
 				</table>
 			</div>

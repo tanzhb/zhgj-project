@@ -189,6 +189,37 @@ angular
 									//调用承诺接口reject();
 								});
 							}
+							 $scope.chooseInvoice=function(serialNum,type){
+									
+									if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+							    		if($scope.inSerialNums&&type=='in'){//进项票
+							    			$scope.inSerialNums.push(serialNum);
+							    		}else if(type=='in'){
+							    			$scope.inSerialNums=[];
+							    			$scope.inSerialNums.push(serialNum);
+							    		} else if($scope.outSerialNums&&type=='out'){//销项票
+							    			$scope.outSerialNums.push(serialNum);
+							    		}else if(type=='out'){
+							    			$scope.outSerialNums=[];
+							    			$scope.outSerialNums.push(serialNum);
+							    		}
+							    	}else{
+							    		if($scope.inSerialNums&&type=='in'){
+							    			for(var i=0;i<$scope.inSerialNums.length;i++){
+							    				if(serialNum == $scope.inSerialNums[i]){
+							    					$scope.inSerialNums.splice(i,1);
+							    				}
+							    			}
+							    		}
+							    		if($scope.outSerialNums&&type=='out'){
+							    			for(var i=0;i<$scope.outSerialNums.length;i++){
+							    				if(serialNum == $scope.outSerialNums[i]){
+							    					$scope.outSerialNums.splice(i,1);
+							    				}
+							    			}
+							    		}
+							    	}
+								}
 							// 构建datatables开始***************************************
 							var tableAjaxUrl ;
 							 var table ;
@@ -250,7 +281,7 @@ angular
 
 														"aoColumns" : [
 															{
-															mData : 'serialNum',
+															mData : 'serialNum'/*,
 							                            	  mRender : function(
 																		data,
 																		type,
@@ -259,7 +290,7 @@ angular
 																	return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 																			"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 																			"<span></span></label>";
-																}
+																}*/
 															},{
 																mData : 'invoiceNum'
 															},  {
@@ -325,12 +356,15 @@ angular
 															'className' : 'dt-body-center',
 															'render' : function(data,
 																	type, full, meta) {
-																return '<input type="checkbox" id="'+data+'" name="in" value="'
+															/*	return '<input type="checkbox" id="'+data+'" name="in" value="'
 																		+ $('<div/>')
 																				.text(
 																						data)
 																				.html()
-																				+ '" data-check="false"  >';
+																				+ '" data-check="false"  >';*/
+																return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+							                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="chooseInvoice(\''+full.serialNum+'\',\''+judgeString+'\')" id="'+data+'" value="'+data+'" />'+
+							                                     '<span></span></label>';
 															},"createdCell": function (td, cellData, rowData, full, col) {
 																 $compile(td)($scope);
 														    }
@@ -472,7 +506,7 @@ angular
 							ajax : tableAjaxUrl,// 加载数据中发票表数据
 							"aoColumns" : [
 											{
-											mData : 'serialNum',
+											mData : 'serialNum'/*,
 			                            	  mRender : function(
 														data,
 														type,
@@ -481,7 +515,7 @@ angular
 													return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 															"<input type='checkbox' class='checkboxes' value='"+data+"'/>" +
 															"<span></span></label>";
-												}
+												}*/
 											},{
 												mData : 'invoiceNum'
 											},  {
@@ -554,12 +588,15 @@ angular
 											'className' : 'dt-body-center',
 											'render' : function(data,
 													type, full, meta) {
-												return '<input type="checkbox" id="'+data+'" name="in" value="'
+												return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+			                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="chooseInvoice(\''+full.serialNum+'\',\''+judgeString+'\')" id="'+data+'" value="'+data+'" />'+
+			                                     '<span></span></label>';
+												/*return '<input type="checkbox" id="'+data+'" name="in" value="'
 														+ $('<div/>')
 																.text(
 																		data)
 																.html()
-																+ '" data-check="false"  >';
+																+ '" data-check="false"  >';*/
 											},"createdCell": function (td, cellData, rowData, full, col) {
 												 $compile(td)($scope);
 										    }
@@ -1825,7 +1862,29 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							       $scope.exportInvoice = function(judgeString){
 							    	   debugger;
 								    	 handle.blockUI("正在导出数据，请稍后"); 
-								    	 window.location.href=$rootScope.basePath+"/rest/invoice/exportInvoice?inOrOut="+judgeString;
+								    	 //如果
+								    	 var serialNums="";
+								    	 if($scope.inSerialNums&&judgeString=='in'){//进项票
+								    		 for(var i=0;i<$scope.inSerialNums.length;i++){
+								    			 if(i==$scope.inSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.inSerialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.inSerialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/invoice/exportInvoice?inOrOut="+judgeString+"&&serialNums="+serialNums;
+								    	 } else if($scope.outSerialNums&&judgeString=='out'){//销项票
+								    		 for(var i=0;i<$scope.outSerialNums.length;i++){
+								    			 if(i==$scope.outSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.outSerialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.outSerialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/invoice/exportInvoice?inOrOut="+judgeString+"&&serialNums="+serialNums;
+								    	 }else {//全部导出
+								    		 window.location.href=$rootScope.basePath+"/rest/invoice/exportInvoice?inOrOut="+judgeString;
+								    	 }
 								    	 handle.unblockUI(); 
 								       }
 								       

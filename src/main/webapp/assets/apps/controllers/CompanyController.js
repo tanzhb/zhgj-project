@@ -48,15 +48,15 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	 });
 	 
 	 var initTabClass = function(){
-			var liobj = $('ul[class="nav nav-tabs"]>li')[0]
+			var liobj = $('ul[class="nav nav-tabs"][id="statement_tab"]>li')[0]
 				$(liobj).addClass("active");
 //				$($('#'+liobj.id+' a')[0].dataset.target).addClass("active");
-				$($('ul[class="nav nav-tabs"]>li a')[0].dataset.target).addClass("active");
+				$($('ul[class="nav nav-tabs"][id="statement_tab"]>li a')[0].dataset.target).addClass("active");
 				
 //				methodName = $('#'+liobj.id+' a')[0].attributes[2].nodeValue; 
 				methodName = '';
 				try{
-					methodName = '$scope.'+$('ul[class="nav nav-tabs"]>li a')[0].attributes[2].nodeValue;
+					methodName = '$scope.'+$('ul[class="nav nav-tabs"][id="statement_tab"]>li a')[0].attributes[2].nodeValue;
 				}catch(e){ 
 //					alert(methodName+"()不存在！"); 
 				}

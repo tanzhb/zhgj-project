@@ -112,6 +112,39 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 			}
 			
 			} 
+	 
+	 
+	 $scope.chooseCustomsFormInfo=function(serialNum,type){
+			
+			if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+	    		if($scope.declarationSerialNums&&type=='declaration'){//报关单
+	    			$scope.declarationSerialNums.push(serialNum);
+	    		}else if(type=='declaration'){
+	    			$scope.declarationSerialNums=[];
+	    			$scope.declarationSerialNums.push(serialNum);
+	    		} else if($scope.clearanceSerialNums&&type=='clearance'){//报关单
+	    			$scope.clearanceSerialNums.push(serialNum);
+	    		}else if(type=='clearance'){
+	    			$scope.clearanceSerialNums=[];
+	    			$scope.clearanceSerialNums.push(serialNum);
+	    		}
+	    	}else{
+	    		if($scope.declarationSerialNums&&type=='declaration'){
+	    			for(var i=0;i<$scope.declarationSerialNums.length;i++){
+	    				if(serialNum == $scope.declarationSerialNums[i]){
+	    					$scope.declarationSerialNums.splice(i,1);
+	    				}
+	    			}
+	    		}
+	    		if($scope.clearanceSerialNums&&type=='clearance'){
+	    			for(var i=0;i<$scope.clearanceSerialNums.length;i++){
+	    				if(serialNum == $scope.clearanceSerialNums[i]){
+	    					$scope.clearanceSerialNums.splice(i,1);
+	    				}
+	    			}
+	    		}
+	    	}
+		}
     var table;
     var loadDeclarationTable = function() {
     	var judgeString='declaration';
@@ -194,9 +227,9 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
-								"<span></span></label>";
+								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">' +
+								'<input type="checkbox" class="checkboxes" value="'+ data +'"  id="'+ data +'"  ng-click="chooseCustomsFormInfo(\''+full.serialNum+'\',\''+judgeString+'\')" />' +
+								'<span></span></label>';
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -368,9 +401,9 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     							'orderable' : false,
     							'render' : function(data,
     									type, full, meta) {
-    								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-    								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
-    								"<span></span></label>";
+    								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">' +
+    								'<input type="checkbox" class="checkboxes" value="'+ data +'"  id="'+ data +'"  ng-click="chooseCustomsFormInfo(\''+full.serialNum+'\',\''+judgeString+'\')" />' +
+    								'<span></span></label>';
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
     								 $compile(td)($scope);
@@ -863,6 +896,9 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
 	    		}
 	   	    	debugger;
 	   	    	if($('#form_sample_4').valid()){
+	   	    		for(var i=0;i<$scope.file.length;i++){
+	   	    			$scope.file[i].relationSerial=$scope.customsForm.serialNum;
+	   	    		}
 	   	    		customsFormService.saveFile($scope.file).then(
 	   	       		     function(data){
 	   	       		    	toastr.success('数据保存成功！');
@@ -1136,7 +1172,29 @@ angular.module('MetronicApp').controller('CustomsFormController', ['$rootScope',
     }
     $scope.exportCustomsForm = function(type){
 	    	 handle.blockUI("正在导出数据，请稍后"); 
-	    	 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type;
+	    	 //如果
+	    	 var serialNums="";
+	    	 if($scope.declarationSerialNums&&type=='declaration'){//clearance declaration
+	    		 for(var i=0;i<$scope.declarationSerialNums.length;i++){
+	    			 if(i==$scope.declarationSerialNums.length-1){
+	    				 serialNums=serialNums+$scope.declarationSerialNums[i]
+	    			 }else{
+	    				 serialNums=serialNums+$scope.declarationSerialNums[i]+",";
+	    			 }
+	    		 }
+	    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
+	    	 } else if($scope.clearanceSerialNums&&type=='clearance'){//clearance declaration
+	    		 for(var i=0;i<$scope.clearanceSerialNums.length;i++){
+	    			 if(i==$scope.clearanceSerialNums.length-1){
+	    				 serialNums=serialNums+$scope.clearanceSerialNums[i]
+	    			 }else{
+	    				 serialNums=serialNums+$scope.clearanceSerialNums[i]+",";
+	    			 }
+	    		 }
+	    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
+	    	 }else {//全部导出
+	    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type;
+	    	 }
 	    	 handle.unblockUI(); 
 	       }
 	       

@@ -86,6 +86,7 @@ import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.model.VerificationRecord;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.CompanyContactService;
 import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyService;
@@ -671,12 +672,23 @@ public class PayController {
 	 */
 	@RequestMapping("exportPay")
 	public void exportPay(Map<String, Object> map, HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response,String  serialNums) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
-		List<PaymentRecord> paymentRecordlist = payService
-				.selectAllPaymentRecordList(currenLoginName);
+		List<PaymentRecord> paymentRecordlist =new ArrayList<PaymentRecord>();
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			for(String id:idList){
+				PaymentRecord paymentRecord=payService.selectPayById(id);
+				paymentRecord.setSupplyComId(paymentRecord.getPayee());
+				paymentRecordlist	.add(paymentRecord);
+			}
+		}else{
+			paymentRecordlist=payService.selectAllPaymentRecordList(currenLoginName);
+		}
+		/*List<PaymentRecord> paymentRecordlist = payService
+				.selectAllPaymentRecordList(currenLoginName);*/
 		for (PaymentRecord paymentRecord : paymentRecordlist) {
 			if ("1".equals(paymentRecord.getBillStyle())) {
 				paymentRecord.setBillStyle(PaymentRecord.XPHK);

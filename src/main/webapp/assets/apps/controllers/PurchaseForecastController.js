@@ -59,7 +59,25 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 			"hideMethod" : "fadeOut"
 	}
 
-
+	
+	$scope.choosePurchaseForecast=function(serialNum){
+		if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+    		if($scope.serialNums){
+    			$scope.serialNums.push(serialNum);
+    		}else{
+    			$scope.serialNums=[];
+    			$scope.serialNums.push(serialNum);
+    		}
+    	}else{
+    		if($scope.serialNums.length > 0){
+    			for(var i=0;i<$scope.serialNums.length;i++){
+    				if(serialNum == $scope.serialNums[i]){
+    					$scope.serialNums.splice(i,1);
+    				}
+    			}
+    		}
+    	}
+	}
 
 
 	var table;
@@ -128,8 +146,14 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 						                            	'orderable' : false,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,type, full, meta) {
-							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
-						                            	}
+						                            		return '<label class="mt-checkbox  mt-checkbox-outline">' +
+						    								'<input type="checkbox" class="checkboxes"  id="'+data+'"  value="'+data+'"   ng-click="choosePurchaseForecast(\''+full.serialNum+'\')"/>' +
+						    								'<span></span></label>';
+//							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
+						                            	},
+						    							"createdCell": function (td, cellData, rowData, row, col) {
+						   								 $compile(td)($scope);
+						   						       }
 						                            } ,
 						                            {
 						                            	'targets' : 1,
@@ -250,7 +274,19 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 	//导出
 	$scope.exportPurchaseForecast = function(){
    	 handle.blockUI("正在导出数据，请稍后"); 
-   	 window.location.href=$rootScope.basePath+"/rest/purchaseForecast/exportPurchaseForecast";
+   	 if($scope.serialNums&&$scope.serialNums.length!=0){
+		 var serialNums="";
+		 for(var i=0;i<$scope.serialNums.length;i++){
+			 if(i==$scope.serialNums.length-1){
+				 serialNums=serialNums+$scope.serialNums[i]
+			 }else{
+				 serialNums=serialNums+$scope.serialNums[i]+",";
+			 }
+		 }
+		 window.location.href=$rootScope.basePath+"/rest/purchaseForecast/exportPurchaseForecast?serialNums="+serialNums;
+	 }else{//全部导出
+		 window.location.href=$rootScope.basePath+"/rest/purchaseForecast/exportPurchaseForecast";
+	 }
    	 handle.unblockUI(); 
       }
 

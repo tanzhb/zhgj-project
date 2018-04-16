@@ -13,6 +13,7 @@ import com.alibaba.druid.util.StringUtils;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
 import com.congmai.zhgj.web.dao.CustomsFormMapper;
 import com.congmai.zhgj.web.dao.Delivery2Mapper;
@@ -117,7 +118,7 @@ public class CustomsFormServiceImpl extends GenericServiceImpl<CustomsForm, Stri
 		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(customsForm.getDeliverSerial());
 		Delivery deliverynew =new  Delivery();
 		deliverynew.setSerialNum(takeDelivery.getDeliverSerial());
-		if("1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
+		if(StringUtil.isNotEmpty(o.getContractContent())&&"1".equals(o.getContractContent().substring(4, 5))){//验收条款有效
 			takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
 			this.createStockInCheckRecord(takeDelivery,currenLoginName);
 			orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验

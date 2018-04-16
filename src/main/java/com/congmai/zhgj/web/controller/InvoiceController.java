@@ -48,6 +48,7 @@ import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyFinance;
+import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.DeliveryTransport;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Invoice;
@@ -278,12 +279,24 @@ public class InvoiceController {
 	     */
 	    @RequestMapping("exportInvoice")
 	    @ResponseBody
-	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  inOrOut) {
+	    public void exportStockInOutCheck(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  inOrOut,String serialNums ) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
-	    		List<Invoice> invoices = invoiceService.getAllInvoice(inOrOut,null);
+	    		List<Invoice> invoices=new ArrayList<Invoice>();
+	    		if(StringUtils.isEmpty(serialNums)){
+	    			invoices = invoiceService.getAllInvoice(inOrOut,null);
+	    		}else{
+	    			List<String> idList = ApplicationUtils.getIdList(serialNums);
+	    			for(String id:idList){
+	    				invoices.add(invoiceService.selectById(id));
+	    			}
+	    		}
 	    		for(Invoice invoice:invoices){
 	    			OrderInfo order=orderService.selectById(invoice.getOrderSerial());
 	    			invoice.setRelationBuyOrSaleNum(order.getOrderNum());
+	    			Company c=companyService.selectOne(invoice.getSupplyComId()==null?invoice.getBuyComId():invoice.getSupplyComId());
+	        		if(c!=null){
+	        			invoice.setComName(c.getComName());
+	        		}
 	    		}
 	    		dataMap.put("invoiceList",invoices);
 	    		if("in".equals(inOrOut)){

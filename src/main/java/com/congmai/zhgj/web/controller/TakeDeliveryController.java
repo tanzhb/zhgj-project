@@ -327,7 +327,7 @@ public class TakeDeliveryController {
         	if(delivery.getOrderSerial()!=null&&sr!=null){
         		OrderInfo o=orderService.selectById(delivery.getOrderSerial());
         		sr.setOrder(o);
-    			if("1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
+    			if(StringUtil.isNotEmpty(o.getContractContent())&&"1".equals(o.getContractContent().substring(4, 5))){//	有验收条款
     				delivery.setHasCheckData(true);
     			}
         		delivery.setStockInOutRecord(sr);
@@ -493,12 +493,25 @@ public class TakeDeliveryController {
      * @return
      */
     @RequestMapping("exportTakeDelivery")
-    public void exportTakeDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportTakeDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
-    		Delivery takeDelivery = new Delivery();
-    		takeDelivery.setPageIndex(0);
-        	takeDelivery.setPageSize(-1);
-    		List<Delivery> takeDeliveryList = takeDeliveryService.selectByPage(takeDelivery).getResult();
+    		List<Delivery> takeDeliveryList = new ArrayList<Delivery>();
+	if(StringUtils.isEmpty(serialNums)){
+		Delivery takeDelivery = new Delivery();
+		takeDelivery.setPageIndex(0);
+    	takeDelivery.setPageSize(-1);
+		 takeDeliveryList = takeDeliveryService.selectByPage(takeDelivery).getResult();
+		 for(Delivery d:takeDeliveryList){
+ 			d.setMaterielTotalCount(deliveryService.getDeliveryTotalCount(d.getSerialNum()));
+ 		}
+	}else{
+		List<String> idList = ApplicationUtils.getIdList(serialNums);
+		for(String id:idList){
+			Delivery vo=takeDeliveryService.selectByTakeDeliveryPrimaryKey(id);
+			vo.setMaterielTotalCount(deliveryService.getDeliveryTotalCount(vo.getSerialNum()));
+			takeDeliveryList.add(vo);
+		}
+	}
     		dataMap.put("takeDeliveryList",takeDeliveryList);
     		ExcelUtil.export(request, response, dataMap, "takeDelivery", "收货计划");
     }

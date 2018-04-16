@@ -184,8 +184,9 @@ angular
 																				data)
 																		.html()
 																		+ '" data-check="false" ng-click="showStockRecord(\''+full.serialNum+'\')" >';*/
+														var type="zijian";//\''+type+'\'
 														return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-					                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecord(\''+full.serialNum+'\')" id="'+data+'" value="'+data+'" data-set="#sample_zijian .checkboxes" />'+
+					                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecord(\''+full.serialNum+'\', \''+type+'\')" id="'+data+'" value="'+data+'" data-set="#sample_zijian .checkboxes" />'+
 					                                     '<span></span></label>';
 													},"createdCell": function (td, cellData, rowData, full, col) {
 														 $compile(td)($scope);
@@ -1056,9 +1057,39 @@ angular
 					 	                })
 					 	            };
 					 	            
-					 	           $scope.showStockRecord=function(serialNum){//列表页显示出入库记录
+					 	           $scope.showStockRecord=function(serialNum,type){//列表页显示出入库记录
 					 	        	  loadStockInTable(serialNum,"sample_stockin");//入库记录
 							 			loadStockOutTable(serialNum,"sample_stockout");//出库记录
+							 			//选中库存列表导出
+							 			if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+								    		if($scope.zijianSerialNums&&type=='zijian'){//报关单
+								    			$scope.zijianSerialNums.push(serialNum);
+								    		}else if(type=='zijian'){
+								    			$scope.zijianSerialNums=[];
+								    			$scope.zijianSerialNums.push(serialNum);
+								    		} else if($scope.daiguanSerialNums&&type=='daiguan'){//报关单
+								    			$scope.daiguanSerialNums.push(serialNum);
+								    		}else if(type=='daiguan'){
+								    			$scope.daiguanSerialNums=[];
+								    			$scope.daiguanSerialNums.push(serialNum);
+								    		}
+								    	}else{
+								    		if($scope.zijianSerialNums&&type=='zijian'){
+								    			for(var i=0;i<$scope.zijianSerialNums.length;i++){
+								    				if(serialNum == $scope.zijianSerialNums[i]){
+								    					$scope.zijianSerialNums.splice(i,1);
+								    				}
+								    			}
+								    		}
+								    		if($scope.daiguanSerialNums&&type=='daiguan'){
+								    			for(var i=0;i<$scope.daiguanSerialNums.length;i++){
+								    				if(serialNum == $scope.daiguanSerialNums[i]){
+								    					$scope.daiguanSerialNums.splice(i,1);
+								    				}
+								    			}
+								    		}
+								    	}
+									
 					 	           }
 						$scope.selectMaterialForStock=function(serialNum,materielName,materielNum,specifications){
 							debugger;
@@ -1241,8 +1272,29 @@ angular
 							            });
 							    	   
 							       }
-							       $scope.exportStock = function(stockType){
-								    	 handle.blockUI("正在导出数据，请稍后"); 
+							       $scope.exportStock = function(type){
+								    	 handle.blockUI("正在导出数据，请稍后"); 	 var serialNums="";
+								    	 if($scope.declarationSerialNums&&type=='zijian'){//clearance declaration
+								    		 for(var i=0;i<$scope.declarationSerialNums.length;i++){
+								    			 if(i==$scope.declarationSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.declarationSerialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.declarationSerialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
+								    	 } else if($scope.clearanceSerialNums&&type=='daiguan'){//clearance declaration
+								    		 for(var i=0;i<$scope.clearanceSerialNums.length;i++){
+								    			 if(i==$scope.clearanceSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.clearanceSerialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.clearanceSerialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
+								    	 }else {//全部导出
+								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type;
+								    	 }
 								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+stockType;
 								    	 handle.unblockUI(); 
 								       }

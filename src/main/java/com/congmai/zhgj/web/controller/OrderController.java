@@ -529,6 +529,7 @@ public class OrderController {
 		String businessKey = orderInfo.getSerialNum().toString();
 		orderInfo.setBusinessKey(businessKey);
 		orderInfo.setOrderType(o.getOrderType());
+		orderInfo.setBuyComId(o.getBuyComId());
 		try {
 			String processInstanceId = this.processService.startSaleOrderInfo(orderInfo);
 			
@@ -999,9 +1000,11 @@ public class OrderController {
     	//按贸易类型查询
     	if(Constants.PURCHASE.equals(groupType)){
     		parm.setTradeType(StaticConst.getInfo("neimao"));
-    	}else if(Constants.INTERNATIONALPURCHASE.equals(groupType)){
+    	}else if(Constants.INTERNATIONALPURCHASE.equals(groupType)/*&&!"lww".equals(user.getUserName())*/){
     		parm.setTradeType(StaticConst.getInfo("waimao"));
-    	}
+    	}/*else if(Constants.INTERNATIONALPURCHASE.equals(groupType)&&"lww".equals(user.getUserName())){
+    		parm.setTradeType(StaticConst.getInfo("waimao"));
+    	}*/
     	
     	
     	if(SALEORDER.equals(type)){//查找公司销售订单
@@ -1043,7 +1046,18 @@ public class OrderController {
     		parm.setStatus("2");
     		orderInfoList = orderService.selectCommenList(parm);
     	}
-
+    		//针对lww(李伟伟设置aq_zcdl建的委托采购订单(采购商comId为61fee61b003c4c258f1704c5be249620))
+    	if("lww".equals(user.getUserName())){
+    		parm =new OrderInfo();
+//        	parm.setBuyComId("61fee61b003c4c258f1704c5be249620");
+        	parm.setOrderType(StaticConst.getInfo("dailiBuy"));//委托采购
+        	parm.setTradeType(StaticConst.getInfo("neimao"));
+        	parm.setDelFlg("0");
+        	parm.setMaker("zhangy");
+        	List<OrderInfo>list=orderService.selectCommenList(parm);
+        	orderInfoList.addAll(list);
+    	}
+    	
     	
     	//封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -1788,7 +1802,7 @@ public class OrderController {
      * @return
      */
     @RequestMapping("exportOrder")
-    public void exportOrder(String type,String fram,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportOrder(String type,String fram, String serialNums,Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
     		List<OrderInfo> orderInfoList = new ArrayList<OrderInfo>();
 //    		OrderInfoExample m =new OrderInfoExample();
@@ -1812,23 +1826,33 @@ public class OrderController {
         	
         	
         	OrderInfo parm =new OrderInfo();
+        	User user = UserUtil.getUserFromSession();
+    		String comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取当前comid
         	if("sale".equals(type)){//平台销售订单供应商为空
         		parm.setSupplyComId("null");
         	}else if("buy".equals(type)){//平台采购订单采购商为空
         		parm.setBuyComId("null");
         	}
-        	if("1".equals(fram)){
-        		orderInfoList = orderService.selectFramList(parm);
+        	if(StringUtil.isNotEmpty(serialNums)){
+        		List<String> idList = ApplicationUtils.getIdList(serialNums);
+    			for(String id:idList){
+    				orderInfoList.add(orderService.selectById(id));
+    			}
         	}else{
-        		orderInfoList = orderService.selectCommenList(parm);
+        		if("1".equals(fram)){
+            		orderInfoList = orderService.selectFramList(parm);
+            	}else{
+            		orderInfoList = orderService.selectCommenList(parm);
+            	}
         	}
+        	
         	
         	
     		dataMap.put("orderInfoList",orderInfoList);
     		if("sale".equals(type)){
-    			ExcelUtil.export(request, response, dataMap, "orderInfo", "订单信息");
+    			ExcelUtil.export(request, response, dataMap, "orderInfo", "销售订单信息");
         	}else if("buy".equals(type)){
-        		ExcelUtil.export(request, response, dataMap, "buyOrderInfo", "订单信息");
+        		ExcelUtil.export(request, response, dataMap, "buyOrderInfo", "采购订单信息");
         	}
     		
     }
@@ -2217,14 +2241,20 @@ public class OrderController {
     			
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
     			
-    			if(supplySet.size()>1){
+//    			newOrderInfo.setMaterielCount(null);
+				newOrderInfo.setMaterielAmount(null);
+				newOrderInfo.setRateAmount(null);
+				newOrderInfo.setRateAndAmount(null);
+				newOrderInfo.setOtherAmount(null);
+				newOrderInfo.setOrderAmount(null);
+    			/*if(supplySet.size()>1){
     				newOrderInfo.setMaterielCount(null);
     				newOrderInfo.setMaterielAmount(null);
     				newOrderInfo.setRateAmount(null);
     				newOrderInfo.setRateAndAmount(null);
     				newOrderInfo.setOtherAmount(null);
     				newOrderInfo.setOrderAmount(null);
-    			}
+    			}*/
     			
     			Company company =  companyService.selectOne(orderInfo.getBuyComId());
     			if(company!=null){

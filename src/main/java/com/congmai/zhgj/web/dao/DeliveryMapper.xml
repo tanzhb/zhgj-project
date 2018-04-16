@@ -464,7 +464,7 @@
     
     
     <select id="getAttachFileInfo" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.RelationFile">
-    SELECT file,fileDescribe AS remark,uploader,uploadDate FROM relationFile WHERE relationSerial=#{serialNum}
+    SELECT file,fileDescribe , remark,fileType,uploader,uploadDate FROM relationFile WHERE relationSerial=#{serialNum}
     </select>
      <!--查询物料总数  -->
     <select id="selectTotalCountByDeliverSerial" resultType="java.lang.String" parameterType="java.lang.String">

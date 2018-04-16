@@ -275,10 +275,18 @@ public class CustomsFormControlller {
 	@RequestMapping("exportCustomsForm")
 	public void exportWarehouse(Map<String, Object> map,
 			HttpServletRequest request, HttpServletResponse response,
-			String type) {
+			String type,String serialNums) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-		List<CustomsForm> customsFormList = customsFormService
-				.selectCustomsFormList(type);
+		List<CustomsForm> customsFormList=new ArrayList<CustomsForm>();
+		if(StringUtils.isEmpty(serialNums)){
+			 customsFormList = customsFormService
+						.selectCustomsFormList(type);
+		}else{
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			for(String id:idList){
+				customsFormList	.add(customsFormService.selectById(id));
+			}
+		}
 		for (CustomsForm customsForm : customsFormList) {
 			DeliveryVO d = deliveryService.selectDetailById(customsForm
 					.getDeliverSerial());
@@ -298,10 +306,10 @@ public class CustomsFormControlller {
 		}
 		dataMap.put("customsFormList", customsFormList);
 		if ("clearance".equals(type)) {
-			ExcelUtil.export(request, response, dataMap, "customsform" + type,
+			ExcelUtil.export(request, response, dataMap, "customsForm" + type,
 					"清关单信息");
 		} else if ("declaration".equals(type)) {
-			ExcelUtil.export(request, response, dataMap, "customsform" + type,
+			ExcelUtil.export(request, response, dataMap, "customsForm" + type,
 					"报关单信息");
 		}
 

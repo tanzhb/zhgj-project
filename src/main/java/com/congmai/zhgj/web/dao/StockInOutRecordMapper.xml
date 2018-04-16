@@ -936,7 +936,7 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 		stock.manageType = '1'
-				AND  o.orderType != '委托采购'
+				<!-- AND  o.orderType != '委托采购' -->
 		)
 		
 		WHERE stock.serialNum = #{serialNum} AND s.status=1; 
@@ -1285,7 +1285,7 @@ dm.stockCount
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
-				AND o.orderType != '委托采购'
+				<!-- AND o.orderType != '委托采购' -->
 		)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1)a
@@ -1619,7 +1619,7 @@ SELECT IFNULL(SUM(a.stockCount ),0) from (SELECT
 		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
 		AND (
 			stock.manageType = '1'
-				AND o.orderType != '委托采购'
+				<!-- AND o.orderType != '委托采购' -->
 		)
 		
 		  WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1

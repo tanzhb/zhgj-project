@@ -421,7 +421,25 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     $scope.viewGraphTrace = function(processInstanceId){
     	graphTrace(processInstanceId,ctx);
     }
-    
+			$scope.chooseBuyOrder=function(serialNum){
+					
+					if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+			    		if($scope.serialNums){
+			    			$scope.serialNums.push(serialNum);
+			    		}else{
+			    			$scope.serialNums=[];
+			    			$scope.serialNums.push(serialNum);
+			    		}
+			    	}else{
+			    		if($scope.serialNums.length > 0){
+			    			for(var i=0;i<$scope.serialNums.length;i++){
+			    				if(serialNum == $scope.serialNums[i]){
+			    					$scope.serialNums.splice(i,1);
+			    				}
+			    			}
+			    		}
+			    	}
+				}
     var table;
     var tableAjaxUrl = "rest/order/findOrderList?type=buy";
     var loadMainTable = function() {
@@ -480,9 +498,13 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 							'orderable' : false,
 							'render' : function(data,
 									type, full, meta) {
-								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
-								"<span></span></label>";
+								return '<label class="mt-checkbox  mt-checkbox-outline">' +
+								'<input type="checkbox" class="checkboxes"  id="'+data+'"   value="'+data+'"  ng-click="chooseBuyOrder(\''+full.serialNum+'\')"/>' +
+								'<span></span></label>';
+//								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
+//								"<input type='checkbox' class='checkboxes' value="+ data +" />" +
+//								"<span></span></label>";
+//								return ""
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
 								 $compile(td)($scope);
@@ -1104,6 +1126,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         
         // 弹出确认删除模态框
         $scope.deleteBuyOrder = function() {
+        	/*var processBase = table.row('.active').data().processBase;
+        	var processBase = table.row('.active').data().processBase;
+			if(processBase != null||){
+				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能！')
+			}*/
 			var ids = '';
 			// Iterate over all checkboxes in the table
 			table.$('input[type="checkbox"]').each(
@@ -3507,7 +3534,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.exportBuyOrder = function(){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=buy";
+			    	 //如果
+			    	 if($scope.serialNums&&$scope.serialNums.length!=0){
+			    		 var serialNums="";
+			    		 for(var i=0;i<$scope.serialNums.length;i++){
+			    			 if(i==$scope.serialNums.length-1){
+			    				 serialNums=serialNums+$scope.serialNums[i]
+			    			 }else{
+			    				 serialNums=serialNums+$scope.serialNums[i]+",";
+			    			 }
+			    		 }
+			    		 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=buy"+"&serialNums="+serialNums;
+			    	 }else{//全部导出
+			    		 window.location.href=$rootScope.basePath+"/rest/order/exportOrder?type=buy";
+			    	 }
 			    	 handle.unblockUI(); 
 			   }
 		       $scope.exportBuyFramOrder = function(){
@@ -4802,7 +4842,25 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 $scope.pageIndex++;
 		 $scope.createDispalyList();
 	 }
-	 
+	 $scope.chooseTakeDelivery= function(serialNum){
+		 if($("#"+serialNum).is(':checked')){//选中时加载
+//	    		$scope.getMaterielInfo(serialNum);
+	    		if($scope.takeDeliverySerialNums){
+	    			$scope.takeDeliverySerialNums.push(serialNum);
+	    		}else{
+	    			$scope.takeDeliverySerialNums=[];
+	    			$scope.takeDeliverySerialNums.push(serialNum);
+	    		}
+	    	}else{
+	    		if($scope.takeDeliverySerialNums){
+	    			for(var i=0;i<$scope.takeDeliverySerialNums.length;i++){
+	    				if(serialNum == $scope.takeDeliverySerialNums[i]){
+	    					$scope.takeDeliverySerialNums.splice(i,1);
+	    				}
+	    			}
+	    		}
+	    	}
+	 }
 	/** *************订单物料明细可检索化  end*************** */
           
 	 /***选择收货列表初始化START***/
@@ -4888,14 +4946,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 													.html()
 											+ '">';*/
 	  	  							return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-                                   '<input type="checkbox"  name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#takeDeliveryTable .checkboxes" />'+
+                                   '<input type="checkbox"    name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'"   ng-click="chooseTakeDelivery(\''+data+'\')"  data-set="#takeDeliveryTable .checkboxes"  />'+
                                    '<span></span>'+
                                '</label>';
 	
   							},
   							"createdCell": function (td, cellData, rowData, row, col) {
-  								 $compile(td)($scope);
-  						       }
+								 $compile(td)($scope);
+						       }
   						},{
   							'targets' : 1,
   							'render' : function(data,
@@ -4998,7 +5056,25 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        * 导出收货计划
 	        */
 	       $scope.exportTakeDelivery = function(){
-		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
+	    	   handle.blockUI("正在导出数据，请稍后"); 
+		    	 //如果
+		    	 if($scope.takeDeliverySerialNums&&$scope.takeDeliverySerialNums.length!=0){
+		    		 var serialNums="";
+		    		 for(var i=0;i<$scope.takeDeliverySerialNums.length;i++){
+		    			 if(i==$scope.takeDeliverySerialNums.length-1){
+		    				 serialNums=serialNums+$scope.takeDeliverySerialNums[i]
+		    			 }else{
+		    				 serialNums=serialNums+$scope.takeDeliverySerialNums[i]+",";
+		    			 }
+		    		 }
+		    		 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery?serialNums="+serialNums;
+		    	 }else{//全部导出
+		    		 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
+		    	 }
+		    	 
+		    	 handle.unblockUI(); 
+	    	   
+		    	 
 		   }
 	       /**
 	         * 查看收货详情
@@ -5429,6 +5505,26 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    $scope.viewGraphTrace = function(processInstanceId){
 		    	graphTrace(processInstanceId,ctx);
 		    }
+		    //	选中付款计划导出	    
+		    $scope.choosePayInfo= function(serialNum){
+		    	 if($("#"+serialNum).is(':checked')){//选中时加载
+			    		if($scope.paySerialNums){
+			    			$scope.paySerialNums.push(serialNum);
+			    		}else{
+			    			$scope.paySerialNums=[];
+			    			$scope.paySerialNums.push(serialNum);
+			    		}
+			    	}else{
+			    		if($scope.paySerialNums){
+			    			for(var i=0;i<$scope.paySerialNums.length;i++){
+			    				if(serialNum == $scope.paySerialNums[i]){
+			    					$scope.paySerialNums.splice(i,1);
+			    				}
+			    			}
+			    		}
+			    	}
+			 }
+		    	
 	       //付款列表
 	   	var tablePay;
 //		var tableAjaxUrl = "rest/pay/findAllPaymentRecord";
@@ -5467,7 +5563,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							              // serverSide: true,
 							              ajax: "rest/pay/findAllPaymentRecord",//加载数据
 							              "aoColumns": [
-							                            { mData: 'serialNum',
+							                            { mData: 'serialNum'/*,
 							                            	mRender : function(
 																	data,
 																	type,
@@ -5476,7 +5572,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 																return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
 																		"<input type='checkbox' class='checkboxes' value='1' />" +
 																		"<span></span></label>";
-															}
+															}*/
 							                            },
 							                            { mData: 'paymentNum' },//paymentType
 							                            { mData: 'paymentType' },//paymentType
@@ -5526,7 +5622,14 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            	'orderable' : false,
 							                            	'className' : 'dt-body-center',
 							                            	'render' : function(data,type, full, meta) {
-							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+//							                            		return '<input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '">';
+							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
+							                                    '<input type="checkbox"    name="serialNum" class="checkboxes"  id="'+data+'" value="'+data+'"   ng-click="choosePayInfo(\''+data+'\')"  data-set="#sample_4  .checkboxes"  />'+
+							                                    '<span></span>'+
+							                                '</label>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
 							                            	}
 							                            } ,
 							                            {
@@ -6257,7 +6360,20 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		//导出付款
 		$scope.exportPay = function(){
 			handle.blockUI("正在导出数据，请稍后"); 
-			window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
+			 //如果
+	    	 if($scope.paySerialNums&&$scope.paySerialNums.length!=0){
+	    		 var serialNums="";
+	    		 for(var i=0;i<$scope.paySerialNums.length;i++){
+	    			 if(i==$scope.paySerialNums.length-1){
+	    				 serialNums=serialNums+$scope.paySerialNums[i]
+	    			 }else{
+	    				 serialNums=serialNums+$scope.paySerialNums[i]+",";
+	    			 }
+	    		 }
+	    		 window.location.href=$rootScope.basePath+"/rest/pay/exportPay?serialNums="+serialNums;
+	    	 }else{//全部导出
+	    		 window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
+	    	 }
 			handle.unblockUI(); 
 		}
 }]);

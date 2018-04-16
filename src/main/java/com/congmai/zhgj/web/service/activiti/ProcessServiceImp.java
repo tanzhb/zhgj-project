@@ -716,9 +716,12 @@ public class ProcessServiceImp implements IProcessService{
 
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance ;
-        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸
-        	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTBUYORDER, businessKey, variables);
-		}else if (StaticConst.getInfo("zizhuBuy").equals(orderInfo.getOrderType())) {//自主采购订单
+        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())
+//        	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTBUYORDER, businessKey, variables);
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
+		}  /*else if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())) {//委托销售内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
+		}*/else if (StaticConst.getInfo("zizhuBuy").equals(orderInfo.getOrderType())) {//自主采购订单
 			processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZBUYORDER, businessKey, variables);
 		}else if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&!StaticConst.getInfo("zizhuBuy").equals(orderInfo.getOrderType())) {
         	if("4a6d7471644248dbb057298d141413ee".equals(orderInfo.getSupplyComId()))//如果是FT公司，走特殊流程
@@ -753,8 +756,11 @@ public class ProcessServiceImp implements IProcessService{
 
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance=null;
-        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())) {//委托销售内贸
+        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())) {//委托销售内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())
         	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTSALEORDER, businessKey, variables);
+//        	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
+		}else if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())&&"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())) {//委托销售内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId()) {//自主销售内贸
+        	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
 		} else if (StaticConst.getInfo("neimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("zizhuSale").equals(orderInfo.getOrderType())) {//自主销售内贸
         	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
 		}else{

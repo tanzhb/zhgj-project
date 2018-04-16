@@ -413,7 +413,7 @@ angular
 									}
 								}								
 							};
-							$scope.showPosition=function(serialNum){
+							$scope.showPosition=function(serialNum,type){
 								
 								if($("#"+serialNum).is(':checked')){//选中时加载
 //						    		$scope.getMaterielInfo(serialNum);

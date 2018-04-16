@@ -21,6 +21,7 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <association property="buyComName" column="buyComId" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey" ></association>
   </resultMap>
+  
   <sql id="Example_Where_Clause" >
     <where >
       <foreach collection="oredCriteria" item="criteria" separator="or" >
@@ -84,7 +85,7 @@
     maker, description, updateDate, remark, delFlg, creator, createTime, updater, updateTime,status
   </sql>
   <sql id="Base_Column_List2" >
-    d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate, d.description, d.updateDate, d.remark, d.delFlg, d.creator, d.createTime, 
+    d.serialNum, d.buyComId, d.source, d.customerPrincipal, d.customerPlanNum, d.demandPlanNum, d.maker, d.releaseDate,d.description, d.updateDate, d.remark, d.delFlg, d.creator, d.createTime, 
     d.updater, d.updateTime,d.status
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.DemandPlanSelectExample" >

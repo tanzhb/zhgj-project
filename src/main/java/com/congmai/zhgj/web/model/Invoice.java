@@ -23,6 +23,10 @@ public class Invoice extends BaseVO{
     private String supplyComId;
 
     private String buyComId;
+    
+    private String buyComName;//收票方
+    
+    private String supplyComName;//开票方
 
     private String orderSerial;
 
@@ -123,6 +127,7 @@ public class Invoice extends BaseVO{
     private String  currency;//币种
     
     private ProcessBase processBase;//流程字段类
+    
 
     public String getCapitalMoney() {
 		return capitalMoney;
@@ -554,6 +559,22 @@ public class Invoice extends BaseVO{
 
 	public void setProcessBase(ProcessBase processBase) {
 		this.processBase = processBase;
+	}
+
+	public String getBuyComName() {
+		return buyComName;
+	}
+
+	public String getSupplyComName() {
+		return supplyComName;
+	}
+
+	public void setBuyComName(String buyComName) {
+		this.buyComName = buyComName;
+	}
+
+	public void setSupplyComName(String supplyComName) {
+		this.supplyComName = supplyComName;
 	}
     
     

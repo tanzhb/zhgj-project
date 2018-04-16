@@ -1120,7 +1120,10 @@ public class TakeDeliverySelectExample {
         	addCriterion("d.buyComId is null");
             return (Criteria) this;
         }
-        
+        public Criteria andTakeDeliverSeriaIsNotNull() {
+        	addCriterion("sr.takeDeliverSerial is not null");
+            return (Criteria) this;
+        }
         public Criteria andDeliverTypeEqualTo(String value) {
             addCriterion("d.deliverType =", value, "deliverType");
             return (Criteria) this;

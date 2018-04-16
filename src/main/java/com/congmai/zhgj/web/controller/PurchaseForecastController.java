@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -192,10 +193,23 @@ public class PurchaseForecastController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping("/exportPurchaseForecast")
-	public void exportPurchaseForecast(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) throws ParseException {
+	public void exportPurchaseForecast(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) throws ParseException {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
-	  List<DemandPlanMateriel> purchaseForecastList=purchaseForecastService.queryPurchaseForecastList("");
-		
+	  List<DemandPlanMateriel> purchaseForecastList=new  ArrayList<DemandPlanMateriel>();
+		if(StringUtils.isEmpty(serialNums)){
+			purchaseForecastList=purchaseForecastService.queryPurchaseForecastList("");
+		}else{
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			for(String id:idList){
+				DemandPlanMateriel  demandPlanMateriel=demandPlanMaterielService.selectById(id);
+				Materiel materiel=materielService.selectById(demandPlanMateriel.getMaterielSerial());
+				demandPlanMateriel.setComName(demandPlanMateriel.getDemandPlan().getBuyComName());
+				demandPlanMateriel.setMaterielName(materiel.getMaterielName());
+				demandPlanMateriel.setMaterielNum(materiel.getMaterielNum());
+				demandPlanMateriel.setSpecifications(materiel.getSpecifications());
+				purchaseForecastList	.add(demandPlanMateriel);
+			}
+		}
 		if(purchaseForecastList.size()>0){
 			for(DemandPlanMateriel demandPlanMateriel:purchaseForecastList){
 				Date deliveryDate=demandPlanMateriel.getDeliveryDate();

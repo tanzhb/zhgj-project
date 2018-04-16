@@ -170,9 +170,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			c.andDeliverBuyComIdIsNull();
 			if("noInit".equals(takeDelivery.getStatus())){//不看查询初始状态的收货（或者说入库计划）
 				c.andStatusNotEqualTo("0");//状态不为初始
+				c.andTakeDeliverSeriaIsNotNull();
 			}else{
 				//平台可查状态为初始的代发货
 				c.andStatusNotEqualTo("0");//状态不为初始
+				c.andTakeDeliverSeriaIsNotNull();
 				Criteria c2 = example.or();
 				c2.andStatusEqualTo("0");//状态为初始，只能是代发货
 				c2.andDeliverTypeEqualTo("代发货");
@@ -187,7 +189,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 
 		Page<Delivery> page = new Page<Delivery>();
 		page.setResult(takeDeliveryMapper.selectListByExample(example));
-		page.setTotalCount(takeDeliveryMapper.countListByExample(example));
+		page.setTotalCount(takeDeliveryMapper.selectListByExample(example).size());
+//		page.setTotalCount(takeDeliveryMapper.countListByExample(example));
 		
 		return page;
 	}

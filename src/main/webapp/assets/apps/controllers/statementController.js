@@ -301,7 +301,36 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     $scope.viewBuyStatement = function(serialNum){
     	$state.go("viewBuyStatement",{serialNum:serialNum});
     }
-    
+    $scope.chooseStatementInfo = function(serialNum,type){
+    	if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+    		if($scope.buySerialNums&&type=='buy'){//进项票
+    			$scope.buySerialNums.push(serialNum);
+    		}else if(type=='buy'){
+    			$scope.buySerialNums=[];
+    			$scope.buySerialNums.push(serialNum);
+    		} else if($scope.supplySerialNums&&type=='supply'){//销项票
+    			$scope.supplySerialNums.push(serialNum);
+    		}else if(type=='supply'){
+    			$scope.supplySerialNums=[];
+    			$scope.supplySerialNums.push(serialNum);
+    		}
+    	}else{
+    		if($scope.buySerialNums&&type=='buy'){
+    			for(var i=0;i<$scope.buySerialNums.length;i++){
+    				if(serialNum == $scope.buySerialNums[i]){
+    					$scope.buySerialNums.splice(i,1);
+    				}
+    			}
+    		}
+    		if($scope.supplySerialNums&&type=='supply'){
+    			for(var i=0;i<$scope.supplySerialNums.length;i++){
+    				if(serialNum == $scope.supplySerialNums[i]){
+    					$scope.supplySerialNums.splice(i,1);
+    				}
+    			}
+    		}
+    	}
+    }
     var buyTable;
     var loadBuyMainTable = function() {
             a = 0;
@@ -364,8 +393,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 //															data)
 //													.html()
 //											+ '">';
+								var judgeString="buy";
 								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-                                '<input type="checkbox" data-check="false" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#sample_2 .checkboxes" />'+
+                                '<input type="checkbox" data-check="false" class="checkboxes"   ng-click="chooseStatementInfo(\''+full.serialNum+'\',\''+judgeString+'\')"   id="'+data+'" value="'+data+'" data-set="#sample_2 .checkboxes" />'+
                                 '<span></span></label>';
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -548,8 +578,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 //    															data)
 //    													.html()
 //    											+ '">';
+    								 var judgeString="supply";
     								return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-                                    '<input type="checkbox" data-check="false" class="checkboxes"  id="'+data+'" value="'+data+'" data-set="#sample_1 .checkboxes" />'+
+                                    '<input type="checkbox" data-check="false" class="checkboxes"  id="'+data+'"    ng-click="chooseStatementInfo(\''+full.serialNum+'\',\''+judgeString+'\')" value="'+data+'" data-set="#sample_1 .checkboxes" />'+
                                     '<span></span></label>';
     							},
     							"createdCell": function (td, cellData, rowData, row, col) {
@@ -994,7 +1025,29 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 		       
 		       $scope.exportStatement = function(type){
 			    	 handle.blockUI("正在导出数据，请稍后"); 
-			    	 window.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type="+type;
+			    	 //如果
+			    	 var serialNums="";
+			    	 if($scope.buySerialNums&&type=='buy'){//客户对账单
+			    		 for(var i=0;i<$scope.buySerialNums.length;i++){
+			    			 if(i==$scope.buySerialNums.length-1){
+			    				 serialNums=serialNums+$scope.buySerialNums[i]
+			    			 }else{
+			    				 serialNums=serialNums+$scope.buySerialNums[i]+",";
+			    			 }
+			    		 }
+			    		 wbuydow.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type="+type+"&&serialNums="+serialNums;
+			    	 } else if($scope.supplySerialNums&&judgeStrbuyg=='supply'){//供应商对账单
+			    		 for(var i=0;i<$scope.supplySerialNums.length;i++){
+			    			 if(i==$scope.supplySerialNums.length-1){
+			    				 serialNums=serialNums+$scope.supplySerialNums[i]
+			    			 }else{
+			    				 serialNums=serialNums+$scope.supplySerialNums[i]+",";
+			    			 }
+			    		 }
+			    		 wbuydow.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type="+type+"&&serialNums="+serialNums;
+			    	 }else {//全部导出
+			    		 wbuydow.location.href=$rootScope.basePath+"/rest/statement/exportStatement?type="+type;
+			    	 }
 			    	 handle.unblockUI(); 
 			   }
 		       //********导入导出end****************//
