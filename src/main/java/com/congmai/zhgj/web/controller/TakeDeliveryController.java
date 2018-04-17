@@ -210,12 +210,15 @@ public class TakeDeliveryController {
 		if(user !=null){
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取用户的企业ID
 		}
-		takeDelivery.setBuyComId(comId);
-		/*if(StringUtil.isEmpty(comId)){
+		/*if(){
+			
+		}*/
+//		takeDelivery.setBuyComId(comId);
+		if(StringUtil.isEmpty(comId)){
 			takeDelivery.setBuyComId(comId);
 		}else{
 			takeDelivery.setSupplyComId(comId);
-		}*/
+		}
 		
 	/*	if("1buy".equals(noInit)){
 			takeDelivery.setBuyComId(null);

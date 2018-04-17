@@ -187,7 +187,129 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        }
 	     });
 	}
-	
+    $scope.showUnderMateriel= function(obj,attr) {
+    	var serialNum=obj[attr].serialNum;//获取物料流水
+    	if(underMaterieltable){
+    		underMaterieltable.ajax.url(ctx+"/rest/materiel/findUnderMaterielList?isLatestVersion=1&serialNum="+serialNum).load();
+		}else{
+			selectUnderMateriel(serialNum);
+		}
+    	$("#underMaterielInfo").modal("show");
+    }
+    var underMaterieltable;
+    var selectUnderMateriel = function(serialNum) {
+        a = 0;
+        App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
+        underMaterieltable = $("#select_sample_under").DataTable({
+            language: {
+                aria: {
+                    sortAscending: ": 以升序排列此列",
+                    sortDescending: ": 以降序排列此列"
+                },
+                emptyTable: "空表",
+                info: "从 _START_ 到 _END_ /共 _TOTAL_ 条数据",
+                infoEmpty: "没有数据",
+                // infoFiltered: "(filtered1 from _MAX_ total
+					// entries)",
+                lengthMenu: "每页显示 _MENU_ 条数据",
+                search: "查询:",processing:"加载中...",infoFiltered: "（从 _MAX_ 项数据中筛选）",
+                zeroRecords: "抱歉， 没有找到！",
+                paginate: {
+                    "sFirst": "首页",
+                    "sPrevious": "前一页",
+                    "sNext": "后一页",
+                    "sLast": "尾页"
+                 }
+            },
+/*
+* fixedHeader: {//固定表头、表底 header: !0, footer: !0, headerOffset: a },
+*/
+            order: [[1, "desc"]],// 默认排序列及排序方式
+            searching: true,// 是否过滤检索
+            ordering:  true,// 是否排序
+            lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
+            pageLength: 5,// 每页显示数量
+            processing: true,// loading等待框
+//serverSide: true,
+            ajax: "rest/materiel/findUnderMaterielList?isLatestVersion=1&serialNum="+serialNum,// 加载数据中
+            "aoColumns": [
+                          /*{ mData: 'serialNum' },*/
+                          { mData: 'materiel.materielNum',
+								 mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if(isNull(data)){
+											return "";
+										}else{
+											return data;
+										}
+									}
+                        	  },
+                          { mData: 'materiel.materielName',
+								 mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if(isNull(data)){
+											return "";
+										}else{
+											return data;
+										}
+									} },
+                          { mData: 'materiel.specifications',
+								 mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if(isNull(data)){
+											return "";
+										}else{
+											return data;
+										}
+									} },
+                          { mData: 'materiel.unit',
+								 mRender : function(
+											data,
+											type,
+											row,
+											meta) {
+										if(isNull(data)){
+											return "";
+										}else{
+											return data;
+										}
+									} }/*,
+                          { mData: 'stockCount' }*/
+                    ],
+           'aoColumnDefs' : []
+
+        }).on('order.dt',
+                function() {
+            console.log('排序');
+        }).on('page.dt', 
+        function () {
+      	  console.log('翻页');
+        }).on('draw.dt',function() {
+      	  checkedIdHandler();
+        });
+        //全选操作
+        $("#select_sample_2").find(".group-checkable").change(function() {
+	            var e = jQuery(this).attr("data-set"),
+	            t = jQuery(this).is(":checked");
+	            jQuery(e).each(function() {
+	                t ? ($(this).prop("checked", !0), $(this).parents("tr").addClass("active")) : ($(this).prop("checked", !1), $(this).parents("tr").removeClass("active"))
+	            })
+	        }),
+	        $("#select_sample_2").on("change", "tbody tr .checkboxes",
+	        function() {
+	            $(this).parents("tr").toggleClass("active")
+	        })
+    };
+
 	//审批通过
 	$scope.orderPass = function() {
 	    var mydata={"processInstanceId":$("#processInstanceId").val(),"orderId":$scope.buyOrder.serialNum,"content":$("#content").val(),
@@ -1850,7 +1972,15 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			}
     			
     			$("#basicMaterielInfo").modal("show");
-    		}else{
+    		}/*else if(type=="showdetail"){
+    			if(table){
+    				table.ajax.url(ctx+"/rest/materiel/findMaterielList?serialNum="+index).load()
+    			}else{
+    				$scope.modalType = type;
+    				selectMateriel();
+    			}
+    			
+    		}*/else{
     			$scope.modalType = 'multiple';
     			if(table){
 //    				table.ajax.reload();

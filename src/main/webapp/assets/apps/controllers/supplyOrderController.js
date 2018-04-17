@@ -4546,11 +4546,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            			return "";
 							                            		}
 							                            	}
-							                            }, { mData: 'status',
+							                            }, { mData: 'status'/*,
 
 							                            	mRender:function(data){
 							                            		return "";
-									                            	/*	if(data!=""&&data!=null){
+									                            		if(data!=""&&data!=null){
 									                            			if(data=='0'){
 									                            				return '待发货';
 									                            			}else if(data=='PENDING'){
@@ -4580,8 +4580,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 																			}
 									                            		}else{
 									                            			return "";
-									                            		}*/
-									                            	}
+									                            		}
+									                            	}*/
 									                            }
 							                            ],
 							                            'aoColumnDefs': [ {
@@ -4624,6 +4624,22 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            	'render' : function(data,
 							                            			type, row, meta) {
 							                            		return '<span data-toggle="modal" >'+data+'</span>';
+							                            	},
+							                            	"createdCell": function (td, cellData, rowData, row, col) {
+							                            		$compile(td)($scope);
+							                            	}
+							                            },
+							                            {
+							                            	'targets' : 10,
+							                            	'className' : 'dt-body-center',
+							                            	'render' : function(data,
+							                            			type, row, meta) {
+							                            		debugger;
+							                            		 if(data==0){
+							             							return '<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>';
+							             						}else{
+							             							return  '' ;
+							             						}
 							                            	},
 							                            	"createdCell": function (td, cellData, rowData, row, col) {
 							                            		$compile(td)($scope);

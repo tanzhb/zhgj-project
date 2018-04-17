@@ -454,12 +454,18 @@ public class MaterielController {
         		criteria.andSupplyComIdIn(comIds);
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
         		criteria.andBuyComIdIn(comIds);
+        	}else if(company!=null&&ComType.TRAFFICKER.getValue().equals(company.getComType())){
+        		criteria.andBuyComIdIn(comIds);
+        		com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria3 =  m.createCriteria();
+        		criteria3.andIsLatestVersionEqualTo("1");
+        		criteria3.andDelFlgEqualTo("0");
+        		criteria3.andSupplyComIdIn(comIds);
+        		m.or(criteria3);
         	}
         	
         	if(params!=null){
 	        	//TODO分页查询
 	        	ObjectMapper objectMapper = new ObjectMapper();
-	        	
 	        	try {
 	        		recordsTotal = materielService.selectListCount(m);
 	        		params = URLDecoder.decode(params, "UTF-8");
@@ -569,7 +575,22 @@ public class MaterielController {
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 
     }
-
+    //显示采购物料下级物料
+    @RequestMapping("/findUnderMaterielList")
+    @ResponseBody
+    public ResponseEntity<Map> findUnderMaterielList(HttpServletRequest request,String params,String serialNum) {
+		Map<String, Object> pageMap = new HashMap<String, Object>();
+	    	//查询bom
+		    	BOMMaterielExample m =new BOMMaterielExample();
+		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andBomMaterielSerialEqualTo(serialNum);
+		    	List<BOMMateriel> BOM = BOMMaterielService.selectList(m);
+		    	pageMap.put("draw", 1);
+				pageMap.put("recordsTotal", BOM==null?0:BOM.size());
+				pageMap.put("recordsFiltered", BOM==null?0:BOM.size());
+				pageMap.put("data", BOM);
+    	return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+    } 	
 	private void findChildList(String parent,List<Materiel> allMaterielList) {
 		List<Materiel> materielList = new ArrayList<Materiel>();
 		MaterielExample m =new MaterielExample();

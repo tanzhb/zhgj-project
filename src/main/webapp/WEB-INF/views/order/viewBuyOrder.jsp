@@ -40,6 +40,7 @@
 					</div> -->
            		 <div class="portlet-body">
 					<jsp:include  page="viewBuyOrderBase.jsp"/>
+					<jsp:include  page="showUnderMateriel.jsp"/> <!-- 显示下级物料 -->
 					
 		            <div class="portlet-title">
 			               <div class="tools"  ng-hide="hideAllBtn">

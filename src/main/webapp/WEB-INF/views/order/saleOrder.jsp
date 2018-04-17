@@ -326,7 +326,7 @@
 										class="fa fa-plus"></i>发货计划
 									</label> 
 									</shiro:hasPermission>
-									<shiro:hasPermission name="deliveryPlan:confirmDelivey">
+									<shiro:hasPermission name="deliveryPlan:confirmDelivery">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 									ng-click="jumpToConfirm()"> <i class="glyphicon glyphicon-play"></i>确认发货
 								</label>

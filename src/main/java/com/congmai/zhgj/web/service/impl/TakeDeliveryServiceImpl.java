@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.activiti.engine.impl.cmd.GetSubTasksCmd;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.cglib.beans.BeanCopier;
@@ -158,22 +159,23 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 		if(StringUtils.isNotEmpty(takeDelivery.getBuyComId())){ //根据用户所在企业筛选收货单
 //			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
-			c.andDeliverSupplyComIdEqualTo(takeDelivery.getBuyComId());
+			c.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
 			c.andStatusNotEqualTo("0");//状态不为初始
 		Criteria c2 = example.or();
 		c2.andStatusEqualTo("0");//状态为初始
 //		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
-		c2.andDeliverSupplyComIdEqualTo(takeDelivery.getBuyComId());
+		c2.andDeliverBuyComIdEqualTo(takeDelivery.getBuyComId());
 		c2.andDeliverTypeEqualTo("采购发货");
 	
 		}else{
 			c.andDeliverBuyComIdIsNull();
 			if("noInit".equals(takeDelivery.getStatus())){//不看查询初始状态的收货（或者说入库计划）
-				c.andStatusNotEqualTo("0");//状态不为初始
+//				c.andStatusNotEqualTo("0");//状态不为初始
 				c.andTakeDeliverSeriaIsNotNull();
+				c.andDeliverSupplyComIdEqualTo(takeDelivery.getSupplyComId());
 			}else{
 				//平台可查状态为初始的代发货
-				c.andStatusNotEqualTo("0");//状态不为初始
+//				c.andStatusNotEqualTo("0");//状态不为初始
 				c.andTakeDeliverSeriaIsNotNull();
 				Criteria c2 = example.or();
 				c2.andStatusEqualTo("0");//状态为初始，只能是代发货

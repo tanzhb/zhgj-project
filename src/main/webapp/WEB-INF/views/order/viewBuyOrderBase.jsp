@@ -870,6 +870,7 @@ margin-right: 20px;
                              <tbody>
                                  <tr ng-repeat="_orderMateriel in dispalyOrderMateriel track by $index" >
 		                          <td>
+		                           <!-- <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p> -->
 		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">

@@ -45,6 +45,7 @@
 	</div>
 </div>
 <jsp:include  page="selectBasicMateriel.jsp"/> <!-- 选择基本物料 -->
+<jsp:include  page="showUnderMateriel.jsp"/> <!-- 显示下级物料 -->
 
 <div id="saleOrderInfo" class="modal fade bs-modal-lg" tabindex="-1"
 	data-backdrop="static" data-keyboard="false">

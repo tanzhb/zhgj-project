@@ -1094,7 +1094,8 @@ margin-right: 20px;
                                  <tr ng-repeat="_orderMateriel in orderMateriel track by $index" ng-mouseover="showOperation('orderMateriel',$index)" ng-mouseleave="hideOperation('orderMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
                                            <!-- <span ng-hide="orderMaterielInput{{$index}}"><a href="javascript：;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
-		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
+		                                <a href="javascript:void(0);"   ng-if="_orderMateriel.materiel.isBOM==1"     style="color:blue"  ng-click="showUnderMateriel(_orderMateriel,'materiel')"> {{_orderMateriel.materiel.materielNum}} </a>
+		                          		<p  ng-if="_orderMateriel.materiel.isBOM!=1"  class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">
 		                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>

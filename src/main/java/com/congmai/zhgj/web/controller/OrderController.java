@@ -1047,7 +1047,7 @@ public class OrderController {
     		orderInfoList = orderService.selectCommenList(parm);
     	}
     		//针对lww(李伟伟设置aq_zcdl建的委托采购订单(采购商comId为61fee61b003c4c258f1704c5be249620))
-    	if("lww".equals(user.getUserName())){
+    	/*if("lww".equals(user.getUserName())){
     		parm =new OrderInfo();
 //        	parm.setBuyComId("61fee61b003c4c258f1704c5be249620");
         	parm.setOrderType(StaticConst.getInfo("dailiBuy"));//委托采购
@@ -1056,7 +1056,7 @@ public class OrderController {
         	parm.setMaker("zhangy");
         	List<OrderInfo>list=orderService.selectCommenList(parm);
         	orderInfoList.addAll(list);
-    	}
+    	}*/
     	
     	
     	//封装datatables数据返回到前台
@@ -2058,8 +2058,8 @@ public class OrderController {
     	List<OperateLog> operateLogList = new ArrayList<OperateLog>();
     	operateLogList = operateLogService.findDeliverLogByOrderSerialNum(serialNum);
     	ListSort(operateLogList);
-    	BigDecimal totalCount=BigDecimal.ZERO;
     	for(OperateLog op:operateLogList){
+    		BigDecimal totalCount=BigDecimal.ZERO;
     		if(StaticConst.getInfo("fahuo").equals(op.getOperationDesc())||StaticConst.getInfo("daifahuo").equals(op.getOperationDesc())){
     			DeliveryVO deliveryvo=deliveryService.selectDetailById(op.getObjectSerial());
     			op.setTimeData(deliveryvo.getDeliverDate());
@@ -2233,7 +2233,7 @@ public class OrderController {
     			newOrderInfo.setBuyComId(null);//表示采购商为平台，即采购订单
     			newOrderInfo.setOrderType(StaticConst.getInfo("dailiBuy"));//设置为代理采购
     			Company supply =  companyService.selectOne(supplyComId);
-    			if(supply!=null&&StaticConst.getInfo("waimao").equals(supply.getTradeType())){
+    			if((supply!=null&&StaticConst.getInfo("waimao").equals(supply.getTradeType()))||"9".equals(supply.getComType())){
     				newOrderInfo.setTradeType(StaticConst.getInfo("waimao"));//设置为外贸
     			}else {
     				newOrderInfo.setTradeType(StaticConst.getInfo("neimao"));//设置为内贸
