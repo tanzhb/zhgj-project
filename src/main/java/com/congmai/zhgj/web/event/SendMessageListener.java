@@ -545,7 +545,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageVO.setProperties(properties);
 				messageProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
-				if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//如果是自主销售订单
+//				if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//如果是自主销售订单
 					List<User> users =new ArrayList<User>();
 					List<User> users1 = groupService.selectUserIdsByGroupType(Constants.PRODUCT_MANAGER);
 					List<User> users2 = groupService.selectUserIdsByGroupType(Constants.FULL_DEPARTMENT_LEADER);
@@ -589,7 +589,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						messageService.insert(messageVO1);
 					}
 				}*/
-			}
+//			}
 		} catch (Exception e) {
 //			logger.warn(e.getMessage(), e);
 		}
@@ -2125,7 +2125,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageVO.setProperties(properties);
 				messageProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
-				if(StaticConst.getInfo("zizhuBuy").equals(order.getOrderType())){//自主采购订单除制单人还需发给采购经理、产品经理、财务负责人（组）、综管负责人（组）
+//				if(StaticConst.getInfo("zizhuBuy").equals(order.getOrderType())){//自主采购订单除制单人还需发给采购经理、产品经理、财务负责人（组）、综管负责人（组）
 					List<User> users =new ArrayList<User>();
 					List<User> users1 = groupService.selectUserIdsByGroupType(Constants.PRODUCT_MANAGER);//产品经理
 					List<User> users2 = groupService.selectUserIdsByGroupType(Constants.FULL_DEPARTMENT_LEADER);//财务负责人（组）
@@ -2154,7 +2154,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						messageProcessor.sendMessageToUser(messageVO1);
 						messageService.insert(messageVO1);
 					}
-				}
+//				}
 				/*//向采购订单关联销售订单制单人发消息
 				if(StringUtil.isNotEmpty(order.getOrderSerial())){//获取采购订单关联销售订单
 					OrderInfo o=orderService.selectByOrderNum(order.getOrderSerial());

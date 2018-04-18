@@ -63,11 +63,13 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	  
 	  $scope.clearNoNum = function(obj,attr,index){
 	    	 //把非数字的都替换掉
-		     obj[attr] = obj[attr].replace(/^\0/g,"");
+		  if(obj[attr].substring(0,1) =="0"){
+			  obj[attr] = obj[attr].substring(1);
+		  }
 	    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 	    	 if(!handle.isInteger(obj[attr])||Number(obj[attr])<=0){
 				   handle.paramCheck("amount"+index,"数量只能是正整数！");
-				   obj[attr]=0;
+				   obj[attr]=null;
 			}
 	    	 
 		 }    

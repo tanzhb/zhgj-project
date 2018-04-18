@@ -3952,6 +3952,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.clearNoNum = function(obj,attr){
 			    	 //把非数字的都替换掉
+		    	   if(obj[attr].substring(0,1) =="0"){
+			 			  obj[attr] = obj[attr].substring(1);
+			 		  }
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 			    	 if(!isNaN(obj[attr])&&obj[attr]!=0){
 			    		 $scope.getUnitPrice(obj);//根据数量获得指导单价
@@ -4710,16 +4713,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        }
 		      //********审批流程end****************//  
 		        function doOrder(_url, mydata, modal){
+		        	handle.blockUI("请稍等..................");
 		        	$.ajax( {
 		    	        url : _url,
 		    	        dataType:"text",
 		    	        type: 'POST',
 		    	        data : mydata,
 		    	        success : function(data) {
+		    	        	handle.unblockUI();
 		    	        	showToastr('toast-bottom-right', 'success', data);
 		    	        	$scope.cancelPage();
 		    	        },
 		    	        error : function(data) {
+		    	        	handle.unblockUI();
 		    	        	toastr.error('连接服务器出错,请登录重试！');
 		    	        }
 		    	     });

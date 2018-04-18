@@ -173,16 +173,20 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     });
     
     function doOrder(_url, mydata, modal){
+    	handle.blockUI("请稍等..................");
     	$.ajax( {
 	        url : _url,
 	        dataType:"text",
 	        type: 'POST',
 	        data : mydata,
 	        success : function(data) {
+	        	handle.unblockUI();
 	        	showToastr('toast-bottom-right', 'success', data);
 	        	$scope.cancelPage();
+	        	
 	        },
 	        error : function(data) {
+	        	handle.unblockUI();
 	        	toastr.error('连接服务器出错,请登录重试！');
 	        }
 	     });
@@ -3902,6 +3906,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
                    return returnV;
                };
 		       $scope.clearNoNumPoint = function(obj,attr){
+		    	   if(obj[attr].substring(0,1) =="0"){
+		 			  obj[attr] = obj[attr].substring(1);
+		 		  }
 			    	 //先把非数字的都替换掉，除了数字和.
 			    	 obj[attr] = obj[attr].replace(/[^\d.]/g,"");
 			    	 //必须保证第一个为数字而不是.
@@ -3911,7 +3918,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
 			    	 if((obj[attr]<0||obj[attr]>100)&&(attr!='orderRateUnit'&&attr!='orderUnitPrice'&&attr!='otherAmount')){
-			    		 obj[attr]=0;
+			    		 obj[attr]=null;
 			    	 }
 			    	 /*if(Number(obj[attr])==0&&(attr=='orderRateUnit'||attr=='orderUnitPrice')){
 			    		 obj[attr]=null;
@@ -3920,6 +3927,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		       
 		       $scope.clearNoNum = function(obj,attr){
 			    	 //把非数字的都替换掉
+		    	   if(obj[attr].substring(0,1) =="0"){
+			 			  obj[attr] = obj[attr].substring(1);
+			 		  }
 			    	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
 			    	 if(!isNaN(obj[attr])&&obj[attr]!=0){
 			    		 $scope.getUnitPrice(obj);//根据数量获得指导单价

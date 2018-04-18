@@ -716,7 +716,7 @@ public class ProcessServiceImp implements IProcessService{
 
         String businessKey = orderInfo.getBusinessKey();
         ProcessInstance processInstance ;
-        if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())
+        if (StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())) {//委托采购内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())
 //        	processInstance = runtimeService.startProcessInstanceByKey(Constants.WTBUYORDER, businessKey, variables);
         	processInstance = runtimeService.startProcessInstanceByKey(Constants.ZZSALEORDERIN, businessKey, variables);
 		}  /*else if (!StaticConst.getInfo("waimao").equals(orderInfo.getTradeType())&&StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())) {//委托销售内贸&&!"61fee61b003c4c258f1704c5be249620".equals(orderInfo.getBuyComId())

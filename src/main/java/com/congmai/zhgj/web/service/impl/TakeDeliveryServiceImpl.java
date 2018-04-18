@@ -170,9 +170,10 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		}else{
 			c.andDeliverBuyComIdIsNull();
 			if("noInit".equals(takeDelivery.getStatus())){//不看查询初始状态的收货（或者说入库计划）
-//				c.andStatusNotEqualTo("0");//状态不为初始
+				c.andStatusNotEqualTo("0");//状态不为初始
 				c.andTakeDeliverSeriaIsNotNull();
-				c.andDeliverSupplyComIdEqualTo(takeDelivery.getSupplyComId());
+//				c.andDeliverBuyComIdEqualTo(takeDelivery.getSupplyComId());
+//				c.andDeliverSupplyComIdEqualTo(takeDelivery.getSupplyComId());
 			}else{
 				//平台可查状态为初始的代发货
 //				c.andStatusNotEqualTo("0");//状态不为初始
@@ -317,7 +318,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			TakeDelivery takeDelivery, String currenLoginName) {
 		if("1".equals(delivery.getStatus())){//平台确定代发货
 			OrderInfo orderInfonew=orderInfoMapper.selectByPrimaryKey(delivery.getOrderSerial());
-			Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
+//			Boolean createQG=StaticConst.getInfo("waimao").equals(orderInfonew.getTradeType());//是否产生清关单
+			Boolean createQG=false;
 			OrderInfo orderInfo=new OrderInfo();
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
@@ -452,7 +454,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
 		
 		Boolean isStockZijian=true;//默认是自建库存
-		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+		//StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())
+		if(!isStockZijian){//代理销售/代理采购
 			criteria.andMaterielSerialEqualTo(orderMateriel.getMaterielSerial()).andManageTypeEqualTo("2").andDelFlgEqualTo("0");
 			if(saleOrderInfo!=null){
 				criteria.andMaterielOwnerEqualTo(saleOrderInfo.getBuyComId());//代管库存有唯一的物权方
