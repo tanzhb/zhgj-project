@@ -1,5 +1,5 @@
 /* Setup general page controller */
-angular.module('MetronicApp').controller('saleFrameController', ['$rootScope', '$scope', 'settings','$filter',
+angular.module('MetronicApp').controller('saleForecastController', ['$rootScope', '$scope', 'settings','$filter',
     '$state',"$stateParams",'$compile','$location','FileUploader', function($rootScope, $scope, settings,$filter,$state,$stateParams,$compile,$location,FileUploader) {
     $scope.$on('$viewContentLoaded', function() {   
     	handle = new pageHandle();
@@ -10,7 +10,7 @@ angular.module('MetronicApp').controller('saleFrameController', ['$rootScope', '
 		$rootScope.settings.layout.pageBodySolid = false;
 		$rootScope.settings.layout.pageSidebarClosed = false;
 
-//		loadMainTable();//加载销售预测列表
+		loadMainTable();//加载销售预测列表
     });
     
 
@@ -64,9 +64,9 @@ angular.module('MetronicApp').controller('saleFrameController', ['$rootScope', '
 						              ajax: tableAjaxUrl,//加载数据中user表数据
 						              "aoColumns": [
 						                            { mData: 'serialNum'},
-						                            { mData: 'materielNum' },
-						                            { mData: 'materielName' },
-						                            { mData: 'specifications' },
+						                            { mData: 'materiel.materielNum' },
+						                            { mData: 'materiel.materielName' },
+						                            { mData: 'materiel.specifications' },
 						                            { mData: 'buyCount' },
 						                            { mData: 'deliveryDate'},
 						                            { mData: 'deliveryAddress'},
@@ -96,6 +96,28 @@ angular.module('MetronicApp').controller('saleFrameController', ['$rootScope', '
 						                            	'render' : function(data,
 						                            			type, row, meta) {
 						                            		return data;
+						                            	},
+						                            	"createdCell": function (td, cellData, rowData, row, col) {
+						                            		$compile(td)($scope);
+						                            	}
+						                            },
+						                            {
+						                            	'targets' : 7,
+						                            	'className' : 'dt-body-center',
+						                            	'render' : function(data,
+						                            			type, row, meta) {
+						                            		return daysBetween(row.deliveryDate,$filter('date')(new Date(), 'yyyy-MM-dd'));
+						                            	},
+						                            	"createdCell": function (td, cellData, rowData, row, col) {
+						                            		$compile(td)($scope);
+						                            	}
+						                            },
+						                            {
+						                            	'targets' : 9,
+						                            	'className' : 'dt-body-center',
+						                            	'render' : function(data,
+						                            			type, row, meta) {
+						                            		return timeStamp2String(data);
 						                            	},
 						                            	"createdCell": function (td, cellData, rowData, row, col) {
 						                            		$compile(td)($scope);

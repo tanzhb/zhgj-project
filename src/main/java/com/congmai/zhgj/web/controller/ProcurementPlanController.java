@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.controller;
 
 import java.math.BigDecimal;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -53,12 +54,14 @@ import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.log.annotation.OperationLog;
+import com.congmai.zhgj.web.enums.ComType;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
 import com.congmai.zhgj.web.model.BaseVO;
+import com.congmai.zhgj.web.model.Category;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
@@ -69,12 +72,14 @@ import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.DemandMateriel;
 import com.congmai.zhgj.web.model.DemandMaterielExample;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.MaterielSelectExample;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OrderFile;
 import com.congmai.zhgj.web.model.OrderFileExample;
@@ -100,6 +105,7 @@ import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
 import com.congmai.zhgj.web.service.ProcurementPlanService;
 import com.congmai.zhgj.web.service.BOMMaterielService;
+import com.congmai.zhgj.web.service.UserCompanyService;
 
 
 /**
@@ -132,6 +138,8 @@ public class ProcurementPlanController {
     protected TaskService taskService;
 	@Autowired
 	private IProcessService processService;
+	@Autowired
+	private UserCompanyService userCompanyService;
     
 
     /**
@@ -1017,15 +1025,47 @@ public class ProcurementPlanController {
 			}
 	    	
 	    }
+	   /**
+	     * 
+	     * @Description 查询物料列表//全部查询，或根据父节点查询
+	     * @param parent(若有值，则查询该分类下的物料)
+	     * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
+	     * @param type 销售订单选择物料，筛选有供应商的物料
+	     * @param supplyComId 物料关联供应商
+	     * @param 分页查询参数
+	     * @return
+	     */
+	    @RequestMapping("/findProcurementPlanMateriel")
+	    @ResponseBody
+	    public ResponseEntity<Map> findProcurementPlanMateriel(HttpServletRequest request) {
+	    	Map pageMap = new HashMap();
+	    	String comId = null;
+	    	Company company = null;
+	    	User user = UserUtil.getUserFromSession();
+	    	if(user!=null){
+				comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));//获取供应商comId
+			}
+	    	ProcurementPlanMaterielExample ppe =new ProcurementPlanMaterielExample();
+	    	com.congmai.zhgj.web.model.ProcurementPlanMaterielExample.Criteria  c=ppe.createCriteria();
+	    	c.andDelFlgEqualTo("0").andSupplyComIdEqualTo(comId);
+	    	List<ProcurementPlanMateriel>list=procurementPlanMaterielService.selectSaleForestList(comId);
+			   	 pageMap.put("draw", 1);
+				 pageMap.put("recordsTotal", list==null?0:list.size());
+				 pageMap.put("recordsFiltered", list==null?0:list.size());
+				 pageMap.put("data", list);
+			
+			return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+
+	    }
 	  /**
 	     * 
 	     * @Description (启动采购计划流程)
 	     * @param params
 	     * @return
 	     */
-	    @RequestMapping(value = "/startBuyPlanProcess", method = RequestMethod.POST)
+	    @RequestMapping(value = "/startProcurementPlanProcess", method = RequestMethod.POST)
 	    @ResponseBody
-	    public String startBuyPlanProcess( @RequestBody String params) {
+	    public String startProcurementPlanProcess(@RequestBody String params) {
 	    	String flag = "0"; //默认失败
 	    	ProcurementPlan procurementPlan = json2ProcurementPlan(params);
 			//启动订单审批测试流程-start
@@ -1035,6 +1075,7 @@ public class ProcurementPlanController {
 			procurementPlan.setTitle(user.getUserName()+" 的采购计划申请");
 			procurementPlan.setStatus(BaseVO.PENDING);					//审批中
 			procurementPlan.setApplyDate(new Date());
+			procurementPlan.setBusinessType(BaseVO.BUYAPPLY);
 			procurementPlan.setReason(procurementPlan.getRemark());
 	    	processBaseService.insert(procurementPlan);
 			String businessKey = procurementPlan.getSerialNum().toString();
@@ -1056,7 +1097,7 @@ public class ProcurementPlanController {
 //	                message.setStatus(Boolean.TRUE);
 //	    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 			    logger.info("processInstanceId: "+processInstanceId);
-//			    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_SALE_ORDER));
+			    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_SALE_ORDER));
 			    flag = "1";
 			} catch (ActivitiException e) {
 //	            	message.setStatus(Boolean.FALSE);
@@ -1074,7 +1115,7 @@ public class ProcurementPlanController {
 //	                message.setMessage("启动订单流程失败，系统内部错误！");
 			    throw e;
 			}
-	        //启动订单审批测试流程-end
+//	        启动订单审批测试流程-end
 			return flag;
 		}
 	    
@@ -1173,6 +1214,7 @@ public class ProcurementPlanController {
 	    			ProcurementPlan oi = new ProcurementPlan();
 	    			oi.setSerialNum(procurementPlan.getSerialNum());
 	    			oi.setStatus("2");
+	    			oi.setUpdateTime(new Date());
 	    			this.procurementPlanService.updateProcurementPlan(oi);
 	    		}
 	    		procurementPlan.setProcessInstanceId(processInstanceId);
@@ -1273,7 +1315,16 @@ public class ProcurementPlanController {
 			
 	    	return result;
 	    }
-
+		 /**
+	     * 用户取消采购计划申请
+	     */
+	    @RequestMapping(value = "/userCancelProcurementPlanApply/{taskId}/{processInstanceId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+		@ResponseBody
+	    public void userCancelProcurementPlanApply(@PathVariable("taskId") String taskId, @PathVariable("processInstanceId") String processInstanceId) {
+	    	ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+	    	ProcurementPlan procurementPlan = (ProcurementPlan) this.runtimeService.getVariable(pi.getId(), "entity");
+			cancelApply(procurementPlan.getSerialNum(),taskId);
+	    }
 		/**
 		 * 
 		 * @Description (取消申请)

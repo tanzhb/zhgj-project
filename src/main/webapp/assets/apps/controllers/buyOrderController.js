@@ -143,8 +143,8 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.opration = '新增';
             		$scope.orderMateriel=[];
             		$scope.buyOrder={};
-            		$scope.stateParamserialNum=$stateParams.serialNum;
-            		$scope.stateParamserialNum=
+//            		$scope.stateParamserialNum=$stateParams.serialNum;
+//            		$scope.stateParamserialNum=
             		$scope.buyOrder.orderNum = '';
             		$rootScope.setNumCode("PO",function(newCode){
             			$scope.buyOrder.orderNum = newCode;

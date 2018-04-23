@@ -42,6 +42,8 @@ public class ProcurementPlan extends BaseVO {
     
     private String maker;//制单人
     
+    private ProcessBase processBase;
+    
     @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date endDate;//齐套日期
     
@@ -219,6 +221,14 @@ public class ProcurementPlan extends BaseVO {
 
 	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
 		this.supplyMateriels = supplyMateriels;
+	}
+
+	public ProcessBase getProcessBase() {
+		return processBase;
+	}
+
+	public void setProcessBase(ProcessBase processBase) {
+		this.processBase = processBase;
 	}
     
 }

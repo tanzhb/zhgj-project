@@ -19,7 +19,7 @@
 		            <div class="portlet-title">
 			               <div class="tools">
 			               <shiro:hasPermission name="procurementPlan:edit">
-			               		<button ng-if="procurementPlan.status == 0" type="button" ng-click="procurementPlanGenerateBuy()"  class="btn blue btn-circle  btn-sm">发布采购</button>
+			               		<button ng-if="procurementPlan.status == 2" type="button" ng-click="procurementPlanGenerateBuy()"  class="btn blue btn-circle  btn-sm">发布采购</button>
 			               	</shiro:hasPermission>
 				                <button type="button" ng-click="cancelPage()" class="btn default btn-circle  btn-sm"><i class="fa fa-undo"></i> 取消 </button>
 				            </div>

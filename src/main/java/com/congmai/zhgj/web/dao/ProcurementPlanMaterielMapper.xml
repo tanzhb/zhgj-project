@@ -94,6 +94,11 @@
     buyCount, orderUnitPrice, orderRateUnit, money, deliveryDate, lastDeliveryDate, deliveryAddress, 
     sort, delFlg, creator, createTime, updater, updateTime, remark,supplyComId,singleDose,demandMaterielSerial,status
   </sql>
+  <sql id="Base_Column_List1" >
+   ppm.serialNum, ppm.procurementPlanSerial, ppm.materielSerial, ppm.supplyMaterielSerial, ppm.planCount, 
+    ppm.buyCount, ppm.orderUnitPrice, ppm.orderRateUnit, ppm.money, ppm.deliveryDate, ppm.lastDeliveryDate, ppm.deliveryAddress, 
+    ppm.sort, ppm.delFlg, ppm.creator, ppm.createTime, ppm.updater, ppm.updateTime, ppm.remark,ppm.supplyComId,ppm.singleDose,ppm.demandMaterielSerial,ppm.status
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.ProcurementPlanMaterielExample" >
     select
     <if test="distinct" >
@@ -481,4 +486,11 @@
       status= #{status,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  <select id="selectSaleForestList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List1" />
+    from procurementPlanMateriel  ppm
+    left join procurementplan p on  p.serialNum=ppm.procurementPlanSerial
+   where p.status=2 and  ppm.supplyComId=#{supplyComId,jdbcType=VARCHAR} and ppm.delFlg=0
+  </select>
 </mapper>

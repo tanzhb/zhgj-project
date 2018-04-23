@@ -653,7 +653,7 @@ angular.module('MetronicApp').service('procurementPlanService',
 							},//启动采购计划流程
 							startProcurementPlanProcess : function(orderInfo) {
 								var deferred = $q.defer();
-								$http.post(ctx+"rest/procurementPlan/startBuyPlanProcess", orderInfo
+								$http.post("rest/procurementPlan/startProcurementPlanProcess", orderInfo
 								).success(function (data) {
 					                // 如果连接成功，延时返回给调用者
 					                deferred.resolve(data);

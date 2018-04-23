@@ -148,6 +148,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					workflowName = "销售框架流程";
 				}else if(workflowType == 'delivery'){
 					workflowName = "销售订单发货计划流程";
+				}else if(workflowType == 'buyApply'){
+					workflowName = "采购计划流程";
 				}else{
 					workflowName = "未命名";
 				}

@@ -17,6 +17,8 @@ public interface ProcurementPlanMaterielMapper {
     int insertSelective(ProcurementPlanMateriel record);
 
     List<ProcurementPlanMateriel> selectByExample(ProcurementPlanMaterielExample example);
+    
+    List<ProcurementPlanMateriel> selectSaleForestList(String supplyComId);
 
     ProcurementPlanMateriel selectByPrimaryKey(String serialNum);
 

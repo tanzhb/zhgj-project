@@ -44,5 +44,5 @@ public interface ProcurementPlanMaterielService extends GenericService<Procureme
 	  
 	  public void updateDemandMateriels(String  ids);//更新需求物料状态
 
-
+	  List<ProcurementPlanMateriel> selectSaleForestList(String  supplyComId);//获取供应商销售预测列表
 }

@@ -18,6 +18,7 @@
     <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
     <result column="isFromForcast" property="isFromForcast" jdbcType="VARCHAR" />
+   <!--  <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association> -->
     <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
   </resultMap>
   <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.ProcurementPlan" >
@@ -38,6 +39,7 @@
     <result column="maker" property="maker" jdbcType="VARCHAR" />
     <result column="isFromForcast" property="isFromForcast" jdbcType="VARCHAR" />
     <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
+    <association property="processBase" column="serialNum" select="com.congmai.zhgj.web.dao.ProcessBaseMapper.selectByPrimaryKey"></association>
     <association property="materielName" column="serialNum" select="com.congmai.zhgj.web.dao.DemandMaterielMapper.selectMaterielNameByProcurementPlanSerial"/>
   	<association property="buyOrderCount" column="serialNum" select="com.congmai.zhgj.web.dao.OrderInfoMapper.getBuyOrderCountByProcurementPlanSerial"/>
   </resultMap>

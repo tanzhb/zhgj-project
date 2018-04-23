@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -74,7 +75,7 @@ public class ProcurementPlanMateriel {
     
     private String daysBeforeDelivery;//供应商/贸易商距交付
     
-    
+    private List<SupplyMateriel> supplyMateriels;
     
 
     public String getDaysBeforeDelivery() {
@@ -339,6 +340,14 @@ public class ProcurementPlanMateriel {
 
 	public void setSupplyComId(String supplyComId) {
 		this.supplyComId = supplyComId;
+	}
+
+	public List<SupplyMateriel> getSupplyMateriels() {
+		return supplyMateriels;
+	}
+
+	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
+		this.supplyMateriels = supplyMateriels;
 	}
     
 }
