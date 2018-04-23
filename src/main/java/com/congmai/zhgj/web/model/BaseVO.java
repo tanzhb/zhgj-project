@@ -34,6 +34,7 @@ public class BaseVO implements Serializable{
 	public final static String BUYFRAME = "buyFrame";	//采购框架	
 	public final static String SALEFRAME = "saleFrame";	//销售框架	
 	public final static String DELIVERY= "delivery";	//发货计划
+	public final static String BUYAPPLY= "buyApply";	//发货计划
 	// 待办任务标识
 	public final static String CANDIDATE = "candidate";
 	

@@ -17,7 +17,7 @@
         
         <div class="portlet-body">
 			<div class="tabbable-custom ">
-			<ul class="nav nav-tabs " id="orderTab">
+			<ul class="nav nav-tabs " id="buyApplyTab">
 				<li class="active"><a href="#apply" data-toggle="tab"
 					ng-click="toApply()"> 采购计划</a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
@@ -120,6 +120,7 @@
 	                                            </label>
 	                                        </th>
 											<th style="white-space: nowrap;">任务状态</th>
+											<th style="white-space: nowrap;">采购计划单号</th>
 											<th style="white-space: nowrap;">申请人</th>
 											<th style="white-space: nowrap;">标题</th>
 											<th style="white-space: nowrap;">当前节点</th>

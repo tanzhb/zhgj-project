@@ -28,7 +28,7 @@
 		<div class="portlet light">
 			<div class="portlet-title">
 			<div class="caption">
-					<i class="fa fa-globe"></i>采购预测列表
+					<i class="fa fa-globe"></i>销售预测列表
 				</div>
 				<div class="actions" ng-controller='MyCtrl'>
 					<%-- <shiro:hasPermission name="purchaseForecast:export">

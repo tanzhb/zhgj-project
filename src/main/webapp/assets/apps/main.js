@@ -5564,6 +5564,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					   "<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a ui-sref='saleOrder'>销售订单列表</a><i class='fa fa-angle-right'></i></li>" + 
 			 		"<li><a>调整发货计划申请</a></li>";							 
+			   }else if('saleForecast' == toState.name){//销售预测
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a >销售框架列表</a><i class='fa fa-angle-right'></i></li>";
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

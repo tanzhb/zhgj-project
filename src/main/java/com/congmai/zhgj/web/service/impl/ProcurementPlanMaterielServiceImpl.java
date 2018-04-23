@@ -186,4 +186,9 @@ public class ProcurementPlanMaterielServiceImpl implements ProcurementPlanMateri
 		
 	}
 
+	@Override
+	public List<ProcurementPlanMateriel> selectSaleForestList(String supplyComId) {
+		return ProcurementPlanMaterielMapper.selectSaleForestList(supplyComId);
+	}
+
 }

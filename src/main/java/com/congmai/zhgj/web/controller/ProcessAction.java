@@ -57,6 +57,7 @@ import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.ProcessInstanceEntity;
+import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ActRuTaskService;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -64,6 +65,7 @@ import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PayService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
+import com.congmai.zhgj.web.service.ProcurementPlanService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.activiti.WorkflowDeployService;
 import com.congmai.zhgj.web.service.activiti.WorkflowService;
@@ -107,6 +109,8 @@ public class ProcessAction {
 	    private DeliveryService deliveryService;
 	 @Resource
 	    private PayService payService;
+	 @Resource
+	    private ProcurementPlanService procurementPlanService;
     
 //	@Autowired
 //	private RevokeTask revokeTaskService;
@@ -269,6 +273,12 @@ public class ProcessAction {
 				PaymentRecord paymentRecord = payService.selectPayById(base.getBusinessKey());
 				map.put("num", paymentRecord==null?"":paymentRecord.getPaymentNum());
 				map.put("serialNum", paymentRecord==null?"":paymentRecord.getSerialNum());
+			}
+			if("buyApply".equals(businessType)){
+				ProcurementPlan procurementPlan=  procurementPlanService.selectById(base.getBusinessKey());//获取发货计划详情
+				map.put("num", procurementPlan==null?"":procurementPlan.getProcurementPlanNum());
+				map.put("serialNum", procurementPlan==null?"":procurementPlan.getSerialNum());
+				
 			}
 			String assign = base.getTask().getAssignee();
 			if(assign != null){
