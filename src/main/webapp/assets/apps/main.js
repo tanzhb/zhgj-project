@@ -2965,7 +2965,58 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        			});
 	        		}]
 	        	}	        
-	        }).state('stockView', {//库存查看
+	        })
+	          .state('addOrEditStockForSupply', {//库存新建编辑
+	        	url: "/addOrEditStockForSupply?:stockSerialNum",
+	        	templateUrl: "rest/stock/addOrEditStockForSupply",
+	        	data: {pageTitle: '新建供应商库存'},
+	        	reload:true, 
+	        	controller: "StockController",
+	        	resolve: {
+	        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	        			return $ocLazyLoad.load({
+	        				name: 'MetronicApp',
+	        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	        				files: [       
+	        				        'assets/global/plugins/datatables/datatables.min.css',                  
+	        				        'assets/global/plugins/datatables/datatables.all.min.js',
+	        				        'assets/apps/service/StockService.js',
+	        						'assets/apps/controllers/StockController.js',
+	        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+	        						 'assets/apps/scripts/pageHandle.js',
+	        						 'assets/apps/service/orderService.js',
+	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
+	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
+	        				        ]
+	        			});
+	        		}]
+	        	}	        
+	        })
+	        .state('stockSupply', {
+	            url: "/stockSupply",
+	            templateUrl: "rest/stock/stockForSupply",
+	            data: {pageTitle: '供应商库存'},
+	            controller: "StockController",
+	            resolve: {
+	                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+	                    return $ocLazyLoad.load({
+	                        name: 'MetronicApp',
+	                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+	                        files: [                             
+						'assets/global/plugins/datatables/datatables.min.css',
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+						'assets/global/plugins/datatables/datatables.all.min.js',
+						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+						'assets/global/plugins/bootbox/bootbox.min.js',
+				        'assets/apps/service/StockService.js',
+				        'assets/apps/service/orderService.js',
+						'assets/apps/controllers/StockController.js'
+	                   	                        ]
+	                    });
+	                }]
+	            }
+	        })
+	        .state('stockView', {//库存查看
 		        	url: "/stockView?:stockSerialNum",
 		        	templateUrl: "rest/stock/stockView",
 		        	data: {pageTitle: '库存详情'},
@@ -5568,6 +5619,10 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>销售订单</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a >销售框架列表</a><i class='fa fa-angle-right'></i></li>";
+			   }else if('stockSupply' == toState.name){//供应商库存
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>";
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

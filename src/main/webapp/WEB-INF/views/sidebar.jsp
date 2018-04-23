@@ -253,6 +253,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                <shiro:hasPermission name="zhgj:stockSupply:*">
+            	<li>
+                    <a ui-sref="stockSupply">
+                         供应商库存</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
                 <shiro:hasPermission name="zhgj:takeDelivery">
                 <li>
                     <a ui-sref="takeDelivery">

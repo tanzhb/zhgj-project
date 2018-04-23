@@ -36,12 +36,24 @@ angular
 													}
 													initSuppliers();//初始化物权方选择框
 										 		}else if($location.path()=="/stockView"){
-										 			debugger;
 										 			getStockDetailInfo($stateParams.stockSerialNum);//查看库区详情页面
 										 			loadZkTable($stateParams.stockSerialNum,"sample_inm");//在库数量
 										 			loadStockInTable($stateParams.stockSerialNum,"sample_stockinview");//入库记录
 										 			loadStockOutTable($stateParams.stockSerialNum,"sample_stockoutview");//出库记录
 										 		//	loadPdTable();//盘点记录
+									 		} else if($location.path()=="/addOrEditStockForSupply"){
+												if($stateParams.stockSerialNum.length>7){//供应商库存编辑页面
+													getStockInfoForSupply($stateParams.stockSerialNum);
+												}else {
+													 $rootScope.setNumCode("SV",function(newCode){//
+														 $scope.stock={};
+									    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
+									    		 		});
+												}
+//												initSuppliers();//初始化物权方选择框
+									 		}else if($location.path()=="/stockSupply"){
+												
+//												initSuppliers();//初始化物权方选择框
 									 		}else{
 										 			loadStockzijianTable();
 										 			loadStockdaiguanTable();
@@ -814,11 +826,14 @@ angular
 			}
 							// 添加库存开始***************************************
 			$scope.addStock = function(judgeString) {
-				debugger;
-				 $state.go('addOrEditStock',{stockSerialNum:judgeString}); 
+				if(judgeString!="gyshang"){
+					 $state.go('addOrEditStock',{stockSerialNum:judgeString}); //自建/代管
+				}else{
+					 $state.go('addOrEditStockForSupply',{stockSerialNum:judgeString}); //供应商库存
+				}
+				
 			}
 						$scope.editStock = function(){
-							debugger;
 							var stock=$scope.stock;
 							$scope.stock=stock;
 							$scope.stockView = false;
@@ -826,7 +841,6 @@ angular
 		        			$scope.stockEdit = true;
 						}
 						$scope.cancelEditStock = function(){
-							debugger;
 							getStockInfo($scope.stock.serialNum);
 							$scope.stockView = true;
 		        			$scope.stockAdd = true;
@@ -835,7 +849,6 @@ angular
 						function judgeData (){//判断最低库存数量与最高库存数量
 							 var maxStock=$scope.stock.maxStock;
 								var minStock=$scope.stock.minStock;
-								debugger;
 								if(parseInt(minStock)>parseInt(maxStock)){
 									toastr.warning("最低库存数量不能大于最高库存数量！");
 								$("#minStock").focus();
@@ -844,7 +857,6 @@ angular
 								return true;
 						}
 								$scope.saveStock= function() {
-									debugger;
 									if($('#stockForm').valid()&&judgeData()){//表单验证通过则执行添加功能
 										 $rootScope.judgeIsExist("stock",$scope.stock.stockNum, $scope.stock.serialNum,function(result){
 								    			var 	isExist = result;

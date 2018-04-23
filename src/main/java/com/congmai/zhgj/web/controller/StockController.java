@@ -88,6 +88,16 @@ public class StockController {
         return "stock/stockList";
     }
     /**
+     * 供应商库存信息列表展示
+     * 
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/stockForSupply")
+    public String stockForSupply(HttpServletRequest request) {
+        return "stock/stockForSupply";
+    }
+    /**
      * 库存信息详情展示
      * 
      * @param session
@@ -98,7 +108,7 @@ public class StockController {
         return "stock/viewStockDetailInfo";
     }
     /**
-     * 	编辑库存信息详情/新增库存信息
+     * 	编辑库存信息详情/新增库存信息(自建或代管)
      * 
      * @param session
      * @return
@@ -106,6 +116,16 @@ public class StockController {
     @RequestMapping(value = "/addOrEditStock")
     public String addOrEditStockDetail( ) {
         return "stock/addOrEditStockInfo";
+    }
+    /**
+     * 	编辑库存信息详情/新增库存信息(自建或代管)
+     * 
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/addOrEditStockForSupply")
+    public String addOrEditStockForSupply( ) {
+        return "stock/addOrEditStockForSupply";
     }
     /**
      * 保存库存信息

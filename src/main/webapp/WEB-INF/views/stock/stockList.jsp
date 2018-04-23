@@ -29,8 +29,11 @@
             <a data-target="#tab_zijian" data-toggle="tab"  ng-click="showStock('zijian')">自建库存</a>
         </li>
         <li  id="daiguan">
-            <a data-target="#tab_daiguan" data-toggle="tab"   ng-click="sshowStock('daiguan')">代管库存</a>
+            <a data-target="#tab_daiguan" data-toggle="tab"   ng-click="showStock('daiguan')">代管库存</a>
         </li>
+        <!--  <li  id="daiguan">
+            <a data-target="#tab_daiguan" data-toggle="tab"   ng-click="sshowStock('daiguan')">供应商库存</a>
+        </li> -->
     </ul>
     <div class="tab-content">
     	<!-- 进项票列表---START -->
