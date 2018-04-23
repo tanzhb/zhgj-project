@@ -79,7 +79,42 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             	$scope.serialNums = [];
             	
             	
-            	if($stateParams.serialNum){
+            	if($stateParams.oprateType=="saleOrderAddBuyOrder"){
+            		$scope.opration = '新增';
+            		$scope.orderMateriel=[];
+            		$scope.buyOrder={};
+            		$scope.stateParamserialNum=$stateParams.serialNum;
+            		$scope.stateParamserialNum=
+            		$scope.buyOrder.orderNum = '';
+            		$rootScope.setNumCode("PO",function(newCode){
+            			$scope.buyOrder.orderNum = newCode;
+            		});
+            		
+            		$scope.contract={};
+            		$rootScope.setNumCode("CA",function(newCode){//
+             			$scope.contract.contractNum= newCode;//合同编号
+             		});
+//            		$scope.contract.contractType="采购合同";
+//            		$scope.buyOrder.orderType="自主采购";
+//            		$scope.buyOrder.tradeType="内贸";
+//            		$scope.buyOrder.currency="人民币";
+//            		$scope.buyOrder.serviceModel="普通代理";
+//            		$scope.buyOrder.settlementClause="平进平出";
+//            		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
+////            		$scope.contract.signDate = timeStamp2String2(new Date());
+//            		$scope.clauseSettlement = {};
+//            		$scope.clauseSettlement.otherAmount = 0;
+//            		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
+//            		$scope.buyOrder.rate = 17;
+            		dateSelectSetting();//日期选择限制
+            		// 加载数据
+                	initSuppliers();
+                	initWarehouse();
+                	//initPtWarehouseAddress();
+                	//合同内容
+                	$scope.buyOrder.contractContent = '111100';
+                	$scope.initContractContent();
+            	}else if($stateParams.serialNum){
             		$scope.opration = '修改';
             		$scope.cancelContract();
             		$scope.stateParamserialNum=$stateParams.serialNum;

@@ -194,6 +194,19 @@ angular.module('MetronicApp').service('orderService',
 			            })  
 			        return deferred.promise;  
 			          
+			    },//根据销售订单分解产生采购订单信息信息
+			    generateOrderBySaleOrder : function(serialNum){
+			        var deferred = $q.defer();  
+			        $http.get("rest/order/generateOrderBySaleOrder", {params:{serialNum:serialNum}})
+			        .success(function (data) {  
+			            // 如果连接成功，延时返回给调用者  
+			            deferred.resolve(data);  
+			        })  
+			            .error(function () {  
+			                deferred.reject('连接服务器出错！');  
+			            })  
+			        return deferred.promise;  
+			          
 			    },//获取框架协议信息
 			    getFrameInfo : function(serialNum){
 			        var deferred = $q.defer();  

@@ -2216,7 +2216,7 @@ public class OrderController {
     			}
     		}
     	}
-    	String numCode = "";//生成的采购单号
+    	String numCode = orderInfo.getOrderSerial()==null?"":(orderInfo.getOrderSerial() + " ");//生成的采购单号
     	if(supplySet.size()>0){
     		for(String supplyComId : supplySet){//对于某一供应商生成采购订单
     			String newSerialNum = ApplicationUtils.random32UUID();//生成新的采购订单流水号
@@ -2434,6 +2434,18 @@ public class OrderController {
 		return orderInfo;
 	}
 	
+	/**
+	 * 
+	 * @Description 根据销售订单的流水号，分解成采购订单用于新增
+	 * @param serialNum
+	 * @param orderInfo
+	 * @return
+	 */
+	public Map generateOrderBySaleOrder(String serialNum) {
+		
+		
+    	return null;
+	}
 	
 	@Resource
     private ProcurementPlanService procurementPlanService;
