@@ -875,6 +875,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 												if(row.orderType =='委托销售'){
 													clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="saleGenerateBuy(\''+row.serialNum+'\')">分解采购</a><br/>';
 												}
+												if(row.orderType =='自主销售'){
+													clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="addBuyOrder(\''+row.serialNum+'\')">新建采购</a><br/>';
+												}
 												
 											}
 											if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))){

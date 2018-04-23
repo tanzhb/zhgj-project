@@ -94,18 +94,18 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$rootScope.setNumCode("CA",function(newCode){//
              			$scope.contract.contractNum= newCode;//合同编号
              		});
-//            		$scope.contract.contractType="采购合同";
-//            		$scope.buyOrder.orderType="自主采购";
-//            		$scope.buyOrder.tradeType="内贸";
-//            		$scope.buyOrder.currency="人民币";
-//            		$scope.buyOrder.serviceModel="普通代理";
-//            		$scope.buyOrder.settlementClause="平进平出";
-//            		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
-////            		$scope.contract.signDate = timeStamp2String2(new Date());
-//            		$scope.clauseSettlement = {};
-//            		$scope.clauseSettlement.otherAmount = 0;
-//            		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
-//            		$scope.buyOrder.rate = 17;
+            		$scope.contract.contractType="采购合同";
+            		$scope.buyOrder.orderType="自主采购";
+            		$scope.buyOrder.tradeType="内贸";
+            		$scope.buyOrder.currency="人民币";
+            		$scope.buyOrder.serviceModel="普通代理";
+            		$scope.buyOrder.settlementClause="平进平出";
+            		$scope.buyOrder.orderDate = timeStamp2String2(new Date());
+//            		$scope.contract.signDate = timeStamp2String2(new Date());
+            		$scope.clauseSettlement = {};
+            		$scope.clauseSettlement.otherAmount = 0;
+            		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
+            		$scope.buyOrder.rate = 17;
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
@@ -114,6 +114,17 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
                 	//合同内容
                 	$scope.buyOrder.contractContent = '111100';
                 	$scope.initContractContent();
+
+                	//获取物料列表
+					 orderService.getOrderInfo($stateParams.serialNum).then(
+	          		     function(data){//加载页面对象
+	          		    	$scope.buyOrder.orderSerial = data.orderInfo.orderNum;
+	          		    	$scope.orderMateriel=data.orderMateriel;
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		     }
+	          		 );
             	}else if($stateParams.serialNum){
             		$scope.opration = '修改';
             		$scope.cancelContract();
@@ -5334,12 +5345,15 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	        var ids = '';
 			 $scope.confirmSelectOrder = function() {
 				 var ids = '';
+				 var saleOrderSerialNum = '';
+				 
 				 table1.$('input[type="radio"]').each(function() {
 						if ($.contains(document, this)) {											
 							if (this.checked) {
 								// 将选中数据id放入ids中
 								if (ids == '') {
 									ids = this.value;
+									saleOrderSerialNum =  this.name;
 								} else
 									ids = ids + ','
 											+ this.value;
@@ -5349,6 +5363,16 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 
 				 if(ids!=''){
 					 $scope.buyOrder.orderSerial = ids;
+					 debugger
+					 //获取物料列表
+					 orderService.getOrderInfo(saleOrderSerialNum).then(
+		          		     function(data){//加载页面对象
+		          		    	$scope.orderMateriel=data.orderMateriel;
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		     }
+		          		 );
 				 }
 				 
 				 $('#saleOrderInfo').modal('hide');// 删除成功后关闭模态框
@@ -5414,7 +5438,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	 								'render' : function(data,
 	 										type, row, meta) {
 	 									return "<label class='mt-radio mt-radio-single mt-radio-outline'>" +
-										"<input type='radio' name='serialNum' class='checkboxes' value="+ row.orderNum +" />" +
+										"<input type='radio' name="+ row.serialNum +"  class='checkboxes' value="+ row.orderNum +" />" +
 										"<span></span></label>";
 	 								},
 	 								"createdCell": function (td, cellData, rowData, row, col) {

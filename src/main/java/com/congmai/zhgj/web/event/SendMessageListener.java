@@ -10,8 +10,6 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.CustomScopeConfigurer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
@@ -22,9 +20,7 @@ import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.web.enums.StaticConst;
-import com.congmai.zhgj.web.model.AlertVO;
 import com.congmai.zhgj.web.model.Company;
-import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
@@ -37,7 +33,6 @@ import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.ProcurementPlan;
-import com.congmai.zhgj.web.model.ProcurementPlanExample;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
@@ -50,8 +45,9 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.GroupService;
+import com.congmai.zhgj.web.service.SendMailService;
 import com.congmai.zhgj.web.service.MaterielService;
-import com.congmai.zhgj.web.service.MessageProcessor;
+import com.congmai.zhgj.web.service.WebSocketService;
 import com.congmai.zhgj.web.service.MessageService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
@@ -61,6 +57,7 @@ import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
+import com.congmai.zhgj.web.service.impl.MailProcessor;
 import com.congmai.zhgj.web.service.impl.WebSocketProcessor;
 /**
  * 
@@ -75,7 +72,9 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 
 	private Logger logger = LoggerFactory.getLogger(SendMessageListener.class);
 
-	private MessageProcessor messageProcessor = null;
+	private WebSocketService webSocketProcessor = null;
+	
+	private SendMailService mailProcessor = null;
 
 	private MessageService messageService = null;
 
@@ -108,7 +107,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	private MaterielService materielService = null;
 
 	private void initService(){
-		messageProcessor = (MessageProcessor) ApplicationContextHelper.getBean(WebSocketProcessor.class);
+		webSocketProcessor = (WebSocketProcessor)ApplicationContextHelper.getBean(WebSocketService.class);
+		mailProcessor = (MailProcessor)ApplicationContextHelper.getBean(SendMailService.class);		
 		messageService =  ApplicationContextHelper.getBean(MessageService.class);
 		actRuTaskService = ApplicationContextHelper.getBean(ActRuTaskService.class);
 		userCompanyService = ApplicationContextHelper.getBean(UserCompanyService.class);
@@ -241,11 +241,11 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_e", "无");
 				}
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
-//			logger.warn(e.getMessage(), e);
+			logger.warn(e.getMessage(), e);
 		}
 
 
@@ -285,7 +285,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", "无"); //这里得去找审批评论
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
@@ -321,7 +321,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_c", MessageConstants.URL_AGREE_PAYMENTRECORD);
 				properties.put("paramer_d", messageVO.getSerialNum());
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
@@ -373,7 +373,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", "无"); //这里得去找审批评论
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUsers(messageVO);
+				webSocketProcessor.sendMessageToUsers(messageVO);
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
@@ -420,7 +420,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", "无"); //这里得去找审批评论
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
@@ -462,7 +462,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", "无"); //这里得去找审批评论
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
@@ -508,7 +508,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_e", "无");
 				}
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
@@ -543,7 +543,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_c", MessageConstants.URL_CONFIRM_SALE_ORDER);
 				properties.put("paramer_d", messageVO.getSerialNum());
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 //				if(StaticConst.getInfo("zizhuSale").equals(order.getOrderType())){//如果是自主销售订单
 					List<User> users =new ArrayList<User>();
@@ -565,7 +565,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_d", MessageConstants.URL_CONFIRM_SALE_ORDER);
 						properties.put("paramer_e", messageVO1.getSerialNum());
 						messageVO1.setProperties(properties);
-						messageProcessor.sendMessageToUser(messageVO1);
+						webSocketProcessor.sendMessageToUser(messageVO1);
 						messageService.insert(messageVO1);
 					}
 				}
@@ -585,7 +585,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_d", MessageConstants.URL_CONFIRM_SALE_ORDER);
 						properties.put("paramer_e", messageVO1.getSerialNum());
 						messageVO1.setProperties(properties);
-						messageProcessor.sendMessageToUser(messageVO1);
+						webSocketProcessor.sendMessageToUser(messageVO1);
 						messageService.insert(messageVO1);
 					}
 				}*/
@@ -640,7 +640,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_e", messageVO.getSerialNum());
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUsers(messageVO);
+				webSocketProcessor.sendMessageToUsers(messageVO);
 				messageService.insertBatch(messageVO);
 			}
 		} catch (Exception e) {
@@ -696,7 +696,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_e", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -725,7 +725,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					messageVO.setProperties(properties);
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 				
@@ -748,7 +748,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_e", messageVO.getSerialNum());
 
 						messageVO.setProperties(properties);
-						messageProcessor.sendMessageToUser(messageVO);
+						webSocketProcessor.sendMessageToUser(messageVO);
 						messageService.insert(messageVO);
 					}
 				}
@@ -798,7 +798,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_f", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -824,7 +824,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_f", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 
@@ -874,7 +874,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_f", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -900,7 +900,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_f", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -955,7 +955,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_g", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -982,7 +982,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_g", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1034,7 +1034,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_e", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1059,7 +1059,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_e", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1112,7 +1112,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_e", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1137,7 +1137,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_e", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1190,7 +1190,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_g", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1217,7 +1217,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_g", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1266,7 +1266,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_f", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1292,7 +1292,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_f", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1342,7 +1342,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 //					properties.put("paramer_g", messageVO.getSerialNum());
 //
 //					messageVO.setProperties(properties);
-//					messageProcessor.sendMessageToUser(messageVO);
+//					webSocketProcessor.sendMessageToUser(messageVO);
 //					messageService.insert(messageVO);
 //				}
 				//通知采购订单的制单人
@@ -1360,7 +1360,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", MessageConstants.URL_IN_TO_BUY);
 				properties.put("paramer_g", messageVO.getSerialNum());
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 				
 				List<User> users =new ArrayList<User>();
@@ -1393,7 +1393,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_f", MessageConstants.URL_IN_TO_BUY);
 					properties.put("paramer_g", messageVO.getSerialNum());
 					messageVO1.setProperties(properties);
-					messageProcessor.sendMessageToUser(messageVO1);
+					webSocketProcessor.sendMessageToUser(messageVO1);
 					messageService.insert(messageVO1);
 				}
 				//通知采购计划订单的制单人
@@ -1418,7 +1418,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 //					properties.put("paramer_f", MessageConstants.URL_IN_TO_BUY);
 //					properties.put("paramer_g", messageVO1.getSerialNum());
 //					messageVO1.setProperties(properties);
-//					messageProcessor.sendMessageToUser(messageVO1);
+//					webSocketProcessor.sendMessageToUser(messageVO1);
 //					messageService.insert(messageVO1);
 //				}
 				
@@ -1443,7 +1443,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_g", order.getOrderSerial());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}*/
@@ -1468,7 +1468,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_g", order.getOrderSerial());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1493,7 +1493,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_g", order.getOrderSerial());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}*/
@@ -1540,7 +1540,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_f", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1566,7 +1566,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_f", messageVO.getSerialNum());
 
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUsers(messageVO);
+					webSocketProcessor.sendMessageToUsers(messageVO);
 					messageService.insertBatch(messageVO);
 				}
 			}
@@ -1610,7 +1610,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_d", messageVO.getSerialNum());
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUsers(messageVO);
+				webSocketProcessor.sendMessageToUsers(messageVO);
 				messageService.insertBatch(messageVO);
 				}
 		} catch (Exception e) {
@@ -1653,7 +1653,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_d", messageVO.getSerialNum());
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUsers(messageVO);
+				webSocketProcessor.sendMessageToUsers(messageVO);
 				messageService.insertBatch(messageVO);
 				}
 		} catch (Exception e) {
@@ -1688,7 +1688,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_c", MessageConstants.URL_DELIVERY_TO_SUPPLY);
 						properties.put("paramer_d", messageVO.getSerialNum());
 						messageVO.setProperties(properties);
-						messageProcessor.sendMessageToUser(messageVO);
+						webSocketProcessor.sendMessageToUser(messageVO);
 						messageService.insert(messageVO);
 					}
 					
@@ -1728,7 +1728,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1771,7 +1771,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1796,7 +1796,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1840,7 +1840,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1868,7 +1868,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1911,7 +1911,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1936,7 +1936,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -1980,7 +1980,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_f", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -2017,7 +2017,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", messageVO.getSerialNum());
 
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -2033,7 +2033,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_c", MessageConstants.URL_CONFIRM_SALE_ORDER);
 					properties.put("paramer_d", messageVO.getSerialNum());
 					messageVO.setProperties(properties);
-					messageProcessor.sendMessageToUser(messageVO);
+					webSocketProcessor.sendMessageToUser(messageVO);
 					messageService.insert(messageVO);
 					//再通知采购物料关联的采购订单物料(未完成的采购订单)中关联的采购订单制单人
 					List<ProcurementPlanMateriel> materielList = null;
@@ -2067,7 +2067,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 													properties1.put("paramer_f", MessageConstants.URL_CONFIRM_SALE_ORDER);
 													properties1.put("paramer_g", messageVO1.getSerialNum());
 													messageVO1.setProperties(properties1);
-													messageProcessor.sendMessageToUser(messageVO1);
+													webSocketProcessor.sendMessageToUser(messageVO1);
 													messageService.insert(messageVO1);
 													break;
 												}
@@ -2123,7 +2123,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_f", "无"); //这里得去找审批评论
 
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 //				if(StaticConst.getInfo("zizhuBuy").equals(order.getOrderType())){//自主采购订单除制单人还需发给采购经理、产品经理、财务负责人（组）、综管负责人（组）
 					List<User> users =new ArrayList<User>();
@@ -2138,6 +2138,24 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					}
 					users.addAll(users1);
 					users.addAll(users2);
+					
+					for(User u : users){
+						Message messageVO1 = this.createMessage(event,user);
+						messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+						messageVO1.setTempleteType(MessageConstants.TEMP_AGREE_ZZ_BUY_ORDER); 
+						messageVO1.setObjectSerial(order.getSerialNum());
+						messageVO1.setReceiverId(u.getUserId().toString());
+						properties.put("paramer_a", u.getUserName());
+						properties.put("paramer_b", order.getOrderNum());
+						properties.put("paramer_c", MessageConstants.URL_AGREE_BUY_ORDER);
+						properties.put("paramer_d", messageVO1.getSerialNum());
+						messageVO1.setProperties(properties);
+						webSocketProcessor.sendMessageToUser(messageVO1);
+						messageService.insert(messageVO1);
+					}
+					
+					//个别用户发送邮件
+					users =new ArrayList<User>();
 					users.addAll(users3);
 					users.addAll(users4);
 					for(User u : users){
@@ -2151,9 +2169,11 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_c", MessageConstants.URL_AGREE_BUY_ORDER);
 						properties.put("paramer_d", messageVO1.getSerialNum());
 						messageVO1.setProperties(properties);
-						messageProcessor.sendMessageToUser(messageVO1);
+						webSocketProcessor.sendMessageToUser(messageVO1);
+						mailProcessor.sendMessageToUser(messageVO1);
 						messageService.insert(messageVO1);
 					}
+					
 //				}
 				/*//向采购订单关联销售订单制单人发消息
 				if(StringUtil.isNotEmpty(order.getOrderSerial())){//获取采购订单关联销售订单
@@ -2169,7 +2189,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					properties.put("paramer_d", MessageConstants.URL_AGREE_BUY_ORDER);
 					properties.put("paramer_e", messageVO.getSerialNum());
 					messageVO1.setProperties(properties);
-					messageProcessor.sendMessageToUser(messageVO1);
+					webSocketProcessor.sendMessageToUser(messageVO1);
 					messageService.insert(messageVO1);		
 				}*/
 			}
@@ -2205,7 +2225,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", MessageConstants.URL_BE_RECEIVE_SALE_ORDER);
 							properties.put("paramer_e", messageVO.getSerialNum());
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -2246,7 +2266,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 							properties.put("paramer_d", MessageConstants.URL_BE_CONFIRM_APPLY_BUY_ORDER);
 							properties.put("paramer_e", messageVO.getSerialNum());
 							messageVO.setProperties(properties);
-							messageProcessor.sendMessageToUser(messageVO);
+							webSocketProcessor.sendMessageToUser(messageVO);
 							messageService.insert(messageVO);
 						}
 					}
@@ -2288,7 +2308,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				properties.put("paramer_c", MessageConstants.URL_DEMANDPLAN_TO_PROMANAGER);
 				properties.put("paramer_d", messageVO.getSerialNum());
 				messageVO.setProperties(properties);
-				messageProcessor.sendMessageToUser(messageVO);
+				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
 			}
 		} catch (Exception e) {
