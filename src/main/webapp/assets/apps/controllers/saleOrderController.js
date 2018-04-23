@@ -871,6 +871,14 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 										}else if(row.status==2){
 											if((isNull(row.deliveryCount)||row.deliveryCount==0)||Number(row.materielCount)>Number(row.deliveryCount)){
 												clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="deliveryAdd(\''+row.serialNum+'\')">发货</a><br/>';
+												
+												if(row.orderType =='委托销售'){
+													clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="saleGenerateBuy(\''+row.serialNum+'\')">分解采购</a><br/>';
+												}
+												if(row.orderType =='自主销售'){
+													clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="addBuyOrder(\''+row.serialNum+'\')">新建采购</a><br/>';
+												}
+												
 											}
 											if((isNull(row.payAmount)||row.payAmount==0||Number(row.payAmount)<Number(row.orderAmount))){
 												clickhtm= clickhtm + '<a href="javascript:void(0);" ng-click="goCollectMoney(\''+row.serialNum+'\')">收款</a><br/>'
@@ -3644,12 +3652,24 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	          		 );
 	        };
 	        
-	        $scope.saleGenerateBuy  = function() {// 分解订单
-	        	if(!isNull($scope.saleOrder.orderSerial)){
-	        		toastr.info('已有对应采购单，不能再次分解！');
-	        		return;
-	        	}
-	        	orderService.saleGenerateBuy($scope.saleOrder.serialNum).then(
+	        $scope.saleGenerateBuy  = function(serialNum) {// 分解订单
+	        	if(serialNum){//列表分解采购
+	        		orderService.saleGenerateBuy(serialNum).then(
+		          		     function(data){
+		          		    	toastr.info('订单分解成功！');
+		          		    	table.ajax.reload();
+		          		     },
+		          		     function(error){
+		          		         $scope.error = error;
+		          		         toastr.error('数据保存出错！');
+		          		     }
+		          		 );
+	        	}else{//详情分解采购
+//	        		if(!isNull($scope.saleOrder.orderSerial)){
+//		        		toastr.info('已有对应采购单，不能再次分解！');
+//		        		return;
+//		        	}
+		        	orderService.saleGenerateBuy($scope.saleOrder.serialNum).then(
 	          		     function(data){
 	          		    	$scope.saleOrder = data
 	          		    	toastr.info('订单分解成功！');
@@ -3659,7 +3679,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	          		         toastr.error('数据保存出错！');
 	          		     }
 	          		 );
-	        };
+	        	}
+	        		        };
 	        
 	        $scope.saleGenerateProcurementPlan  = function() {// 分解订单
 	        	if(!isNull($scope.saleOrder.orderSerial)){
@@ -5466,6 +5487,11 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	    				);
 		 	    	 
 		 	       }
+		 	   //销售订单分解采购
+		 	      $scope.addBuyOrder= function(serialNum) {
+		 	    	 $state.go('addBuyOrder',{oprateType:"saleOrderAddBuyOrder",serialNum:serialNum});
+		 	      }
+		 	     
 		 	     //设置默认框架或委托方
 		 	      $scope.setEntrustParty= function(obj) {
 		 	    	//订单采购商变化时

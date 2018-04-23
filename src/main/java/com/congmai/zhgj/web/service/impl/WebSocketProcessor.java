@@ -7,11 +7,11 @@ import org.springframework.web.socket.TextMessage;
 import com.alibaba.fastjson.JSONObject;
 import com.congmai.zhgj.web.model.Message;
 import com.congmai.zhgj.web.model.MessageTemplate;
-import com.congmai.zhgj.web.service.MessageProcessor;
+import com.congmai.zhgj.web.service.WebSocketService;
 import com.congmai.zhgj.web.websocket.SystemWebSocketHandler;
 
 @Service
-public class WebSocketProcessor implements MessageProcessor {
+public class WebSocketProcessor implements WebSocketService {
 	
 	private static final String DEFAULT_MSG_TEMPLATE = "WebSocket";
 	

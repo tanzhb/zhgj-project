@@ -1301,7 +1301,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         })
         // 新增采购订单
         .state('addBuyOrder', {
-            url: "/addBuyOrder?:serialNum&:view",
+            url: "/addBuyOrder?:serialNum&:view&:oprateType",
             templateUrl: "rest/page/addBuyOrder",
             data: {pageTitle: '新增采购订单'},
             controller: "buyOrderController",
