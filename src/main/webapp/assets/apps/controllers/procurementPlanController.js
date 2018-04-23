@@ -1525,11 +1525,18 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
  	   	    	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
  	   	    		toastr.error('请先保存采购计划信息！');return
  	    		}
+ 	   	    	var count=0;//待保存数量
  	   	    for(var i=0;i<$scope.demandMateriel.length;i++){
  	   	    	if(isNull($scope.demandMateriel[i].planCount)||$scope.demandMateriel[i].planCount==undefined){
 					toastr.warning('请先填写需求数量！');return
 				}
+	 	   	    	if($scope.demandMateriel[i].status!=1){
+	 	   	    		count++;
+	 	   	    	}
  	   	    	$scope.demandMateriel[i].procurementPlanSerial=$scope.procurementPlan.serialNum;
+ 	   	    }
+ 	   	    if(count==0){
+ 	   	    toastr.warning('暂无需要保存的需求物料,请添加需求物料！');return
  	   	    }
  	   	    	procurementPlanService.saveAllDemandMateriel($scope.demandMateriel).then(
  	   	       		     function(data){

@@ -365,7 +365,7 @@
                                        	&nbsp;&nbsp;&nbsp;
                                        	<a  ng-click="canceDemandMateriel(_procurementPlanMateriel,$index)" title="取消"><i class="fa fa-undo"></i></a>
                                        </span> -->
-                                       <span  ng-show="operation_o{{$index}}">
+                                       <span  ng-show="operation_o{{$index}}"  ng-if="_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0">
                                        	&nbsp;&nbsp;&nbsp;&nbsp;
                                        	<a    ng-hide="demandMaterielInput{{$index}}" ng-click="saveDemandMateriel(_procurementPlanMateriel,$index)" title="保存"><i class="fa fa-save"></i></a>
                                        	<a  ng-show="demandMaterielShow{{$index}}"  title="编辑" ng-click="editDemandMateriel(_procurementPlanMateriel)"><i class="fa fa-edit"></i></a>
@@ -532,7 +532,7 @@
                                        	&nbsp;&nbsp;&nbsp;
                                        	<a  ng-click="cancelProcurementPlanMateriel(_procurementPlanMateriel,$index)" title="取消"><i class="fa fa-undo"></i></a>
                                        </span> -->
-                                       <span  ng-show="operation_o{{$index}}">
+                                       <span  ng-show="operation_o{{$index}}"   ng-if="_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0">
                                        	&nbsp;&nbsp;&nbsp;&nbsp;
                                        	<a    ng-hide="procurementPlanMaterielInput{{$index}}" ng-click="saveProcurementPlanMateriel(_procurementPlanMateriel,$index)" title="保存"><i class="fa fa-save"></i></a>
                                        	<a ng-show="procurementPlanMaterielShow{{$index}}"   title="编辑" ng-click="editProcurementPlanMateriel(_procurementPlanMateriel)"><i class="fa fa-edit"></i></a>
