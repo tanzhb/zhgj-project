@@ -1614,8 +1614,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 				delete procurementPlanMateriel.materiel;
 				delete procurementPlanMateriel.supplyMateriel;
 				delete procurementPlanMateriel.supply;
+				delete procurementPlanMateriel.supplyMateriels;
 				if(isNull(procurementPlanMateriel.buyCount)||procurementPlanMateriel.buyCount==undefined){
 					toastr.warning('请先填写需求数量！');return
+				}
+				if(isNull(procurementPlanMateriel.supplyComId)){
+					toastr.warning('供应商不能为空,请选择供应商！');return
 				}
 				var promise = procurementPlanService
 				.saveProcurementPlanMateriel(procurementPlanMateriel);

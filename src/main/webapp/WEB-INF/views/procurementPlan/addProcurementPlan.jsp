@@ -284,9 +284,15 @@
                              <tbody>
                                  <tr ng-repeat="_procurementPlanMateriel in demandMateriel track by $index" ng-mouseover="showOperation('procurementPlanMateriel',$index)" ng-mouseleave="hideOperation('procurementPlanMateriel',$index)"  repeat-done="repeatDone(this)">
 		                          <td>
-		                          <div  ng-hide="showCheckBoxForDm{{$index}}"   ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined">
+		                          <div  ng-hide="showCheckBoxForDm{{$index}}"   ng-if="(_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined)&&(_procurementPlanMateriel.serialNum==null||_procurementPlanMateriel.serialNum==undefined)">
 		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"  >
                                         <input type="checkbox" class="group-checkable1"      name="{{$index}}"  id="{{_procurementPlanMateriel.materielSerial}}"  value="{{_procurementPlanMateriel.isBOM}}" />
+                                        <span></span>
+                                    </label>
+                                    </div>
+                                     <div  ng-hide="showCheckBoxForDm{{$index}}"   ng-if="(_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==undefined)&&(_procurementPlanMateriel.serialNum!=null&&_procurementPlanMateriel.serialNum!=undefined)">
+		                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"  >
+                                        <input type="checkbox" class="group-checkable1"      name="{{$index}}"  id="{{_procurementPlanMateriel.serialNum}}"  value="{{_procurementPlanMateriel.isBOM}}" />
                                         <span></span>
                                     </label>
                                     </div>
@@ -323,7 +329,8 @@
 		                          </td>
 		                       
 		                          <td>  
-		                          <div ng-hide="demandMaterielInput{{$index}}&&((demandMateriel[$index].status==0||demandMateriel[$index].status==undefined)||demandMaterielShow{{$index}})"     input-medium class="input-group date date-picker"
+		                          <!-- demandMaterielInput{{$index}}&&((demandMateriel[$index].status==1)||demandMaterielShow{{$index}}) -->
+		                          <div ng-hide="demandMaterielInput{{$index}}||(demandMateriel[$index].status==1)"     input-medium class="input-group date date-picker"   
 															 data-date-format="yyyy-mm-dd"
 															data-date-viewmode="years">
 															<input type="text" class="form-control" style="min-width: 110px;" readonly="" id="deliveryDate{{$index}}" ng-model="demandMateriel[$index].deliveryDate"    name="deliveryDate"   
@@ -338,10 +345,10 @@
 		                          </td>
 		                        
 		                          <td>  
-		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}&&((demandMateriel[$index].status==0||demandMateriel[$index].status==undefined)||demandMaterielShow{{$index}})"   ng-model="demandMateriel[$index].deliveryAddress"  
-		                           ng-if="$first"    ng-change="setAllDeliveryAddress(demandMateriel[$index] ,$index)" />
-		                           <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}&&((demandMateriel[$index].status==0||demandMateriel[$index].status==undefined)||demandMaterielShow{{$index}})"   ng-model="demandMateriel[$index].deliveryAddress"  
-		                           ng-if="!$first"     />
+		                          <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}"   ng-model="demandMateriel[$index].deliveryAddress"  
+		                           ng-if="$first&&(demandMateriel[$index].status==0||demandMateriel[$index].status==undefined)"    ng-change="setAllDeliveryAddress(demandMateriel[$index] ,$index)" />
+		                           <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}"   ng-model="demandMateriel[$index].deliveryAddress"  
+		                           ng-if="!$first&&(demandMateriel[$index].status==0||demandMateriel[$index].status==undefined)"     />
                                      		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}||(_procurementPlanMateriel.status!=undefined&&_procurementPlanMateriel.status!=0)"> {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
                                       <td>  

@@ -1214,6 +1214,7 @@ public class ProcurementPlanController {
 	    			ProcurementPlan oi = new ProcurementPlan();
 	    			oi.setSerialNum(procurementPlan.getSerialNum());
 	    			oi.setStatus("2");
+	    			oi.setUpdateTime(new Date());
 	    			this.procurementPlanService.updateProcurementPlan(oi);
 	    		}
 	    		procurementPlan.setProcessInstanceId(processInstanceId);
