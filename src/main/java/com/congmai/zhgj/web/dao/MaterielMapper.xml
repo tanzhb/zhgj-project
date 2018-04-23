@@ -63,6 +63,7 @@
     <!-- 查询物料指导单价,没有显示无 有过期了为已过期 -->
     <!-- <association property="guideUnitPrice" column="serialNum" select="com.congmai.zhgj.web.dao.PriceListMapper.getGuideUnitPrice"/> -->
     <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId"/> 
+
     
   </resultMap>
   
@@ -125,7 +126,7 @@
     <association property="categoryName2" column="category2" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/>
     <association property="categoryName3" column="category3" select="com.congmai.zhgj.web.dao.CategoryMapper.selectNameByPrimaryKey"/> -->
     <!-- 查询库存数量，影响查询效率 -->
-    <!-- <association property="stockCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/> -->
+    <association property="stockCount" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
     <!-- 查询物料指导单价,没有显示无 有过期了为已过期 -->
     <!-- <association property="guideUnitPrice" column="serialNum" select="com.congmai.zhgj.web.dao.PriceListMapper.getGuideUnitPrice"/> -->
     <!-- <collection property="supplyMateriels" column="materielId" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielId4materielList"/> --> 

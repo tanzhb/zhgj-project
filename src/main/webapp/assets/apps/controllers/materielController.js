@@ -610,7 +610,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 							'render' : function(data,
 									type, full, meta) {
 								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-								"<input type='checkbox' id='"+data+"' class='checkboxes' ng-click='getDetailMaterielInfo_(\""+data+"\")' name='serialNum[]' value="+ data +" />" +
+								"<input type='checkbox' id='"+data+"' class='checkboxes' ng-click='getMaterielInfo(\""+data+"\")' name='serialNum[]' value="+ data +" />" +
 								"<span></span></label>";
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {

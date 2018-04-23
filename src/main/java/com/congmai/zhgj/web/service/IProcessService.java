@@ -18,6 +18,8 @@ import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
+import com.congmai.zhgj.web.model.ProcurementPlan;
+
 
 public interface IProcessService {
 
@@ -226,6 +228,9 @@ public interface IProcessService {
 	public String startSaleFramerProcess(ContractVO contract);
 	//发货计划流程
 	public String startDeliveryPlanProcess(DeliveryVO deliveryVo);
+	
+	//采购计划流程
+		public String startProcurementPlanInfo(ProcurementPlan procurementPlan);
 
 	//自定义已办任务查询
 	public List<BaseVO> findFinishedTaskInstancesDiy(User user, String businessType);

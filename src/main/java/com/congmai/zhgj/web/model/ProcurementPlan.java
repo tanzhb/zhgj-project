@@ -7,8 +7,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ProcurementPlan {
-    private String serialNum;
+public class ProcurementPlan extends BaseVO {
+    /**
+	 * @Field @serialVersionUID : 采购计划
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String serialNum;
 
     private String saleOrderSerial;
     
@@ -41,10 +46,10 @@ public class ProcurementPlan {
     private Date endDate;//齐套日期
     
     private String endCount;//齐套数量
-    
+    private List<SupplyMateriel> supplyMateriels;
     private String buyOrderCount;//采购订单数量
     private String materielName;//采购计划物料名称(多个拼接加 ,连接)
-    
+    private String isFromForcast;//是否来自采购预测
     public String getBuyOrderCount() {
 		return buyOrderCount;
 	}
@@ -198,6 +203,22 @@ public class ProcurementPlan {
 
 	public void setMaterielName(String materielName) {
 		this.materielName = materielName;
+	}
+
+	public String getIsFromForcast() {
+		return isFromForcast;
+	}
+
+	public void setIsFromForcast(String isFromForcast) {
+		this.isFromForcast = isFromForcast;
+	}
+
+	public List<SupplyMateriel> getSupplyMateriels() {
+		return supplyMateriels;
+	}
+
+	public void setSupplyMateriels(List<SupplyMateriel> supplyMateriels) {
+		this.supplyMateriels = supplyMateriels;
 	}
     
 }

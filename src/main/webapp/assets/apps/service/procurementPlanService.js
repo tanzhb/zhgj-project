@@ -452,7 +452,7 @@ angular.module('MetronicApp').service('procurementPlanService',
 					});
 					return deferred.promise;//返回承诺
 				},//启动采购订单流程
-				startProcurementPlanProcess : function(procurementPlanInfo) {
+			/*	startProcurementPlanProcess : function(procurementPlanInfo) {
 					var deferred = $q.defer();
 					$http.post("rest/procurementPlan/startProcurementPlanProcess", procurementPlanInfo
 					).success(function (data) {
@@ -462,7 +462,7 @@ angular.module('MetronicApp').service('procurementPlanService',
 	                    deferred.reject('连接服务器出错！');
 	                })
 					return deferred.promise;
-				},//启动销售订单流程
+				},*///启动销售订单流程
 				startSaleProcurementPlanProcess : function(procurementPlanInfo) {
 					var deferred = $q.defer();
 					$http.post("rest/procurementPlan/startSaleProcurementPlanProcess", procurementPlanInfo
@@ -650,6 +650,17 @@ angular.module('MetronicApp').service('procurementPlanService',
 						            deferred.reject('连接服务器出错！');  
 						        })  
 						        return deferred.promise; 
+							},//启动采购计划流程
+							startProcurementPlanProcess : function(orderInfo) {
+								var deferred = $q.defer();
+								$http.post(ctx+"rest/procurementPlan/startBuyPlanProcess", orderInfo
+								).success(function (data) {
+					                // 如果连接成功，延时返回给调用者
+					                deferred.resolve(data);
+					            }).error(function () {
+				                    deferred.reject('连接服务器出错！');
+				                })
+								return deferred.promise;
 							}
 							
 		}

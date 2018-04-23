@@ -871,7 +871,8 @@ margin-right: 20px;
                                  <tr ng-repeat="_orderMateriel in dispalyOrderMateriel track by $index" >
 		                          <td>
 		                           <!-- <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p> -->
-		                                <p class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
+		                            <a href="javascript:void(0);"   ng-if="_orderMateriel.materiel.isBOM==1"     style="color:blue"  ng-click="showUnderMateriel(_orderMateriel,'materiel')"> {{_orderMateriel.materiel.materielNum}} </a>
+		                               <p  ng-if="_orderMateriel.materiel.isBOM!=1"  class="form-control-static" > {{_orderMateriel.materiel.materielNum}} </p>
 		                          </td>
 		                          <td ng-if="buyOrder.tradeType =='外贸'">
 		                          		<p class="form-control-static" > {{_orderMateriel.materiel.customsCode}} </p>

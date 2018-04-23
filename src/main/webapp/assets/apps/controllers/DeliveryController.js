@@ -1047,7 +1047,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	
 	    var table;
 		var loadMainTable = function() {
-			
+			var type="buy";
 			var a = 0;
 			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
 				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
@@ -1081,7 +1081,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 							              [ 5, 10, 15, 15,30, "All" ] ],
 							              pageLength : 10,// 每页显示数量
 							              processing : true,// loading等待框
-							              ajax:"rest/delivery/findAllDeliveryList?noInit=1",//加载数据中user表数据
+							              ajax:"rest/delivery/findAllDeliveryList?noInit=1&&type="+type,//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum',
 						                            	mRender : function(

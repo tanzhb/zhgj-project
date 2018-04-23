@@ -17,6 +17,7 @@
     <result column="endCount" property="endCount" jdbcType="VARCHAR" />
     <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <result column="isFromForcast" property="isFromForcast" jdbcType="VARCHAR" />
     <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
   </resultMap>
   <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.ProcurementPlan" >
@@ -35,6 +36,7 @@
     <result column="endCount" property="endCount" jdbcType="VARCHAR" />
     <result column="endDate" property="endDate" jdbcType="TIMESTAMP" />
     <result column="maker" property="maker" jdbcType="VARCHAR" />
+    <result column="isFromForcast" property="isFromForcast" jdbcType="VARCHAR" />
     <!-- <association property="saleOrder" column="saleOrderSerial" select="com.congmai.zhgj.web.dao.OrderInfoMapper.selectByPrimaryKey"/>  -->
     <association property="materielName" column="serialNum" select="com.congmai.zhgj.web.dao.DemandMaterielMapper.selectMaterielNameByProcurementPlanSerial"/>
   	<association property="buyOrderCount" column="serialNum" select="com.congmai.zhgj.web.dao.OrderInfoMapper.getBuyOrderCountByProcurementPlanSerial"/>
@@ -99,7 +101,7 @@
   </sql>
   <sql id="Base_Column_List" >
     serialNum, saleOrderSerial,procurementPlanNum, buyCount, buyDate, status, remark, delFlg, creator, createTime, 
-    updater, updateTime,endCount,endDate,maker
+    updater, updateTime,endCount,endDate,maker,isFromForcast
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap1" parameterType="com.congmai.zhgj.web.model.ProcurementPlanExample" >
     select
@@ -135,11 +137,12 @@
     insert into procurementPlan (serialNum, saleOrderSerial,procurementPlanNum, buyCount, 
       buyDate, status, remark, 
       creator, createTime, 
-      updater, updateTime,endCount,endDate,maker)
+      updater, updateTime,endCount,endDate,maker,isFromForcast)
     values (#{serialNum,jdbcType=VARCHAR}, #{saleOrderSerial,jdbcType=VARCHAR}, #{procurementPlanNum,jdbcType=VARCHAR}, #{buyCount,jdbcType=VARCHAR}, 
       #{buyDate,jdbcType=DATE}, #{status,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{endCount,jdbcType=VARCHAR},#{endDate,jdbcType=TIMESTAMP},#{maker,jdbcType=VARCHAR})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{endCount,jdbcType=VARCHAR},#{endDate,jdbcType=TIMESTAMP},#{maker,jdbcType=VARCHAR},
+      #{isFromForcast,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.ProcurementPlan" >
     insert into procurementPlan
@@ -189,6 +192,9 @@
       <if test="maker != null" >
         maker,
       </if>
+      <if test="isFromForcast != null" >
+        isFromForcast,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -235,6 +241,9 @@
       </if>
       <if test="maker != null" >
         #{maker,jdbcType=VARCHAR},
+      </if>
+       <if test="isFromForcast != null" >
+        #{isFromForcast,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>

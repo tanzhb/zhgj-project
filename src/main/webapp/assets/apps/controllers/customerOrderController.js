@@ -4425,6 +4425,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	 /***选择收货列表初始化START***/
 		         var TakeDelieryTable;
 		         var loadTakeDelieryTable = function() {
+		        	 var type="buy";
 		                  a = 0;
 		                  App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
 		                  TakeDelieryTable = $("#takeDeliveryTable").DataTable({

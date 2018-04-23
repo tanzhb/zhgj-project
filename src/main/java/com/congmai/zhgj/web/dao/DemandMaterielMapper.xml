@@ -19,6 +19,8 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"/>
+     <association property="stockCount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getMaterielZiJianStock"/>
+    <collection property="supplyMateriels" column="materielSerial" select="com.congmai.zhgj.web.dao.SupplyMaterielMapper.selectSupplyMaterielByMaterielSerial"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >

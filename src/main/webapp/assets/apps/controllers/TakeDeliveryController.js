@@ -981,6 +981,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	       /***选择收货列表初始化START***/
 	       var table;
 	       var loadTakeDelieryTable = function() {
+	    	   var type="buy";
 	                a = 0;
 	                App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile") && (a = $(".page-header").outerHeight(!0)) : $(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0) : $("body").hasClass("page-header-fixed") && (a = 64);
 	                table = $("#takeDeliveryTable").DataTable({
@@ -1024,7 +1025,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	                    processing: true,//loading等待框
 	                    bRetrieve : true,
 //	                    serverSide: true,
-	                   ajax: "rest/takeDelivery/takeDeliveryList?noInit=1",//加载数据中
+	                   ajax: "rest/takeDelivery/takeDeliveryList?noInit=1&&type="+type,//加载数据中
 	                   /* ajax :{ "url":$rootScope.basePath
 	  						+ "/rest/takeDelivery/takeDeliveryList",// 加载数据中user表数据    
 	  						"contentType": "application/json",
