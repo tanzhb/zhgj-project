@@ -288,7 +288,7 @@ public class DeliveryController {
      * @return
      */
     @RequestMapping(value = "/findAllDeliveryList", method = RequestMethod.GET)
-    public ResponseEntity<Map<String,Object>> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit) {
+    public ResponseEntity<Map<String,Object>> findAllDeliveryList(HttpServletRequest request,String customsFormType,String noInit,String type) {
 
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -308,7 +308,9 @@ public class DeliveryController {
 				query.setBuyComId(comId);
 			}else if("2".equals(com.getComType())){//供应商
 				query.setSupplyComId(comId );
-			}else if("9".equals(com.getComType())){//贸易商
+			}else if("9".equals(com.getComType())&&"sale".equals(type)){//贸易商
+				query.setSupplyComId(comId );
+			}else if("9".equals(com.getComType())&&"buy".equals(type)){//贸易商
 				query.setBuyComId(comId);
 			}
 		}else{//平台查看
@@ -429,7 +431,8 @@ public class DeliveryController {
 		
 		map.put("orderSerial", orderSerial);
 		map.put("orderInfo", o);
-		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
+//		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单Boolean createQG
+		Boolean createQG=false;
 		deliveryService.updateOrderWhenDeliveryComlete(map);
 		map.put("createQG", createQG);
 		deliveryService.goDelivery(map);//外贸供应商发货

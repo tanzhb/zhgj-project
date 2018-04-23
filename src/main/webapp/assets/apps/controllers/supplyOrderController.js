@@ -4449,7 +4449,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 	/** *************发货计划列表  end*************** */ 
 	 var deliveryTable;
 		var loadDeliveryTable = function() {
-			
+			var type="sale";
 			var a = 0;
 			App.getViewPort().width < App.getResponsiveBreakpoint("md") ? $(".page-header").hasClass("page-header-fixed-mobile")&& (a = $(".page-header").outerHeight(!0)): 
 				$(".page-header").hasClass("navbar-fixed-top") ? a = $(".page-header").outerHeight(!0): $("body").hasClass("page-header-fixed")&& (a = 64);
@@ -4482,7 +4482,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							              [ 5, 10, 15, 15,30, "All" ] ],
 							              pageLength : 10,// 每页显示数量
 							              processing : false,// loading等待框
-							              ajax:"rest/delivery/findAllDeliveryList",//加载数据中user表数据
+							              ajax:"rest/delivery/findAllDeliveryList?type="+type,//加载数据中user表数据
 							              "aoColumns": [
 							                            { mData: 'serialNum',
 						                            	mRender : function(
@@ -4636,7 +4636,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 							                            			type, row, meta) {
 							                            		debugger;
 							                            		 if(data==0){
-							             							return '<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>';
+							                            			 return  '' ;
+//							             							return '<a href="javascript:void(0);" ng-click="pingTaiSubmit(\''+row.serialNum+'\',\''+row.orderAmount+'\')">提交</a>';
 							             						}else{
 							             							return  '' ;
 							             						}

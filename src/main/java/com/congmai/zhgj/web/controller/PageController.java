@@ -457,6 +457,29 @@ public class PageController {
     public String procurementPlan() {
         return "procurementPlan/procurementPlan";
     }
+    /**
+     * 采购计划提交申请
+     */
+    @RequestMapping("/approvalProcurementPlanApply")
+    public String approvalProcurementPlanApply(String serialNum,String view) {
+        return "procurementPlan/approvalProcurementPlanApply";
+    }
+    /**
+     * 审批采购计划
+     */
+    @RequestMapping("/submitProcurementPlanApply")
+    public String submitProcurementPlanApply(String serialNum,String view) {
+        return "procurementPlan/submitProcurementPlanApply";
+    }
+    /**
+     * 重新编辑采购计划
+     */
+    @RequestMapping("/editProcurementPlanApply")
+    public String editProcurementPlanApply(String serialNum,String view) {
+        return "procurementPlan/editProcurementPlanApply";
+    }
+    
+  
     
     /**
      * 采购框架
@@ -795,4 +818,11 @@ public class PageController {
     public String editDeliveryPlanApply() {
         return "delivery/editDeliveryPlanApply";
     }    
+    /**
+     * 销售预测
+     */
+    @RequestMapping("/saleForecast")
+    public String saleForecast() {
+        return "saleForecast/saleForecast";
+    }
 }

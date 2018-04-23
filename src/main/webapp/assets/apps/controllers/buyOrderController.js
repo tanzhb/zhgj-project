@@ -233,7 +233,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             ordering:  true,// 是否排序
             lengthMenu: [[5, 10, 15, 30, -1], [5, 10, 15, 30, "All"]],
             pageLength: 5,// 每页显示数量
-            processing: true,// loading等待框
+            processing: false,// loading等待框
 //serverSide: true,
             ajax: "rest/materiel/findUnderMaterielList?isLatestVersion=1&serialNum="+serialNum,// 加载数据中
             "aoColumns": [

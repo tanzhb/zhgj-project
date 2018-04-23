@@ -173,7 +173,9 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				c.andStatusNotEqualTo("0");//状态不为初始
 				c.andTakeDeliverSeriaIsNotNull();
 //				c.andDeliverBuyComIdEqualTo(takeDelivery.getSupplyComId());
-//				c.andDeliverSupplyComIdEqualTo(takeDelivery.getSupplyComId());
+				if(StringUtils.isNotEmpty(takeDelivery.getSupplyComId())){
+					c.andDeliverSupplyComIdEqualTo(takeDelivery.getSupplyComId());
+				}
 			}else{
 				//平台可查状态为初始的代发货
 //				c.andStatusNotEqualTo("0");//状态不为初始

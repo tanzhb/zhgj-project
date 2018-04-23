@@ -15,8 +15,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -28,18 +32,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.SendEmail;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -50,18 +58,22 @@ import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BOMMateriel;
 import com.congmai.zhgj.web.model.BOMMaterielExample;
+import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.ClauseAdvance;
 import com.congmai.zhgj.web.model.ClauseAfterSales;
 import com.congmai.zhgj.web.model.ClauseCheckAccept;
 import com.congmai.zhgj.web.model.ClauseDelivery;
 import com.congmai.zhgj.web.model.ClauseSettlement;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.Company;
+import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.DeliveryMaterielVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.DemandMateriel;
 import com.congmai.zhgj.web.model.DemandMaterielExample;
+import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.OperateLog;
 import com.congmai.zhgj.web.model.OrderFile;
@@ -84,6 +96,7 @@ import com.congmai.zhgj.web.service.ContractService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
 import com.congmai.zhgj.web.service.ProcurementPlanService;
 import com.congmai.zhgj.web.service.BOMMaterielService;
@@ -111,6 +124,14 @@ public class ProcurementPlanController {
     private com.congmai.zhgj.web.service.MaterielService materielService;
     @Resource
     private com.congmai.zhgj.web.service.SupplyMaterielService supplyMaterielService;
+    @Resource
+    private ProcessBaseService processBaseService;
+    @Autowired
+	protected RuntimeService runtimeService;
+	@Autowired
+    protected TaskService taskService;
+	@Autowired
+	private IProcessService processService;
     
 
     /**
@@ -148,6 +169,7 @@ public class ProcurementPlanController {
 		procurementPlanInfo.setBuyDate(new Date());
 		procurementPlanInfo.setMaker(currenLoginName);
 		procurementPlanInfo.setStatus("0");
+		procurementPlanInfo.setIsFromForcast("0");//不是来自采购预测
 		
 		procurementPlanService.insert(procurementPlanInfo);
 	}
@@ -867,6 +889,7 @@ public class ProcurementPlanController {
 		map.put("procurementPlanMateriels", procurementPlanMateriels);
 		return map;
 	}
+	//发布采购清单物料
 	 @RequestMapping(value = "/releaseProcurementPlanMateriel", method = RequestMethod.POST)
 	    @ResponseBody
 	    public void releaseProcurementPlanMateriel(@RequestBody String params) {
@@ -994,5 +1017,284 @@ public class ProcurementPlanController {
 			}
 	    	
 	    }
-	
+	  /**
+	     * 
+	     * @Description (启动采购计划流程)
+	     * @param params
+	     * @return
+	     */
+	    @RequestMapping(value = "/startBuyPlanProcess", method = RequestMethod.POST)
+	    @ResponseBody
+	    public String startBuyPlanProcess( @RequestBody String params) {
+	    	String flag = "0"; //默认失败
+	    	ProcurementPlan procurementPlan = json2ProcurementPlan(params);
+			//启动订单审批测试流程-start
+			User user = UserUtil.getUserFromSession();
+			procurementPlan.setUserId(user.getUserId());
+			procurementPlan.setUser_name(user.getUserName());
+			procurementPlan.setTitle(user.getUserName()+" 的采购计划申请");
+			procurementPlan.setStatus(BaseVO.PENDING);					//审批中
+			procurementPlan.setApplyDate(new Date());
+			procurementPlan.setReason(procurementPlan.getRemark());
+	    	processBaseService.insert(procurementPlan);
+			String businessKey = procurementPlan.getSerialNum().toString();
+			procurementPlan.setBusinessKey(businessKey);
+			
+			try {
+				String processInstanceId = this.processService.startProcurementPlanInfo(procurementPlan);
+				
+				//申请加入流程已办
+				HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+				historicTaskVO.setTaskId(ApplicationUtils.random32UUID());
+				historicTaskVO.setProcessInstanceId(processInstanceId);
+				historicTaskVO.setStartTime(new Date());
+				historicTaskVO.setEndTime(new Date());
+				historicTaskVO.setProcessDefId(procurementPlan.getBusinessKey());
+				historicTaskVO.setUserId(user.getUserId().toString());
+				
+				processBaseService.insertHistoricTask(historicTaskVO);
+//	                message.setStatus(Boolean.TRUE);
+//	    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
+			    logger.info("processInstanceId: "+processInstanceId);
+//			    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_SALE_ORDER));
+			    flag = "1";
+			} catch (ActivitiException e) {
+//	            	message.setStatus(Boolean.FALSE);
+			    if (e.getMessage().indexOf("no processes deployed with key") != -1) {
+			        logger.warn("没有部署流程!", e);
+//	        			message.setMessage("没有部署流程，请联系系统管理员，在[流程定义]中部署相应流程文件！");
+			    } else {
+			        logger.error("启动订单流程失败：", e);
+//	                    message.setMessage("启动订单流程失败，系统内部错误！");
+			    }
+			    throw e;
+			} catch (Exception e) {
+			    logger.error("启动订单流程失败：", e);
+//	                message.setStatus(Boolean.FALSE);
+//	                message.setMessage("启动订单流程失败，系统内部错误！");
+			    throw e;
+			}
+	        //启动订单审批测试流程-end
+			return flag;
+		}
+	    
+	    
+	    /**
+	     * 审批订单流程
+	     * @param taskId
+	     * @param model
+	     * @return
+	     * @throws NumberFormatException
+	     * @throws Exception
+	     */
+//		@RequiresPermissions("user:order:toApproval") 	//*代表 经理、总监、人力
+	    @RequestMapping(value = "/toApproval/{taskId}", method = RequestMethod.POST, produces = "application/json")
+	    public @ResponseBody Map<String, Object> toApproval(@PathVariable("taskId") String taskId) throws NumberFormatException, Exception{
+	    	Task task = this.taskService.createTaskQuery().taskId(taskId).singleResult();
+			// 根据任务查询流程实例
+	    	ProcurementPlan procurementPlan = new ProcurementPlan();
+	    	List<CommentVO> commentList = new ArrayList<CommentVO>();
+	    	String result = null;
+	    	if(task!=null){
+	    		String processInstanceId = task.getProcessInstanceId();
+	    		ProcessInstance pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+	    		procurementPlan = (ProcurementPlan) this.runtimeService.getVariable(pi.getId(), "entity");
+	    		procurementPlan.setTask(task);
+	    		procurementPlan.setProcessInstanceId(processInstanceId);
+	    		commentList = this.processService.getComments(processInstanceId);
+	    		String taskDefinitionKey = task.getTaskDefinitionKey();
+	    		logger.info("taskDefinitionKey: "+taskDefinitionKey);
+	    		
+	    		if("modifyApply".equals(taskDefinitionKey)){
+	    			result = "modify";
+	    		}else{
+	    			result = "audit";
+	    		}
+	    	}
+	    	
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("actionType", result);
+			map.put("procurementPlan", procurementPlan);
+			map.put("commentList", commentList);
+	    	return map;
+	    }
+	    
+	    
+	    /**
+	     * 完成任务
+	     * @param content
+	     * @param completeFlag
+	     * @param taskId
+	     * @param redirectAttributes
+	     * @param session
+	     * @return
+	     * @throws Exception
+	     */
+//		@RequiresPermissions("user:order:complate")  //数据库中权限字符串为user:*:complate， 通配符*匹配到order所以有权限操作 
+	    @RequestMapping(value = "/complate/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+		@ResponseBody
+	    public String complate(
+	    		@RequestParam("procurementPlanId") String procurementPlanId,
+	    		@RequestParam("content") String content,
+	    		@RequestParam("processInstanceId") String processInstanceId,
+	    		@RequestParam("completeFlag") Boolean completeFlag,
+	    		@PathVariable("taskId") String taskId, 
+	    		RedirectAttributes redirectAttributes) throws Exception{
+	    	User user = UserUtil.getUserFromSession();
+	    	String result = "";
+	    	try {
+	    		ProcurementPlan procurementPlan = this.procurementPlanService.selectById(procurementPlanId);
+	    		ProcurementPlan baseProcurementPlanInfo = (ProcurementPlan) this.runtimeService.getVariable(processInstanceId, "entity");
+	    		Map<String, Object> variables = new HashMap<String, Object>();
+	    		variables.put("isPass", completeFlag);
+	    		if(!completeFlag){
+	    			baseProcurementPlanInfo.setTitle(baseProcurementPlanInfo.getUser_name()+" 的采购计划申请失败,需修改后重新提交！");
+	    			procurementPlan.setStatus(BaseVO.APPROVAL_FAILED);
+	    			variables.put("entity", baseProcurementPlanInfo);
+	    		}else{
+	    			procurementPlan.setStatus(BaseVO.PENDING);					//审批中
+	    		}
+	    		// 完成任务，返回当前节点定义
+	    		String taskDefinitionKey = this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+	    		
+	    		ProcessInstance pi = null;
+	    		if(completeFlag){
+	    			//此处需要修改，不能根据人来判断审批是否结束。应该根据流程实例id(processInstanceId)来判定。
+	    			//判断指定ID的实例是否存在，如果结果为空，则代表流程结束，实例已被删除(移到历史库中)
+	    			pi = this.runtimeService.createProcessInstanceQuery().processInstanceId(processInstanceId).singleResult();
+	    			if(BeanUtils.isBlank(pi)){
+	    				procurementPlan.setStatus(BaseVO.APPROVAL_SUCCESS);
+	    			}
+	    		}
+	    		
+	    		this.processBaseService.update(procurementPlan);
+	    		
+	    		if(BaseVO.APPROVAL_SUCCESS.equals(procurementPlan.getStatus())){//审批完成，需更新状态为2(采购计划待发布采购)
+	    			ProcurementPlan oi = new ProcurementPlan();
+	    			oi.setSerialNum(procurementPlan.getSerialNum());
+	    			oi.setStatus("2");
+	    			this.procurementPlanService.updateProcurementPlan(oi);
+	    		}
+	    		procurementPlan.setProcessInstanceId(processInstanceId);
+	    		//发送消息
+	    		if(completeFlag){//发送消息给采购计划制单人
+				
+	    		}
+	    		result = "任务办理完成！";
+			} catch (ActivitiObjectNotFoundException e) {
+				result = "此任务不存在，请联系管理员！";
+				throw e;
+			} catch (ActivitiException e) {
+				result = "此任务正在协办，您不能办理此任务！";
+				throw e;
+			} catch (Exception e) {
+				result = "任务办理失败，请联系管理员！";
+				throw e;
+			}
+			return result;
+	    }
+		
+	    
+	    /**
+		 * 调整订单申请
+		 * @param vacation
+		 * @param taskId
+		 * @param processInstanceId
+		 * @param reApply
+		 * @param session
+		 * @return
+		 * @throws Exception
+		 */
+//		@RequiresPermissions("user:vacation:modify")
+		@RequestMapping(value = "/modifyProcurementPlan/{taskId}", method = RequestMethod.POST, produces = "application/text;charset=UTF-8")
+		@ResponseBody
+		public String modifyProcurementPlan(
+				@PathVariable("taskId") String taskId,
+				@RequestParam("processInstanceId") String processInstanceId,
+				@RequestParam("reApply") Boolean reApply,
+				@RequestParam("procurementPlanId") String procurementPlanId,
+				@RequestParam("reason") String reason,
+				@RequestParam("orderType") String orderType) throws Exception{
+			String result = "";
+			User user = UserUtil.getUserFromSession();
+			ProcurementPlan procurementPlan = new ProcurementPlan();
+			procurementPlan.setSerialNum(procurementPlanId);
+	        Map<String, Object> variables = new HashMap<String, Object>();
+	        procurementPlan.setUserId(user.getUserId());
+	        procurementPlan.setUser_name(user.getUserName());
+	        procurementPlan.setApplyDate(new Date());
+	        procurementPlan.setBusinessKey(procurementPlanId);
+	        procurementPlan.setProcessInstanceId(processInstanceId);
+	        String content = "";
+	        if(reApply){
+	        	//修改订单申请
+	        	procurementPlan.setTitle(user.getUserName()+" 的采购计划申请！");
+	        	procurementPlan.setStatus(BaseVO.PENDING);
+		        content = "重新申请";
+		        result = "任务办理完成，采购计划申请已重新提交！";
+		        
+		      
+	        }else{
+	        	procurementPlan.setTitle(user.getUserName()+" 的采购计划申请已取消！");
+	        	procurementPlan.setStatus(BaseVO.APPROVAL_FAILED);
+	        	content = "取消申请";
+	        	result = "任务办理完成，已经取消您的采购计划申请！";
+	        }
+	        try {
+	    		this.processBaseService.update(procurementPlan);
+				variables.put("entity", procurementPlan);
+				variables.put("reApply", reApply);
+				this.processService.complete(taskId, content, user.getUserId().toString(), variables);
+				
+				//发送消息
+				if(reApply){
+				        //申请消息
+					procurementPlan = procurementPlanService.selectById(procurementPlan.getSerialNum());
+					   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_BUY_ORDER));
+				}else{
+					cancelApply(procurementPlan.getSerialNum(),taskId);
+				}
+			} catch (ActivitiObjectNotFoundException e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("此任务不存在，请联系管理员！");
+				result = "此任务不存在，请联系管理员！";
+				throw e;
+			} catch (ActivitiException e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("此任务正在协办，您不能办理此任务！");
+				result = "此任务正在协办，您不能办理此任务！";
+				throw e;
+			} catch (Exception e) {
+//				message.setStatus(Boolean.FALSE);
+//				message.setMessage("任务办理失败，请联系管理员！");
+				result = "任务办理失败，请联系管理员！";
+				throw e;
+			}
+			
+	    	return result;
+	    }
+
+		/**
+		 * 
+		 * @Description (取消申请)
+		 * @param serialNum
+		 */
+		private void cancelApply(String serialNum,String taskId) {
+			this.processBaseService.delete(serialNum);//取消申请删除审批记录，才开重新审批
+			//更新已办tab里面的deleteReason 更新为'取消申请'
+			HistoricTaskVO historicTaskVO = new HistoricTaskVO();
+			historicTaskVO.setTaskId(taskId);
+			historicTaskVO.setDeleteReason(StaticConst.getInfo("quxiaoApply"));//'取消申请'		
+			processBaseService.updateHistoricTask(historicTaskVO);
+			ProcurementPlan m = new ProcurementPlan();
+			m.setStatus("0");//取消申请采购计划回到审批前状态
+			m.setSerialNum(serialNum);
+			m.setUpdateTime(new Date());
+			Subject currentUser = SecurityUtils.getSubject();
+			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+			m.setUpdater(currenLoginName);
+			procurementPlanService.updateProcurementPlan(m);
+			
+		}
+		
 }

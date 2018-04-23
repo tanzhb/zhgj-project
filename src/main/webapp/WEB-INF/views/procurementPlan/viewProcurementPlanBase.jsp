@@ -124,6 +124,7 @@ margin-right: 20px;
                                  <p class="form-control-static" ng-if="procurementPlan.status==undefined||procurementPlan.status==0"    > 未完成</p>
                                  	<!-- <p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p> -->
                                  	<p class="form-control-static" ng-if="procurementPlan.status==1"    > 已完成</p>
+                                 	<p class="form-control-static" ng-if="procurementPlan.status==2"    >待采购 </p>
                                  	<!-- <p class="form-control-static" ng-if="procurementPlan.endCount==undefined"    > 未完成</p>
                                  	<p class="form-control-static" ng-if="procurementPlan.endCount!=undefined&&procurementPlan.endCount!=procurementPlan.buyCount"    > 部分完成</p>
                                  	<p class="form-control-static" ng-if="procurementPlan.endCount==procurementPlan.buyCount&&procurementPlan.endCount!=undefined"    > 已完成</p> -->
@@ -299,6 +300,7 @@ margin-right: 20px;
 								<th>供应商</th>
 								<th>交付日期</th>
 								<th>交付地址</th>
+								<th>备注</th>
 								<th>状态</th>
                                  </tr>
                              </thead>
@@ -338,8 +340,12 @@ margin-right: 20px;
 		                          <td>  
                                      		<p class="form-control-static" > {{_procurementPlanMateriel.deliveryAddress}} </p>
 		                          </td>
+		                           <td>  
+                                     		<p class="form-control-static" > {{_procurementPlanMateriel.remark}} </p>
+		                          </td>
                                      <td>  
-                                     		<p class="form-control-static" >  </p>
+                                     		<p class="form-control-static"   style="color:red"  ng-if="_procurementPlanMateriel.status==0||_procurementPlanMateriel.status==null"> 待发布 </p>
+                                     		<p class="form-control-static"   style="color:green"  ng-if="_procurementPlanMateriel.status==1"> 已发布 </p>
 		                          </td>
                                  </tr>
                                  <tr>
@@ -351,6 +357,7 @@ margin-right: 20px;
 								<th></th>
 								<th>{{totalMaterielPlanCountForView()}}</th>
 								<th>{{totalMaterielCount()}}</th>
+								<th></th>
 								<th></th>
 								<th></th>
 								<th></th>

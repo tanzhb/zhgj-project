@@ -357,6 +357,7 @@ public class PurchaseForecastController {
 		newProcurementPlan.setBuyDate(new Date());
 		newProcurementPlan.setMaker(currenLoginName);
 		newProcurementPlan.setStatus("0");//待发布采购
+		newProcurementPlan.setIsFromForcast("1");//1 来自采购预测
 		
 			for(String id:idList){
 				DemandMateriel dm=new DemandMateriel();

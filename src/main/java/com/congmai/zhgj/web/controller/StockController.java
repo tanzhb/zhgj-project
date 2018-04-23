@@ -171,17 +171,21 @@ public class StockController {
 			stock.setOnRoadAmount("0");
 			stock.setCanSaleAmount("0");
 			stock.setStatus("0");
-			if(StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+			if(StringUtil.isNotEmpty(stock.getLastInDateZijian())&&StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
 				long a=0;
 				try {
-					a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getFirstInDateZijian()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateZijian()));
+					a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastInDateZijian()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateZijian()));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				stock.setLastUpdateDate(a<0?stock.getFirstInDateZijian():stock.getLastOutDateZijian());
+				stock.setLastUpdateDate(a<0?stock.getLastInDateZijian():stock.getLastOutDateZijian());
+			}else if(StringUtil.isEmpty(stock.getLastInDateZijian())&&StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+				stock.setLastUpdateDate(stock.getLastOutDateZijian());
+			}else if(StringUtil.isNotEmpty(stock.getLastInDateZijian())&&StringUtil.isEmpty(stock.getLastOutDateZijian())){
+				stock.setLastUpdateDate(stock.getLastInDateZijian());
 			}else{
-				stock.setLastUpdateDate(stock.getFirstInDateZijian());
+				stock.setLastUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(stock.getCreateTime()));
 			}
 		}
 		}
@@ -313,7 +317,7 @@ public class StockController {
 						stock.setStatus(StaticConst.getInfo("zhengchang"));
 					}
 					stock.setRiskGrade("");
-					if(StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+					if(StringUtil.isNotEmpty(stock.getLastInDateZijian())&&StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
 						long a=0;
 						try {
 							a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastInDateZijian()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateZijian()));
@@ -321,17 +325,13 @@ public class StockController {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						stock.setLastUpdateDate(a<0?(stock.getLastInDateZijian().substring(0, 16)):(stock.getLastOutDateZijian()==null?"":stock.getLastOutDateZijian().substring(0, 16)));
+						stock.setLastUpdateDate(a<0?stock.getLastInDateZijian():stock.getLastOutDateZijian());
+					}else if(StringUtil.isEmpty(stock.getLastInDateZijian())&&StringUtil.isNotEmpty(stock.getLastOutDateZijian())){
+						stock.setLastUpdateDate(stock.getLastOutDateZijian());
+					}else if(StringUtil.isNotEmpty(stock.getLastInDateZijian())&&StringUtil.isEmpty(stock.getLastOutDateZijian())){
+						stock.setLastUpdateDate(stock.getLastInDateZijian());
 					}else{
-						stock.setLastUpdateDate(stock.getLastInDateZijian()==null?"":stock.getLastInDateZijian().substring(0, 16));
-					}
-					if(stock.getFirstInDateZijian()!=null){
-						try {
-							stock.setFirstInDateZijian(DateUtil.daysBetween(new SimpleDateFormat("yyyy-MM-dd").parse(stock.getFirstInDateZijian()), new Date())+"");
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						stock.setLastUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(stock.getCreateTime()));
 					}
 					
 				}

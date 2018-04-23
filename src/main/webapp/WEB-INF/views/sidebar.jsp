@@ -130,6 +130,13 @@
                     </a>
                 </li>
                 </shiro:hasPermission>
+                 <shiro:hasPermission name="zhgj:saleForecast:*">
+                <li>
+                    <a ui-sref="saleForecast">
+                        销售预测</span>
+                    </a>
+                </li>
+                </shiro:hasPermission>
                 <shiro:hasPermission name="zhgj:supplyOrder:*">
                 <li>
                     <a ui-sref="supplyOrder">

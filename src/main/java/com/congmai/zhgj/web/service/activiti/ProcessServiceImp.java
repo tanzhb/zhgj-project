@@ -70,6 +70,7 @@ import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.PriceList;
+import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Vacation;
 import com.congmai.zhgj.web.service.DeliveryService;
@@ -888,7 +889,7 @@ public class ProcessServiceImp implements IProcessService{
 		return taskList;
 	
 	}
-
+//发货计划
 	@Override
 	public String startDeliveryPlanProcess(DeliveryVO deliveryVO) {
 		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
@@ -913,5 +914,27 @@ public class ProcessServiceImp implements IProcessService{
         //最后要设置null，就是这么做，还没研究为什么
         this.identityService.setAuthenticatedUserId(null);
         return processInstanceId;
+	}
+	//采购计划
+	@Override
+	@OperationLog(operateType = "app" ,operationDesc = "申请" ,objectSerial= "{serialNum}")
+	public String startProcurementPlanInfo( ProcurementPlan procurementPlan ) {
+
+		// 用来设置启动流程的人员ID，引擎会自动把用户ID保存到activiti:initiator中
+        identityService.setAuthenticatedUserId(procurementPlan.getUserId().toString());
+        Map<String, Object> variables = new HashMap<String, Object>();
+        variables.put("entity", procurementPlan);
+
+        String businessKey = procurementPlan.getBusinessKey();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(Constants.PROCUREMENTPLAN, businessKey, variables);
+		String processInstanceId = processInstance.getId();
+		procurementPlan.setProcessInstanceId(processInstanceId);
+        this.processBaseService.update(procurementPlan);
+
+        logger.info("processInstanceId: "+processInstanceId);
+        //最后要设置null，就是这么做，还没研究为什么
+        this.identityService.setAuthenticatedUserId(null);
+        return processInstanceId;
+	
 	}
 }

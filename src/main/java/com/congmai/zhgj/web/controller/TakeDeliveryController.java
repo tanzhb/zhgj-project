@@ -171,7 +171,7 @@ public class TakeDeliveryController {
      * @return
      */
     @RequestMapping(value="takeDeliveryList")
-    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status,String noInit) {
+    public ResponseEntity<Map<String,Object>> takeDeliveryList(Map<String, Object> map,HttpServletRequest request,@RequestBody String params,Delivery takeDelivery,String status,String noInit,String type) {
     	//远程分页代码
     	/*try {
     		params = URLDecoder.decode(params, "UTF-8");
@@ -213,12 +213,16 @@ public class TakeDeliveryController {
 		/*if(){
 			
 		}*/
-//		takeDelivery.setBuyComId(comId);
-		if(StringUtil.isEmpty(comId)){
+		takeDelivery.setBuyComId(comId);
+		if("buy".equals(type)){
+			takeDelivery.setSupplyComId(comId);
+			takeDelivery.setBuyComId(null);
+		}
+		/*if(StringUtil.isEmpty(comId)){
 			takeDelivery.setBuyComId(comId);
 		}else{
 			takeDelivery.setSupplyComId(comId);
-		}
+		}*/
 		
 	/*	if("1buy".equals(noInit)){
 			takeDelivery.setBuyComId(null);

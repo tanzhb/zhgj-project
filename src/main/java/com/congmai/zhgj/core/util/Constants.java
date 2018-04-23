@@ -96,7 +96,8 @@ public class Constants {
 	/***************** 售后无合同发货流程key *****************/
 	public static final String AFTERWITHOUTCONTRACTDELIVERY= "com.congmai.zhgj.afterWithoutContractDelivery";
 	
-	
+	/***************** 采购计划流程key *****************/
+	public static final String PROCUREMENTPLAN = "com.congmai.zhgj.buyApply";
 	
 	
 	/******************************=======用户组类型START=====**********************************/

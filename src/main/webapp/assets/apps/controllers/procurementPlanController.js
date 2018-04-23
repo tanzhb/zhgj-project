@@ -271,7 +271,82 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     $scope.viewGraphTrace = function(processInstanceId){
     	graphTrace(processInstanceId,ctx);
     }
-    
+    //流程相关方法start
+    function doProcurementPlan(_url, mydata, modal){
+    	handle.blockUI("请稍等..................");
+    	$.ajax( {
+	        url : _url,
+	        dataType:"text",
+	        type: 'POST',
+	        data : mydata,
+	        success : function(data) {
+	        	handle.unblockUI();
+	        	showToastr('toast-bottom-right', 'success', data);
+	        	$scope.cancelPage();
+	        	
+	        },
+	        error : function(data) {
+	        	handle.unblockUI();
+	        	toastr.error('连接服务器出错,请登录重试！');
+	        }
+	     });
+	}
+    $scope.cancelPage  = function() {// 取消提交申请
+    	$state.go("procurementPlan");
+    };
+    $scope.confirmProcurementPlanApply  = function() {// 进入提交采购计划申请
+    	$scope.submitOrder = {}
+    	$scope.submitOrder.serialNum = $scope.procurementPlan.serialNum;
+//    	$scope.submitOrder.remark = $scope.procurementPlan.reason;
+//    	$scope.submitOrder.procurementPlanNum = $scope.procurementPlan.procurementPlanNum;
+    	//启动流程
+    	procurementPlanService.startProcurementPlanProcess($scope.submitOrder).then(
+      		     function(data){
+      		    	if(data == "1"){
+        				toastr.success("提交申请成功！");
+        				$scope.cancelPage();
+        			}else{
+        				toastr.error("提交申请失败！");
+		            	console.log(data);
+        			}
+      		     },
+      		     function(error){
+      		         $scope.error = error;
+      		         toastr.error('数据保存出错！');
+      		     }
+      		 );
+		
+    };
+  //审批通过
+	$scope.procurementPlanPass = function() {
+	    var mydata={"processInstanceId":$("#processInstanceId").val(),"procurementPlanId":$scope.procurementPlan.serialNum,"content":$("#content").val(),
+				"completeFlag":true};
+	    var _url = ctx + "rest/procurementPlan/complate/" + $("#taskId").val();
+	    doProcurementPlan(_url, mydata, 'audit');
+	};
+	//审批不通过
+	$scope.procurementPlanUnPass = function() {
+		var mydata={"processInstanceId":$("#processInstanceId").val(),"procurementPlanId":$scope.procurementPlan.serialNum,"content":$("#content").val(),
+				"completeFlag":false};
+		var _url = ctx + "rest/procurementPlan/complate/" + $("#taskId").val();
+		doProcurementPlan(_url, mydata, 'audit');
+	};
+	
+	//重新申请
+	$scope.replyProcurementPlan= function() {
+	    var mydata={"processInstanceId":$("#processInstanceId").val(),
+				"reApply":true,"procurementPlanId":$scope.procurementPlan.serialNum,"reason":$scope.buyOrder.remark};
+		var _url = ctx + "rest/procurementPlan/modifyProcurementPlan/" + $("#taskId").val();
+		doProcurementPlan(_url, mydata, 'modify');
+	};
+	//取消申请
+	$scope.cancelApply = function() {
+	     var mydata={"processInstanceId":$("#processInstanceId").val(),
+				"reApply":false,"procurementPlanId":$scope.procurementPlan.serialNum,"reason":$scope.buyOrder.remark};
+		var _url = ctx + "rest/procurementPlan/modifyProcurementPlan/" + $("#taskId").val();
+		doProcurementPlan(_url, mydata, 'modify' );
+	};
+	//流程相关方法end
     var table;
     var tableAjaxUrl = "rest/procurementPlan/findProcurementPlanList?type=buy";
     var loadMainTable = function() {
@@ -400,10 +475,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, full, meta) {
-								if(data==1){
-									return '<span style="color:green">已完成</span>'
+								if(data==2){
+									return '<span style="color:yellow">待采购</span>'
+								}else if(data==0){
+									return '<span style="color:red">待申请</span>'
 								}else{
-									return '<span style="color:red">待采购</span>'
+									return '<span style="color:green">已完成</span>'
 								}
 							}
 						},{
@@ -411,10 +488,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 							'className' : 'dt-body-center',
 							'render' : function(data,
 									type, row, meta) {
-								if(data==1){
-									return ''
+								if(data==2){
+									return '<a href="javascript:void(0);" ng-click="viewProcurementPlan(\''+row.serialNum+'\')">发布采购</a>';
 								}else{
-									return '<a href="javascript:void(0);" ng-click="viewProcurementPlan(\''+row.serialNum+'\')">发布采购</a><br/>'
+									return '';
 								}
 							},
 							"createdCell": function (td, cellData, rowData, row, col) {
@@ -779,7 +856,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
           		    	if(isNull($scope.procurementPlan.endCount)){
           		    		$scope.procurementPlan.endCount=0;
           		    	}
-          		    	if($state.current.name=="viewProcurementPlan"){//查看页面构造物料查询分页
+          		    	if($state.current.name=="viewProcurementPlan"||$state.current.name=="approvalProcurementPlanApply"||$state.current.name=="submitProcurementPlanApply"){//查看页面构造物料查询分页
           		    		$scope.cancelAllProcurementPlanMateriel();
           		    		$scope.queryForPage();//采购清单物料构造分页
           		    		$scope.queryForPage1();//需求物料构造分页
@@ -868,8 +945,11 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
    														row.serialNum)
    												.html()
    										+ '">';*/
+     									$scope["supplyMateriels"+row.serialNum]=eval(row.supplyMateriels);
+     									$scope["stockCount"+row.serialNum]=row.stockCount==null?"0":row.stockCount;
+     									console.log($scope["stockCount"+row.serialNum]);
      	  								return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-     									"<input type='checkbox' class='checkboxes' data-checked=false  id='"+ row.serialNum +"' ng-click='getCheckedIds(\""+data+"\","+meta.row+")' name='material_serial' value="+ row.isBOM +" />" +
+     									"<input type='checkbox' class='checkboxes' name='material_serial' data-checked=false  id='"+ row.serialNum +"'   ng-click='getCheckedIds(\""+data+"\","+meta.row+")'     value="+ row.isBOM +" />" +
      									"<span></span></label>";
 
      								}
@@ -947,7 +1027,17 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
       			}
       			
       		}
-      		
+      		$scope.setComName=function(obj,attr){
+      			var  supplyComId=obj[attr];
+      			for(var i in obj.supplyMateriels){
+      				if(obj.supplyMateriels[i].supply.comId=supplyComId){
+      					obj.supplyName=obj.supplyMateriels[i].supply.comName;
+      					return;
+      				}
+      				
+      			}
+      			
+      		}
               /**
   	    	 * 更换供应物料流水号
   	    	 */
@@ -968,7 +1058,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
       		 */
       		function checkedIdHandler(){
       			//获取选中物料ID
-      			table.$('input[name="material_serial"]').each(function() { //遍历当前页的物料信息
+      			table.$('input').each(function() { //遍历当前页的物料信息
       					if ($.contains(document, this)) {
       						if (this.checked) {
       							if($scope.serialNums.length>0){
@@ -1095,6 +1185,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 										param.specifications=$scope.demandMateriel[this.name].specifications==undefined?$scope.demandMateriel[this.name].materiel.specifications:$scope.demandMateriel[this.name].specifications;
 										param.unit=$scope.demandMateriel[this.name].unit==undefined?($scope.demandMateriel[this.name].materiel==null?null:$scope.demandMateriel[this.name].materiel.unit):$scope.demandMateriel[this.name].unit;
 										param.sets=$scope.demandMateriel[this.name].planCount;//设置台套
+										param.supplyMateriels=$scope["supplyMateriels"+this.id]==undefined?$scope.demandMateriel[this.name].supplyMateriels:$scope["supplyMateriels"+this.id];
+										param.stockCount=$scope["stockCount"+this.id]==undefined?$scope.demandMateriel[this.name].stockCount:$scope["stockCount"+this.id];
 										param.deliveryDate=$scope.demandMateriel[this.name].deliveryDate;
 										param.deliveryAddress=$scope.demandMateriel[this.name].deliveryAddress;
 										param.buyCount=$scope.demandMateriel[this.name].planCount;//设置初始采购数量
@@ -1208,7 +1300,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
     		});
 			return;
 		}
-        $scope.releaseProcurementPlanMateriel=function(){//选中采购清单物料分解
+        $scope.releaseProcurementPlanMateriel=function(){   //选中采购清单物料分解
         	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
    	    		toastr.error('请先保存采购计划信息！');return
     		}
@@ -1234,12 +1326,11 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								} else{
 									indexs = indexs + ','
 									+ this.id;
-								}
-							
 									
 							}
 						}
-					});
+					}
+				});
         	var indexArray=indexs.split(",");
         	$scope.choosedProcurementPlanMateriel=[];
         	for(var i=0;i<indexArray.length;i++){
@@ -1281,6 +1372,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         			if($scope.materielSelectedIndex != undefined){
         				$scope.procurementPlanMateriel[$scope.materielSelectedIndex].materielSerial = data.data[0].serialNum;
         				$scope.procurementPlanMateriel[$scope.materielSelectedIndex].materiel = data.data[0];
+//        				$scope.procurementPlanMateriel[$scope.materielSelectedIndex]
         			}
         			$("#basicMaterielInfo").modal("hide");
         		},function(data){
@@ -1299,7 +1391,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			}
         		var ids = '';
 				// Iterate over all checkboxes in the table
-				table.$('input[type="checkbox"]').each(
+				table.$('input[type="checkbox"][name="material_serial"]:checked').each(
 						function() {
 							// If checkbox exist in DOM
 							if ($.contains(document, this)) {
@@ -1312,6 +1404,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 										ids = ids + ','
 												+ this.id;
 									$scope["isBOM"+this.id]=this.value;
+//									$scope["supplyMateriels"+this.id]=this.name;//附上供应商物料
 									
 								}
 							}
@@ -1339,6 +1432,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.procurementPlanSerial = $scope.procurementPlan.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
+        					$scope.tempMateriel.supplyMateriels=$scope["supplyMateriels"+(data.data)[i].serialNum];//为需求物料附上供应商
         					$scope.demandMateriel.push($scope.tempMateriel);
         					$scope["procurementPlanMaterielInput"+i] = false;
         					$scope["procurementPlanMaterielShow"+i] = false;
@@ -1349,6 +1443,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
         					$scope.tempMateriel.materiel = (data.data)[i];
         					$scope.tempMateriel.procurementPlanSerial = $scope.procurementPlan.serialNum;
         					$scope.tempMateriel.materielSerial = (data.data)[i].serialNum;
+        					$scope.tempMateriel.supplyMateriels=$scope["supplyMateriels"+(data.data)[i].serialNum];//为需求物料附上供应商
         					$scope.demandMateriel.push($scope.tempMateriel);
 	        				$scope["procurementPlanMaterielInput"+(length+i)] = false;
 							$scope["procurementPlanMaterielShow"+(length+i)] = false;
@@ -1423,16 +1518,15 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
  	   	    	if($scope.procurementPlan.serialNum==null||$scope.procurementPlan.serialNum=='') {// 订单信息为空的处理
  	   	    		toastr.error('请先保存采购计划信息！');return
  	    		}
- 	   	    	for(var i=0;i<$scope.demandMateriel.length;i++){
+ 	   	    for(var i=0;i<$scope.demandMateriel.length;i++){
  	   	    	if(isNull($scope.demandMateriel[i].planCount)||$scope.demandMateriel[i].planCount==undefined){
 					toastr.warning('请先填写需求数量！');return
 				}
  	   	    	$scope.demandMateriel[i].procurementPlanSerial=$scope.procurementPlan.serialNum;
- 	   	    	}
+ 	   	    }
  	   	    	procurementPlanService.saveAllDemandMateriel($scope.demandMateriel).then(
  	   	       		     function(data){
  	   	       		    	toastr.success('数据保存成功！');
- 	   	       		    	$scope.demandMateriel=data.data.demandMateriel;
  	   	       			$scope.demandMateriel=data.data.demandMateriel;
  	   	       		$scope.procurementPlan.buyCount=data.data.totalDemandCount;
  	   	       		    	$scope.cancelAllDemandMateriel();
@@ -1974,19 +2068,19 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		     //********审批流程start****************//
 		       $scope.submitBuyApply  = function(serialNum) {// 进入申请审批页面
 		    	   if(!isNull(serialNum)){//列表操作栏按钮进入审批申请
-		    			$state.go('submitBuyApply',{serialNum:serialNum});
+		    			$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
 		    		}else if(!isNull($scope.procurementPlan)&&!isNull($scope.procurementPlan.serialNum)){//详情页面进入审批
 		    			var processBase = $scope.procurementPlan.processBase;
 		    			if(processBase != null){
-		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}else $state.go('submitBuyApply',{serialNum:$scope.procurementPlan.serialNum});
+		    				showToastr('toast-top-center', 'warning', '该采购计划已发起流程审批，不能再次申请！')
+		    			}else $state.go('submitProcurementPlanApply',{newSerialNum:$scope.procurementPlan.serialNum});
 		    		}else if(table.rows('.active').data().length != 1){//列表选择进入审批申请
 		    			showToastr('toast-top-center', 'warning', '请选择一条任务进行流程申请！')
 		    		}else{
 		    			var processBase = table.row('.active').data().processBase;
 		    			if(processBase != null){
-		    				showToastr('toast-top-center', 'warning', '该订单已发起流程审批，不能再次申请！')
-		    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
+		    				showToastr('toast-top-center', 'warning', '该采购计划已发起流程审批，不能再次申请！')
+		    			}else $state.go('submitProcurementPlanApply',{newSerialNum:table.row('.active').data().serialNum});
 		    		}     	
 		        };
 		        

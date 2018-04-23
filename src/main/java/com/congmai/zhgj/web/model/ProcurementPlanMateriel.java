@@ -70,12 +70,30 @@ public class ProcurementPlanMateriel {
     
     private String status;  //(0 待采购 1已采购)
     
+    private String stockCount;
     
+    private String daysBeforeDelivery;//供应商/贸易商距交付
     
     
     
 
-    public String getStatus() {
+    public String getDaysBeforeDelivery() {
+		return daysBeforeDelivery;
+	}
+
+	public void setDaysBeforeDelivery(String daysBeforeDelivery) {
+		this.daysBeforeDelivery = daysBeforeDelivery;
+	}
+
+	public String getStockCount() {
+		return stockCount;
+	}
+
+	public void setStockCount(String stockCount) {
+		this.stockCount = stockCount;
+	}
+
+	public String getStatus() {
 		return status;
 	}
 

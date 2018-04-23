@@ -176,6 +176,12 @@
     delFlg, creator, createTime, updater, updateTime, remark, materielName, specifications, 
     unit, type, category1, category2, category3, unitPriceGuide, purchaseQuota, moq
   </sql>
+  <sql id="Base_Column_List1" >
+    s.serialNum serialNum, s.materielId materielId<!-- , supplyComId, supplyMaterielNum, packageNum, packageSpecifications, 
+    packageUnit, packagewidth, packageheight, packagelength, packagevolume, packageUnitConversion, 
+    delFlg, creator, createTime, updater, updateTime, remark, materielName, specifications, 
+    unit, type, category1, category2, category3, unitPriceGuide, purchaseQuota, moq -->
+  </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.SupplyMaterielExample" >
     select
     <if test="distinct" >
@@ -199,6 +205,15 @@
     where 
     materielId = #{materielId,jdbcType=VARCHAR}
     and delFlg = '0'
+  </select>
+  <select id="selectSupplyMaterielByMaterielSerial" resultMap="SupplyMaterielMap" parameterType="java.lang.String" >
+    select
+    s.*
+    from supplyMateriel s
+    left join materiel m on m.materielId=s.materielId
+    where 
+    m.serialNum = #{serialNum,jdbcType=VARCHAR}
+    and s.delFlg = '0'
   </select>
   
   <select id="selectSupplyMaterielByMaterielId4materielList" resultMap="SupplyMaterielMap4materielList" parameterType="java.lang.String" >

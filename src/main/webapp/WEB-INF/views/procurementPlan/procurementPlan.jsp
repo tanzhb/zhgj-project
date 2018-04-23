@@ -5,37 +5,39 @@
 <!-- END PAGE HEADER-->
 <!-- BEGIN MAIN CONTENT -->
 <div class="tabbable-line">
-    <%-- <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs">
 		<shiro:hasPermission name="zhgj:buyNormalOrder">
 			<li class="active"><a data-target="#tab_15_1" data-toggle="tab">采购计划</a>
 			</li>
 		</shiro:hasPermission>
-	</ul> --%>
+	</ul>
     <div class="tab-content">
     	<!-- 普通订单---START -->
         <div class="tab-pane active" id="tab_15_1">
         
         <div class="portlet-body">
-			<!-- <div class="tabbable-custom "> -->
-<!-- 			<ul class="nav nav-tabs " id="orderTab">
+			<div class="tabbable-custom ">
+			<ul class="nav nav-tabs " id="orderTab">
 				<li class="active"><a href="#apply" data-toggle="tab"
-					ng-click="toApply()"> 订单 </a></li>
+					ng-click="toApply()"> 采购计划</a></li>
 				<li><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
 						待办 <dbQuantity/></a></li>
 				<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
 						已办 <ybQuantity/></a></li>
-			</ul> -->
+			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active" id="apply">
 			        <div class="portlet light">
 			            <div class="portlet-title">
-				            <div class="caption">
+				           <!--  <div class="caption">
 								<i class="fa fa-globe font-green"></i>
 								<span class="caption-subject font-green bold uppercase">采购计划</span>
-							</div>
+							</div> -->
 							<div class="actions">
-								<!-- <label class="btn btn-transparent yellow btn-circle btn-sm"
-										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label> -->
+							<shiro:hasPermission name="procurementPlan:apply">
+								<label class="btn btn-transparent yellow btn-circle btn-sm"
+										ng-click="submitBuyApply()"> <i class="glyphicon glyphicon-play"></i> 申请</label>
+										</shiro:hasPermission>
 								<shiro:hasPermission name="procurementPlan:add">
 									<label class="btn btn-transparent green btn-circle btn-sm"
 										ui-sref="addProcurementPlan"> <i class="fa fa-plus"></i> 添加
@@ -98,10 +100,11 @@
 			                    </tbody>
 			                </table>
 			            </div>
+		
 			        </div>
 				</div>
-				<!-- <div class="tab-pane" id="daiban">
-							BEGIN EXAMPLE TABLE PORTLET
+				<div class="tab-pane" id="daiban">
+							<!-- BEGIN EXAMPLE TABLE PORTLET -->
 							<div class="portlet box ">
 								<div class="portlet-title"></div>
 	
@@ -133,7 +136,7 @@
 	
 	
 							</div>
-							END EXAMPLE TABLE PORTLET
+							<!-- END EXAMPLE TABLE PORTLET -->
 				</div>
 				<div class="tab-pane" id="yiban">
 							<div class="portlet box">
@@ -163,14 +166,15 @@
 	
 	
 							</div>
-							END EXAMPLE TABLE PORTLET
-				</div> -->
+							<!-- END EXAMPLE TABLE PORTLET -->
+				</div>
 			</div>
 		<!-- </div> -->
 </div>
 
  </div>
 <!-- 普通订单---end -->
+ </div>
  </div>
  </div>
  <!-- 删除订单modal 开始 -->
