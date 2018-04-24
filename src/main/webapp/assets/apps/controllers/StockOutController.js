@@ -349,22 +349,23 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 								//$scope.takeDeliveryMateriels=params.deliveryMateriels ;
 							}else{
 								toastr.success("出库成功！");
+								$state.go("delivery");
 								//自动代收货
-								var promise = DeliveryService.goTakeDelivery($scope.record.deliverSerial);
-								promise.then(function(data) {
-									if(data.flag=='0'){
-										$state.go("delivery");
-									}else{
-										toastr.error("确认收货失败！请联系管理员");
-									}
-								
-								}, function(data) {
-									// 调用承诺接口reject();
-									$(".modal-backdrop").remove();
-									handle.unblockUI();
-									toastr.error("发货失败！请联系管理员");
-									console.log(data);
-								});
+//								var promise = DeliveryService.goTakeDelivery($scope.record.deliverSerial);
+//								promise.then(function(data) {
+//									if(data.flag=='0'){
+//										$state.go("delivery");
+//									}else{
+//										toastr.error("确认收货失败！请联系管理员");
+//									}
+//								
+//								}, function(data) {
+//									// 调用承诺接口reject();
+//									$(".modal-backdrop").remove();
+//									handle.unblockUI();
+//									toastr.error("发货失败！请联系管理员");
+//									console.log(data);
+//								});
 								
 							}
 							

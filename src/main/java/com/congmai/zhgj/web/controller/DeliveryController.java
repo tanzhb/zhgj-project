@@ -1795,11 +1795,11 @@ public class DeliveryController {
     			o.setDeliverStatus(OrderInfo.TAKEDELIVER);//已收货
     			o.setUpdater(currenLoginName);
     			orderService.updateStatus(o);
-    		/*TakeDelivery takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
+    		TakeDelivery takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
     		TakeDelivery takeDelivery1=new TakeDelivery();
     		takeDelivery1.setSerialNum(takeDelivery.getSerialNum());
-    		takeDelivery1.setStatus(TakeDelivery.COMPLETE_TAKEDELIVERY);//已收货
-    			takeDeliveryService.updateTakeDelivery(takeDelivery1);*/
+    		takeDelivery1.setStatus(TakeDelivery.COMPLETE);//已收货/已完成
+    			takeDeliveryService.updateTakeDelivery(takeDelivery1);
     		}
     	}catch(Exception e){
     		logger.warn(e.getMessage(), e);

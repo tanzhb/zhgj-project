@@ -2934,6 +2934,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/bootbox/bootbox.min.js',
 				        'assets/apps/service/StockService.js',
 				        'assets/apps/service/orderService.js',
+				        'assets/apps/service/CommonService.js',
 						'assets/apps/controllers/StockController.js'
 	                   	                        ]
 	                    });
@@ -2959,6 +2960,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 	        						 'assets/apps/scripts/pageHandle.js',
 	        						 'assets/apps/service/orderService.js',
+	        						 'assets/apps/service/CommonService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -2985,6 +2987,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
 	        						 'assets/apps/scripts/pageHandle.js',
 	        						 'assets/apps/service/orderService.js',
+	        						 'assets/apps/service/CommonService.js',
 	        				        'assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js',
 	        				        'assets/global/plugins/bootstrap-select/css/bootstrap-select.css'
 	        				        ]
@@ -3010,6 +3013,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 						'assets/global/plugins/bootbox/bootbox.min.js',
 				        'assets/apps/service/StockService.js',
 				        'assets/apps/service/orderService.js',
+				        'assets/apps/service/CommonService.js',
 						'assets/apps/controllers/StockController.js'
 	                   	                        ]
 	                    });
@@ -3035,6 +3039,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 		        						'assets/global/plugins/bootbox/bootbox.min.js',
 		        				        'assets/apps/service/StockService.js',
 		        				        'assets/apps/service/orderService.js',
+		        				        'assets/apps/service/CommonService.js',
 		        						'assets/apps/controllers/StockController.js'
 		        				        ]
 		        			});
@@ -5623,6 +5628,14 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>";
+			   }else if('addOrEditStockForSupply' == toState.name){//新增/修改供应商库存
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>新增供应商库存</a></li>";
+			   }else if('viewStockForSupply' == toState.name){//查看供应商库存
+				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
+			 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>供应商库存详情</a></li>";
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	

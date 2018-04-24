@@ -271,7 +271,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		DeliveryExample d_example = new DeliveryExample();
 		d_example.createCriteria().andSerialNumEqualTo(delivery.getSerialNum());
 		delivery2Mapper.updateByExampleSelective(delivery,d_example);
-		if("10".equals(delivery.getStatus())){//平台通知供应商发货
+		if("11".equals(delivery.getStatus())){//平台通知供应商发货
 		/*	OrderInfo o=new OrderInfo();
 			o.setSerialNum(delivery.getOrderSerial());
 			o.setStatus(OrderInfo.WAIT_SUPPLY_CONFIRMED);

@@ -46,7 +46,19 @@ angular.module('MetronicApp').service('commonService',['$http','$q',function($ht
         });
         return deferred.promise;//返回承诺
 	}
-	
+	/**
+	 * 获取当前登录人信息
+	 */
+	this.getCurrentWarehouse = function (){
+		var deferred = $q.defer();
+		$http.get("rest/company/getCurrentWarehouse")
+		.then(function success(result) {
+            deferred.resolve(result);//请求成功
+        }, function error(err) {
+            deferred.reject(err);//请求失败
+        });
+        return deferred.promise;//返回承诺
+	}
 	/**
 	 * 获取订单编号
 	 */

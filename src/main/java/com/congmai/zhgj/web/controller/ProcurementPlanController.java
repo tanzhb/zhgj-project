@@ -840,7 +840,7 @@ public class ProcurementPlanController {
     		
     		ProcurementPlan updateProcurementPlan = new ProcurementPlan();
     		updateProcurementPlan.setSerialNum(serialNum);
-    		updateProcurementPlan.setStatus("1");
+    		updateProcurementPlan.setStatus("3");//已完成
     		updateProcurementPlan.setBuyDate(new Date());
     		procurementPlanService.update(updateProcurementPlan);
     	}
@@ -1025,16 +1025,7 @@ public class ProcurementPlanController {
 			}
 	    	
 	    }
-	   /**
-	     * 
-	     * @Description 查询物料列表//全部查询，或根据父节点查询
-	     * @param parent(若有值，则查询该分类下的物料)
-	     * @param isLatestVersion(若有值为1，则查询所以已发布的正式物料)
-	     * @param type 销售订单选择物料，筛选有供应商的物料
-	     * @param supplyComId 物料关联供应商
-	     * @param 分页查询参数
-	     * @return
-	     */
+	 
 	    @RequestMapping("/findProcurementPlanMateriel")
 	    @ResponseBody
 	    public ResponseEntity<Map> findProcurementPlanMateriel(HttpServletRequest request) {

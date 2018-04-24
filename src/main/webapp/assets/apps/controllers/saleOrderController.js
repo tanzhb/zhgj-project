@@ -5263,7 +5263,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		 							                            			return "";
 		 							                            		}
 		 							                            	}*/
-		 							                            }, { mData: 'status' ,
+		 							                            }, { mData: 'status'/* ,
 				 					                            	mRender:function(data,row){
 				 							                            		if(data!=""&&data!=null){
 				 							                            			if(data=='8' ||data=='10'){
@@ -5274,7 +5274,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 				 							                            		}else{
 				 							                            			return "";
 				 							                            		}
-				 							                            	}
+				 							                            	}*/
 		 							                            	}
 		 							                            ],
 		 							                            'aoColumnDefs': [ {

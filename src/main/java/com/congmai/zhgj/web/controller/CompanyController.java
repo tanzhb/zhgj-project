@@ -759,6 +759,29 @@ public class CompanyController {
     		
     		return user;
     }
+    /**
+     * @Description (获取当前登录公司仓库信息)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getCurrentWarehouse")
+    @ResponseBody
+    public List<Warehouse> getCurrentWarehouse(HttpServletRequest request) {
+    		User user =	UserUtil.getUserFromSession();
+    		List<String> comIds = null;
+        	String  comId = null;
+        	if(user!=null){
+    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+    		}
+        	if(comIds!=null){
+        		comId =comIds.get(0);
+        	}
+        	WarehouseExample we=new WarehouseExample();
+        	com.congmai.zhgj.web.model.WarehouseExample.Criteria c=we.createCriteria();
+        	c.andDelFlgEqualTo("0").andOwnerEqualTo(comId);
+        	List<Warehouse>warehouseList=warehouseService.selectWarehouseList(we);
+    		return warehouseList;
+    }
     
     /**
      * @Description (获取订单编号)

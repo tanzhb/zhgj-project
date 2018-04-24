@@ -31,6 +31,10 @@
 										class="btn blue  btn-circle  btn-sm">
 										<i class="fa fa-save"></i> 确认发布
 									</button>
+									<button type="button" ng-click="goTakeDelivery()"     ng-if="deliver.status=='8'||deliver.status=='10'"
+								class="btn green  btn-circle  btn-sm">
+								 确认收货
+							</button>
 
 								</div>
 							</div>

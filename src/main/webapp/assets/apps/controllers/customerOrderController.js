@@ -4492,6 +4492,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                                    { mData: 'deliveryTransport.transportType' },
 		                                    { mData: 'takeDelivery.takeDeliverAddress' },
 		                                    { mData: 'takeDelivery.remark' },
+		                                    { mData: 'status' },
 		                                    { mData: 'status' }
 		                              ],
 		                     'aoColumnDefs' : [ {
@@ -4597,7 +4598,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      									}else if(data=="3"){
 		      										return '<span  class="label label-sm label-warning ng-scope">待出库</span>';
 		      									}else if(data=="4"){
-		      										return '<span  class="label label-sm label-success ng-scope">已完成</span>';
+		      										return '<span  class="label label-sm label-success ng-scope">已收货</span>';//已完成
 		      									}else if(data=="0"){
 		      										return '<span  class="label label-sm label-success ng-scope">待提货</span>';
 		      									}else if(data=="5"){
@@ -4608,6 +4609,8 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      										return '<span  class="label label-sm label-success ng-scope">待清关</span>';
 		      									}else if(data=="8"){
 		      										return '<span  class="label label-sm label-success ng-scope">已清关</span>';
+		      									}else if(data=="10"){
+		      										return '<span  class="label label-sm label-success ng-scope">待收货</span>';
 		      									}else if(data=="000"){
 		      										return '<span  class="label label-sm label-danger ng-scope">已失效</span>';
 		      									}else if(isNull(data)){
@@ -4616,6 +4619,19 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		      										return '';
 		      									}
 		      							}
+		      						},{
+		      							'targets' : 13,
+		      							'render' : function(data,
+		      									type, row, meta) {
+		      										if(data!=10){
+		      											return "";
+		      										}else
+		    	  	  								return '<a href="javascript:void(0);" ng-click="viewCustomerDeliveryOrder(\''+row.takeDelivery.serialNum+'\')">收货</a>';
+		    	
+		      							},
+		      							"createdCell": function (td, cellData, rowData, row, col) {
+		      								 $compile(td)($scope);
+		      						       }
 		      						}]
 
 		                  }).on('order.dt',
@@ -4754,7 +4770,25 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 						$scope.deliverView=false;
 			    		
 			    	}
-			    	
+			    	//采购商确认收货
+			    	$scope. goTakeDelivery=function(){
+			    	var promise = deliveryService.goTakeDelivery($scope.deliver.serialNum);//收货
+					promise.then(function(data) {
+						if(data.flag=='0'){
+							toastr.success("确认收货成功");
+							$scope.deliver.status=4;
+						}else{
+							toastr.error("确认收货失败！请联系管理员");
+						}
+					
+					}, function(data) {
+						// 调用承诺接口reject();
+						$(".modal-backdrop").remove();
+						handle.unblockUI();
+						toastr.error("收货失败！请联系管理员");
+						console.log(data);
+					});
+			    	}
 			    	  /**
 			         * 查看收货详情
 			         */

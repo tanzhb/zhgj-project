@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.congmai.zhgj.web.dao.StockSupplyRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.congmai.zhgj.web.model.StockSupplyRecord" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="warehouseSerial" property="warehouseSerial" jdbcType="VARCHAR" />
+    <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="relationNum" property="relationNum" jdbcType="VARCHAR" />
+    <result column="inOutNum" property="inOutNum" jdbcType="VARCHAR" />
+    <result column="stockDate" property="stockDate" jdbcType="TIMESTAMP" />
+    <result column="operator" property="operator" jdbcType="VARCHAR" />
+    <result column="contactNum" property="contactNum" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
+    <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    serialNum, warehouseSerial, materielSerial, relationNum, inOutNum, stockDate, operator, 
+    contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
+    materielCount
+  </sql>
+  <sql id="Base_Column_List1" >
+    ssr.serialNum, ssr.warehouseSerial, ssr.materielSerial, ssr.relationNum, ssr.inOutNum, ssr.stockDate, ssr.operator, 
+    ssr.contactNum, ssr.status, ssr.remark, ssr.delFlg, ssr.creator, ssr.createTime, ssr.updater, ssr.updateTime, ssr.inOutType, 
+    ssr.materielCount
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockSupplyRecordExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from stocksupplyrecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from stocksupplyrecord
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from stocksupplyrecord
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.StockSupplyRecordExample" >
+    delete from stocksupplyrecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.congmai.zhgj.web.model.StockSupplyRecord" >
+    insert into stocksupplyrecord (serialNum, warehouseSerial, materielSerial, 
+      relationNum, inOutNum, stockDate, 
+      operator, contactNum, status, 
+      remark, delFlg, creator, 
+      createTime, updater, updateTime, 
+      inOutType, materielCount)
+    values (#{serialNum,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
+      #{relationNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
+      #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{inOutType,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockSupplyRecord" >
+    insert into stocksupplyrecord
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        serialNum,
+      </if>
+      <if test="warehouseSerial != null" >
+        warehouseSerial,
+      </if>
+      <if test="materielSerial != null" >
+        materielSerial,
+      </if>
+      <if test="relationNum != null" >
+        relationNum,
+      </if>
+      <if test="inOutNum != null" >
+        inOutNum,
+      </if>
+      <if test="stockDate != null" >
+        stockDate,
+      </if>
+      <if test="operator != null" >
+        operator,
+      </if>
+      <if test="contactNum != null" >
+        contactNum,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="delFlg != null" >
+        delFlg,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="createTime != null" >
+        createTime,
+      </if>
+      <if test="updater != null" >
+        updater,
+      </if>
+      <if test="updateTime != null" >
+        updateTime,
+      </if>
+      <if test="inOutType != null" >
+        inOutType,
+      </if>
+      <if test="materielCount != null" >
+        materielCount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="serialNum != null" >
+        #{serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="warehouseSerial != null" >
+        #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="materielSerial != null" >
+        #{materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="relationNum != null" >
+        #{relationNum,jdbcType=VARCHAR},
+      </if>
+      <if test="inOutNum != null" >
+        #{inOutNum,jdbcType=VARCHAR},
+      </if>
+      <if test="stockDate != null" >
+        #{stockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inOutType != null" >
+        #{inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="materielCount != null" >
+        #{materielCount,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.congmai.zhgj.web.model.StockSupplyRecordExample" resultType="java.lang.Integer" >
+    select count(*) from stocksupplyrecord
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update stocksupplyrecord
+    <set >
+      <if test="record.serialNum != null" >
+        serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.warehouseSerial != null" >
+        warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielSerial != null" >
+        materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relationNum != null" >
+        relationNum = #{record.relationNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inOutNum != null" >
+        inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stockDate != null" >
+        stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operator != null" >
+        operator = #{record.operator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contactNum != null" >
+        contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.delFlg != null" >
+        delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creator != null" >
+        creator = #{record.creator,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updater != null" >
+        updater = #{record.updater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.inOutType != null" >
+        inOutType = #{record.inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.materielCount != null" >
+        materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update stocksupplyrecord
+    set serialNum = #{record.serialNum,jdbcType=VARCHAR},
+      warehouseSerial = #{record.warehouseSerial,jdbcType=VARCHAR},
+      materielSerial = #{record.materielSerial,jdbcType=VARCHAR},
+      relationNum = #{record.relationNum,jdbcType=VARCHAR},
+      inOutNum = #{record.inOutNum,jdbcType=VARCHAR},
+      stockDate = #{record.stockDate,jdbcType=TIMESTAMP},
+      operator = #{record.operator,jdbcType=VARCHAR},
+      contactNum = #{record.contactNum,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      delFlg = #{record.delFlg,jdbcType=VARCHAR},
+      creator = #{record.creator,jdbcType=VARCHAR},
+      createTime = #{record.createTime,jdbcType=TIMESTAMP},
+      updater = #{record.updater,jdbcType=VARCHAR},
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+      inOutType = #{record.inOutType,jdbcType=VARCHAR},
+      materielCount = #{record.materielCount,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.StockSupplyRecord" >
+    update stocksupplyrecord
+    <set >
+      <if test="warehouseSerial != null" >
+        warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="materielSerial != null" >
+        materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      </if>
+      <if test="relationNum != null" >
+        relationNum = #{relationNum,jdbcType=VARCHAR},
+      </if>
+      <if test="inOutNum != null" >
+        inOutNum = #{inOutNum,jdbcType=VARCHAR},
+      </if>
+      <if test="stockDate != null" >
+        stockDate = #{stockDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operator != null" >
+        operator = #{operator,jdbcType=VARCHAR},
+      </if>
+      <if test="contactNum != null" >
+        contactNum = #{contactNum,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlg != null" >
+        delFlg = #{delFlg,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        createTime = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updater != null" >
+        updater = #{updater,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null" >
+        updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="inOutType != null" >
+        inOutType = #{inOutType,jdbcType=VARCHAR},
+      </if>
+      <if test="materielCount != null" >
+        materielCount = #{materielCount,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.StockSupplyRecord" >
+    update stocksupplyrecord
+    set warehouseSerial = #{warehouseSerial,jdbcType=VARCHAR},
+      materielSerial = #{materielSerial,jdbcType=VARCHAR},
+      relationNum = #{relationNum,jdbcType=VARCHAR},
+      inOutNum = #{inOutNum,jdbcType=VARCHAR},
+      stockDate = #{stockDate,jdbcType=TIMESTAMP},
+      operator = #{operator,jdbcType=VARCHAR},
+      contactNum = #{contactNum,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      delFlg = #{delFlg,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=VARCHAR},
+      createTime = #{createTime,jdbcType=TIMESTAMP},
+      updater = #{updater,jdbcType=VARCHAR},
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+      inOutType = #{inOutType,jdbcType=VARCHAR},
+      materielCount = #{materielCount,jdbcType=VARCHAR}
+    where serialNum = #{serialNum,jdbcType=VARCHAR}
+  </update>
+  <select id="getStockSupplyRecordBySupplyComId" parameterType="java.lang.String"  resultMap="BaseResultMap">
+  select
+    <include refid="Base_Column_List1" />
+    from stocksupplyrecord ssr
+    left join warehouse w on  w.serialNum=ssr.warehouseSerial and w.owner=#{comId,jdbcType=VARCHAR} 
+    where  ssr.delFlg=0
+  </select>
+  
+</mapper>

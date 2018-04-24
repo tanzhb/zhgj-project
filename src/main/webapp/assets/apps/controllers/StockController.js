@@ -11,11 +11,13 @@ angular
 						'$http',
 						'$location',
 						'$stateParams',
+						'$filter',
 						'settings',
 						'orderService',
+						'commonService',
 						'StockService',
-						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,settings,
-								orderService,StockService) {
+						function($rootScope, $scope, $state, $compile,$http,$location,$stateParams,$filter,settings,
+								orderService,commonService,StockService) {
 							$scope
 									.$on(
 											'$viewContentLoaded',
@@ -45,9 +47,13 @@ angular
 												if($stateParams.stockSerialNum.length>7){//供应商库存编辑页面
 													getStockInfoForSupply($stateParams.stockSerialNum);
 												}else {
-													 $rootScope.setNumCode("SV",function(newCode){//
-														 $scope.stock={};
-									    		 			$scope.stock.stockNum= newCode;//自建.代管库存编号
+													 $rootScope.setNumCode("IV",function(newCode){//
+														 $scope.record={};
+									    		 			$scope.record.inOutNum= newCode;//供应商库存编号
+									    		 			$scope.record.stockDate=$filter('date')(new Date(), 'yyyy-MM-dd HH:mm');
+									    		 			$scope.record.inOutType='其它';
+									    		 			getCurrentWarehouse();
+									    		 			getCurrentUserName();
 									    		 		});
 												}
 //												initSuppliers();//初始化物权方选择框
@@ -973,6 +979,49 @@ angular
 									}
 								}								
 							};
+							
+							$scope.saveStockForSupply= function() {
+								if($('#stockForSupplyForm').valid()){//表单验证通过则执行添加功能&&judgeData()
+									 $rootScope.judgeIsExist("stock",$scope.record.inOutNum, $scope.record.serialNum,function(result){
+							    			var 	isExist = result;
+							    		debugger;
+							    		if(isExist){
+							    			 toastr.error('供应商库存编号重复！');
+							    			return;
+							    		}else{
+							    			handle.blockUI();
+											$scope.record.materielSerial=$("#materielSerial").val();
+											$scope.record.materielNum=$("#materielNum").val();
+											$scope.record.materielName=$("#materielName").val();
+											$scope.record.specifications=$("#specifications").val();
+											$scope.record.dateStock=$scope.record.stockDate;
+											delete $scope.record.stockDate
+											StockService
+											.saveStockForSupply($scope.record)
+											.then(
+													function(data) {
+														toastr.success("保存供应商库存数据成功!");
+														handle.unblockUI();
+														// $state.go('warehouse',{},{reload:true});  // 重新加载datatables数据
+														$scope.record = data;
+									        			$scope.stockView = true;
+									        			$scope.stockAdd = true;
+									        			$scope.stockEdit = false;
+									        			$scope.span=true;
+									        			$(".alert-danger").hide();
+													},
+													function(errResponse) {
+														toastr.warning("保存供应商库存失败！");
+														console
+																.error('Error while creating User');
+													}
+											);
+							    		}
+							    		
+							    		});
+								
+								}
+						};	
 							$scope.showStockInfo=function(serialNum){
 								debugger;
 								 $state.go('stockView',{stockSerialNum:serialNum},{reload:true}); 
@@ -1195,7 +1244,54 @@ angular
 						                r.hide()
 						            }
 						        })   							}); 
-							
+							// 页面加载完成后调用，验证输入框
+							$scope.$watch('$viewContentLoaded', function() {  
+								var e = $("#stockForSupplyForm"),
+						        r = $(".alert-danger", e),
+						        i = $(".alert-success", e);
+						        e.validate({
+						            errorElement: "span",
+						            errorClass: "help-block help-block-error",
+						            focusInvalid: !1,
+						            ignore: "",
+						            messages: {
+						            	inOutNum:{required:"入库单号不能为空！"},
+						            	materielNum:{required:"未选择物料！"},
+						            	materielCount:{required:"入库数量不能为空！",digits:"请输入正确的整数!"},
+						            	contactNum:{isPhone:"请输入正确的联系电话！"}
+						            	
+						            },
+						            rules: {
+						            	inOutNum:{required:true},
+						            	materielNum:{required:true},
+						            	materielCount:{required:true,digits:true},
+						            	contactNum:{
+						                	isPhone: !0
+						                }
+						            	
+						            },
+						            invalidHandler: function(e, t) {
+						                i.hide(),
+						                r.show(),
+						                App.scrollTo(r, -200)
+						            },
+						            errorPlacement: function(e, r) {
+						                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+						            },
+						            highlight: function(e) {
+						                $(e).closest(".form-group").addClass("has-error")
+						            },
+						            unhighlight: function(e) {
+						                $(e).closest(".form-group").removeClass("has-error")
+						            },
+						            success: function(e) {
+						                e.closest(".form-group").removeClass("has-error")
+						            },
+						            submitHandler: function(e) {
+						                i.show(),
+						                r.hide()
+						            }
+						        })   							}); 
 							 /**
 							 * 加载物权方下拉框数据
 							 */
@@ -1215,6 +1311,40 @@ angular
 						        		//调用承诺接口reject();
 						        	});
 							}
+							 /**
+							 * 加载当前用户信息
+							 */
+							var getCurrentUserName = function(){
+								var promise = commonService.getCurrentUser();
+								promise.then(function(data){
+									$scope.user = data.data;
+									$scope.record.operator=data.data.userName;
+									
+									
+								},function(data){
+									//调用承诺接口reject();
+								});
+							}
+							 /**
+							 * 加载当前用户仓库(供应商库存仓库)
+							 */
+							var getCurrentWarehouse = function(){
+								var promise = commonService.getCurrentWarehouse();
+								promise.then(function(data){
+									 $scope.warehouseListf=data.data;
+							       		setTimeout(function () {
+							       		  	$("#warehouseSerial").selectpicker({
+							                showSubtext: true
+							            });
+										$('#warehouseSerial').selectpicker('refresh');//刷新插件
+							               }, 100);
+									
+									
+								},function(data){
+									//调用承诺接口reject();
+								});
+							}
+							
 							function count(str,char){//统计逗号出现的次数
 							 var str=str;
 							 var num=(str.split(char)).length-1;

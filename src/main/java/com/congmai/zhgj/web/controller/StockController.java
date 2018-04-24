@@ -47,12 +47,16 @@ import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.model.StockOutBatchExample;
+import com.congmai.zhgj.web.model.StockSupplyRecord;
 import com.congmai.zhgj.web.model.User;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockService;
+import com.congmai.zhgj.web.service.StockSupplyRecordService;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.congmai.zhgj.web.service.WarehouseService;
 
 
 /**
@@ -76,6 +80,10 @@ public class StockController {
     private OrderService  orderService;
     @Resource
     private UserCompanyService  userCompanyService;
+    @Resource
+    private StockSupplyRecordService  stockSupplyRecordService;
+    @Resource
+    private WarehouseService  warehouseService;
     
     /**
      * 库存信息列表展示
@@ -578,4 +586,79 @@ public class StockController {
 		pageMap.put("data", stockOutList);
 		return new ResponseEntity<Map<String, Object>>(pageMap, HttpStatus.OK);
 	}
+		 /**
+		     * 保存库存信息
+		     * 
+		     * @param session
+		     * @return
+		 * @throws ParseException 
+		     * @throws IOException 
+		     * @throws JsonMappingException 
+		     * @throws JsonParseException 
+		     */
+		    @RequestMapping(value = "/saveStockSupplyInfo", method = RequestMethod.POST)
+			public ResponseEntity<StockSupplyRecord> saveStockSupplyInfo(@RequestBody  StockSupplyRecord stockSupplyRecord,UriComponentsBuilder ucBuilder) throws ParseException{//
+		    	Subject currentUser = SecurityUtils.getSubject();
+				String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+				stockSupplyRecord.setStockDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stockSupplyRecord.getDateStock()));
+				Warehouse w=warehouseService.selectOne(stockSupplyRecord.getWarehouseSerial());
+				stockSupplyRecord.setWarehouseName(w.getWarehouseName());
+		    	try{
+		    		if(StringUtils.isEmpty(stockSupplyRecord.getSerialNum())){
+		    			stockSupplyRecord.setSerialNum(ApplicationUtils.random32UUID());
+		    			stockSupplyRecordService.insert(stockSupplyRecord);
+		    		}else{
+		    			stockSupplyRecordService.update(stockSupplyRecord);
+		    		}
+		    		if(stockSupplyRecord!=null){
+			    		Materiel m=materielService.selectById(stockSupplyRecord.getMaterielSerial());
+			    		stockSupplyRecord.setMaterielName(m.getMaterielName());
+			    		stockSupplyRecord.setMaterielNum(m.getMaterielNum());
+			    		stockSupplyRecord.setSpecifications(m.getSpecifications());
+			    		stockSupplyRecord.setWarehouseName((warehouseService.selectOne(stockSupplyRecord.getWarehouseSerial())).getWarehouseName());
+			    }
+		    	}catch(Exception e){
+		    		//20180110 qhzhao System.out.println(e.getMessage());
+		    	}
+		    	
+				return new ResponseEntity<StockSupplyRecord>(stockSupplyRecord, HttpStatus.OK);
+		    }
+//		  获取供应商自己的供应商库存列表/平台端供应商库存列表
+		    @RequestMapping(value = "/getStockSupplyList", method = RequestMethod.GET)//获取库存信息列表
+		    public ResponseEntity<Map> getStockSupplyList(HttpServletRequest request) {
+		    	String comId = null;
+		    	User user = UserUtil.getUserFromSession();
+		    	List<StockSupplyRecord> stockSupplyRecords=new ArrayList<StockSupplyRecord>();
+		    	if(user!=null){
+					comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+				}
+		    	if(StringUtil.isEmpty(comId)){
+		    		stockSupplyRecords=stockSupplyRecordService.selectList();//平台查看供应商库存
+		    		}else{
+		    			stockSupplyRecords=stockService.getStockSupplyRecordBySupplyComId(comId);//供应商查看自己的供应商库存
+		    		}
+				
+				// 封装datatables数据返回到前台
+				Map<String,Object> pageMap = new HashMap<String,Object>();
+				pageMap.put("draw", 1);
+				pageMap.put("recordsTotal", stockSupplyRecords==null?0:stockSupplyRecords.size());
+				pageMap.put("recordsFiltered", stockSupplyRecords==null?0:stockSupplyRecords.size());
+				pageMap.put("data", stockSupplyRecords);
+				return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
+			}
+		   //获取供应商库存内容
+		    @RequestMapping(value = "/viewStockSupply", method = RequestMethod.POST)
+		    public ResponseEntity<Map> viewStockSupply(HttpServletRequest request, @RequestBody String  serialNum) {
+		    	Map<String, Object> map = new HashMap<String, Object>();
+		    	StockSupplyRecord stockSupplyRecord=stockSupplyRecordService.selectById(serialNum);
+		    	if(stockSupplyRecord!=null){
+		    		Materiel m=materielService.selectById(stockSupplyRecord.getMaterielSerial());
+		    		stockSupplyRecord.setMaterielName(m.getMaterielName());
+		    		stockSupplyRecord.setMaterielNum(m.getMaterielNum());
+		    		stockSupplyRecord.setSpecifications(m.getSpecifications());
+		    		stockSupplyRecord.setWarehouseName((warehouseService.selectOne(stockSupplyRecord.getWarehouseSerial())).getWarehouseName());
+					map.put("stockSupplyRecord", stockSupplyRecord);
+		    }
+		    	return new ResponseEntity<Map>(map, HttpStatus.OK);
+}
 }

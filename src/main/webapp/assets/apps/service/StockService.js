@@ -7,7 +7,11 @@ angular.module('MetronicApp').factory('StockService', ['$rootScope', '$http', '$
         delStocks:delStocks,
         selectBySerialNum:selectBySerialNum,
         uploadExcel:uploadExcel,
-        selectDetailBySerialNum:selectDetailBySerialNum
+        selectDetailBySerialNum:selectDetailBySerialNum,
+        saveStockForSupply:saveStockForSupply,
+        selectDetailBySerialNumForSupply:selectDetailBySerialNumForSupply,
+        delStocksForSupply:delStocksForSupply
+        
     };
 
     return factory;
@@ -27,7 +31,35 @@ debugger;
         return deferred.promise;  
           
     };
-    
+    //保存供应商库存
+    function saveStockForSupply(stockSupplyRecord){
+        var deferred = $q.defer();  
+debugger;
+        $http.post($rootScope.basePath + "/rest/stock/saveStockSupplyInfo", stockSupplyRecord).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+        	debugger;
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
+    //删除供应商库存
+    function delStocksForSupply(serialNums){
+        var deferred = $q.defer();  
+
+        $http.post($rootScope.basePath + "/rest/stock/delStocksForSupply", serialNums).success(function (data) {  
+            // 如果连接成功，延时返回给调用者  
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
     //删除库存
     function delStocks(serialNums){
         var deferred = $q.defer();  
@@ -42,7 +74,6 @@ debugger;
         return deferred.promise;  
           
     };
-    
     
     //通过库存serialNum查找库存
     function selectBySerialNum(serialNum){
@@ -84,5 +115,17 @@ debugger;
         return deferred.promise;  
           
     };
-
+  //通过供应商库存serialNum库存详情页面信息
+    function selectDetailBySerialNumForSupply(serialNum){
+        var deferred = $q.defer();  
+        $http.post($rootScope.basePath + "/rest/stock/viewStockSupplyDetail", serialNum).success(function (data) { 
+            // 如果连接成功，延时返回给调用者 
+            deferred.resolve(data);  
+        })  
+            .error(function () {  
+                deferred.reject('连接服务器出错！');  
+            })  
+        return deferred.promise;  
+          
+    };
 }]);

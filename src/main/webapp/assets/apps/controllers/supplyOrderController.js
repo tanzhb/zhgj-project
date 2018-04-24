@@ -4535,7 +4535,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 																		return '完成发货';
 																	}else if(data=='9'){
 																		return '待入库';
-																	}else if(data=='10'){
+																	}else if(data=='11'){
 																		return '待确认';//平台通知供应商发货待确认
 																	}else if(data=="000"){
 								  										return '<span  class="label label-sm label-danger ng-scope">已失效</span>';

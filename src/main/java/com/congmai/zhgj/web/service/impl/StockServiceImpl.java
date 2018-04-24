@@ -20,12 +20,14 @@ import com.congmai.zhgj.web.dao.StockInBatchMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
 import com.congmai.zhgj.web.dao.StockMapper;
 import com.congmai.zhgj.web.dao.StockOutBatchMapper;
+import com.congmai.zhgj.web.dao.StockSupplyRecordMapper;
 import com.congmai.zhgj.web.dao.WarehouseMapper;
 import com.congmai.zhgj.web.dao.WarehousepositionMapper;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.Stock;
 import com.congmai.zhgj.web.model.StockExample;
 import com.congmai.zhgj.web.model.StockOutBatchExample;
+import com.congmai.zhgj.web.model.StockSupplyRecord;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.StockExample.Criteria;
 import com.congmai.zhgj.web.model.StockInBatch;
@@ -58,7 +60,8 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	    private WarehousepositionMapper  warehousepositionMapper;
 	 @Resource
 	    private StockInBatchMapper  stockInBatchMapper;
-	 
+	 @Resource
+	    private StockSupplyRecordMapper  stockSupplyRecordMapper;
 
 	@Override
 	public GenericDao<Stock, String> getDao() {
@@ -316,6 +319,13 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		 c.andStockOutMaterielSerialEqualTo(serialNum);
 		 List<StockOutBatch>list=stockOutBatchMapper.selectByExample(se);
 		return list;
+	}
+
+	@Override
+	public List<StockSupplyRecord> getStockSupplyRecordBySupplyComId(
+			String comId) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.getStockSupplyRecordBySupplyComId(comId);
 	}
    
 	

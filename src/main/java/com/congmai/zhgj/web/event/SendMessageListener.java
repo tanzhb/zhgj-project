@@ -551,6 +551,25 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					List<User> users2 = groupService.selectUserIdsByGroupType(Constants.FULL_DEPARTMENT_LEADER);
 					List<User> users3 = groupService.selectUserIdsByGroupType(Constants.FINANCIAL_LEADER);
 					users.addAll(users1);
+					/*users.addAll(users2);
+					users.addAll(users3);*/
+					for(User u : users){
+						Message messageVO1 = this.createMessage(event,user);
+						messageVO1.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+						messageVO1.setTempleteType(MessageConstants.TEMP_AGREE_SALE_ORDER); //采购计划组
+						messageVO1.setObjectSerial(order.getSerialNum());
+						messageVO1.setReceiverId(u.getUserId().toString());
+						properties.put("paramer_a", u.getUserName());
+						properties.put("paramer_b", maker.getUserName());
+						properties.put("paramer_c", order.getOrderNum());
+						properties.put("paramer_d", MessageConstants.URL_CONFIRM_SALE_ORDER);
+						properties.put("paramer_e", messageVO1.getSerialNum());
+						messageVO1.setProperties(properties);
+						webSocketProcessor.sendMessageToUser(messageVO1);
+						messageService.insert(messageVO1);
+					}
+					//个别用户发送邮件
+					users =new ArrayList<User>();
 					users.addAll(users2);
 					users.addAll(users3);
 					for(User u : users){
@@ -566,6 +585,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						properties.put("paramer_e", messageVO1.getSerialNum());
 						messageVO1.setProperties(properties);
 						webSocketProcessor.sendMessageToUser(messageVO1);
+						mailProcessor.sendMessageToUser(messageVO1);
 						messageService.insert(messageVO1);
 					}
 				}
@@ -2137,7 +2157,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 						users=groupService.selectUserIdsByGroupType(Constants.INTERNATIONALPURCHASE);
 					}
 					users.addAll(users1);
-					users.addAll(users2);
+					users.addAll(users3);
 					
 					for(User u : users){
 						Message messageVO1 = this.createMessage(event,user);
@@ -2156,7 +2176,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					
 					//个别用户发送邮件
 					users =new ArrayList<User>();
-					users.addAll(users3);
+					users.addAll(users2);
 					users.addAll(users4);
 					for(User u : users){
 						Message messageVO1 = this.createMessage(event,user);

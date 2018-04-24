@@ -502,7 +502,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 							if(number==0){//保存代发货
 								$scope.deliver.status=0;
 							}else if(number=="notice"){
-								$scope.deliver.status=10;//通知发货(保存加通知)
+								$scope.deliver.status=11;//通知发货(保存加通知)
 							}else{
 								$scope.deliver.status=1;
 							}

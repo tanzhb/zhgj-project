@@ -2084,6 +2084,28 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		     //********订单物料合计，结算条款end****************//
 		       
 		     //********审批流程start****************//
+		     
+		     function  judgeSupplyCom(serialNum){
+		    	 procurementPlanService.getProcurementPlanInfo(serialNum).then(
+	          		     function(data){//加载页面对象
+	          		    	$scope.procurementPlanMateriel=data.procurementPlanMateriel;
+	          		    	if($scope.procurementPlanMateriel.length==0){
+	          		    		showToastr('toast-top-center', 'warning', '该采购计划无采购清单物料，不能申请！');
+	          		    		return  false;
+	          		    	}
+	          		    	for(var i in $scope.procurementPlanMateriel){
+	          		    		if(isNull($scope.procurementPlanMateriel[i].supplyComId)){
+	          		    			showToastr('toast-top-center', 'warning', '该采购计划存在供应商未选择的采购清单物料，不能申请！');
+		          		    		return  false;
+	          		    		}
+	          		    	}	
+	          		    		return  true;
+	          		     },
+	          		     function(error){
+	          		         $scope.error = error;
+	          		     }
+	          		 );
+		     }
 		       $scope.submitBuyApply  = function(serialNum) {// 进入申请审批页面
 		    	   if(!isNull(serialNum)){//列表操作栏按钮进入审批申请
 		    			$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
@@ -2098,7 +2120,12 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		    			var processBase = table.row('.active').data().processBase;
 		    			if(processBase != null){
 		    				showToastr('toast-top-center', 'warning', '该采购计划已发起流程审批，不能再次申请！')
-		    			}else $state.go('submitProcurementPlanApply',{newSerialNum:table.row('.active').data().serialNum});
+		    			}else {
+		    				var serialNum=table.row('.active').data().serialNum;
+		    				if(judgeSupplyCom(serialNum)){////判断采购清单物料是否都选了供应商
+		    					$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
+		    				}
+		    			}
 		    		}     	
 		        };
 		        
@@ -2385,10 +2412,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	      	}
 	  };
 	  $scope.procurementPlanGenerateBuy  = function() {// 分解订单
-      	if($scope.procurementPlan.status!=0){
+      	/*if($scope.procurementPlan.status!=0){
       		toastr.info('已有对应采购单，不能再次分解！');
       		return;
-      	}
+      	}*/
       	for(var i=0;i<$scope.dispalyProcurementPlanMateriel.length;i++){
       		if(isNull($scope.dispalyProcurementPlanMateriel[i].supplyName)){
       			toastr.info('请为采购物料选供应商!');
