@@ -59,6 +59,8 @@ import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
 import com.congmai.zhgj.web.model.CompanyContact;
+import com.congmai.zhgj.web.model.DeliverFile;
+import com.congmai.zhgj.web.model.DeliverFileExample;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
@@ -81,6 +83,7 @@ import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
 import com.congmai.zhgj.web.model.Warehouseposition;
 import com.congmai.zhgj.web.model.WarehousepositionExample;
+import com.congmai.zhgj.web.service.DeliverFileService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.DeliveryTransportService;
@@ -157,6 +160,11 @@ public class TakeDeliveryController {
 	
 	@Autowired
 	private DeliveryService  deliveryService;
+	
+	@Autowired
+	private DeliverFileService  deliverFileService;
+	
+	
 	@Autowired
 	private StockInOutRecordMapper stockInOutRecordMapper;  
 	@RequestMapping("takeDeliveryManage")
@@ -339,6 +347,17 @@ public class TakeDeliveryController {
     			}
         		delivery.setStockInOutRecord(sr);
         	}
+    	}
+    	
+    	if(delivery.getSerialNum()!=null){
+    		//获取发货附件
+    		DeliverFileExample om =new DeliverFileExample();
+        	com.congmai.zhgj.web.model.DeliverFileExample.Criteria criteria2 =  om.createCriteria();
+        	criteria2.andDeliverSerialEqualTo(delivery.getSerialNum());
+        	criteria2.andDelFlgEqualTo("0");
+        	List<DeliverFile> deliverFile = deliverFileService.selectList(om);
+        	
+        	delivery.setDeliverFile(deliverFile);
     	}
     	
     	return delivery;

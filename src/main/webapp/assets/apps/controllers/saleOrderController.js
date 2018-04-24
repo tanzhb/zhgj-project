@@ -1607,7 +1607,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         /** *************订单物料操作 start*************** */
         
         var selectMateriel = function() {
-        	var thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1&type=sale"
+        	var thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1&type=sale&buyComId="+$scope.saleOrder.buyComId
         	var thisAoColumns = [
                              { mData: 'serialNum' },
                              { mData: 'materielNum' },
@@ -1685,7 +1685,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 				}];
         	//自主销售不需要供应商
         	if($scope.saleOrder.orderType=='自主销售'){
-        		thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1";
+        		thisAjaxUrl = "rest/materiel/findMaterielList?isLatestVersion=1&buyComId="+$scope.saleOrder.buyComId;
         		thisAoColumns = [
                                  { mData: 'serialNum' },
                                  { mData: 'materielNum' },
@@ -1990,7 +1990,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			$scope.modalType = type;
     			$scope.materielSelectedIndex = index;
     			if(table){
-    				table.ajax.reload();
+//    				table.ajax.reload();
+    				table.ajax.url(ctx+"/rest/materiel/findMaterielList?isLatestVersion=1&buyComId="+$scope.saleOrder.buyComId).load()
     			}else{
     				selectMateriel();
     			}
@@ -1999,7 +2000,8 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     		}else{
     			$scope.modalType = 'multiple';
     			if(table){
-    				table.ajax.reload();
+//    				table.ajax.reload();
+    				table.ajax.url(ctx+"/rest/materiel/findMaterielList?isLatestVersion=1&buyComId="+$scope.saleOrder.buyComId).load()
     			}else{
     				selectMateriel();
     			}

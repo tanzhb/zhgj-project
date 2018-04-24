@@ -114,7 +114,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
                   pageLength: 5,//每页显示数量
                   processing: true,//loading等待框
 //                  serverSide: true,
-                  ajax: "rest/materiel/findMaterielList?isLatestVersion=1",//加载数据中
+                  ajax: "rest/materiel/findMaterielList?isLatestVersion=1&buyComId="+$scope.demandPlan.buyComId,//加载数据中
                   "aoColumns": [
                                 { mData: 'serialNum' },
                                 { mData: 'materielNum' },

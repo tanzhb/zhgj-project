@@ -17,6 +17,7 @@
 						</li> -->
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+						<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
 						<li class="dropdown pull-right tabdrop">
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>						
@@ -729,6 +730,49 @@
 			
 		</div>
 	</div>
+						
+						<div class="tab-pane fade " id="tab_1_9">
+				                   <!-- 附件 start-->
+						          <div class="portlet-body form">
+								     <form id="form_sample_9"   >
+									     <div class="table-scrollable">
+						                         <table class="table table-bordered table-hover">
+						                             <thead>
+						                                 <tr>
+						                                     <th>附件类型</th>
+						                                     <th>描述</th>
+						                                     <th>文件</th>
+						                                     <th>备注</th>
+						                                     <th>上传人</th>
+						                                     <th>上传时间</th>
+						                                 </tr>
+						                             </thead>
+						                             <tbody>
+						                                 <tr ng-repeat="_deliverFile in deliverFile track by $index">
+								                          <td>
+								                                <p class="form-control-static" > {{_deliverFile.fileType}} </p>
+								                          </td>
+								                           <td>
+								                                <p class="form-control-static" > {{_deliverFile.fileDescribe}} </p>
+								                          </td>
+						                                      <td>
+						                                      	<label    ng-if="deliverFile[$index].file==null||deliverFile[$index].file==''" class="c_edit" >未上传附件</label>
+						                                      	<label    ng-if="deliverFile[$index].file!=null&&deliverFile[$index].file!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadOrderFile(deliverFile[$index])">{{_deliverFile.file.substring(_deliverFile.file.indexOf("_")+1)}}</a></label>
+								                          </td>
+								                           <td>
+								                                <p class="form-control-static" > {{_deliverFile.remark}} </p>
+								                          </td>
+						                                     <td><p class="form-control-static"> {{_deliverFile.uploader}} </p></td>
+						                                     <td><p class="form-control-static"> {{_deliverFile.uploadDate}} </p></td>
+						                                 </tr>
+						                             </tbody>
+						                         </table>
+						                     </div>
+						                </form>
+						           </div>
+						         <!-- 附件 end-->
+				             </div>
+						
 						</div>
 				</div>
 			</div>

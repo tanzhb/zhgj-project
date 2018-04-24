@@ -142,6 +142,7 @@ public class Delivery {
 	
 	private String realCount;// 实际出入库数量
 	
+	private List<DeliverFile> deliverFile;
 
 	public String getSerialNum() {
 		return serialNum;
@@ -685,6 +686,14 @@ public class Delivery {
 
 	public void setHasCheckData(boolean hasCheckData) {
 		this.hasCheckData = hasCheckData;
+	}
+
+	public List<DeliverFile> getDeliverFile() {
+		return deliverFile;
+	}
+
+	public void setDeliverFile(List<DeliverFile> deliverFile) {
+		this.deliverFile = deliverFile;
 	}
 	
 }

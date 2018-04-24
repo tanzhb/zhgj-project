@@ -517,8 +517,9 @@ public class DeliveryServiceImpl extends GenericServiceImpl<DeliveryMaterielVO, 
 		//按结算条款中的签订合同节点生成付款
 		String orderString = (String) map.get("orderSerial");
 		String nodeString = ClauseSettlementDetail.FHH;
-		contractService.findPaymentNode(orderString, nodeString);
-		
+		if(StringUtils.isNotEmpty(orderString)){
+			contractService.findPaymentNode(orderString, nodeString);
+		}
 		
 	}
 

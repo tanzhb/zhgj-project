@@ -4811,6 +4811,12 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			        	if(isNull($scope.deliver.receiver)){
 			        		$scope.deliver.receiver = "中航能科（上海）能源科技有限公司";
 			        	}
+			        	
+			        	if(!isNull(data.data.deliverFile)){
+     	        			$scope.deliverFile = data.data.deliverFile;
+     	        			_deliverFileIndex = $scope.deliverFile.length;
+     	        		}
+			        	
 			        	if(type=="edit"){
 			        		$scope.deliverTransport = data.data.deliveryTransport;
 			        		$scope.orderMateriels = data.data.deliveryMateriels;
