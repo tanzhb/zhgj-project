@@ -413,7 +413,7 @@ public class MaterielController {
      */
     @RequestMapping("/findMaterielList")
     @ResponseBody
-    public ResponseEntity<Map> findMaterielList(HttpServletRequest request,String params,String parent,String isLatestVersion,String type,String supplyComId) {
+    public ResponseEntity<Map> findMaterielList(HttpServletRequest request,String params,String parent,String isLatestVersion,String type,String supplyComId,String buyComId) {
     	//MaterielExample m =new MaterielExample();
     	MaterielSelectExample m =new MaterielSelectExample();
     	List<Materiel> materielList = new ArrayList<Materiel>();
@@ -446,10 +446,14 @@ public class MaterielController {
         	}
         	//排序字段
         	m.setOrderByClause("materielNum DESC");
-        	if(supplyComId!=null){
+        	if(StringUtils.isNotEmpty(supplyComId)){
         		comIds = new ArrayList<String>();
         		comIds.add(supplyComId);
         		criteria.andSupplyComIdIn(comIds);
+        	}else if(StringUtils.isNotEmpty(buyComId)){
+        		comIds = new ArrayList<String>();
+        		comIds.add(buyComId);
+        		criteria.andBuyComIdIn(comIds);
         	}else if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
         		criteria.andSupplyComIdIn(comIds);
         	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){

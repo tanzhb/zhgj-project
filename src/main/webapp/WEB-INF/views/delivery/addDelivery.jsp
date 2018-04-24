@@ -28,6 +28,7 @@
 						</li> -->
 						<!-- <li class="bold"><a data-target="#tab_1_3" data-toggle="tab">运输信息</a></li>-->
 						<li class="bold"><a data-target="#tab_1_4" data-toggle="tab">物料信息</a></li>
+						<li class="bold"><a data-target="#tab_1_9" data-toggle="tab">附件</a></li>
 						<li class="dropdown pull-right tabdrop">
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>						
@@ -747,6 +748,95 @@
 								</div>
 								<!-- 供应商 end-->
 							</div>
+							<div class="tab-pane fade " id="tab_1_9">
+		                   <!-- 附件 start-->
+					         <div class="portlet-title" style="min-height: 48px;">
+					              <div class="tools" style="float:right">
+					              	 	<button type="submit" ng-click="savedeliverFile()" ng-hide="deliverFileInfoInput" class="btn green  btn-circle  btn-sm">
+					                 		<i class="fa fa-save"></i> 保存 </button>
+					                 <button ng-click="canceldeliverFile()" type="button" ng-hide="deliverFileInfoInput" class="btn defualt  btn-circle  btn-sm">
+					                 		<i class="fa fa-undo"></i> 取消 </button>
+					                 <button ng-click="editdeliverFile()" type="button" ng-show="deliverFileInfoShow&&noShow" class="btn purple  btn-circle  btn-sm">
+					                 		<i class="fa fa-edit"></i> 编辑 </button>
+					               </div>
+					           </div>
+					          <div class="portlet-body form">
+							     <form id="form_sample_9"   >
+								     <div class="table-scrollable">
+					                         <table class="table table-bordered table-hover">
+					                             <thead>
+					                                 <tr>
+					                                     <th>附件类型</th>
+					                                     <th>描述</th>
+					                                     <th>文件</th>
+					                                     <th>备注</th>
+					                                     <th>上传人</th>
+					                                     <th>上传时间</th>
+					                                     <th style="width:100px;"></th>
+					                                 </tr>
+					                             </thead>
+					                             <tbody>
+					                                 <tr ng-repeat="_deliverFile in deliverFile track by $index" ng-mouseover="showOperation('deliverFile',$index)" ng-mouseleave="hideOperation('deliverFile',$index)">
+							                          <td>
+						                                 	<select class="form-control" id="deliverFileType[$index]" name="deliverFileType" class="form-control" ng-hide="deliverFileInfoInput" ng-model="deliverFile[$index].fileType"  >
+					                                             <option value=""></option>
+					                                            	<option value="物料图片" >物料图片</option>
+					                                              <option value="图纸" >图纸</option>
+					                                              <option value="其他附件" >其他附件</option>
+					                                            </select>
+							                                <p class="form-control-static" ng-show="deliverFileInfoShow"> {{_deliverFile.fileType}} </p>
+							                          </td>
+							                           <td>
+					                                     		<input type="text" id="deliverFileDescribe[$index]" name="deliverFileDescribe" class="form-control" ng-hide="deliverFileInfoInput" ng-model="deliverFile[$index].fileDescribe"  >
+							                                <p class="form-control-static" ng-show="deliverFileInfoShow"> {{_deliverFile.fileDescribe}} </p>
+							                          </td>
+					                                      <td>
+					                                        <div ng-hide="deliverFileInfoInput"   ng-if="deliverFile[$index].file==null||deliverFile[$index].file==''"  class="fileinput fileinput-new" data-provides="fileinput">
+					                                            <span class="btn blue btn-circle btn-file">
+					                                                <span class="fileinput-new">上传附件</span>
+					                                                <span class="fileinput-exists">更改</span>
+					                                                <input type="file" name="..." nv-file-select uploader="DeliverUploader" onchange="angular.element(this).scope().deliverUp(this.files[0])" ng-model="deliverFile[$index].file" ng-click="uploaddeliverFile($index)" > </span>
+					                                            <span class="fileinput-filename">{{_deliverFile.file.substring(_deliverFile.file.indexOf("_")+1)}}</span> &nbsp;
+					                                            <a href="javascript:;" class="close fileinput-exists" ng-click="removedeliverFile($index)" data-dismiss="fileinput"> </a>
+					                                        </div>
+					                                        <div ng-hide="deliverFileInfoInput"   ng-if="deliverFile[$index].file!=null&&deliverFile[$index].file!=''"  class="fileinput fileinput-exists" data-provides="fileinput">
+					                                            <span class="btn blue btn-circle btn-file">
+					                                                <span class="fileinput-new">上传附件</span>
+					                                                <span class="fileinput-exists">更改</span>
+					                                                <input type="file" name="..." nv-file-select uploader="DeliverUploader" onchange="angular.element(this).scope().deliverUp(this.files[0])" ng-model="deliverFile[$index].file" ng-click="uploaddeliverFile($index)" > </span>
+					                                            <span class="fileinput-filename">{{_deliverFile.file.substring(_deliverFile.file.indexOf("_")+1)}}</span> &nbsp;
+					                                            <a href="javascript:;" class="close fileinput-exists"  ng-click="removedeliverFile($index)" data-dismiss="fileinput"> </a>
+					                                        </div>
+					                                      	<label   ng-show="deliverFileInfoShow" ng-if="deliverFile[$index].file==null||deliverFile[$index].file==''" class="c_edit" >未上传附件</label>
+					                                      	<label   ng-show="deliverFileInfoShow" ng-if="deliverFile[$index].file!=null&&deliverFile[$index].file!=''" class="c_edit" ><a href="javascript:;" ng-click="downloadFile(deliverFile[$index])">{{_deliverFile.file.substring(_deliverFile.file.indexOf("_")+1)}}</a></label>
+					                                     		<!-- <input type="text" name="file[$index]" name="file" class="form-control" ng-hide="fileInfoInput" ng-model="file[$index].file"  >
+							                                <p class="form-control-static" ng-show="fileInfoShow"> {{_file.file}} </p> -->
+							                          </td>
+							                           <td>
+					                                     		<input type="text" name="remark[$index]" name="remark" class="form-control" ng-hide="deliverFileInfoInput" ng-model="deliverFile[$index].remark"  >
+							                                <p class="form-control-static" ng-show="deliverFileInfoShow"> {{_deliverFile.remark}} </p>
+							                          </td>
+					                                     <td><p class="form-control-static"> {{_deliverFile.uploader}} </p></td>
+					                                     <td><p class="form-control-static"> {{_deliverFile.uploadDate}} </p></td>
+					                                     
+					                                     <td ng-show="operation_f{{$index}}">
+					                                     	<a href="javascript:;"  class="btn red btn-sm" ng-hide="deliverFileInfoInput" ng-click="deletedeliverFile($index)">
+					                                   			<i class="fa fa-close"></i> 
+					                            				</a>
+					                                     </td>
+					                                 </tr>
+					                             </tbody>
+					                         </table>
+					                     </div>
+					                </form>
+					                     <div class="form-actions right">
+											<a  class="btn blue btn-sm"  ng-hide="deliverFileInfoInput" ng-click="adddeliverFile()"   >
+					                              <i class="fa fa-plus"></i> 增加
+					                       	</a> 
+					                 		</div>
+					           </div>
+					         <!-- 附件 end-->
+					        </div>
 						</div>
 				</div>
 			</div>

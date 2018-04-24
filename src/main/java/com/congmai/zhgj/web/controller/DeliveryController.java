@@ -85,6 +85,8 @@ import com.congmai.zhgj.web.model.CompanyAddress;
 import com.congmai.zhgj.web.model.CompanyExample;
 import com.congmai.zhgj.web.model.CompanyQualification;
 import com.congmai.zhgj.web.model.ContractVO;
+import com.congmai.zhgj.web.model.DeliverFile;
+import com.congmai.zhgj.web.model.DeliverFileExample;
 import com.congmai.zhgj.web.model.Delivery;
 import com.congmai.zhgj.web.model.DeliveryMateriel;
 import com.congmai.zhgj.web.model.DeliveryMaterielExample;
@@ -93,6 +95,8 @@ import com.congmai.zhgj.web.model.DeliveryTransportVO;
 import com.congmai.zhgj.web.model.DeliveryVO;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.Materiel;
+import com.congmai.zhgj.web.model.OrderFile;
+import com.congmai.zhgj.web.model.OrderFileExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
@@ -112,6 +116,7 @@ import com.congmai.zhgj.web.service.ClauseDeliveryService;
 import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.DeliverFileService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.MaterielService;
@@ -184,6 +189,9 @@ public class DeliveryController {
 	@Autowired
 	protected TaskService taskService;
 	
+	
+	@Resource
+	private DeliverFileService deliverFileService;
 	
 	@Resource
 	private StockInOutCheckService  stockInOutCheckService;
@@ -1282,6 +1290,14 @@ public class DeliveryController {
 		}
 		
 		map.put("deliveryMateriels", deliveryMateriels);
+		
+    	//获取发货附件
+		DeliverFileExample om =new DeliverFileExample();
+    	com.congmai.zhgj.web.model.DeliverFileExample.Criteria criteria2 =  om.createCriteria();
+    	criteria2.andDeliverSerialEqualTo(serialNum);
+    	criteria2.andDelFlgEqualTo("0");
+    	List<DeliverFile> deliverFile = deliverFileService.selectList(om);
+    	map.put("deliverFile", deliverFile);
 		return map;
 	}
    	
@@ -2113,4 +2129,42 @@ public class DeliveryController {
 		map.put("flag", flag);
 		return new ResponseEntity<Map<String,Object>>(map, HttpStatus.CREATED);
 	}
+	
+	
+	/**
+     * 
+     * @Description 保存附件
+     * @param params
+     * @return
+     */
+    @RequestMapping(value = "/saveDeliverFile", method = RequestMethod.POST)
+    @ResponseBody
+    public void saveDeliverFile(@RequestBody String params) {
+    	params = params.replace("\\", "");
+		ObjectMapper objectMapper = new ObjectMapper();  
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, DeliverFile.class);  
+        List<DeliverFile> file;
+		try {
+			file = objectMapper.readValue(params, javaType);
+	    	if(!CollectionUtils.isEmpty(file)){
+	    		Subject currentUser = SecurityUtils.getSubject();
+	    		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+		    	for(DeliverFile f:file){
+		    		f.setSerialNum(ApplicationUtils.random32UUID());
+		    		f.setUploader(currenLoginName);
+		    		f.setCreator(currenLoginName);
+	    			f.setUpdater(currenLoginName);
+	    			f.setUploadDate(new Date());
+	    			f.setCreateTime(new Date());
+	    			f.setUpdateTime(new Date());
+		    	}
+		    	//填充File******↑↑↑↑↑↑********
+		    	deliverFileService.betchInsertDeliverFiles(file);
+		    	//数据插入******↑↑↑↑↑↑********
+	        }
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    	
+    }
 }

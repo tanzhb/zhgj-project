@@ -33,6 +33,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		if($state.current.name=="addDelivery"){
 			$scope.deliveryTransport={};
 			$scope.takeDelivery={};
+			validatedeliverFileInit();
 		$rootScope.setNumCode("SE",function(newCode){
 			$scope.delivery.deliverNum = newCode;
 		});
@@ -2382,6 +2383,11 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 	          		    		$scope.supplyComId=$scope.delivery.supplyComId;
 	          		    		$scope.shipper=$scope.delivery.shipper;
 	          		    	}
+	          		    	
+	          		    	if(!isNull(data.deliverFile)){
+	     	        			$scope.deliverFile = data.deliverFile;
+	     	        			_deliverFileIndex = $scope.deliverFile.length;
+	     	        		}
 	          		  /*	var array=new Array();
 	    				for (var i=0;i < data.data.deliveryMateriels.length;i++){
 	    					if(data.data.deliveryMateriels[i].deliverCount!=0){
@@ -2490,6 +2496,12 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 				    						array.push(data.deliveryMateriels[i]);
 				    					}
 				    				}
+				    				
+				    				if(!isNull(data.deliverFile)){
+			     	        			$scope.deliverFile = data.deliverFile;
+			     	        			_deliverFileIndex = $scope.deliverFile.length;
+			     	        		}
+				    				
 				    				$scope.deliveryMaterielE=array; 
 				    				$scope.materielCount=array.length;
 			          		    	//$scope.deliveryMaterielE=data.deliveryMateriels;
@@ -3601,6 +3613,168 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 	    	 $scope.cancelPage  = function() {// 取消编辑
 		        	$state.go("saleOrder");
 		        };
+		        
+		     //********发货tab附件  start****************//
+		        /**
+				 * 显示编辑、删除操作
+				 */
+		       $scope.showOperation = function(type,index){
+
+		    	   if(type=='deliverFile'){
+		    		   call =  "operation_f"+index;
+		    	   }
+		    	   
+		    	   $scope[call] = true;
+		       };
+		       
+		       /**
+				 * 隐藏编辑、删除操作
+				 */
+		       $scope.hideOperation = function(type,index){
+
+		    	   if(type=='deliverFile'){
+		    		   call =  "operation_f"+index;
+		    	   }
+		    	   $scope[call]= false;
+		       };
+		       
+	   	   		var _deliverFileIndex = 0;
+	   	   	    $scope.savedeliverFile  = function() {//保存deliverFile信息
+			   	   	if($scope.delivery==null||$.trim($scope.delivery.serialNum)==""){
+			  			toastr.error("请先保存发货信息！");	
+			  			return;
+			  		}
+	   	   	    	if($('#form_sample_9').valid()){
+	   	   	    	DeliveryService.saveDeliverFile($scope.deliverFile).then(
+	   	   	       		     function(data){
+	   	   	       		    	toastr.success('数据保存成功！');
+	   	   	       		    	$scope.canceldeliverFile();
+	   	   	       		     },
+	   	   	       		     function(error){
+	   	   	       		    	toastr.error('数据保存出错！');
+	   	   	       		         $scope.error = error;
+	   	   	       		     }
+	   	   	       		 );
+	   	   	    	}
+	   	   	    	
+	   	   	    }; 	
+	   	   	    
+	   	   	    $scope.canceldeliverFile  = function() {//取消编辑deliverFile信息
+	   	   	    	$scope.deliverFileInfoInput = true;
+	   	   		    $scope.deliverFileInfoShow = true;
+	   	   	    };
+	   	   	    
+	   	   	    $scope.editdeliverFile  = function() {//进入编辑deliverFile信息
+	   	   	    	$scope.deliverFileInfoInput = false;
+	   	   		    $scope.deliverFileInfoShow = false;
+	   	   	    };
+	   	   	    /**
+	   	 	        * deliverFile新增一行
+	   	 	        */
+	   	   	    $scope.adddeliverFile = function(){
+			   	   	  if($scope.delivery==null||$.trim($scope.delivery.serialNum)==""){
+				  			toastr.error("请先保存发货信息！");	
+				  			return;
+				  		}else{
+	   	   		    	   if($scope.deliverFile){}else{$scope.deliverFile =[{}]}
+	   	   		    	   $scope.deliverFile[_deliverFileIndex] = {};
+	   	   		    	   $scope.deliverFile[_deliverFileIndex].deliverSerial = $scope.delivery.serialNum;
+	   	   		    	   _deliverFileIndex++;
+	   	   		       }
+	   	   	    };
+	   	   	    
+	   	   	    /**
+	   		        * deliverFile删除一行
+	   		        */
+	   		       $scope.deletedeliverFile = function(index){
+	   		    	   $scope.deliverFile.splice(index,1);
+	   		    	   _deliverFileIndex--;
+	   		       };
+	   		       
+	   		       
+	   		      var validatedeliverFileInit = function() {
+	   		        	var e = $("#form_sample_9");
+	   			        r = $(".alert-danger", e),
+	   			        i = $(".alert-success", e);
+	   			        e.validate({
+	   			            errorElement: "span",
+	   			            errorClass: "help-block help-block-error",
+	   			            focusInvalid: !1,
+	   			            ignore: "",
+	   			            messages: {
+	   			            },
+	   		            	rules: {
+	   		            			
+	   		            			},
+	   		            		invalidHandler: function(e, t) {
+	   		                    i.hide(), r.show(), App.scrollTo(r, -200)
+	   		                },
+	   			            invalidHandler: function(e, t) {
+	   			                i.hide(),
+	   			                r.show(),
+	   			                App.scrollTo(r, -200)
+	   			            },
+	   			            errorPlacement: function(e, r) {
+	   			                r.is(":checkbox") ? e.insertAfter(r.closest(".md-checkbox-list, .md-checkbox-inline, .checkbox-list, .checkbox-inline")) : r.is(":radio") ? e.insertAfter(r.closest(".md-radio-list, .md-radio-inline, .radio-list,.radio-inline")) : e.insertAfter(r)
+	   			            },
+	   			            highlight: function(e) {
+	   			                $(e).closest(".form-group").addClass("has-error")
+	   			            },
+	   			            unhighlight: function(e) {
+	   			                $(e).closest(".form-group").removeClass("has-error")
+	   			            },
+	   			            success: function(e) {
+	   			                e.closest(".form-group").removeClass("has-error")
+	   			            },
+	   			            submitHandler: function(e) {
+	   			                i.show(),
+	   			                r.hide()
+	   			            }})
+	   		        };	   		       
+	   		      
+	   		   //创建对象
+	   		  	  var DeliverUploader = $scope.DeliverUploader = new FileUploader({url:'rest/fileOperate/uploadSingleFile'});
+	   		  	 
+	   		  	DeliverUploader.onAfterAddingFile = function(item){
+	   		  		  if(item.file.size>10000000){
+	   		  			  //toastr.warning("文件大小超过10M！");
+	   		  			DeliverUploader.cancelAll();
+	   		  		  }
+	   		  	  }
+	   		  	  
+	   		  	  //添加文件到上传队列后
+	   		 DeliverUploader.onCompleteAll = function () {
+	   			DeliverUploader.clearQueue();
+	   		  	  };
+	   		  	  //上传成功
+	   		  	DeliverUploader.onSuccessItem = function (fileItem,response, status, headers) {
+	   		  		  if (status == 200){ 
+	   		  			  if(response==""){
+	   		  				  toastr.error("上传失败！");
+	   		  				  return;
+	   		  			  }
+	   		  		  		toastr.success("上传成功！");
+	   		  		  		$scope.deliverFile[uploadSelectIndex].file = response.filename;
+	   		  		  }else{
+	   		  			  toastr.error("上传失败！");
+	   		  			$scope.deliverFile[uploadSelectIndex].file = response.filename;
+	   		  		  }
+	   		  		};
+	   		  	  //上传失败
+	   		  	  uploader.onErrorItem = function (fileItem, response, status, headers) {
+	   		  			toastr.error("上传失败！");
+	   		  	  };  
+	   		  	  
+	   		  	$scope.deliverUp = function(file){
+		   		  	DeliverUploader.clearQueue();
+		   		  	DeliverUploader.addToQueue(file);
+		   		  	DeliverUploader.uploadAll();
+	   	  	  }
+	   		 var uploadSelectIndex;
+	     	  $scope.uploaddeliverFile = function(index){
+	     		uploadSelectIndex = index;
+	     	  }
+	   	   	  //********发货tab附件  end****************//
 }]);
 
 

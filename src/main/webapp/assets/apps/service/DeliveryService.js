@@ -57,7 +57,7 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     		
     		batchGetMaterielInfo:batchGetMaterielInfo,
     		
-    		
+    		saveDeliverFile:saveDeliverFile,
     		saveFile:saveFile,
     		
     		
@@ -77,6 +77,20 @@ angular.module('MetronicApp').factory('DeliveryService', ['$rootScope', '$http',
     return factory;
     
     
+    //保存附件
+    function saveDeliverFile(File){
+		var deferred = $q.defer();
+		var params = {};
+		params = JSON.stringify(File);
+		$http.post("rest/delivery/saveDeliverFile", params
+		).success(function (data) {
+            // 如果连接成功，延时返回给调用者
+            deferred.resolve(data);
+        }).error(function () {
+            deferred.reject('连接服务器出错！');
+        })
+		return deferred.promise;
+	};
   //获取附件
     function getAttachFileInfo(serialNum) {
     	
