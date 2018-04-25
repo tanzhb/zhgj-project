@@ -433,6 +433,12 @@
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
+  
+  <update id="updateStockNumUsed" parameterType="java.lang.String" >
+    UPDATE numCode SET isUsed = 1 WHERE numCode = #{numCode,jdbcType=VARCHAR}
+  </update>
+  
+  
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.Stock" >
     update stock
     set materielSerial = #{materielSerial,jdbcType=VARCHAR},
