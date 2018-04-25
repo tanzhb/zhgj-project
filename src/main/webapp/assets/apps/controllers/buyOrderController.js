@@ -2201,11 +2201,12 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
   	   	    	if($scope.buyOrder.serialNum==null||$scope.buyOrder.serialNum=='') {// 订单信息为空的处理
   	   	    		toastr.error('请先保存订单信息！');return
   	    		}
-  	   	   for(var i=0;i<$scope.orderMateriel.length;i++){
-   	    		if(isNull($scope.orderMateriel[i].orderRateUnit)||isNull($scope.orderMateriel[i].orderUnitPrice)){
-   	    		toastr.warning('含税价格或不含税价格必填！');return
-   	    		}
-   	    		}
+	  	   	   for(var i=0;i<$scope.orderMateriel.length;i++){
+	   	    		if(isNull($scope.orderMateriel[i].orderRateUnit)||isNull($scope.orderMateriel[i].orderUnitPrice)){
+	   	    			toastr.warning('含税价格或不含税价格必填！');return
+	   	    		}
+	   	    		$scope.orderMateriel[i].orderSerial = $scope.buyOrder.serialNum;
+	   	    	}
   	   	    	
   	   	    	if($('#form_sample_5').valid()){
   	   	    	orderService.saveAllOrderMateriel($scope.orderMateriel).then(
@@ -2290,6 +2291,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				if(isNull(orderMateriel.orderRateUnit)||isNull(orderMateriel.orderUnitPrice)){
  	   	    		toastr.warning('含税价格或不含税价格必填！');return
  	   	    		}
+				orderMateriel.orderSerial = $scope.buyOrder.serialNum;
 				delete orderMateriel.materiel;
 				delete orderMateriel.supplyMateriel;
 				delete orderMateriel.supply;

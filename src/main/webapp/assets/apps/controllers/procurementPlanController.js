@@ -2122,9 +2122,29 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		    				showToastr('toast-top-center', 'warning', '该采购计划已发起流程审批，不能再次申请！')
 		    			}else {
 		    				var serialNum=table.row('.active').data().serialNum;
-		    				if(judgeSupplyCom(serialNum)){////判断采购清单物料是否都选了供应商
-		    					$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
-		    				}
+//		    				if(judgeSupplyCom(serialNum)){////判断采购清单物料是否都选了供应商
+//		    					$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
+//		    				}
+		    				
+		    				procurementPlanService.getProcurementPlanInfo(serialNum).then(
+		   	          		     function(data){//加载页面对象
+		   	          		    	$scope.procurementPlanMateriel=data.procurementPlanMateriel;
+		   	          		    	if($scope.procurementPlanMateriel.length==0){
+		   	          		    		showToastr('toast-top-center', 'warning', '该采购计划无采购清单物料，不能申请！');
+		   	          		    		return  false;
+		   	          		    	}
+		   	          		    	for(var i in $scope.procurementPlanMateriel){
+		   	          		    		if(isNull($scope.procurementPlanMateriel[i].supplyComId)){
+		   	          		    			showToastr('toast-top-center', 'warning', '该采购计划存在供应商未选择的采购清单物料，不能申请！');
+		   		          		    		return  false;
+		   	          		    		}
+		   	          		    	}	
+		   	          		    	$state.go('submitProcurementPlanApply',{newSerialNum:serialNum});
+		   	          		     },
+		   	          		     function(error){
+		   	          		         $scope.error = error;
+		   	          		     }
+		   	          		 );
 		    			}
 		    		}     	
 		        };
