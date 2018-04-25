@@ -492,6 +492,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 				//stock.setServiceParty(StaticConst.getInfo("comName"));
 			}
 			stockMapper.insert(stock);
+			stockMapper.updateStockNumUsed(stock.getStockNum());
 			
 		}/*else{//已存在此物料的库存,更新库存数量
 //		Integer currenAmount=Integer.parseInt(stocks.get(0).getCountInAmount()==null?"0":stocks.get(0).getCountInAmount())-Integer.parseInt(stocks.get(0).getCountOutAmount()==null?"0":stocks.get(0).getCountOutAmount());//获取当前库存数
@@ -573,6 +574,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			record.setUpdateTime(new Date());
 			StockInOutRecordExample example = new StockInOutRecordExample();
 			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+			record.setInOutNum(null);//不更新编号，否则影响sql执行效率
 			stockInOutRecordMapper.updateByExampleSelective(record, example);
 		if("1".equals(record.getStatus())){
 			//入库完成状态处理
