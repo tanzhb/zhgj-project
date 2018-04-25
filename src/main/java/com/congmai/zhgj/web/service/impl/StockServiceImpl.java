@@ -67,7 +67,13 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	public GenericDao<Stock, String> getDao() {
 		return stockMapper;
 	}
-
+	@Override
+	public int insert(Stock record){
+		int i = stockMapper.insert(record);
+		stockMapper.updateStockNumUsed(record.getStockNum());
+		return i;
+	}
+	
 	@Override
 	public void deleteStock(String serialNums) {
 		List<String> idList = ApplicationUtils.getIdList(serialNums);
