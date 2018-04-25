@@ -26,7 +26,7 @@
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
         <li  id="gyshang"  class="active">
-            <a data-target="#tab_gyshang" data-toggle="tab"  ng-click="showStock('gyshang')">供应商库存</a>
+            <a data-target="#tab_gyshang" data-toggle="tab"  >供应商库存</a>
         </li>
       
     </ul>
@@ -43,8 +43,10 @@
 				<div class="actions">
 				<div class="btn-group btn-group-devided" data-toggle="buttons">
 					<shiro:hasPermission name="stockSupply:add">
-						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('gyshang')">
-	                                              <i class="fa fa-plus"></i> 添加</label>
+						<label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('gysIn')">
+	                                              <i class="fa fa-plus"></i> 添加入库</label>
+	                     <label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('gysOut')">
+	                                              <i class="fa fa-plus"></i> 添加出库</label>
 	                </shiro:hasPermission>
 	                <shiro:hasPermission name="stockSupply:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockPage('gyshang')">
@@ -156,19 +158,15 @@
                     	<div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_stockin">
+					id="sample_stockSupplyIn">
 					<thead>
 					<tr>
 							<th>入库明细号</th>
                             <th> 入库类型</th>
                             <th> 关联单据</th>
-                            <!-- <th>物料批次号 </th> -->
                             <th>入库日期</th>
                             <th>入库数量</th>
                             <th>仓库 </th>
-                             <!-- <th>库区 </th> -->
-                            <!-- <th>供应商 </th>
-                            <th>关联单号 </th> -->
                             <th>备注</th>
 						</tr>
 						
@@ -197,19 +195,15 @@
 					       <div class="portlet-body">
 				<table
 					class="table table-striped table-bordered table-hover "
-					id="sample_stockout">
+					id="sample_stockSupplyOut">
 					<thead>
 					<tr>
 							<th>出库明细号</th>
                             <th> 出库类型</th>
                             <th> 关联单据</th>
-                            <!-- <th>物料批次号 </th> -->
                             <th>出库日期</th>
                             <th>出库数量</th>
                             <th>仓库 </th>
-                            <!-- <th>库区</th> -->
-                            <!-- <th>采购商 </th>
-                            <th>关联单号 </th> -->
                             <th>备注</th>
 						</tr>
 						

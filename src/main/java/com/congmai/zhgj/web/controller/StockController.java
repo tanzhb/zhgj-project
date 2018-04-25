@@ -115,6 +115,10 @@ public class StockController {
     public String stockView(HttpServletRequest request) {
         return "stock/viewStockDetailInfo";
     }
+    @RequestMapping(value = "/stockSupplyView")
+    public String stockSupplyView(HttpServletRequest request) {
+        return "stock/viewStockSupplyDetailInfo";
+    }
     /**
      * 	编辑库存信息详情/新增库存信息(自建或代管)
      * 
@@ -187,12 +191,11 @@ public class StockController {
 			stock.setMaterielNum(m.getMaterielNum());
 			stock.setSpecifications(m.getSpecifications());
 			if("1".equals(manageType)){//自建
-				/*if("0e2523c32dd1415cac89999ccad52b83".equals(stock.getMaterielSerial())){
-					System.out.println("当前入库数是:"+stock.getCountInAmountZijian());
-				}*/
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountZijian()==null?"0":stock.getCountInAmountZijian())-Integer.parseInt(stock.getCountOutAmountZijian()==null?"0":stock.getCountOutAmountZijian()))+"");
-			}else if("2".equals(manageType)){//代管
+			}else if("2".equals(manageType)){//代管(更新时间暂时没有)
 				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountDaiguan()==null?"0":stock.getCountInAmountDaiguan())-Integer.parseInt(stock.getCountOutAmountDaiguan()==null?"0":stock.getCountOutAmountDaiguan()))+"");
+			}else if("3".equals(manageType)){//供应商库存
+				stock.setCurrentAmount((Integer.parseInt(stock.getCountInAmountSupply()==null?"0":stock.getCountInAmountSupply())-Integer.parseInt(stock.getCountOutAmountSupply()==null?"0":stock.getCountOutAmountSupply()))+"");
 			}
 			stock.setAverrageWhAge("0");
 			stock.setPreSaleAmount("0");
@@ -252,11 +255,11 @@ public class StockController {
     public ResponseEntity<Map> viewStockDetail(HttpServletRequest request, @RequestBody String  serialNum) {
     	Map<String, Object> map = new HashMap<String, Object>();
     	Stock stock=stockService.selectById(serialNum);
-    	if(stock!=null){
-    		Materiel m=materielService.selectById(stock.getMaterielSerial());
-			stock.setMaterielName(m.getMaterielName());
-			stock.setMaterielNum(m.getMaterielNum());
-			stock.setSpecifications(m.getSpecifications());
+    	Materiel m=materielService.selectById(stock.getMaterielSerial());
+		stock.setMaterielName(m.getMaterielName());
+		stock.setMaterielNum(m.getMaterielNum());
+		stock.setSpecifications(m.getSpecifications());
+    	if(stock!=null&&!"3".equals(stock.getManageType())){
 			if(!StringUtils.isEmpty(stock.getMaterielOwner())){
 				Company com=companyService.selectOne(stock.getMaterielOwner());
 				stock.setMaterielOwnerName(com==null?"":com.getComName());
@@ -282,7 +285,15 @@ public class StockController {
 				
 			}
 			map.put("stock", stock);
+    }else{//供应商库存
+    	stock.setCurrentAmount(stockSupplyRecordService.currentAmountForSupply(stock.getSerialNum()));
+    	stock.setLastOutDateSupply(stockSupplyRecordService.getLastOutDateForSupply(stock.getSerialNum()));
+    	stock.setLastInDateSupply(stockSupplyRecordService.getLastInDateForSupply(stock.getSerialNum()));
+    	stock.setCountInAmountSupply(stockSupplyRecordService.countInAmountForSupply(stock.getSerialNum()));
+    	stock.setCountOutAmountSupply(stockSupplyRecordService.countOutAmountForSupply(stock.getSerialNum()));
+    	map.put("stock", stock);
     }
+    	
     	//List<Company>comList=companyService.selectList();
     	return new ResponseEntity<Map>(map, HttpStatus.OK);
     }
@@ -600,14 +611,36 @@ public class StockController {
 			public ResponseEntity<StockSupplyRecord> saveStockSupplyInfo(@RequestBody  StockSupplyRecord stockSupplyRecord,UriComponentsBuilder ucBuilder) throws ParseException{//
 		    	Subject currentUser = SecurityUtils.getSubject();
 				String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+				User user = UserUtil.getUserFromSession();
+		    	List<StockSupplyRecord> stockSupplyRecords=new ArrayList<StockSupplyRecord>();
+		    	String comId=null;
+		    	if(user!=null){//获取当前供应商comId
+					comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+				}
 				stockSupplyRecord.setStockDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stockSupplyRecord.getDateStock()));
 				Warehouse w=warehouseService.selectOne(stockSupplyRecord.getWarehouseSerial());
 				stockSupplyRecord.setWarehouseName(w.getWarehouseName());
 		    	try{
 		    		if(StringUtils.isEmpty(stockSupplyRecord.getSerialNum())){
+		    			//判断供应商库存是否存在
+		    			Stock	 stock=stockSupplyRecordService.judgeSupplyStockIsExist(stockSupplyRecord.getMaterielSerial(),comId);
+		    			if(stock==null){//插入供应商库存
+		    				stock=new Stock();
+		    				stock.setSerialNum(ApplicationUtils.random32UUID());
+		    				stock.setManageType("3");//供应商库存
+		    				stock.setMaterielOwner(comId);//物权方(供应商comId)
+		    				stock.setMaterielSerial(stockSupplyRecord.getMaterielSerial());
+		    				stock.setStockNum(orderService.getNumCode("IV"));
+		    				stock.setCreateTime(new Date());
+		    				stockService.insert(stock);
+		    			}
 		    			stockSupplyRecord.setSerialNum(ApplicationUtils.random32UUID());
+		    			stockSupplyRecord.setCreator(currenLoginName);
+		    			stockSupplyRecord.setCreateTime(new Date());
 		    			stockSupplyRecordService.insert(stockSupplyRecord);
 		    		}else{
+		    			stockSupplyRecord.setUpdater(currenLoginName);
+		    			stockSupplyRecord.setUpdateTime(new Date());
 		    			stockSupplyRecordService.update(stockSupplyRecord);
 		    		}
 		    		if(stockSupplyRecord!=null){
@@ -615,7 +648,6 @@ public class StockController {
 			    		stockSupplyRecord.setMaterielName(m.getMaterielName());
 			    		stockSupplyRecord.setMaterielNum(m.getMaterielNum());
 			    		stockSupplyRecord.setSpecifications(m.getSpecifications());
-			    		stockSupplyRecord.setWarehouseName((warehouseService.selectOne(stockSupplyRecord.getWarehouseSerial())).getWarehouseName());
 			    }
 		    	}catch(Exception e){
 		    		//20180110 qhzhao System.out.println(e.getMessage());
@@ -635,7 +667,7 @@ public class StockController {
 		    	if(StringUtil.isEmpty(comId)){
 		    		stockSupplyRecords=stockSupplyRecordService.selectList();//平台查看供应商库存
 		    		}else{
-		    			stockSupplyRecords=stockService.getStockSupplyRecordBySupplyComId(comId);//供应商查看自己的供应商库存
+		    			stockSupplyRecords=stockSupplyRecordService.getStockSupplyRecordBySupplyComId(comId);//供应商查看自己的供应商库存
 		    		}
 				
 				// 封装datatables数据返回到前台
@@ -661,4 +693,71 @@ public class StockController {
 		    }
 		    	return new ResponseEntity<Map>(map, HttpStatus.OK);
 }
+		    /**
+			  * @Description (获取入库记录)
+			  * @param request
+			  * @return
+			  */
+			 @RequestMapping(value="stockSupplyInList",method=RequestMethod.GET)
+			 public ResponseEntity<Map<String,Object>> stockSupplyInList(String serialNum) {
+//				 	StockSupplyRecord stock=stockSupplyRecordService.selectById(serialNum);
+			    	String comId=null;
+			    	User user = UserUtil.getUserFromSession();
+			    	if(user!=null){
+						comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+					}
+				 List<StockSupplyRecord>stockInList=stockSupplyRecordService.getSupplyListForIn(serialNum,comId);
+				 // 封装datatables数据返回到前台
+				 Map<String,Object> pageMap = new HashMap<String,Object>();
+				 pageMap.put("draw", 1);
+				 pageMap.put("recordsTotal", stockInList==null?0:stockInList.size());
+				 pageMap.put("recordsFiltered", stockInList==null?0:stockInList.size());
+				 pageMap.put("data", stockInList);
+				 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+			 }
+		    
+		    /**
+			  * @Description (获取供应商在库数量)
+			  * @param request
+			  * @return
+			  */
+			 @RequestMapping(value="stockSupplyInBatchList",method=RequestMethod.GET)
+			 public ResponseEntity<Map<String,Object>> stockSupplyInBatchList(String serialNum) {
+				 
+				 StockSupplyRecord stock=stockSupplyRecordService.selectById(serialNum);
+				 List<StockSupplyRecord>stockInBatchList=stockSupplyRecordService.getSupplyListForIn(stock.getMaterielSerial(),null);
+//				 List<StockSupplyRecord>stockOutBatchList=stockSupplyRecordService.getSupplyListForOut(stock.getMaterielSerial());
+					 
+				 // 封装datatables数据返回到前台
+				 Map<String,Object> pageMap = new HashMap<String,Object>();
+				 pageMap.put("draw", 1);
+				 pageMap.put("recordsTotal", stockInBatchList==null?0:stockInBatchList.size());
+				 pageMap.put("recordsFiltered", stockInBatchList==null?0:stockInBatchList.size());
+				 pageMap.put("data", stockInBatchList);
+				 return new ResponseEntity<Map<String,Object>>(pageMap, HttpStatus.OK);
+			 }
+			  /**
+			  * @Description (获取出库记录)
+			  * @param request
+			  * @return
+			  */
+			 @RequestMapping(value="stockSupplyOutList",method=RequestMethod.GET)
+		public ResponseEntity<Map<String, Object>> stockSupplyOutList(String serialNum) {
+//				 StockSupplyRecord stock=stockSupplyRecordService.selectById(serialNum);
+				 String comId=null;
+			    	User user = UserUtil.getUserFromSession();
+			    	if(user!=null){
+						comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+					}
+				 List<StockSupplyRecord>stockOutList=stockSupplyRecordService.getSupplyListForOut(serialNum,comId);
+			// 封装datatables数据返回到前台
+			Map<String, Object> pageMap = new HashMap<String, Object>();
+			pageMap.put("draw", 1);
+			pageMap.put("recordsTotal",
+					stockOutList == null ? 0 : stockOutList.size());
+			pageMap.put("recordsFiltered",
+					stockOutList == null ? 0 : stockOutList.size());
+			pageMap.put("data", stockOutList);
+			return new ResponseEntity<Map<String, Object>>(pageMap, HttpStatus.OK);
+		}
 }

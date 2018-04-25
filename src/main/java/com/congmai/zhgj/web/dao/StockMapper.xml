@@ -16,6 +16,7 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+     <!-- <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"></association> -->
    <!--  <association property="belongWarehouseNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.getBelongWarehouseNumForZijian"></association>自建库存所在仓库数
     <association property="relationBuyNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNumForZijian"></association> 自建库存关联采购单数
     <association property="relationSaleNumZijian" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countSaleNumForZijian"></association> 自建库存关联销售单数
@@ -50,6 +51,30 @@
     <association property="countOutAmountDaiguan" column="serialNum" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countOutAmountForDaiguan"></association> <!--代管库存  累计出库数量-->
      <!-- <association property="preSaleAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  预售数量-->
      <!-- <association property="onRoadAmount" column="materielSerial" select="com.congmai.zhgj.web.dao.StockInOutRecordMapper.countBuyNum"></association> --><!--  在途数量-->
+  </resultMap>
+  <resultMap id="BaseResultMap1" type="com.congmai.zhgj.web.model.Stock" >
+    <id column="serialNum" property="serialNum" jdbcType="VARCHAR" />
+    <result column="materielSerial" property="materielSerial" jdbcType="VARCHAR" />
+    <result column="stockNum" property="stockNum" jdbcType="VARCHAR" />
+    <result column="maxStock" property="maxStock" jdbcType="VARCHAR" />
+    <result column="minStock" property="minStock" jdbcType="VARCHAR" />
+    <result column="manageType" property="manageType" jdbcType="VARCHAR" />
+    <result column="materielOwner" property="materielOwner" jdbcType="VARCHAR" />
+    <result column="serviceParty" property="serviceParty" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="delFlg" property="delFlg" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="VARCHAR" />
+    <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="updater" property="updater" jdbcType="VARCHAR" />
+    <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <!-- <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"></association> --><!-- 自建库存所在仓库名称 -->
+    <association property="belongWarehouseNameSupply" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.getBelongWarehouseNameForSupply"></association><!-- 自建库存所在仓库名称 -->
+    <association property="firstInDateSupply"  column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.getFirstInDateForSupply"></association><!-- 供应商库存 最早入库日期 -->
+     <association property="lastInDateSupply" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.getLastInDateForSupply"></association><!-- 供应商库存 最后入库日期 -->
+    <association property="lastOutDateSupply" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.getLastOutDateForSupply"></association> <!-- 供应商库存最后出库日期 -->
+ 	<association property="countInAmountSupply" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.countInAmountForSupply"></association> <!--  供应商库存累计入库数量 -->
+    <association property="countOutAmountSupply" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.countOutAmountForSupply"></association>  <!-- 供应商库存累计出库数量 -->
+    <association property="currentAmount" column="serialNum" select="com.congmai.zhgj.web.dao.StockSupplyRecordMapper.currentAmountForSupply"></association>  <!-- 供应商库存累计出库数量 -->
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -147,7 +172,27 @@
       </if>
        AND s.delFlg=0
   </select>
-  
+  <!--查看供应商库存列表  -->
+  <select id="selectStockSupplyList" resultMap="BaseResultMap1" parameterType="com.congmai.zhgj.web.model.Stock" >
+  	select
+  	s.serialNum, s.materielSerial, s.stockNum, s.maxStock, s.minStock, s.manageType, s.materielOwner, 
+    s.serviceParty, s.remark, s.delFlg, s.creator, s.createTime, s.updater, s.updateTime
+    from stock s
+    	<if test="comId != null" >
+        left join materiel m on s.materielSerial = m.serialNum
+		LEFT JOIN buyMateriel bm on m.materielId = bm.materielId
+		LEFT JOIN supplyMateriel sm on m.materielId = sm.materielId
+      </if>
+    where
+    1=1
+    <if test="manageType != null" >
+        AND manageType = #{manageType,jdbcType=VARCHAR}
+      </if>
+      <if test="comId != null" >
+        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
+      </if>
+       AND s.delFlg=0
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />

@@ -35,11 +35,12 @@ import com.congmai.zhgj.web.model.StockOutBatch;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.StockSupplyRecordService;
 
+
 /**
- * 
- * @ClassName StockServiceImpl
- * @Descripzhaichao
- * @Date 2017年8月21日 下午4:56:29
+ * @ClassName StockSupplyServiceImpl
+ * @Description TODO(这里用一句话描述这个类的作用)
+ * @author zhaichao
+ * @Date 2018年4月25日 下午1:45:02
  * @version 1.0.0
  */
 @Service
@@ -82,7 +83,90 @@ public class StockSupplyServiceImpl extends GenericServiceImpl<StockSupplyRecord
 	}
 
 
-	
+
+	@Override
+	public List<StockSupplyRecord> getSupplyListForIn(String materielSerial,String supplyComId) {
+		// TODO Auto-generated method stub
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("materielSerial", materielSerial);
+		map.put("supplyComId", supplyComId);
+		return stockSupplyRecordMapper.getStockInRecordForSupply(map);
+	}
+
+
+
+	@Override
+	public List<StockSupplyRecord> getSupplyListForOut(String materielSerial,String supplyComId) {
+		// TODO Auto-generated method stub
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("materielSerial", materielSerial);
+		map.put("supplyComId", supplyComId);
+		return stockSupplyRecordMapper.getStockOutRecordForSupply(map);
+	}
+
+
+
+	@Override
+	public List<StockSupplyRecord> getStockSupplyRecordBySupplyComId(
+			String comId) {
+		return stockSupplyRecordMapper.getStockSupplyRecordBySupplyComId(comId);
+	}
+
+
+
+	@Override
+	public Stock judgeSupplyStockIsExist(String materielSerial,
+			String supplyComId) {
+		Map<String,String> map=new HashMap<String,String>();
+		map.put("materielSerial", materielSerial);
+		map.put("supplyComId", supplyComId);
+		return stockSupplyRecordMapper.judgeSupplyStockIsExist(map);
+	}
+
+
+
+	@Override
+	public String currentAmountForSupply(String serialNums) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.currentAmountForSupply(serialNums);
+	}
+
+
+
+	@Override
+	public String countInAmountForSupply(String serialNums) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.countInAmountForSupply(serialNums);
+	}
+
+
+
+	@Override
+	public String countOutAmountForSupply(String serialNums) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.countOutAmountForSupply(serialNums);
+	}
+
+
+
+	@Override
+	public String getLastOutDateForSupply(String serialNums) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.getLastOutDateForSupply(serialNums);
+	}
+
+
+
+	@Override
+	public String getLastInDateForSupply(String serialNums) {
+		// TODO Auto-generated method stub
+		return stockSupplyRecordMapper.getLastInDateForSupply(serialNums);
+	}
+
+
+
+
+
 	
 	}
 	

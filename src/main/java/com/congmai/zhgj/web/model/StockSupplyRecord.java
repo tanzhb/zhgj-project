@@ -30,6 +30,10 @@ public class StockSupplyRecord {
 	    private String warehouseSerial;//入库仓库
 
 	    private String contactNum;
+	    
+	    private Materiel  materiel;//物料
+	    
+	    private Warehouse  warehouse;//物料
 
 	    private String status;
 
@@ -46,6 +50,8 @@ public class StockSupplyRecord {
 	    private Date updateTime;
 
 	    private String inOutType;
+	    
+	    private String manageType;//out出in入
 
 	    private String warehouseName;//入库仓库名称
 	    
@@ -59,7 +65,16 @@ public class StockSupplyRecord {
 
 		private String materielNum;
 		
-
+		private String belongWarehouseNameSupply;//所在仓库名称拼接
+		
+		private String currentAmount;//当前库存
+		
+		private String firstInDateSupply;//最早入库日期
+		private String lastOutDateSupply;//最后出库日期
+		private String preSaleAmount;//预售
+		private String onRoadAmount;//在途
+		private String canSaleAmount;//可售
+		private String lastUpdateDate;//更新日期
 		public String getSerialNum() {
 			return serialNum;
 		}
@@ -235,6 +250,94 @@ public class StockSupplyRecord {
 
 		public void setMaterielNum(String materielNum) {
 			this.materielNum = materielNum;
+		}
+
+		public String getManageType() {
+			return manageType;
+		}
+
+		public void setManageType(String manageType) {
+			this.manageType = manageType;
+		}
+
+		public String getBelongWarehouseNameSupply() {
+			return belongWarehouseNameSupply;
+		}
+
+		public String getCurrentAmount() {
+			return currentAmount;
+		}
+
+		public String getFirstInDateSupply() {
+			return firstInDateSupply;
+		}
+
+		public String getLastOutDateSupply() {
+			return lastOutDateSupply;
+		}
+
+		public String getPreSaleAmount() {
+			return preSaleAmount;
+		}
+
+		public String getOnRoadAmount() {
+			return onRoadAmount;
+		}
+
+		public String getCanSaleAmount() {
+			return canSaleAmount;
+		}
+
+		public String getLastUpdateDate() {
+			return lastUpdateDate;
+		}
+
+		public void setBelongWarehouseNameSupply(String belongWarehouseNameSupply) {
+			this.belongWarehouseNameSupply = belongWarehouseNameSupply;
+		}
+
+		public void setCurrentAmount(String currentAmount) {
+			this.currentAmount = currentAmount;
+		}
+
+		public void setFirstInDateSupply(String firstInDateSupply) {
+			this.firstInDateSupply = firstInDateSupply;
+		}
+
+		public void setLastOutDateSupply(String lastOutDateSupply) {
+			this.lastOutDateSupply = lastOutDateSupply;
+		}
+
+		public void setPreSaleAmount(String preSaleAmount) {
+			this.preSaleAmount = preSaleAmount;
+		}
+
+		public void setOnRoadAmount(String onRoadAmount) {
+			this.onRoadAmount = onRoadAmount;
+		}
+
+		public void setCanSaleAmount(String canSaleAmount) {
+			this.canSaleAmount = canSaleAmount;
+		}
+
+		public void setLastUpdateDate(String lastUpdateDate) {
+			this.lastUpdateDate = lastUpdateDate;
+		}
+
+		public Materiel getMateriel() {
+			return materiel;
+		}
+
+		public void setMateriel(Materiel materiel) {
+			this.materiel = materiel;
+		}
+
+		public Warehouse getWarehouse() {
+			return warehouse;
+		}
+
+		public void setWarehouse(Warehouse warehouse) {
+			this.warehouse = warehouse;
 		}
 		
 	

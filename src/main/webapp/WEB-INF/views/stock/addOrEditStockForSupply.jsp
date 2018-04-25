@@ -44,19 +44,22 @@
                         <div class="portlet-title">
                             <div class="caption">供应商库存</div>
                             <div class="actions" >
-                                
+                                <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
                             </div>
-                            <div class="actions">
+                        </div>
+                        <br/>
+                        <div class="actions" style="float:right;">
                                 <button  ng-show="stockView"    class="btn purple  btn-sm btn-circle  " ng-click="editStockForSupply()">
                                             <i class="fa fa-edit"></i> 编辑 </button>
                                 <button   ng-show="stockEdit"   class="btn defualt  btn-sm btn-circle " ng-click="cancelEditStockForSupply()">
                                             <i class="fa fa-undo"></i> 取消 </button>
                                 <button  ng-hide="stockAdd"   type="submit"   class="btn green  btn-sm btn-circle "   ng-click="saveStockForSupply()">
                                             <i class="fa fa-save"></i> 保存 </button>
-                                            <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+                                            
                             </div>
-                        </div>
+                            <br/>
                               <div class="tab-content">
+                              
 				<div class="tab-pane fade active in" id="tab_1_1"> 
                         <div class="portlet-body form">
                             <form  id="stockForSupplyForm"  >
@@ -66,7 +69,8 @@
                                                <div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="inOutNum">入库单号 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="inOutNum" ng-if="judgeSerialNum.indexOf('In')>-1">入库单号 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="inOutNum" ng-if="judgeSerialNum.indexOf('Out')>-1">出库单号 <span class="required"> * </span></label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="inOutNum" name="inOutNum" ng-model="record.inOutNum" ng-hide="stockAdd" >
                                                         <div class="form-control-focus"> </div>
@@ -78,11 +82,19 @@
 										
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="inOutType">入库类型<span class="required"> * </span> </label>
-	                                                 <div class="">
+											<label class="control-label bold" for="inOutNum" ng-if="judgeSerialNum.indexOf('In')>-1">入库类型 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="inOutType"  ng-if="judgeSerialNum.indexOf('Out')>-1">出库类型<span class="required"> * </span> </label>
+	                                                 <div class=""   ng-if="judgeSerialNum.indexOf('In')>-1">
 	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType"     data-size="8" ng-hide="stockAdd">
-	                                                 	<option value="">无</option>
+	                                                 	<!-- <option value="">无</option> -->
 			                                                   <option value="采购入库">采购入库</option>
+			                                                    <option value="其它"  >其它</option>
+			                                             </select>
+                                                     </div>
+                                                     <div class=""   ng-if="judgeSerialNum.indexOf('Out')>-1">
+	                                                 	<select class="form-control"  name="inOutType" ng-model="record.inOutType"     data-size="8" ng-hide="stockAdd">
+	                                                 	<!-- <option value="">无</option> -->
+			                                                   <option value="销售出库">销售出库</option>
 			                                                    <option value="其它"  >其它</option>
 			                                             </select>
                                                      </div>
@@ -93,7 +105,8 @@
 										<!--/span-->
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="stockDate">入库日期 <span class="required"> * </span></label>
+                                                    <label class="control-label bold" for="stockDate"  ng-if="judgeSerialNum.indexOf('In')>-1">入库日期 <span class="required"> * </span></label>
+                                                     <label class="control-label bold" for="stockDate"  ng-if="judgeSerialNum.indexOf('Out')>-1">出库日期 <span class="required"> * </span></label>
                                                     <div class="">
                                                       <!--  <input type="text" class="form-control  date-picker" size="16"  data-date-format="yyyy-mm-dd hh:mm:ss" 
                                                          id="stockDate"  name="stockDate" ng-model="record.stockDate" ng-hide="deliverAdd" readonly="readonly"> -->
@@ -154,7 +167,8 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="supplyComId"> 入库仓库</label>
+                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('In')>-1"> 入库仓库</label>
+                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('Out')>-1"> 出库仓库</label>
                                                     <div class="">
                                                     <div  ng-hide="span">
 														<select class="form-control"  id="warehouseSerial"  data-live-search="true" data-size=""  ng-hide="stockAdd"
@@ -172,7 +186,8 @@
 										</div>
 						<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="supplyComId"> <span class="required"> * </span>入库数量</label>
+                                                    <label class="control-label bold" for="supplyComId"  ng-if="judgeSerialNum.indexOf('In')>-1"> <span class="required"> * </span>入库数量</label>
+                                                   <label class="control-label bold" for="supplyComId"  ng-if="judgeSerialNum.indexOf('Out')>-1"> <span class="required"> * </span>出库数量</label>
                                                     <div class="">
                                                     	<input type="text" class="form-control"    name="materielCount"  ng-model="record.materielCount"   ng-hide="stockAdd"/>
                                                        <p class="control-label left"   ng-show="stockView">{{record.materielCount}}</p>
@@ -181,12 +196,14 @@
 										</div>
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="relationNum"  ng-if="record.inOutType!='采购入库'">关联单号 </label>
-                                                    <label class="control-label bold" for="relationNum"   ng-if="record.inOutType=='采购入库'">采购订单号 </label>
+                                                    <label class="control-label bold" for="relationNum"  ng-if="record.inOutType!='采购入库'&&judgeSerialNum.indexOf('In')>-1">关联单号 </label>
+                                                    <label class="control-label bold" for="relationNum"   ng-if="record.inOutType=='采购入库'&&judgeSerialNum.indexOf('In')>-1">采购订单号 </label>
+                                                    <label class="control-label bold" for="relationNum"  ng-if="record.inOutType!='销售出库'&&judgeSerialNum.indexOf('Out')>-1">关联单号 </label>
+                                                    <label class="control-label bold" for="relationNum"  ng-if="record.inOutType=='销售出库'&&judgeSerialNum.indexOf('Out')>-1">销售订单号  </label>
                                                     <div class="">
                                                         <input type="text" class="form-control" id="relationNum" name="relationNum" ng-model="record.relationNum" ng-hide="stockAdd" >
                                                         <div class="form-control-focus"> </div>
-                                                         <p class="control-label left" ng-show="stockView">{{record.operator}}</p>
+                                                         <p class="control-label left" ng-show="stockView">{{record.relationNum}}</p>
                                                     </div>
                                             </div>
 										</div>

@@ -16,7 +16,7 @@ public class Stock {
 	private String serialNum;
 
 	private String materielSerial;// 物料流水号
-
+	private String materiel;// 物料
 	private String stockNum;// 库存编号
 
 	private String maxStock;// 最高库存
@@ -108,8 +108,63 @@ public class Stock {
 
 	private String firstInDateDaiguan;// 最早入库日期代管库存
 
+	private String belongWarehouseNameSupply;//所在仓库名称拼接(供应商库存)
+	private String firstInDateSupply;//最早入库日期(供应商库存)
+	private String lastInDateSupply;//最后入库日期(供应商库存)
+	private String lastOutDateSupply;//最后出库日期(供应商库存)
+	private String  countInAmountSupply;//累计入库数量(供应商库存)
+	private String  countOutAmountSupply;//累计出库数量(供应商库存)
+	
 	public String getBelongWarehouseNumZijian() {
 		return belongWarehouseNumZijian;
+	}
+
+	public String getLastInDateSupply() {
+		return lastInDateSupply;
+	}
+
+	public void setLastInDateSupply(String lastInDateSupply) {
+		this.lastInDateSupply = lastInDateSupply;
+	}
+
+	public String getBelongWarehouseNameSupply() {
+		return belongWarehouseNameSupply;
+	}
+
+	public String getFirstInDateSupply() {
+		return firstInDateSupply;
+	}
+
+	public String getLastOutDateSupply() {
+		return lastOutDateSupply;
+	}
+
+	public String getCountInAmountSupply() {
+		return countInAmountSupply;
+	}
+
+	public String getCountOutAmountSupply() {
+		return countOutAmountSupply;
+	}
+
+	public void setBelongWarehouseNameSupply(String belongWarehouseNameSupply) {
+		this.belongWarehouseNameSupply = belongWarehouseNameSupply;
+	}
+
+	public void setFirstInDateSupply(String firstInDateSupply) {
+		this.firstInDateSupply = firstInDateSupply;
+	}
+
+	public void setLastOutDateSupply(String lastOutDateSupply) {
+		this.lastOutDateSupply = lastOutDateSupply;
+	}
+
+	public void setCountInAmountSupply(String countInAmountSupply) {
+		this.countInAmountSupply = countInAmountSupply;
+	}
+
+	public void setCountOutAmountSupply(String countOutAmountSupply) {
+		this.countOutAmountSupply = countOutAmountSupply;
 	}
 
 	public void setBelongWarehouseNumZijian(String belongWarehouseNumZijian) {
@@ -508,6 +563,14 @@ public class Stock {
 
 	public void setLastUpdateDate(String lastUpdateDate) {
 		this.lastUpdateDate = lastUpdateDate;
+	}
+
+	public String getMateriel() {
+		return materiel;
+	}
+
+	public void setMateriel(String materiel) {
+		this.materiel = materiel;
 	}
 	
 }

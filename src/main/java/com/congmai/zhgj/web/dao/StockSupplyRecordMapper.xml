@@ -19,6 +19,10 @@
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="inOutType" property="inOutType" jdbcType="VARCHAR" />
     <result column="materielCount" property="materielCount" jdbcType="VARCHAR" />
+    <result column="manageType" property="manageType" jdbcType="VARCHAR" />
+    <association property="materiel" column="materielSerial" select="com.congmai.zhgj.web.dao.MaterielMapper.selectByPrimaryKey"></association><!-- 自建库存所在仓库名称 -->
+    <association property="warehouse" column="warehouseSerial" select="com.congmai.zhgj.web.dao.WarehouseMapper.selectByPrimaryKey"></association>
+    
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -81,7 +85,7 @@
   <sql id="Base_Column_List" >
     serialNum, warehouseSerial, materielSerial, relationNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
-    materielCount
+    materielCount, manageType
   </sql>
   <sql id="Base_Column_List1" >
     ssr.serialNum, ssr.warehouseSerial, ssr.materielSerial, ssr.relationNum, ssr.inOutNum, ssr.stockDate, ssr.operator, 
@@ -124,13 +128,15 @@
       operator, contactNum, status, 
       remark, delFlg, creator, 
       createTime, updater, updateTime, 
-      inOutType, materielCount)
+      inOutType, materielCount, manageType
+      )
     values (#{serialNum,jdbcType=VARCHAR}, #{warehouseSerial,jdbcType=VARCHAR}, #{materielSerial,jdbcType=VARCHAR}, 
       #{relationNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
       #{operator,jdbcType=VARCHAR}, #{contactNum,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{inOutType,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR})
+      #{inOutType,jdbcType=VARCHAR}, #{materielCount,jdbcType=VARCHAR}, #{manageType,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockSupplyRecord" >
     insert into stocksupplyrecord
@@ -186,6 +192,9 @@
       <if test="materielCount != null" >
         materielCount,
       </if>
+      <if test="manageType != null" >
+        manageType,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -238,6 +247,9 @@
       </if>
       <if test="materielCount != null" >
         #{materielCount,jdbcType=VARCHAR},
+      </if>
+      <if test="manageType != null" >
+        #{manageType,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -301,6 +313,9 @@
       <if test="record.materielCount != null" >
         materielCount = #{record.materielCount,jdbcType=VARCHAR},
       </if>
+      <if test="record.manageType != null" >
+        manageType = #{record.manageType,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -324,7 +339,8 @@
       updater = #{record.updater,jdbcType=VARCHAR},
       updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       inOutType = #{record.inOutType,jdbcType=VARCHAR},
-      materielCount = #{record.materielCount,jdbcType=VARCHAR}
+      materielCount = #{record.materielCount,jdbcType=VARCHAR},
+      manageType = #{record.manageType,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -380,6 +396,9 @@
       <if test="materielCount != null" >
         materielCount = #{materielCount,jdbcType=VARCHAR},
       </if>
+      <if test="manageType != null" >
+        manageType = #{manageType,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -400,15 +419,112 @@
       updater = #{updater,jdbcType=VARCHAR},
       updateTime = #{updateTime,jdbcType=TIMESTAMP},
       inOutType = #{inOutType,jdbcType=VARCHAR},
-      materielCount = #{materielCount,jdbcType=VARCHAR}
+      materielCount = #{materielCount,jdbcType=VARCHAR},
+      manageType = #{manageType,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <select id="getStockSupplyRecordBySupplyComId" parameterType="java.lang.String"  resultMap="BaseResultMap">
   select
     <include refid="Base_Column_List1" />
     from stocksupplyrecord ssr
-    left join warehouse w on  w.serialNum=ssr.warehouseSerial and w.owner=#{comId,jdbcType=VARCHAR} 
+     LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
     where  ssr.delFlg=0
+    group by ssr.materielSerial
   </select>
-  
+   <!--供应商库存获取库存所在仓库名称  -->
+    <select id="getBelongWarehouseNameForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
+	   SELECT
+		GROUP_CONCAT(DISTINCT w.warehouseName)
+		FROM
+		stocksupplyrecord ssr
+		  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
+		
+    </select>
+    
+    <!--供应商库存获取库存最早入库日期  -->
+    <select id="getFirstInDateForSupply" parameterType="java.lang.String"   resultType="java.lang.String">
+	
+		SELECT
+		MIN(ssr.stockDate)
+		FROM
+			stocksupplyrecord ssr 
+		  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+		WHERE  ssr.manageType='in'; 
+    </select>
+    <!--供应商库存获取库存最后入库日期  -->
+    <select id="getLastInDateForSupply" parameterType="java.lang.String"   resultType="java.lang.String">
+	
+		SELECT
+		Max(ssr.stockDate)
+		FROM
+			stocksupplyrecord ssr
+			  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
+		WHERE  ssr.manageType='in'
+    </select>
+    <!--供应商库存获取库存最后出库日期  -->
+    <select id="getLastOutDateForSupply" parameterType="java.lang.String"   resultType="java.lang.String">
+	
+		SELECT
+		MAX(ssr.stockDate)
+		FROM
+			stocksupplyrecord ssr
+			  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
+		WHERE   ssr.manageType='out'; 
+    </select>
+      <!--供应商库存获取累计入库数量   -->
+     <select id="countInAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
+     SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr  
+       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+     WHERE  ssr.manageType='in'
+     </select>
+      <!--供应商库存获取累计出库数量   -->
+     <select id="countOutAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
+     SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
+       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+     WHERE  ssr.manageType='out'
+     </select>
+      <!--供应商库存获取当前库存数量   -->
+     <select id="currentAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
+     select IFNULL((
+     SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
+       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+     WHERE ssr.manageType='in'),0) 
+     -
+    IFNULL(( SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
+      LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+     WHERE ssr.manageType='out'
+     ),0)
+   
+     </select>
+     <!-- 供应商库存获取库存出库记录-->
+     <select id="getStockOutRecordForSupply"  parameterType="java.util.HashMap"  resultMap="BaseResultMap" >
+     select <include refid="Base_Column_List1" />
+      from stocksupplyrecord ssr
+       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
+     WHERE  ssr.manageType='out'
+     </select>
+      <!-- 供应商库存获取库存入库记录-->
+     <select id="getStockInRecordForSupply"  parameterType="java.util.HashMap"  resultMap="BaseResultMap" >
+     select <include refid="Base_Column_List1" />
+      from stocksupplyrecord ssr
+      LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
+     WHERE  ssr.manageType='in'
+     </select>
+     <select id="judgeSupplyStockIsExist"  parameterType="java.util.HashMap"  resultType="com.congmai.zhgj.web.model.Stock">
+     select *
+      from stock 
+     WHERE stock.materielSerial  =  #{materielSerial,jdbcType=VARCHAR} AND stock.manageType='3' and stock.delFlg=0 and stock.materielOwner=#{owner,jdbcType=VARCHAR} 
+     </select>
+     
 </mapper>

@@ -1964,17 +1964,17 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 	        };
 	        
 	    	//确认代发货
-			$scope.jumpToConfirm = function() {		
-				if(TakeDelieryTable.rows('.active').data().length != 1){
-					showToastr('toast-top-center', 'warning', '请选择一条数据进行确认！')
-				}else{
-					
-					if(TakeDelieryTable.row('.active').data().status == '0'){
-						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder"});
-						//$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
-					}else showToastr('toast-top-center', 'warning', '已确认代发货')
-				} 
-			};
+//			$scope.jumpToConfirm = function() {		
+//				if(TakeDelieryTable.rows('.active').data().length != 1){
+//					showToastr('toast-top-center', 'warning', '请选择一条数据进行确认！')
+//				}else{
+//					
+//					if(TakeDelieryTable.row('.active').data().status == '0'){
+//						$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder"});
+//						//$state.go('takeDeliveryView',{serialNum:TakeDelieryTable.row('.active').data().serialNum,oprateType:"forBuyOrder"});
+//					}else showToastr('toast-top-center', 'warning', '已确认代发货')
+//				} 
+//			};
 	        
 	        /**
 			 * 删除
@@ -4680,7 +4680,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 			showToastr('toast-top-center', 'warning', '请选择一条数据进行确认发货！')
 		}else{
 			
-			if(deliveryTable.row('.active').data().status == '0'||deliveryTable.row('.active').data().status == '10'){//供应商自建的发货或者平台通知供应商发货
+			if(deliveryTable.row('.active').data().status == '0'||deliveryTable.row('.active').data().status == '11'){//供应商自建的发货或者平台通知供应商发货
 				$state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSupplyOrder"});
 			}else showToastr('toast-top-center', 'warning', '已确认发货')
 		} 

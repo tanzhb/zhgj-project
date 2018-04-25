@@ -294,7 +294,11 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		Stock s = new Stock();
 		s.setManageType(manageType);
 		s.setComId(comId);
-		return stockMapper.selectStockListByComId(s);
+		if("3".equals(manageType)){
+			return stockMapper.selectStockSupplyList(s);
+		}else{
+			return stockMapper.selectStockListByComId(s);
+		}
 	}
 
 	@Override
@@ -321,12 +325,7 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 		return list;
 	}
 
-	@Override
-	public List<StockSupplyRecord> getStockSupplyRecordBySupplyComId(
-			String comId) {
-		// TODO Auto-generated method stub
-		return stockSupplyRecordMapper.getStockSupplyRecordBySupplyComId(comId);
-	}
+	
    
 	
 	}

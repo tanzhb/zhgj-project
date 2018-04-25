@@ -1264,6 +1264,76 @@ public class StockSupplyRecordExample {
             addCriterion("materielCount not between", value1, value2, "materielCount");
             return (Criteria) this;
         }
+
+        public Criteria andManageTypeIsNull() {
+            addCriterion("manageType is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeIsNotNull() {
+            addCriterion("manageType is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeEqualTo(String value) {
+            addCriterion("manageType =", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotEqualTo(String value) {
+            addCriterion("manageType <>", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeGreaterThan(String value) {
+            addCriterion("manageType >", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("manageType >=", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeLessThan(String value) {
+            addCriterion("manageType <", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeLessThanOrEqualTo(String value) {
+            addCriterion("manageType <=", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeLike(String value) {
+            addCriterion("manageType like", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotLike(String value) {
+            addCriterion("manageType not like", value, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeIn(List<String> values) {
+            addCriterion("manageType in", values, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotIn(List<String> values) {
+            addCriterion("manageType not in", values, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeBetween(String value1, String value2) {
+            addCriterion("manageType between", value1, value2, "manageType");
+            return (Criteria) this;
+        }
+
+        public Criteria andManageTypeNotBetween(String value1, String value2) {
+            addCriterion("manageType not between", value1, value2, "manageType");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

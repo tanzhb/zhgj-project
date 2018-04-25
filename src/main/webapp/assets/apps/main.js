@@ -3020,10 +3020,36 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 	                }]
 	            }
 	        })
-	        .state('stockView', {//库存查看
+	          .state('stockView', {//库存查看
 		        	url: "/stockView?:stockSerialNum",
 		        	templateUrl: "rest/stock/stockView",
 		        	data: {pageTitle: '库存详情'},
+		        	reload:true, 
+		        	controller: "StockController",
+		        	resolve: {
+		        		deps: ['$ocLazyLoad', function($ocLazyLoad) {
+		        			return $ocLazyLoad.load({
+		        				name: 'MetronicApp',
+		        				insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+		        				files: [       
+		        				    	'assets/global/plugins/datatables/datatables.min.css',
+		        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+		        						'assets/global/plugins/datatables/datatables.all.min.js',
+		        						'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+		        						'assets/global/plugins/bootbox/bootbox.min.js',
+		        				        'assets/apps/service/StockService.js',
+		        				        'assets/apps/service/orderService.js',
+		        				        'assets/apps/service/CommonService.js',
+		        						'assets/apps/controllers/StockController.js'
+		        				        ]
+		        			});
+		        		}]
+		        	}	        
+		    })   
+	        .state('stockSupplyView', {//供应商库存查看
+		        	url: "/stockSupplyView?:stockSerialNum",
+		        	templateUrl: "rest/stock/stockSupplyView",
+		        	data: {pageTitle: '供应商库存详情'},
 		        	reload:true, 
 		        	controller: "StockController",
 		        	resolve: {
@@ -5632,7 +5658,7 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>新增供应商库存</a></li>";
-			   }else if('viewStockForSupply' == toState.name){//查看供应商库存
+			   }else if('stockSupplyView' == toState.name){//查看供应商库存
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>供应商库存详情</a></li>";
