@@ -82,6 +82,8 @@ public class SendEmail {
 	    Properties pro = new Properties();
 	    pro.put("mail.smtp.host", smtphost);//发送邮箱服务器
 	    pro.put("mail.smtp.auth", "true");//是否需要校验
+	    pro.put("mail.smtp.port", "465");
+	    pro.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	    Session sendMailSession = Session.getInstance(pro,null); 
 	    try { 
 	        // 根据session创建一个邮件消息  
@@ -148,7 +150,7 @@ public class SendEmail {
     }
     
 	public static void main(String args[]) throws UnsupportedEncodingException{
-		//sendHtmlMail("1923188401@qq.com","邮件测试","看看有没有钓鱼邮件内容");
+		sendHtmlMail("462037670@qq.com","邮件测试","看看有没有钓鱼邮件内容");
 //		Call webCall;
 //		String location =SystemConstants.SERVICES_IP+"services/SCMyunSenEmail.do?wsdl";
 //		try {
