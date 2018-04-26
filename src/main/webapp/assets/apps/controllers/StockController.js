@@ -553,8 +553,9 @@ angular
 										'className' : 'dt-body-center',
 										'render' : function(data,
 												type, full, meta) {
+											var type="gyshang";
 											return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecordSupply(\''+full.materielSerial+'\')" id="'+data+'" value="'+data+'" data-set="#sample_gyshang .checkboxes" />'+
+		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecordSupply(\''+full.materielSerial+'\',\''+type+'\')" id="'+data+'" value="'+data+'" data-set="#sample_gyshang .checkboxes" />'+
 		                                     '<span></span></label>';
 										},"createdCell": function (td, cellData, rowData, full, col) {
 											 $compile(td)($scope);
@@ -631,7 +632,7 @@ angular
 										'render' : function(data,
 												type, row, meta) {
 										
-											if(!isNull(data)&&(row.currentAmount<=data)){
+											if(isNull(row.currentAmount)||(row.currentAmount==0)){
 	 	    									return '<span class="label label-sm label-success"  >缺料</span> ';
 	 	    								}else {
 	 	    									return '<span class="label label-sm label-success">正常</span> ';
@@ -1303,8 +1304,10 @@ angular
 								var ids = '';
 								if(judgeString=='zijian'){
 									table=tablezijian;
-								}else{
+								}else if(judgeString=='daiguan'){
 									table=tabledaiguan;
+								}else{
+									table=tableSupply;
 								}
 								// Iterate over all checkboxes in the table
 								table.$('input[type="checkbox"]').each(function() {
@@ -1502,21 +1505,38 @@ angular
 					 	                    console.log('排序');
 					 	                })
 					 	            };
-					 	           $scope.showStockRecordSupply=function(serialNum){//列表页显示出入库记录
+					 	           $scope.showStockRecordSupply=function(serialNum,type){//列表页显示出入库记录
 						 	        	  loadStockSupplyInTable(serialNum,"sample_stockSupplyIn");//入库记录
 								 			loadStockSupplyOutTable(serialNum,"sample_stockSupplyOut");//出库记录
+								 			//选中库存列表导出
+								 			if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
+								 			if($scope.gyshangSerialNums&&type=='gyshang'){//代管库存
+								    			$scope.gyshangSerialNums.push(serialNum);
+								    		}else if(type=='gyshang'){
+								    			$scope.gyshangSerialNums=[];
+								    			$scope.gyshangSerialNums.push(serialNum);
+								    		}
+								 			}else{
+								 				if($scope.gyshangSerialNums&&type=='gyshang'){
+									    			for(var i=0;i<$scope.gyshangSerialNums.length;i++){
+									    				if(serialNum == $scope.gyshangSerialNums[i]){
+									    					$scope.gyshangSerialNums.splice(i,1);
+									    				}
+									    			}
+									    		}
+								 			}
 						 	           }
 					 	           $scope.showStockRecord=function(serialNum,type){//列表页显示出入库记录
 					 	        	  loadStockInTable(serialNum,"sample_stockin");//入库记录
 							 			loadStockOutTable(serialNum,"sample_stockout");//出库记录
 							 			//选中库存列表导出
 							 			if($("#"+serialNum).is(':checked')){//选中时加到serialNums中
-								    		if($scope.zijianSerialNums&&type=='zijian'){//报关单
+								    		if($scope.zijianSerialNums&&type=='zijian'){//自建库存
 								    			$scope.zijianSerialNums.push(serialNum);
 								    		}else if(type=='zijian'){
 								    			$scope.zijianSerialNums=[];
 								    			$scope.zijianSerialNums.push(serialNum);
-								    		} else if($scope.daiguanSerialNums&&type=='daiguan'){//报关单
+								    		} else if($scope.daiguanSerialNums&&type=='daiguan'){//代管库存
 								    			$scope.daiguanSerialNums.push(serialNum);
 								    		}else if(type=='daiguan'){
 								    			$scope.daiguanSerialNums=[];
@@ -1537,6 +1557,7 @@ angular
 								    				}
 								    			}
 								    		}
+								    		
 								    	}
 									
 					 	           }
@@ -1646,7 +1667,8 @@ angular
 						            	inOutNum:{required:"入库单号不能为空！"},
 						            	materielNum:{required:"未选择物料！"},
 						            	materielCount:{required:"入库数量不能为空！",digits:"请输入正确的整数!"},
-						            	contactNum:{isPhone:"请输入正确的联系电话！"}
+						            	contactNum:{isPhone:"请输入正确的联系电话！"},
+						            	warehouseSerial:{required:"未选择出入库仓库！"}
 						            	
 						            },
 						            rules: {
@@ -1655,7 +1677,8 @@ angular
 						            	materielCount:{required:true,digits:true},
 						            	contactNum:{
 						                	isPhone: !0
-						                }
+						                },
+						                warehouseSerial:{required:true}
 						            	
 						            },
 						            invalidHandler: function(e, t) {
@@ -1803,29 +1826,39 @@ angular
 							    	   
 							       }
 							       $scope.exportStock = function(type){
-								    	 handle.blockUI("正在导出数据，请稍后"); 	 var serialNums="";
-								    	 if($scope.declarationSerialNums&&type=='zijian'){//clearance declaration
-								    		 for(var i=0;i<$scope.declarationSerialNums.length;i++){
-								    			 if(i==$scope.declarationSerialNums.length-1){
-								    				 serialNums=serialNums+$scope.declarationSerialNums[i]
+								    	 handle.blockUI("正在导出数据，请稍后"); 	
+								    	 var serialNums="";
+								    	 if($scope.zijianSerialNums&&type=='zijian'){//clearance declaration
+								    		 for(var i=0;i<$scope.zijianSerialNums.length;i++){
+								    			 if(i==$scope.zijianSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.zijianSerialNums[i]
 								    			 }else{
-								    				 serialNums=serialNums+$scope.declarationSerialNums[i]+",";
+								    				 serialNums=serialNums+$scope.zijianSerialNums[i]+",";
 								    			 }
 								    		 }
-								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
-								    	 } else if($scope.clearanceSerialNums&&type=='daiguan'){//clearance declaration
-								    		 for(var i=0;i<$scope.clearanceSerialNums.length;i++){
-								    			 if(i==$scope.clearanceSerialNums.length-1){
-								    				 serialNums=serialNums+$scope.clearanceSerialNums[i]
+								    		 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+type+"&&serialNums="+serialNums;
+								    	 } else if($scope.daiguanSerialNums&&type=='daiguan'){//clearance declaration
+								    		 for(var i=0;i<$scope.daiguanSerialNums.length;i++){
+								    			 if(i==$scope.daiguan.length-1){
+								    				 serialNums=serialNums+$scope.daiguanSerialNums[i]
 								    			 }else{
-								    				 serialNums=serialNums+$scope.clearanceSerialNums[i]+",";
+								    				 serialNums=serialNums+$scope.daiguanSerialNums[i]+",";
 								    			 }
 								    		 }
-								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type+"&&serialNums="+serialNums;
+								    		 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+type+"&&serialNums="+serialNums;
+								    	 }else if($scope.gyshangSerialNums&&type=='gyshang'){//clearance declaration
+								    		 for(var i=0;i<$scope.gyshangSerialNums.length;i++){
+								    			 if(i==$scope.gyshangSerialNums.length-1){
+								    				 serialNums=serialNums+$scope.gyshangSerialNums[i]
+								    			 }else{
+								    				 serialNums=serialNums+$scope.gyshangSerialNums[i]+",";
+								    			 }
+								    		 }
+								    		 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+type+"&&serialNums="+serialNums;
 								    	 }else {//全部导出
-								    		 window.location.href=$rootScope.basePath+"/rest/customsForm/exportCustomsForm?type="+type;
+								    		 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+type;
 								    	 }
-								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+stockType;
+//								    	 window.location.href=$rootScope.basePath+"/rest/stock/exportStock?type="+stockType;
 								    	 handle.unblockUI(); 
 								       }
 								       

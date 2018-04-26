@@ -379,6 +379,50 @@ public class StockController {
 						"自建库存信息");
 
 			}
+		}else if("gyshang".equals(type)){
+			List<Stock> stocks = stockService
+					.selectStockListByComId("3", comId);
+			if (stocks.size() != 0) {
+				for (Stock stock : stocks) {
+					Materiel m = materielService.selectById(stock
+							.getMaterielSerial());
+					stock.setMaterielName(m.getMaterielName());
+					stock.setMaterielNum(m.getMaterielNum());
+					stock.setSpecifications(m.getSpecifications());
+					stock.setAverrageWhAge("0");
+					stock.setPreSaleAmount("0");
+					stock.setOnRoadAmount("0");
+					stock.setCanSaleAmount("0");
+					
+					if(new BigDecimal(stock.getCurrentAmount()).compareTo(BigDecimal.ZERO)>-1){
+						stock.setStatus(StaticConst.getInfo("zhengchang"));
+					}else{
+						stock.setStatus(StaticConst.getInfo("queliao"));
+					}
+					stock.setRiskGrade("");
+					if(StringUtil.isNotEmpty(stock.getLastInDateSupply())&&StringUtil.isNotEmpty(stock.getLastOutDateSupply())){
+						long a=0;
+						try {
+							a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastInDateSupply()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateSupply()));
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						stock.setLastUpdateDate(a<0?stock.getLastInDateSupply():stock.getLastOutDateSupply());
+					}else if(StringUtil.isEmpty(stock.getLastInDateSupply())&&StringUtil.isNotEmpty(stock.getLastOutDateSupply())){
+						stock.setLastUpdateDate(stock.getLastOutDateSupply());
+					}else if(StringUtil.isNotEmpty(stock.getLastInDateSupply())&&StringUtil.isEmpty(stock.getLastOutDateSupply())){
+						stock.setLastUpdateDate(stock.getLastInDateSupply());
+					}else{
+						stock.setLastUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(stock.getCreateTime()));
+					}
+					
+				}
+				dataMap.put("stocks",stocks);
+				ExcelUtil.export(request, response, dataMap, "gyshangStock",
+						"供应商库存信息");
+
+			}
 		}
 	    		
 	    }
@@ -558,9 +602,9 @@ public class StockController {
 							if("0".equals(dm1.getStockCount())){
 								continue;
 							}
-							if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))>0 &&!"0".equals(stockOutCount.toString())){//出库比入库多
+							if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()==null?"0":dm1.getStockCount()))>0 &&!"0".equals(stockOutCount.toString())){//出库比入库多
 								dm1.setStockCount("0");
-								stockOutCount=stockOutCount.subtract(new BigDecimal(dm1.getStockCount()));
+								stockOutCount=stockOutCount.subtract(new BigDecimal(dm1.getStockCount()==null?"0":dm1.getStockCount()));
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());
 								}else{
@@ -568,8 +612,8 @@ public class StockController {
 										dm.setWarehouseName(dm.getWarehouseName().concat(dm1.getWarehouseName()));
 									}
 								}
-							}else if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()))<=0 &&!"0".equals(stockOutCount.toString())){//出库比入库少
-								dm1.setStockCount(new BigDecimal(dm1.getStockCount()).subtract(stockOutCount).toString());
+							}else if(stockOutCount.compareTo(new BigDecimal(dm1.getStockCount()==null?"0":dm1.getStockCount()))<=0 &&!"0".equals(stockOutCount.toString())){//出库比入库少
+								dm1.setStockCount(new BigDecimal(dm1.getStockCount()==null?"0":dm1.getStockCount()).subtract(stockOutCount).toString());
 								stockOutCount=BigDecimal.ZERO;
 								if(StringUtil.isEmpty(dm.getWarehouseName())){
 									dm.setWarehouseName(dm1.getWarehouseName());

@@ -1914,7 +1914,7 @@ angular.module('MetronicApp').controller('supplyOrderController', ['$rootScope',
 					showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 				}else{
 					
-					if(TakeDelieryTable.row('.active').data().status == '0'){
+					if(TakeDelieryTable.row('.active').data().status == '0'||TakeDelieryTable.row('.active').data().status == '11'){
 						//$state.go("takeDeliveryView",{serialNum:serialNum,oprateType:'forBuyOrder'});
 						$state.go('takeDeliveryAdd',{serialNum:TakeDelieryTable.row('.active').data().takeDelivery.serialNum,oprateType:"forBuyOrder",type:'edit'});
 					}else showToastr('toast-top-center', 'warning', '已确认发货');
@@ -4669,7 +4669,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		if(deliveryTable.rows('.active').data().length != 1){
 			showToastr('toast-top-center', 'warning', '请选择一条数据进行修改！')
 		}else{
-			if(deliveryTable.row('.active').data().status== '0'){
+			if(deliveryTable.row('.active').data().status== '0'||deliveryTable.row('.active').data().status == '11'){
 				$state.go('editDeliveryPage',{serialNumEdit:deliveryTable.row('.active').data().serialNum,oprateType:"forSupplyOrder"});
 			}else showToastr('toast-top-center', 'warning', '该条数据已经发货，不能进行修改！')
 		} 

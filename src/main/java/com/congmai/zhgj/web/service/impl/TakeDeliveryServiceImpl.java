@@ -574,8 +574,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			record.setUpdateTime(new Date());
 			StockInOutRecordExample example = new StockInOutRecordExample();
 			example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
-			record.setInOutNum(null);//不更新编号，否则影响sql执行效率
-			stockInOutRecordMapper.updateByExampleSelective(record, example);
+//			record.setInOutNum(null);//不更新编号，否则影响sql执行效率
+//			stockInOutRecordMapper.updateByExampleSelective(record, example);
 		if("1".equals(record.getStatus())){
 			//入库完成状态处理
 			stockInEndHandle(old_delivery.getOrderSerial(),takeDeliverySerial,currenLoginName);		
@@ -584,13 +584,15 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			String orderString = old_delivery.getOrderSerial();
 			String nodeString = ClauseSettlementDetail.RKH;
 			contractService.findPaymentNode(orderString, nodeString);	
+		}else{
+			stockInOutRecordMapper.updateByExampleSelective(record, example);
 		}	
 		}else{
 			//获取更新前的发货id
 			StockInOutRecord stockInOutRecord = stockInOutRecordMapper.selectByPrimaryKey(record.getSerialNum());
 			String deliverySerial = stockInOutRecord.getDeliverSerial();
 			old_delivery = delivery2Mapper.selectByDeliveryPrimaryKey(deliverySerial);
-			clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
+//			clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
 			
 			//更新入库记录
 			record.setUpdater(currenLoginName);
@@ -613,7 +615,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 			example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
 			deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
 			totalOutCount=totalOutCount.add(new  BigDecimal(materiel.getStockCount()) );
-			if(!CollectionUtils.isEmpty(materiel.getStockInBatchs())){
+			/*if(!CollectionUtils.isEmpty(materiel.getStockInBatchs())){
 				//先删除原来的入库批次信息
 				StockInBatchExample se=new StockInBatchExample();
 				com.congmai.zhgj.web.model.StockInBatchExample.Criteria c=se.createCriteria();
@@ -628,7 +630,7 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					s.setCreateTime(new Date());
 					stockInBatchMapper.insert(s);
 				}
-			}
+			}*/
 			if("1".equals(record.getStatus())){
 			createStock(materiel,new StockExample(),currenLoginName);
 			String  orderSerial=old_delivery.getOrderSerial();//取订单流水

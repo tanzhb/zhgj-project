@@ -197,8 +197,10 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			sale2BuyGroupMessage(event);
 		}else if(MessageConstants.DEMANDPLAN_TO_PROMANAGER.equals(event.getAction())){ //提交需求计划后通知产品经理
 			demand2ProManagerMessage(event);
+		}else if(MessageConstants.APPLY_BUY_APPLY.equals(event.getAction())){ //提交采购计划给申请人
+			applyBuyApplyMessage(event);
 		}
-
+//
 	}
 
 
@@ -2333,6 +2335,54 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			}
 		} catch (Exception e) {
 //			logger.warn(e.getMessage(), e);
+		}
+
+
+	}
+	/**
+	 * 
+	 * @Description (采购计划申请消息)
+	 * @param event
+	 */
+	private void applyBuyApplyMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				ProcurementPlan procurementPlan = (ProcurementPlan) event.getSource();
+
+				if(procurementPlan.getMaker()!=null){
+					user = userService.selectByUsername(procurementPlan.getMaker());
+				}
+				Message messageVO = this.createMessage(event,user);
+				messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+				messageVO.setTempleteType(MessageConstants.TEMP_APPLY_BUY_APPLY); //采购计划申请消息
+				messageVO.setObjectSerial(procurementPlan.getSerialNum());
+
+
+				Properties properties = new Properties();
+				User auditUser = actRuTaskService.getAuditUserByProcessInstanceId(procurementPlan.getProcessInstanceId());
+				if( auditUser!=null ){
+					messageVO.setReceiverId(auditUser.getUserId().toString());
+					properties.put("paramer_a", auditUser.getUserName());
+				}else{
+					throw new Exception("没有找到消息接受者！");
+				}
+				properties.put("paramer_b", user.getUserName());
+				properties.put("paramer_c", procurementPlan.getProcurementPlanNum());
+				properties.put("paramer_d", MessageConstants.URL_APPLY_BUY_APPLY);
+				properties.put("paramer_f", messageVO.getSerialNum());
+				if(StringUtils.isNotBlank(procurementPlan.getReason())){
+					properties.put("paramer_e", procurementPlan.getReason());
+				}else{
+					properties.put("paramer_e", "无");
+				}
+				messageVO.setProperties(properties);
+				webSocketProcessor.sendMessageToUser(messageVO);
+				messageService.insert(messageVO);
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
 		}
 
 

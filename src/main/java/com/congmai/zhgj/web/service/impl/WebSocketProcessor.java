@@ -182,7 +182,9 @@ public class WebSocketProcessor implements WebSocketService {
 						//自主销售订单分解提醒供应商备货给平台
 						private static String message19= "尊敬的${paramer_a}，${paramer_b}物料需要在${paramer_c}完成入库，数量为${paramer_d}，请及时通知${paramer_e}备货"+
 						  "<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
-	
+						// 采购计划申请消息模板
+						private static String message99 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购计划&nbsp;${paramer_c}&nbsp;等待您的审批。"+
+														 "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
 	static{
 		MessageTemplate.register("01", DEFAULT_MSG_TEMPLATE, null, message01);
 		MessageTemplate.register("02", DEFAULT_MSG_TEMPLATE, null, message02);
@@ -220,7 +222,7 @@ public class WebSocketProcessor implements WebSocketService {
 		MessageTemplate.register("96", DEFAULT_MSG_TEMPLATE, null, message96);
 		MessageTemplate.register("97", DEFAULT_MSG_TEMPLATE, null, message97);
 		MessageTemplate.register("98", DEFAULT_MSG_TEMPLATE, null, message98);
-		
+		MessageTemplate.register("99", DEFAULT_MSG_TEMPLATE, null, message99);
 		MessageTemplate.register("101", DEFAULT_MSG_TEMPLATE, null, message101);
 		MessageTemplate.register("102", DEFAULT_MSG_TEMPLATE, null, message102);
 		MessageTemplate.register("103", DEFAULT_MSG_TEMPLATE, null, message103);

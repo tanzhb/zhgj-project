@@ -65,6 +65,7 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 		}
 		List<DemandPlan> list = demandPlanMapper.selectByExample(example);
 		List<DemandPlan> listnew=new ArrayList<DemandPlan>();
+		List<DemandPlanMateriel> listnew1=new ArrayList<DemandPlanMateriel>();
 		if(!CollectionUtils.isEmpty(list)){
 			for(DemandPlan vo : list){
 				DemandPlanMaterielExample example2 = new DemandPlanMaterielExample();
@@ -76,6 +77,7 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 				}
 				List<DemandPlanMateriel> mList = demandPlanMaterielMapper.selectByExample(example2);
 				if(CollectionUtils.isNotEmpty(mList)){
+					listnew1.addAll(mList);
 					for(DemandPlanMateriel dm : mList){
 						int remainTime = 0;
 						try {
@@ -100,11 +102,11 @@ public class DemandPlanServiceImpl extends GenericServiceImpl<DemandPlan,String>
 				vo.setMateriels(mList);*/
 			}
 		}
-		int count = demandPlanMapper.countByExample(example);
+//		int count = demandPlanMapper.countByExample(example);
 		Page<DemandPlan> page = new Page<DemandPlan>(start, limit);
 //		page.setResult(list);
 		page.setResult(listnew);
-		page.setTotalCount(count);
+		page.setTotalCount(listnew1.size());
 		return page;
 	}
 

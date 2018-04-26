@@ -51,6 +51,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	    	
 	 });
+	$scope.getCurrentAddress = function(){//获取采购商联系地址
+			var promise = demandPlanService.getCompanyInfo($scope.demandPlan.buyComId);
+			promise.then(function(data){
+				$scope.companyAddresses = data.data.companyAddresses;
+				
+			},function(data){
+				//调用承诺接口reject();
+			});
+		}
 	  var getCurrentUser = function(){
 			var promise = commonService.getCurrentUser();
 			promise.then(function(data){
@@ -60,7 +69,6 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 				//调用承诺接口reject();
 			});
 		}
-	  
 	  $scope.clearNoNum = function(obj,attr,index){
 	    	 //把非数字的都替换掉
 		  if(obj[attr].substring(0,1) =="0"){

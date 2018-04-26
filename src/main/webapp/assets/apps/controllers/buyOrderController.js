@@ -4051,9 +4051,13 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					    		   return;
 					    	   }
 			    			var processBase = table.row('.active').data().processBase;
+			    			var orderAmount = table.row('.active').data().orderAmount;
 			    			 if(processBase != null){
 			    				showToastr('toast-top-center', 'warning', '该采购订单已发起流程审批，不能再次申请！')
-			    			}else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
+			    			}else if(orderAmount==null||Number(orderAmount)==0){
+					    		   showToastr('toast-top-center', 'warning', '该采购订单金额为0，不能申请！');
+					    		   return;
+					    	   }else $state.go('submitBuyApply',{serialNum:table.row('.active').data().serialNum});
 			    		}  
 		    	   }else{
 		    		   if(serialNum=='view'){//详情申请
