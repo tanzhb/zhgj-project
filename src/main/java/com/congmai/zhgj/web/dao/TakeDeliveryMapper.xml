@@ -375,7 +375,7 @@
     from takeDelivery td
     left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
-    left join stockinoutrecord  sr on  sr.takeDeliverSerial=td.serialNum
+    left join stockInOutRecord  sr on  sr.takeDeliverSerial=td.serialNum
     
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />

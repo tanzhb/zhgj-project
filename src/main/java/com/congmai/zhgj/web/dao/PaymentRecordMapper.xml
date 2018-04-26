@@ -124,7 +124,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from paymentrecord
+    from paymentRecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -135,21 +135,21 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from paymentrecord
+    from paymentRecord
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from paymentrecord
+    delete from paymentRecord
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" >
-    delete from paymentrecord
+    delete from paymentRecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
   <insert id="insert" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    insert into paymentrecord (serialNum, paymentNum, supplyComId, 
+    insert into paymentRecord (serialNum, paymentNum, supplyComId, 
       buyComId, paymentType, paymentPlanSerial, 
       orderSerial, applyPaymentAmount, applyCurrency, 
       playPaymentDate, paymentNode, payType, 
@@ -185,7 +185,7 @@
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    insert into paymentrecord
+    insert into paymentRecord
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
         serialNum,
@@ -480,13 +480,13 @@
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.congmai.zhgj.web.model.PaymentRecordExample" resultType="java.lang.Integer" >
-    select count(*) from paymentrecord
+    select count(*) from paymentRecord
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update paymentrecord
+    update paymentRecord
     <set >
       <if test="record.serialNum != null" >
         serialNum = #{record.serialNum,jdbcType=VARCHAR},
@@ -638,7 +638,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update paymentrecord
+    update paymentRecord
     set serialNum = #{record.serialNum,jdbcType=VARCHAR},
       paymentNum = #{record.paymentNum,jdbcType=VARCHAR},
       supplyComId = #{record.supplyComId,jdbcType=VARCHAR},
@@ -692,7 +692,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    update paymentrecord
+    update paymentRecord
     <set >
       <if test="paymentNum != null" >
         paymentNum = #{paymentNum,jdbcType=VARCHAR},
@@ -839,7 +839,7 @@
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.congmai.zhgj.web.model.PaymentRecord" >
-    update paymentrecord
+    update paymentRecord
     set paymentNum = #{paymentNum,jdbcType=VARCHAR},
       supplyComId = #{supplyComId,jdbcType=VARCHAR},
       buyComId = #{buyComId,jdbcType=VARCHAR},

@@ -32,7 +32,11 @@
             </list>
         </property>
     </bean>
-
+	<bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="3000" />
+        <property name="logSlowSql" value="true" />
+        <property name="mergeSql" value="true" />
+    </bean>
     <!-- dataSource 配置 -->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!-- 基本属性 url、user、password -->
@@ -65,6 +69,13 @@
 
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="stat"/>
+        
+        <property name="filters" value="log4j" />
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter" />
+            </list>
+        </property>
         
         <!-- 超过时间限制是否回收 -->  
 		<property name="removeAbandoned" value="true" />  

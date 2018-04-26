@@ -258,7 +258,7 @@
 	LEFT JOIN deliveryTransport e ON e.deliverSerial=a.serialNum
 	LEFT JOIN  company   com  ON  com.comId=a.supplyComId
 	LEFT JOIN  company   com1  ON  com1.comId=a.buyComId
-	left join stockinoutrecord  sr on  sr.deliverSerial=a.serialNum
+	left join stockInOutRecord  sr on  sr.deliverSerial=a.serialNum
 	WHERE a.delFlg=0
 	
 	<if test="supplyComId== null" >
