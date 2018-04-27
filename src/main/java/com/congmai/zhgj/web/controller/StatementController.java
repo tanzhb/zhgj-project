@@ -160,8 +160,8 @@ public class StatementController {
     	User user = UserUtil.getUserFromSession();
     	if(user!=null){
     		List<String> comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
-    		if("buy".equals(type)){//平台客户对账单供应商为空
-    			if(comIds==null){
+    		if("buy".equals(type)){
+    			if(comIds==null){//平台客户对账单供应商为空
     				criteria.andSupplyComIdIsNull();
     			}else{
     				criteria.andSupplyComIdIn(comIds);

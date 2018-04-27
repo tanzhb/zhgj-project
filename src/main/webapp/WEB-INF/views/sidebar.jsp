@@ -329,10 +329,10 @@
             </a>
             <ul class="sub-menu">
 				<shiro:hasPermission name="zhgj:statementSupply">
-					<li><a ui-sref="supplyStatement"><shiro:hasRole name="admin">供应商</shiro:hasRole>对账单</a></li>
+					<li><a ui-sref="supplyStatement">供应商对账单</a></li>
 				</shiro:hasPermission>
 				<shiro:hasPermission name="zhgj:statementBuy">
-					<li><a ui-sref="buyStatement"><shiro:hasRole name="admin">客户</shiro:hasRole>对账单</a></li>
+					<li><a ui-sref="buyStatement">客户对账单</a></li>
 				</shiro:hasPermission>
 			</ul>
         </li>

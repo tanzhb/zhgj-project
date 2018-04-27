@@ -46,7 +46,7 @@
                                 <button   ng-hide="statementAdd" class="btn blue  btn-outline  btn-sm " ng-click="savestatement()">
                                             <i class="fa fa-save"></i> 保存 </button> -->
                                 <button   class="btn green  btn-sm btn-circle" ng-click="saveSupplyStatement()">
-                              		<i class="fa fa-check"></i> 确认发送 </button>
+                              		<i class="fa fa-check"></i> 确认 </button>
                       			<button    class="btn defualt  btn-sm btn-circle" ng-click="cancelSupplyStatement()" onclick="return false;">
                               		<i class="fa fa-mail-reply"></i> 取消 </button>
                             </div>
@@ -146,27 +146,27 @@
 										</div>
 						
 										<!--/span-->
-										<div class="col-md-4">
+										<!-- <div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="makerDate">超期款</label>
                                                     <div class="">
-                                                        <!--  <input type="text" class="form-control" id="approval"  name="approval" ng-model="statement.approval" ng-hide="statementAdd" > -->
+                                                         <input type="text" class="form-control" id="approval"  name="approval" ng-model="statement.approval" ng-hide="statementAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left">{{statement.overTimeAmout|currency:'￥'}}</p>
                                                     </div>
                                             </div>
 										</div>
-										<!--/span-->
+										/span
 										<div class="col-md-4">
 											<div class="form-group">
                                                     <label class="control-label bold" for="approval">本期扣款</label>
                                                     <div class="">
-                                                      <!--   <input type="text" class="form-control" id="approval"  name="approval" ng-model="statement.approval" ng-hide="statementAdd" > -->
+                                                        <input type="text" class="form-control" id="approval"  name="approval" ng-model="statement.approval" ng-hide="statementAdd" >
                                                         <div class="form-control-focus"> </div>
                                                          <p class="control-label left">{{statement.serviceAmount|currency:'￥'}}</p>
                                                     </div>
                                             </div>
-										</div>
+										</div> -->
 										<!--/span-->
 									</div>
 									<!--/row-->
@@ -226,52 +226,52 @@
 								<thead>
 									<tr>
 										<th>采购单号</th>
-										<th>采购合同号</th>
+										<!-- <th>采购合同号</th> -->
 										<th>下单日期</th>
 										<th>订单金额</th>
 										<th>应付金额</th>
 										<th>已付金额</th>
 										<th>未付金额</th>
-										<th>超期金额</th>
+										<!-- <th>超期金额</th>
 										<th>服务扣除金额</th>
 										<th>已开票金额</th>
 										<th>未开票金额</th>
 										<th>订单状态</th>
-										<th>操作</th>
+										<th>操作</th> -->
 									</tr>
 								</thead>
 								<tbody> 
 									<tr ng-repeat="info in orderList track by $index" >
 										<td>{{info.orderNum}}</td>
-										<td>{{info.orderNum}}</td>
+										<!-- <td>{{info.orderNum}}</td> -->
 										<td>{{info.orderDate}}</td>
 										<td>{{info.totalMoney|currency:'￥'}}</td>
 										<td>{{info.paymentMoney|currency:'￥'}}</td>
 										<td>{{info.totalPaymentAmount|currency:'￥'}}</td>
 										<td>{{info.totalUnPaymentMoney|currency:'￥'}}</td>
-										<td>{{info.overDueMoney|currency:'￥'}}</td>
+										<!-- <td>{{info.overDueMoney|currency:'￥'}}</td>
 										<td>{{info.totalServiceMoney|currency:'￥'}}</td>
 										<td>{{info.totalReadyAmount|currency:'￥'}}</td>
 										<td>{{info.totalUnReadyAmount|currency:'￥'}}</td>
-										<td>{{info.orderStatus}}</td>
-										<td></td>
+										<td>{{info.orderStatus}}</td> -->
+										
 									</tr>
 									<tr ng-if="orderList!=null&&orderList.length>0">
 										<td></td>
-										<td></td>
+										<!-- <td></td> -->
 										<td>合计：</td>
 										<td>{{totalMoney|currency:'￥'}}</td>
 										<td>{{paymentMoney|currency:'￥'}}</td>
 										<td>{{totalPaymentAmount|currency:'￥'}}</td>
 										<td>{{totalUnPaymentMoney|currency:'￥'}}</td>
-										<td>{{overDueMoney|currency:'￥'}}</td>
+										<!-- <td>{{overDueMoney|currency:'￥'}}</td>
 										<td>{{totalServiceMoney|currency:'￥'}}</td>
 										<td>{{totalReadyAmount|currency:'￥'}}</td>
 										<td>{{totalUnReadyAmount|currency:'￥'}}</td>
-										<td></td>
+										<td></td> -->
 									</tr>
 									<tr ng-if="orderList==null||orderList.length==0">
-											<td colspan="13" align="center">暂无数据</td>
+											<td colspan="6" align="center">暂无数据</td>
 									</tr>
 								</tbody>
 							</table>
@@ -302,14 +302,15 @@
 												<th>关联采购订单号</th>
 												<th>计划付款日期</th>
 												<th>付款节点</th>
-												<th>付款金额</th>
-												<th>付款状态</th>
-												<th>账期（天）</th>
+												<th>应付金额</th>
+												<th>核算金额</th>
+												<!-- <th>付款状态</th> -->
+												<!-- <th>账期（天）</th>
 												<th>利息</th>
 												<th>是否开票</th>
 												<th>发票日期</th>
 												<th>发票编号</th>
-												<th>操作</th>
+												<th>操作</th> -->
 											</tr>
 										</thead>
 										<tbody> 
@@ -318,31 +319,33 @@
 												<td>{{payment.orderNum}}</td>
 												<td>{{payment.paymentPlanDate}}</td>
 												<td>{{payment.paymentNode}}</td>
+												<td>{{payment.applyPaymentAmount|currency:'￥'}}</td>
 												<td>{{payment.paymentAmount|currency:'￥'}}</td>
-												<td>{{payment.paymentStatus}}</td>
+												<!-- <td>{{payment.paymentStatus}}</td>
 												<td>{{payment.period==undefined?"未设置":payment.period}}</td>
 												<td>{{payment.interest}}</td>
 												<td>{{payment.isBill}}</td>
 												<td>{{payment.billDate}}</td>
 												<td>{{payment.billNum}}</td>
-												<td></td>
+												<td></td> -->
 											</tr>
 											<tr ng-if="paymentList!=null&&paymentList.length>0">
 												<td></td>
 												<td></td>
 												<td></td>
 												<td>合计：</td>
+												<td>{{applyPaymentTotal|currency:'￥'}}</td>
 												<td>{{paymentTotal|currency:'￥'}}</td>
+												<!-- <td></td>
 												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
-												<td></td>
-												<td></td>
+												<td></td> -->
 											</tr>
 											<tr ng-if="paymentList==null||paymentList.length==0">
-												<td colspan="13" align="center">暂无数据</td>
+												<td colspan="7" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>
@@ -354,51 +357,50 @@
 										class="table table-striped table-bordered table-advance table-hover">
 										<thead>
 											<tr>
-												<th>付款计划单号</th>
-												<th>关联采购订单号</th>
-												<th>计划付款日期</th>
-												<th>付款节点</th>
+												<th>付款水单号</th>
 												<th>付款金额</th>
-												<th>付款状态</th>
+												<th>币种</th>
+												<th>付款方式</th>
+												<th>到账日期</th>
+												<!-- <th>到账日期</th>
 												<th>账期（天）</th>
 												<th>利息</th>
 												<th>是否开票</th>
 												<th>发票日期</th>
 												<th>发票编号</th>
-												<th>操作</th>
+												<th>操作</th> -->
 											</tr>
 										</thead>
 										<tbody> 
 											<tr ng-repeat="payment in alreadyPaymentList track by $index" >
-												<td>{{payment.paymentPlanNum}}</td>
-												<td>{{payment.orderNum}}</td>
-												<td>{{payment.paymentPlanDate}}</td>
-												<td>{{payment.paymentNode}}</td>
-												<td>{{payment.paymentAmount|currency:'￥'}}</td>
-												<td>{{payment.paymentStatus}}</td>
+												<td>{{payment.memoNum}}</td>
+												<td>{{payment.moneyAmount|currency:'￥'}}</td>
+												<td>{{payment.currency}}</td>
+												<td>{{payment.paymentStyle}}</td>
+												<td>{{payment.paymentDate}}</td>
+												<!-- <td>{{payment.paymentStatus}}</td>
 												<td>{{payment.period==null?"未设置":payment.period}}</td>
 												<td>{{payment.interest}}</td>
 												<td>{{payment.isBill}}</td>
 												<td>{{payment.billDate}}</td>
 												<td>{{payment.billNum}}</td>
-												<td></td>
+												<td></td> -->
 											</tr>
-											<tr ng-if="alreadyPaymentList==null&&alreadyPaymentList.length>0">
-												<td></td>
-												<td></td>
-												<td></td>
+											<tr ng-if="alreadyPaymentList!=null&&alreadyPaymentList.length>0">
 												<td>合计：</td>
 												<td>{{alreadyPaymentTotal|currency:'￥'}}</td>
 												<td></td>
 												<td></td>
 												<td></td>
+												<!-- <td></td>
 												<td></td>
 												<td></td>
 												<td></td>
 												<td></td>
+												<td></td> -->
 											</tr>
 											<tr ng-if="alreadyPaymentList==null||alreadyPaymentList.length==0">
-												<td colspan="13" align="center">暂无数据</td>
+												<td colspan="5" align="center">暂无数据</td>
 											</tr>
 										</tbody>
 									</table>

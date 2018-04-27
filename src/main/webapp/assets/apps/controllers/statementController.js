@@ -165,9 +165,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 	var getTotal = function(){
 			
 		    getOrderData();
-	    	$scope.statement.nowShouldPay = $scope.paymentMoney + $scope.statement.beginShouldPay;
-	    	$scope.statement.nowAlreadyPay = $scope.totalPaymentAmount;
-	    	$scope.statement.endShouldPay = $scope.totalUnPaymentMoney + $scope.statement.beginShouldPay;
+	    	$scope.statement.nowShouldPay = $scope.applyPaymentTotal;//本期应收付
+	    	$scope.statement.nowAlreadyPay = $scope.alreadyPaymentTotal;//本期已收付款水单
+	    	$scope.statement.endShouldPay = ($scope.applyPaymentTotal - $scope.alreadyPaymentTotal + Number($scope.statement.beginShouldPay)).toFixed(2);
 	    	$scope.statement.overTimeAmout = 0;
 	    	$scope.statement.serviceAmount = 0;
 	}
@@ -183,6 +183,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     	$scope.totalReadyAmount=0;
     	$scope.totalUnReadyAmount=0;
     	$scope.paymentTotal=0;
+    	$scope.applyPaymentTotal=0;
     	$scope.alreadyPaymentTotal=0;
     	for(var i in $scope.orderList){
     		$scope.totalMoney += Number($scope.orderList[i].totalMoney);
@@ -197,9 +198,10 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     	
     	for(var i in $scope.paymentList){
     		$scope.paymentTotal += Number($scope.paymentList[i].paymentAmount);
+    		$scope.applyPaymentTotal += Number($scope.paymentList[i].applyPaymentAmount);
     	}
     	for(var i in $scope.alreadyPaymentList){
-    		$scope.alreadyPaymentTotal += Number($scope.alreadyPaymentList[i].paymentAmount);
+    		$scope.alreadyPaymentTotal += Number($scope.alreadyPaymentList[i].moneyAmount);
     	}
 	}
    
@@ -376,9 +378,9 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'nowShouldPay' },
                               { mData: 'nowAlreadyPay' },
                               { mData: 'endShouldPay' },
-                              { mData: 'overTimeAmout' },
+                              /*{ mData: 'overTimeAmout' },
                               { mData: 'serviceAmount' },
-                              { mData: 'status' }
+                              { mData: 'status' }*/
                         ],
                'aoColumnDefs' : [ {
 							'targets' : 0,
@@ -411,6 +413,16 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 								 $compile(td)($scope);
 						       }
 						},{
+							'targets' : 3,
+							'render' : function(data,
+									type, row, meta) {
+								if(isNull(data)){
+									return "中航能科（上海）能源科技有限公司";
+								}else{
+									return data;
+								}
+							}
+						},{
 							'targets' : 4,
 							'render' : function(data,
 									type, row, meta) {
@@ -434,7 +446,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 									type, row, meta) {
 								return $filter('currency')(data,'￥');
 							}
-						},{
+						}/*,{
 							'targets' : 8,
 							'render' : function(data,
 									type, row, meta) {
@@ -452,7 +464,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
 									type, row, meta) {
 								return '待接收';
 							}
-						}  ]
+						}*/  ]
 
             }).on('statement.dt',
             function() {
@@ -560,10 +572,10 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
                               { mData: 'beginShouldPay' },
                               { mData: 'nowShouldPay' },
                               { mData: 'nowAlreadyPay' },
-                              { mData: 'endShouldPay' },
+                              { mData: 'endShouldPay' }/*,
                               { mData: 'overTimeAmout' },
                               { mData: 'serviceAmount' },
-                              { mData: 'status' }
+                              { mData: 'status' }*/
                             ],
                    'aoColumnDefs' : [ {
     							'targets' : 0,
@@ -596,6 +608,17 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     								 $compile(td)($scope);
     						       }
     						},{
+    							'targets' : 3,
+    							'render' : function(data,
+    									type, row, meta) {
+    								if(isNull(data)){
+    									return "中航能科（上海）能源科技有限公司";
+    								}else{
+    									return data;
+    								}
+    								
+    							}
+    						},{
     							'targets' : 4,
     							'render' : function(data,
     									type, row, meta) {
@@ -619,7 +642,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     									type, row, meta) {
     								return $filter('currency')(data,'￥');
     								}
-    						},{
+    						}/*,{
     							'targets' : 8,
     							'render' : function(data,
     									type, row, meta) {
@@ -637,7 +660,7 @@ angular.module('MetronicApp').controller('statementController', ['$rootScope', '
     									type, row, meta) {
     								return "待接收";
     							}
-    						}]
+    						}*/]
 
                 }).on('statement.dt',
                 function() {
