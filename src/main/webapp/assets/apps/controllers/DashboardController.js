@@ -62,6 +62,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 			$state.go("demandPlan");
 		}else if(actionName=="noticeSupply"){
 			$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
+		}else if(actionName=="buyApply"){
+			$state.go("procurementPlan");
 		}
 	}
     $scope.changeReadFlg = function(serialNum,readFlg){
@@ -162,6 +164,12 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 				if(workflowType == 'delivery'){
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='saleOrder({tabHref:3})'>" +//tabHref:1将tab指向“待办列表”
+							"<span>"+workflowName+"："+title+"</span></a></div>" +
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				}
+				if(workflowType == 'buyApply'){
+					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
+					"<a ui-sref='procurementPlan({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
 					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
 				}

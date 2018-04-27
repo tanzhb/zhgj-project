@@ -68,6 +68,8 @@ public class MessageConstants {
 	 * 提示平台采购组人员委托销售订单分解成功提示发起采购
 	 */
 	public static final String BE_CONFIRM_APPLY_BUY_ORDER = "beConfirmApplyBuyOrder";
+	
+	public static final String APPLY_BUY_APPLY = "buyApply";
 	/*========================销售订单相关消息End==============================*/
 	/**
 	 * 销售订单申请消息
@@ -248,7 +250,10 @@ public class MessageConstants {
 	 * 采购订单申请消息URL
 	 */
 	public static final String URL_APPLY_BUY_ORDER = "buyOrder({tabHref:'1'})";
-	
+	/**
+	 * 采购计划申请消息URL
+	 */
+	public static final String URL_APPLY_BUY_APPLY = "procurementPlan";
 	/**
 	 * 采购订单驳回消息URL
 	 */
@@ -697,7 +702,10 @@ public class MessageConstants {
 	 * 平台代发货通知
 	 */
 	public static final String TEMP_NOTICESUPPLY= "20";
-	
+	/**
+	 * 采购计划申请消息模板
+	 */
+	public static final String TEMP_APPLY_BUY_APPLY= "99"; 
 	
 	
 	/*===========出入库检验相关消息End=================*/

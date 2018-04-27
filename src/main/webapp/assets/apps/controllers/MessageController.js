@@ -210,6 +210,8 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("demandPlan");
 				}else if(actionName=="noticeSupply"){
 					$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
+				}else if(actionName=="buyApply"){
+					$state.go("procurementPlan");
 				}
 			}
 			

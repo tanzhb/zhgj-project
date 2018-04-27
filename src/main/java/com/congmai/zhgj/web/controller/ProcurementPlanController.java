@@ -1088,7 +1088,7 @@ public class ProcurementPlanController {
 //	                message.setStatus(Boolean.TRUE);
 //	    			message.setMessage("订单流程已启动，流程ID：" + processInstanceId);
 			    logger.info("processInstanceId: "+processInstanceId);
-			    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_SALE_ORDER));
+			    EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_BUY_APPLY));
 			    flag = "1";
 			} catch (ActivitiException e) {
 //	            	message.setStatus(Boolean.FALSE);
@@ -1283,7 +1283,7 @@ public class ProcurementPlanController {
 				if(reApply){
 				        //申请消息
 					procurementPlan = procurementPlanService.selectById(procurementPlan.getSerialNum());
-					   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_BUY_ORDER));
+					   EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.APPLY_BUY_APPLY));
 				}else{
 					cancelApply(procurementPlan.getSerialNum(),taskId);
 				}

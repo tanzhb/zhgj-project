@@ -491,6 +491,6 @@
     <include refid="Base_Column_List1" />
     from procurementPlanMateriel  ppm
     left join procurementplan p on  p.serialNum=ppm.procurementPlanSerial
-   where p.status=2 and  ppm.supplyComId=#{supplyComId,jdbcType=VARCHAR} and ppm.delFlg=0
+   where (p.status=2 or  p.status=3) and  ppm.supplyComId=#{supplyComId,jdbcType=VARCHAR} and ppm.delFlg=0
   </select>
 </mapper>

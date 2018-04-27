@@ -462,7 +462,6 @@
 			                                            </tbody>
 			                                            <tbody ng-repeat="_address in companyAddresses track by $index">
 			                                                <tr ng-mouseover="showOperation('address',$index)" ng-mouseleave="hideOperation('address',$index)">
-			                                                	<td>{{_address.warehouseName}}</td>
 			                                                    <td>{{_address.address}}</td>
 			                                                    <td>{{_address.zipCode}}</td>
 			                                                    <td>{{_address.contactTel}}</td>

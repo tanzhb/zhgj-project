@@ -48,10 +48,10 @@
 	                     <label class="btn btn-transparent green btn-circle btn-sm" ng-click="addStock('gysOut')">
 	                                              <i class="fa fa-plus"></i> 添加出库</label>
 	                </shiro:hasPermission>
-	                <shiro:hasPermission name="stockSupply:edit">
+	                <%-- <shiro:hasPermission name="stockSupply:edit">
 						<label class="btn btn-transparent purple btn-circle btn-sm" ng-click="toEditStockPage('gyshang')">
 	                                              <i class="fa fa-edit"></i> 修改</label>
-	                </shiro:hasPermission>
+	                </shiro:hasPermission> --%>
 	                <shiro:hasPermission name="stockSupply:delete">
 						<label class="btn btn-transparent red btn-circle btn-sm" ng-click="delStock('gyshang')" >
 	                                              <i class="fa fa-minus"></i> 删除</label>
@@ -69,7 +69,7 @@
 			</div>
 
 			<!-- 删除供应商库存start -->
-				<div id="delStockzijianModal" class="modal fade" tabindex=
+				<div id="delStockgyshangModal" class="modal fade" tabindex=
 
 				data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
@@ -85,7 +85,7 @@
 						<div class="modal-footer">
 							<button type="button" data-dismiss="modal"
 								class="btn dark btn-outline">取消</button>
-							<button type="button" ng-click="confirmDellStock('gyshang')" class="btn green">确定
+							<button type="button" ng-click="confirmDellStock()" class="btn green">确定
 								</button>
 						</div>
 					</div>

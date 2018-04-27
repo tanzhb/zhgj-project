@@ -19,6 +19,8 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			
 			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
 				$('#buyPlanTab a[href="#daiban"]').tab('show');
+				$('#buyPlanTab li[id="buyApply"]').removeClass("active");
+				$('#buyPlanTab li[id="daiban"]').addClass("active");
 				showDbTable();
 			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
 				$('#buyPlanTab a[href="#yiban"]').tab('show');
@@ -346,6 +348,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 		var _url = ctx + "rest/procurementPlan/modifyProcurementPlan/" + $("#taskId").val();
 		doProcurementPlan(_url, mydata, 'modify' );
 	};
+	 $scope.viewGraphTrace = function(processInstanceId){
+		 	graphTrace(processInstanceId,ctx);
+}
 	//流程相关方法end
     var table;
     var tableAjaxUrl = "rest/procurementPlan/findProcurementPlanList?type=buy";
@@ -476,7 +481,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 							'render' : function(data,
 									type, full, meta) {
 								 if(!isNull(full.processBase)&&full.processBase.status=='PENDING'){
-									return '<span style="color:red">审批中</span>'
+									return '<span style="color:red"  ng-click="viewGraphTrace(\''+full.processBase.processInstanceId+'\')">审批中</span>'
 								}else if(!isNull(full.processBase)&&full.processBase.status=='APPROVAL_FAILED'){
 									return '<span style="color:red">未通过</span>'
 								} else if(data==2){
@@ -486,7 +491,10 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 								}else{
 									return '<span style="color:green">已完成</span>'
 								}
-							}
+							},
+							"createdCell": function (td, cellData, rowData, row, col) {
+								 $compile(td)($scope);
+						       }
 						},{
 							'targets' : 8,
 							'className' : 'dt-body-center',

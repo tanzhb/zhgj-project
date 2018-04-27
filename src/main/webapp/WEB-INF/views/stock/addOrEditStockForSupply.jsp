@@ -42,7 +42,7 @@
             <div class="portlet-body">
 				<div class="portlet light ">
                         <div class="portlet-title">
-                            <div class="caption">供应商库存</div>
+                            <div class="caption">供应商库存</div><!--新增出入库记录  -->
                             <div class="actions" >
                                 <button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
                             </div>
@@ -167,8 +167,8 @@
 									<div class="row">
 										<div class="col-md-4">
 											<div class="form-group">
-                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('In')>-1"> 入库仓库</label>
-                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('Out')>-1"> 出库仓库</label>
+                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('In')>-1"> <span class="required"> * </span>入库仓库</label>
+                                                    <label class="control-label bold" for="supplyComId"   ng-if="judgeSerialNum.indexOf('Out')>-1"><span class="required"> * </span> 出库仓库</label>
                                                     <div class="">
                                                     <div  ng-hide="span">
 														<select class="form-control"  id="warehouseSerial"  data-live-search="true" data-size=""  ng-hide="stockAdd"
