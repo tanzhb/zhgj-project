@@ -1045,7 +1045,7 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
       		$scope.setComName=function(obj,attr){
       			var  supplyComId=obj[attr];
       			for(var i in obj.supplyMateriels){
-      				if(obj.supplyMateriels[i].supply.comId=supplyComId){
+      				if(obj.supplyMateriels[i].supply.comId==supplyComId){
       					obj.supplyName=obj.supplyMateriels[i].supply.comName;
       					return;
       				}

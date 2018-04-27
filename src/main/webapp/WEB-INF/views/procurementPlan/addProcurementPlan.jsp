@@ -318,8 +318,8 @@
                                      		<p class="form-control-static" > 1 </p>
 		                          </td>
 		                             <td>  
-		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount==null&&(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"  ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   ><!--已注释内有验证采购数量不得大于需求数量  -->
-                                     	<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount!=null&&(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   >	
+		                          		<input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"  ng-init="demandMateriel[$index].planCount=demandMateriel[$index].amount"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   ><!--已注释内有验证采购数量不得大于需求数量  -->
+                                     	<!-- <input style="padding:6px 3px" type="text"  name="buyCount{{$index}}" class="form-control" ng-hide="demandMaterielInput{{$index}}" ng-model="demandMateriel[$index].planCount"   ng-if="demandMateriel[$index].planCount!=null&&(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"   ng-change="clearNoNum(demandMateriel[$index],'planCount' ,'amount')"   > -->	
                                      		<p class="form-control-static" ng-show="demandMaterielShow{{$index}}||(_procurementPlanMateriel.status!=undefined&&_procurementPlanMateriel.status!=0)"> {{_procurementPlanMateriel.planCount}} </p>
                                      		<!-- <br  ng-if="(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"/>
                                      		<p class="form-control-static"  ng-hide="demandMaterielInput{{$index}}"  ng-if="(_procurementPlanMateriel.status==undefined||_procurementPlanMateriel.status==0)"> 当前库存：{{_procurementPlanMateriel.materiel.stockCount}} </p> -->
@@ -480,11 +480,13 @@
                                      		<p class="form-control-static" ng-hide="procurementPlanMaterielInput{{$index}}"> 当前库存：{{_procurementPlanMateriel.stockCount}} </p>
 		                          </td>
 		                          <td>
-	                                                    <select ng-hide="procurementPlanMaterielInput{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control"   ng-change="setComName(_procurementPlanMateriel,'supplyComId')"  ng-model="_procurementPlanMateriel.supplyComId"  ng-if=" _procurementPlanMateriel.supplyMateriels!=null&&_procurementPlanMateriel.supplyMateriels.length!=0">
-	                                                    	<option ng-repeat="m in _procurementPlanMateriel.supplyMateriels" value="{{m.supply.comId}}"  >
-	                                                    		{{m.supply.comName}}
-	                                                    	</option>
-	                                                    </select>
+		                          						<div ng-if=" _procurementPlanMateriel.supplyMateriels!=null&&_procurementPlanMateriel.supplyMateriels.length!=0">
+		                                                    <select ng-hide="procurementPlanMaterielInput{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control"   ng-change="setComName(_procurementPlanMateriel,'supplyComId')"  ng-model="_procurementPlanMateriel.supplyComId"  >
+		                                                    	<option ng-repeat="m in _procurementPlanMateriel.supplyMateriels" value="{{m.supply.comId}}"  >
+		                                                    		{{m.supply.comName}}
+		                                                    	</option>
+		                                                    </select>
+	                                                    </div>
 	                                                    <span  ng-hide="procurementPlanMaterielInput{{$index}}"   ng-if="_procurementPlanMateriel.supplyMateriels==null||_procurementPlanMateriel.supplyMateriels.length==0">无供应商</span>
 	                                                   <!--  <select ng-hide="demandPlanMaterielEdit{{$index}}"  id="supplyMaterielSerial{{$index}}"   class="form-control" ng-model="materiel.supplyMaterielSerial"   ng-if="materiel.supplyMateriels==null||materiel.supplyMateriels.length==0">
 	                                                    	<option ng-repeat="com in suppliers" value="{{com.comId}}"  >

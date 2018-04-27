@@ -2342,7 +2342,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 				$scope["orderMaterielShow"+index] = true;
 				$scope["orderMaterielEdit"+index] = false;
 	        	for(var i=0;i<$scope.copyMateriels.length;i++){
-	        		if(materiel.serialNum == $scope.copyMateriels[i].serialNum){ // 如果是以保存的物料，回滚
+	        		if(!isNull(materiel.serialNum)&&ismateriel.serialNum == $scope.copyMateriels[i].serialNum){ // 如果是以保存的物料，回滚
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)] = $scope.copyMateriels[i];
 						break;
 	        		}
@@ -2531,7 +2531,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){
-	        				if(materiel == $scope.orderMateriel[i]){
+	        				if(materiel == $scope.orderMateriel[i]){//保持下方所有物料的编辑状态
+	        					/*for(var j=i;j+1<$scope.orderMateriel.length;j++){
+	        						$scope["orderMaterielInput"+j] = $scope["orderMaterielInput"+(j+1)];
+		    	        			$scope["orderMaterielShow"+j] = $scope["orderMaterielShow"+(j+1)];
+	        					}*/
 	        					$scope.orderMateriel.splice(i,1);
 	        				}
 	        			}
