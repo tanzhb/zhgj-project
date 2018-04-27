@@ -676,6 +676,7 @@ public class StockController {
 		    				stock.setMaterielSerial(stockSupplyRecord.getMaterielSerial());
 		    				stock.setStockNum(orderService.getNumCode("IV"));
 		    				stock.setCreateTime(new Date());
+		    				stock.setDelFlg("0");
 		    				stockService.insert(stock);
 		    			}
 		    			stockSupplyRecord.setSerialNum(ApplicationUtils.random32UUID());

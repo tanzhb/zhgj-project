@@ -70,13 +70,6 @@
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="stat"/>
         
-        <property name="filters" value="log4j" />
-        <property name="proxyFilters">
-            <list>
-                <ref bean="stat-filter" />
-            </list>
-        </property>
-        
         <!-- 超过时间限制是否回收 -->  
 		<property name="removeAbandoned" value="true" />  
 		<!-- 超时时间；单位为秒。180秒=3分钟 -->  

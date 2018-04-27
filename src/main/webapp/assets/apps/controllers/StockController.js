@@ -69,17 +69,22 @@ angular
 									 			loadStockSupplyTable();
 									 		}else{
 										 			loadStockzijianTable();
-										 			loadStockdaiguanTable();
+//										 			loadStockdaiguanTable();
+										 			loadStockSupplyTable();
 										 			if($scope.manageType==undefined||$scope.manageType=='zijian'){
 										 				$("#daiguan").removeClass("active");
 										 				$("#zijian").addClass("active");
 										 				$("#tab_daiguan").removeClass("active");
 										 				$("#tab_zijian").addClass("active");
 										 			}else{
-										 				$("#daiguan").addClass("active");
 										 				$("#zijian").removeClass("active");
-										 				$("#tab_daiguan").addClass("active");
-										 				$("#tab_zijian").removeClass("active")
+										 				$("#gyshang").addClass("active");
+										 				$("#tab_zijian").removeClass("active");
+										 				$("#tab_gyshang").addClass("active");
+//										 				$("#daiguan").addClass("active");
+//										 				$("#zijian").removeClass("active");
+//										 				$("#tab_daiguan").addClass("active");
+//										 				$("#tab_zijian").removeClass("active")
 										 			}
 										 		}
 												
@@ -1195,6 +1200,11 @@ angular
 							   return stockZkTable;
 								}
 			 $scope.showStock=function(judgeString){
+				 if(judgeString=="zijian"){
+					 $scope.showGyshang=false;
+				 }else{
+					 $scope.showGyshang=true;
+				 }
 				 $state.go('stock',{stockSerialNum:judgeString}); //切换tab
 			}
 							// 添加库存开始***************************************

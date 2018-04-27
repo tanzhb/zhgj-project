@@ -551,7 +551,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	    	 * 选择物料并展示在列表
 	    	 */
 	    	$scope.confirmSelect = function(){
-	    		
+	    		$scope.getCurrentAddress();
 		    		if($scope.serialNums.length==0){ //判断是否选择了物料
 	    				toastr.warning("请选择物料");
 						return;
