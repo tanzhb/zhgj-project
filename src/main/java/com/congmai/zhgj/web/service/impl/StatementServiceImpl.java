@@ -23,6 +23,7 @@ import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.Handle;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.dao.InvoiceMapper;
+import com.congmai.zhgj.web.dao.MemoRecordMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
 import com.congmai.zhgj.web.dao.PaymentPlanViewMapper;
@@ -30,6 +31,8 @@ import com.congmai.zhgj.web.dao.PaymentRecordMapper;
 import com.congmai.zhgj.web.dao.StatementMapper;
 import com.congmai.zhgj.web.model.Invoice;
 import com.congmai.zhgj.web.model.InvoiceExample;
+import com.congmai.zhgj.web.model.MemoRecord;
+import com.congmai.zhgj.web.model.MemoRecordExample;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderInfoExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
@@ -78,6 +81,10 @@ public class StatementServiceImpl implements StatementService {
     
     @Resource
     private InvoiceMapper invoiceMapper;
+    
+    @Resource
+    private MemoRecordMapper memoRecordMapper;
+    
     @Resource
     private PaymentRecordSerive paymentRecordSerive;
     
@@ -138,8 +145,8 @@ public class StatementServiceImpl implements StatementService {
 		Map<String,Object> map = new HashMap<String, Object>();
 		
 		List<StatementOrderInfo> list = new ArrayList<StatementOrderInfo>(); //账单信息
-		List<StatementPaymentInfo> shouldPaymentList = new ArrayList<StatementPaymentInfo>(); //本月应付
-		List<StatementPaymentInfo> alreadyPaymentList = new ArrayList<StatementPaymentInfo>(); //本月已付
+		List<StatementPaymentInfo> shouldPaymentList = new ArrayList<StatementPaymentInfo>(); //本月应收付
+		List<MemoRecord> alreadyPaymentList = new ArrayList<MemoRecord>(); //本月收付款水单
 		try{
 					PaymentRecordExample paymentRecordExample = new PaymentRecordExample(); 
 					Criteria criteria = paymentRecordExample.createCriteria();
@@ -162,6 +169,11 @@ public class StatementServiceImpl implements StatementService {
 						.andPlayPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
 						.andPlayPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
 					}
+					List<String> statusList = new ArrayList<String>();
+					statusList.add("1");
+					statusList.add("2");
+					statusList.add("APPROVAL_SUCCESS");
+					criteria.andDelFlgEqualTo("0").andStatusIn(statusList);
 					Map<String,Map<String,Double>> map2 = new HashMap<String, Map<String,Double>>();
  					Set<OrderInfo> set = new HashSet<OrderInfo>();
  					
@@ -171,7 +183,7 @@ public class StatementServiceImpl implements StatementService {
 					List<PaymentRecord> paymentRecords = paymentRecordMapper.selectByExample(paymentRecordExample);
 					if(CollectionUtils.isNotEmpty(paymentRecords)){
 						//获取本期应付/应收/扣款信息
-						getShouldAndAlreadyPaymentInfo(paymentRecords,set,shouldPaymentList,alreadyPaymentList,map2);
+						getShouldAndAlreadyPaymentInfo(paymentRecords,set,shouldPaymentList,/*alreadyPaymentList,*/map2);
 						/*for(PaymentRecord record :paymentRecords){
 							StatementPaymentInfo alreadyPaymentInfo = new StatementPaymentInfo(); //已付信息
 						//	StatementPaymentInfo shouldPaymentInfo = new StatementPaymentInfo();	//应付信息
@@ -228,7 +240,33 @@ public class StatementServiceImpl implements StatementService {
 							}
 						}*/
 						getOrderInfo(set,map2,list);
+						
 					}
+					
+					MemoRecordExample mre=new MemoRecordExample();
+					com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
+					c.andDelFlgEqualTo("0");
+					if(StringUtils.isNotEmpty(supplyComId)){ //供应商对账单
+						if(StringUtils.isEmpty(buyComId)){
+							c.andBuyComIdIsNull();
+						}else{
+							c.andBuyComIdEqualTo(buyComId);
+						}
+						c.andSupplyComIdEqualTo(supplyComId)
+						.andPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
+						.andPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
+					}else{ //客户对账单
+						if(StringUtils.isEmpty(supplyComId)){
+							c.andSupplyComIdIsNull();
+						}else{
+							c.andSupplyComIdEqualTo(supplyComId);
+						}
+						c.andBuyComIdEqualTo(buyComId)
+						.andPaymentDateGreaterThanOrEqualTo(DateUtil.getMonthFirstDay(DateUtil.parse("yyyy-MM-dd", statementDate)))
+						.andPaymentDateLessThanOrEqualTo(DateUtil.getMonthLastDay(DateUtil.parse("yyyy-MM-dd", statementDate)));
+					}
+					
+					alreadyPaymentList =  memoRecordMapper.selectByExample(mre);
 							
 				} catch (Exception e) {
 					logger.warn(e.getMessage(), e);
@@ -256,10 +294,10 @@ public class StatementServiceImpl implements StatementService {
 			StatementExample statement_example = new StatementExample();
 			if(StringUtils.isNotEmpty(supplyComId)){
 				statement_example.createCriteria().andDelFlgEqualTo("0").andSupplyComIdEqualTo(supplyComId).andBuyComIdIsNull()
-	 			.andStatementDateGreaterThan(DateUtil.parse("yyyy-MM-dd",statementDate));
+	 			.andStatementDateLessThan(DateUtil.parse("yyyy-MM-dd",statementDate));
 			}else{
 				statement_example.createCriteria().andDelFlgEqualTo("0").andBuyComIdEqualTo(buyComId).andSupplyComIdIsNull()
-	 			.andStatementDateGreaterThan(DateUtil.parse("yyyy-MM-dd",statementDate));
+	 			.andStatementDateLessThan(DateUtil.parse("yyyy-MM-dd",statementDate));
 			}
 			statement_example.setOrderByClause("statementDate desc");
 			List<Statement> statementList = statementMapper.selectByExample(statement_example);
@@ -281,7 +319,7 @@ public class StatementServiceImpl implements StatementService {
 	 * @param paymentList
 	 * @param moneyCountMap
 	 */
-	private void getShouldAndAlreadyPaymentInfo(List<PaymentRecord> paymentRecords,Set<OrderInfo> set,List<StatementPaymentInfo> shouldPaymentList,List<StatementPaymentInfo> alreadyPaymentList,Map<String,Map<String, Double>> moneyCountMap){
+	private void getShouldAndAlreadyPaymentInfo(List<PaymentRecord> paymentRecords,Set<OrderInfo> set,List<StatementPaymentInfo> shouldPaymentList,/*List<StatementPaymentInfo> alreadyPaymentList,*/Map<String,Map<String, Double>> moneyCountMap){
 		
 		for(PaymentRecord paymentRecord :paymentRecords){
 			OrderInfoExample orderExample = new OrderInfoExample();
@@ -292,6 +330,7 @@ public class StatementServiceImpl implements StatementService {
 			StatementPaymentInfo sti=new StatementPaymentInfo();
 			sti.setPaymentNode(paymentRecord.getPaymentNode());
 			sti.setPaymentAmount(paymentRecord.getPaymentAmount());
+			sti.setApplyPaymentAmount(paymentRecord.getApplyPaymentAmount());
 			sti.setPaymentStatus(paymentRecord.getStatus());
 			sti.setBillNum("施工中");//发票金额
 			sti.setBillDate("施工中");//发票日期
@@ -302,12 +341,13 @@ public class StatementServiceImpl implements StatementService {
 			sti.setPeriod(paymentRecord.getAccountPeriod());
 			sti.setInterest("施工中");
 			
-			if(StringUtil.isNotEmpty(paymentRecord.getPaymentAmount())){//付过钱放入已付)
-				alreadyPaymentList.add(sti);
+			if(StringUtil.isNotEmpty(paymentRecord.getPaymentAmount())){//所有应收应付，alreadyPaymentList已收付款需从收付款水单查询
+//				alreadyPaymentList.add(sti);
 			}else{//放入(本期应付)
 				sti.setPaymentAmount("0");
-				shouldPaymentList.add(sti);
+//				shouldPaymentList.add(sti);
 			}
+			shouldPaymentList.add(sti);
 			//超期金额.服务扣除金额暂且未加上
 			if(moneyCountMap.containsKey(order.getSerialNum())){
 				if(StringUtil.isNotEmpty(paymentRecord.getPaymentAmount())){
@@ -403,10 +443,10 @@ public class StatementServiceImpl implements StatementService {
 					statementOrderInfo.setOrderDate(DateUtil.format("yyyy-MM-dd",o.getOrderDate()));
 					statementOrderInfo.setOrderStatus(o.getStatus());
 					statementOrderInfo.setContractNum(o.getContractSerial());
-					statementOrderInfo.setTotalMoney(o.getOrderAmount());
-					statementOrderInfo.setPaymentMoney(o.getPayAmount());
-					statementOrderInfo.setTotalPaymentAmount(String.valueOf(totalPaymentAmount));
-					statementOrderInfo.setTotalUnPaymentMoney(String.valueOf(totalShouldPaymentAmount-totalPaymentAmount));
+					statementOrderInfo.setTotalMoney(o.getOrderAmount());//订单金额
+					statementOrderInfo.setPaymentMoney(String.valueOf(totalShouldPaymentAmount));//应付金额
+					statementOrderInfo.setTotalPaymentAmount(String.valueOf(totalPaymentAmount));//已付金额
+					statementOrderInfo.setTotalUnPaymentMoney(String.valueOf(totalShouldPaymentAmount-totalPaymentAmount));//未付金额
 					statementOrderInfo.setTotalServiceMoney(String.valueOf(totalServiceMoney));
 					statementOrderInfo.setTotalReadyAmount(String.valueOf(totalReadyAmount));
 					statementOrderInfo.setOverDueMoney(String.valueOf(overDueMoney));

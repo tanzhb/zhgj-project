@@ -6,6 +6,7 @@ public class StatementPaymentInfo {
 	private String paymentPlanDate;
 	private String paymentNode;
 	private String paymentAmount;
+    private String applyPaymentAmount;
 	private String paymentStatus;
 	private String period;
 	private String interest;
@@ -79,6 +80,12 @@ public class StatementPaymentInfo {
 	}
 	public void setPaymentNum(String paymentNum) {
 		this.paymentNum = paymentNum;
+	}
+	public String getApplyPaymentAmount() {
+		return applyPaymentAmount;
+	}
+	public void setApplyPaymentAmount(String applyPaymentAmount) {
+		this.applyPaymentAmount = applyPaymentAmount;
 	}
 	
 	

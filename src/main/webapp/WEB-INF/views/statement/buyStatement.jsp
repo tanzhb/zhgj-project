@@ -41,8 +41,8 @@
 									<label class="btn btn-transparent red btn-circle btn-sm" ng-click="deleteBuyStatement()">
 				                                              <i class="fa fa-minus"></i> 删除</label>
 				                                              </shiro:hasPermission>
-									<label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('buy')">
-				                                              <i class="fa fa-file-excel-o"></i> 导出</label>
+									<!-- <label class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm" ng-click="exportStatement('buy')">
+				                                              <i class="fa fa-file-excel-o"></i> 导出</label> -->
 				                </div>
 							</div>
 				            </div>
@@ -63,9 +63,9 @@
 				                            <th> 本期应付 </th>
 				                            <th> 本期付款 </th>
 				                            <th> 期末应付</th>
-				                            <th> 超期款</th>
+				                            <!-- <th> 超期款</th>
 				                            <th> 本期扣款 </th>
-				                            <th> 状态 </th>
+				                            <th> 状态 </th> -->
 				                        </tr>
 				                    </thead>
 				                    <tbody>
