@@ -524,7 +524,7 @@
      <select id="judgeSupplyStockIsExist"  parameterType="java.util.HashMap"  resultType="com.congmai.zhgj.web.model.Stock">
      select *
       from stock 
-     WHERE stock.materielSerial  =  #{materielSerial,jdbcType=VARCHAR} AND stock.manageType='3' and stock.delFlg=0 and stock.materielOwner=#{owner,jdbcType=VARCHAR} 
+     WHERE stock.materielSerial  =  #{materielSerial,jdbcType=VARCHAR} AND stock.manageType='3' and stock.delFlg=0 and stock.materielOwner=#{supplyComId,jdbcType=VARCHAR} 
      </select>
      
 </mapper>

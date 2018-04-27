@@ -316,7 +316,7 @@ public class MaterielController {
 
 
 	/**
-	 * @Description 构造新版本物料
+	 * @Description 构造新版本物料(将上一版本下级物料带入版本号为(最新版本+1)的物料中)
 	 * @param materiel
 	 */
 	private void createNewVersion(Materiel materiel) {
@@ -336,6 +336,20 @@ public class MaterielController {
 			materiel.setVersionNO("1");
 		}else{
 			materiel.setVersionNO(String.valueOf((Integer.parseInt(lastmateriel.getVersionNO())+1)));
+			//获取最新版本下级物料带入最新版本
+			if("1".equals(materiel.getIsBOM())){//只有最新(最新版本+1)的物料是bom物料
+				BOMMaterielExample m =new BOMMaterielExample();
+		    	com.congmai.zhgj.web.model.BOMMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andBomMaterielSerialEqualTo(lastmateriel.getSerialNum());
+		    	List<BOMMateriel> bomList = BOMMaterielService.selectList(m);
+		    	for(BOMMateriel bom:bomList){
+		    		bom.setSerialNum(ApplicationUtils.random32UUID());
+		    		bom.setBomMaterielSerial(materiel.getSerialNum());
+		    		bom.setCreateTime(new Date());
+		    		bom.setCreator(currenLoginName);
+		    		BOMMaterielService.insert(bom);
+		    	}
+			}
 		}
 		materiel.setStatus("1");
 	}

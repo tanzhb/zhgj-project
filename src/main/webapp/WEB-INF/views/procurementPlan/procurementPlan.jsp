@@ -18,9 +18,9 @@
         <div class="portlet-body">
 			<div class="tabbable-custom ">
 			<ul class="nav nav-tabs " id="buyApplyTab">
-				<li class="active"  id="buyApply"><a href="#apply" data-toggle="tab"
+				<li class="active"  ><a href="#apply" data-toggle="tab"
 					ng-click="toApply()"> 采购计划</a></li>
-				<li   id="daiban"><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
+				<li   ><a href="#daiban" data-toggle="tab" ng-click="toDaiban()">
 						待办 <dbQuantity/></a></li>
 				<li><a href="#yiban" data-toggle="tab" ng-click="toYiban()">
 						已办 <ybQuantity/></a></li>

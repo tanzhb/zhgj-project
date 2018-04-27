@@ -901,7 +901,7 @@ public class TakeDeliveryController {
 		 Map<String,Object> pageMap = new HashMap<String,Object>();
 		 if(user != null){
 			 String comId = userCompanyService.getUserComId(user.getUserId().toString());
-			 record.setSupplyComId(comId);
+//			 record.setSupplyComId(comId);
 			 Page<DeliveryMateriel> takeDeliverys = deliveryMaterielService.selectListByExample(record,"out","1");
 			 //List<Company> companys = companyService.selectByPage(company).getResult();
 			 // 封装datatables数据返回到前台
