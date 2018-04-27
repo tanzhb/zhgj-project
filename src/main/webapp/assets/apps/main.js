@@ -5657,11 +5657,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 			   }else if('addOrEditStockForSupply' == toState.name){//新增/修改供应商库存
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
-				 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>新增供应商库存</a></li>";
+				 		"<li><a  ui-sref='stockSupply'>供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>新增供应商库存</a></li>";
 			   }else if('stockSupplyView' == toState.name){//查看供应商库存
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>库存</a><i class='fa fa-angle-right'></i></li>" +
-			 		"<li><a >供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>供应商库存详情</a></li>";
+			 		"<li><a ui-sref='stockSupply'>供应商库存</a><i class='fa fa-angle-right'></i></li>"+"<li><a>供应商库存详情</a></li>";
 			   }else if('solrSearch' == toState.name){//全文检索   
 				   html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 			 		"<li><a>全文检索</a></i></li>";	
