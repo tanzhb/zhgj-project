@@ -1878,6 +1878,10 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 				$scope["orderMaterielShow"+index] = true;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		if(!isNull(materiel.serialNum)&&materiel.serialNum == $scope.orderMateriel[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ // 如果是以保存的物料，回滚
+	        			if(isNull($scope.orderMateriel[i].orderUnitPrice)||isNull($scope.orderMateriel[i].orderRateUnit)){
+	        				$scope.orderMateriel[i].orderUnitPrice="";
+	        				$scope.orderMateriel[i].orderRateUnit="";
+	        			}
 	        			$scope.orderMateriel[$scope.orderMateriel.indexOf(materiel)] = $scope.orderMateriel[i];
 						break;
 	        		}
@@ -1967,7 +1971,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 	        /**
 			 * 编辑销售订单物料
 			 */
-	        $scope.editOrderMateriel=function (materiel) {
+	        $scope.editOrderMateriel=function (materiel,index) {
 	        	// .show_materiels = false;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
 	        		if(materiel.serialNum == $scope.orderMateriel[i].serialNum){
@@ -1981,7 +1985,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 	        /**
 			 * 删除
 			 */
-	        $scope.deleteOrderMateriel=function (materiel) {
+	        $scope.deleteOrderMateriel=function (materiel,index) {
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){

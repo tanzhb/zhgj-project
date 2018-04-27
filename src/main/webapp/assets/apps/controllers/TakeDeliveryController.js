@@ -541,7 +541,7 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 										if(data.data.isDel){
 											toastr.warning("当前发货单已发货完毕请删除当前发货单!");
 										}else{
-											$scope.orderMateriels=data.data.deliveryMateriels;
+//											$scope.orderMateriels=data.data.deliveryMateriels;
 											toastr.warning("存在发货数量超过未发数量的物料,请重新编辑!");}
 									}
 								}else{

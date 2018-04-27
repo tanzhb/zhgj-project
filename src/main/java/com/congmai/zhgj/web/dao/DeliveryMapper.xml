@@ -482,11 +482,11 @@
 	FROM
 	deliveryMateriel a
 	LEFT JOIN delivery f ON a.deliverSerial=f.serialNum
-	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  (f.status!=0 and f.status!=10)
+	WHERE a.orderMaterielSerial=#{serialNum} and a.delFlg=0 and a.deliverCount is not null and  (f.status!=0 and f.status!=11)
     </select>
     <!-- 将当前其他未确认发货的发货单更新为已失效 -->
     <update id="updateOtherDeliveryStatus" parameterType="java.util.HashMap">
-    UPDATE delivery SET status='000',updateTime=NOW() WHERE serialNum!=#{serialNum} and orderSerial=#{orderSerial} and (status='0' or  status='10') and delFlg=0
+    UPDATE delivery SET status='000',updateTime=NOW() WHERE serialNum!=#{serialNum} and orderSerial=#{orderSerial} and (status='0' or  status='11') and delFlg=0
    
     </update>
     </mapper>
