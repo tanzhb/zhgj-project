@@ -85,6 +85,7 @@ import com.congmai.zhgj.web.service.CompanyFinanceService;
 import com.congmai.zhgj.web.service.CompanyManageService;
 import com.congmai.zhgj.web.service.CompanyQualificationService;
 import com.congmai.zhgj.web.service.CompanyService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.UserCompanyService;
 import com.congmai.zhgj.web.service.UserService;
 import com.congmai.zhgj.web.service.WarehouseService;
@@ -120,7 +121,8 @@ public class CompanyController {
 	private CompanyManageService companyManageService;
 	@Autowired
 	private WarehouseService warehouseService;
-	
+	@Autowired
+	private OrderService orderService;
 	  /**
      * @Description (企业信息首页)
      * @param request
@@ -671,6 +673,15 @@ public class CompanyController {
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
 			final List<Company> companyList = new ArrayList<Company>(); 
 			excelReader.readExcelContent(new RowHandler() {
+				@SuppressWarnings({ "serial", "unused" })
+				class MyException extends Exception{
+				    public MyException(){
+				        super();
+				    }
+				    public MyException(String msg){
+				        super(msg);
+				    }
+				}
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
 					if(!CollectionUtils.isEmpty(row)){
@@ -678,10 +689,17 @@ public class CompanyController {
 							Company company = new Company();
 							company.setComId(ApplicationUtils.random32UUID());
 							company.setComNum(row.get(0).toString());
+							if (StringUtils.isNotEmpty(company.getComNum())) {
+								if(orderService.isExist("company",company.getComNum(),null)){
+									throw new MyException("企业编号已存在！");
+								}
+							}else {
+								throw new MyException("企业编号不能为空！");
+							}
 							company.setComName(row.get(1).toString());
 							String comTypeName = ComType.getValueByInfo(row.get(2).toString().trim());
 							if(comTypeName==null){
-								throw new Exception("企业类型不存在");
+								throw new MyException("企业类型不存在");
 							}
 							company.setComType(ComType.getValueByInfo(row.get(2).toString().trim()));
 							company.setAbbreviation(row.get(3).toString());
@@ -702,8 +720,10 @@ public class CompanyController {
 							company.setUpdateTime(new Date());
 							company.setUpdater(currenLoginName);
 							companyList.add(company);
+						}catch(MyException  e){
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+e.getMessage());
 						}catch(Exception  e){
-							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+row.toString()+e.getMessage());
+							throw new Exception("第"+(i+1)+"行数据转换错误！");
 						}
 						
 					}
@@ -711,7 +731,7 @@ public class CompanyController {
 				}
 			}, 2);
 				
-//				companyService.insertBatch(companyList);
+			companyService.insertBatch(companyList);
 			
 			map.put("data", "success");
 		} catch (Exception e1) {

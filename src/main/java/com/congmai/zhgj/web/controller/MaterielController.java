@@ -876,6 +876,16 @@ public class MaterielController {
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
 			List<Materiel> materielList = new ArrayList<Materiel>(); 
 			excelReader.readExcelContent(new RowHandler() {
+				@SuppressWarnings("serial")
+				class MyException extends Exception{
+				    @SuppressWarnings("unused")
+					public MyException(){
+				        super();
+				    }
+				    public MyException(String msg){
+				        super(msg);
+				    }
+				}
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
 					if(!CollectionUtils.isEmpty(row)){
@@ -884,20 +894,20 @@ public class MaterielController {
 
 							materiel.setMaterielNum(row.get(0).toString());
 							if (StringUtils.isNotEmpty(materiel.getMaterielNum())) {
-								Boolean falg = orderService.isExist("materiel",materiel.getMaterielNum(),null);
-								if(falg){
-									throw new Exception("物料编号已存在！");
+								if(orderService.isExist("materiel",materiel.getMaterielNum(),null)){
+									throw new MyException("物料编号已存在！");
 								}
+							}else {
+								throw new MyException("物料编号不能为空！");
 							}
 							materiel.setMnemonicCode(row.get(1).toString());
-							materiel.setType(row.get(2).toString());
-							materiel.setMaterielName(row.get(3).toString());
-							materiel.setCategory1(row.get(4).toString());
-							materiel.setUnit(row.get(5).toString());
-							materiel.setSpecifications(row.get(6).toString());
-							materiel.setProductionPlace(row.get(7).toString());
-							materiel.setStockUnit(row.get(8).toString());
-							/*materiel.setparentMateriel(row.get(9).toString());*/
+							materiel.setMaterielName(row.get(2).toString());
+							materiel.setSpecifications(row.get(3).toString());
+							materiel.setType(row.get(4).toString());
+							materiel.setCategory1(row.get(5).toString());
+							materiel.setCategory2(row.get(6).toString());
+							materiel.setCategory3(row.get(7).toString());
+							materiel.setUnit(row.get(9).toString());
 							materiel.setBrand(row.get(10).toString());
 							materiel.setOriginCountry(row.get(11).toString());
 							materiel.setLength(row.get(12).toString());
@@ -907,18 +917,21 @@ public class MaterielController {
 							materiel.setUnitPrice(row.get(16).toString());
 							materiel.setFilingItemNo(row.get(17).toString());
 							materiel.setVolume(row.get(18).toString());
-							materiel.setCustomsSupervisionConditions(row.get(19).toString());
-							materiel.setWeight(row.get(20).toString());
-							materiel.setQualityDate(row.get(21).toString());
-							materiel.setPalletSpecification(row.get(22).toString());
-							materiel.setManufactureDate(StringUtils.isEmpty(row.get(23).toString())?null:(Date) row.get(23));
-							materiel.setPalletWeight(row.get(24).toString());
-							materiel.setRemark(row.get(25).toString());
+							materiel.setWeight(row.get(19).toString());
+							materiel.setPalletSpecification(row.get(20).toString());
+							materiel.setPalletWeight(row.get(21).toString());
+							materiel.setCustomsSupervisionConditions(row.get(22).toString());
+							materiel.setCustomsCode(row.get(23).toString());
+							materiel.setQualityDate(row.get(24).toString());
+							materiel.setDeliveryCycle(row.get(25).toString());
+							materiel.setRemark(row.get(26).toString());
 
 							/*insertNew(materiel);*/
 							materielList.add(materiel);
+						}catch(MyException  e){
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+e.getMessage());
 						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据转换错误！");
 						}
 						
 					}

@@ -268,6 +268,18 @@ public class CompanyServiceImpl extends GenericServiceImpl<Company, String> impl
 	}
 
 
+	@Override
+	public Company selectComByComName(String comName) {
+		CompanyExample example = new CompanyExample();
+		example.createCriteria().andComNameEqualTo(comName);
+		List<Company> list = companyMapper.selectByExample(example);
+		if(CollectionUtils.isNotEmpty(list)){
+			return list.get(0);
+		}
+		return null;
+	}
+
+
 
 	
 }

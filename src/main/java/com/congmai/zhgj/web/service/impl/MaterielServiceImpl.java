@@ -204,4 +204,22 @@ public class MaterielServiceImpl implements MaterielService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public Materiel getMaterielInfoByMaterielNum(String materielNum) {
+		MaterielExample m =new MaterielExample();
+    	//and 条件1
+    	Criteria criteria =  m.createCriteria();
+    	criteria.andIsLatestVersionEqualTo("1");
+    	criteria.andMaterielNumEqualTo(materielNum);
+    	criteria.andDelFlgEqualTo("0");
+    	//排序字段
+    	m.setOrderByClause("updateTime DESC");
+    	List<Materiel> materielList = MaterielMapper.selectByExample(m);
+    	
+    	if(materielList==null||materielList.size()<1){
+    		return null;
+    	}
+		return materielList.get(0);
+	}
 }

@@ -150,8 +150,10 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	    	        var file = document.querySelector('input[name="file"]').files[0];
 	    	        fd.append("files", file);
 	    			}
-	    			
-	    			fd.append('id',$scope.contractVO.id); 
+	    			if(!isNull($scope.contractVO.id)){
+	    				fd.append('id',$scope.contractVO.id);
+	    			}
+	    			 
 	    			fd.append('contractNum',$scope.contractVO.contractNum); 
 	    	        fd.append('contractType',$scope.contractVO.contractType); 
 	    	        fd.append('firstParty',$scope.contractVO.firstParty); 
@@ -858,12 +860,12 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	       $scope.uploadExcel = function(){
 	    	    var file = document.querySelector('input[type=file]').files[0];
 	    	    if(handle.isNull(file)){
-	    	    	handle.toastr.warning("请选择Excel文件！");
+	    	    	toastr.warning("请选择Excel文件！");
 	    	    }
 	    	    console.log(file.name);
 	    	    var type = file.name.substring(file.name.lastIndexOf("."));
 	    	   if(type != ".xls"){
-	    		   handle.toastr.warning("文件格式不正确，需要xls类型的Excel文档");
+	    		   toastr.warning("文件格式不正确，需要xls类型的Excel文档");
 	    		   return;
 	    	   }
 	    	   	handle.blockUI("正在导入中，请不要进行其他操作"); 
@@ -871,16 +873,16 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
        			promise.then(function(data){
        				handle.unblockUI(); 
        				if(data.data.data=="success"){
-       					handle.toastr.success("导入成功");
+       					toastr.success("导入成功");
        					$state.go('userContract',{},{reload:true});
        					$(".modal-backdrop").remove();
        				}else{
-       					handle.toastr.error(data.data.data);
+       					toastr.error(data.data.data);
        				}
        				$('#import').modal('hide'); 
 	            },function(data){
 	               //调用承诺接口reject();
-	            	handle.toastr.error("操作失败");
+	            	toastr.error("操作失败");
 	            	$('#import').modal('hide'); 
 	            });
 	    	   

@@ -55,6 +55,7 @@ import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.BaseVO;
 import com.congmai.zhgj.web.model.CommentVO;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.HistoricTaskVO;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.Materiel;
@@ -68,6 +69,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.LadderPriceService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.PriceComService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
@@ -103,9 +105,11 @@ public class PriceListController {
 	 private ProcessBaseService processBaseService;
 	 @Autowired
 	 protected RuntimeService runtimeService;
-	  @Autowired
-		private PriceComService  priceComService;
-    
+	@Autowired
+	private PriceComService  priceComService;
+	@Autowired
+	private OrderService  orderService;
+	  
     
     /**
      * 价格信息列表展示
@@ -447,45 +451,109 @@ public class PriceListController {
 	     */
 	    @RequestMapping("priceListImport")
 	    @ResponseBody
-	    public Map<String,String> companyImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
+	    public Map<String,String> priceListImport(@RequestParam(value = "excelFile") MultipartFile excelFile,HttpServletRequest request,HttpServletResponse response) {
 	    	Map<String,String> map = new HashMap<String, String>();
 	    	 try {
 			     
 				ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+				List<PriceList> priceListList = new ArrayList<PriceList>(); 
 				excelReader.readExcelContent(new RowHandler() {
+					@SuppressWarnings({ "serial", "unused" })
+					class MyException extends Exception{
+					    public MyException(){
+					        super();
+					    }
+					    public MyException(String msg){
+					        super(msg);
+					    }
+					}
 					@Override
 					public void handle(List<Object> row,int i) throws Exception {
-						/*if(!CollectionUtils.isEmpty(row)){
+						if(!CollectionUtils.isEmpty(row)){
 							try{
-								Warehouse  warehouse = new Warehouse();
-								warehouse.setSerialNum(ApplicationUtils.random32UUID());
-								warehouse.setWarehouseNum(row.get(0).toString());
-								warehouse.setWarehouseName(row.get(1).toString());
-								warehouse.setWarehouseType(row.get(2).toString());
-								warehouse.setWarehouseCategory(row.get(3).toString());
-								warehouse.setOwner(row.get(4).toString());
-								warehouse.setAddress(row.get(5).toString());
-								warehouse.setArea(row.get(6).toString());
-								warehouse.setAdmin(row.get(7).toString());
-								warehouse.setTel(row.get(8).toString());
-								warehouse.setEmail(row.get(9).toString());
-								warehouse.setFax(row.get(10).toString());
-								warehouse.setRemark(row.get(11).toString());
+								PriceList priceList = new PriceList();
+							
+								priceList.setPriceNum(row.get(0).toString());
+								if (!StringUtils.isEmpty(priceList.getPriceNum())) {
+									if(orderService.isExist("price",priceList.getPriceNum(),null)){
+										throw new MyException("价格目录编号已存在！");
+									}
+								}else {
+									throw new MyException("价格目录编号不能为空！");
+								}
+								priceList.setComName(row.get(1).toString());
+								if (!StringUtils.isEmpty(priceList.getComName())) {
+									Company company = companyService.selectComByComName(priceList.getComName());
+									if(company==null){
+										throw new MyException("商户不存在！");
+									}else if("1".equals(company.getComType())){
+										priceList.setBuyComId(company.getComId());
+									}else if("2".equals(company.getComType())){
+										priceList.setSupplyComId(company.getComId());
+									}else if("9".equals(company.getComType())){
+										priceList.setSupplyComId(company.getComId());
+									}else{
+										throw new MyException("不是可用的商户类型！");
+									}
+								}else {
+									throw new MyException("商户名称不能为空！");
+								}
+								
+								priceList.setMaterielNum(row.get(2).toString());
+								if(!StringUtils.isEmpty(priceList.getMaterielNum())){
+									Materiel materiel = materielService.getMaterielInfoByMaterielNum(priceList.getMaterielNum());
+									if (materiel==null) {
+										throw new MyException("物料不存在！");
+									}else{
+										priceList.setMaterielSerial(materiel.getSerialNum());
+									}
+								}else {
+									throw new MyException("物料编号不能为空！");
+								}
+								
+								if (StaticConst.getInfo("buyPrice").equals(row.get(5).toString())) {
+									priceList.setPriceType("buyPrice");
+								}else if (StaticConst.getInfo("salePrice").equals(row.get(5).toString())) {
+									priceList.setPriceType("salePrice");
+								}else {
+									throw new MyException("价格类型不存在！");
+								}
+								
+								priceList.setUnit(row.get(6).toString());
+								priceList.setUnitPrice(row.get(7).toString());
+								priceList.setRate(row.get(8).toString());
+								priceList.setCurrency(row.get(9).toString());
+								priceList.setPriceEffectiveDate(StringUtils.isEmpty(row.get(10).toString())?null:(Date) row.get(10));
+								priceList.setPriceExpirationDate(StringUtils.isEmpty(row.get(10).toString())?null:(Date) row.get(11));
+
 								Subject currentUser = SecurityUtils.getSubject();
 								String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
-								warehouse.setCreateTime(new Date());
-								warehouse.setCreator(currenLoginName);
-								warehouse.setUpdateTime(new Date());
-								warehouse.setUpdater(currenLoginName);
-								warehouseService.insert(warehouse);
+								priceList.setCreateTime(new Date());
+								priceList.setCreator(currenLoginName);
+								priceList.setUpdateTime(new Date());
+								priceList.setUpdater(currenLoginName);
+								priceList.setSerialNum(ApplicationUtils.random32UUID());
+				    			priceList.setPriceId(ApplicationUtils.random32UUID());
+				    			priceList.setVersionNO("1");
+				    			priceList.setIsLatestVersion("1");
+				    			priceList.setStatus("0");//待审批
+				    			
+				    			priceListList.add(priceList);
+							}catch(MyException  e){
+								throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+e.getMessage());
 							}catch(Exception  e){
-								throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+								throw new Exception("第"+(i+1)+"行数据转换错误！");
 							}
 							
-						}*/
+						}
 						
 					}
-				}, 1);
+				}, 2);
+				
+				for (PriceList priceList : priceListList) {
+					priceListService.insert(priceList);
+				}
+				
 				map.put("data", "success");
 			} catch (Exception e1) {
 				map.put("data", e1.getMessage());

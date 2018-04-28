@@ -40,6 +40,7 @@ import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.LadderPrice;
 import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
@@ -291,7 +292,17 @@ public class WareHouseController {
     	 try {
 		     
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			List<Warehouse> warehouseList = new ArrayList<Warehouse>(); 
 			excelReader.readExcelContent(new RowHandler() {
+				@SuppressWarnings({ "serial", "unused" })
+				class MyException extends Exception{
+				    public MyException(){
+				        super();
+				    }
+				    public MyException(String msg){
+				        super(msg);
+				    }
+				}
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
 					if(!CollectionUtils.isEmpty(row)){
@@ -299,6 +310,13 @@ public class WareHouseController {
 							Warehouse  warehouse = new Warehouse();
 							warehouse.setSerialNum(ApplicationUtils.random32UUID());
 							warehouse.setWarehouseNum(row.get(0).toString());//
+							if (!StringUtils.isEmpty(warehouse.getWarehouseNum())) {
+								if(orderService.isExist("warehouse",warehouse.getWarehouseNum(),null)){
+									throw new MyException("仓库编号已存在！");
+								}
+							}else {
+								throw new MyException("仓库编号不能为空！");
+							}
 							warehouse.setWarehouseName(row.get(1).toString());
 							warehouse.setWarehouseType(row.get(2).toString());
 							warehouse.setWarehouseCategory(row.get(3).toString());
@@ -334,15 +352,21 @@ public class WareHouseController {
 							warehouse.setCreator(currenLoginName);
 							warehouse.setUpdateTime(new Date());
 							warehouse.setUpdater(currenLoginName);
-							warehouseService.insert(warehouse);
+							warehouseList.add(warehouse);
+						}catch(MyException  e){
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+e.getMessage());
 						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据转换错误！");
 						}
 						
 					}
 					
 				}
 			}, 2);
+			for (Warehouse warehouse : warehouseList) {
+				warehouseService.insert(warehouse);
+			}
+
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());
