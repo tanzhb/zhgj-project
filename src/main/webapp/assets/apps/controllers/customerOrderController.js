@@ -1877,7 +1877,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 	        	$scope["orderMaterielInput"+index] = true;
 				$scope["orderMaterielShow"+index] = true;
 	        	for(var i=0;i<$scope.orderMateriel.length;i++){
-	        		if(materiel.serialNum == $scope.orderMateriel[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ // 如果是以保存的物料，回滚
+	        		if(!isNull(materiel.serialNum)&&materiel.serialNum == $scope.orderMateriel[i].serialNum && !isNull(materiel.supplyMaterielSerial)){ // 如果是以保存的物料，回滚
 	        			if(isNull($scope.orderMateriel[i].orderUnitPrice)||isNull($scope.orderMateriel[i].orderRateUnit)){
 	        				$scope.orderMateriel[i].orderUnitPrice="";
 	        				$scope.orderMateriel[i].orderRateUnit="";
