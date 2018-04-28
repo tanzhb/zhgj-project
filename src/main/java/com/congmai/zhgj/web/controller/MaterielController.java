@@ -64,6 +64,7 @@ import com.congmai.zhgj.web.service.CategoryService;
 import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
+import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -106,6 +107,11 @@ public class MaterielController {
     
     @Resource
     private StockService stockService;
+    
+    @Resource
+    private OrderService orderService;
+    
+    
     
     /**
      * 保存物料
@@ -868,6 +874,7 @@ public class MaterielController {
     	Map<String,String> map = new HashMap<String, String>();
     	 try {
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			List<Materiel> materielList = new ArrayList<Materiel>(); 
 			excelReader.readExcelContent(new RowHandler() {
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
@@ -876,6 +883,12 @@ public class MaterielController {
 							Materiel materiel = new Materiel();
 
 							materiel.setMaterielNum(row.get(0).toString());
+							if (StringUtils.isNotEmpty(materiel.getMaterielNum())) {
+								Boolean falg = orderService.isExist("materiel",materiel.getMaterielNum(),null);
+								if(falg){
+									throw new Exception("物料编号已存在！");
+								}
+							}
 							materiel.setMnemonicCode(row.get(1).toString());
 							materiel.setType(row.get(2).toString());
 							materiel.setMaterielName(row.get(3).toString());
@@ -903,6 +916,7 @@ public class MaterielController {
 							materiel.setRemark(row.get(25).toString());
 
 							/*insertNew(materiel);*/
+							materielList.add(materiel);
 						}catch(Exception  e){
 							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
 						}
@@ -911,6 +925,9 @@ public class MaterielController {
 					
 				}
 			}, 2);
+			for (Materiel materiel : materielList) {
+				insertNew(materiel);
+			}
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());
