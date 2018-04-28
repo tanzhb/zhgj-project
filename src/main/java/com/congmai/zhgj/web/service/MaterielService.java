@@ -41,4 +41,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	String  selectListCount (MaterielSelectExample m);//获取总的物料数量
 
 	Materiel getMaterielInfoByMaterielSerial(String materielSerial);//根据物料流水查物料详情
+
+	void insertBatch(List<Materiel> materielList);
 }

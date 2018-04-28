@@ -198,4 +198,10 @@ public class MaterielServiceImpl implements MaterielService {
 	public String selectListCount(MaterielSelectExample m) {
 		return MaterielMapper.selectListCountBySelectExample(m);
 	}
+
+	@Override
+	public void insertBatch(List<Materiel> materielList) {
+		// TODO Auto-generated method stub
+		
+	}
 }

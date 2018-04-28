@@ -1767,8 +1767,8 @@ $scope.showCompany=function(judgeString){
 		    		 toastr.warning("您的企业信息还未保存");
 		    		 return;
 		       }else{
-		    	   _index++;
 		    	   $scope.companyQualifications[_index] = {}
+		    	   _index++;
 		       }
 	       };
 	       
@@ -1938,6 +1938,8 @@ $scope.showCompany=function(judgeString){
 	 	        			if(!handle.isNull(data.data.companyQualifications)){
 		 	        			$scope.companyQualifications = data.data.companyQualifications;
 		 	        			_index = data.data.companyQualifications.length-1;
+		 	        		}else{
+		 	        			_index = 0
 		 	        		}
 	 	        		}else if(type=="company"){
 	 	        			$scope.company = data.data.company;
@@ -1949,6 +1951,8 @@ $scope.showCompany=function(judgeString){
 		 	        		if(!handle.isNull(data.data.companyQualifications)){
 		 	        			$scope.companyQualifications = data.data.companyQualifications;
 		 	        			_index = data.data.companyQualifications.length-1;
+		 	        		}else{
+		 	        			_index = 0
 		 	        		}
 		 	        		debugger;
 		 	        		$scope.companyContacts = data.data.companyContacts;
