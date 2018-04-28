@@ -1592,7 +1592,7 @@ function loadPriceListSaleTable(){
 					  return;
 				  }
 				  handle.blockUI("正在导入中，请不要进行其他操作"); 
-				  var promise = WarehouseService.uploadExcel();
+				  var promise = priceListService.uploadExcel();
 				  promise.then(function(data){
 					  handle.unblockUI(); 
 					  if(data.data.data=="success"){

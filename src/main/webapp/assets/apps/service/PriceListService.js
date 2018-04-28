@@ -11,11 +11,28 @@ angular.module('MetronicApp').factory('priceListService', ['$rootScope', '$http'
         getLadderPriceInfo:getLadderPriceInfo,
         startPriceProcess:startPriceProcess,
         getAuditInfos:getAuditInfos,
-        savePriceComs:savePriceComs
+        savePriceComs:savePriceComs,
+        uploadExcel:uploadExcel
         
     };
 
     return factory;
+    
+	function uploadExcel(params){
+		var deferred = $q.defer();
+		var fd = new FormData();
+        var file = document.querySelector('input[type=file]').files[0];
+        fd.append('excelFile', file);
+		$http.post("rest/priceList/priceListImport",  
+				fd,{headers:{'Content-Type': undefined},transformRequest: angular.identity}
+		).then(function success(result) {
+			deferred.resolve(result);//请求成功
+		}, function error(err) {
+			deferred.reject(err);//请求失败
+		});
+		return deferred.promise;//返回承诺
+	}
+	
     //保存价格
     function savePriceList(priceList){
         var deferred = $q.defer();  

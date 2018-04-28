@@ -54,6 +54,13 @@ public interface CompanyService extends GenericService<Company, String>{
 	 */
 	String selectComIdByComName(String comName);
 	
+	/**
+	 * 
+	 * @Description (根据公司名获取公司)
+	 * @return
+	 */
+	Company selectComByComName(String comName);
+	
 	
 	int countCompanybySelective(CompanyExample example);
 

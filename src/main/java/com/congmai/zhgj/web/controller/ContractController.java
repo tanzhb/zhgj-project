@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +54,10 @@ import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.OrderInfo;
 import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.OrderMaterielExample;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.OrderService;
 
 
 /**
@@ -73,6 +76,8 @@ public class ContractController {
 	 */
 	@Resource
 	private ContractService contractService;
+	@Resource
+	private OrderService orderService;
 	
 	@Autowired  
 	Environment env;
@@ -271,7 +276,7 @@ public class ContractController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 		List<ContractVO> contractList=contractService.queryContractList(currenLoginName);
 		dataMap.put("contractList",contractList);
-		ExcelUtil.export(request, response, dataMap, "contract", "合同信息");
+		ExcelUtil.export(request, response, dataMap, "otherContract", "其他合同信息");
 	}
 
 	
@@ -489,7 +494,17 @@ public class ContractController {
     	 try {
 		     
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
+			List<ContractVO> contractList = new ArrayList<ContractVO>(); 
 			excelReader.readExcelContent(new RowHandler() {
+				@SuppressWarnings({ "serial", "unused" })
+				class MyException extends Exception{
+				    public MyException(){
+				        super();
+				    }
+				    public MyException(String msg){
+				        super(msg);
+				    }
+				}
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
 					if(!CollectionUtils.isEmpty(row)){
@@ -497,28 +512,46 @@ public class ContractController {
 							ContractVO contract = new ContractVO();
 							contract.setId(ApplicationUtils.random32UUID());
 							contract.setContractNum(row.get(0).toString());
-							contract.setComId(row.get(1).toString());
-							contract.setContractType(row.get(2).toString());
-							contract.setServiceModel(row.get(3).toString());
+
+							if (!StringUtils.isEmpty(contract.getContractNum())) {
+								if(orderService.isExist("contract",contract.getContractNum(),null)){
+									throw new MyException("合同编号已存在！");
+								}
+							}else {
+								throw new MyException("合同编号不能为空！");
+							}
+							contract.setFirstParty(row.get(1).toString());
+							contract.setSecondParty(row.get(2).toString());
+							contract.setContractType(row.get(3).toString());
+							contract.setServiceModel(row.get(4).toString());
 							
-							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
-							contract.setSignDate(sdf.parse(row.get(4).toString()));
-							contract.setSigner(row.get(5).toString());
-							contract.setStartDate(sdf.parse(row.get(6).toString()));
-							contract.setEndDate(sdf.parse(row.get(7).toString()));
-							contract.setSettlementClause(row.get(8).toString());
+//							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
+							contract.setSignDate(StringUtils.isEmpty(row.get(5).toString())?null:(Date) row.get(5));
+							contract.setSigner(row.get(6).toString());
+							contract.setStartDate(StringUtils.isEmpty(row.get(7).toString())?null:(Date) row.get(7));
+							contract.setEndDate(StringUtils.isEmpty(row.get(8).toString())?null:(Date) row.get(8));
 							Subject currentUser = SecurityUtils.getSubject();
 							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 							contract.setCreator(currenLoginName);
-							contractService.insertContract(contract);
+							contract.setCreateTime(new Date());
+							contract.setUpdateTime(new Date());
+							contract.setUpdater(currenLoginName);
+							contractList.add(contract);
+						}catch(MyException  e){
+							throw new Exception("第"+(i+1)+"行数据异常请检查，数据内容："+e.getMessage());
 						}catch(Exception  e){
-							throw new Exception("第"+i+"行数据异常请检查，数据内容："+row.toString());
+							throw new Exception("第"+(i+1)+"行数据转换错误！");
 						}
 						
 					}
 					
 				}
 			}, 2);
+			
+			for (ContractVO contractVO : contractList) {
+				contractService.insertContract(contractVO);
+			}
+			
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());

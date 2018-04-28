@@ -31,6 +31,8 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	void updateVersion(Materiel materiel);
 
 	Materiel getMaterielInfoByMaterielId(String materielId);
+	
+	Materiel getMaterielInfoByMaterielNum(String materielNum);
 
 	List<Materiel> chooseMateriel(String ids);
 	
