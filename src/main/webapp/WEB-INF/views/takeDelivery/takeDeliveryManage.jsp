@@ -247,7 +247,7 @@
 										ng-click="stockInEdit()"> <i class="fa fa-edit"></i>
 										修改
 									</label></shiro:hasPermission> -->
-									<shiro:hasPermission name="stockInRecord:import">
+									<shiro:hasPermission name="stockInRecord:delete">
 									<label class="btn btn-transparent red btn-circle btn-sm"
 										ng-click="stockInDelete()"> <i class="fa fa-minus"></i>
 										删除
