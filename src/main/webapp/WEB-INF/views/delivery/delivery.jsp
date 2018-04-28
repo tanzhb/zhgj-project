@@ -53,16 +53,18 @@
 								</label> <label class="btn btn-transparent red btn-circle btn-sm"
 									ng-click="del()"> <i class="fa fa-minus"></i> 删除
 								</label> -->
-								<shiro:hasPermission name="	stockOutRecord:add">
+								<shiro:hasPermission name="stockOutRecord:out">
 									<label class="btn btn-transparent yellow btn-circle btn-sm"
 										ng-click="deliveryStockOut()"> <i class="fa fa-arrow-up"></i> 出库
 									</label>
 								</shiro:hasPermission>
+								<shiro:hasPermission name="stockOutRecord:export">
 								<label
 									class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"
 									ng-click="exportContract()"> <i
 									class="fa fa-file-excel-o"></i> 导出
 								</label>
+								</shiro:hasPermission>
 							</div>
 						</div>
 
