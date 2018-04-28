@@ -731,8 +731,8 @@
     <if test="orderSerial != null" >
       and  o.serialNum= #{orderSerial,jdbcType=VARCHAR}
     </if>
-    <if test="comId != null" >
-        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR}) and  d.supplyComId = #{comId,jdbcType=VARCHAR}
+    <if test="comId != null" ><!--  -->
+           AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR}) and  d.supplyComId = #{comId,jdbcType=VARCHAR}
       </if>
       
     <if test="orderByClause != null" >

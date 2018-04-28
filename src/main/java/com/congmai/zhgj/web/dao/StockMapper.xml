@@ -189,7 +189,7 @@
         AND manageType = #{manageType,jdbcType=VARCHAR}
       </if>
       <if test="comId != null" >
-        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})
+        AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})  and s.materielOwner=#{comId,jdbcType=VARCHAR}
       </if>
        AND s.delFlg=0
   </select>

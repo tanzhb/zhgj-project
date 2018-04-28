@@ -219,7 +219,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     });
     
     function doOrder(_url, mydata, modal){
-    	handle.blockUI("请稍等..................");
+    	handle.blockUI("请稍等...");
     	$.ajax( {
 	        url : _url,
 	        dataType:"text",

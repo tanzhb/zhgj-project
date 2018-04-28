@@ -25,7 +25,7 @@
 
 <div class="tabbable-line">
     <ul class="nav nav-tabs">
-        <li  id="zijian" >
+        <li  class="active"  id="zijian" >
             <a data-target="#tab_zijian" data-toggle="tab"  ng-click="showStock('zijian')">自建库存</a>
         </li>
       <!--   <li  id="daiguan">
@@ -304,9 +304,9 @@
                             <th>所在仓库 </th>
                             <th> 库存 </th>
                             <th>最高库龄 </th>
-                            <th> 预售 </th>
+                            <!-- <th> 预售 </th>
                             <th> 在途 </th>
-                            <th> 可售 </th>
+                            <th> 可售 </th> -->
                             <th> 状态 </th>
                             <th>更新日期</th>
 						</tr>

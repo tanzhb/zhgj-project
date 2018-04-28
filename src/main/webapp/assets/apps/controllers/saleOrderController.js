@@ -4736,7 +4736,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		        }
 		      //********审批流程end****************//  
 		        function doOrder(_url, mydata, modal){
-		        	handle.blockUI("请稍等..................");
+		        	handle.blockUI("请稍等...");
 		        	$.ajax( {
 		    	        url : _url,
 		    	        dataType:"text",
