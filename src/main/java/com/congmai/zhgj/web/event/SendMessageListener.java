@@ -19,6 +19,7 @@ import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
+import com.congmai.zhgj.web.dao.TakeDeliveryMapper;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CustomsForm;
@@ -105,6 +106,9 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	private OrderMaterielService orderMaterielService = null;
 	
 	private MaterielService materielService = null;
+	
+	private  TakeDeliveryMapper  takeDeliveryMapper=null;
+	
 
 	private void initService(){
 		webSocketProcessor = (WebSocketProcessor)ApplicationContextHelper.getBean(WebSocketService.class);
@@ -124,6 +128,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		procurementPlanService=  ApplicationContextHelper.getBean(ProcurementPlanService.class);
 		orderMaterielService=  ApplicationContextHelper.getBean(OrderMaterielService.class);
 		materielService=  ApplicationContextHelper.getBean(MaterielService.class);
+		takeDeliveryMapper=  ApplicationContextHelper.getBean(TakeDeliveryMapper.class);
 	}
 
 	@Override
@@ -1909,10 +1914,22 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		try {
 			initService();
 			User user = UserUtil.getUserFromSession();
+			User user1=null;//订单制单人
 			if(user != null){
 				StockInOutRecord record=(StockInOutRecord)event.getSource();
+				if(StringUtil.isEmpty(record.getDeliverSerial())&&StringUtil.isEmpty(record.getTakeDeliverSerial())){//入库
+					Delivery  delivery=takeDeliveryMapper.selectByPrimaryDeliveryKey(record.getTakeDeliverSerial());
+					OrderInfo  o=orderService.selectById(delivery.getOrderSerial());
+					user1=userService.selectByUsername(o.getMaker());
+				}else{//出库
+					DeliveryVO  delivery=deliveryService.selectDetailById(record.getDeliverSerial());
+					OrderInfo  o=orderService.selectById(delivery.getOrderSerial());
+					user1=userService.selectByUsername(o.getMaker());
+				}
+				
 				List<User> users = null;
 					users = groupService.selectUserIdsByGroupType(Constants.STORAGE);
+					users.add(user1);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
 							Properties properties = new Properties();
