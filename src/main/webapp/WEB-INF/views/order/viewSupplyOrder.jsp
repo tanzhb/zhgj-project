@@ -39,7 +39,7 @@
 				            </div>
 					</div> -->
            		 <div class="portlet-body">
-					<jsp:include  page="viewBuyOrderBase.jsp"/>
+					<jsp:include  page="viewSupplyOrderBase.jsp"/>
 					
 		            <div class="portlet-title">
 			               <div class="tools">

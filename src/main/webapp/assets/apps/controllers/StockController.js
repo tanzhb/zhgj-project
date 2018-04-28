@@ -509,7 +509,7 @@ angular
 										headerOffset : a
 									},*/
 									// select: true,行多选
-									order : [ [12, "desc" ] ],// 默认排序列及排序方式
+									order : [ [9, "desc" ] ],// 默认排序列及排序方式
 									bRetrieve : true,
 									// searching: true,//是否过滤检索
 									// ordering: true,//是否排序
@@ -539,13 +539,13 @@ angular
 											mData : 'currentAmount'
 										}, {
 											mData : 'firstInDateSupply'//averrageWhAge
-										}, {
+										}/*, {
 											mData : 'preSaleAmount'
 										},{
 											mData : 'onRoadAmount'
 										}, {
 											mData : 'canSaleAmount'
-										},{
+										}*/,{
 											mData : 'status'
 										}, {
 											mData : 'lastUpdateDate'//riskGrade
@@ -599,7 +599,7 @@ angular
 	 	    								}
 											
 										}
-									},{
+									}/*,{
 										'targets' : 8,
 										'render' : function(data,
 												type, row, meta) {
@@ -632,8 +632,8 @@ angular
 	 	    								}
 											
 										}
-									},{
-										'targets' : 11,
+									}*/,{
+										'targets' : 8,
 										'render' : function(data,
 												type, row, meta) {
 										
@@ -644,7 +644,7 @@ angular
 	 	    								}
 										}
 									},{
-										'targets' : 12,
+										'targets' : 9,
 										'render' : function(data,
 												type, row, meta) {
 											if(isNull(data)){
