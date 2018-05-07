@@ -18,15 +18,15 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 			var endTaskTable;//已办table
 			
 			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
-				$('#buyPlanTab a[href="#daiban"]').tab('show');
-				$('#buyPlanTab li[id="buyApply"]').removeClass("active");
-				$('#buyPlanTab li[id="daiban"]').addClass("active");
+				$('#buyApplyTab a[href="#daiban"]').tab('show');
+				$('#buyApplyTab li[id="buyApply"]').removeClass("active");
+				$('#buyApplyTab li[id="daiban"]').addClass("active");
 				showDbTable();
 			}else if($stateParams.tabHref == '2'){//首页已办列表传过来的参数
-				$('#buyPlanTab a[href="#yiban"]').tab('show');
+				$('#buyApplyTab a[href="#yiban"]').tab('show');
 				showYbTable();
 			}else{//从菜单进入
-				$('#buyPlanTab a[href="#apply"]').tab('show');
+				$('#buyApplyTab a[href="#apply"]').tab('show');
 			}
 			
 			
@@ -2338,6 +2338,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	 }
    
    $scope.clearNoNum = function(obj,attr,attr1){
+	   	if(obj[attr].substring(0,1) =="0"){
+			  obj[attr] = obj[attr].substring(1);
+		  }
     	 //把非数字的都替换掉
     	 obj[attr] = obj[attr].replace(/[^\d]/g,"");
     	 if(!handle.isInteger(obj[attr])||Number(obj[attr])<=0){

@@ -1890,21 +1890,21 @@ public class OrderController {
 						try{
 							OrderInfo orderInfo = new OrderInfo();
 
-							orderInfo.setOrderNum(row.get(0).toString());
-							orderInfo.setOrderType(row.get(1).toString());
-							orderInfo.setSupplyComId(row.get(2).toString());
-							orderInfo.setSeller(row.get(3).toString());
-							orderInfo.setEntrustParty(row.get(4).toString());
-							orderInfo.setServiceModel(row.get(5).toString());
-							orderInfo.setSettlementClause(row.get(6).toString());
-							orderInfo.setDeliveryMode(row.get(7).toString());
-							orderInfo.setRate(row.get(8).toString());
-							orderInfo.setCurrency(row.get(9).toString());
-							orderInfo.setExchangeRate(row.get(10).toString());
-							orderInfo.setDemandPlanSerial(row.get(11).toString());
-							orderInfo.setOrderSerial(row.get(12).toString());
-							orderInfo.setMaker(row.get(13).toString());
-							orderInfo.setOrderDate(StringUtils.isEmpty(row.get(14).toString())?null:(Date) row.get(14));
+							orderInfo.setOrderNum(StringUtil.rowCell2String(row,0));
+							orderInfo.setOrderType(StringUtil.rowCell2String(row,1));
+							orderInfo.setSupplyComId(StringUtil.rowCell2String(row,2));
+							orderInfo.setSeller(StringUtil.rowCell2String(row,3));
+							orderInfo.setEntrustParty(StringUtil.rowCell2String(row,4));
+							orderInfo.setServiceModel(StringUtil.rowCell2String(row,5));
+							orderInfo.setSettlementClause(StringUtil.rowCell2String(row,6));
+							orderInfo.setDeliveryMode(StringUtil.rowCell2String(row,7));
+							orderInfo.setRate(StringUtil.rowCell2String(row,8));
+							orderInfo.setCurrency(StringUtil.rowCell2String(row,9));
+							orderInfo.setExchangeRate(StringUtil.rowCell2String(row,10));
+							orderInfo.setDemandPlanSerial(StringUtil.rowCell2String(row,11));
+							orderInfo.setOrderSerial(StringUtil.rowCell2String(row,12));
+							orderInfo.setMaker(StringUtil.rowCell2String(row,13));
+							orderInfo.setOrderDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,14))?null:(Date) row.get(14));
 
 							orderInfo.setSerialNum(ApplicationUtils.random32UUID());
 				    		Subject currentUser = SecurityUtils.getSubject();
@@ -1951,22 +1951,22 @@ public class OrderController {
 						try{
 							OrderInfo orderInfo = new OrderInfo();
 
-							orderInfo.setOrderNum(row.get(0).toString());
-							orderInfo.setOrderType(row.get(1).toString());
-							orderInfo.setBuyComId(row.get(2).toString());
-							orderInfo.setSeller(row.get(3).toString());
-							orderInfo.setEntrustParty(row.get(4).toString());
-							orderInfo.setServiceModel(row.get(5).toString());
-							orderInfo.setSettlementClause(row.get(6).toString());
-							orderInfo.setDeliveryMode(row.get(7).toString());
-							orderInfo.setRate(row.get(8).toString());
-							orderInfo.setCurrency(row.get(9).toString());
-							orderInfo.setExchangeRate(row.get(10).toString());
-							orderInfo.setDemandPlanSerial(row.get(11).toString());
-							orderInfo.setSaleApplySerial(row.get(12).toString());
-							orderInfo.setOrderSerial(row.get(13).toString());
-							orderInfo.setMaker(row.get(14).toString());
-							orderInfo.setOrderDate(StringUtils.isEmpty(row.get(15).toString())?null:(Date) row.get(15));
+							orderInfo.setOrderNum(StringUtil.rowCell2String(row,0));
+							orderInfo.setOrderType(StringUtil.rowCell2String(row,1));
+							orderInfo.setBuyComId(StringUtil.rowCell2String(row,2));
+							orderInfo.setSeller(StringUtil.rowCell2String(row,3));
+							orderInfo.setEntrustParty(StringUtil.rowCell2String(row,4));
+							orderInfo.setServiceModel(StringUtil.rowCell2String(row,5));
+							orderInfo.setSettlementClause(StringUtil.rowCell2String(row,6));
+							orderInfo.setDeliveryMode(StringUtil.rowCell2String(row,7));
+							orderInfo.setRate(StringUtil.rowCell2String(row,8));
+							orderInfo.setCurrency(StringUtil.rowCell2String(row,9));
+							orderInfo.setExchangeRate(StringUtil.rowCell2String(row,10));
+							orderInfo.setDemandPlanSerial(StringUtil.rowCell2String(row,11));
+							orderInfo.setSaleApplySerial(StringUtil.rowCell2String(row,12));
+							orderInfo.setOrderSerial(StringUtil.rowCell2String(row,13));
+							orderInfo.setMaker(StringUtil.rowCell2String(row,14));
+							orderInfo.setOrderDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,15))?null:(Date) row.get(15));
 
 							orderInfo.setSerialNum(ApplicationUtils.random32UUID());
 				    		Subject currentUser = SecurityUtils.getSubject();

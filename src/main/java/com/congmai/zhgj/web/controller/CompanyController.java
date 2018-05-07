@@ -688,7 +688,7 @@ public class CompanyController {
 						try{
 							Company company = new Company();
 							company.setComId(ApplicationUtils.random32UUID());
-							company.setComNum(row.get(0).toString());
+							company.setComNum(StringUtil.rowCell2String(row,0));
 							if (StringUtils.isNotEmpty(company.getComNum())) {
 								if(orderService.isExist("company",company.getComNum(),null)){
 									throw new MyException("企业编号已存在！");
@@ -696,23 +696,23 @@ public class CompanyController {
 							}else {
 								throw new MyException("企业编号不能为空！");
 							}
-							company.setComName(row.get(1).toString());
-							String comTypeName = ComType.getValueByInfo(row.get(2).toString().trim());
+							company.setComName(StringUtil.rowCell2String(row,1));
+							String comTypeName = ComType.getValueByInfo(StringUtil.rowCell2String(row,2).trim());
 							if(comTypeName==null){
 								throw new MyException("企业类型不存在");
 							}
-							company.setComType(ComType.getValueByInfo(row.get(2).toString().trim()));
-							company.setAbbreviation(row.get(3).toString());
-							company.setBusinessNature(row.get(4).toString());
-							company.setComNature(row.get(5).toString());
-							company.setBusinessType(row.get(6).toString());
-							company.setRegisteredCapital(row.get(7).toString());
-							company.setLegalPerson(row.get(8).toString());
-							company.setAddress(row.get(9).toString());
-							company.setTaxpayeNumber(row.get(10).toString());
-							company.setTel(row.get(11).toString());
-							company.setContact(row.get(12).toString());
-							company.setRemark(row.get(13).toString());
+							company.setComType(ComType.getValueByInfo(StringUtil.rowCell2String(row,2).trim()));
+							company.setAbbreviation(StringUtil.rowCell2String(row,3));
+							company.setBusinessNature(StringUtil.rowCell2String(row,4));
+							company.setComNature(StringUtil.rowCell2String(row,5));
+							company.setBusinessType(StringUtil.rowCell2String(row,6));
+							company.setRegisteredCapital(StringUtil.rowCell2String(row,7));
+							company.setLegalPerson(StringUtil.rowCell2String(row,8));
+							company.setAddress(StringUtil.rowCell2String(row,9));
+							company.setTaxpayeNumber(StringUtil.rowCell2String(row,10));
+							company.setTel(StringUtil.rowCell2String(row,11));
+							company.setContact(StringUtil.rowCell2String(row,12));
+							company.setRemark(StringUtil.rowCell2String(row,13));
 							Subject currentUser = SecurityUtils.getSubject();
 							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 							company.setCreateTime(new Date());

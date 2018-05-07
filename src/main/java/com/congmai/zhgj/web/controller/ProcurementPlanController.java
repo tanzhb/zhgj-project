@@ -778,7 +778,7 @@ public class ProcurementPlanController {
     			
     			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
     			newOrderInfo.setOrderDate(new Date());
-    			newOrderInfo.setRate("17");
+    			newOrderInfo.setRate("16");
     			newOrderInfo.setCurrency("人民币");
     			
     			newOrderInfo.setCreator(currenLoginName);
@@ -952,7 +952,7 @@ public class ProcurementPlanController {
 		        			
 		        			newOrderInfo.setSeller(StaticConst.getInfo("comName"));
 		        			newOrderInfo.setOrderDate(new Date());
-		        			newOrderInfo.setRate("17");
+		        			newOrderInfo.setRate("16");
 		        			newOrderInfo.setCurrency("人民币");
 		        			
 		        			newOrderInfo.setCreator(currenLoginName);
@@ -1211,7 +1211,9 @@ public class ProcurementPlanController {
 	    		procurementPlan.setProcessInstanceId(processInstanceId);
 	    		//发送消息
 	    		if(completeFlag){//发送消息给采购计划制单人
-				
+	    			if(BeanUtils.isBlank(pi)){
+	    				EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(procurementPlan,MessageConstants.AGREE_BUY_APPLY));
+	    			}
 	    		}
 	    		result = "任务办理完成！";
 			} catch (ActivitiObjectNotFoundException e) {

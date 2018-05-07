@@ -358,7 +358,7 @@
     select
     group_concat(sib.batchNum,'(',sob.outCount,')',';')
     from stockOutBatch sob
-     left join  stockinbatch sib on sib.serialNum= sob.stockInBatchSerial
+     left join  stockInBatch sib on sib.serialNum= sob.stockInBatchSerial
     where  sob.stockOutMaterielSerial=#{serialNum,jdbcType=VARCHAR} and sob.delFlg=0
   </select>
   <select id="selectSumBySerialNum"    parameterType="java.lang.String"  resultType="java.lang.String">

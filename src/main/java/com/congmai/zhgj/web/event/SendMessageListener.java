@@ -3,8 +3,10 @@ package com.congmai.zhgj.web.event;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -35,6 +37,7 @@ import com.congmai.zhgj.web.model.OrderMaterielExample;
 import com.congmai.zhgj.web.model.PaymentRecord;
 import com.congmai.zhgj.web.model.ProcurementPlan;
 import com.congmai.zhgj.web.model.ProcurementPlanMateriel;
+import com.congmai.zhgj.web.model.ProcurementPlanMaterielExample;
 import com.congmai.zhgj.web.model.StockInOutCheck;
 import com.congmai.zhgj.web.model.StockInOutRecord;
 import com.congmai.zhgj.web.model.TakeDelivery;
@@ -46,6 +49,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.DeliveryMaterielService;
 import com.congmai.zhgj.web.service.DeliveryService;
 import com.congmai.zhgj.web.service.GroupService;
+import com.congmai.zhgj.web.service.ProcurementPlanMaterielService;
 import com.congmai.zhgj.web.service.SendMailService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.WebSocketService;
@@ -103,6 +107,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	
 	private ProcurementPlanService procurementPlanService = null;
 	
+	private ProcurementPlanMaterielService procurementPlanMaterielService = null;
+	
 	private OrderMaterielService orderMaterielService = null;
 	
 	private MaterielService materielService = null;
@@ -129,6 +135,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 		orderMaterielService=  ApplicationContextHelper.getBean(OrderMaterielService.class);
 		materielService=  ApplicationContextHelper.getBean(MaterielService.class);
 		takeDeliveryMapper=  ApplicationContextHelper.getBean(TakeDeliveryMapper.class);
+		procurementPlanMaterielService=  ApplicationContextHelper.getBean(ProcurementPlanMaterielService.class);
+		
 	}
 
 	@Override
@@ -204,6 +212,8 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			demand2ProManagerMessage(event);
 		}else if(MessageConstants.APPLY_BUY_APPLY.equals(event.getAction())){ //提交采购计划给申请人
 			applyBuyApplyMessage(event);
+		}else if(MessageConstants.AGREE_BUY_APPLY.equals(event.getAction())){ //采购计划审核通过
+			agreeBuyApplyMessage(event);
 		}
 //
 	}
@@ -756,6 +766,28 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 					messageService.insertBatch(messageVO);
 				}
 				
+				//发给制单人
+				if(StringUtil.isNotEmpty(order.getMaker())){
+					User u = userService.selectByUsername(order.getMaker());
+					if(u!=null){
+						Message messageVO = this.createMessage(event,user);
+						Properties properties = new Properties();
+						messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+						messageVO.setTempleteType(MessageConstants.DELIVERY_COMPLETE); //供应商确认发货
+						messageVO.setObjectSerial(delivery.getSerialNum());
+						messageVO.setReceiverId(u.getUserId().toString());
+						properties.put("paramer_a", u.getUserName());
+						properties.put("paramer_b", delivery.getDeliverNum());
+						properties.put("paramer_d", order.getOrderNum());
+						properties.put("paramer_e", MessageConstants.URL_BE_CONFIRM_BUY_ORDER);
+						properties.put("paramer_f", messageVO.getSerialNum());
+
+						messageVO.setProperties(properties);
+						webSocketProcessor.sendMessageToUser(messageVO);
+						messageService.insert(messageVO);
+					}
+					
+				}
 				//发给仓储
 				users = null;
 				users = groupService.selectUserIdsByGroupType(Constants.STORAGE);
@@ -2397,6 +2429,73 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 				messageVO.setProperties(properties);
 				webSocketProcessor.sendMessageToUser(messageVO);
 				messageService.insert(messageVO);
+			}
+		} catch (Exception e) {
+			logger.warn(e.getMessage(), e);
+		}
+
+
+	}
+	
+	/**
+	 * 
+	 * @Description (采购计划审核通过消息)
+	 * @param event
+	 */
+	private void agreeBuyApplyMessage(SendMessageEvent event) {
+		try {
+			initService();
+			User user = UserUtil.getUserFromSession();
+			if(user != null){
+				ProcurementPlan procurementPlan = (ProcurementPlan) event.getSource();
+
+				if(procurementPlan.getMaker()!=null){
+					user = userService.selectByUsername(procurementPlan.getMaker());
+				}
+				
+				Properties properties = new Properties();
+				
+				List<ProcurementPlanMateriel> procurementPlanMateriel=null;
+		    	
+		    	ProcurementPlanMaterielExample m =new ProcurementPlanMaterielExample();
+		    	//and 条件1
+		    	com.congmai.zhgj.web.model.ProcurementPlanMaterielExample.Criteria criteria =  m.createCriteria();
+		    	criteria.andDelFlgEqualTo("0");
+		    	criteria.andProcurementPlanSerialEqualTo(procurementPlan.getSerialNum());
+		    	m.setOrderByClause(" sort asc");
+		    	procurementPlanMateriel = procurementPlanMaterielService.selectList(m);
+		    	
+		    	Set<String> supplySet = new HashSet<String>();//存入所有物料供应商，不会重复
+		    	if(procurementPlanMateriel!=null){//循环供应物料，集合所有的供应商
+		    		for(ProcurementPlanMateriel o:procurementPlanMateriel){
+		    			if(StringUtil.isNotEmpty(o.getSupplyComId())){
+		    				supplySet.add(o.getSupplyComId());
+		    			}
+		    		}
+		    	}
+		    	for (String supplyComId : supplySet) {
+		    		List<User> Users = userService.selectUserListByComId(supplyComId);
+		    		if (CollectionUtils.isNotEmpty(Users)) {
+						for (User user2 : Users) {
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.SYSTEM_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_AGREE_BUY_APPLY); //采购计划申请消息
+							messageVO.setObjectSerial(procurementPlan.getSerialNum());
+							messageVO.setReceiverId(user2.getUserId().toString());
+							properties.put("paramer_a", user2.getUserName());
+							properties.put("paramer_b", user.getUserName());
+							properties.put("paramer_c", procurementPlan.getProcurementPlanNum());
+							properties.put("paramer_d", MessageConstants.URL_SALE_FORECAST);
+							properties.put("paramer_f", messageVO.getSerialNum());
+
+							messageVO.setProperties(properties);
+							webSocketProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+				}
+		    	
+				
 			}
 		} catch (Exception e) {
 			logger.warn(e.getMessage(), e);

@@ -32,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
@@ -309,7 +310,7 @@ public class WareHouseController {
 						try{
 							Warehouse  warehouse = new Warehouse();
 							warehouse.setSerialNum(ApplicationUtils.random32UUID());
-							warehouse.setWarehouseNum(row.get(0).toString());//
+							warehouse.setWarehouseNum(StringUtil.rowCell2String(row,0));//
 							if (!StringUtils.isEmpty(warehouse.getWarehouseNum())) {
 								if(orderService.isExist("warehouse",warehouse.getWarehouseNum(),null)){
 									throw new MyException("仓库编号已存在！");
@@ -317,35 +318,35 @@ public class WareHouseController {
 							}else {
 								throw new MyException("仓库编号不能为空！");
 							}
-							warehouse.setWarehouseName(row.get(1).toString());
-							warehouse.setWarehouseType(row.get(2).toString());
-							warehouse.setWarehouseCategory(row.get(3).toString());
-//							warehouse.setOwner(row.get(4).toString());
-							if(StringUtils.isEmpty(row.get(4).toString())){
+							warehouse.setWarehouseName(StringUtil.rowCell2String(row,1));
+							warehouse.setWarehouseType(StringUtil.rowCell2String(row,2));
+							warehouse.setWarehouseCategory(StringUtil.rowCell2String(row,3));
+//							warehouse.setOwner(StringUtil.rowCell2String(row,4));
+							if(StringUtils.isEmpty(StringUtil.rowCell2String(row,4))){
 								warehouse.setOwner("pingtai");//默认平台为所有者
 							}else{
-								String comId=companyService.selectComIdByComName(row.get(4).toString());
+								String comId=companyService.selectComIdByComName(StringUtil.rowCell2String(row,4));
 								if(StringUtils.isEmpty(comId)){
 									//创建该公司
 									Company com=new Company();
 									com.setComId(ApplicationUtils.random32UUID());
 									com.setComNum(orderService.getNumCode("CO"));
 									com.setComType("9");
-									com.setComName(row.get(4).toString());
+									com.setComName(StringUtil.rowCell2String(row,4));
 									companyService.insert(com);
 									warehouse.setOwner(com.getComId());
 								}else{
 									warehouse.setOwner(comId);
 								}
 							}
-//							warehouse.setOwner(row.get(4).toString());
-							warehouse.setAddress(row.get(5).toString());
-							warehouse.setArea(row.get(6).toString());
-							warehouse.setAdmin(row.get(7).toString());
-							warehouse.setTel(row.get(8).toString());
-							warehouse.setEmail(row.get(9).toString());
-							warehouse.setFax(row.get(10).toString());
-							warehouse.setRemark(row.get(11).toString());
+//							warehouse.setOwner(StringUtil.rowCell2String(row,4));
+							warehouse.setAddress(StringUtil.rowCell2String(row,5));
+							warehouse.setArea(StringUtil.rowCell2String(row,6));
+							warehouse.setAdmin(StringUtil.rowCell2String(row,7));
+							warehouse.setTel(StringUtil.rowCell2String(row,8));
+							warehouse.setEmail(StringUtil.rowCell2String(row,9));
+							warehouse.setFax(StringUtil.rowCell2String(row,10));
+							warehouse.setRemark(StringUtil.rowCell2String(row,11));
 							Subject currentUser = SecurityUtils.getSubject();
 							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 							warehouse.setCreateTime(new Date());

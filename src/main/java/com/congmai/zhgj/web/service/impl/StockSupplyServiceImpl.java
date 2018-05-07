@@ -85,22 +85,22 @@ public class StockSupplyServiceImpl extends GenericServiceImpl<StockSupplyRecord
 
 
 	@Override
-	public List<StockSupplyRecord> getSupplyListForIn(String materielSerial,String supplyComId) {
+	public List<StockSupplyRecord> getSupplyListForIn(String serialNum) {
 		// TODO Auto-generated method stub
 		Map<String,String> map=new HashMap<String,String>();
-		map.put("materielSerial", materielSerial);
-		map.put("supplyComId", supplyComId);
+		map.put("serialNum", serialNum);
+//		map.put("supplyComId", supplyComId);
 		return stockSupplyRecordMapper.getStockInRecordForSupply(map);
 	}
 
 
 
 	@Override
-	public List<StockSupplyRecord> getSupplyListForOut(String materielSerial,String supplyComId) {
+	public List<StockSupplyRecord> getSupplyListForOut(String serialNum) {
 		// TODO Auto-generated method stub
 		Map<String,String> map=new HashMap<String,String>();
-		map.put("materielSerial", materielSerial);
-		map.put("supplyComId", supplyComId);
+		map.put("serialNum", serialNum);
+//		map.put("supplyComId", supplyComId);
 		return stockSupplyRecordMapper.getStockOutRecordForSupply(map);
 	}
 

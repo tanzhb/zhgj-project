@@ -31,6 +31,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.DateUtil;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.model.BOMMateriel;
@@ -385,9 +386,9 @@ public class StatementController {
 						try{
 							Statement statement = new Statement();
 
-							statement.setStatementNum(row.get(0).toString());
+							statement.setStatementNum(StringUtil.rowCell2String(row,0));
 							
-							statement.setStatementDate(StringUtils.isEmpty(row.get(15).toString())?null:(Date) row.get(15));
+							statement.setStatementDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,15))?null:(Date) row.get(15));
 
 							statement.setSerialNum(ApplicationUtils.random32UUID());
 				    		Subject currentUser = SecurityUtils.getSubject();

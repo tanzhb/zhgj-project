@@ -132,7 +132,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
             		$scope.saleOrder.settlementClause="平进平出";
             		
             		$scope.saleOrder.orderDate = timeStamp2String2(new Date())
-            		$scope.saleOrder.rate = 17;
+            		$scope.saleOrder.rate = 16;
                 	//合同内容
                 	$scope.saleOrder.contractContent = '111100';
                 	$scope.initContractContent();
@@ -2500,6 +2500,10 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){
+	        				for(var j=i;j+1<$scope.orderMateriel.length;j++){
+        						$scope["orderMaterielInput"+j] = $scope["orderMaterielInput"+(j+1)];
+	    	        			$scope["orderMaterielShow"+j] = $scope["orderMaterielShow"+(j+1)];
+        					}
 	        				if(materiel == $scope.orderMateriel[i]){
 	        					$scope.orderMateriel.splice(i,1);
 	        				}

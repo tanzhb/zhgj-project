@@ -73,21 +73,36 @@ angular
 						 }else if($location.path()=="/priceList"){
 				 			debugger;
 				 		
-				 			
-				 			if($stateParams.buyOrSale=='sale'){
+				 			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+				 				$("#buy").addClass("active");
+				 				$("#sale").removeClass("active");
+				 				$("#tab_buy").addClass("active");
+				 				$("#tab_sale").removeClass("active")
+				 				loadPriceListBuyTable();//加载采购价格列表
+				 				$('#buyPriceTab a[href="#daibanBuyPrice"]').tab('show');
+			 					$scope.toDaibanBuyPrice();
+			 				}if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
+			 					$("#buy").removeClass("active");
+				 				$("#sale").addClass("active");
+				 				$("#tab_buy").removeClass("active");
+				 				$("#tab_sale").addClass("active");
+				 				loadPriceListSaleTable();//加载销售价格列表
+			 					$('#salePriceTab a[href="#daibanSalePrice"]').tab('show');
+			 					$scope.toDaibanSalePrice();
+			 				}else if($stateParams.buyOrSale=='sale'){
 				 				debugger;
 				 				$("#buy").removeClass("active");
 				 				$("#sale").addClass("active");
 				 				$("#tab_buy").removeClass("active");
 				 				$("#tab_sale").addClass("active");
-				 				loadPriceListSaleTable();
-				 				//加载采购价格列表
+				 				loadPriceListSaleTable();//加载销售价格列表
+				 				
 				 			}else if($stateParams.buyOrSale=='buy'){
 				 				$("#buy").addClass("active");
 				 				$("#sale").removeClass("active");
 				 				$("#tab_buy").addClass("active");
 				 				$("#tab_sale").removeClass("active")
-				 				loadPriceListBuyTable();//加载销售价格列表
+				 				loadPriceListBuyTable();//加载采购价格列表
 				 			}else{
 				 				initTabClass();
 				 			}
@@ -522,7 +537,7 @@ function loadPriceListBuyTable(){
 									    									type, row, meta){
 									                            		if(data!=""&&data!=null){
 									                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
-									    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+									    										return '<span  ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" class="label label-sm label-warning ng-scope">审核中</span>';
 									    									}else if(data.status=="APPROVAL_SUCCESS"){
 									    										if(row.status==1){
 									    											return '<span  class="label label-sm label-success ng-scope">生效中</span>';
@@ -539,7 +554,10 @@ function loadPriceListBuyTable(){
 									                            		}else{
 									                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 									                            		}
-									                            	}
+									                            	},
+									    							"createdCell": function (td, cellData, rowData, row, col) {
+									   								 $compile(td)($scope);
+									   						       }
 									                            }/*,{
 									                            	  mData : 'status'
 									                              }*/
@@ -631,7 +649,9 @@ function loadPriceListBuyTable(){
 								// ***************************************
 */				// 构建datatables结束***************************************
 				}
-
+$scope.viewGraphTrace = function(processInstanceId){
+	graphTrace(processInstanceId,ctx);
+}
 function loadPriceListSaleTable(){
 	var a = 0,judgeString='sale';
 	 tableAjaxUrl = "rest/priceList/getPriceList?buyOrSale="+judgeString;
@@ -746,7 +766,7 @@ function loadPriceListSaleTable(){
 		    									type, row, meta){
 		                            		if(data!=""&&data!=null){
 		                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
-		    										return '<span  class="label label-sm label-warning ng-scope">审核中</span>';
+		    										return '<span  ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" class="label label-sm label-warning ng-scope">审核中</span>';
 		    									}else if(data.status=="APPROVAL_SUCCESS"){
 		    										if(row.status==1){
 		    											return '<span  class="label label-sm label-success ng-scope">生效中</span>';
@@ -763,7 +783,10 @@ function loadPriceListSaleTable(){
 		                            		}else{
 		                            			return '<span  class="label label-sm label-info ng-scope">未审批</span>';
 		                            		}
-		                            	}
+		                            	},
+		    							"createdCell": function (td, cellData, rowData, row, col) {
+		   								 $compile(td)($scope);
+		   						       }
 		                            }/*,
 		                            { mData: 'processBase',//操作
 		                            	mRender:function(data,
@@ -1112,6 +1135,9 @@ function loadPriceListSaleTable(){
 			 jQuery.validator.addMethod("toppriceNumCheck", function (value, element) {//最低价最高价判断
 	    			debugger;
 					$(element).removeData();
+					if(value==""||$(element).data("topprice")==""){
+						return true
+					}
 					return this.optional(element) || Number($(element).data("topprice")) == NaN?false:(Number($(element).data("topprice"))-value>= 0);
 				}, "最低限价不能超过最高限价");
 			 jQuery.validator.addMethod("ladderPriceNumCheck", function (value, element) {//梯度价格判断
@@ -2188,8 +2214,9 @@ function loadPriceListSaleTable(){
 		        									data) {
 		        								if (data != null) {
 		        									return timeStamp2String(data);
-		        								} else
+		        								} else{
 		        									return '';
+		        								}
 		        							}
 		        						},
 		        						{
@@ -2197,7 +2224,7 @@ function loadPriceListSaleTable(){
 		        						},
 		        						{
 		        							mData : 'version'
-		        						},
+		        						}/*,
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
@@ -2212,7 +2239,7 @@ function loadPriceListSaleTable(){
 		        								}
 		        								
 		        							}
-		        						}
+		        						}*/
 		        						]
 
 		        			})
@@ -2538,8 +2565,9 @@ function loadPriceListSaleTable(){
 		        									data) {
 		        								if (data != null) {
 		        									return timeStamp2String(data);
-		        								} else
+		        								} else{
 		        									return '';
+		        								}
 		        							}
 		        						},
 		        						{
@@ -2547,7 +2575,7 @@ function loadPriceListSaleTable(){
 		        						},
 		        						{
 		        							mData : 'version'
-		        						},
+		        						}/*,
 		        						{
 		        							mData : 'revoke',
 		        							mRender : function(data,type,row,meta) {
@@ -2562,7 +2590,7 @@ function loadPriceListSaleTable(){
 		        								}
 		        								
 		        							}
-		        						}
+		        						}*/
 		        						]
 
 		        			})

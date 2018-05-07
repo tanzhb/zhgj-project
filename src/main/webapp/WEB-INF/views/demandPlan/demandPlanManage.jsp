@@ -66,13 +66,13 @@
 																删除
 															</label>
 														</shiro:hasPermission>
-														<shiro:hasPermission name="demand:import">
+														<%-- <shiro:hasPermission name="demand:import">
 															<label
 																class="btn btn-transparent green btn-outline btn-circle btn-sm"
 																data-toggle="modal" data-target="#import"> <i
 																class="fa fa-upload"></i> 导入
 															</label>
-														</shiro:hasPermission>
+														</shiro:hasPermission> --%>
 														<shiro:hasPermission name="demand:export">
 															<label
 																class="btn btn-transparent yellow-casablanca btn-outline btn-circle btn-sm"

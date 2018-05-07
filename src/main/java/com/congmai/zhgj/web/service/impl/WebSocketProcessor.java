@@ -100,7 +100,9 @@ public class WebSocketProcessor implements WebSocketService {
 	//已发货
 	private static String message81 = "尊敬的${paramer_a}，您好！</br>销售订单号${paramer_b} 需要发货，发货单号${paramer_c}。"+
 			"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_e}')>查看</a>";
-
+	//已发货完成
+		private static String message810 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b}已确认发货，关联采购订单号${paramer_d}。"+
+				"<a href='javascript:;' ui-sref=${paramer_e} onclick=readAndClose('${paramer_f}')>查看</a>";
 	//已出库检验（to采购）
 	private static String message102 = "尊敬的${paramer_a}，您好！</br>发货单号${paramer_b} 已完成出库检验${paramer_c}件，不合格品 ${paramer_d} 件，关联销售订单号${paramer_e}。"+
 			"<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
@@ -164,27 +166,30 @@ public class WebSocketProcessor implements WebSocketService {
 	private static String message108 = "尊敬的${paramer_a}，您好！采购计划${paramer_b} 已发布，请及时处理。"+
 	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 	//采购计划发布发送给销售订单制单人
-		private static String message110 = "尊敬的${paramer_a}，您好！销售单号${paramer_b} 关联的采购计划分解成功。"+
-		  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	private static String message110 = "尊敬的${paramer_a}，您好！销售单号${paramer_b} 关联的采购计划分解成功。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
 
 	//入库发送给仓储人员
-		private static String message109 = "尊敬的${paramer_a}，您好！入库通知${paramer_b} 已发布，请及时处理。"+
-		  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
-		//出库发送给仓储人员
-				private static String message16 = "尊敬的${paramer_a}，您好！出库通知${paramer_b} 已发布，请及时处理。"+
-				  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
-				//清关发送给仓储人员
-				private static String message17 = "尊敬的${paramer_a}，您好！清关单${paramer_b} 已发布，请及时处理。"+
-				  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
-				//报关发送给仓储人员
-						private static String message18 = "尊敬的${paramer_a}，您好！报关单${paramer_b} 已发布，请及时处理。"+
-						  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
-						//自主销售订单分解提醒供应商备货给平台
-						private static String message19= "尊敬的${paramer_a}，${paramer_b}物料需要在${paramer_c}完成入库，数量为${paramer_d}，请及时通知${paramer_e}备货"+
-						  "<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
-						// 采购计划申请消息模板
-						private static String message99 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购计划&nbsp;${paramer_c}&nbsp;等待您的审批。"+
-														 "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
+	private static String message109 = "尊敬的${paramer_a}，您好！入库通知${paramer_b} 已发布，请及时处理。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	//出库发送给仓储人员
+	private static String message16 = "尊敬的${paramer_a}，您好！出库通知${paramer_b} 已发布，请及时处理。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	//清关发送给仓储人员
+	private static String message17 = "尊敬的${paramer_a}，您好！清关单${paramer_b} 已发布，请及时处理。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	//报关发送给仓储人员
+	private static String message18 = "尊敬的${paramer_a}，您好！报关单${paramer_b} 已发布，请及时处理。"+
+	  "<a href='javascript:;' ui-sref=${paramer_c} onclick=readAndClose('${paramer_d}')>查看</a>";
+	//自主销售订单分解提醒供应商备货给平台
+	private static String message19= "尊敬的${paramer_a}，${paramer_b}物料需要在${paramer_c}完成入库，数量为${paramer_d}，请及时通知${paramer_e}备货"+
+	  "<a href='javascript:;' ui-sref=${paramer_f} onclick=readAndClose('${paramer_g}')>查看</a>";
+	// 采购计划申请消息模板
+	private static String message99 = "尊敬的${paramer_a}，您好！</br>${paramer_b}新建采购计划&nbsp;${paramer_c}&nbsp;等待您的审批。"+
+	  "<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>马上处理</a> </br>备注：${paramer_e}。</br>祝您工作愉快！";
+	// 采购计划通过发给供应商消息模板
+	private static String message100 = "尊敬的${paramer_a}，您好！</br>${paramer_b}（中航能科）发布了采购计划。"+
+		"<a href='javascript:;' ui-sref=${paramer_d} onclick=readAndClose('${paramer_f}')>查看</a>";
 	static{
 		MessageTemplate.register("01", DEFAULT_MSG_TEMPLATE, null, message01);
 		MessageTemplate.register("02", DEFAULT_MSG_TEMPLATE, null, message02);
@@ -214,6 +219,7 @@ public class WebSocketProcessor implements WebSocketService {
 		MessageTemplate.register("72", DEFAULT_MSG_TEMPLATE, null, message72);
 		
 		MessageTemplate.register("81", DEFAULT_MSG_TEMPLATE, null, message81);
+		MessageTemplate.register("810", DEFAULT_MSG_TEMPLATE, null, message810);
 		MessageTemplate.register("91", DEFAULT_MSG_TEMPLATE, null, message91);
 		MessageTemplate.register("92", DEFAULT_MSG_TEMPLATE, null, message92);
 		MessageTemplate.register("93", DEFAULT_MSG_TEMPLATE, null, message93);
@@ -223,6 +229,7 @@ public class WebSocketProcessor implements WebSocketService {
 		MessageTemplate.register("97", DEFAULT_MSG_TEMPLATE, null, message97);
 		MessageTemplate.register("98", DEFAULT_MSG_TEMPLATE, null, message98);
 		MessageTemplate.register("99", DEFAULT_MSG_TEMPLATE, null, message99);
+		MessageTemplate.register("100", DEFAULT_MSG_TEMPLATE, null, message100);
 		MessageTemplate.register("101", DEFAULT_MSG_TEMPLATE, null, message101);
 		MessageTemplate.register("102", DEFAULT_MSG_TEMPLATE, null, message102);
 		MessageTemplate.register("103", DEFAULT_MSG_TEMPLATE, null, message103);

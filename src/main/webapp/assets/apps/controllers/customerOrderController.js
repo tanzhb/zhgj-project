@@ -123,7 +123,7 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
             		$scope.customerOrder.serviceModel = "普通代理";
             		$scope.customerOrder.settlementClause="平进平出";
             		$scope.customerOrder.orderDate = timeStamp2String2(new Date());
-            		$scope.customerOrder.rate = 17;
+            		$scope.customerOrder.rate = 16;
                 	//合同内容
                 	$scope.customerOrder.contractContent = '111100';
                 	$scope.initContractContent();
@@ -1989,6 +1989,10 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 	        	handle.confirm("确定删除吗？",function(){
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){
+	        				for(var j=i;j+1<$scope.orderMateriel.length;j++){
+        						$scope["orderMaterielInput"+j] = $scope["orderMaterielInput"+(j+1)];
+	    	        			$scope["orderMaterielShow"+j] = $scope["orderMaterielShow"+(j+1)];
+        					}
 	        				if(materiel == $scope.orderMateriel[i]){
 	        					$scope.orderMateriel.splice(i,1);
 	        				}

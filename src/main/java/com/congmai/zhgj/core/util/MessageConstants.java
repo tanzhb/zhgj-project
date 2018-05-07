@@ -70,6 +70,11 @@ public class MessageConstants {
 	public static final String BE_CONFIRM_APPLY_BUY_ORDER = "beConfirmApplyBuyOrder";
 	
 	public static final String APPLY_BUY_APPLY = "buyApply";
+	
+	/**
+	 * 采购计划通过审核
+	 */
+	public static final String AGREE_BUY_APPLY = "agreeBuyApply";
 	/*========================销售订单相关消息End==============================*/
 	/**
 	 * 销售订单申请消息
@@ -317,7 +322,10 @@ public class MessageConstants {
 	public static final String URL_DELIVERY_TO_SUPPLY= "supplyOrder";
 	
 	
-	
+	/**
+	 * 销售预测url
+	 */
+	public static final String URL_SALE_FORECAST = "saleForecast";
 	
 	
 	/*========================销售订单相关消息Start==============================*/
@@ -584,6 +592,11 @@ public class MessageConstants {
 	 * 已发货消息模板
 	 */
 	public static final String TEMP_DELIVERY = "81"; 
+	
+	/**
+	 * 发货完成
+	 */
+	public static final String DELIVERY_COMPLETE = "810";
 	/*========================发货相关消息End==============================*/
 
 	
@@ -706,6 +719,11 @@ public class MessageConstants {
 	 * 采购计划申请消息模板
 	 */
 	public static final String TEMP_APPLY_BUY_APPLY= "99"; 
+	
+	/**
+	 * 采购计划通过审核
+	 */
+	public static final String TEMP_AGREE_BUY_APPLY = "100";
 	
 	
 	/*===========出入库检验相关消息End=================*/

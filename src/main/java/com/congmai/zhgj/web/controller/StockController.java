@@ -746,12 +746,12 @@ public class StockController {
 			 @RequestMapping(value="stockSupplyInList",method=RequestMethod.GET)
 			 public ResponseEntity<Map<String,Object>> stockSupplyInList(String serialNum) {
 //				 	StockSupplyRecord stock=stockSupplyRecordService.selectById(serialNum);
-			    	String comId=null;
-			    	User user = UserUtil.getUserFromSession();
-			    	if(user!=null){
-						comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
-					}
-				 List<StockSupplyRecord>stockInList=stockSupplyRecordService.getSupplyListForIn(serialNum,comId);
+//			    	String comId=null;
+//			    	User user = UserUtil.getUserFromSession();
+//			    	if(user!=null){
+//						comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
+//					}
+				 List<StockSupplyRecord>stockInList=stockSupplyRecordService.getSupplyListForIn(serialNum);
 				 // 封装datatables数据返回到前台
 				 Map<String,Object> pageMap = new HashMap<String,Object>();
 				 pageMap.put("draw", 1);
@@ -770,7 +770,7 @@ public class StockController {
 			 public ResponseEntity<Map<String,Object>> stockSupplyInBatchList(String serialNum) {
 				 
 				 StockSupplyRecord stock=stockSupplyRecordService.selectById(serialNum);
-				 List<StockSupplyRecord>stockInBatchList=stockSupplyRecordService.getSupplyListForIn(stock.getMaterielSerial(),null);
+				 List<StockSupplyRecord>stockInBatchList=stockSupplyRecordService.getSupplyListForIn(stock.getSerialNum());
 //				 List<StockSupplyRecord>stockOutBatchList=stockSupplyRecordService.getSupplyListForOut(stock.getMaterielSerial());
 					 
 				 // 封装datatables数据返回到前台
@@ -794,7 +794,7 @@ public class StockController {
 			    	if(user!=null){
 						comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 					}
-				 List<StockSupplyRecord>stockOutList=stockSupplyRecordService.getSupplyListForOut(serialNum,comId);
+				 List<StockSupplyRecord>stockOutList=stockSupplyRecordService.getSupplyListForOut(serialNum);
 			// 封装datatables数据返回到前台
 			Map<String, Object> pageMap = new HashMap<String, Object>();
 			pageMap.put("draw", 1);

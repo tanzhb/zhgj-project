@@ -23,10 +23,10 @@ margin-right: 20px;
 		<li class="active bold">
                		<a data-target="#tab_1_1" data-toggle="tab">库存信息</a>
            		</li>
-		<li class="bold" ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">在库数量</a></li>
+		<!-- <li class="bold" ng-hide="tab_1_2Hide"><a data-target="#tab_1_2" data-toggle="tab">在库数量</a></li> -->
 		<li class="bold" ng-hide="tab_1_3Hide"><a data-target="#tab_1_3" data-toggle="tab">入库记录</a></li>
 		<li class="bold" ng-hide="tab_1_4Hide"><a data-target="#tab_1_4" data-toggle="tab">出库记录</a></li>			
-		<li class="bold" ng-hide="tab_1_5Hide"><a data-target="#tab_1_5" data-toggle="tab">盘点记录</a></li>
+		<!-- <li class="bold" ng-hide="tab_1_5Hide"><a data-target="#tab_1_5" data-toggle="tab">盘点记录</a></li> -->
 		<li class="dropdown pull-right tabdrop">
 			<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 		</li>		

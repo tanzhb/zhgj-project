@@ -252,7 +252,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 
         // 价格目录
         .state('priceList', {
-            url: "/priceList?:buyOrSale",
+            url: "/priceList?:buyOrSale&:tabHref",
             templateUrl: "rest/priceList/viewPriceList",
             data: {pageTitle: '价格目录'},
             controller: "PriceListController",

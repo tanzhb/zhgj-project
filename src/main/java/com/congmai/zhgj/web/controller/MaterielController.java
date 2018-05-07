@@ -36,6 +36,7 @@ import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.web.enums.ComType;
@@ -491,13 +492,14 @@ public class MaterielController {
 	        	//TODO分页查询
 	        	ObjectMapper objectMapper = new ObjectMapper();
 	        	try {
-	        		recordsTotal = materielService.selectListCount(m);
+	        		
 	        		params = URLDecoder.decode(params, "UTF-8");
 					dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
 					m.setStart(dataTablesParams.getStart());
 					m.setLength(dataTablesParams.getLength());
 					m.setSearchStr(dataTablesParams.getSearch().getValue());
-							
+					
+					recordsTotal = materielService.selectListCount(m);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -552,7 +554,7 @@ public class MaterielController {
         	if(params!=null){
 	        	try {
 	        		
-	        		recordsTotal = materielService.selectListCount(m);
+	        		
 	        		
 	        		params = URLDecoder.decode(params, "UTF-8");
 					dataTablesParams = objectMapper.readValue(params,DataTablesParams.class);
@@ -561,7 +563,7 @@ public class MaterielController {
 					
 					m.setSearchStr(dataTablesParams.getSearch().getValue());
 					
-							
+					recordsTotal = materielService.selectListCount(m);		
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -831,24 +833,123 @@ public class MaterielController {
      * @return
      */
     @RequestMapping("exportMateriel")
-    public void exportMateriel(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+    public void exportMateriel(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String params,String parent,String isLatestVersion,String serialNums) {
     		Map<String, Object> dataMap = new HashMap<String, Object>();
         	List<Materiel> materielList = new ArrayList<Materiel>();
-        	//查询全部物料
-        	MaterielExample m =new MaterielExample();
-    		//and 条件1
-        	Criteria criteria =  m.createCriteria();
-        	criteria.andIsLatestVersionEqualTo("1");
-        	criteria.andDelFlgEqualTo("0");
-    		//and 条件2,未发布可编辑的物料
-        	Criteria criteria2 =  m.createCriteria();
-        	criteria2.andStatusEqualTo("0");
-        	criteria2.andDelFlgEqualTo("0");
-        	//or 条件
-        	m.or(criteria2);
-        	//排序字段
-        	m.setOrderByClause("updateTime DESC");
-        	materielList = materielService.selectList(m);
+        	
+        	User user = UserUtil.getUserFromSession();
+        	List<String> comIds = null;
+        	Company company = null;
+        	if(user!=null){
+    			comIds = userCompanyService.getComIdsByUserId(String.valueOf(user.getUserId()));
+    		}
+        	if(comIds!=null){
+        		company = companyService.selectById(comIds.get(0));
+        	}
+        	DataTablesParams  dataTablesParams = null;
+        	MaterielSelectExample m =new MaterielSelectExample();
+        	if(StringUtil.isEmpty(serialNums)){
+        		if(parent==null||parent.isEmpty()){//查询全部物料
+            		//and 条件1
+                	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
+                	criteria.andIsLatestVersionEqualTo("1");
+                	criteria.andDelFlgEqualTo("0");
+                	if("1".equals(isLatestVersion)){
+                	}else{
+                		//and 条件2,未发布可编辑的物料
+                    	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria2 =  m.createCriteria();
+                    	criteria2.andStatusEqualTo("0");
+                    	criteria2.andDelFlgEqualTo("0");
+                    	//or 条件
+                    	m.or(criteria2);
+                	}
+                	//排序字段
+                	m.setOrderByClause("materielNum DESC");
+                	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
+                		criteria.andSupplyComIdIn(comIds);
+                	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
+                		criteria.andBuyComIdIn(comIds);
+                	}else if(company!=null&&ComType.TRAFFICKER.getValue().equals(company.getComType())){
+                		criteria.andBuyComIdIn(comIds);
+                		com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria3 =  m.createCriteria();
+                		criteria3.andIsLatestVersionEqualTo("1");
+                		criteria3.andDelFlgEqualTo("0");
+                		criteria3.andSupplyComIdIn(comIds);
+                		m.or(criteria3);
+                	}
+                	
+                	if(params!=null){
+                		m.setSearchStr(params);
+                	}
+                	materielList = materielService.selectList(m);
+            	}else{//根据父节点查询
+            		
+            		Category category = this.categoryService.selectById(parent);
+            		
+            		//and 条件1
+                	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
+                	criteria.andIsLatestVersionEqualTo("1");
+                	criteria.andDelFlgEqualTo("0");
+                	if(category!=null){
+                		if("1".equals(category.getLevel())){
+                			criteria.andTypeEqualTo(parent);
+                		}else if("2".equals(category.getLevel())){
+                			criteria.andCategory1EqualTo(parent);
+                		}else if("3".equals(category.getLevel())){
+                			criteria.andCategory2EqualTo(parent);
+                		}else if("4".equals(category.getLevel())){
+                			criteria.andCategory3EqualTo(parent);
+                		}
+                	}
+                	//and 条件2
+                	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria2 =  m.createCriteria();
+                	criteria2.andStatusEqualTo("0");
+                	criteria2.andDelFlgEqualTo("0");
+                	if(category!=null){
+                		if("1".equals(category.getLevel())){
+                			criteria2.andTypeEqualTo(parent);
+                		}else if("2".equals(category.getLevel())){
+                			criteria2.andCategory1EqualTo(parent);
+                		}else if("3".equals(category.getLevel())){
+                			criteria2.andCategory2EqualTo(parent);
+                		}else if("4".equals(category.getLevel())){
+                			criteria2.andCategory3EqualTo(parent);
+                		}
+                	}
+                	//or 条件
+                	m.or(criteria2);
+                	//排序字段
+                	m.setOrderByClause("materielNum DESC");
+                	if(company!=null&&ComType.SUPPLIER.getValue().equals(company.getComType())){
+                		criteria.andSupplyComIdIn(comIds);
+                	}else if(company!=null&&ComType.BUYER.getValue().equals(company.getComType())){
+                		criteria.andBuyComIdIn(comIds);
+                	}else if(company!=null&&ComType.TRAFFICKER.getValue().equals(company.getComType())){
+                		criteria.andBuyComIdIn(comIds);
+                		com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria3 =  m.createCriteria();
+                		criteria3.andIsLatestVersionEqualTo("1");
+                		criteria3.andDelFlgEqualTo("0");
+                		criteria3.andSupplyComIdIn(comIds);
+                		m.or(criteria3);
+                	}
+                	
+                	if(params!=null){
+                		m.setSearchStr(params);
+                	}
+                	
+                	materielList = materielService.selectList(m);
+                	
+                	//查询下级物料
+                	/*findChildList(parent,materielList);*/
+            	}
+			}else{
+				List<String> idList = ApplicationUtils.getIdList(serialNums);
+    			for(String id:idList){
+    				materielList.add(materielService.selectById(id));
+    			}
+			}
+        	
+
     		dataMap.put("materielList",materielList);
     		ExcelUtil.export(request, response, dataMap, "materiel", "物料信息");
     }
@@ -892,7 +993,7 @@ public class MaterielController {
 						try{
 							Materiel materiel = new Materiel();
 
-							materiel.setMaterielNum(row.get(0).toString());
+							materiel.setMaterielNum(StringUtil.rowCell2String(row,0));
 							if (StringUtils.isNotEmpty(materiel.getMaterielNum())) {
 								if(orderService.isExist("materiel",materiel.getMaterielNum(),null)){
 									throw new MyException("物料编号已存在！");
@@ -900,31 +1001,31 @@ public class MaterielController {
 							}else {
 								throw new MyException("物料编号不能为空！");
 							}
-							materiel.setMnemonicCode(row.get(1).toString());
-							materiel.setMaterielName(row.get(2).toString());
-							materiel.setSpecifications(row.get(3).toString());
-							materiel.setType(row.get(4).toString());
-							materiel.setCategory1(row.get(5).toString());
-							materiel.setCategory2(row.get(6).toString());
-							materiel.setCategory3(row.get(7).toString());
-							materiel.setUnit(row.get(9).toString());
-							materiel.setBrand(row.get(10).toString());
-							materiel.setOriginCountry(row.get(11).toString());
-							materiel.setLength(row.get(12).toString());
-							materiel.setWidth(row.get(13).toString());
-							materiel.setHeight(row.get(14).toString());
-							materiel.setCurrency(row.get(15).toString());
-							materiel.setUnitPrice(row.get(16).toString());
-							materiel.setFilingItemNo(row.get(17).toString());
-							materiel.setVolume(row.get(18).toString());
-							materiel.setWeight(row.get(19).toString());
-							materiel.setPalletSpecification(row.get(20).toString());
-							materiel.setPalletWeight(row.get(21).toString());
-							materiel.setCustomsSupervisionConditions(row.get(22).toString());
-							materiel.setCustomsCode(row.get(23).toString());
-							materiel.setQualityDate(row.get(24).toString());
-							materiel.setDeliveryCycle(row.get(25).toString());
-							materiel.setRemark(row.get(26).toString());
+							materiel.setMnemonicCode(StringUtil.rowCell2String(row,1));
+							materiel.setMaterielName(StringUtil.rowCell2String(row,2));
+							materiel.setSpecifications(StringUtil.rowCell2String(row,3));
+							materiel.setType(StringUtil.rowCell2String(row,4));
+							materiel.setCategory1(StringUtil.rowCell2String(row,5));
+							materiel.setCategory2(StringUtil.rowCell2String(row,6));
+							materiel.setCategory3(StringUtil.rowCell2String(row,7));
+							materiel.setUnit(StringUtil.rowCell2String(row,9));
+							materiel.setBrand(StringUtil.rowCell2String(row,10));
+							materiel.setOriginCountry(StringUtil.rowCell2String(row,11));
+							materiel.setLength(StringUtil.rowCell2String(row,12));
+							materiel.setWidth(StringUtil.rowCell2String(row,13));
+							materiel.setHeight(StringUtil.rowCell2String(row,14));
+							materiel.setCurrency(StringUtil.rowCell2String(row,15));
+							materiel.setUnitPrice(StringUtil.rowCell2String(row,16));
+							materiel.setFilingItemNo(StringUtil.rowCell2String(row,17));
+							materiel.setVolume(StringUtil.rowCell2String(row,18));
+							materiel.setWeight(StringUtil.rowCell2String(row,19));
+							materiel.setPalletSpecification(StringUtil.rowCell2String(row,20));
+							materiel.setPalletWeight(StringUtil.rowCell2String(row,21));
+							materiel.setCustomsSupervisionConditions(StringUtil.rowCell2String(row,22));
+							materiel.setCustomsCode(StringUtil.rowCell2String(row,23));
+							materiel.setQualityDate(StringUtil.rowCell2String(row,24));
+							materiel.setDeliveryCycle(StringUtil.rowCell2String(row,25));
+							materiel.setRemark(StringUtil.rowCell2String(row,26));
 
 							/*insertNew(materiel);*/
 							materielList.add(materiel);

@@ -21,8 +21,8 @@ import com.congmai.zhgj.web.model.Warehouseposition;
 public interface StockSupplyRecordService extends GenericService<StockSupplyRecord, String> {
    
 	void deleteStockSupply(String serialNums);
-	List<StockSupplyRecord>getSupplyListForIn(String materielSerial,String supplyComId);//获取供应商库存入库记录
-	 List<StockSupplyRecord>getSupplyListForOut(String materielSerial,String supplyComId);//获取供应商库存出库记录
+	List<StockSupplyRecord>getSupplyListForIn(String serialNum);//根据库存流水号获取供应商库存入库记录
+	 List<StockSupplyRecord>getSupplyListForOut(String serialNum);//根据库存流水号获取供应商库存出库记录
 	 List<StockSupplyRecord> getStockSupplyRecordBySupplyComId(String comId);//通过供应商comid查供应商库存
 	 Stock   judgeSupplyStockIsExist(String materielSerial,String supplyComId);
 	 String    currentAmountForSupply(String serialNums);

@@ -428,8 +428,8 @@
     <include refid="Base_Column_List1" />
     from stocksupplyrecord ssr
      LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-    where  ssr.delFlg=0
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial   
+    where  ssr.delFlg=0 and s. serialNum=#{serialNum,jdbcType=VARCHAR}
     group by ssr.materielSerial
   </select>
    <!--供应商库存获取库存所在仓库名称  -->
@@ -439,8 +439,8 @@
 		FROM
 		stocksupplyrecord ssr
 		  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
-		
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial   
+		where s. serialNum=#{serialNum,jdbcType=VARCHAR} 
     </select>
     
     <!--供应商库存获取库存最早入库日期  -->
@@ -451,8 +451,8 @@
 		FROM
 			stocksupplyrecord ssr 
 		  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-		WHERE  ssr.manageType='in'; 
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  
+		WHERE  ssr.manageType='in' and s. serialNum=#{serialNum,jdbcType=VARCHAR} ; 
     </select>
     <!--供应商库存获取库存最后入库日期  -->
     <select id="getLastInDateForSupply" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -462,8 +462,8 @@
 		FROM
 			stocksupplyrecord ssr
 			  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
-		WHERE  ssr.manageType='in'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial 
+		WHERE  ssr.manageType='in'  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
     </select>
     <!--供应商库存获取库存最后出库日期  -->
     <select id="getLastOutDateForSupply" parameterType="java.lang.String"   resultType="java.lang.String">
@@ -473,35 +473,35 @@
 		FROM
 			stocksupplyrecord ssr
 			  LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
-		WHERE   ssr.manageType='out'; 
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial    
+		WHERE   ssr.manageType='out' and s. serialNum=#{serialNum,jdbcType=VARCHAR}; 
     </select>
       <!--供应商库存获取累计入库数量   -->
      <select id="countInAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
      SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr  
        LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-     WHERE  ssr.manageType='in'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  
+     WHERE  ssr.manageType='in'  and s. serialNum=#{serialNum,jdbcType=VARCHAR}
      </select>
       <!--供应商库存获取累计出库数量   -->
      <select id="countOutAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
      SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
        LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-     WHERE  ssr.manageType='out'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial   
+     WHERE  ssr.manageType='out' and s. serialNum=#{serialNum,jdbcType=VARCHAR}
      </select>
       <!--供应商库存获取当前库存数量   -->
      <select id="currentAmountForSupply"  parameterType="java.lang.String"   resultType="java.lang.String">
      select IFNULL((
      SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
        LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-     WHERE ssr.manageType='in'),0) 
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial 
+     WHERE ssr.manageType='in'  and s. serialNum=#{serialNum,jdbcType=VARCHAR} ),0) 
      -
     IFNULL(( SELECT SUM(ssr.materielCount ) from stocksupplyrecord ssr
       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-     WHERE ssr.manageType='out'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  
+     WHERE ssr.manageType='out' and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
      ),0)
    
      </select>
@@ -510,16 +510,16 @@
      select <include refid="Base_Column_List1" />
       from stocksupplyrecord ssr
        LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
-     WHERE  ssr.manageType='out'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  
+     WHERE  ssr.manageType='out' and s. serialNum=#{serialNum,jdbcType=VARCHAR}  
      </select>
       <!-- 供应商库存获取库存入库记录-->
      <select id="getStockInRecordForSupply"  parameterType="java.util.HashMap"  resultMap="BaseResultMap" >
      select <include refid="Base_Column_List1" />
       from stocksupplyrecord ssr
       LEFT JOIN warehouse w  ON w.serialNum = ssr.warehouseSerial
-		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
-     WHERE  ssr.manageType='in'
+		left join stock s  on  s.materielOwner=w.owner    and  s.materielSerial=ssr.materielSerial  
+     WHERE  ssr.manageType='in'and s. serialNum=#{serialNum,jdbcType=VARCHAR} 
      </select>
      <select id="judgeSupplyStockIsExist"  parameterType="java.util.HashMap"  resultType="com.congmai.zhgj.web.model.Stock">
      select *

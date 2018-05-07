@@ -105,7 +105,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.clauseSettlement = {};
             		$scope.clauseSettlement.otherAmount = 0;
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
-            		$scope.buyOrder.rate = 17;
+            		$scope.buyOrder.rate = 16;
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
@@ -165,7 +165,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
             		$scope.clauseSettlement = {};
             		$scope.clauseSettlement.otherAmount = 0;
             		$scope.buyOrder.seller ="中航能科（上海）能源科技有限公司";
-            		$scope.buyOrder.rate = 17;
+            		$scope.buyOrder.rate = 16;
             		dateSelectSetting();//日期选择限制
             		// 加载数据
                 	initSuppliers();
@@ -2532,10 +2532,10 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	        		if($scope.orderMateriel.length > 0){
 	        			for(var i=0;i<$scope.orderMateriel.length;i++){
 	        				if(materiel == $scope.orderMateriel[i]){//保持下方所有物料的编辑状态
-	        					/*for(var j=i;j+1<$scope.orderMateriel.length;j++){
+	        					for(var j=i;j+1<$scope.orderMateriel.length;j++){
 	        						$scope["orderMaterielInput"+j] = $scope["orderMaterielInput"+(j+1)];
 		    	        			$scope["orderMaterielShow"+j] = $scope["orderMaterielShow"+(j+1)];
-	        					}*/
+	        					}
 	        					$scope.orderMateriel.splice(i,1);
 	        				}
 	        			}

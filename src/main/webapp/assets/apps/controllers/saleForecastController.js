@@ -48,7 +48,7 @@ angular.module('MetronicApp').controller('saleForecastController', ['$rootScope'
 								headerOffset : a
 							},*/
 						// select: true,行多选
-						order : [ [ 9, "desc" ] ],// 默认排序列及排序方式
+						order : [ [ 8, "desc" ] ],// 默认排序列及排序方式
 						bRetrieve : true,
 						"sScrollX": "100%",
 						"sScrollXInner": "110%",
@@ -63,7 +63,7 @@ angular.module('MetronicApp').controller('saleForecastController', ['$rootScope'
 						              // serverSide: true,
 						              ajax: tableAjaxUrl,//加载数据中user表数据
 						              "aoColumns": [
-						                            { mData: 'serialNum'},
+						                            /*{ mData: 'serialNum'},*/
 						                            { mData: 'materiel.materielNum' },
 						                            { mData: 'materiel.materielName' },
 						                            { mData: 'materiel.specifications' },
@@ -74,24 +74,24 @@ angular.module('MetronicApp').controller('saleForecastController', ['$rootScope'
 						                            { mData: 'remark'},
 						                            { mData: 'updateTime' }
 						                            ],
-						                            'aoColumnDefs': [ {
+						                            'aoColumnDefs': [ /*{
 						                            	'targets' : 0,
 						                            	'searchable' : false,
 						                            	'orderable' : false,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,type, full, meta) {
 						                            		return "";
-						                            		/*return '<label class="mt-checkbox  mt-checkbox-outline">' +
+						                            		return '<label class="mt-checkbox  mt-checkbox-outline">' +
 						    								'<input type="checkbox" class="checkboxes"  id="'+data+'"  value="'+data+'"   ng-click="choosePurchaseForecast(\''+full.serialNum+'\')"/>' +
-						    								'<span></span></label>';*/
+						    								'<span></span></label>';
 //							                            		return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline"><input type="checkbox" name="id[]" value="'+ $('<div/>').text(data).html()+ '"><span></span></label>';
 						                            	},
 						    							"createdCell": function (td, cellData, rowData, row, col) {
 						   								 $compile(td)($scope);
 						   						       }
-						                            } ,
+						                            } ,*/
 						                            {
-						                            	'targets' : 1,
+						                            	'targets' : 0,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
@@ -102,7 +102,7 @@ angular.module('MetronicApp').controller('saleForecastController', ['$rootScope'
 						                            	}
 						                            },
 						                            {
-						                            	'targets' : 7,
+						                            	'targets' : 6,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {
@@ -113,7 +113,7 @@ angular.module('MetronicApp').controller('saleForecastController', ['$rootScope'
 						                            	}
 						                            },
 						                            {
-						                            	'targets' : 9,
+						                            	'targets' : 8,
 						                            	'className' : 'dt-body-center',
 						                            	'render' : function(data,
 						                            			type, row, meta) {

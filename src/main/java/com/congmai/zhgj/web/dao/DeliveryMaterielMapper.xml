@@ -794,7 +794,7 @@
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-    LEFT JOIN ordermateriel om on om.serialNum= dm.orderMaterielSerial  
+    LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
        <!-- left join 	stockOutBatch sob on  dm.serialNum=sob.stockInBatchSerial -->
     where  dm.delFlg=0 and s.delFlg=0  and s.status=1 and o.buyComId is not null  and om.materielSerial=#{materielSerial}  and  s.deliverSerial in 
        <!--  <foreach item="idList" collection="list" open="(" close=")" separator=",">
@@ -817,7 +817,7 @@
    left join delivery d on d.serialNum = s.deliverSerial
     left join deliveryMateriel dm on d.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     LEFT JOIN ordermateriel om on om.serialNum= dm.orderMaterielSerial  
+     LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
    <!--   left join 	stockOutBatch sob on  dm.serialNum=sob.stockOutMaterielSerial -->
     where  dm.delFlg=0 and s.delFlg=0 and s.status=1 and o.buyComId is not  null and  s.status=1 and om.materielSerial=#{materielSerial}  and   s.deliverSerial in 
         <!-- <foreach item="idList" collection="list" open="(" close=")" separator=",">
@@ -838,7 +838,7 @@
     LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-    LEFT JOIN ordermateriel om on om.serialNum= dm.orderMaterielSerial  
+    LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
      where dm.delFlg=0 and s.delFlg=0 and o.buyComId is  null and s.status=1 and om.materielSerial=#{materielSerial}
      and   s.takeDeliverSerial in 
         <foreach item="item" collection="idList" open="(" close=")" separator=",">
@@ -856,7 +856,7 @@
         LEFT JOIN delivery d ON d.serialNum = td.deliverSerial
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     LEFT JOIN ordermateriel om on om.serialNum= dm.orderMaterielSerial  
+     LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
      where dm.delFlg=0 and s.delFlg=0 and o.buyComId is  not null and s.status=1 and om.materielSerial=#{materielSerial}  and s.takeDeliverSerial in 
         <!-- <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}
@@ -877,7 +877,7 @@
     LEFT JOIN delivery d ON d.takeDeliverSerial = td.serialNum
     left join deliveryMateriel dm on td.serialNum = dm.deliverSerial
     left join orderInfo o on o.serialNum = d.orderSerial
-     LEFT JOIN ordermateriel om on om.serialNum= dm.orderMaterielSerial  
+     LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
      where dm.delFlg=0 and s.delFlg=0  and s.status=1 and om.materielSerial=#{materielSerial} and  s.takeDeliverSerial in 
         <!-- <foreach item="idList" collection="list" open="(" close=")" separator=",">
             #{idList}

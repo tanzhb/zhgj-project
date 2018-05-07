@@ -41,6 +41,7 @@ import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.SupplyMaterielMapper;
 import com.congmai.zhgj.web.event.EventExample;
@@ -464,14 +465,14 @@ public class DemandPlanController {
 					if(!CollectionUtils.isEmpty(row)){
 						try{
 							if(i==1){
-								demandPlan.setDemandPlanNum(row.get(1).toString());
-								String comId = companyService.selectComIdByComName(row.get(4).toString().trim());
+								demandPlan.setDemandPlanNum(StringUtil.rowCell2String(row,1));
+								String comId = companyService.selectComIdByComName(StringUtil.rowCell2String(row,4).trim());
 								if(comId==null){
 									Company company = new Company();
 									comId = ApplicationUtils.random32UUID();
 									company.setComId(comId);
 									company.setComType("1");//客户
-									company.setComName(row.get(4).toString()
+									company.setComName(StringUtil.rowCell2String(row,4)
 											);
 									company.setCreator(currenLoginName);
 									company.setCreateTime(new Date());
@@ -484,14 +485,14 @@ public class DemandPlanController {
 								}
 							}else if(i==2){
 								demandPlan.setReleaseDate((Date)row.get(1));
-								demandPlan.setRemark(row.get(4).toString());
+								demandPlan.setRemark(StringUtil.rowCell2String(row,4));
 							}else if(i==3){
 								
 							}else{
 								DemandPlanMateriel materiel = new DemandPlanMateriel();
 								materiel.setSerialNum(ApplicationUtils.random32UUID());
 								materiel.setDemandPlanSerial(demandPlanSerial);
-								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(row.get(1).toString()); //物料流水号
+								String serialNum = demandPlanMaterielService.selectMaterielSerialByMaterielNum(StringUtil.rowCell2String(row,1)); //物料流水号
 								//String s_serialNum = ""; //供应物料流水号
 								if(serialNum==null){//标准物料不存在
 									Materiel m = new Materiel();
@@ -500,26 +501,26 @@ public class DemandPlanController {
 									String materiel_id = ApplicationUtils.random32UUID();
 									m.setSerialNum(serialNum);
 									m.setMaterielId(materiel_id);
-									m.setMaterielName(row.get(1).toString());
-									m.setMaterielNum(row.get(0).toString());
+									m.setMaterielName(StringUtil.rowCell2String(row,1));
+									m.setMaterielNum(StringUtil.rowCell2String(row,0));
 									m.setCreator(currenLoginName);
 									m.setDelFlg("0");
 									m.setCreateTime(new Date());
 									m.setUpdater(currenLoginName);
 									m.setUpdateTime(new Date());
 									materielMapper.insert(m);//新增标准物料
-									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString(),currenLoginName);
+									setSupplyMaterielSerial(materiel,materiel_id,StringUtil.rowCell2String(row,5),currenLoginName);
 									materiel.setMaterielSerial(serialNum);
 								}else{//存在标准物料
 									materiel.setMaterielSerial(serialNum);
 									String materiel_id = materielMapper.selectByPrimaryKey(serialNum).getMaterielId();
 									//检查供应物料是否存在
-									setSupplyMaterielSerial(materiel,materiel_id,row.get(5).toString(),currenLoginName);
+									setSupplyMaterielSerial(materiel,materiel_id,StringUtil.rowCell2String(row,5),currenLoginName);
 								}
 								
-								materiel.setAmount(row.get(2).toString());
+								materiel.setAmount(StringUtil.rowCell2String(row,2));
 								materiel.setDeliveryDate((Date)row.get(3));
-								materiel.setDeliveryAddress(row.get(4).toString());
+								materiel.setDeliveryAddress(StringUtil.rowCell2String(row,4));
 								materiel.setCreator(currenLoginName);
 								materiel.setCreateTime(new Date());
 								materiel.setUpdater(currenLoginName);

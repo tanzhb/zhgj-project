@@ -49,6 +49,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.ContractVO;
 import com.congmai.zhgj.web.model.OrderInfo;
@@ -511,7 +512,7 @@ public class ContractController {
 						try{
 							ContractVO contract = new ContractVO();
 							contract.setId(ApplicationUtils.random32UUID());
-							contract.setContractNum(row.get(0).toString());
+							contract.setContractNum(StringUtil.rowCell2String(row,0));
 
 							if (!StringUtils.isEmpty(contract.getContractNum())) {
 								if(orderService.isExist("contract",contract.getContractNum(),null)){
@@ -520,16 +521,16 @@ public class ContractController {
 							}else {
 								throw new MyException("合同编号不能为空！");
 							}
-							contract.setFirstParty(row.get(1).toString());
-							contract.setSecondParty(row.get(2).toString());
-							contract.setContractType(row.get(3).toString());
-							contract.setServiceModel(row.get(4).toString());
+							contract.setFirstParty(StringUtil.rowCell2String(row,1));
+							contract.setSecondParty(StringUtil.rowCell2String(row,2));
+							contract.setContractType(StringUtil.rowCell2String(row,3));
+							contract.setServiceModel(StringUtil.rowCell2String(row,4));
 							
 //							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
-							contract.setSignDate(StringUtils.isEmpty(row.get(5).toString())?null:(Date) row.get(5));
-							contract.setSigner(row.get(6).toString());
-							contract.setStartDate(StringUtils.isEmpty(row.get(7).toString())?null:(Date) row.get(7));
-							contract.setEndDate(StringUtils.isEmpty(row.get(8).toString())?null:(Date) row.get(8));
+							contract.setSignDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,5))?null:(Date) row.get(5));
+							contract.setSigner(StringUtil.rowCell2String(row,6));
+							contract.setStartDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,7))?null:(Date) row.get(7));
+							contract.setEndDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,8))?null:(Date) row.get(8));
 							Subject currentUser = SecurityUtils.getSubject();
 							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 							contract.setCreator(currenLoginName);

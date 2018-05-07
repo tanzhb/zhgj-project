@@ -412,18 +412,18 @@ public class StockInOutController {
 							try{
 								Warehouse  warehouse = new Warehouse();
 								warehouse.setSerialNum(ApplicationUtils.random32UUID());
-								warehouse.setWarehouseNum(row.get(0).toString());
-								warehouse.setWarehouseName(row.get(1).toString());
-								warehouse.setWarehouseType(row.get(2).toString());
-								warehouse.setWarehouseCategory(row.get(3).toString());
-								warehouse.setOwner(row.get(4).toString());
-								warehouse.setAddress(row.get(5).toString());
-								warehouse.setArea(row.get(6).toString());
-								warehouse.setAdmin(row.get(7).toString());
-								warehouse.setTel(row.get(8).toString());
-								warehouse.setEmail(row.get(9).toString());
-								warehouse.setFax(row.get(10).toString());
-								warehouse.setRemark(row.get(11).toString());
+								warehouse.setWarehouseNum(StringUtil.rowCell2String(row,0));
+								warehouse.setWarehouseName(StringUtil.rowCell2String(row,1));
+								warehouse.setWarehouseType(StringUtil.rowCell2String(row,2));
+								warehouse.setWarehouseCategory(StringUtil.rowCell2String(row,3));
+								warehouse.setOwner(StringUtil.rowCell2String(row,4));
+								warehouse.setAddress(StringUtil.rowCell2String(row,5));
+								warehouse.setArea(StringUtil.rowCell2String(row,6));
+								warehouse.setAdmin(StringUtil.rowCell2String(row,7));
+								warehouse.setTel(StringUtil.rowCell2String(row,8));
+								warehouse.setEmail(StringUtil.rowCell2String(row,9));
+								warehouse.setFax(StringUtil.rowCell2String(row,10));
+								warehouse.setRemark(StringUtil.rowCell2String(row,11));
 								Subject currentUser = SecurityUtils.getSubject();
 								String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 								warehouse.setCreateTime(new Date());

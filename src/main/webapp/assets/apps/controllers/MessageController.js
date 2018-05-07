@@ -212,7 +212,10 @@ angular.module('MetronicApp').controller('MessageController',['$rootScope','$sco
 					$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
 				}else if(actionName=="buyApply"){
 					$state.go("procurementPlan");
+				}else if(actionName=="agreeBuyApply"){
+					$state.go("saleForecast");
 				}
+				
 			}
 			
 			var readMessage = function(serialNum){

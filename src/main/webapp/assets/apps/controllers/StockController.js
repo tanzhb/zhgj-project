@@ -560,7 +560,7 @@ angular
 												type, full, meta) {
 											var type="gyshang";
 											return '<label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">'+
-		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecordSupply(\''+full.materielSerial+'\',\''+type+'\')" id="'+data+'" value="'+data+'" data-set="#sample_gyshang .checkboxes" />'+
+		                                     '<input type="checkbox" data-check="false" class="checkboxes" ng-click="showStockRecordSupply(\''+full.serialNum+'\',\''+type+'\')" id="'+data+'" value="'+data+'" data-set="#sample_gyshang .checkboxes" />'+
 		                                     '<span></span></label>';
 										},"createdCell": function (td, cellData, rowData, full, col) {
 											 $compile(td)($scope);

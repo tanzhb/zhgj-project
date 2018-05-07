@@ -12,8 +12,10 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         handle = new pageHandle();
         if($state.current.name=="materiel"){
         	loadMainTable();//加载物料列表
-        	
         	loadTree();//加载物料树
+        	
+        	$scope.parent = null;
+        	$scope.params = null;
         	}else{
         	$('.date-picker').datepicker({
 				rtl: App.isRTL(),
@@ -575,6 +577,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 //					"contentType": "application/json",
 				    "type": "POST",
 				    "data": function ( d ) {
+				    	$scope.params = d.search.value;
 				      return {params : JSON.stringify( d )};
 				    }
 //                ,
@@ -746,6 +749,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             }),
             $("#tree_1").on("select_node.jstree", function(e, t) {
             	table.ajax.url(tableAjaxUrl+"?parent="+t.selected[0]).load()// 重新加载datatables数据
+            	$scope.parent = t.selected[0]
             })
             
             $('#tree_1').on("open_node.jstree",function(e,data){
@@ -766,6 +770,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
         };
         $scope.reloadTable = function() {
         	table.ajax.url(tableAjaxUrl).load()// 重新加载datatables数据
+        	$scope.parent = null
         }
         
         //弹出确认删除模态框
@@ -1307,7 +1312,29 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	       
 	       $scope.exportMateriel = function(){
 		    	 handle.blockUI("正在导出数据，请稍后"); 
-		    	 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel";
+		    	 var ids = '';
+				// Iterate over all checkboxes in the table
+				table.$('input[type="checkbox"]').each(
+						function() {
+							// If checkbox exist in DOM
+							if ($.contains(document, this)) {
+								// If checkbox is checked
+								if (this.checked) {
+									// 将选中数据id放入ids中
+									if (ids == '') {
+										ids = this.value;
+									} else
+										ids = ids + ','
+												+ this.value;
+								}
+							}
+						});
+				if(ids==''){
+					 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
+	    		}else{
+	    			 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
+	    		}
+		    	
 		    	 handle.unblockUI(); 
 		   }
 	       //********导入导出end****************//

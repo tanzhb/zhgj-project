@@ -61,7 +61,8 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 		}else if(actionName=="demandplan2Promanager"){
 			$state.go("demandPlan");
 		}else if(actionName=="noticeSupply"){
-			$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
+//			$state.go("supplyOrder",{tabHref:'2',serialNum:objSerial});
+			$state.go('viewDelivery',{serialNum:objSerial,oprateType:"forSupplyOrder"});
 		}else if(actionName=="buyApply"){
 			$state.go("procurementPlan");
 		}
@@ -152,6 +153,10 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					workflowName = "销售订单发货计划流程";
 				}else if(workflowType == 'buyApply'){
 					workflowName = "采购计划流程";
+				}else if(workflowType == 'buyPrice'){
+					workflowName = "采购价格流程";
+				}else if(workflowType == 'salePrice'){
+					workflowName = "销售价格流程";
 				}else{
 					workflowName = "未命名";
 				}
@@ -170,6 +175,17 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 				if(workflowType == 'buyApply'){
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='procurementPlan({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
+							"<span>"+workflowName+"："+title+"</span></a></div>" +
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				}
+				if(workflowType == 'buyPrice'){
+					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
+					"<a ui-sref='priceList({tabHref:1})'>" +//tabHref:1将tab指向“采购价格待办列表”
+							"<span>"+workflowName+"："+title+"</span></a></div>" +
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+				}if(workflowType == 'salePrice'){
+					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
+					"<a ui-sref='priceList({tabHref:2})'>" +//tabHref:1将tab指向“销售价格待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
 					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
 				}

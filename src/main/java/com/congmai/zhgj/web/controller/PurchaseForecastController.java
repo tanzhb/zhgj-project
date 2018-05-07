@@ -550,17 +550,17 @@ public class PurchaseForecastController {
 						try{
 							ContractVO contract = new ContractVO();
 							contract.setId(ApplicationUtils.random32UUID());
-							contract.setContractNum(row.get(0).toString());
-							contract.setComId(row.get(1).toString());
-							contract.setContractType(row.get(2).toString());
-							contract.setServiceModel(row.get(3).toString());
+							contract.setContractNum(StringUtil.rowCell2String(row,0));
+							contract.setComId(StringUtil.rowCell2String(row,1));
+							contract.setContractType(StringUtil.rowCell2String(row,2));
+							contract.setServiceModel(StringUtil.rowCell2String(row,3));
 							
 							SimpleDateFormat sdf=new SimpleDateFormat("yyyy-mm-dd");
-							contract.setSignDate(sdf.parse(row.get(4).toString()));
-							contract.setSigner(row.get(5).toString());
-							contract.setStartDate(sdf.parse(row.get(6).toString()));
-							contract.setEndDate(sdf.parse(row.get(7).toString()));
-							contract.setSettlementClause(row.get(8).toString());
+							contract.setSignDate(sdf.parse(StringUtil.rowCell2String(row,4)));
+							contract.setSigner(StringUtil.rowCell2String(row,5));
+							contract.setStartDate(sdf.parse(StringUtil.rowCell2String(row,6)));
+							contract.setEndDate(sdf.parse(StringUtil.rowCell2String(row,7)));
+							contract.setSettlementClause(StringUtil.rowCell2String(row,8));
 							Subject currentUser = SecurityUtils.getSubject();
 							String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 							contract.setCreator(currenLoginName);

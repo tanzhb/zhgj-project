@@ -47,12 +47,12 @@
 				<table class="table table-striped table-bordered table-hover table-checkable order-column" id="sample_saleForecast">
 					<thead>
 						<tr>
-							<th>
+							<!-- <th>
                                                  <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
                                                      <input type="checkbox" class="group-checkable" id="example-select-all"/>
                                                      <span></span>
                                                  </label>
-                                             </th>
+                                             </th> -->
 
 							<th style="white-space: nowrap;">销售预测编号</th>
 							<th style="white-space: nowrap;">物料名称</th>

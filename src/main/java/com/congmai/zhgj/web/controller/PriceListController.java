@@ -45,6 +45,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
 import com.congmai.zhgj.core.util.MessageConstants;
+import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -473,7 +474,7 @@ public class PriceListController {
 							try{
 								PriceList priceList = new PriceList();
 							
-								priceList.setPriceNum(row.get(0).toString());
+								priceList.setPriceNum(StringUtil.rowCell2String(row,0));
 								if (!StringUtils.isEmpty(priceList.getPriceNum())) {
 									if(orderService.isExist("price",priceList.getPriceNum(),null)){
 										throw new MyException("价格目录编号已存在！");
@@ -481,7 +482,7 @@ public class PriceListController {
 								}else {
 									throw new MyException("价格目录编号不能为空！");
 								}
-								priceList.setComName(row.get(1).toString());
+								priceList.setComName(StringUtil.rowCell2String(row,1));
 								if (!StringUtils.isEmpty(priceList.getComName())) {
 									Company company = companyService.selectComByComName(priceList.getComName());
 									if(company==null){
@@ -499,7 +500,7 @@ public class PriceListController {
 									throw new MyException("商户名称不能为空！");
 								}
 								
-								priceList.setMaterielNum(row.get(2).toString());
+								priceList.setMaterielNum(StringUtil.rowCell2String(row,2));
 								if(!StringUtils.isEmpty(priceList.getMaterielNum())){
 									Materiel materiel = materielService.getMaterielInfoByMaterielNum(priceList.getMaterielNum());
 									if (materiel==null) {
@@ -511,20 +512,20 @@ public class PriceListController {
 									throw new MyException("物料编号不能为空！");
 								}
 								
-								if (StaticConst.getInfo("buyPrice").equals(row.get(5).toString())) {
+								if (StaticConst.getInfo("buyPrice").equals(StringUtil.rowCell2String(row,5))) {
 									priceList.setPriceType("buyPrice");
-								}else if (StaticConst.getInfo("salePrice").equals(row.get(5).toString())) {
+								}else if (StaticConst.getInfo("salePrice").equals(StringUtil.rowCell2String(row,5))) {
 									priceList.setPriceType("salePrice");
 								}else {
 									throw new MyException("价格类型不存在！");
 								}
 								
-								priceList.setUnit(row.get(6).toString());
-								priceList.setUnitPrice(row.get(7).toString());
-								priceList.setRate(row.get(8).toString());
-								priceList.setCurrency(row.get(9).toString());
-								priceList.setPriceEffectiveDate(StringUtils.isEmpty(row.get(10).toString())?null:(Date) row.get(10));
-								priceList.setPriceExpirationDate(StringUtils.isEmpty(row.get(10).toString())?null:(Date) row.get(11));
+								priceList.setUnit(StringUtils.isEmpty(row.get(6))?null:StringUtil.rowCell2String(row,6));
+								priceList.setUnitPrice(StringUtils.isEmpty(row.get(7))?null:StringUtil.rowCell2String(row,7));
+								priceList.setRate(StringUtils.isEmpty(row.get(8))?null:StringUtil.rowCell2String(row,8));
+								priceList.setCurrency(StringUtils.isEmpty(row.get(9))?null:StringUtil.rowCell2String(row,9));
+								priceList.setPriceEffectiveDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,10))?null:(Date) row.get(10));
+								priceList.setPriceExpirationDate(StringUtils.isEmpty(StringUtil.rowCell2String(row,11))?null:(Date) row.get(11));
 
 								Subject currentUser = SecurityUtils.getSubject();
 								String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名

@@ -1,9 +1,12 @@
 package com.congmai.zhgj.core.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.util.StringUtils;
 
 public class StringUtil {
 	private static final byte[] SPACE_TAB = { 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
@@ -750,6 +753,11 @@ public class StringUtil {
 	         s = s.replaceAll("[.]$", "");//如最后一位是.则去掉
 	     }
 	     return s;  
+	 }
+	
+	public static String rowCell2String(List<Object> row,int i) {  
+		String string = StringUtils.isEmpty(row.get(i))?null:row.get(i).toString();
+		return StringUtils.isEmpty(string)?"":string.trim();
 	 }
 	
 }
