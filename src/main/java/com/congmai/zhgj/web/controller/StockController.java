@@ -215,6 +215,19 @@ public class StockController {
 				stock.setLastUpdateDate(stock.getLastOutDateZijian());
 			}else if(StringUtil.isNotEmpty(stock.getLastInDateZijian())&&StringUtil.isEmpty(stock.getLastOutDateZijian())){
 				stock.setLastUpdateDate(stock.getLastInDateZijian());
+			}else if(StringUtil.isNotEmpty(stock.getLastInDateSupply())&&StringUtil.isNotEmpty(stock.getLastOutDateSupply())){
+				long a=0;
+				try {
+					a = DateUtil.timeBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastInDateSupply()), new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getLastOutDateSupply()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				stock.setLastUpdateDate(a<0?stock.getLastInDateSupply():stock.getLastOutDateSupply());
+			}else if(StringUtil.isEmpty(stock.getLastInDateSupply())&&StringUtil.isNotEmpty(stock.getLastOutDateSupply())){
+				stock.setLastUpdateDate(stock.getLastOutDateSupply());
+			}else if(StringUtil.isNotEmpty(stock.getLastInDateSupply())&&StringUtil.isEmpty(stock.getLastOutDateSupply())){
+				stock.setLastUpdateDate(stock.getLastInDateSupply());
 			}else{
 				stock.setLastUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(stock.getCreateTime()));
 			}

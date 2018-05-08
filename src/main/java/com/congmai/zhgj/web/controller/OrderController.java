@@ -336,6 +336,8 @@ public class OrderController {
 					}
 				}
 			}
+		}else{//供应商为空，说明是采购商新建的订单提交给平台
+			EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(orderInfo,MessageConstants.BE_RECEIVE_SALE_ORDER));
 		}
 	
 		return orderInfo;

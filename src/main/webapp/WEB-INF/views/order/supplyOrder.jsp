@@ -139,28 +139,6 @@
 								</div>
 							</div>
 	
-							<div id="delDeliveryModal" class="modal fade" tabindex="-1"
-								data-backdrop="static" data-keyboard="false">
-								<div class="modal-dialog">
-									<div class="modal-content">
-										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal"
-												aria-hidden="true"></button>
-											<h4 class="modal-title">确认</h4>
-										</div>
-										<div class="modal-body">
-											<p>是否删除已选条目?</p>
-										</div>
-										<div class="modal-footer">
-											<button type="button" data-dismiss="modal"
-												class="btn dark btn-outline">取消</button>
-											<button type="button" ng-click="confirmDel()"
-												class="btn green">确定</button>
-										</div>
-									</div>
-								</div>
-							</div>
-	
 							<div class="portlet-body">
 								<div class="tabbable-custom ">
 									<div class="tab-content">
@@ -338,6 +316,28 @@
         <!-- 收款计划---end -->
  </div>
  </div>
+ 
+ <div id="delDeliveryModal" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">确认</h4>
+				</div>
+				<div class="modal-body">
+					<p>是否删除已选条目?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+					<button type="button" ng-click="confirmDel()"
+						class="btn green">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <jsp:include  page="viewOperateLog.jsp"/>
 <jsp:include  page="viewDeliverOperateLog.jsp"/>
 <jsp:include  page="viewPayOperateLog.jsp"/>

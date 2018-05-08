@@ -1583,9 +1583,9 @@ angular.module('MetronicApp').controller('procurementPlanController', ['$rootSco
 	 	   		if(isNull($scope.procurementPlanMateriel[i].buyCount)||$scope.procurementPlanMateriel[i].buyCount==undefined){
 					toastr.warning('请先填写需求数量！');return
 				}
- 	   	    	if(isNull($scope.procurementPlanMateriel[i].supplyComId)){
- 	   	    	toastr.warning('请为采购清单物料选择供应商信息！');return
- 	   	    	}
+// 	   	    	if(isNull($scope.procurementPlanMateriel[i].supplyComId)){
+// 	   	    	toastr.warning('请为采购清单物料选择供应商信息！');return
+// 	   	    	}
  	   	    	}
   	   	    	if($('#form_sample_5').valid()){
   	   	    	procurementPlanService.saveAllProcurementPlanMateriel($scope.procurementPlanMateriel).then(

@@ -2270,7 +2270,7 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 	}
 	/**
 	 * 
-	 * @Description (采购商发布采购订单通知  to 销售组接收分解销售订单)
+	 * @Description (采购商发布采购订单通知  to 销售组接收分解销售订单和产品总监组)
 	 * @param event
 	 */
 	private void buy2SaleGroupMessage(SendMessageEvent event) {
@@ -2280,11 +2280,29 @@ public class SendMessageListener implements  ApplicationListener<SendMessageEven
 			if(user != null){
 				OrderInfo  order = (OrderInfo) event.getSource();
 				OrderInfo orderInfo=orderService.selectById(order.getSerialNum());//取订单编号
-				Company buyCom=companyService.selectById(order.getBuyComId());//获取订单采购商
+				Company buyCom=companyService.selectById(orderInfo.getBuyComId());//获取订单采购商
 				Properties properties = new Properties();
 				List<User> users = groupService.selectUserIdsByGroupType(Constants.SALES);
 					if(CollectionUtils.isNotEmpty(users)){
 						for(User u : users){
+							Message messageVO = this.createMessage(event,user);
+							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
+							messageVO.setTempleteType(MessageConstants.TEMP_BE_RECEIVE_SALE_ORDER); //采购商发布采购订单通知
+							messageVO.setObjectSerial(order.getSerialNum());
+							messageVO.setReceiverId(u.getUserId().toString());
+							properties.put("paramer_a", u.getUserName());
+							properties.put("paramer_b", buyCom==null?"":buyCom.getComName());
+							properties.put("paramer_c", orderInfo.getOrderNum());
+							properties.put("paramer_d", MessageConstants.URL_BE_RECEIVE_SALE_ORDER);
+							properties.put("paramer_e", messageVO.getSerialNum());
+							messageVO.setProperties(properties);
+							webSocketProcessor.sendMessageToUser(messageVO);
+							messageService.insert(messageVO);
+						}
+					}
+					List<User> users2 = groupService.selectUserIdsByGroupType(Constants.PRODUCT_MANAGER);//通知产品经理
+					if(CollectionUtils.isNotEmpty(users2)){
+						for(User u : users2){
 							Message messageVO = this.createMessage(event,user);
 							messageVO.setMessageType(MessageConstants.BUSSINESS_MESSAGE);
 							messageVO.setTempleteType(MessageConstants.TEMP_BE_RECEIVE_SALE_ORDER); //采购商发布采购订单通知
