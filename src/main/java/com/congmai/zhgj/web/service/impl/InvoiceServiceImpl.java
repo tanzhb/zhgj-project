@@ -111,7 +111,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	}
 
 	@Override
-	@OperationLog(operateType = "add" ,operationDesc = "收票" ,objectSerial= "{serialNum}")
+	@OperationLog(operateType = "add" ,operationDesc = "确认收票" ,objectSerial= "{serialNum}")
 	public void confirmInvoiceIn(Invoice in) {//进项票确认
 		// TODO Auto-generated method stub
 		OrderInfo orderInfo=new OrderInfo();
@@ -166,7 +166,7 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	}
 
 	@Override
-	@OperationLog(operateType = "add" ,operationDesc = "开票" ,objectSerial= "{serialNum}")
+	@OperationLog(operateType = "add" ,operationDesc = "确认开票" ,objectSerial= "{serialNum}")
 	public void confirmInvoiceOut(Invoice out) {//销项票确认
 		// TODO Auto-generated method stub
 		OrderInfo orderInfo=new OrderInfo();
@@ -180,25 +180,27 @@ public class InvoiceServiceImpl extends GenericServiceImpl<Invoice, String> impl
 	}
 	
 
-	@Override
-	public void insertInvoce(Invoice invoice) {
-		// TODO Auto-generated method stub
-		if(invoice.getInvoiceNum().indexOf("OT")>-1){
-			insertInvoiceForIn(invoice);//进项票
-		}else{
-			insertInvoiceForOut(invoice);//销项票
-		}
-		
-	}
+//	@Override
+//	public void insertInvoce(Invoice invoice) {
+//		// TODO Auto-generated method stub
+//		if(invoice.getInvoiceNum().indexOf("OT")>-1){
+//			insertInvoiceForIn(invoice);//进项票
+//		}else{
+//			insertInvoiceForOut(invoice);//销项票
+//		}
+//		
+//	}
 	
-	@OperationLog(operateType = "add" ,operationDesc = "收票" ,objectSerial= "{serialNum}")
+	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "新建收票" ,objectSerial= "{serialNum}")
 	public void insertInvoiceForIn(Invoice in) {//进项票新增
 		// TODO Auto-generated method stub
 		invoiceMapper.insert(in);
 		
 		
 	}
-	@OperationLog(operateType = "add" ,operationDesc = "开票" ,objectSerial= "{serialNum}")
+	@Override
+	@OperationLog(operateType = "add" ,operationDesc = "新建开票" ,objectSerial= "{serialNum}")
 	public void insertInvoiceForOut(Invoice in) {//销项票新增
 		// TODO Auto-generated method stub
 		invoiceMapper.insert(in);

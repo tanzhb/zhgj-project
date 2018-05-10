@@ -69,8 +69,9 @@
 																	<i class="fa fa-search"></i>
 																</button>
 															</span>
-															<p class="form-control-static" ng-show="span">{{paymentRecord.orderNum}}</p>
+															
 														</div>
+														<p class="form-control-static" ng-show="span">{{paymentRecord.orderNum}}</p>
 														<input type="text" ng-model="orderSerial" ng-hide="true" />
 													</div>
 												</div>

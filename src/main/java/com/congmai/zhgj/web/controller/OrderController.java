@@ -381,6 +381,13 @@ public class OrderController {
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		orderInfo.setUpdater(currenLoginName);
 		orderInfo.setUpdateTime(new Date());
+		
+		if("1".equals(orderInfo.getDeleteMaterielFlag())){//更好供应商或采购商删除物料
+			orderMaterielService.deleteOrderMaterielByOrderSerial(orderInfo.getSerialNum());
+			orderInfo.setMaterielCount("0");
+			orderInfo.setMaterielAmount("0");
+		}
+		
 		if(StringUtils.isNotEmpty(orderInfo.getStatus())){
 			orderService.updateStatus(orderInfo);
 		}else{

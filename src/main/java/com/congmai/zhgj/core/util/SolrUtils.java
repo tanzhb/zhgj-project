@@ -22,7 +22,7 @@ public class SolrUtils {
     /**
      * solr 服务器访问地址
      */
-    private static String url = "http://127.0.0.1:8010/solr/db_core";
+    private static String url = "http://47.97.203.202:8010/solr/db_core";
 
     private static Integer connectionTimeout = 100; // socket read timeout
 

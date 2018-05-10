@@ -290,6 +290,52 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 	    }
 		 
 	 }
+  $scope.confirmSave  = function(type) {
+		if(!isNull(type)){
+			$('#editBuyComIdModal').modal('hide');// 删除成功后关闭模态框
+			$scope.saleOrder.deleteMaterielFlag = type
+			$scope.orderMateriel = [];
+		}
+		orderService.save($scope.saleOrder).then(
+     		     function(data){
+     		    	$scope.saleOrder = data;
+     		    	$scope.oldBuyComId=data.buyComId;//记录初始的采购商id，用于保存时检查采购商是否修改
+     		    	$scope.contract.orderSerial = data.serialNum;
+     		    	if(isNull($scope.contract.contractNum)){
+     		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
+     		    	}
+	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
+//	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
+	   	    		//根据买方comId获取采购商联系地址
+	   	    	initBuyComAddress($scope.saleOrder.buyComId);
+  	   	    	if($scope.contract.contractType=='销售订单'){
+		    		$scope.contract.contractNum = null;
+		    	}
+	   	    		orderService.saveContract($scope.contract).then(
+	   	       		     function(data){
+	   	       		    	toastr.success('数据保存成功！');
+	   	       		    	$scope.contract = data.data;
+	   	       		     },
+	   	       		     function(error){
+	   	       		    	toastr.error('数据保存出错！');
+	   	       		         $scope.error = error;
+	   	       		     }
+	   	       		 );
+     		    	/*$location.search({serialNum:data.serialNum,view:1});*/
+     		    	$scope.saleOrderInput = true;
+     			    $scope.saleOrderShow = true;
+     			    
+	       			 if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)&&$scope.isInit){
+	         			getDemandPlanMateriels($stateParams.materiels);
+	         			$scope.isInit = false;
+	       			 }
+     		     },
+     		     function(error){
+     		         $scope.error = error;
+     		         toastr.error('数据保存出错！');
+     		     }
+     		 );
+	}
     $scope.save  = function() {
     	if($('#form_sample_1').valid()){//
     		if($scope.saleOrder.orderDate=='') {// 日期为空的处理
@@ -306,44 +352,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
          		    	 if(data>0){
          		    		toastr.error('订单编号重复！');
          		    	 }else{
-         		    		orderService.save($scope.saleOrder).then(
-         		         		     function(data){
-         		         		    	$scope.saleOrder = data;
-         		         		    	$scope.contract.orderSerial = data.serialNum;
-         		         		    	if(isNull($scope.contract.contractNum)){
-         		         		    		$scope.contract.contractNum = $scope.saleOrder.orderNum;
-         		         		    	}
-         		  	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
-//         		  	   	    		$scope.contract.signDate = $scope.saleOrder.orderDate;
-         		  	   	    		//根据买方comId获取采购商联系地址
-         		  	   	    	initBuyComAddress($scope.saleOrder.buyComId);
-	         		  	   	    	if($scope.contract.contractType=='销售订单'){
-	    	        		    		$scope.contract.contractNum = null;
-	    	        		    	}
-         		  	   	    		orderService.saveContract($scope.contract).then(
-         		  	   	       		     function(data){
-         		  	   	       		    	toastr.success('数据保存成功！');
-         		  	   	       		    	$scope.contract = data.data;
-         		  	   	       		     },
-         		  	   	       		     function(error){
-         		  	   	       		    	toastr.error('数据保存出错！');
-         		  	   	       		         $scope.error = error;
-         		  	   	       		     }
-         		  	   	       		 );
-         		         		    	/*$location.search({serialNum:data.serialNum,view:1});*/
-         		         		    	$scope.saleOrderInput = true;
-         		         			    $scope.saleOrderShow = true;
-         		         			    
-         		  	       			 if(!isNull($stateParams.demandPlanSerial)&&!isNull($stateParams.materiels)&&$scope.isInit){
-         		  	         			getDemandPlanMateriels($stateParams.materiels);
-         		  	         			$scope.isInit = false;
-         		  	       			 }
-         		         		     },
-         		         		     function(error){
-         		         		         $scope.error = error;
-         		         		         toastr.error('数据保存出错！');
-         		         		     }
-         		         		 );
+
+         		    		if(!isNull($scope.oldBuyComId)&&$scope.oldBuyComId!=$scope.saleOrder.buyComId){//验证采购商已修改，不能自动保存
+         	    				$('#editBuyComIdModal').modal('show');//显示弹框
+         	    			}else{
+         	    				$scope.confirmSave();
+         	    			}
          		    	 }
          		     },
          		     function(error){
@@ -365,9 +379,13 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		}else{
 			//先验证订单价格
 			if($state.current.name=="addSaleOrder"&&$scope.saleOrderInput != true&&$('#form_sample_1').valid()){//处于编辑状态且验证通过
+				if(!isNull($scope.oldBuyComId)&&$scope.oldBuyComId!=$scope.saleOrder.buyComId){//验证采购商已修改，不能自动保存
+    				return;
+    			}
 				orderService.save($scope.saleOrder).then(
 	         		     function(data){
 	         		    	$scope.saleOrder = data;
+	         		    	$scope.oldBuyComId=data.buyComId;//记录初始的采购商id，用于保存时检查采购商是否修改
 	         		    	$scope.contract.orderSerial = data.serialNum;
 	  	   	    		$scope.contract.comId = $scope.saleOrder.buyComId;
 		  	   	    	if($scope.contract.contractType=='销售订单'){
@@ -1501,6 +1519,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
           		     function(data){//加载页面对象
           		    	
           		    	$scope.saleOrder=data.orderInfo;
+          		    	$scope.oldBuyComId=data.orderInfo.buyComId;//记录初始的采购商id，用于保存时检查采购商是否修改
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
           		    	if($state.current.name=="viewSaleOrder"

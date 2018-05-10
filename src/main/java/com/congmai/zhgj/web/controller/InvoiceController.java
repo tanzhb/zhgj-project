@@ -163,7 +163,12 @@ public class InvoiceController {
     			invoice.setSerialNum(ApplicationUtils.random32UUID());
     			//invoice.setStatus("0");//待确认
     			invoice.setDelFlg("0");
-    			invoiceService.insertInvoce(invoice);
+    			if(invoice.getInvoiceNum().indexOf("OT")>-1){
+    				invoiceService.insertInvoiceForIn(invoice);//进项票
+    			}else{
+    				invoiceService.insertInvoiceForOut(invoice);//销项票
+    			}
+//    			invoiceService.insertInvoce(invoice);
     		}else{
     			invoiceService.update(invoice);
     			if("2".equals(invoice.getStatus())){

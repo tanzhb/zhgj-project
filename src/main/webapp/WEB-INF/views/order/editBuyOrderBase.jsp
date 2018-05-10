@@ -2076,3 +2076,29 @@ margin-right: 20px;
      
      </div>
 <!-- 采购订单基本信息 end -->
+
+<!-- 供应商修改确认modal 开始 -->
+	<div id="editSupplyComIdModal" class="modal fade" tabindex="-1"
+		data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true"></button>
+					<h4 class="modal-title">确认</h4>
+				</div>
+				<div class="modal-body">
+					<p>您更改了订单供应商，物料信息是否保留?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" ng-click="confirmSave(2)" class="btn green">是
+						</button>
+					<button type="button" ng-click="confirmSave(1)" class="btn red">否
+						</button>
+					<button type="button" data-dismiss="modal"
+						class="btn dark btn-outline">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- 供应商修改确认modal 结束 -->

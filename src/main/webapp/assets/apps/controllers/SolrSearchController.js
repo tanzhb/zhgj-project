@@ -27,12 +27,38 @@ angular
 							};
 							
 							//点击title查看订单详情
-							$scope.viewBuyOrder = function(serialNum, goType){
+							$scope.solrSearchView = function(serialNum, goType){
 								if(goType == 'buyOrder'){//跳转到采购订单详情页面
 									$state.go("viewBuyOrder",{serialNum:serialNum});
 								}else if(goType == 'saleOrder'){//跳转到销售订单详情页面
 									$state.go("viewSaleOrder",{serialNum:serialNum});
-								}
+								}else if(goType == "company"){
+									$state.go("company");
+			    				}else if(goType == "materiel"){
+			    					$state.go("materiel");
+			    				}else if(goType == "buyPriceList"){
+			    					$state.go("addPriceList",{buyOrSale:serialNum+'buy'+'view'});
+			    				}else if(goType == "salePriceList"){
+			    					$state.go("addPriceList",{buyOrSale:serialNum+'sale'+'view'});
+			    				}else if(goType == "contract"){
+			    					$state.go("userContract");
+			    				}else if(goType == "warehouse"){
+			    					$state.go("warehouse");
+			    				}else if(goType == "stock"){
+			    					$state.go('stockView',{stockSerialNum:serialNum},{reload:true}); 
+			    				}else if(goType == "buyPaymentRecord"){
+			    					$state.go('viewPay',{serialNum:serialNum});
+			    				}else if(goType == "salePaymentRecord"){
+			    					$state.go('viewGatheringMoney',{serialNum:serialNum});
+			    				}else if(goType == "buyInvoice"){
+			    					$state.go('invoiceView',{inOrOut:serialNum+'in'},{reload:true}); 
+			    				}else if(goType == "saleInvoice"){
+			    					$state.go('invoiceView',{inOrOut:serialNum+'out'},{reload:true}); 
+			    				}else if(goType == "supplyStatement"){
+			    					$state.go("viewSupplyStatement",{serialNum:serialNum});
+			    				}else if(goType == "buyStatement"){
+			    					$state.go("viewBuyStatement",{serialNum:serialNum});
+			    				}
 						    	
 						    }
 							

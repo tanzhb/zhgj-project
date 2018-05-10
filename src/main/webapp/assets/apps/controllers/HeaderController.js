@@ -30,6 +30,11 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
     	$("#hide").val("saleOrder");//本页面用
     	$rootScope.searchType = "saleOrder";//solrSearch.jsp调用
     }
+    $scope.select3 = function(value,type) {//选择销售订单
+    	$("#selValue").text(value);
+    	$("#hide").val(type);//本页面用
+    	$rootScope.searchType = type;//solrSearch.jsp调用
+    }
     $scope.selectAll = function() {//选择全部
     	$("#selValue").text("全部");
     	$("#hide").val("all");//本页面用

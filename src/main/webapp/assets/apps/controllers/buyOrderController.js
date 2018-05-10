@@ -465,6 +465,49 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 	    }
 		 
 	 }
+  	$scope.confirmSave  = function(type) {
+  		if(!isNull(type)){
+  			$('#editSupplyComIdModal').modal('hide');// 删除成功后关闭模态框
+  			$scope.buyOrder.deleteMaterielFlag = type
+  			$scope.orderMateriel = [];
+  		}
+	  	//如果平台修改了双方已确认的订单，需重新提交
+			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
+				$scope.buyOrder.status = 0;
+			}
+		orderService.save($scope.buyOrder).then(
+	    		     function(data){
+	    		    	$scope.buyOrder = data;
+	    		    	$scope.contract.orderSerial = data.serialNum;
+	    		    	$scope.oldSupplyComId=data.supplyComId;//记录初始的供应商id，用于保存时检查供应商是否修改
+	    		    	/*if(isNull($scope.contract.contractNum)){
+	    		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
+	    		    	}*/
+	    		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
+	//	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
+	    		    	if($scope.contract.contractType=='采购订单'){
+	    		    		$scope.contract.contractNum = null;
+	    		    	}
+		   	    		orderService.saveContract($scope.contract).then(
+		   	       		     function(data){
+		   	       		    	toastr.success('数据保存成功！');
+		   	       		    	$scope.contract = data.data;
+		   	       		     },
+		   	       		     function(error){
+		   	       		    	toastr.error('数据保存出错！');
+		   	       		         $scope.error = error;
+		   	       		     }
+		   	       		 );
+	    		    	/*$location.search({serialNum:data.serialNum,view:1});*/
+	    		    	$scope.buyOrderInput = true;
+	    			    $scope.buyOrderShow = true;
+	    		     },
+	    		     function(error){
+	    		         $scope.error = error;
+	    		         toastr.error('数据保存出错！');
+	    		     }
+	    		 );
+  	}
     $scope.save  = function() {
     	if($('#form_sample_1').valid()){//
     		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
@@ -477,41 +520,11 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     			toastr.error('订单编号重复！');
     			return;
     		}else{
-    			//如果平台修改了双方已确认的订单，需重新提交
-    			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
-    				$scope.buyOrder.status = 0;
+    			if(!isNull($scope.oldSupplyComId)&&$scope.oldSupplyComId!=$scope.buyOrder.supplyComId){//验证供应商是否修改
+    				$('#editSupplyComIdModal').modal('show');//显示弹框
+    			}else{
+    				$scope.confirmSave();
     			}
-    		orderService.save($scope.buyOrder).then(
-	        		     function(data){
-	        		    	$scope.buyOrder = data;
-	        		    	$scope.contract.orderSerial = data.serialNum;
-	        		    	/*if(isNull($scope.contract.contractNum)){
-	        		    		$scope.contract.contractNum = $scope.buyOrder.orderNum;
-	        		    	}*/
-	        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
-//	 	   	    		$scope.contract.signDate = $scope.buyOrder.orderDate;
-	        		    	if($scope.contract.contractType=='采购订单'){
-	        		    		$scope.contract.contractNum = null;
-	        		    	}
-	 	   	    		orderService.saveContract($scope.contract).then(
-	 	   	       		     function(data){
-	 	   	       		    	toastr.success('数据保存成功！');
-	 	   	       		    	$scope.contract = data.data;
-	 	   	       		     },
-	 	   	       		     function(error){
-	 	   	       		    	toastr.error('数据保存出错！');
-	 	   	       		         $scope.error = error;
-	 	   	       		     }
-	 	   	       		 );
-	        		    	/*$location.search({serialNum:data.serialNum,view:1});*/
-	        		    	$scope.buyOrderInput = true;
-	        			    $scope.buyOrderShow = true;
-	        		     },
-	        		     function(error){
-	        		         $scope.error = error;
-	        		         toastr.error('数据保存出错！');
-	        		     }
-	        		 );
     		}
     		
     		});
@@ -529,12 +542,16 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
     	    		if($scope.buyOrder.orderDate=='') {// 日期为空的处理
     	    			$scope.buyOrder.orderDate=null;
     	    		}
+    	    		if(!isNull($scope.oldSupplyComId)&&$scope.oldSupplyComId!=$scope.buyOrder.supplyComId){//验证供应商已修改，不能自动保存
+        				return;
+        			}
 	    			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
 	    				$scope.buyOrder.status = 0;
 	    			}
 		    		orderService.save($scope.buyOrder).then(
 			        		     function(data){
 			        		    	$scope.buyOrder = data;
+			        		    	$scope.oldSupplyComId=data.supplyComId;//记录初始的供应商id，用于保存时检查供应商是否修改
 			        		    	$scope.contract.orderSerial = data.serialNum;
 			        		    	$scope.contract.comId = $scope.buyOrder.supplyComId;
 			        		    	if($scope.contract.contractType=='采购订单'){
@@ -1673,6 +1690,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
         	orderService.getOrderInfo(serialNum).then(
           		     function(data){//加载页面对象
           		    	$scope.buyOrder=data.orderInfo;
+          		    	$scope.oldSupplyComId=data.orderInfo.supplyComId;//记录初始的供应商id，用于保存时检查供应商是否修改
           		    	$scope.orderMateriel=data.orderMateriel;
           		    	$scope.cancelAllOrderMateriel();
           		    	if($state.current.name=="viewBuyOrder"
@@ -4791,7 +4809,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                             "sLast": "尾页"
 		                          }
 		                     },
-		      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+		      				order : [ [ 4, "asc" ] ],// 默认排序列及排序方式
 
 		      				bRetrieve : true,
 		      				lengthMenu : [
@@ -4868,7 +4886,7 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		                             "sLast": "尾页"
 		                          }
 		                     },
-		      				order : [ [ 2, "asc" ] ],// 默认排序列及排序方式
+		      				order : [ [ 4, "asc" ] ],// 默认排序列及排序方式
 
 		      				bRetrieve : true,
 		      				lengthMenu : [

@@ -183,6 +183,7 @@ public class OrderInfo extends BaseVO {
     
    private String payReceiptMoney;//已付/已收金额(订单列表用);
     
+   private String deleteMaterielFlag;
     
     public String getSerialNum() {
         return serialNum;
@@ -628,6 +629,14 @@ public class OrderInfo extends BaseVO {
 
 	public void setPayReceiptMoney(String payReceiptMoney) {
 		this.payReceiptMoney = payReceiptMoney;
+	}
+
+	public String getDeleteMaterielFlag() {
+		return deleteMaterielFlag;
+	}
+
+	public void setDeleteMaterielFlag(String deleteMaterielFlag) {
+		this.deleteMaterielFlag = deleteMaterielFlag;
 	}
 
 	

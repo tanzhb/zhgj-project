@@ -27,7 +27,9 @@ public interface OrderMaterielService extends GenericService<OrderMateriel, Stri
      */
     List<OrderMateriel> selectList(OrderMaterielExample m);
 
-	public void deleteOrderMateriels(String ids);
+	void deleteOrderMateriels(String ids);
+	
+	void deleteOrderMaterielByOrderSerial(String Serial);
 
 	void betchInsertOrderMateriel(List<OrderMateriel> orderMateriel);
 

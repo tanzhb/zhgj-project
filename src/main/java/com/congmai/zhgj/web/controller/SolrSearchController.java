@@ -118,9 +118,30 @@ public class SolrSearchController {
 					String buyComId = (String) st.getFieldValue("buyComId");
 					String supplyComId = (String) st.getFieldValue("supplyComId");
 					
-					if(searchType.equals("purchaseOrder") && buyComId != null){//汇总采购订单关键字
-						continue;
-					}else if(searchType.equals("saleOrder") && supplyComId != null){//回总销售订单关键字
+					String orderNum = (String) st.getFieldValue("orderNum");
+					String comNum = (String) st.getFieldValue("comNum");
+					String materielNum = (String) st.getFieldValue("materielNum");
+					String priceNum = (String) st.getFieldValue("priceNum");
+					String contractNum = (String) st.getFieldValue("contractNum");
+					String warehouseNum = (String) st.getFieldValue("warehouseNum");
+					String stockNum = (String) st.getFieldValue("stockNum");
+					String paymentNum = (String) st.getFieldValue("paymentNum");
+					String invoiceNum = (String) st.getFieldValue("invoiceNum");
+					String statementNum = (String) st.getFieldValue("statementNum");
+					
+					if(searchType.equals("purchaseOrder") && buyComId == null && orderNum != null){//汇总采购订单关键字
+					}else if(searchType.equals("saleOrder") && supplyComId == null && orderNum != null){//汇总销售订单关键字
+					}else if(searchType.equals("company") && comNum != null){
+					}else if(searchType.equals("materiel") && materielNum != null){
+					}else if(searchType.equals("priceList") && priceNum != null){
+					}else if(searchType.equals("contract") && contractNum != null){
+					}else if(searchType.equals("warehouse") && warehouseNum != null){
+					}else if(searchType.equals("stock") && stockNum != null){
+					}else if(searchType.equals("paymentRecord") && paymentNum != null){
+					}else if(searchType.equals("invoice") && invoiceNum != null){
+					}else if(searchType.equals("statement") && statementNum != null){
+					}else if("all".equals(searchType)){
+					}else{//类型和数据不匹配时，关键字不加人汇总
 						continue;
 					}
 					
@@ -326,10 +347,30 @@ public class SolrSearchController {
             //根据检索类型添加过滤器，汇总总数据，方便分页
             if(!"all".equals(searchType)){
             	if(searchType.equals("purchaseOrder")){
-            		query.addFilterQuery("-buyComId:*");
+            		query.addFilterQuery("orderNum:*");  
+            		query.addFilterQuery("supplyComId:*");
             	}else if(searchType.equals("saleOrder")){
-            		query.addFilterQuery("-supplyComId:*");
-            	}
+            		query.addFilterQuery("orderNum:*");  
+            		query.addFilterQuery("buyComId:*");
+            	}else if(searchType.equals("company")){
+            		query.addFilterQuery("comNum:*");
+				}else if(searchType.equals("materiel")){
+					query.addFilterQuery("materielNum:*");
+				}else if(searchType.equals("priceList")){
+					query.addFilterQuery("priceNum:*");
+				}else if(searchType.equals("contract")){
+					query.addFilterQuery("contractNum:*");
+				}else if(searchType.equals("warehouse")){
+					query.addFilterQuery("warehouseNum:*");
+				}else if(searchType.equals("stock")){
+					query.addFilterQuery("stockNum:*");
+				}else if(searchType.equals("paymentRecord")){
+					query.addFilterQuery("paymentNum:*");
+				}else if(searchType.equals("invoice")){
+					query.addFilterQuery("invoiceNum:*");
+				}else if(searchType.equals("statement")){
+					query.addFilterQuery("statementNum:*");
+				}
             }
             
             
@@ -351,20 +392,29 @@ public class SolrSearchController {
             	String title = "";//每行结果名称，用于页面显示
             	
                 Object id=solrDocument.get("id");//企业或物料id
-                Object orderNum = solrDocument.get("orderNum");//采购/销售订单号               
-                Object orderType = solrDocument.get("orderType");//采购/销售类型
-                Object tradeType = solrDocument.get("tradeType");//贸易类型
-                Object seller = solrDocument.get("seller");//采购商/供应商                
-                Object currency = solrDocument.get("currency");//币种
-                Object rate = solrDocument.get("rate");//税率（%）
-                Object maker = solrDocument.get("maker");//制单人
-                Object makeDate = solrDocument.get("makeDate");//制单日期
-                Object orderDate = solrDocument.get("orderDate");//采购/销售日期
-                Object entrustParty = solrDocument.get("entrustParty");//委托方
-                Object serviceModel = solrDocument.get("serviceModel");//服务模式
-                Object createTime = solrDocument.get("createTime");//数据创建时间
-                Object updateTime = solrDocument.get("updateTime");//数据更新时间
-                Object comName = solrDocument.get("comName");//供应商/采购商
+                Object orderNum = solrDocument.get("orderNum");//采购/销售订单号      
+                Object comNum = solrDocument.getFieldValue("comNum");
+                Object materielNum = solrDocument.getFieldValue("materielNum");
+                Object priceNum = solrDocument.getFieldValue("priceNum");
+                Object contractNum = solrDocument.getFieldValue("contractNum");
+                Object warehouseNum = solrDocument.getFieldValue("warehouseNum");
+                Object stockNum = solrDocument.getFieldValue("stockNum");
+                Object paymentNum = solrDocument.getFieldValue("paymentNum");
+                Object invoiceNum = solrDocument.getFieldValue("invoiceNum");
+                Object statementNum = solrDocument.getFieldValue("statementNum");
+//                Object orderType = solrDocument.get("orderType");//采购/销售类型
+//                Object tradeType = solrDocument.get("tradeType");//贸易类型
+//                Object seller = solrDocument.get("seller");//采购商/供应商                
+//                Object currency = solrDocument.get("currency");//币种
+//                Object rate = solrDocument.get("rate");//税率（%）
+//                Object maker = solrDocument.get("maker");//制单人
+//                Object makeDate = solrDocument.get("makeDate");//制单日期
+//                Object orderDate = solrDocument.get("orderDate");//采购/销售日期
+//                Object entrustParty = solrDocument.get("entrustParty");//委托方
+//                Object serviceModel = solrDocument.get("serviceModel");//服务模式
+//                Object createTime = solrDocument.get("createTime");//数据创建时间
+//                Object updateTime = solrDocument.get("updateTime");//数据更新时间
+//                Object comName = solrDocument.get("comName");//供应商/采购商
                 
                 Object supplyComId = solrDocument.get("supplyComId");//供应商id
                 Object buyComId = solrDocument.get("buyComId");//采购商id
@@ -373,24 +423,104 @@ public class SolrSearchController {
                 Map<String, List<String>>  fieldMap=maplist.get(id);//高亮文字
                 List<String> stringlist=fieldMap.get("search_fields");
                 
-                if(searchType.equals("purchaseOrder") && buyComId == null){//采购订单
+                if(searchType.equals("purchaseOrder") && supplyComId != null && orderNum != null){//采购订单
                 	title = "采购订单;单号：" + orderNum;
                 	goType = "buyOrder";
-                	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
-                }else if(searchType.equals("saleOrder") && supplyComId == null){//销售订单
+//                	string = /*"id号：" + id + ";" +*/ StringUtils.join(stringlist.toArray(),",") ;
+                }else if(searchType.equals("saleOrder") && buyComId != null && orderNum != null){//销售订单
                 	title = "销售订单;单号：" + orderNum;
                 	goType = "saleOrder";
-                	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
-                }else if(searchType.equals("all")){//全部
-                	if(buyComId == null){
+//                	string = /*"id号：" + id + ";" +*/ StringUtils.join(stringlist.toArray(),",") ;
+                }else if(searchType.equals("company") && comNum != null){
+                	title = "企业信息;单号：" + comNum;
+                	goType = "company";
+				}else if(searchType.equals("materiel") && materielNum != null){
+					title = "物料信息;单号：" + materielNum;
+                	goType = "materiel";
+				}else if(searchType.equals("priceList") && supplyComId != null && priceNum != null){
+					title = "采购价格目录;单号：" + priceNum;
+                	goType = "buyPriceList";
+				}else if(searchType.equals("priceList") && buyComId != null && priceNum != null){
+					title = "销售价格目录;单号：" + priceNum;
+                	goType = "lePriceList";
+				}else if(searchType.equals("contract") && contractNum != null){
+					title = "合同信息;单号：" + contractNum;
+                	goType = "contract";
+				}else if(searchType.equals("warehouse") && warehouseNum != null){
+					title = "仓库信息;单号：" + warehouseNum;
+                	goType = "warehouse";
+				}else if(searchType.equals("stock") && stockNum != null){
+					title = "库存信息;单号：" + stockNum;
+                	goType = "stock";
+				}else if(searchType.equals("paymentRecord") && supplyComId != null && paymentNum != null){
+					title = "应付款;单号：" + paymentNum;
+                	goType = "buyPaymentRecord";
+				}else if(searchType.equals("paymentRecord") && buyComId != null && paymentNum != null){
+					title = "应收款;单号：" + paymentNum;
+                	goType = "salePaymentRecord";
+				}else if(searchType.equals("invoice") && supplyComId != null && invoiceNum != null){
+					title = "进项票;单号：" + invoiceNum;
+                	goType = "buyInvoice";
+				}else if(searchType.equals("invoice") && buyComId != null && invoiceNum != null){
+					title = "销项票;单号：" + invoiceNum;
+                	goType = "saleInvoice";
+				}else if(searchType.equals("statement") && supplyComId != null && statementNum != null){
+					title = "供应商对账单;单号：" + statementNum;
+                	goType = "supplyStatement";
+				}else if(searchType.equals("statement") && buyComId != null && statementNum != null){
+					title = "采购商对账单;单号：" + statementNum;
+                	goType = "buyStatement";
+				}else if(searchType.equals("all")){//全部
+                	if(supplyComId != null && orderNum != null){
                 		title = "采购订单;单号：" + orderNum;
                 		goType = "buyOrder";
-                	}else if(supplyComId == null){
+                	}else if(buyComId != null && orderNum != null){
                 		title = "销售订单;单号：" + orderNum;
                 		goType = "saleOrder";
-                	}
-                	string = "id号：" + id + ";" + StringUtils.join(stringlist.toArray(),",") ;
+                	}else if(comNum != null){
+                    	title = "企业信息;单号：" + comNum;
+                    	goType = "company";
+    				}else if(materielNum != null){
+    					title = "物料信息;单号：" + materielNum;
+                    	goType = "materiel";
+    				}else if(supplyComId != null && priceNum != null){
+    					title = "采购价格目录;单号：" + priceNum;
+                    	goType = "buyPriceList";
+    				}else if(buyComId != null && priceNum != null){
+    					title = "销售价格目录;单号：" + priceNum;
+                    	goType = "salePriceList";
+    				}else if(contractNum != null){
+    					title = "合同信息;单号：" + contractNum;
+                    	goType = "contract";
+    				}else if(warehouseNum != null){
+    					title = "仓库信息;单号：" + warehouseNum;
+                    	goType = "warehouse";
+    				}else if(stockNum != null){
+    					title = "库存信息;单号：" + stockNum;
+                    	goType = "stock";
+    				}else if(supplyComId != null && paymentNum != null){
+    					title = "应付款;单号：" + paymentNum;
+                    	goType = "buyPaymentRecord";
+    				}else if(buyComId != null && paymentNum != null){
+    					title = "应收款;单号：" + paymentNum;
+                    	goType = "salePaymentRecord";
+    				}else if(supplyComId != null && invoiceNum != null){
+    					title = "进项票;单号：" + invoiceNum;
+                    	goType = "buyInvoice";
+    				}else if(buyComId != null && invoiceNum != null){
+    					title = "销项票;单号：" + invoiceNum;
+                    	goType = "saleInvoice";
+    				}else if(supplyComId != null && statementNum != null){
+    					title = "供应商对账单;单号：" + statementNum;
+                    	goType = "supplyStatement";
+    				}else if(buyComId != null && statementNum != null){
+    					title = "采购商对账单;单号：" + statementNum;
+                    	goType = "buyStatement";
+    				}
+                	
                 }
+                
+                string = /*"id号：" + id + ";" +*/ StringUtils.join(stringlist.toArray(),",") ;
                 
                 solrDocument.put("id", id);
                 solrDocument.put("goType", goType);

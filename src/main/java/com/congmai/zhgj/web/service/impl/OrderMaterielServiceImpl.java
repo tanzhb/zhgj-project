@@ -81,7 +81,7 @@ public class OrderMaterielServiceImpl implements OrderMaterielService {
 	@Override
 	public void betchInsertOrderMateriel(List<OrderMateriel> orderMateriel) {
 		if(!CollectionUtils.isEmpty(orderMateriel)){
-			//删除之前的附件
+			//删除之前的物料
 			OrderMateriel m = new OrderMateriel();
 			m.setDelFlg("1");
 			m.setUpdateTime(new Date());
@@ -100,6 +100,19 @@ public class OrderMaterielServiceImpl implements OrderMaterielService {
 			}
 		}
 		
+	}
+
+	@Override
+	public void deleteOrderMaterielByOrderSerial(String Serial) {
+		OrderMateriel m = new OrderMateriel();
+		m.setDelFlg("1");
+		m.setUpdateTime(new Date());
+		
+		OrderMaterielExample ex =new OrderMaterielExample();
+    	Criteria criteria =  ex.createCriteria();
+    	criteria.andOrderSerialEqualTo(Serial);
+		
+    	OrderMaterielMapper.updateByExampleSelective(m, ex);
 	}
 
 }

@@ -22,7 +22,7 @@
 				         <li class="search-item clearfix">
 							<div class="search-content text-left">
 								<h2 class="search-title">
-									<a href="javascript:;" ng-click="viewBuyOrder(searchItem.id, searchItem.goType)">{{searchItem.title}}</a>
+									<a href="javascript:;" ng-click="solrSearchView(searchItem.id, searchItem.goType)">{{searchItem.title}}</a>
 								</h2>
 								<p class="search-desc" ng-bind-html="TrustDangerousSnippet(searchItem)">
 									{{searchItem.search_fields}}

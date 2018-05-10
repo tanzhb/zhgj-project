@@ -1131,24 +1131,27 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
     
   //启动流程
 	$scope.applyAp = function() {
+		handle.blockUI("请稍等...");
 		PayService
 				.applyAp($('#reason').val(), $stateParams.serialNum)
 				.then(
 						function(data) {
+							handle.unblockUI();
 							toastr.success("申请成功！");
-							
+							$state.go('paymentRecordC');//返回申请列表
+							//location.reload();
+							$("#sample_2").DataTable().ajax.reload();
+							location.reload();
 						},
 						function(errResponse) {
+							handle.unblockUI();
 							toastr.warning("申请失败！");
 							console
 									.error('Error while apply ap');
 						}
 
 				);
-		$state.go('paymentRecordC');//返回申请列表
-		//location.reload();
-		$("#sample_2").DataTable().ajax.reload();
-		location.reload();
+		
 	//$state.go('paymentRecordC',{},{reload:true});
 		
 	};

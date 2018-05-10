@@ -62,8 +62,25 @@
 					<ul class="dropdown-menu dropdown-menu-default">
 						<li><a href="#" ng-click="select1()">采购订单
 						</a></li>
-						
 						<li><a href="#" ng-click="select2()">销售订单
+						</a></li>
+						<li><a href="#" ng-click="select3('企业信息','company')">企业信息
+						</a></li>
+						<li><a href="#" ng-click="select3('物料信息','materiel')">物料信息
+						</a></li>
+						<li><a href="#" ng-click="select3('价格目录','priceList')">价格目录
+						</a></li>
+						<li><a href="#" ng-click="select3('合同信息','contract')">合同信息
+						</a></li>
+						<li><a href="#" ng-click="select3('仓库信息','warehouse')">仓库信息
+						</a></li>
+						<li><a href="#" ng-click="select3('库存信息','stock')">库存信息
+						</a></li>
+						<li><a href="#" ng-click="select3('应收付款','paymentRecord')">应收付款
+						</a></li>
+						<li><a href="#" ng-click="select3('发票信息','invoice')">发票信息
+						</a></li>
+						<li><a href="#" ng-click="select3('对账单','statement')">对账单
 						</a></li>
 						<li class="divider"></li>
 						<li><a href="#" ng-click="selectAll()">全部

@@ -15,7 +15,10 @@ public interface InvoiceService extends GenericService<Invoice, String>{
 	void confirmInvoiceIn(Invoice in);//进项票确认
 	void confirmInvoiceOut(Invoice out);//销项票确认
 	
-	void insertInvoce(Invoice invoice);//新增发票
+//	void insertInvoce(Invoice invoice);//新增发票
+	
+	void insertInvoiceForIn(Invoice invoice);
+	void insertInvoiceForOut(Invoice invoice);
 	
 	public  Boolean  insertAllInvoiceBillingRecordInfo(List<InvoiceBillingRecord>list,String currenLoginName,String serialNum);//保存收开票记录  serialNum 发票流水
 }
