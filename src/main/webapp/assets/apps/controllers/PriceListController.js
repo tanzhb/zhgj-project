@@ -81,7 +81,7 @@ angular
 				 				loadPriceListBuyTable();//加载采购价格列表
 				 				$('#buyPriceTab a[href="#daibanBuyPrice"]').tab('show');
 			 					$scope.toDaibanBuyPrice();
-			 				}if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
+			 				}else if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
 			 					$("#buy").removeClass("active");
 				 				$("#sale").addClass("active");
 				 				$("#tab_buy").removeClass("active");

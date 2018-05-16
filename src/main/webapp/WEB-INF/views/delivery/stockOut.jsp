@@ -52,8 +52,11 @@
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a></li>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
-						<button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()">
+						<button   class="btn green  btn-sm btn-circle" ng-click="saveStockOut()" ng-if="record.wmsDeliveryId==null">
                               		<i class="fa fa-check"></i> 确认出库 </button>
+                        <button   class="btn green  btn-sm btn-circle" ng-click="getWmsStockOut()" ng-if="record.wmsDeliveryId!=null">
+                              		<i class="fa fa-check"></i> 同步WMS出库 </button>
+                              		
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>												
 					</ul>
@@ -432,7 +435,7 @@
 							
 										</td> -->
 										<td  ng-if="materiel.currentStockAmount!=0"  class="form-group">
-										<input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount"  ng-change="changeValue(materiel,'stockCount')"  data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-model="materiel.stockCount" ng-hide="deliverAdd" >
+										<input type="text" class="form-control input-small" id="stockCountinline{{materiel.serialNum}}" name="stockCount"  ng-change="changeValue(materiel,'stockCount')"  data-delivercount="{{materiel.deliverCount}}"   data-currentstock="{{materiel.currentStockAmount}}"    ng-model="materiel.stockCount" ng-init="materiel.stockCount=materiel.deliverCount"   ng-hide="deliverAdd" >
                                                  
                                                  <div class="form-control-focus"> </div>
                                                  <p class="form-control-static" ng-show="deliverView">

@@ -220,7 +220,47 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
         		});
 	        }
 	        
-
+	        /**
+	         * 从WMS获取入库信息后，赋值，确认入库
+	         */   
+		    $scope.getWmsStockOut = function(){
+		    	handle.blockUI();
+		    	var promise = takeDeliveryService.getWmsStockOut($scope.record.wmsDeliveryId);
+				promise.then(function(data) {
+					debugger
+					handle.unblockUI();
+					var data = JSON.parse((data.data.data));
+					if(!isNull(data)&&data.flag=="1"){
+						var products = data.products
+						$scope.record.stockDate = $filter('date')(products[0].createTime, 'yyyy-MM-dd HH:mm');
+						for(var i=1;i<products.length;i++){
+							if(products[i].createTime>=$scope.record.stockDate){
+								$scope.record.stockDate = $filter('date')(products[i].createTime, 'yyyy-MM-dd HH:mm');
+							}
+						}
+						
+						for(var j=0;j<$scope.takeDeliveryMateriels.length;j++){
+							for(var i=0;i<products.length;i++){
+								if(products[i].productId==$scope.takeDeliveryMateriels[j].orderMateriel.materiel.wmsMaterielId){
+									$scope.takeDeliveryMateriels[j].stockCount = products[i].amount;
+									products.splice(i,1);
+								}
+							}
+						}
+						
+						$scope.saveStockOut();
+					}else{
+						toastr.warning("wms未完成出库！");
+					}
+					
+					
+				
+				}, function(data) {
+					// 调用承诺接口reject();
+					handle.unblockUI();
+					toastr.error("同步wms出库失败！请联系管理员");
+				});
+		    }
 	        /**
 	         * 确认出库
 	         */
@@ -441,6 +481,7 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
             			if(!isNull($stateParams.serialNum)&&($location.path()=="/stockOutAdd"||$location.path()=="/stockOut")){//出库编辑或入库时时
             				$scope.deliverSerial = data.data.deliver.serialNum;
             				$scope.getTakeDeliverMateriel(data.data.deliver);
+            				$scope.record.inOutType = '销售';
             			}else{
             				$scope.getTakeDeliverMateriel(data.data.deliver);
             				$scope.queryForPage();

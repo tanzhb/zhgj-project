@@ -236,6 +236,23 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+	                                                            <div class="form-group ">
+			                                                    	<label class="control-label bold">关联WMS仓库 :</label>
+																	<div  ng-hide="warehouseView"><!--ng-show="warehouseAdd"   -->
+																	 	<select class="form-control" data-live-search="true" data-size="10" id="wmsWarehouse" ng-model="warehouse.wmsWarehouseId" ng-change="">
+					                                                       	<option value="">无</option>
+					                                                   		<option  ng-repeat="wmsWarehouse in wmsWarehouses" value="{{wmsWarehouse.id}}" >{{wmsWarehouse.storeName}}</option><!--  disabled="disabled" -->
+					                                                    </select>
+					                                                </div>
+																	<div class="form-control-focus"> </div>
+				                                                    <p class="control-label left" ng-show="warehouseView">{{warehouse.wmsWarehouseName}}</p> 
+	                                                             </div>
+                                                            </div>
+                                                            <!--/span-->
+                                                        </div>
 								</div>
 							</form>
          				</div>

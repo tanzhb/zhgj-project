@@ -54,8 +54,10 @@
 						<li class="bold"><a data-target="#tab_1_2" data-toggle="tab">发货信息</a></li>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">物料信息</a></li>
 						<li class="dropdown pull-right tabdrop">
-						<button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()">
+						<button   class="btn green  btn-sm btn-circle" ng-click="saveStockIn()" ng-if="record.wmsDeliveryId==null">
                               		<i class="fa fa-check"></i> 确认入库 </button>
+                        <button   class="btn green  btn-sm btn-circle" ng-click="getWmsStockIn()" ng-if="record.wmsDeliveryId!=null">
+                              		<i class="fa fa-check"></i> 同步WMS入库 </button>
 							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>						
 					</ul>

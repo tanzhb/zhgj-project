@@ -294,7 +294,9 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 		if(!isNull(type)){
 			$('#editBuyComIdModal').modal('hide');// 删除成功后关闭模态框
 			$scope.saleOrder.deleteMaterielFlag = type
-			$scope.orderMateriel = [];
+			if(type==1){
+  				$scope.orderMateriel = [];
+  			}
 		}
 		orderService.save($scope.saleOrder).then(
      		     function(data){

@@ -74,6 +74,8 @@ public class Company {
     private List<String> comIds;
     
     private List<CompanyQualification> companyQualifications;
+    
+    private String wmsComId;
  
     public String getComId() {
         return comId;
@@ -346,6 +348,14 @@ public class Company {
 
 	public void setTradeType(String tradeType) {
 		this.tradeType = tradeType;
+	}
+
+	public String getWmsComId() {
+		return wmsComId;
+	}
+
+	public void setWmsComId(String wmsComId) {
+		this.wmsComId = wmsComId;
 	}
     
     

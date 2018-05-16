@@ -16,10 +16,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.cglib.beans.BeanCopier;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.feature.orm.mybatis.Page;
 import com.congmai.zhgj.core.generic.GenericDao;
 import com.congmai.zhgj.core.generic.GenericServiceImpl;
 import com.congmai.zhgj.core.util.ApplicationUtils;
+import com.congmai.zhgj.core.util.HttpClientUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.SendEmail;
 import com.congmai.zhgj.core.util.StringUtil;
@@ -43,6 +45,7 @@ import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.event.EventExample;
 import com.congmai.zhgj.web.event.SendMessageEvent;
 import com.congmai.zhgj.web.model.ClauseSettlementDetail;
+import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.CompanyContact;
 import com.congmai.zhgj.web.model.CustomsForm;
 import com.congmai.zhgj.web.model.Delivery;
@@ -69,6 +72,7 @@ import com.congmai.zhgj.web.model.TakeDelivery;
 import com.congmai.zhgj.web.model.TakeDeliveryExample;
 import com.congmai.zhgj.web.model.TakeDeliveryParams;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
+import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
 import com.congmai.zhgj.web.service.CompanyContactService;
@@ -79,6 +83,12 @@ import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
 import com.congmai.zhgj.web.service.StockInBatchService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
+import com.congmai.zhgj.wms.model.ArriveBill;
+import com.congmai.zhgj.wms.model.ArriveData;
+import com.congmai.zhgj.wms.model.Product;
+import com.congmai.zhgj.wms.model.Supplier;
+import com.congmai.zhgj.wms.model.Unit;
+import com.congmai.zhgj.wms.model.WmsReturn;
 
 @Service
 public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,String>
@@ -373,6 +383,11 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					delivery1.setStatus(DeliveryVO.WAIT_IN_RECORD);
 					//生成入库单
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
+					
+					//为wms生成到货通知
+					//TODO
+			    	
+					
 					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
 					stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
 					stockInOutRecord.setDeliverSerial("");

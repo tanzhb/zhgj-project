@@ -103,6 +103,9 @@ public class StockInOutRecord {
 		private String realCount;//实际出入库数量
 	    
 		private String dateStock;//日期
+		
+		private String wmsDeliveryId;
+		
 		 public String getRealCount() {
 				return realCount;
 		}
@@ -455,6 +458,14 @@ public class StockInOutRecord {
 
 		public void setDateStock(String dateStock) {
 			this.dateStock = dateStock;
+		}
+
+		public String getWmsDeliveryId() {
+			return wmsDeliveryId;
+		}
+
+		public void setWmsDeliveryId(String wmsDeliveryId) {
+			this.wmsDeliveryId = wmsDeliveryId;
 		}
 		
 	

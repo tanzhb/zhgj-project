@@ -3421,7 +3421,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
 					}
 				})
         .state('invoice', {
-            url: "/invoice?:inOrOut",
+            url: "/invoice?:inOrOut&:tabHref",
             templateUrl: "rest/invoice/viewInvoiceList",
             data: {pageTitle: '发票'},
             controller: "InvoiceController",

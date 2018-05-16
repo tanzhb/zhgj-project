@@ -153,6 +153,8 @@ public class Materiel {
     private  String stockCount;//库存数量
     
     private  String guideUnitPrice;//指导单价
+    
+    private  String wmsMaterielId;
    
     
     public String getCustomsRate() {
@@ -747,6 +749,14 @@ public class Materiel {
 
 	public void setOrderRateUnit(String orderRateUnit) {
 		this.orderRateUnit = orderRateUnit;
+	}
+
+	public String getWmsMaterielId() {
+		return wmsMaterielId;
+	}
+
+	public void setWmsMaterielId(String wmsMaterielId) {
+		this.wmsMaterielId = wmsMaterielId;
 	}
     
 }

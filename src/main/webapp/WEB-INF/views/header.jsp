@@ -76,7 +76,7 @@
 						</a></li>
 						<li><a href="#" ng-click="select3('库存信息','stock')">库存信息
 						</a></li>
-						<li><a href="#" ng-click="select3('应收付款','paymentRecord')">应收付款
+						<li><a href="#" ng-click="select3('应收付款','paymentRecord')">应收应付
 						</a></li>
 						<li><a href="#" ng-click="select3('发票信息','invoice')">发票信息
 						</a></li>

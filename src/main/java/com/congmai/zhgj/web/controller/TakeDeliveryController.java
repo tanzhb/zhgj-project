@@ -28,6 +28,8 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -46,6 +48,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.BeanUtils;
 import com.congmai.zhgj.core.util.Constants;
 import com.congmai.zhgj.core.util.ExcelUtil;
+import com.congmai.zhgj.core.util.HttpClientUtil;
 import com.congmai.zhgj.core.util.MessageConstants;
 import com.congmai.zhgj.core.util.SendEmail;
 import com.congmai.zhgj.core.util.StringUtil;
@@ -107,7 +110,10 @@ import com.congmai.zhgj.web.service.WarehousepositionService;
  */
 @Controller
 @RequestMapping("takeDelivery")
+@PropertySource("classpath:/wmsAPI.properties")
 public class TakeDeliveryController {
+	@Autowired
+	Environment env;
 	
 	 private Logger logger = Logger.getLogger(TakeDeliveryController.class);
 	
@@ -364,6 +370,35 @@ public class TakeDeliveryController {
     }
     
 	    
+    
+    
+    
+    
+    /**
+     * @Description (获取WMS中到货信息的入库记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getWmsStockIn")
+    @ResponseBody
+    public ResponseEntity<String> getWmsStockIn(HttpServletRequest request,String serialNum) {
+    	String data = HttpClientUtil.sendHttpGet(env.getProperty("getArrive")+serialNum);
+		return new ResponseEntity<String>(data,HttpStatus.OK);
+    }
+    
+    /**
+     * @Description (获取WMS中发货信息的出库记录)
+     * @param request
+     * @return
+     */
+    @RequestMapping("getWmsStockOut")
+    @ResponseBody
+    public ResponseEntity<String> getWmsStockOut(HttpServletRequest request,String serialNum) {
+    	String data = HttpClientUtil.sendHttpGet(env.getProperty("getDelivery")+serialNum);
+		return new ResponseEntity<String>(data,HttpStatus.OK);
+    }
+    
+    
     /**
      * @Description (保存)
      * @param request

@@ -41,6 +41,8 @@ angular
 										    		 }
 										    		 initAllComs();
 										    		/* getComId();*/
+										    		 
+										    		 initAllWmsWarehouse();
 										    		
 										 		}
 												 if($location.path()=="/warehouse"){
@@ -270,6 +272,28 @@ angular
 		        	});
 			}
 			
+			/**
+			 * 加载所有wms仓库数据
+			 */
+			var initAllWmsWarehouse = function(){
+				var promise = WarehouseService.initAllWmsWarehouse();
+		        	promise.then(function(data){
+		        		debugger;
+		        		$scope.wmsWarehouses = JSON.parse((data.data.data)).items;
+		        		setTimeout(function () {
+		        			$("#wmsWarehouse").selectpicker({
+		                        showSubtext: true
+		                    });
+		        			$('#wmsWarehouse').selectpicker('refresh');//刷新插件
+		        			
+		                }, 100);
+		        	},function(data){
+		        		//调用承诺接口reject();
+		        	});
+			}
+			
+			
+			
 			var getComId=function (judgestring){
 				var promise = orderService.getComId();
 				promise.then(function(data) {
@@ -327,6 +351,9 @@ angular
 								    			return;
 								    		}else{
 								    			handle.blockUI();
+								    			if(!handle.isNull($scope.warehouse.wmsWarehouseId)){
+								    				$scope.warehouse.wmsWarehouseName = $("#wmsWarehouse option:selected").text()
+								    			}
 								    			WarehouseService
 												.saveWarehouse($scope.warehouse)
 												.then(

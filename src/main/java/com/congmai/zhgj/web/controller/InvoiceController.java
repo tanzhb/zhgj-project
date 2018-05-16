@@ -163,6 +163,7 @@ public class InvoiceController {
     			invoice.setSerialNum(ApplicationUtils.random32UUID());
     			//invoice.setStatus("0");//待确认
     			invoice.setDelFlg("0");
+    			invoice.setUpdateTime(new Date());
     			if(invoice.getInvoiceNum().indexOf("OT")>-1){
     				invoiceService.insertInvoiceForIn(invoice);//进项票
     			}else{
@@ -170,7 +171,9 @@ public class InvoiceController {
     			}
 //    			invoiceService.insertInvoce(invoice);
     		}else{
+    			invoice.setUpdateTime(new Date());
     			invoiceService.update(invoice);
+    			
     			if("2".equals(invoice.getStatus())){
     				if(StringUtils.isEmpty(invoice.getSupplyComId())){
     					invoiceService.confirmInvoiceOut(invoice);

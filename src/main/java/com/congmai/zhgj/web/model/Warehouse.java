@@ -43,7 +43,10 @@ public class Warehouse {
     
     private String ownerName;//仓库所有者名称
     
-
+    private String wmsWarehouseId;
+    private String wmsWarehouseName;
+    
+    
     public String getSerialNum() {
         return serialNum;
     }
@@ -194,6 +197,22 @@ public class Warehouse {
 
 	public void setOwnerName(String ownerName) {
 		this.ownerName = ownerName;
+	}
+
+	public String getWmsWarehouseId() {
+		return wmsWarehouseId;
+	}
+
+	public void setWmsWarehouseId(String wmsWarehouseId) {
+		this.wmsWarehouseId = wmsWarehouseId;
+	}
+
+	public String getWmsWarehouseName() {
+		return wmsWarehouseName;
+	}
+
+	public void setWmsWarehouseName(String wmsWarehouseName) {
+		this.wmsWarehouseName = wmsWarehouseName;
 	}
     
 }

@@ -58,8 +58,20 @@ angular
 										 			getInvoiceInfo($stateParams.inOrOut+"view");//查看发票详情
 									 		}else if(($location.path()=="/invoice")){
 									 			debugger;
-									 			if($stateParams.inOrOut=='showout'){
-									 				debugger;
+									 			if($stateParams.tabHref == '1'){//首页待办列表传过来的参数
+									 				$("#in").removeClass("active");
+									 				$("#out").addClass("active");
+									 				$("#tab_in").removeClass("active");
+									 				$("#tab_out").addClass("active");
+								 					$scope.toDaibanInvoice();
+								 				}else if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
+								 					$("#in").removeClass("active");
+									 				$("#out").addClass("active");
+									 				$("#tab_in").removeClass("active");
+									 				$("#tab_out").addClass("active");
+								 					$scope.toYibanInvoice();
+								 				}else if($stateParams.inOrOut=='showout'){
+								 					debugger;
 									 				$("#in").removeClass("active");
 									 				$("#out").addClass("active");
 									 				$("#tab_in").removeClass("active");
@@ -159,7 +171,7 @@ angular
 								dbOutInvoicetable = showDbOutInvoiceTable();								
 							};
 							// 销项票已办流程
-							$scope. toYibanInvoice= function(judgeString) {
+							$scope.toYibanInvoice= function(judgeString) {
 								$('#invoiceOutTab a[href="#yibanBuyPrice"]').tab('show');
 								debugger;
 								endTaskOutInvoiceTable = showYbOutInvoiceTable();

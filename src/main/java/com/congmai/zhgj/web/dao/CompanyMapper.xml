@@ -29,6 +29,7 @@
     <result column="openingBank" property="openingBank" jdbcType="VARCHAR" />
     <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
     <result column="billRemark" property="billRemark" jdbcType="VARCHAR" />
+    <result column="wmsComId" property="wmsComId" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.Company" >
     <result column="comId" property="comId" jdbcType="VARCHAR" />
@@ -58,6 +59,7 @@
     <result column="openingBank" property="openingBank" jdbcType="VARCHAR" />
     <result column="accountNumber" property="accountNumber" jdbcType="VARCHAR" />
     <result column="billRemark" property="billRemark" jdbcType="VARCHAR" />
+    <result column="wmsComId" property="wmsComId" jdbcType="VARCHAR" />
     <collection column="comId" property="companyQualifications"  select="com.congmai.zhgj.web.dao.CompanyQualificationMapper.selectByComId"></collection>
   </resultMap>
    <sql id="Example_Where_Clause" >
@@ -93,7 +95,7 @@
     comId, comNum, comType,tradeType, abbreviation, comName, registeredCapital, legalPerson, address, 
     taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
     status, delFlg, creator, createTime, updater, updateTime, corporatePresence, openingBank, 
-    accountNumber, billRemark
+    accountNumber, billRemark,wmsComId
   </sql>
   
   <select id="selectList" resultMap="BaseResultMap2" parameterType="com.congmai.zhgj.web.model.Company" >
@@ -308,6 +310,9 @@
       <if test="billRemark != null" >
         billRemark = #{billRemark,jdbcType=VARCHAR},
       </if>
+      <if test="wmsComId != null" >
+        wmsComId = #{wmsComId,jdbcType=VARCHAR},
+      </if>
     </set>
     where comId = #{comId,jdbcType=VARCHAR}
   </update>
@@ -331,7 +336,7 @@
        comId, comNum, comType,tradeType, abbreviation, comName, registeredCapital, legalPerson, address, 
     taxpayeNumber, tel, contact, businessNature, comNature, businessType, classification, remark,
     status, c.delFlg, c.creator, c.createTime, c.updater, c.updateTime, corporatePresence, openingBank, 
-    accountNumber, billRemark
+    accountNumber, billRemark,wmsComId
     from   	supply_buy s 
      <if test="supplyId=='notnull'">    
      	   left  join  company  c  on s.supply_id = c.comId

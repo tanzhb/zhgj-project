@@ -586,6 +586,17 @@
                                            <!-- /span -->
                                        </div>
                                        <!-- /row -->
+                                       <div class="row">
+                                           <div class="col-md-6">
+                                            	<div class="form-group ">
+                                      				<label class="control-label col-md-5">关联WMS仓库 :</label>
+													<div  class="col-md-7">
+													 	 <p class="form-control-static">{{warehouse.wmsWarehouseName}}</p>
+				                                    </div>
+                                             	</div>
+                                           </div>
+                                           <!--/span-->
+                                     	</div>
                                    </div>
                                </form>
                               <!--  END FORM -->

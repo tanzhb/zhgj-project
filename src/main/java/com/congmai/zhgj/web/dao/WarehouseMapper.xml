@@ -20,6 +20,9 @@
     <result column="createTime" property="createTime" jdbcType="TIMESTAMP" />
     <result column="updater" property="updater" jdbcType="VARCHAR" />
     <result column="updateTime" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="wmsWarehouseId" property="wmsWarehouseId" jdbcType="VARCHAR" />
+    <result column="wmsWarehouseName" property="wmsWarehouseName" jdbcType="VARCHAR" />
+    
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -82,7 +85,7 @@
   <sql id="Base_Column_List" >
     serialNum, warehouseNum, warehouseName, warehouseType, warehouseCategory, owner, 
     address, area, admin, tel, email, fax, remark, delFlg, creator, createTime, updater, 
-    updateTime
+    updateTime,wmsWarehouseId,wmsWarehouseName
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.WarehouseExample" >
     select
@@ -135,13 +138,13 @@
       address, area, admin, 
       tel, email, fax, remark, 
       delFlg, creator, createTime, 
-      updater, updateTime)
+      updater, updateTime,wmsWarehouseId,wmsWarehouseName)
     values (#{serialNum,jdbcType=VARCHAR}, #{warehouseNum,jdbcType=VARCHAR}, #{warehouseName,jdbcType=VARCHAR}, 
       #{warehouseType,jdbcType=VARCHAR}, #{warehouseCategory,jdbcType=VARCHAR}, #{owner,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, #{admin,jdbcType=VARCHAR}, 
       #{tel,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{fax,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{delFlg,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updater,jdbcType=VARCHAR}, #{updateTime,jdbcType=TIMESTAMP},#{wmsWarehouseId,jdbcType=VARCHAR},#{wmsWarehouseName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.Warehouse" >
     insert into warehouse
@@ -200,6 +203,12 @@
       <if test="updateTime != null" >
         updateTime,
       </if>
+      <if test="wmsWarehouseId != null" >
+        wmsWarehouseId,
+      </if>
+      <if test="wmsWarehouseName != null" >
+        wmsWarehouseName,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="serialNum != null" >
@@ -255,6 +264,12 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wmsWarehouseId != null" >
+        #{wmsWarehouseId,jdbcType=VARCHAR},
+      </if>
+      <if test="wmsWarehouseName != null" >
+       #{wmsWarehouseName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -321,6 +336,12 @@
       <if test="record.updateTime != null" >
         updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.wmsWarehouseId != null" >
+        wmsWarehouseId = #{record.wmsWarehouseId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.wmsWarehouseName != null" >
+       	wmsWarehouseName = #{record.wmsWarehouseName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -345,7 +366,9 @@
       creator = #{record.creator,jdbcType=VARCHAR},
       createTime = #{record.createTime,jdbcType=TIMESTAMP},
       updater = #{record.updater,jdbcType=VARCHAR},
-      updateTime = #{record.updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{record.updateTime,jdbcType=TIMESTAMP},
+        wmsWarehouseId = #{record.wmsWarehouseId,jdbcType=VARCHAR},
+       	wmsWarehouseName = #{record.wmsWarehouseName,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -404,6 +427,12 @@
       <if test="updateTime != null" >
         updateTime = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="wmsWarehouseId != null" >
+        wmsWarehouseId = #{wmsWarehouseId,jdbcType=VARCHAR},
+      </if>
+      <if test="wmsWarehouseName != null" >
+       	wmsWarehouseName = #{wmsWarehouseName,jdbcType=VARCHAR},
+      </if>
     </set>
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
@@ -425,7 +454,9 @@
       creator = #{creator,jdbcType=VARCHAR},
       createTime = #{createTime,jdbcType=TIMESTAMP},
       updater = #{updater,jdbcType=VARCHAR},
-      updateTime = #{updateTime,jdbcType=TIMESTAMP}
+      updateTime = #{updateTime,jdbcType=TIMESTAMP},
+        wmsWarehouseId = #{wmsWarehouseId,jdbcType=VARCHAR},
+       	wmsWarehouseName = #{wmsWarehouseName,jdbcType=VARCHAR}
     where serialNum = #{serialNum,jdbcType=VARCHAR}
   </update>
     <delete id="deleteWarehouse" parameterType="java.util.List">

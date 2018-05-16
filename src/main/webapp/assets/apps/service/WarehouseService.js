@@ -12,7 +12,8 @@ angular.module('MetronicApp').factory('WarehouseService', ['$rootScope', '$http'
         uploadExcel:uploadExcel,
         saveWarehousePosition:saveWarehousePosition,
         saveAllWarehousePosition:saveAllWarehousePosition,
-        deleteWarehousePosition:deleteWarehousePosition
+        deleteWarehousePosition:deleteWarehousePosition,
+        initAllWmsWarehouse:initAllWmsWarehouse,
     };
 
     return factory;
@@ -150,6 +151,18 @@ debugger;
                 deferred.reject(err);//请求失败
             });
             return deferred.promise;//返回承诺
-	}
-
+	};
+	 /**
+		 * 所有wms仓库数据
+		 */
+	 function  initAllWmsWarehouse(){//所有wms仓库数据
+		  var deferred = $q.defer();
+			$http.get("rest/warehouse/initAllWmsWarehouse")
+			.then(function success(result) {
+				deferred.resolve(result);//请求成功
+			}, function error(err) {
+				deferred.reject(err);//请求失败
+			});
+			return deferred.promise;//返回承诺  
+	  }
 }]);

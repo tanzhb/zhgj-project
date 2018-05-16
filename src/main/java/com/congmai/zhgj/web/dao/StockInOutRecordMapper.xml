@@ -32,6 +32,8 @@
     <result column="transport" property="transport" jdbcType="VARCHAR" />
     <result column="transportType" property="transportType" jdbcType="VARCHAR" />
      <result column="realCount" property="realCount" jdbcType="VARCHAR" />
+     <result column="wmsDeliveryId" property="wmsDeliveryId" jdbcType="VARCHAR" />
+     
   </resultMap>
   <!-- 入库查询 -->
   <resultMap id="BaseResultMap2" type="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -65,6 +67,7 @@
     <result column="transport" property="transport" jdbcType="VARCHAR" />
     <result column="transportType" property="transportType" jdbcType="VARCHAR" />
      <result column="realCount" property="realCount" jdbcType="VARCHAR" />
+     <result column="wmsDeliveryId" property="wmsDeliveryId" jdbcType="VARCHAR" />
     
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.TakeDeliveryMapper.selectByTakeDeliveryPrimaryKeyForStockIn"></association>
@@ -104,6 +107,8 @@
     <result column="transport" property="transport" jdbcType="VARCHAR" />
     <result column="transportType" property="transportType" jdbcType="VARCHAR" />
      <result column="realCount" property="realCount" jdbcType="VARCHAR" />
+     <result column="wmsDeliveryId" property="wmsDeliveryId" jdbcType="VARCHAR" />
+     
     <association column="shipperOrReceiver" property="shipperOrReceiverName" select="com.congmai.zhgj.web.dao.CompanyMapper.selectComNameByPrimaryKey"  />
     <association property="delivery" column="deliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.selectByDeliveryPrimaryKey"></association>
   	<association property="warehouseCount" column="takeDeliverSerial" select="com.congmai.zhgj.web.dao.Delivery2Mapper.countWarehouseByDeliverSerial" ></association>
@@ -171,7 +176,7 @@
    	 serialNum, deliverSerial, takeDeliverSerial, docNum, inOutNum, stockDate, operator, 
     contactNum, status, remark, delFlg, creator, createTime, updater, updateTime, inOutType, 
     shipperOrReceiver, inOutFlag, packageType, packageSpecifications, packageCount,materielCount,
-    transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark,realCount
+    transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark,realCount,wmsDeliveryId
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.congmai.zhgj.web.model.StockInOutRecordExample" >
     select
@@ -223,7 +228,7 @@
       createTime, updater, updateTime, 
       inOutType, shipperOrReceiver, inOutFlag, 
       packageType, packageSpecifications, packageCount,materielCount,
-      transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark,realCount
+      transportType,transport,shipNumber,transportContact,transportContactNum,transportRemark,realCount,wmsDeliveryId
       )
     values (#{serialNum,jdbcType=VARCHAR}, #{deliverSerial,jdbcType=VARCHAR}, #{takeDeliverSerial,jdbcType=VARCHAR}, 
       #{docNum,jdbcType=VARCHAR}, #{inOutNum,jdbcType=VARCHAR}, #{stockDate,jdbcType=TIMESTAMP}, 
@@ -234,7 +239,7 @@
        #{packageCount,jdbcType=VARCHAR},#{materielCount,jdbcType=VARCHAR},
        #{transportType,jdbcType=VARCHAR},#{transport,jdbcType=VARCHAR},
        #{shipNumber,jdbcType=VARCHAR},#{transportContact,jdbcType=VARCHAR},
-       #{transportContactNum,jdbcType=VARCHAR},#{transportRemark,jdbcType=VARCHAR},#{realCount,jdbcType=VARCHAR}
+       #{transportContactNum,jdbcType=VARCHAR},#{transportRemark,jdbcType=VARCHAR},#{realCount,jdbcType=VARCHAR},#{wmsDeliveryId,jdbcType=VARCHAR}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.congmai.zhgj.web.model.StockInOutRecord" >
@@ -409,7 +414,7 @@
       </if>
       <if test="transportContactNum != null" >
         #{transportContactNum,jdbcType=VARCHAR},
-      </if>realCount
+      </if>
       <if test="transportRemark != null" >
         #{transportRemark,jdbcType=VARCHAR},
       </if>

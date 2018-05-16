@@ -273,6 +273,48 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 			       		return 0;
 			       	}
 		       };
+		       
+		       /**
+		         * 从WMS获取入库信息后，赋值，确认入库
+		         */   
+		    $scope.getWmsStockIn = function(){
+		    	handle.blockUI();
+		    	var promise = takeDeliveryService.getWmsStockIn($scope.record.wmsDeliveryId);
+				promise.then(function(data) {
+					debugger
+					handle.unblockUI();
+					var data = JSON.parse((data.data.data));
+					if(!isNull(data)&&data.flag=="1"){
+						var products = data.products
+						$scope.record.stockDate = $filter('date')(products[0].createTime, 'yyyy-MM-dd HH:mm');
+						for(var i=1;i<products.length;i++){
+							if(products[i].createTime>=$scope.record.stockDate){
+								$scope.record.stockDate = $filter('date')(products[i].createTime, 'yyyy-MM-dd HH:mm');
+							}
+						}
+						
+						for(var j=0;j<$scope.takeDeliveryMateriels.length;j++){
+							for(var i=0;i<products.length;i++){
+								if(products[i].productId==$scope.takeDeliveryMateriels[j].orderMateriel.materiel.wmsMaterielId){
+									$scope.takeDeliveryMateriels[j].stockInCount = products[i].storageCount;
+									products.splice(i,1);
+								}
+							}
+						}
+						
+						$scope.saveStockIn();
+					}else{
+						toastr.warning("wms未完成入库！");
+					}
+					
+					
+				
+				}, function(data) {
+					// 调用承诺接口reject();
+					handle.unblockUI();
+					toastr.error("同步wms入库失败！请联系管理员");
+				});
+		    }
 	        /**
 	         * 确认入库
 	         */

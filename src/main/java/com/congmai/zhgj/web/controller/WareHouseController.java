@@ -11,11 +11,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.activiti.engine.impl.cmd.GetNextIdBlockCmd;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.alibaba.fastjson.JSON;
 import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.core.util.ExcelReader;
+import com.congmai.zhgj.core.util.HttpClientUtil;
 import com.congmai.zhgj.core.util.StringUtil;
 import com.congmai.zhgj.core.util.UserUtil;
 import com.congmai.zhgj.core.util.ExcelReader.RowHandler;
@@ -39,9 +40,6 @@ import com.congmai.zhgj.core.util.ExcelUtil;
 import com.congmai.zhgj.web.enums.StaticConst;
 import com.congmai.zhgj.web.model.Company;
 import com.congmai.zhgj.web.model.JsonTreeData;
-import com.congmai.zhgj.web.model.LadderPrice;
-import com.congmai.zhgj.web.model.OrderMateriel;
-import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.WarehouseExample;
@@ -63,8 +61,10 @@ import com.congmai.zhgj.web.service.WarehousepositionService;
  */
 @Controller
 @RequestMapping(value = "/warehouse")
+@PropertySource("classpath:/wmsAPI.properties")
 public class WareHouseController {
-
+	@Autowired
+	Environment env;
     @Resource
     private WarehouseService  warehouseService;
     @Resource
@@ -169,6 +169,19 @@ public class WareHouseController {
 		}
 		return new ResponseEntity<Map>(pageMap, HttpStatus.OK);
 	}
+    
+    
+    /**
+     * @Description (获取WMS仓库列表)
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/initAllWmsWarehouse", method = RequestMethod.GET)
+    public ResponseEntity<String> initAllWmsWarehouse(HttpServletRequest request) {
+    	String data = HttpClientUtil.sendHttpGet(env.getProperty("getStoreList"));
+		return new ResponseEntity<String>(data,HttpStatus.OK);
+	}
+    
     /**
      * @Description (查看)
      * @param request

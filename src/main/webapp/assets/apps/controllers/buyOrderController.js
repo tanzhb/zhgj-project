@@ -469,7 +469,9 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
   		if(!isNull(type)){
   			$('#editSupplyComIdModal').modal('hide');// 删除成功后关闭模态框
   			$scope.buyOrder.deleteMaterielFlag = type
-  			$scope.orderMateriel = [];
+  			if(type==1){
+  				$scope.orderMateriel = [];
+  			}
   		}
 	  	//如果平台修改了双方已确认的订单，需重新提交
 			if(!isNull($scope.buyOrder.serialNum)&&$scope.buyOrder.status =='1'){
