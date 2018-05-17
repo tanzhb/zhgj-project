@@ -267,25 +267,25 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='procurementPlan({tabHref:1})'>" +//tabHref:1将tab指向“待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
-					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				}
 				if(workflowType == 'buyPrice'){
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='priceList({tabHref:1})'>" +//tabHref:1将tab指向“采购价格待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
-					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				}
 				if(workflowType == 'salePrice'){
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='priceList({tabHref:2})'>" +//tabHref:1将tab指向“销售价格待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
-					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				}
 				if(workflowType == 'outInvoice'){
 					map['template'] = "<li style='background-color:#fff'><div class='col-md-7'>" +
 					"<a ui-sref='invoice({tabHref:2})'>" +//tabHref:1将tab指向“销售价格待办列表”
 							"<span>"+workflowName+"："+title+"</span></a></div>" +
-					"<div class='col-md-5'><div class='date'>" + timeStamp2String(creatTime) + "</div></div></li>";
+					"<div class='col-md-5'><div class='date'>" + timeStamp2String(endTime) + "</div></div></li>";
 				}
 				list.push(map);
 			}

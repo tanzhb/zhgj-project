@@ -5442,7 +5442,17 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 					}else{
 						
 						if(deliveryTable.row('.active').data().status == '0'){
+							var  deliverType=deliveryTable.row('.active').data().deliverType;
+			    			 if(deliverType!='贸易发货'&&deliverType!='采购发货'){////如果是贸易发货类型/采购发货类型不需要审批
+					    		   showToastr('toast-top-center', 'warning', '该发货计划未进行流程审批！');
+					    		   return;
+					    	 }else{
+					    		 $state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
+					    	 }
+							
+						}else if(deliveryTable.row('.active').data().status == '11'){
 							$state.go('viewDelivery',{serialNum:deliveryTable.row('.active').data().serialNum,oprateType:"forSaleOrder"});
+							
 						}else showToastr('toast-top-center', 'warning', '未处于待发货')
 					} 
 				};

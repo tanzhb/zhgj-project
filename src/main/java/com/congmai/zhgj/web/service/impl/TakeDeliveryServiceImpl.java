@@ -10,10 +10,15 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.activiti.engine.RuntimeService;
+import org.activiti.engine.TaskService;
 import org.activiti.engine.impl.cmd.GetSubTasksCmd;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.beans.BeanCopier;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -35,6 +40,7 @@ import com.congmai.zhgj.web.dao.DeliveryTransportMapper;
 import com.congmai.zhgj.web.dao.MaterielMapper;
 import com.congmai.zhgj.web.dao.OrderInfoMapper;
 import com.congmai.zhgj.web.dao.OrderMaterielMapper;
+import com.congmai.zhgj.web.dao.RelationFileMapper;
 import com.congmai.zhgj.web.dao.StockInBatchMapper;
 import com.congmai.zhgj.web.dao.StockInOutCheckMapper;
 import com.congmai.zhgj.web.dao.StockInOutRecordMapper;
@@ -75,25 +81,39 @@ import com.congmai.zhgj.web.model.TakeDeliverySelectExample;
 import com.congmai.zhgj.web.model.Warehouse;
 import com.congmai.zhgj.web.model.TakeDeliverySelectExample.Criteria;
 import com.congmai.zhgj.web.model.TakeDeliveryVO;
+import com.congmai.zhgj.web.service.ClauseDeliveryService;
+import com.congmai.zhgj.web.service.CompanyAddressService;
 import com.congmai.zhgj.web.service.CompanyContactService;
+import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.ContractService;
+import com.congmai.zhgj.web.service.DeliverFileService;
 import com.congmai.zhgj.web.service.DeliveryService;
+import com.congmai.zhgj.web.service.IProcessService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderMaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.StockInBatchService;
+import com.congmai.zhgj.web.service.StockInOutCheckService;
 import com.congmai.zhgj.web.service.TakeDeliveryService;
+import com.congmai.zhgj.web.service.UserCompanyService;
+import com.congmai.zhgj.web.service.WarehouseService;
 import com.congmai.zhgj.wms.model.ArriveBill;
 import com.congmai.zhgj.wms.model.ArriveData;
 import com.congmai.zhgj.wms.model.Product;
 import com.congmai.zhgj.wms.model.Supplier;
 import com.congmai.zhgj.wms.model.Unit;
 import com.congmai.zhgj.wms.model.WmsReturn;
+import com.congmai.zhgj.wms.model.WmsReturnData;
 
 @Service
+@PropertySource("classpath:/wmsAPI.properties")
 public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,String>
 		implements TakeDeliveryService {
 
+	@Autowired
+	Environment env;
+	
 	@Resource
 	private TakeDeliveryMapper takeDeliveryMapper;
 	
@@ -145,8 +165,18 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 	private ContractService contractService;
 	@Resource
 	private CompanyContactService companyContactService;
+
+	/**
+	 * 仓库service
+	 */
+	@Resource
+    private WarehouseService  warehouseService;
 	
+	@Resource
+	private CompanyService  companyservice;
 	
+	@Resource
+	private MaterielService materielService;
 	@Override
 	public GenericDao<TakeDelivery, String> getDao() {
 	
@@ -384,8 +414,8 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 					//生成入库单
 					StockInOutRecord stockInOutRecord=new StockInOutRecord();
 					
-					//为wms生成到货通知
-					//TODO
+					//为wms生成到货通知,并设置返回的id
+					stockInOutRecord.setWmsDeliveryId(createWmsArriveBill(delivery,takeDelivery));
 			    	
 					
 					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
@@ -1175,7 +1205,182 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		
 	}
 
+	/**
+	 * 
+	 * @Description (生成wms到货单，并返回数据记录id)
+	 * @param delivery
+	 * @param deliveryMateriels1
+	 * @param takeDelivery
+	 * @return
+	 */
+	private String createWmsArriveBill(Delivery delivery,TakeDelivery takeDelivery) {
+		try {
+			if(StringUtil.isNotEmpty(takeDelivery.getWarehouseSerial())){//判断收货仓库是否是WMS仓库
+				Warehouse w =warehouseService.selectOne(takeDelivery.getWarehouseSerial());
+				if(w!=null&&StringUtil.isNotEmpty(w.getWmsWarehouseId())){
+					
+					List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
+					deliveryMateriels1= deliveryService.selectListForDetail(delivery.getSerialNum());
+					if(deliveryMateriels1!=null&&deliveryMateriels1.size()>0){
+						String materielNum=deliveryMateriels1.get(0).getMaterielNum();
+						if(StringUtils.isEmpty(materielNum)){
+						deliveryMateriels1 = deliveryService.selectListForDetail2(delivery.getSerialNum());	
+						}	
+					}
+					
+					ArriveBill arriveBill = new ArriveBill();
+					
+					arriveBill.setStorageType(env.getProperty("storageType"));//设置入库方式
+					arriveBill.setArriveWarehouse(w.getWmsWarehouseId());//设置 仓库
+					
+					//设置 供应商
+					Company com = companyservice.selectById(delivery.getSupplyComId());
+					if(StringUtil.isNotEmpty(com.getWmsComId())){//已关联供应商
+						arriveBill.setSupplierManage(com.getWmsComId());
+					}else {//未关联供应商
+						//为wms生成供应商
+						Supplier supplier = new Supplier();
+						supplier.setEnterpriseName(com.getComName());// 供应商名称 
+						supplier.setEnterpriseShortname(com.getAbbreviation());// 供应商简称
+						supplier.setIsForbit(Integer.parseInt(env.getProperty("isForbit")));
+						
+						String data = HttpClientUtil.sendHttpPost(env.getProperty("addSupplier"),JSON.toJSONString(supplier));
+						
+						if (StringUtil.isNotEmpty(data)) {//获取返回的供应商id
+							WmsReturn wmsReturn = JSON.parseObject(data,WmsReturn.class); 
+							WmsReturnData wmsReturnData = JSON.parseObject(wmsReturn.getData(),WmsReturnData.class); 
+							if("1".equals(wmsReturnData.getFlag())){
+								arriveBill.setSupplierManage(wmsReturnData.getId());
+								
+								//更新中航供应商绑定wms供应商
+								Company updateCompany = new Company();
+								updateCompany.setWmsComId(wmsReturnData.getId());
+								updateCompany.setComId(delivery.getSupplyComId());
+								companyservice.update(updateCompany);
+							}
+						}
+					}
 	
+					arriveBill.setShipDate(delivery.getDeliverDate());// 发货日期
+					arriveBill.setState(env.getProperty("arriveState"));// 到货状态
+					
+					//设置到货物料
+					List<ArriveData> goodsList = new ArrayList<ArriveData>();
+					
+					List<Unit> unitList = new ArrayList<Unit>();
+				  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){//循环发货物料构造数据生成wms到货计划物料
+					  ArriveData arriveData = new ArriveData();	
+					  
+					  Materiel materiel = materielService.getMaterielInfoByMaterielSerial(deliveryMateriel.getMaterielSerial());
+					  
+					  arriveData.setProductFlag("0");
+					  arriveData.setArriveCount(Float.parseFloat(deliveryMateriel.getDeliverCount()));
+					  if(StringUtil.isNotEmpty(materiel.getWmsMaterielId())){
+						  arriveData.setProductId(materiel.getWmsMaterielId());
+						  Product product= new Product();
+						  product.setId(materiel.getWmsMaterielId());
+						  arriveData.setProduct(product);
+					  }else{
+						//为wms生成产品
+						  	Product product= new Product();
+						  	product.setProductchname(materiel.getMaterielName());// 产品名称
+						  	product.setTypeid(env.getProperty("productTypeId"));// 分类，写死，默认
+						  	product.setState(env.getProperty("productState"));//  状态，默认
+						  	
+						  	//默认未找到单位id
+							String matchFlag = "0";
+						  	if(StringUtil.isNotEmpty(materiel.getUnit())){
+						  		if(unitList.size()>0){
+									for (Unit unit : unitList){
+										if(materiel.getUnit().equals(unit.getUnitname())){
+											product.setUnitid(unit.getId());// 单位id
+											matchFlag = "1";
+										}
+									}
+							  	}else{
+							  	//获取单位id
+								  	String unitData = HttpClientUtil.sendHttpGet(env.getProperty("getUnitList"));
+								  	if (StringUtil.isNotEmpty(unitData)) {//获取返回的产品id
+										WmsReturn wmsReturn = JSON.parseObject(unitData,WmsReturn.class); 
+										WmsReturnData wmsReturnData = JSON.parseObject(wmsReturn.getData(),WmsReturnData.class); 
+										if(Integer.parseInt(wmsReturnData.getTotal())>0){
+											List<String> unitStringList = wmsReturnData.getItems();
+											if (!CollectionUtils.isEmpty(unitStringList)) {
+												for (String string : unitStringList) {
+													Unit unit = JSON.parseObject(string,Unit.class);
+													if(materiel.getUnit().equals(unit.getUnitname())){
+														product.setUnitid(unit.getId());// 单位id
+														matchFlag = "1";
+													}
+													unitList.add(unit);
+												}
+											}
+										}
+									}
+								  	
+							  	}
+						  		if (matchFlag=="0") {//未找到对应id，需向WMS中新增单位
+									Unit unit = new Unit();
+									unit.setUnitname(materiel.getUnit());
+									unit.setIsforbit(Integer.parseInt(env.getProperty("isForbit")));
+									
+									String data = HttpClientUtil.sendHttpPost(env.getProperty("addUnit"),JSON.toJSONString(unit));
+									
+									if (StringUtil.isNotEmpty(data)) {//获取返回的产品id
+										WmsReturn wmsReturn2 = JSON.parseObject(data,WmsReturn.class); 
+										WmsReturnData wmsReturnData2 = JSON.parseObject(wmsReturn2.getData(),WmsReturnData.class);
+										if("1".equals(wmsReturnData2.getFlag())){
+											product.setUnitid(wmsReturnData2.getId());
+											unit.setId(wmsReturnData2.getId());
+											unitList.add(unit);
+										}
+									}
+								}
+						  	}
+						  	
+							
+							String data = HttpClientUtil.sendHttpPost(env.getProperty("addProduct"),JSON.toJSONString(product));
+							
+							if (StringUtil.isNotEmpty(data)) {//获取返回的产品id
+								WmsReturn wmsReturn = JSON.parseObject(data,WmsReturn.class); 
+								WmsReturnData wmsReturnData = JSON.parseObject(wmsReturn.getData(),WmsReturnData.class); 
+								if("1".equals(wmsReturnData.getFlag())){
+									arriveData.setProductId(wmsReturnData.getId());
+									  Product product2= new Product();
+									  product2.setId(wmsReturnData.getId());
+									  arriveData.setProduct(product2);
+									//更新中航物料绑定wms产品
+									Materiel updateMateriel = new Materiel();
+									updateMateriel.setWmsMaterielId(wmsReturnData.getId());
+									updateMateriel.setSerialNum(deliveryMateriel.getMaterielSerial());
+									materielService.update(updateMateriel);
+								}
+							}
+					  }
+					  goodsList.add(arriveData);
+					}
+					  
+				  	arriveBill.setGoodsList(goodsList);  
+					
+					//新增wms到货通知
+					String data = HttpClientUtil.sendHttpPost(env.getProperty("addArrive"),JSON.toJSONString(arriveBill));
+					if (StringUtil.isNotEmpty(data)) {//获取返回的到货通知id
+						WmsReturn wmsReturn = JSON.parseObject(data,WmsReturn.class); 
+						WmsReturnData wmsReturnData = JSON.parseObject(wmsReturn.getData(),WmsReturnData.class);
+						if("1".equals(wmsReturnData.getFlag())){
+							return wmsReturnData.getId();
+							
+						}
+					}
+	
+				}
+			}
+			
+		} catch (Exception e) {
+			return null;
+		}
+		return null;
+	}
 
 
 	

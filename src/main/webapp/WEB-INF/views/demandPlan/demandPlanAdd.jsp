@@ -271,15 +271,16 @@
                                                    	 	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.amount}}</label>
                                                     </td>
                                                     <td>
-	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" input-medium class="input-group date date-picker"
-															 data-date-format="yyyy-mm-dd"
-															data-date-viewmode="years">
-															<input type="text" class="form-control" style="min-width: 110px;" readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"   
+	                                                    <div  ng-hide="demandPlanMaterielEdit{{$index}}" >
+															<!-- <input type="text" class="form-control"  readonly="" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"   
 																ng-change="setAllDeliveryDate(materiel ,$index)"  > <span class="input-group-btn">
 																<button class="btn default " type="button">
 																	<i class="fa fa-calendar"></i>
 																</button>
-															</span>
+															</span> -->
+															<input class="form-control form-control-inline input-medium date-picker" data-date-format="yyyy-mm-dd"
+															data-date-viewmode="years" size="16" type="text" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"   
+																ng-change="setAllDeliveryDate(materiel ,$index)" repeat-done="renderdataDone()">
 														</div>
 														<span class="help-block"></span>
 														<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryDate}}</label>
@@ -294,20 +295,20 @@
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td> -->
                                                     <td>
-	                                                    <select   ng-if="$first&&(companyAddresses!=null||companyAddresses.length!=0)"  ng-hide="demandPlanMaterielEdit{{$index}}"  id="deliveryAddress{{$index}}"   class="form-control"   ng-change="setAllDeliveryAddress(materiel ,$index)" ng-model="materiel.deliveryAddress" >
+	                                                    <select   ng-if="$first&&haveCompanyAddresses!=0"  ng-hide="demandPlanMaterielEdit{{$index}}"  id="deliveryAddress{{$index}}"   class="form-control"   ng-change="setAllDeliveryAddress(materiel ,$index)" ng-model="materiel.deliveryAddress" >
 	                                                    	<option ng-repeat="m in companyAddresses" value="{{m.address}}"  >
 	                                                    		{{m.address}}
 	                                                    	</option>
 	                                                    </select>
-	                                                    <select   ng-if="!$first&&(companyAddresses!=null||companyAddresses.length!=0)"  ng-hide="demandPlanMaterielEdit{{$index}}"  id="deliveryAddress{{$index}}"   class="form-control"   ng-change="setAllDeliveryAddress(materiel ,$index)" ng-model="materiel.deliveryAddress" >
+	                                                    <select  ng-if="!$first&&haveCompanyAddresses!=0"  ng-hide="demandPlanMaterielEdit{{$index}}"  id="deliveryAddress{{$index}}"   class="form-control"  ng-model="materiel.deliveryAddress" >
 	                                                    	<option ng-repeat="m in companyAddresses" value="{{m.address}}"  >
 	                                                    		{{m.address}}
 	                                                    	</option>
 	                                                    </select>
 	                                                    <input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value=""
-                                                    	ng-if="$first&&(companyAddresses==null||companyAddresses.length==0)"    ng-change="setAllDeliveryAddress(materiel ,$index)" >
+                                                    	ng-if="$first&&haveCompanyAddresses==0"    ng-change="setAllDeliveryAddress(materiel ,$index)" >
                                                     	<input  ng-hide="demandPlanMaterielEdit{{$index}}" id="deliveryAddress{{$index}}" type="text" class="form-control" ng-model="materiel.deliveryAddress" value=""
-                                                    	ng-if="!$first&&(companyAddresses==null||companyAddresses.length==0)"   >
+                                                    	ng-if="!$first&&haveCompanyAddresses==0"   >
 	                                                   <span class="help-block"></span>
                                                     	<label   ng-show="demandPlanMaterielView{{$index}}"  >{{materiel.deliveryAddress}}</label>
                                                     </td>

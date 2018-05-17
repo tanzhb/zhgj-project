@@ -52,6 +52,7 @@ import com.congmai.zhgj.web.model.DataTablesParams;
 import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
+import com.congmai.zhgj.web.model.OrderMateriel;
 import com.congmai.zhgj.web.model.Search;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
@@ -139,15 +140,25 @@ public class MaterielController {
     public Map saveBOM(@RequestBody String params) {
     	params = params.replace("\\", "");
 		ObjectMapper objectMapper = new ObjectMapper();  
-        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, BOMMateriel.class);  
+//        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(List.class, BOMMateriel.class);  
         List<BOMMateriel> BOM;
 		try {
-			BOM = objectMapper.readValue(params, javaType);
+			BOM = JSON.parseArray(params, BOMMateriel.class);
+//			objectMapper.readValue(params, javaType);
 			Materiel materiel = null;
 	    	if(!CollectionUtils.isEmpty(BOM)){
 	    		materiel = materielService.selectById(BOM.get(0).getBomMaterielSerial());
 	    		if(materiel!=null){
-		    		createNewVersion(materiel);
+//		    		createNewVersion(materiel);
+	    			materiel.setSerialNum(ApplicationUtils.random32UUID());
+	    			Subject currentUser = SecurityUtils.getSubject();
+	    			String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+	    			materiel.setCreator(currenLoginName);
+	    			materiel.setUpdater(currenLoginName);
+	    			materiel.setCreateTime(new Date());
+	    			materiel.setUpdateTime(new Date());
+	    			materiel.setIsLatestVersion("1");
+	    			materiel.setStatus("1");
 		    	}
 	    		//生成新版本物料******↑↑↑↑↑↑********
 	    		Subject currentUser = SecurityUtils.getSubject();

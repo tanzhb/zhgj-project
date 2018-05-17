@@ -1134,12 +1134,13 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	    		materielService.saveBOM($scope.BOM).then(
     	       		     function(data){
     	       		    	toastr.success('数据保存成功！');
-    	       		    	$scope.materiel = data.materiel;
-    	       		    	if(!isNull(data.BOM)){
-    	 	        			$scope.BOM = data.BOM;
-    	 	        			_index = $scope.BOM.length-1;
-    	 	        		}
-    	       		    	$scope.cancelBOM();
+    	       		    	$location.search({serialNum:data.materiel.serialNum,view:1});
+//    	       		    	$scope.materiel = data.materiel;
+//    	       		    	if(!isNull(data.BOM)){
+//    	 	        			$scope.BOM = data.BOM;
+//    	 	        			_index = $scope.BOM.length-1;
+//    	 	        		}
+//    	       		    	$scope.cancelBOM();
     	       		    	
     	       		     },
     	       		     function(error){
@@ -1170,9 +1171,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	    	if($scope.materiel.serialNum==null||$scope.materiel.serialNum=='') {
     	    		toastr.error('请先保存基本信息！');return
     			}else{
-    		    	   _index++;
     		    	   $scope.BOM[_index] = {};
     		    	   $scope.BOM[_index].materiel = {}
+    		    	   _index++;
     		       }
     	    };
     	    

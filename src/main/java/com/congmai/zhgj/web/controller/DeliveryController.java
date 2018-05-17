@@ -2208,22 +2208,22 @@ public class DeliveryController {
 		Boolean  isDel=false;//是否删除当前发货单
 		 Boolean flag=false;//还可以发
 		DeliveryVO delivery=deliveryService.selectDetailById(serialNum);
-		String orderSerial=delivery.getOrderSerial();
-		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
-		OrderInfo o=orderService.selectById(orderSerial);
-		String  deliveryCount=o.getDeliveryCount();//订单已发数量
-		String  materielCount=o.getMaterielCount();//订单总数量
-		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
-		  BigDecimal materielCount1=new BigDecimal(materielCount);
-		  if(deliveryCount1.compareTo(materielCount1)>=0){
-			  flag=true;
-			  isDel=true;//提示删除当前发货单
-			  map.put("isDel", isDel);
-			  map.put("flag", flag);
-			  return map;
-		  }else{
-			  map.put("isDel", isDel);
-		  }
+//		String orderSerial=delivery.getOrderSerial();
+//		List<DeliveryMaterielVO> orderMateriels = deliveryService.selectList(orderSerial);//取最新的数据判断
+//		OrderInfo o=orderService.selectById(orderSerial);
+//		String  deliveryCount=o.getDeliveryCount();//订单已发数量
+//		String  materielCount=o.getMaterielCount();//订单总数量
+//		  BigDecimal deliveryCount1=new BigDecimal(deliveryCount);
+//		  BigDecimal materielCount1=new BigDecimal(materielCount);
+//		  if(deliveryCount1.compareTo(materielCount1)>=0){
+//			  flag=true;
+//			  isDel=true;//提示删除当前发货单
+//			  map.put("isDel", isDel);
+//			  map.put("flag", flag);
+//			  return map;
+//		  }else{
+//			  map.put("isDel", isDel);
+//		  }
 		 
 		List<DeliveryMaterielVO> deliveryMateriels1=null;//查出当前发货信息
 		deliveryMateriels1= deliveryService.selectListForDetail(serialNum);
@@ -2233,19 +2233,19 @@ public class DeliveryController {
 			deliveryMateriels1 = deliveryService.selectListForDetail2(serialNum);	
 			}	
 		}
-		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
-			  for(DeliveryMaterielVO vo:orderMateriels){
-				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
-					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
-					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
-					  if(deliverCount.compareTo(canDeliverCount)>0){
-						  flag=true;
-						  map.put("flag", flag);
-						  return map;
-					  }
-				  }
-			  }
-		  }
+//		  for(DeliveryMaterielVO deliveryMateriel: deliveryMateriels1){
+//			  for(DeliveryMaterielVO vo:orderMateriels){
+//				  if(deliveryMateriel.getOrderMaterielSerialNum().equals(vo.getOrderMaterielSerialNum())){//两个订单物料流水相同时
+//					  BigDecimal deliverCount=new BigDecimal(deliveryMateriel.getDeliverCount());
+//					  BigDecimal canDeliverCount=new BigDecimal(vo.getAmount()).subtract(new BigDecimal(vo.getDeliveredCount()==null?"0":vo.getDeliveredCount()));//可发数量=物料数量-已发数量
+//					  if(deliverCount.compareTo(canDeliverCount)>0){
+//						  flag=true;
+//						  map.put("flag", flag);
+//						  return map;
+//					  }
+//				  }
+//			  }
+//		  }
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
 
@@ -2257,113 +2257,53 @@ public class DeliveryController {
 		takeDelivery = takeDeliveryMapper.selectTakeDeliveryByDeliveryId(serialNum);
 		
 		
-		map.put("orderSerial", orderSerial);
-		map.put("orderInfo", o);
-		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
-		deliveryService.updateOrderWhenDeliveryComlete(map);
-		map.put("createQG", createQG);
-		deliveryService.goDelivery(map);//外贸供应商发货
-		if(!createQG){//不产生清关单(供应商发货/平台发货)
-			OrderInfo orderInfo=new OrderInfo();
-			orderInfo.setSerialNum(orderSerial);
-			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
+//		map.put("orderSerial", orderSerial);
+//		map.put("orderInfo", o);
+//		Boolean createQG=StaticConst.getInfo("waimao").equals(o.getTradeType())&&!StringUtils.isEmpty(o.getSupplyComId());//供应商发货/平台发货是否产生清关单
+//		deliveryService.updateOrderWhenDeliveryComlete(map);
+//		map.put("createQG", createQG);
+//		deliveryService.goDelivery(map);//外贸供应商发货
+//		if(!createQG){//不产生清关单(供应商发货/平台发货)
+//			OrderInfo orderInfo=new OrderInfo();
+//			orderInfo.setSerialNum(orderSerial);
+//			orderInfo.setDeliverStatus(OrderInfo.DELIVER);
 			//设置订单发货数量，用于更新
-			orderInfo.setDeliveryCount(o.getDeliveryCount());
-			List<DeliveryMaterielVO> deliveryMateriels=null;
-			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
-			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
-				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
-					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
-				}
-			}
+//			orderInfo.setDeliveryCount(o.getDeliveryCount());
+//			List<DeliveryMaterielVO> deliveryMateriels=null;
+//			deliveryMateriels = deliveryService.selectListForDetail(delivery.getSerialNum());
+//			if(deliveryMateriels!=null&&deliveryMateriels.size()>0){
+//				for(DeliveryMaterielVO deliveryMaterielVO:deliveryMateriels){
+//					orderInfo.setDeliveryCount(StringUtil.sum(orderInfo.getDeliveryCount(),deliveryMaterielVO.getDeliverCount()));
+//				}
+//			}
 			
 			Delivery delivery1=new  Delivery();
 			delivery1.setSerialNum(delivery.getSerialNum());
 			delivery1.setStatus(DeliveryVO.COMPLETE);
-			if("1".equals(o.getContractContent().substring(4, 5))){//有验收条款
-					if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生检验单
-						//平台发货-->  需要检验 --> 生成出库检验单
-						StockInOutCheck stockInOutCheck=new StockInOutCheck();
-						stockInOutCheck.setSerialNum(ApplicationUtils.random32UUID());
-						stockInOutCheck.setDeliverSerial(serialNum);
-						stockInOutCheck.setCheckNum(orderService.getNumCode("QU"));
-						stockInOutCheck.setTakeDeliverSerial("checkout");
-						stockInOutCheck.setChecker(currenLoginName);
-						stockInOutCheck.setCreator(currenLoginName);
-						stockInOutCheck.setCreateTime(new Date());
-						stockInOutCheck.setUpdater(currenLoginName);
-						stockInOutCheck.setUpdateTime(new Date());
-						stockInOutCheck.setStatus("0");//待检验
-						stockInOutCheck.setCheckDate(new Date());
-						stockInOutCheck.setDelFlg("0");
-						stockInOutCheckService.insert(stockInOutCheck);
-						//更新订单状态至出库待检验
-						orderInfo.setDeliverStatus(orderInfo.WAIT_OUT_CHECK);
-						delivery1.setStatus(DeliveryVO.WAIT_CHECK);
-						takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE);
-						//出库检验通知仓储人员/采购
-				    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutCheck,MessageConstants.IN_TO_WAITCHECK));
-					}else{
-						//供应商发货--> 不走清关 --> 不需收货 --> 需要检验 --> 生成入库检验单
-						
-						if(takeDelivery!=null){
-							takeDelivery.setStatus(TakeDelivery.APPLY_COMPLETE); //待检验
-							this.createStockInCheckRecord(takeDelivery,currenLoginName);
-							orderInfo.setDeliverStatus(orderInfo.WAIT_IN_CHECK);//已收货待检验
-							delivery1.setStatus(DeliveryVO.WAIT_CHECK);
-						}
-						
-					}
-			}else{//没有验收条款
-				if(StringUtils.isEmpty(o.getSupplyComId())){//平台发货 产生出库单
-					//平台发货-->  不需要检验 --> 生成出库单
-					
-					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);//待出库
-					StockInOutRecord stockInOutRecord=new StockInOutRecord();
-					stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
-					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
-					stockInOutRecord.setDelFlg("0");
-					stockInOutRecord.setStatus("0");
-					stockInOutRecord.setDeliverSerial(serialNum);
-					stockInOutRecord.setTakeDeliverSerial("");
-					stockInOutRecord.setCreator(currenLoginName);
-					stockInOutRecord.setCreateTime(new Date());
-					stockInOutRecord.setUpdater(currenLoginName);
-					stockInOutRecord.setUpdateTime(new Date());
-					stockInOutRecordMapper.insert(stockInOutRecord);
-					//更新订单状态至待出库
-					orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
-					delivery1.setStatus(DeliveryVO.WAITRECORD);
-					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE);
-					//出库通知消息通知仓储人员
-			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
-				}else{//供应商发货--> 不走清关 --> 不需收货 --> 不需要检验 --> 生成入库单
-					takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE); //已完成
-					orderInfo.setDeliverStatus(orderInfo.WAIT_INRECORD);//待入库
-					delivery1.setStatus(DeliveryVO.WAIT_IN_RECORD);
-					//生成入库单
-					StockInOutRecord stockInOutRecord=new StockInOutRecord();
-					stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
-					stockInOutRecord.setTakeDeliverSerial(takeDelivery.getSerialNum());
-					stockInOutRecord.setDeliverSerial("");
-					stockInOutRecord.setInOutNum(orderService.getNumCode("IN"));
-					stockInOutRecord.setDelFlg("0");
-					stockInOutRecord.setStatus("0");
-					stockInOutRecord.setCreator(currenLoginName);
-					stockInOutRecord.setCreateTime(new Date());
-					stockInOutRecord.setUpdater(currenLoginName);
-					stockInOutRecord.setUpdateTime(new Date());
-					stockInOutRecordMapper.insert(stockInOutRecord);
-					//出库通知消息通知仓储人员
-			    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
-					
-				}
-				
-			}
-			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
+			StockInOutRecord stockInOutRecord=new StockInOutRecord();
+			//为wms生成发货通知,并设置返回的id
+			stockInOutRecord.setWmsDeliveryId(createWmsDelivery(delivery, deliveryMateriels1,takeDelivery));
+			stockInOutRecord.setInOutNum(orderService.getNumCode("OU"));
+			stockInOutRecord.setSerialNum(ApplicationUtils.random32UUID());
+			stockInOutRecord.setDelFlg("0");
+			stockInOutRecord.setStatus("0");
+			stockInOutRecord.setDeliverSerial(serialNum);
+			stockInOutRecord.setTakeDeliverSerial("");
+			stockInOutRecord.setCreator(currenLoginName);
+			stockInOutRecord.setCreateTime(new Date());
+			stockInOutRecord.setUpdater(currenLoginName);
+			stockInOutRecord.setUpdateTime(new Date());
+			stockInOutRecordMapper.insert(stockInOutRecord);
+			//更新订单状态至待出库
+//			orderInfo.setDeliverStatus(orderInfo.WAIT_OUTRECORD);
+			delivery1.setStatus(DeliveryVO.WAITRECORD);
+			takeDelivery.setStatus(TakeDelivery.CHECK_COMPLETE);
+			//出库通知消息通知仓储人员
+	    	EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(stockInOutRecord,MessageConstants.IN_TO_STOCK));
+//			orderInfoMapper.updateByPrimaryKeySelective(orderInfo);//更新订单状态
 			delivery2Mapper.updateByPrimaryKeySelective(delivery1);//更新发货单状态
 			takeDeliveryMapper.updateByPrimaryKeySelective(takeDelivery);//更新收货单状态
-		}
+//		}
 		
 		//发货消息
 		EventExample.getEventPublisher().publicSendMessageEvent(new SendMessageEvent(delivery,MessageConstants.DELIVERY));

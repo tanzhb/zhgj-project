@@ -63,12 +63,14 @@ angular
 									 				$("#out").addClass("active");
 									 				$("#tab_in").removeClass("active");
 									 				$("#tab_out").addClass("active");
+									 				loadInvoiceOutTable();
 								 					$scope.toDaibanInvoice();
 								 				}else if($stateParams.tabHref == '2'){//首页待办列表传过来的参数
 								 					$("#in").removeClass("active");
 									 				$("#out").addClass("active");
 									 				$("#tab_in").removeClass("active");
 									 				$("#tab_out").addClass("active");
+									 				loadInvoiceOutTable();
 								 					$scope.toYibanInvoice();
 								 				}else if($stateParams.inOrOut=='showout'){
 								 					debugger;
@@ -167,12 +169,12 @@ angular
 							//销项票待办流程
 							$scope.toDaibanInvoice = function(judgeString) {//
 								debugger;
-								$('#invoiceOutTab a[href="#daibanBuyPrice"]').tab('show');
+								$('#invoiceOutTab a[href="#daibanOutInvoice"]').tab('show');
 								dbOutInvoicetable = showDbOutInvoiceTable();								
 							};
 							// 销项票已办流程
 							$scope.toYibanInvoice= function(judgeString) {
-								$('#invoiceOutTab a[href="#yibanBuyPrice"]').tab('show');
+								$('#invoiceOutTab a[href="#yibanOutInvoice"]').tab('show');
 								debugger;
 								endTaskOutInvoiceTable = showYbOutInvoiceTable();
 							};
@@ -462,7 +464,9 @@ angular
 											// ***************************************
 */							// 构建datatables结束***************************************
 							}
-			
+			$scope.viewGraphTrace = function(processInstanceId){
+				graphTrace(processInstanceId,ctx);
+			}
 			function loadInvoiceOutTable(){
 				var a = 0,judgeString='out';
 				tableAjaxUrl= "rest/invoice/getInvoiceList?inOrOut="+judgeString;
@@ -569,7 +573,7 @@ angular
 				                            		if(data!=""&&data!=null){
 				                            			debugger;
 				                            			if(data.status=="PENDING"||data.status=="WAITING_FOR_APPROVAL"){
-				    										return '<span  class="label label-sm label-warning">审核中</span>';
+				    										return '<span ng-click="viewGraphTrace('+row.processBase.processInstanceId+')" class="label label-sm label-warning">审核中</span>';
 				    									}else if(data.status=="APPROVAL_SUCCESS"){
 				    										if(row.status==0){
 				    											return '<span   class="label label-sm  label-warning">待开票</span>';
@@ -590,7 +594,10 @@ angular
 		    										}else{
 				                            			return '<span  class="label label-sm  label-warning">待开票</span>';//class="label label-sm label-warning"  
 				                            		}
-				                            	}
+				                            	},
+				    							"createdCell": function (td, cellData, rowData, row, col) {
+					   								 $compile(td)($scope);
+					   						       }
 				                            }
 											],
 										'aoColumnDefs' : [ {
@@ -1129,7 +1136,7 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 	$("#"+serialNum).val(billAcount);
 }
 			$scope.showOut=function(judgeString){
-				 $state.go('invoice',{inOrOut:judgeString}); //切换tab
+				 $state.go('invoice',{inOrOut:judgeString,tabHref:0}); //切换tab
 			}
 							// 添加发票开始***************************************
 			$scope.addInvoice = function(judgeString) {

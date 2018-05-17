@@ -51,10 +51,15 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 	    	
 	 });
+	 
+	 $scope.haveCompanyAddresses=0;
 	$scope.getCurrentAddress = function(){//获取采购商联系地址
 			var promise = demandPlanService.getCompanyInfo($scope.demandPlan.buyComId);
 			promise.then(function(data){
 				$scope.companyAddresses = data.data.companyAddresses;
+				if(!isNull($scope.companyAddresses)){
+					$scope.haveCompanyAddresses=1;
+				}
 				
 			},function(data){
 				//调用承诺接口reject();
@@ -80,7 +85,27 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 				   obj[attr]=null;
 			}
 	    	 
-		 }    
+		 }   
+	 
+	  /**
+       * 需求物料初始化日期控件
+       */
+	    $scope.repeatDone = function(scope){
+	    	var date1= scope.materiel.deliveryDate;
+	    	$scope.datepickerInit();
+	    	if(scope.materiel){
+	    		scope.materiel.deliveryDate = date1;
+	    	}
+	   };
+	   $scope.datepickerInit = function(scope){
+		   $('.date-picker').datepicker({
+				rtl: App.isRTL(),
+				orientation: "bottom",
+				autoclose: true,
+				dateFormat:"yyyy-mm-dd",
+				language: "zh-CN"
+	   	})
+	  };
 	 /***选择物料列表初始化START***/
      var table;
      var selectParentMateriel = function() {
@@ -895,6 +920,7 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	 		    		}
 	 	        		$scope.copyMateriels = angular.copy($scope.rootMateriels);
 	 	        		$scope.countSupplyCount();
+	 	        		$scope.getCurrentAddress();
 	 	            },function(data){
 	 	               //调用承诺接口reject();
 	 	            });
@@ -1160,12 +1186,10 @@ angular.module('MetronicApp').controller('DemandPlanController',['$rootScope','$
 	       
 
 	       
-	       /**
-	        * 需求物料初始化日期控件
-	        */
-	       $scope.repeatDone = function(){
-	    	   handle.datePickersInit("auto bottom");
-	       };
+	       
+//	       $scope.repeatDone = function(){
+//	    	   handle.datePickersInit("auto bottom");
+//	       };
 	       
 	       
 	       /**
