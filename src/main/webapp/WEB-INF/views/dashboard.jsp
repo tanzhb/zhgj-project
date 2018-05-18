@@ -49,7 +49,7 @@
 						<li><a href="#tab_1_2" data-toggle="tab" ng-click="findEndTask()"> 已办 <ybQuantity/></a></li>
 					</ul>
 				</div>
-				<div class="portlet-body" style="height:640px">
+				<div class="portlet-body" style="height:665px">
 					<!--BEGIN TABS-->
 					<div class="tab-content">
 						<div class="tab-pane active" id="tab_1_1">
@@ -74,9 +74,13 @@
 						<div class="tab-pane" id="tab_1_2">
 							<div class="scroller" style="height: 620px;" data-always-visible="1" data-rail-visible="0">
 								<ul class="feeds">									
-									 <div ng-repeat="ybItem in ybItems">
-								         <div compile="ybItem.template"></div>         
-								     </div>							
+									 <div ng-repeat="ybItem in ybItems  track by $index">
+								         <div ng-if="displayYbItemCount>$index" compile="ybItem.template"></div>         
+								     </div>		
+								      	
+								     <div ng-if="ybItems.length>displayYbItemCount" ng-click="addDisplayYbItemCount()" style="text-align: center;margin-top: 10px;"> 
+								     	<div class="col-md-12"><a ><span>点击加载更多</span></a></div>
+								      </div>					
 								</ul>
 							</div>
 						</div>

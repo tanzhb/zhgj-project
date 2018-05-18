@@ -209,18 +209,25 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
      });
     
  
-    
+	$scope.displayYbItemCount = 10;
+	$scope.addDisplayYbItemCount  = function(){
+		$scope.displayYbItemCount = $scope.displayYbItemCount+10;
+	}
+	
     //已办列表
 	$scope.findEndTask  = function(serialNum){
-	$http.get(ctx + "/rest/processAction/endTask/" + 'All').success( function(result) {
+		$scope.displayYbItemCount = 10;
+		handle.blockUI();
+	$http.get(ctx + "/rest/processAction/endTask/" + 'All').then(function success(result) {
+		handle.unblockUI();
 		var list = [];
-		if(result != null && result.data != null && result.data.length > 0){
-			for (var i=0;i<result.data.length;i++){
+		if(result != null && result.data != null && result.data.data != null && result.data.data.length > 0){
+			for (var i=0;i<result.data.data.length;i++){
 				var map = {};
-				var title = result.data[i].title;
-				var creatTime = result.data[i].createTime;
-				var endTime = result.data[i].endTime;
-				var workflowType = result.data[i].businessType;
+				var title = result.data.data[i].title;
+				var creatTime = result.data.data[i].createTime;
+				var endTime = result.data.data[i].endTime;
+				var workflowType = result.data.data[i].businessType;
 				var workflowName = "";
 				if(workflowType == 'vacation'){
 					workflowName = "请假流程";
@@ -295,7 +302,10 @@ dashModule.controller('DashboardController', ['$rootScope', '$scope', '$state', 
 				list.push(map);
 		}
 		$scope.ybItems = list;
-     });
+     }, function error(err) {
+    	 handle.unblockUI();
+    	 toastr.error("请求出错！");
+		});
 	
 	}
 	 //公告
