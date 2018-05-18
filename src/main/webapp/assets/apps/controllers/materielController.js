@@ -134,6 +134,9 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     	
     }; 	
     
+    $scope.goBackList  = function() {//取消编辑
+    	$state.go("materiel");
+    };
     $scope.cancel  = function() {//取消编辑
     	if($scope.materiel.serialNum==null || $scope.materiel.serialNum=='') {//如果是取消新增，返回列表页面
     		$state.go("materiel");

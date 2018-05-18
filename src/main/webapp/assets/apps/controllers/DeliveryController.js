@@ -679,6 +679,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		}else{
 			    $scope.otherMode = true;
 			    $scope.delivery.orderSerial="";
+			    $scope.orderSerial="";
 		}
 		$scope.deliveryMaterielE= null;
 		$scope.materielCount=null;
@@ -1466,7 +1467,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
          */
     	$scope.addMateriel = function (type,index){
     		$("#basicMaterielInfoI").modal("show");
-    		$("#sample_22_processing").remove();
+//    		$("#sample_22_processing").remove();
 		}
     	
     	
@@ -3621,6 +3622,9 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 		       $scope.showOperation = function(type,index){
 
 		    	   if(type=='deliverFile'){
+		    		   call =  "operation_df"+index;
+		    	   }
+		    	   if(type=='file'){
 		    		   call =  "operation_f"+index;
 		    	   }
 		    	   
@@ -3633,6 +3637,9 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
 		       $scope.hideOperation = function(type,index){
 
 		    	   if(type=='deliverFile'){
+		    		   call =  "operation_df"+index;
+		    	   }
+		    	   if(type=='file'){
 		    		   call =  "operation_f"+index;
 		    	   }
 		    	   $scope[call]= false;

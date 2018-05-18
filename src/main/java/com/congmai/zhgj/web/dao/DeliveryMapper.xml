@@ -193,7 +193,7 @@
     SELECT
 	a.serialNum,a.supplyMaterielSerial,a.orderMaterielSerial,c.materielNum,c.materielName,c.specifications,c.unit,a.batchNum,a.manufactureDate,a.deliverCount,a.remark,
 	a.stockCount,a.unstockCount,d.warehouseName,e.positionName,a.stockRemark,a.qualifiedCount,a.unqualifiedCount,a.checkRemark,
-	a.acceptCount,a.refuseCount,a.takeRemark,f.status
+	a.acceptCount,a.refuseCount,a.takeRemark,f.status,c.serialNum as materielSerial
 	FROM
 	deliveryMateriel a
 	LEFT JOIN supplyMateriel g ON a.supplyMaterielSerial=g.serialNum

@@ -257,7 +257,7 @@
                                                 </tr>
                                             </tbody>
                                             <tbody>
-                                                <tr  ng-repeat="materiel in rootMateriels track by $index"  repeat-done="repeatDone()" ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
+                                                <tr  ng-repeat="materiel in rootMateriels track by $index"  ng-mouseover="showOperation('contact',$index)" ng-mouseleave="hideOperation('contact',$index)">
                                                     <td>
                                                     	<span ng-show="demandPlanMaterielView{{$index}}">{{materiel.materielNum}}</span>
                                                     	<span ng-hide="demandPlanMaterielEdit{{$index}}"><a href="javascript:;" ng-click="addMateriel('single',$index)">{{materiel.materielNum}}</a></span>
@@ -278,7 +278,7 @@
 																	<i class="fa fa-calendar"></i>
 																</button>
 															</span> -->
-															<input class="form-control form-control-inline input-medium date-picker" data-date-format="yyyy-mm-dd"
+															<input class="form-control form-control-inline input-medium date-picker" data-date-format="yyyy-mm-dd" repeat-done="repeatDone(this)"
 															data-date-viewmode="years" size="16" type="text" id="deliveryDate{{$index}}" ng-model="materiel.deliveryDate" name="deliveryDate"   
 																ng-change="setAllDeliveryDate(materiel ,$index)" repeat-done="renderdataDone()">
 														</div>

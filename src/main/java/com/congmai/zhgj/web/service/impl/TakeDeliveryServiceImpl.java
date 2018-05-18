@@ -736,79 +736,109 @@ public class TakeDeliveryServiceImpl extends GenericServiceImpl<TakeDelivery,Str
 		//clearStockOutInfoFormMateriels(old_delivery.getDeliveryMateriels());//清除之前的出入库物料信息
 		BigDecimal totalOutCount=BigDecimal.ZERO;
 		if("1".equals(record.getStatus())){
-		//自动生成报关单
-		OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
-		OrderInfo orderInfo=new OrderInfo();
-		orderInfo.setSerialNum(o.getSerialNum());
-		Delivery d=new Delivery();
-		d.setSerialNum(old_delivery.getSerialNum());
-		TakeDelivery td=new TakeDelivery();
-		td.setSerialNum(old_delivery.getTakeDeliverSerial());
-		if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
-			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
-			for(DeliveryMateriel materiel : materiels){
-				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
-				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
-				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
-				totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
-			}
-		createCustomsDeclarationForm(deliverySerial,currenLoginName);
-		//更新订单状态待报关
-		orderInfo.setDeliverStatus(orderInfo.DECLARATION);
-		d.setStatus(DeliveryVO.DECLARATION);
-		td.setStatus(TakeDelivery.WAIT_Declaration);
-		}else{
-			//orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
-			orderInfo.setDeliverStatus(orderInfo.WAIT_TAKEDELIVER);//待收货
-			//d.setStatus(DeliveryVO.COMPLETE);//发货完成
-			d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
-			//td.setStatus(TakeDelivery.COMPLETE);
-			td.setStatus(TakeDelivery.WAITING);//待收货
-			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
-			for(DeliveryMateriel materiel : materiels){
-				DeliveryMaterielExample example2 = new DeliveryMaterielExample();
-				example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
-				deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
-				totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
-				/*createStock(materiel,new StockExample(),currenLoginName);*/
-			}
-		}
-		OrderInfo order=orderService.selectById(old_delivery.getOrderSerial());
-		if(StringUtil.isNotEmpty(order.getReceiveCount())){
-			totalOutCount=totalOutCount.add(new BigDecimal(order.getReceiveCount()));
-		}
-		orderInfo.setReceiveCount(totalOutCount.toString());
-		orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
-		delivery2Mapper.updateByPrimaryKeySelective(d);
-		takeDeliveryMapper.updateByPrimaryKeySelective(td);
-		//按结算条款中的签订合同节点生成付款
-		String orderString = old_delivery.getOrderSerial();
-		String nodeString = ClauseSettlementDetail.CKH;
-		contractService.findPaymentNode(orderString, nodeString);	
-		
-		//更新出库单实际出库数量
-		StockInOutRecordExample example = new StockInOutRecordExample();
-		example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
-		record.setRealCount(totalOutCount.toString());//实际出库数量
-		stockInOutRecordMapper.updateByExampleSelective(record, example);
-			// 出库计划出库成功通过发邮件通知采购商
-			if (StringUtil.isNotEmpty(order.getBuyComId())) {
-				List<CompanyContact> companyContacts = companyContactService
-						.selectListByComId(order.getBuyComId());// 获取企业联系人
-				if (org.apache.commons.collections.CollectionUtils
-						.isNotEmpty(companyContacts)) {
-					for (CompanyContact companyContact : companyContacts) {
-						if (StringUtil.isNotEmpty(companyContact
-								.getContactEmail())) {
-							SendEmail.sendHtmlMail(
-									companyContact.getContactEmail(),
-									"平台发货计划出库成功",
-									"平台出库成功,"+
-									"关联收货计划单号" + old_delivery.getDeliverNum());
-						}
+			
+			OrderInfo o=orderInfoMapper.selectByPrimaryKey(old_delivery.getOrderSerial());
+			if(o!=null){//订单发货出库
+				OrderInfo orderInfo=new OrderInfo();
+				orderInfo.setSerialNum(o.getSerialNum());
+				Delivery d=new Delivery();
+				d.setSerialNum(old_delivery.getSerialNum());
+				TakeDelivery td=new TakeDelivery();
+				td.setSerialNum(old_delivery.getTakeDeliverSerial());
+				if(StaticConst.getInfo("waimao").equals(o.getTradeType())&&StringUtils.isEmpty(o.getSupplyComId())){//外贸
+					List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+					for(DeliveryMateriel materiel : materiels){
+						DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+						example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+						deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+						totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
+					}
+					//自动生成报关单
+					createCustomsDeclarationForm(deliverySerial,currenLoginName);
+					//更新订单状态待报关
+					orderInfo.setDeliverStatus(orderInfo.DECLARATION);
+					d.setStatus(DeliveryVO.DECLARATION);
+					td.setStatus(TakeDelivery.WAIT_Declaration);
+				}else{
+					//orderInfo.setDeliverStatus(orderInfo.OUTRECORD);//已出库
+					orderInfo.setDeliverStatus(orderInfo.WAIT_TAKEDELIVER);//待收货
+					//d.setStatus(DeliveryVO.COMPLETE);//发货完成
+					d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
+					//td.setStatus(TakeDelivery.COMPLETE);
+					td.setStatus(TakeDelivery.WAITING);//待收货
+					List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+					for(DeliveryMateriel materiel : materiels){
+						DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+						example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+						deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+						totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
+						/*createStock(materiel,new StockExample(),currenLoginName);*/
 					}
 				}
+				record.setRealCount(totalOutCount.toString());//实际出库数量*****在计算订单总的发货数量前设置
+				
+				OrderInfo order=orderService.selectById(old_delivery.getOrderSerial());
+				if(StringUtil.isNotEmpty(order.getReceiveCount())){
+					totalOutCount=totalOutCount.add(new BigDecimal(order.getReceiveCount()));
+				}
+				orderInfo.setReceiveCount(totalOutCount.toString());
+				orderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+				delivery2Mapper.updateByPrimaryKeySelective(d);
+				takeDeliveryMapper.updateByPrimaryKeySelective(td);
+				//按结算条款中的签订合同节点生成付款
+				String orderString = old_delivery.getOrderSerial();
+				String nodeString = ClauseSettlementDetail.CKH;
+				contractService.findPaymentNode(orderString, nodeString);	
+				
+				//更新出库单实际出库数量
+				StockInOutRecordExample example = new StockInOutRecordExample();
+				example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+				
+				stockInOutRecordMapper.updateByExampleSelective(record, example);
+					// 出库计划出库成功通过发邮件通知采购商
+					if (StringUtil.isNotEmpty(order.getBuyComId())) {
+						List<CompanyContact> companyContacts = companyContactService
+								.selectListByComId(order.getBuyComId());// 获取企业联系人
+						if (org.apache.commons.collections.CollectionUtils
+								.isNotEmpty(companyContacts)) {
+							for (CompanyContact companyContact : companyContacts) {
+								if (StringUtil.isNotEmpty(companyContact
+										.getContactEmail())) {
+									SendEmail.sendHtmlMail(
+											companyContact.getContactEmail(),
+											"平台发货计划出库成功",
+											"平台出库成功,"+
+											"关联收货" + old_delivery.getDeliverNum());
+								}
+							}
+						}
+					}
+			}else{//无合同发货出库
+				Delivery d=new Delivery();
+				d.setSerialNum(old_delivery.getSerialNum());
+				TakeDelivery td=new TakeDelivery();
+				td.setSerialNum(old_delivery.getTakeDeliverSerial());
+				d.setStatus(DeliveryVO.WAIT_TAKEDELIVER_DELIVERY);//待收货
+				td.setStatus(TakeDelivery.WAITING);//待收货
+				List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
+				for(DeliveryMateriel materiel : materiels){
+					DeliveryMaterielExample example2 = new DeliveryMaterielExample();
+					example2.createCriteria().andSerialNumEqualTo(materiel.getSerialNum());
+					deliveryMaterielMapper.updateByExampleSelective(materiel, example2);
+					totalOutCount=totalOutCount.add(new BigDecimal(materiel.getStockCount()));
+				}
+				record.setRealCount(totalOutCount.toString());//实际出库数量*****在计算订单总的发货数量前设置
+
+				delivery2Mapper.updateByPrimaryKeySelective(d);
+				takeDeliveryMapper.updateByPrimaryKeySelective(td);
+				
+				//更新出库单实际出库数量
+				StockInOutRecordExample example = new StockInOutRecordExample();
+				example.createCriteria().andSerialNumEqualTo(record.getSerialNum());
+				
+				stockInOutRecordMapper.updateByExampleSelective(record, example);
 			}
+		
 		}else{
 			List<DeliveryMateriel> materiels = deliveryMateriels; //这里是出入库的物料信息
 			for(DeliveryMateriel materiel : materiels){

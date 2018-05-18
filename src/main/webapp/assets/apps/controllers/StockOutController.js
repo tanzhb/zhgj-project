@@ -241,10 +241,19 @@ angular.module('MetronicApp').controller('StockOutController',['$rootScope','$sc
 						
 						for(var j=0;j<$scope.takeDeliveryMateriels.length;j++){
 							for(var i=0;i<products.length;i++){
-								if(products[i].productId==$scope.takeDeliveryMateriels[j].orderMateriel.materiel.wmsMaterielId){
-									$scope.takeDeliveryMateriels[j].stockCount = products[i].amount;
-									products.splice(i,1);
+								if(!isNull($scope.takeDeliveryMateriels[j].orderMateriel)){
+									if(products[i].productId==$scope.takeDeliveryMateriels[j].orderMateriel.materiel.wmsMaterielId){
+										$scope.takeDeliveryMateriels[j].stockCount = products[i].amount;
+										products.splice(i,1);
+									}
 								}
+								if(!isNull($scope.takeDeliveryMateriels[j].supplyMateriel)){
+									if(products[i].productId==$scope.takeDeliveryMateriels[j].supplyMateriel.materiel.wmsMaterielId){
+										$scope.takeDeliveryMateriels[j].stockCount = products[i].amount;
+										products.splice(i,1);
+									}
+								}
+								
 							}
 						}
 						

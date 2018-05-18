@@ -626,8 +626,7 @@
 												<tbody>
 													<tr
 														ng-repeat="_deliveryMateriel in deliveryMaterielE track by $index"
-														ng-mouseover="showOperation('deliveryMateriel',$index)"
-														ng-mouseleave="hideOperation('deliveryMateriel',$index)"
+														
 														repeat-done="repeatDone()">
 														<td>
 															<!--  <span ><a href="javascript:;" ng-click="addMateriel('single',$index)">{{_orderMateriel.materiel.materielNum}}</a></span> -->
@@ -819,7 +818,7 @@
 					                                     <td><p class="form-control-static"> {{_deliverFile.uploader}} </p></td>
 					                                     <td><p class="form-control-static"> {{_deliverFile.uploadDate}} </p></td>
 					                                     
-					                                     <td ng-show="operation_f{{$index}}">
+					                                     <td ng-show="operation_df{{$index}}">
 					                                     	<a href="javascript:;"  class="btn red btn-sm" ng-hide="deliverFileInfoInput" ng-click="deletedeliverFile($index)">
 					                                   			<i class="fa fa-close"></i> 
 					                            				</a>

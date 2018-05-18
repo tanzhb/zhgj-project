@@ -796,13 +796,10 @@
     left join orderInfo o on o.serialNum = d.orderSerial
     LEFT JOIN orderMateriel om on om.serialNum= dm.orderMaterielSerial  
        <!-- left join 	stockOutBatch sob on  dm.serialNum=sob.stockInBatchSerial -->
-    where  dm.delFlg=0 and s.delFlg=0  and s.status=1 and o.buyComId is not null  and om.materielSerial=#{materielSerial}  and  s.deliverSerial in 
-       <!--  <foreach item="idList" collection="list" open="(" close=")" separator=",">
-            #{idList}
-        </foreach> -->
+    where  dm.delFlg=0 and s.delFlg=0  and s.status=1 and(( o.buyComId is not null  and om.materielSerial=#{materielSerial}  and  s.deliverSerial in 
         <foreach item="item" collection="idList" open="(" close=")" separator=",">
             #{item}
-        </foreach>
+        </foreach>) <!-- 加入无合同发货的出库记录  -->or d.orderSerial is null or d.orderSerial ='')
       order by s.stockDate ASC
      </select>
      <!--代管库存 获取出库记录中出库明细   -->     

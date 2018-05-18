@@ -1050,14 +1050,10 @@ SELECT td.serialNum FROM takeDelivery td, (
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
 		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN supplyMateriel sm ON sm.serialNum = dm.supplyMaterielSerial
+		LEFT JOIN materiel m ON m.materielId = sm.materielId and m.isLatestVersion = '1' and m.delFlg = '0'
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
-		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
-		AND (
-			stock.manageType = '1'
-				AND  o.orderType != '委托采购'
-		
-		)
-		
+		LEFT JOIN stock stock ON ((stock.materielSerial = om.materielSerial AND stock.manageType = '1' AND  o.orderType != '委托采购') <!-- 加入无合同发货出库记录 -->or stock.materielSerial = m.serialNum)
 		WHERE stock.serialNum = #{serialNum,jdbcType=VARCHAR} AND s.status=1
     </select>
     <!--代管库存获取库存最后出库日期-->
@@ -1161,13 +1157,10 @@ dm.stockCount
 		LEFT JOIN delivery d ON d.serialNum = dm.deliverSerial
 		LEFT JOIN stockInOutRecord s ON d.serialNum = s.deliverSerial 
 		LEFT JOIN orderMateriel om ON om.serialNum = dm.orderMaterielSerial
+		LEFT JOIN supplyMateriel sm ON sm.serialNum = dm.supplyMaterielSerial
+		LEFT JOIN materiel m ON m.materielId = sm.materielId and m.isLatestVersion = '1' and m.delFlg = '0'
 		LEFT JOIN orderInfo o ON o.serialNum = om.orderSerial
-		LEFT JOIN stock stock ON stock.materielSerial = om.materielSerial
-		AND (
-			stock.manageType = '1'
-				AND  o.orderType != '委托采购'
-				
-		)
+		LEFT JOIN stock stock ON ((stock.materielSerial = om.materielSerial AND stock.manageType = '1' AND  o.orderType != '委托采购') <!-- 加入无合同发货出库记录 -->or stock.materielSerial = m.serialNum)
 		
 		WHERE stock.materielSerial  = #{serialNum,jdbcType=VARCHAR} AND s.status=1)a
     </select>

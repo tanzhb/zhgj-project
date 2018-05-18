@@ -47,7 +47,7 @@
 						</shiro:hasRole>
 						<li class="bold"><a data-target="#tab_1_3" data-toggle="tab">附件</a></li>
 						<li class="dropdown pull-right tabdrop">
-							<button type="button" onclick="goBackPage()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
+							<button type="button" ng-click="goBackList()" class="btn defualt  btn-circle  btn-sm"><i class="fa fa-reply"></i>返回</button>
 						</li>
 					</ul>
 					<div class="tab-content">

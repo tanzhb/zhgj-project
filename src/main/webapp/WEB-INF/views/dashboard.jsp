@@ -41,7 +41,7 @@
 				<div class="portlet-title tabbable-line">
 					<div class="caption">
 						<i class="icon-globe font-dark hide"></i> <span
-							class="caption-subject font-dark bold uppercase">流程</span>
+							class="caption-subject font-dark bold uppercase">我的任务</span>
 					</div>
 					<ul class="nav nav-tabs" id="test">
 						<li class="active"><a href="#tab_1_1" class="active"

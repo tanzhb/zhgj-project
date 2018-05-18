@@ -1048,32 +1048,49 @@ public class TakeDeliveryController {
         	 if(!CollectionUtils.isEmpty(deliveryMateriels)){
         	 //先判断该订单是普通采购还是代采购
         	 OrderMateriel orderMateriel =deliveryMateriels.get(0).getOrderMateriel();
-     		OrderInfo orderInfo=orderService.selectById(orderMateriel.getOrderSerial());
-     		StockExample stockExample =new StockExample();
-     		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
-     		Boolean isStockZijian=true;//默认是自建库存
-     		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
-     			isStockZijian=false;
-     		}
-        	 for(DeliveryMateriel d:deliveryMateriels){
-        		 String materielSerial=d.getOrderMateriel().getMaterielSerial();//基本物料流水
-        		 String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
-     			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
-     			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
-    			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
-    			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+
-    					Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
-        	/*	if(isStockZijian){
-        			String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
-        			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
-        			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+"");
-        		}else{
-        			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
-        			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
-        			d.setCurrentStockAmount(Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
-        		}*/
-        		 
-        	 }
+        	if(orderMateriel!=null){
+        		OrderInfo orderInfo=orderService.selectById(orderMateriel.getOrderSerial());
+        		StockExample stockExample =new StockExample();
+         		com.congmai.zhgj.web.model.StockExample.Criteria criteria=stockExample.createCriteria();
+         		Boolean isStockZijian=true;//默认是自建库存
+         		if(StaticConst.getInfo("dailiBuy").equals(orderInfo.getOrderType())||StaticConst.getInfo("dailiSale").equals(orderInfo.getOrderType())){//代理销售/代理采购
+         			isStockZijian=false;
+         		}
+            	 for(DeliveryMateriel d:deliveryMateriels){
+            		 String materielSerial=d.getOrderMateriel().getMaterielSerial();//基本物料流水
+            		 String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
+         			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+         			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
+        			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
+        			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+
+        					Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
+            	/*	if(isStockZijian){
+            			String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
+            			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+            			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+"");
+            		}else{
+            			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial);
+            			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+            			d.setCurrentStockAmount(Integer.parseInt(countInAmountDaiguan==null?"0":countInAmountDaiguan)-Integer.parseInt(countOutAmountDaiguan==null?"0":countOutAmountDaiguan)+"");
+            		}*/
+            		 
+            	 }
+        	}else {//无合同发货
+        		for(DeliveryMateriel d:deliveryMateriels){
+        			try {
+        				String materielSerial=d.getSupplyMateriel().getMateriel().getSerialNum();//基本物料流水
+                  		 String countInAmountZijian=stockService.getCountInAmountForZijian(materielSerial);
+               			String countOutAmountZijian=stockService.getCountOutAmountForZijian(materielSerial);
+//               			String countInAmountDaiguan=stockService.getCountInAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
+//              			String countOutAmountDaiguan=stockService.getCountOutAmountForDaiguan(materielSerial,orderInfo.getBuyComId());
+              			d.setCurrentStockAmount(Integer.parseInt(countInAmountZijian==null?"0":countInAmountZijian)-Integer.parseInt(countOutAmountZijian==null?"0":countOutAmountZijian)+"");
+					} catch (Exception e) {
+						d.setCurrentStockAmount("0");
+					}
+
+           	 }
+			}
+
         	 }
         	return deliveryMateriels;
     	}else if(StringUtils.isNotBlank(stockSerial)){
