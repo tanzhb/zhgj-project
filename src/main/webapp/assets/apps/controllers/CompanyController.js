@@ -1129,6 +1129,9 @@ $scope.showCompany=function(judgeString){
 	        	}else if(type=="bill"){
 	        		$scope.billView = true;
 	       			$scope.billAdd = true;
+	        	}else if(type=="companyRelation"){
+	        		$scope.CompanyInfoInput = true;
+		   		    $scope.CompanyInfoShow = true;
 	        	}else{
 	       			$scope.companyQualificationView = true;
 	       			$scope.companyQualificationAdd = true;
@@ -1967,10 +1970,16 @@ $scope.showCompany=function(judgeString){
 		 	        		if(!isNull(data.data.supplies)){
 		 	        			$scope.supplies = data.data.supplies;
 		 	        			supplyIndex = $scope.supplies.length;
+		 	        		}else{
+		 	        			$scope.supplies = [];
+		 	        			supplyIndex = 0;
 		 	        		}
 		 	        		if(!isNull(data.data.buyComs)){
 		 	        			$scope.buyComs = data.data.buyComs;
 		 	        			buyIndex = $scope.buyComs.length;
+		 	        		}else{
+		 	        			$scope.buyComs = [];
+		 	        			buyIndex = 0;
 		 	        		}
 		 	        		/*initCustomers();
 		 		    		initSuppliers();*/

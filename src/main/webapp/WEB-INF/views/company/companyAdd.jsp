@@ -809,7 +809,7 @@
 				                                  <tr>
 				                                      <th>采购商</th>
 				                                      <th>采购商编号</th>
-				                                       <th>操作</th>
+				                                       <th style="width:200px">操作</th>
 				                                  </tr>
 				                              </thead>
 				                              <tbody>
@@ -851,7 +851,7 @@
 				                                  <tr>
 				                                      <th>供应商</th>
 				                                      <th>供应商编号</th>
-				                                      <th>操作</th>
+				                                      <th style="width:200px">操作</th>
 				                                  </tr>
 				                              </thead>
 				                              <tbody>

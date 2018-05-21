@@ -1020,6 +1020,9 @@ public class MaterielController {
 							materiel.setCategory2(StringUtil.rowCell2String(row,6));
 							materiel.setCategory3(StringUtil.rowCell2String(row,7));
 							materiel.setUnit(StringUtil.rowCell2String(row,9));
+							if (StringUtils.isEmpty(materiel.getUnit())) {
+								throw new MyException("物料单位不能为空！");
+							}
 							materiel.setBrand(StringUtil.rowCell2String(row,10));
 							materiel.setOriginCountry(StringUtil.rowCell2String(row,11));
 							materiel.setLength(StringUtil.rowCell2String(row,12));

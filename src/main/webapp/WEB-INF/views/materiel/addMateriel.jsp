@@ -321,9 +321,9 @@
 				                      <div class="row">
 				                      	<div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">单位</label>
+				                                  <label class="control-label bold">单位<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
-				                                      <input type="text" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
+				                                      <input type="text" name="unit" class="form-control" ng-hide="materielInput" ng-model="materiel.unit" >
 				                                      <div class="form-control-focus"> </div>
 				                                      <span class="help-block" ng-hide="materielInput">请输入单位</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.unit}} </p>

@@ -860,6 +860,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 	            	category:{required:"物料分类不能为空！"},
 	            	specifications:{required:"物料规格不能为空！"},
 	            	stockUnit:{required:"库存单位不能为空！"},
+	            	unit:{required:"单位不能为空！"},
 	            	deliveryCycle:{required:"一般交付周期不能为空！"}
 	            },
             	rules: {materielNum: {required: !0,maxlength: 20},
@@ -868,6 +869,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
             			category: {required: !0,maxlength: 20},
             			specifications: {required: !0,maxlength: 20},
             			stockUnit: {required: !0,maxlength: 20},
+            			unit: {required: !0,maxlength: 20},
             			deliveryCycle:{required: !0,maxlength: 20}
             			},
             		invalidHandler: function(e, t) {
