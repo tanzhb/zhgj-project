@@ -51,7 +51,7 @@
 											请先输入正确数据！
 										</div>
 										<div class="row">
-											<div class="col-md-4">
+											<div class="col-md-2">
 												<div class="form-group">
 													<label class="control-label bold">合同编号<span
 														class="required" aria-required="true"> * </span></label>
@@ -61,13 +61,33 @@
 												</div>
 											</div>
 											<!--/span-->
-
-											<div class="col-md-4">
+											<div class="col-md-2">
+												<div class="form-group">
+													<label class="control-label bold">合同名称</label>
+													<div class="">
+														<input type="text" id="contractName" name="contractName" class="form-control"
+															ng-model="contractVO.contractName"/>
+														<div class="form-control-focus"></div>
+													</div>
+												</div>
+											</div>
+											
+											<div class="col-md-2">
 												<div class="form-group">
 													<label class="control-label bold">合同类型<span
 														class="required" aria-required="true"> * </span></label>
 													<div class="">
 														{{contractVO.contractType}}
+													</div>
+												</div>
+											</div>
+											<div class="col-md-2">
+												<div class="form-group">
+													<label class="control-label bold">标的物</label>
+													<div class="">
+														<input type="text" id="subjectMatter" name="subjectMatter" class="form-control"
+															ng-model="contractVO.subjectMatter"/>
+														<div class="form-control-focus"></div>
 													</div>
 												</div>
 											</div>

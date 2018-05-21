@@ -122,6 +122,19 @@
 				
 				                              </div>
 				                          </div>
+				                          <div class="col-md-4">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">制造标准</label>
+				                                  <div class="">
+				                                      <input type="text" name="manufacturingStandard" ng-hide="materielInput" ng-model="materiel.manufacturingStandard" class="form-control" >
+				                                  		<div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请输入制造标准</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.manufacturingStandard}} </p>
+				                                  </div>
+				
+				                              </div>
+				                          </div>
+				                          
 				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
@@ -137,7 +150,11 @@
 				
 				                              </div>
 				                          </div>
-				                          <div class="col-md-4">
+				                          
+				                      </div>
+				                      <!--/row-->
+				                      <div class="row">
+				                      	<div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
 				                                  <div class="">
@@ -152,9 +169,6 @@
 				
 				                              </div>
 				                          </div>
-				                      </div>
-				                      <!--/row-->
-				                      <div class="row">
 				                           <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">二级分类</label>
@@ -185,24 +199,7 @@
 				                              </div>
 				                          </div>
 				                          <!--/span-->
-				                          <div class="col-md-4">
-				                              <div class="form-group ">
-				                                  <label class="control-label bold">物料属性</label>
-				                                  <div ng-hide="materielInput">
-				                                      <select id="materielAttribute" class="mt-multiselect btn btn-default form-control" multiple="multiple" data-label="left" data-filter="true" name="materielAttribute" ng-hide="materielInput" ng-model="materiel.materielAttribute" >
-		                                              <option ng-repeat="_function in functionList" value="{{_function.categoryId}}">{{_function.categoryName}}</option>
-		                                             </select>
-				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请选择物料属性</span>
-				                                      
-				                                  </div>
-				                                  <div ng-show="materielShow">
-				                                   	<p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttributeName}} </p>
-				                                  </div>
-				                                 
-				
-				                              </div>
-				                          </div>
+				                          
 				                      </div>
 				                      </shiro:lacksRole>
 				                      </shiro:lacksRole>
@@ -247,6 +244,15 @@
 					
 					                              </div>
 					                          </div>
+					                          <div class="col-md-4">
+					                              <div class="form-group ">
+					                                  <label class="control-label bold">制造标准</label>
+					                                  <div class="">
+					                                      <p class="form-control-static" > {{materiel.manufacturingStandard}} </p>
+					                                  </div>
+					
+					                              </div>
+					                          </div>
 					                      	<div class="col-md-4">
 					                              <div class="form-group ">
 					                                  <label class="control-label bold">物料大类<span class="required" aria-required="true"> * </span></label>
@@ -256,7 +262,10 @@
 					
 					                              </div>
 					                          </div>
-					                          <div class="col-md-4">
+					                      </div>
+					                      <!--/row-->
+					                      <div class="row">
+					                      		<div class="col-md-4">
 					                              <div class="form-group ">
 					                                  <label class="control-label bold">一级分类<span class="required" aria-required="true"> * </span></label>
 					                                  <div class="">
@@ -265,9 +274,6 @@
 					
 					                              </div>
 					                          </div>
-					                      </div>
-					                      <!--/row-->
-					                      <div class="row">
 					                           <div class="col-md-4">
 					                              <div class="form-group ">
 					                                  <label class="control-label bold">二级分类</label>
@@ -287,7 +293,7 @@
 					                              </div>
 					                          </div>
 					                          <!--/span-->
-					                          <div class="col-md-4">
+					                          <!-- <div class="col-md-4">
 					                              <div class="form-group ">
 					                                  <label class="control-label bold">物料属性</label>
 					                                  <div >
@@ -296,7 +302,7 @@
 					                                 
 					
 					                              </div>
-					                          </div>
+					                          </div> -->
 					                      </div>
 				                      
 				                      </shiro:hasAnyRoles>
@@ -401,15 +407,17 @@
 				                          <!--/span-->
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">币种</label>
+				                                  <label class="control-label bold">高度</label>
 				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.currency" class="form-control" >
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.height" class="form-control" >
 				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入币种</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.currency}} </p>
+				                                      <span class="help-block" ng-hide="materielInput">请输入高度</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.height}} </p>
 				                                  </div>
+				
 				                              </div>
 				                          </div>
+				                          
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
 				                                  <label class="control-label bold">宽度</label>
@@ -439,14 +447,13 @@
 				                          </div>
 				                          <div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">高度</label>
+				                                  <label class="control-label bold">币种</label>
 				                                  <div class="">
-				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.height" class="form-control" >
+				                                      <input type="text" ng-hide="materielInput" ng-model="materiel.currency" class="form-control" >
 				                                      <div class="form-control-focus"> </div>
-				                                      <span class="help-block" ng-hide="materielInput">请输入高度</span>
-				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.height}} </p>
+				                                      <span class="help-block" ng-hide="materielInput">请输入币种</span>
+				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.currency}} </p>
 				                                  </div>
-				
 				                              </div>
 				                          </div>
 				                          <div class="col-md-4">
@@ -574,7 +581,7 @@
 				                          </div>
 				                      		<div class="col-md-4">
 				                              <div class="form-group ">
-				                                  <label class="control-label bold">一般交付周期<span class="required" aria-required="true"> * </span></label>
+				                                  <label class="control-label bold">一般交付周期</label>
 				                                  <div class="">
 				                                      <input type="text" name="deliveryCycle" ng-hide="materielInput" ng-model="materiel.deliveryCycle" class="form-control" >
 				                                      <div class="form-control-focus"> </div>
@@ -609,6 +616,24 @@
 				                                      <span class="help-block" ng-hide="materielInput">请输入备注</span>
 				                                      <p class="form-control-static" ng-show="materielShow"> {{materiel.remark}} </p>
 				                                  </div>
+				                              </div>
+				                          </div>
+				                          <div class="col-md-4">
+				                              <div class="form-group ">
+				                                  <label class="control-label bold">物料属性</label>
+				                                  <div ng-hide="materielInput">
+				                                      <select id="materielAttribute" class="mt-multiselect btn btn-default form-control" multiple="multiple" data-label="left" data-filter="true" name="materielAttribute" ng-hide="materielInput" ng-model="materiel.materielAttribute" >
+		                                              <option ng-repeat="_function in functionList" value="{{_function.categoryId}}">{{_function.categoryName}}</option>
+		                                             </select>
+				                                      <div class="form-control-focus"> </div>
+				                                      <span class="help-block" ng-hide="materielInput">请选择物料属性</span>
+				                                      
+				                                  </div>
+				                                  <div ng-show="materielShow">
+				                                   	<p class="form-control-static" ng-show="materielShow"> {{materiel.materielAttributeName}} </p>
+				                                  </div>
+				                                 
+				
 				                              </div>
 				                          </div>
 				                          <div class="col-md-4">

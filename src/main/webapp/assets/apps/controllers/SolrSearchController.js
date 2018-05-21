@@ -33,17 +33,17 @@ angular
 								}else if(goType == 'saleOrder'){//跳转到销售订单详情页面
 									$state.go("viewSaleOrder",{serialNum:serialNum});
 								}else if(goType == "company"){
-									$state.go("company");
+									$state.go("companyAdd",{comId:serialNum,view:1});
 			    				}else if(goType == "materiel"){
-			    					$state.go("materiel");
+			    					$state.go("addMateriel",{serialNum:serialNum,view:1});
 			    				}else if(goType == "buyPriceList"){
 			    					$state.go("addPriceList",{buyOrSale:serialNum+'buy'+'view'});
 			    				}else if(goType == "salePriceList"){
 			    					$state.go("addPriceList",{buyOrSale:serialNum+'sale'+'view'});
 			    				}else if(goType == "contract"){
-			    					$state.go("userContract");
+			    					$state.go("viewUserContract",{id:serialNum});
 			    				}else if(goType == "warehouse"){
-			    					$state.go("warehouse");
+			    					$state.go("addWarehouse",{warehouseSerialNum:serialNum,view:1});
 			    				}else if(goType == "stock"){
 			    					$state.go('stockView',{stockSerialNum:serialNum},{reload:true}); 
 			    				}else if(goType == "buyPaymentRecord"){

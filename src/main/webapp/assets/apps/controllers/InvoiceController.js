@@ -1325,6 +1325,8 @@ $scope.cancelEditBillingRecord=function (serialNum,judgeString,billAcount){
 							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(/\.{2,}/g,"");
 							       	 //保证.只出现一次，而不能出现两次以上
 							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+							        	//保证小数点后只有9位
+							        	$scope.invoice.invoiceAmount = $scope.invoice.invoiceAmount.replace(/([0-9]+\.[0-9]{9})[0-9]*/,"$1");
 							   	 }
 							// 添加发票结束***************************************
 							

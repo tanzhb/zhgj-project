@@ -30,6 +30,12 @@ public class ContractVO  extends BaseVO {
     //合同编号
     private String contractNum;
 
+    //合同名称
+    private String contractName;
+    
+    //合同标的物
+    private String subjectMatter;
+    
     //合同类型
     private String contractType;
 
@@ -504,6 +510,22 @@ public class ContractVO  extends BaseVO {
 
 	public void setProcessBase(ProcessBase processBase) {
 		this.processBase = processBase;
+	}
+
+	public String getContractName() {
+		return contractName;
+	}
+
+	public void setContractName(String contractName) {
+		this.contractName = contractName;
+	}
+
+	public String getSubjectMatter() {
+		return subjectMatter;
+	}
+
+	public void setSubjectMatter(String subjectMatter) {
+		this.subjectMatter = subjectMatter;
 	}
 
 	

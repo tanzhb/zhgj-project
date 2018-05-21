@@ -157,15 +157,39 @@ angular.module('MetronicApp').controller('ContractController', ['$rootScope','$s
 	    			fd.append('contractNum',$scope.contractVO.contractNum); 
 	    	        fd.append('contractType',$scope.contractVO.contractType); 
 	    	        fd.append('firstParty',$scope.contractVO.firstParty); 
-	    	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
+	    	        
+	    	        if(!isNull($scope.contractVO.firstPartySigner)){
+	    				fd.append('firstPartySigner',$scope.contractVO.firstPartySigner);
+	    			}
+//	    	        fd.append('firstPartySigner',$scope.contractVO.firstPartySigner); 
 	    	        fd.append('secondParty',$scope.contractVO.secondParty); 
-	    	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
-	    	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	    	        if(!isNull($scope.contractVO.secondPartySigner)){
+	    				fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	    			}
+//	    	        fd.append('secondPartySigner',$scope.contractVO.secondPartySigner);
+	    	        if(!isNull($scope.contractVO.otherPartyContractNum)){
+	    				fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
+	    			}
+//	    	        fd.append('otherPartyContractNum',$scope.contractVO.otherPartyContractNum);
 	    	        if($scope.contractVO.startDate)fd.append('startDate',$scope.contractVO.startDate); 
 	    	        if($scope.contractVO.endDate)fd.append('endDate',$scope.contractVO.endDate); 
 	    	        fd.append('signDate',$scope.contractVO.signDate); 
-	    	        fd.append('remark',$scope.contractVO.remark);
-	    	        fd.append('signerAddress',$scope.contractVO.signerAddress);
+	    	        
+	    	        if(!isNull($scope.contractVO.remark)){
+	    				fd.append('remark',$scope.contractVO.remark);
+	    			}
+	    	        
+	    	        if(!isNull($scope.contractVO.signerAddress)){
+	    				fd.append('signerAddress',$scope.contractVO.signerAddress);
+	    			}
+//	    	        fd.append('remark',$scope.contractVO.remark);
+//	    	        fd.append('signerAddress',$scope.contractVO.signerAddress);
+	    	        if(!isNull($scope.contractVO.contractName)){
+	    				fd.append('contractName',$scope.contractVO.contractName);
+	    			}
+	    	        if(!isNull($scope.contractVO.subjectMatter)){
+	    				fd.append('subjectMatter',$scope.contractVO.subjectMatter);
+	    			}
 	    	         $http({
 	    	        	  method:'POST',
 	    	              url:"rest/contract/saveUserContract",

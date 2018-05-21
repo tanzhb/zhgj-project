@@ -1358,6 +1358,8 @@ angular.module('MetronicApp').controller('StockInController',['$rootScope','$sco
 	    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 	    	 //保证.只出现一次，而不能出现两次以上
 	    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+	    	//保证小数点后只有9位
+	    	 obj[attr] = obj[attr].replace(/([0-9]+\.[0-9]{9})[0-9]*/,"$1");
   	 }
 							 
 	 /** *************入库物料批次操作  end*************** */

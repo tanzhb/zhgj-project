@@ -4,10 +4,11 @@
     
     <!--添加合同  -->
     <insert id="insertContract" parameterType="com.congmai.zhgj.web.model.ContractVO">
-    INSERT INTO contract(serialNum,  comId,   contractNum,    contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark, 
+    INSERT INTO contract(serialNum,  comId,   contractNum,contractName,subjectMatter,
+        contractType,  serviceModel,   settlementClause,  startDate,  endDate,   signDate,   signer,    remark, 
      electronicContract,  signContract,versionNO,status, isLatestVersion,creator,createTime,updater,updateTime,firstParty,secondParty,firstPartySigner,secondPartySigner,otherPartyContractNum,signerAddress,contractNumber
      ,contractContent,seller) 
-                VALUES(#{id},#{comId},#{contractNum},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},
+                VALUES(#{id},#{comId},#{contractNum},#{contractName},#{subjectMatter},#{contractType},#{serviceModel},#{settlementClause},#{startDate},#{endDate},#{signDate},#{signer},#{remark},
      #{electronicContract},#{signContract},   '1',#{status},  '1',        #{creator},NOW(),#{creator},NOW(),#{firstParty},#{secondParty},#{firstPartySigner},#{secondPartySigner},#{otherPartyContractNum},#{signerAddress},#{contractNumber}
      ,#{contractContent},#{seller})
     </insert>
@@ -17,6 +18,8 @@
     SELECT 
     a.serialNum AS Id,
 	a.contractNum,
+	a.contractName,
+	a.subjectMatter,
 	a.firstParty,
 	a.secondParty,
 	a.contractType,
@@ -44,7 +47,7 @@
     <!--查询销售合同列表  -->
     <select id="querySaleContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,
+	a.serialNum AS id,a.contractNum,a.contractName,a.subjectMatter,	(SELECT comName FROM company WHERE comId=a.comId) AS comId,
 	a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
     a.versionNO,a.status as status
 	FROM
@@ -60,7 +63,7 @@
      <!--查询采购合同列表  -->
     <select id="queryBuyContractList" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT
-	a.serialNum AS id,a.contractNum,(SELECT comName FROM company WHERE comId=a.comId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
+	a.serialNum AS id,a.contractNum,a.contractName,a.subjectMatter,(SELECT comName FROM company WHERE comId=a.comId) AS comId,a.contractType,COUNT(DISTINCT b.serialNum) AS orderAmount,a.signDate,a.signer,a.startDate,a.endDate,
 	a.versionNO,ifNull(b.status,a.status) as status
 	FROM
 	contract a
@@ -100,6 +103,8 @@
     SELECT 
     a.serialNum AS Id,
 	a.contractNum,
+	a.contractName,
+	a.subjectMatter,
 	a.contractType,
 	a.firstParty,
 	a.secondParty,
@@ -136,6 +141,8 @@
 	contract
 	SET
 	contractNum=#{contractNum},
+	contractName=#{contractName},
+	subjectMatter=#{subjectMatter},
 	contractType=#{contractType},
 	startDate=#{startDate},
 	endDate=#{endDate},
@@ -171,6 +178,12 @@
     signContract = #{signContract},  
    <if test="contractNum != null" >
         contractNum = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        contractName = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectMatter != null" >
+        subjectMatter = #{subjectMatter,jdbcType=VARCHAR},
       </if>
       <if test="contractType != null" >
         contractType = #{contractType,jdbcType=VARCHAR},
@@ -275,6 +288,8 @@
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="comId" property="comId" jdbcType="VARCHAR" />
     <result column="contractNum" property="contractNum" jdbcType="VARCHAR" />
+    <result column="contractName" property="contractName" jdbcType="VARCHAR" />
+    <result column="subjectMatter" property="subjectMatter" jdbcType="VARCHAR" />
     <result column="contractType" property="contractType" jdbcType="VARCHAR" />
     <result column="serviceModel" property="serviceModel" jdbcType="VARCHAR" />
     <result column="settlementClause" property="settlementClause" jdbcType="VARCHAR" />
@@ -314,7 +329,7 @@
     <!--查询合同列表  -->
    <select id="selectList" resultMap="BaseResultMap" resultType="com.congmai.zhgj.web.model.ContractVO">
     SELECT 
-    serialNum as id, comId, contractNum, contractType, serviceModel, settlementClause, startDate, 
+    serialNum as id, comId, contractNum, contractName,subjectMatter, contractType, serviceModel, settlementClause, startDate, 
     endDate, signDate, firstParty, secondParty, firstPartySigner, secondPartySigner, 
     otherPartyContractNum, signer, contractNumber, signerAddress, paymentMethod, paymentPeriod, 
     remark, totalMaterialMoney, serviceMoney, logisticsMoney, totalMoney, electronicContract, 
@@ -351,6 +366,12 @@
       </if>
       <if test="contractNum != null" >
         contractNum = #{contractNum,jdbcType=VARCHAR},
+      </if>
+      <if test="contractName != null" >
+        contractName = #{contractName,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectMatter != null" >
+        subjectMatter = #{subjectMatter,jdbcType=VARCHAR},
       </if>
       <if test="contractType != null" >
         contractType = #{contractType,jdbcType=VARCHAR},

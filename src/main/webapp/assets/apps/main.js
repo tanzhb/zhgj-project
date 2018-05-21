@@ -2187,6 +2187,34 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
                 }]
             }
         })
+        .state('viewUserContract',{
+            url: "/viewUserContract?:id",
+            templateUrl: "rest/page/viewUserContract",
+            data: {pageTitle: '查看合同'},
+            controller: "ContractController",
+            resolve: {
+                deps: ['$ocLazyLoad', function($ocLazyLoad) {
+                    return $ocLazyLoad.load({
+                        name: 'MetronicApp',
+                        insertBefore: '#ng_load_plugins_before', // load the above css files before '#ng_load_plugins_before'
+                        files: [                             
+					
+					'assets/global/plugins/datatables/datatables.min.css',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css',
+					'assets/global/plugins/datatables/datatables.all.min.js',
+					'assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+					'assets/apps/scripts/angular-file-upload-shim.min.js',
+			        'assets/apps/scripts/angular-file-upload.min.js',
+			        'assets/apps/scripts/FileUploader.js',
+			        'assets/apps/service/ContractService.js',
+					'assets/apps/controllers/ContractController.js'
+					
+					
+					]
+                    });
+                }]
+            }
+        })
         
         .state('editUserContractPage', {
         	params:{data:null},
@@ -2316,7 +2344,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
         	}
         })
         .state('companyAdd', {
-	        	url: "/companyAdd?:comId",
+	        	url: "/companyAdd?:comId&:view",
 	        	templateUrl: "rest/company/companyAdd",
 	        	data: {pageTitle: '新建企业信息'},
 	        	reload:true, 
@@ -2889,7 +2917,7 @@ MetronicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvi
             }
         })
         .state('addWarehouse', {
-            url: "/addWarehouse?:warehouseSerialNum",
+            url: "/addWarehouse?:warehouseSerialNum&:view",
             templateUrl: "rest/warehouse/addOrEditWarehouseInfo",
             data: {pageTitle: '新增仓库'},
             controller: "WarehouseController",
@@ -4872,6 +4900,11 @@ MetronicApp.run(['$rootScope', '$window', '$location', '$log', '$compile', '$htt
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
 					 	"<li><a>新增合同</a></li>";
+			   }else if('viewUserContract' == toState.name){//查看合同
+					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +
+				 		"<li><a ui-sref='userContract'>合同信息</a><i class='fa fa-angle-right'></i></li>" + 
+					 	"<li><a>查看合同</a></li>";
 			   }else if('editUserContractPage' == toState.name){//修改“其他合同”
 					 html="<li><i class='fa fa-home'></i> <a ui-sref='dashboard'>首页</a> <i class='fa fa-angle-right'></i></li>" +
 				 		"<li><a>基础数据</a><i class='fa fa-angle-right'></i></li>" +

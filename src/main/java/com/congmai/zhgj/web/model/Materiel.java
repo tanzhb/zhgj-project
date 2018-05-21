@@ -17,6 +17,8 @@ public class Materiel {
     private String materielName;
 
     private String specifications;
+    
+    private String manufacturingStandard;
 
     private String unit;
 
@@ -757,6 +759,14 @@ public class Materiel {
 
 	public void setWmsMaterielId(String wmsMaterielId) {
 		this.wmsMaterielId = wmsMaterielId;
+	}
+
+	public String getManufacturingStandard() {
+		return manufacturingStandard;
+	}
+
+	public void setManufacturingStandard(String manufacturingStandard) {
+		this.manufacturingStandard = manufacturingStandard;
 	}
     
 }

@@ -25,6 +25,12 @@ angular.module('MetronicApp').controller('CompanyController',['$rootScope','$sco
 	        			$scope.company.comNum= newCode;//企业编码
 	        		});
 	    		}
+	    		
+	    		if($stateParams.view==1){//切换为查看
+	    			$scope.companyView = true;
+	       			$scope.companyAdd = true;
+	       			$scope.companyEdit = false;
+			    }
 	 		}else{
 	 			initTabClass();
 	 			

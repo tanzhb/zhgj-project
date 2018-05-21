@@ -140,6 +140,16 @@ public class PageController {
     }
     
     /**
+     * 查看合同页面
+     * @return 查看合同页面url
+     */
+    @RequestMapping("/viewUserContract")
+    public String viewUserContract() {
+        return "contract/viewUserContract";
+    }
+    
+    
+    /**
      * 用户管理
      */
     @RequestMapping("/user")

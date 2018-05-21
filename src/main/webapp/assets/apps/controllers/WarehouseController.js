@@ -43,6 +43,12 @@ angular
 										    		/* getComId();*/
 										    		 
 										    		 initAllWmsWarehouse();
+										    		 
+										    		 if($stateParams.view==1){//切换为查看
+										    			 $scope.warehouseView = true;
+									        			$scope.warehouseAdd = true;
+									        			$scope.warehouseEdit = false;
+													  }
 										    		
 										 		}
 												 if($location.path()=="/warehouse"){
