@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -377,8 +379,13 @@ public class MaterielController {
 	 * @param materiel
 	 */
 	private void insertNew(Materiel materiel) {
-		materiel.setSerialNum(ApplicationUtils.random32UUID());
-		materiel.setMaterielId(ApplicationUtils.random32UUID());
+		if (StringUtil.isEmpty(materiel.getSerialNum())) {
+			materiel.setSerialNum(ApplicationUtils.random32UUID());
+		}
+		if (StringUtil.isEmpty(materiel.getMaterielId())) {
+			materiel.setMaterielId(ApplicationUtils.random32UUID());
+		}
+		
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		materiel.setCreator(currenLoginName);
@@ -462,7 +469,7 @@ public class MaterielController {
     		company = companyService.selectById(comIds.get(0));
     	}
     	DataTablesParams  dataTablesParams = null;
-    	if(parent==null||parent.isEmpty()){//查询全部物料
+    	if(parent==null||parent.isEmpty()||"null".equals(parent.toLowerCase())){//查询全部物料
     		//and 条件1
         	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
         	criteria.andIsLatestVersionEqualTo("1");
@@ -860,7 +867,7 @@ public class MaterielController {
         	DataTablesParams  dataTablesParams = null;
         	MaterielSelectExample m =new MaterielSelectExample();
         	if(StringUtil.isEmpty(serialNums)){
-        		if(parent==null||parent.isEmpty()){//查询全部物料
+        		if(parent==null||parent.isEmpty()||"null".equals(parent.toLowerCase())){//查询全部物料
             		//and 条件1
                 	com.congmai.zhgj.web.model.MaterielSelectExample.Criteria criteria =  m.createCriteria();
                 	criteria.andIsLatestVersionEqualTo("1");
@@ -889,10 +896,27 @@ public class MaterielController {
                 		m.or(criteria3);
                 	}
                 	
-                	if(params!=null){
+                	if(params!=null&&!"null".equals(params)){
                 		m.setSearchStr(params);
                 	}
-                	materielList = materielService.selectList(m);
+                	materielList = materielService.selectList4Export(m);
+                	
+                	//拼接供应商采购商名称
+                	if(!CollectionUtils.isEmpty(materielList)){
+                		for (Materiel materiel : materielList) {
+                			if(!CollectionUtils.isEmpty(materiel.getSupplyMateriels())){
+                	    		for (SupplyMateriel supplyMateriel2 : materiel.getSupplyMateriels()) {
+                	    			materiel.setSupplyNamesString((StringUtil.isEmpty(materiel.getSupplyNamesString())?"":(materiel.getSupplyNamesString()+","))+supplyMateriel2.getSupply().getComName());
+        						}
+                			}
+                			
+                	    	if(!CollectionUtils.isEmpty(materiel.getBuyMateriels())){
+                	    		for (BuyMateriel buyMateriel2 : materiel.getBuyMateriels()) {
+                	    			materiel.setBuyNamesString((StringUtil.isEmpty(materiel.getBuyNamesString())?"":(materiel.getBuyNamesString()+","))+buyMateriel2.getBuy().getComName());
+        						}
+                	    	}
+        				}
+                	}
             	}else{//根据父节点查询
             		
             		Category category = this.categoryService.selectById(parent);
@@ -944,12 +968,28 @@ public class MaterielController {
                 		m.or(criteria3);
                 	}
                 	
-                	if(params!=null){
+                	if(params!=null&&!"null".equals(params)){
                 		m.setSearchStr(params);
                 	}
                 	
-                	materielList = materielService.selectList(m);
+                	materielList = materielService.selectList4Export(m);
                 	
+                	//拼接供应商采购商名称
+                	if(!CollectionUtils.isEmpty(materielList)){
+                		for (Materiel materiel : materielList) {
+                			if(!CollectionUtils.isEmpty(materiel.getSupplyMateriels())){
+                	    		for (SupplyMateriel supplyMateriel2 : materiel.getSupplyMateriels()) {
+                	    			materiel.setSupplyNamesString((StringUtil.isEmpty(materiel.getSupplyNamesString())?"":(materiel.getSupplyNamesString()+","))+supplyMateriel2.getSupply().getComName());
+        						}
+                			}
+                			
+                	    	if(!CollectionUtils.isEmpty(materiel.getBuyMateriels())){
+                	    		for (BuyMateriel buyMateriel2 : materiel.getBuyMateriels()) {
+                	    			materiel.setBuyNamesString((StringUtil.isEmpty(materiel.getBuyNamesString())?"":(materiel.getBuyNamesString()+","))+buyMateriel2.getBuy().getComName());
+        						}
+                	    	}
+        				}
+                	}
                 	//查询下级物料
                 	/*findChildList(parent,materielList);*/
             	}
@@ -958,7 +998,32 @@ public class MaterielController {
     			for(String id:idList){
     				materielList.add(materielService.selectById(id));
     			}
+    			
+    			//按选择项的导出,拼接供应商采购商名称
+    			if(!CollectionUtils.isEmpty(materielList)){
+            		for (Materiel materiel : materielList) {
+            			if(!CollectionUtils.isEmpty(materiel.getSupplyMateriels())){
+            	    		for (SupplyMateriel supplyMateriel2 : materiel.getSupplyMateriels()) {
+            	    			materiel.setSupplyNamesString((StringUtil.isEmpty(materiel.getSupplyNamesString())?"":(materiel.getSupplyNamesString()+","))+supplyMateriel2.getSupply().getComName());
+    						}
+            			}
+            			
+            			
+            			BuyMaterielExample m3 =new BuyMaterielExample();
+            	    	com.congmai.zhgj.web.model.BuyMaterielExample.Criteria criteria3 =  m3.createCriteria();
+            	    	criteria3.andMaterielIdEqualTo(materiel.getMaterielId());
+            	    	criteria3.andDelFlgEqualTo("0");
+            	    	List<BuyMateriel> buyMateriel = buyMaterielService.selectList(m3);
+            	    	if(!CollectionUtils.isEmpty(buyMateriel)){
+            	    		for (BuyMateriel buyMateriel2 : buyMateriel) {
+            	    			materiel.setBuyNamesString((StringUtil.isEmpty(materiel.getBuyNamesString())?"":(materiel.getBuyNamesString()+","))+buyMateriel2.getBuy().getComName());
+    						}
+            	    	}
+    				}
+            	}
 			}
+        	
+        	
         	
 
     		dataMap.put("materielList",materielList);
@@ -987,6 +1052,26 @@ public class MaterielController {
     	 try {
 			ExcelReader excelReader = new ExcelReader(excelFile.getInputStream());
 			List<Materiel> materielList = new ArrayList<Materiel>(); 
+			
+			List<SupplyMateriel> supplyMaterielList = new ArrayList<SupplyMateriel>(); 
+			List<BuyMateriel> buyMaterielList = new ArrayList<BuyMateriel>(); 
+			
+			String comNumCodeString = orderService.getNumCode("C");
+			
+//			Set<String> newSupplyString = new HashSet<String>(); //新增的供应商名称集合
+			
+			List<Company> newSupply = new ArrayList<Company>(); //新增的供应商集合
+			
+			List<Company> oldSupply = companyService.selectCompanyByComType(ComType.SUPPLIER.getValue(), null); //已有的供应商集合
+			
+//			Set<String> newBuyString = new HashSet<String>(); //新增的采购商名称集合
+			
+			List<Company> newBuy = new ArrayList<Company>(); //新增的采购商集合
+			
+			List<Company> oldBuy = companyService.selectCompanyByComType(ComType.BUYER.getValue(), null); //已有的采购商集合
+			
+			List<Company> updateCompanyList = new ArrayList<Company>(); //需要修改为贸易商的公司
+					
 			excelReader.readExcelContent(new RowHandler() {
 				@SuppressWarnings("serial")
 				class MyException extends Exception{
@@ -998,12 +1083,15 @@ public class MaterielController {
 				        super(msg);
 				    }
 				}
+				
 				@Override
 				public void handle(List<Object> row,int i) throws Exception {
 					if(!CollectionUtils.isEmpty(row)){
 						try{
 							Materiel materiel = new Materiel();
-
+							
+							materiel.setSerialNum(ApplicationUtils.random32UUID());
+							materiel.setMaterielId(ApplicationUtils.random32UUID());
 							materiel.setMaterielNum(StringUtil.rowCell2String(row,0));
 							if (StringUtils.isNotEmpty(materiel.getMaterielNum())) {
 								if(orderService.isExist("materiel",materiel.getMaterielNum(),null)){
@@ -1040,6 +1128,120 @@ public class MaterielController {
 							materiel.setQualityDate(StringUtil.rowCell2String(row,24));
 							materiel.setDeliveryCycle(StringUtil.rowCell2String(row,25));
 							materiel.setRemark(StringUtil.rowCell2String(row,26));
+							
+							materiel.setSupplyNamesString(StringUtil.rowCell2String(row,27));
+							materiel.setBuyNamesString(StringUtil.rowCell2String(row,28));
+							
+							//构造供应商物料
+							if (StringUtil.isNotEmpty(materiel.getSupplyNamesString())) {
+								String[] nameList = materiel.getSupplyNamesString().split(",");
+								if (nameList!=null&&nameList.length>0) {
+									for (String name : nameList) {
+										//查找公司名是否已在供应商中，存在返回供应商
+										Company company = nameInOldSupply(name,oldSupply);
+										if (company!=null) {
+											//构造供应商物料
+											SupplyMateriel supplyMateriel = createSupplyMateriel(materiel, company);
+											supplyMaterielList.add(supplyMateriel);
+										}else {
+											//查找公司名是否已在采购商中，存在返回采购商，并设置公司类型为贸易商，加入需修改list
+											company = nameInOldBuy(name,oldBuy);
+											if (company!=null) {
+												company.setComType(ComType.TRAFFICKER.getValue());
+												updateCompanyList.add(company);
+												//构造供应商物料
+												SupplyMateriel supplyMateriel = createSupplyMateriel(materiel, company);
+												supplyMaterielList.add(supplyMateriel);
+											}else{
+												//查找公司名是否已在新的供应商名中，存在返回新的供应商
+												company = nameInNewSupply(name,newSupply);
+												if (company!=null) {
+													//构造供应商物料
+													SupplyMateriel supplyMateriel = createSupplyMateriel(materiel, company);
+													supplyMaterielList.add(supplyMateriel);
+												}else {
+													//查找公司名是否已在新的采购商名中，存在返回新的采购商，设置公司类型为贸易商
+													company = nameInNewBuy(name,newBuy);
+													if (company!=null) {
+														company.setComType(ComType.TRAFFICKER.getValue());
+														//构造供应商物料
+														SupplyMateriel supplyMateriel = createSupplyMateriel(materiel, company);
+														supplyMaterielList.add(supplyMateriel);
+													}else {
+														//不存在新增供应商到新的供应商中
+														company = new Company();
+														company.setComId(ApplicationUtils.random32UUID());
+														company.setComName(name);
+														company.setComNum(comNumCodeString+((newSupply.size()+newBuy.size()==0)?"":(newSupply.size()+newBuy.size())));
+														company.setComType(ComType.SUPPLIER.getValue());
+														
+														newSupply.add(company);
+														//构造供应商物料
+														SupplyMateriel supplyMateriel = createSupplyMateriel(materiel, company);
+														supplyMaterielList.add(supplyMateriel);
+													}
+												}
+											}
+											
+										}
+									}
+								}
+							}
+							
+							//构造采购商物料
+							if (StringUtil.isNotEmpty(materiel.getBuyNamesString())) {
+								String[] nameList = materiel.getBuyNamesString().split(",");
+								if (nameList!=null&&nameList.length>0) {
+									for (String name : nameList) {
+										//查找公司名是否已在采购商中，存在返回采购商
+										Company company = nameInOldBuy(name,oldBuy);
+										if (company!=null) {
+											//构造采购商物料
+											BuyMateriel BuyMateriel = createBuyMateriel(materiel, company);
+											buyMaterielList.add(BuyMateriel);
+										}else {
+											//查找公司名是否已在供应商中，存在返回供应商，并设置公司类型为贸易商，加入需修改list
+											company = nameInOldSupply(name,oldSupply);
+											if (company!=null) {
+												company.setComType(ComType.TRAFFICKER.getValue());
+												updateCompanyList.add(company);
+												//构造采购商物料
+												BuyMateriel BuyMateriel = createBuyMateriel(materiel, company);
+												buyMaterielList.add(BuyMateriel);
+											}else{
+												//查找公司名是否已在新的采购商名中，存在返回新的采购商
+												company = nameInNewBuy(name,newBuy);
+												if (company!=null) {
+													//构造采购商物料
+													BuyMateriel BuyMateriel = createBuyMateriel(materiel, company);
+													buyMaterielList.add(BuyMateriel);
+												}else {
+													//查找公司名是否已在新的供应商名中，存在返回新的供应商，设置公司类型为贸易商
+													company = nameInNewSupply(name,newSupply);
+													if (company!=null) {
+														company.setComType(ComType.TRAFFICKER.getValue());
+														//构造采购商物料
+														BuyMateriel BuyMateriel = createBuyMateriel(materiel, company);
+														buyMaterielList.add(BuyMateriel);
+													}else {
+														//不存在新增采购商到新的采购商中
+														company = new Company();
+														company.setComId(ApplicationUtils.random32UUID());
+														company.setComNum(comNumCodeString+((newSupply.size()+newBuy.size()==0)?"":(newSupply.size()+newBuy.size())));
+														company.setComName(name);
+														company.setComType(ComType.BUYER.getValue());
+														
+														newBuy.add(company);
+														//构造采购商物料
+														BuyMateriel BuyMateriel = createBuyMateriel(materiel, company);
+														buyMaterielList.add(BuyMateriel);
+													}
+												}
+											}
+										}
+									}
+								}
+							}
 
 							/*insertNew(materiel);*/
 							materielList.add(materiel);
@@ -1052,10 +1254,86 @@ public class MaterielController {
 					}
 					
 				}
+
+				private SupplyMateriel createSupplyMateriel(Materiel materiel,
+						Company company) {
+					SupplyMateriel supplyMateriel = new SupplyMateriel();
+					supplyMateriel.setSerialNum(ApplicationUtils.random32UUID());
+					supplyMateriel.setSerialNum(ApplicationUtils.random32UUID());
+					supplyMateriel.setMaterielId(materiel.getMaterielId());
+					supplyMateriel.setSupplyComId(company.getComId());
+					supplyMateriel.setSupplyMaterielNum(materiel.getMaterielNum());
+					supplyMateriel.setMaterielName(materiel.getMaterielName());
+					supplyMateriel.setSpecifications(materiel.getSpecifications());
+					supplyMateriel.setUnit(materiel.getUnit());
+					supplyMateriel.setType(materiel.getType());
+					supplyMateriel.setCategory1(materiel.getCategory1());
+					supplyMateriel.setCategory2(materiel.getCategory2());
+					supplyMateriel.setCategory3(materiel.getCategory3());
+					Subject currentUser = SecurityUtils.getSubject();
+					String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+					supplyMateriel.setCreator(currenLoginName);
+					supplyMateriel.setUpdater(currenLoginName);
+					supplyMateriel.setCreateTime(new Date());
+					supplyMateriel.setUpdateTime(new Date());
+					return supplyMateriel;
+				}
+				
+				private BuyMateriel createBuyMateriel(Materiel materiel,
+						Company company) {
+					BuyMateriel buyMateriel = new BuyMateriel();
+					buyMateriel.setSerialNum(ApplicationUtils.random32UUID());
+					buyMateriel.setSerialNum(ApplicationUtils.random32UUID());
+					buyMateriel.setMaterielId(materiel.getMaterielId());
+					buyMateriel.setBuyComId(company.getComId());
+					buyMateriel.setBuyMaterielNum(materiel.getMaterielNum());
+					buyMateriel.setMaterielName(materiel.getMaterielName());
+					buyMateriel.setSpecifications(materiel.getSpecifications());
+					buyMateriel.setUnit(materiel.getUnit());
+					buyMateriel.setType(materiel.getType());
+					buyMateriel.setCategory1(materiel.getCategory1());
+					buyMateriel.setCategory2(materiel.getCategory2());
+					buyMateriel.setCategory3(materiel.getCategory3());
+					Subject currentUser = SecurityUtils.getSubject();
+					String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
+					buyMateriel.setCreator(currenLoginName);
+					buyMateriel.setUpdater(currenLoginName);
+					buyMateriel.setCreateTime(new Date());
+					buyMateriel.setUpdateTime(new Date());
+					return buyMateriel;
+				}
 			}, 2);
+			
+			//插入物料信息
 			for (Materiel materiel : materielList) {
 				insertNew(materiel);
 			}
+			
+			//插入新增的企业信息
+			for (Company com : newSupply) {
+				companyService.insert(com);
+			}
+			
+			//插入新增的企业信息
+			for (Company com : newBuy) {
+				companyService.insert(com);
+			}
+			
+			//更新企业信息
+			for (Company com : updateCompanyList) {
+				companyService.update(com);
+			}
+			
+			//插入新增的供应商物料
+			for (SupplyMateriel supplyMateriel : supplyMaterielList) {
+				supplyMaterielService.insert(supplyMateriel);
+			}
+			
+			//插入新增的采购商物料
+			for (BuyMateriel buyMateriel : buyMaterielList) {
+				buyMaterielService.insert(buyMateriel);
+			}
+			
 			map.put("data", "success");
 		} catch (Exception e1) {
 			map.put("data", e1.getMessage());
@@ -1064,6 +1342,61 @@ public class MaterielController {
          return map;
     }
     
+    
+    protected Company nameInNewSupply(String name, List<Company> newSupply) {
+    	if(CollectionUtils.isEmpty(newSupply)){
+			return null;
+		}else {
+			for (Company company : newSupply) {
+				if(name.equals(company.getComName())){
+					return company;
+				}
+			}
+		}
+		return null;
+	}
+
+    protected Company nameInOldSupply(String name,
+			List<Company> oldSupply) {
+		if(CollectionUtils.isEmpty(oldSupply)){
+			return null;
+		}else {
+			for (Company company : oldSupply) {
+				if(name.equals(company.getComName())){
+					return company;
+				}
+			}
+		}
+		return null;
+	}
+    
+    
+    protected Company nameInNewBuy(String name, List<Company> newBuy) {
+    	if(CollectionUtils.isEmpty(newBuy)){
+			return null;
+		}else {
+			for (Company company : newBuy) {
+				if(name.equals(company.getComName())){
+					return company;
+				}
+			}
+		}
+		return null;
+	}
+
+    protected Company nameInOldBuy(String name,
+			List<Company> oldBuy) {
+		if(CollectionUtils.isEmpty(oldBuy)){
+			return null;
+		}else {
+			for (Company company : oldBuy) {
+				if(name.equals(company.getComName())){
+					return company;
+				}
+			}
+		}
+		return null;
+	}
     
     /**
      * 

@@ -45,4 +45,6 @@ public interface MaterielService extends GenericService<Materiel, String> {
 	Materiel getMaterielInfoByMaterielSerial(String materielSerial);//根据物料流水查物料详情
 
 	void insertBatch(List<Materiel> materielList);
+
+	List<Materiel> selectList4Export(MaterielSelectExample m);
 }

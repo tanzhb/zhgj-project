@@ -28,6 +28,8 @@ public class Materiel {
     
     private List<SupplyMateriel> supplyMateriels;
 
+    private List<BuyMateriel> buyMateriels;
+    
     private String type;
 
     private String productionPlace;
@@ -156,8 +158,12 @@ public class Materiel {
     
     private  String guideUnitPrice;//指导单价
     
-    private  String wmsMaterielId;
+    private  String wmsMaterielId;//关联的wms产品id
    
+    private  String supplyNamesString;//物料关联供应商名称
+    
+    private  String buyNamesString;//物料关联采购商名称
+    
     
     public String getCustomsRate() {
 		return customsRate;
@@ -768,5 +774,30 @@ public class Materiel {
 	public void setManufacturingStandard(String manufacturingStandard) {
 		this.manufacturingStandard = manufacturingStandard;
 	}
+
+	public String getSupplyNamesString() {
+		return supplyNamesString;
+	}
+
+	public void setSupplyNamesString(String supplyNamesString) {
+		this.supplyNamesString = supplyNamesString;
+	}
+
+	public String getBuyNamesString() {
+		return buyNamesString;
+	}
+
+	public void setBuyNamesString(String buyNamesString) {
+		this.buyNamesString = buyNamesString;
+	}
+
+	public List<BuyMateriel> getBuyMateriels() {
+		return buyMateriels;
+	}
+
+	public void setBuyMateriels(List<BuyMateriel> buyMateriels) {
+		this.buyMateriels = buyMateriels;
+	}
+
     
 }

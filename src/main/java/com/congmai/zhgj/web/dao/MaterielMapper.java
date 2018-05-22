@@ -40,4 +40,6 @@ public interface MaterielMapper {
 
 	String selectListCountBySelectExample(MaterielSelectExample m);
 
+	List<Materiel> selectBySelectExample4Export(MaterielSelectExample m);
+
 }

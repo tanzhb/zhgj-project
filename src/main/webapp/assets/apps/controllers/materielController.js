@@ -1306,6 +1306,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
        				$('#import').modal('hide'); 
 	            },function(data){
 	               //调用承诺接口reject();
+	            	handle.unblockUI();
 	            	toastr.error("操作失败");
 	            	$('#import').modal('hide'); 
 	            });
@@ -1335,13 +1336,73 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 								}
 							}
 						});
-				if(ids==''){
-					 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
+				
+				
+				var xhr = new XMLHttpRequest();
+		        xhr.responseType = "blob";
+
+		        if(ids==''){
+		        	xhr.open("GET",$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params, true);
+//					iframe.src=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
+//					 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
 	    		}else{
-	    			 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
+	    			xhr.open("GET",$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids, true);
+//	    			iframe.src=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
+//	    			 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
 	    		}
+//		        xhr.open("GET", "http://localhost:56888/api/ServiceStateChanges?url=" + url + "&filename=" + name + "", true);
+
+//		        xhr.setRequestHeader("Authorization", 'Bearer ' + currUser.token);
+
+		        xhr.onreadystatechange = function (e) {
+		            if (this.readyState == 4) {
+		                var response = this.response;
+		                var URL = window.URL || window.webkitURL || window;
+		                var link = document.createElement('a');
+		                link.href = URL.createObjectURL(response);
+		                link.download = "物料信息" + "-" + timeStamp2String(new Date())+".xls";
+		                var event = document.createEvent('MouseEvents');
+		                event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+		                link.dispatchEvent(event);
+		                handle.unblockUI(); 
+		            }
+		        }
+		        xhr.send(null); 
+		        
+//				var iframe = document.getElementById("iframe_id");  
+				
+//				if(ids==''){
+//					iframe.src=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
+////					 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?parent="+$scope.parent+"&params="+$scope.params;
+//	    		}else{
+//	    			iframe.src=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
+////	    			 window.location.href=$rootScope.basePath+"/rest/materiel/exportMateriel"+"?serialNums="+ids;
+//	    		}
 		    	
-		    	 handle.unblockUI(); 
+//				$(iframe).load(function(){                             //  等iframe加载完毕  
+//					alert(1)
+//					handle.unblockUI(); 
+//				}); 
+//				
+//				iframe.onreadystatechange = function(){ // IE下的节点都有onreadystatechange这个事件  
+//			        if (iframe.readyState == "complete"){  
+//			        	handle.unblockUI(); 
+//			        	alert("Local iframe is now loaded.");  
+//			        }  
+//			    };  
+//				if (iframe.attachEvent){  
+//				    iframe.attachEvent("onload", function(){ // IE  
+//				    	handle.unblockUI(); 
+//				    	alert("Local iframe is now loaded.");  
+//				        
+//				    });  
+//				} else {  
+//				    iframe.onload = function(){ // 非IE  
+//				    	handle.unblockUI(); 
+//				        alert("Local iframe is now loaded.");  
+//				    };  
+//				} 
+		    	
 		   }
 	       //********导入导出end****************//
 	       

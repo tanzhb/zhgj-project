@@ -222,4 +222,9 @@ public class MaterielServiceImpl implements MaterielService {
     	}
 		return materielList.get(0);
 	}
+
+	@Override
+	public List<Materiel> selectList4Export(MaterielSelectExample m) {
+		return MaterielMapper.selectBySelectExample4Export(m);
+	}
 }
