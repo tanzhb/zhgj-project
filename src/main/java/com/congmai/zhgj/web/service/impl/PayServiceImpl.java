@@ -160,9 +160,14 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
      * @return
      */
 	@Override
-	public List<PaymentRecord> findAllGatheringMoneyRecord(String userId) {
-		// TODO Auto-generated method stub
-		return payMapper.findAllGatheringMoneyRecord(userId);
+	public List<PaymentRecord> findAllGatheringMoneyRecord(String userId,String serialNums) {
+		Map map = new HashMap();
+		map.put("userId", userId);
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			map.put("idList", idList);
+		}
+		return payMapper.findAllGatheringMoneyRecord(map);
 	}
 
 	/**
@@ -349,10 +354,15 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	}
 
 	@Override
-	public List<MemoRecord> findReceiveMemoRecord(String userId) {
+	public List<MemoRecord> findReceiveMemoRecord(String userId, String serialNums) {
 		MemoRecordExample mre=new MemoRecordExample();
 		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
 		c.andDelFlgEqualTo("0").andBuyComIdIsNotNull();
+		
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			c.andSerialNumIn(idList);
+		}
 		return memoRecordMapper.selectByExample(mre);
 	}
 
@@ -371,10 +381,14 @@ public class PayServiceImpl extends GenericServiceImpl<PaymentRecord, String> im
 	}
 
 	@Override
-	public List<MemoRecord> findPayMemoRecord(String userId) {
+	public List<MemoRecord> findPayMemoRecord(String userId,String serialNums) {
 		MemoRecordExample mre=new MemoRecordExample();
 		com.congmai.zhgj.web.model.MemoRecordExample.Criteria c=mre.createCriteria();
 		c.andDelFlgEqualTo("0").andSupplyComIdIsNotNull();
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			c.andSerialNumIn(idList);
+		}
 		return memoRecordMapper.selectByExample(mre);
 	}
 

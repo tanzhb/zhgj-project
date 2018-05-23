@@ -284,6 +284,12 @@
     <if test="orderSerial != null" >
        AND a.orderSerial= #{orderSerial} 
     </if>
+    <if test="idList != null" >
+    	and a.serialNum in
+         <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
     
 <!-- 	<if test="supplyComIds != null" >
         and a.supplyComId in

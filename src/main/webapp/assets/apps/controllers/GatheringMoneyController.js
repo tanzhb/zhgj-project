@@ -949,7 +949,21 @@ angular.module('MetronicApp').controller('GatheringMoneyController', ['$rootScop
 	//导出收款
 	$scope.exportPay = function(){
 		handle.blockUI("正在导出数据，请稍后"); 
-		window.location.href=$rootScope.basePath+"/rest/pay/exportGatheringMoney";
+		var ids ='';
+		table.$('input[type="checkbox"]').each(function() {
+			// If checkbox exist in DOM
+			if ($.contains(document, this)) {
+				// If checkbox is checked
+				if (this.checked) {
+					// 将选中数据id放入ids中
+					if (ids == '') {
+						ids = this.value;
+					} else
+						ids = ids + ',' + this.value;
+				}
+			}
+		});
+		window.location.href=$rootScope.basePath+"/rest/pay/exportGatheringMoney"+"?serialNums="+ids;
 		handle.unblockUI(); 
 	}
 	  $scope.goVerificate= function(serialNum) {//去核销

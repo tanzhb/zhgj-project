@@ -79,7 +79,7 @@
     
     
      <!--查询收款列表  -->
-    <select id="findAllGatheringMoneyRecord" parameterType="java.lang.String" resultType="com.congmai.zhgj.web.model.PaymentRecord">
+    <select id="findAllGatheringMoneyRecord" parameterType="java.util.Map" resultType="com.congmai.zhgj.web.model.PaymentRecord">
 	 SELECT
 	 a.serialNum,a.paymentNum,a.playPaymentDate,a.paymentNode,a.nodeNum,a.applyPaymentAmount,b.orderNum,
 	(SELECT comName FROM company WHERE comId=a.buyComId) AS buyComId,a.paymentDate,a.paymentAmount,a.status,a.paymentType,a.applyCurrency,a.payee,a.isBill,a.applyDate
@@ -91,6 +91,13 @@
 	a.creator=#{userId}
 	AND
 	a.supplyComId IS NULL
+	<if test="idList != null" >
+    	and a.serialNum in
+         <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
+
     </select>
     
     <!--通过id查询收付款详情  -->

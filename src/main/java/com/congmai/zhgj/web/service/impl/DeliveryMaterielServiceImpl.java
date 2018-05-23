@@ -95,6 +95,10 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 		Page<DeliveryMateriel> page = new Page<DeliveryMateriel>();
 		Criteria c = example.createCriteria();
 		c.andDelFlgEqualTo("0");
+		
+		if(!CollectionUtils.isEmpty(record.getIdList())){
+			c.andSerialNumIn(record.getIdList());
+		}
 		if("in".equals(type)){
 			
 			c.andDeliverSerialEqualTo("");
@@ -110,6 +114,9 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			c2.andDeliverSerialEqualTo(""); 
 			//c2.andInOutFlagIsNull();//出库;
 			c2.andDelFlgEqualTo("0");
+			if(!CollectionUtils.isEmpty(record.getIdList())){
+				c2.andSerialNumIn(record.getIdList());
+			}
 			page.setResult(deliveryMaterielMapper.selectListByExampleForStockIn(example));
 			page.setTotalCount(deliveryMaterielMapper.countListByExampleForStockIn(example));
 		}else{
@@ -126,6 +133,9 @@ public class DeliveryMaterielServiceImpl extends GenericServiceImpl<DeliveryMate
 			c2.andTakeDeliverSerialEqualTo(""); 
 //			c2.andInOutFlagIsNull();//出库
 			c2.andDelFlgEqualTo("0");
+			if(!CollectionUtils.isEmpty(record.getIdList())){
+				c2.andSerialNumIn(record.getIdList());
+			}
 			page.setResult(deliveryMaterielMapper.selectListByExample(example));
 			page.setTotalCount(deliveryMaterielMapper.countListByExample(example));
 		}

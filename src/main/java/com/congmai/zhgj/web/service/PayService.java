@@ -130,9 +130,10 @@ public interface PayService extends GenericService<PaymentRecord, String> {
     /**
      * 查询收款列表
      * @param userId
+     * @param serialNums 
      * @return
      */
-    public List<PaymentRecord> findAllGatheringMoneyRecord(String userId);
+    public List<PaymentRecord> findAllGatheringMoneyRecord(String userId, String serialNums);
     
     
     /**
@@ -192,16 +193,18 @@ public interface PayService extends GenericService<PaymentRecord, String> {
 	 /**
      * 查询收款水单列表
      * @param userId
+	 * @param serialNums 
      * @return
      */
-    public List<MemoRecord>findReceiveMemoRecord(String userId);
+    public List<MemoRecord>findReceiveMemoRecord(String userId, String serialNums);
     
     /**
      * 查询付款水单列表
      * @param userId
+     * @param serialNums 
      * @return
      */
-    public List<MemoRecord>findPayMemoRecord(String userId);
+    public List<MemoRecord>findPayMemoRecord(String userId, String serialNums);
     
     /**
      * 查询收款/付款水单对应的核销记录(通过收款/付款水单流水)

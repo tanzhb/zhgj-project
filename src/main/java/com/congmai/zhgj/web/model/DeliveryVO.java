@@ -237,6 +237,9 @@ public class DeliveryVO extends BaseVO implements Serializable{
 	    private  List<DeliveryMaterielVO> deliveryMateriels;
 	    
 	    private String orderApplyCount;//订单已申请数量
+	    
+	    
+	    private   List<String> idList;
 	
 /*	// 业务类型
 	private String businessType;
@@ -851,6 +854,14 @@ public class DeliveryVO extends BaseVO implements Serializable{
 
 	public void setDeRemark(String deRemark) {
 		this.deRemark = deRemark;
+	}
+
+	public List<String> getIdList() {
+		return idList;
+	}
+
+	public void setIdList(List<String> idList) {
+		this.idList = idList;
 	}
 
 /*	public String getBusinessType() {

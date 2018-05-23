@@ -977,11 +977,15 @@ public class TakeDeliveryController {
 	     * @return
 	     */
 	    @RequestMapping("exportStockIn")
-	    public void exportStockIn(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    public void exportStockIn(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
 	    		StockInOutRecord record = new StockInOutRecord();
 	    		record.setPageIndex(0);
 	    		record.setPageSize(-1);
+	    		if(StringUtil.isNotEmpty(serialNums)){
+					List<String> idList = ApplicationUtils.getIdList(serialNums);
+					record.setIdList(idList);
+				}
 	    		List<DeliveryMateriel> stockInList = deliveryMaterielService.selectListByExample(record,"in","1").getResult();
 	    		dataMap.put("stockInList",stockInList);
 	    		ExcelUtil.export(request, response, dataMap, "stockIn", "入库记录");
@@ -993,11 +997,15 @@ public class TakeDeliveryController {
 	     * @return
 	     */
 	    @RequestMapping("exportStockOut")
-	    public void exportStockOut(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	    public void exportStockOut(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) {
 	    	Map<String, Object> dataMap = new HashMap<String, Object>();
 	    	StockInOutRecord record = new StockInOutRecord();
 	    	record.setPageIndex(0);
 	    	record.setPageSize(-1);
+			if(StringUtil.isNotEmpty(serialNums)){
+				List<String> idList = ApplicationUtils.getIdList(serialNums);
+				record.setIdList(idList);
+			}
 	    	List<DeliveryMateriel> stockOutList = deliveryMaterielService.selectListByExample(record,"out","1").getResult();
 	    	dataMap.put("stockOutList",stockOutList);
 	    	ExcelUtil.export(request, response, dataMap, "stockOut", "出库记录");

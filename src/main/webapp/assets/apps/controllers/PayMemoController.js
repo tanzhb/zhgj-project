@@ -1260,7 +1260,22 @@ angular.module('MetronicApp').controller('ReceiveMemoController', ['$rootScope',
 	}
 	 $scope.exportPayReceiveMemo = function(type){
     	 handle.blockUI("正在导出数据，请稍后"); 
-    	 window.location.href=$rootScope.basePath+"/rest/pay/exportPayReceiveMemo?type="+type;
+    	 var ids = '';
+ 		// Iterate over all checkboxes in the table
+ 		table.$('input[type="checkbox"]').each(function() {
+ 			// If checkbox exist in DOM
+ 			if ($.contains(document, this)) {
+ 				// If checkbox is checked
+ 				if (this.checked) {
+ 					// 将选中数据id放入ids中
+ 					if (ids == '') {
+ 						ids = this.value;
+ 					} else
+ 						ids = ids + ',' + this.value;
+ 				}
+ 			}
+ 		});
+    	 window.location.href=$rootScope.basePath+"/rest/pay/exportPayReceiveMemo?type="+type+"&serialNums="+ids;
     	 handle.unblockUI(); 
        }
 }]);

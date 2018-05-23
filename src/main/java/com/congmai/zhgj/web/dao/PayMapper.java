@@ -58,10 +58,10 @@ public interface PayMapper extends GenericDao<PaymentRecord, String> {
 	
 	/**
 	 * 查询收款记录列表
-	 * @param userId
+	 * @param map
 	 * @return
 	 */
-	public List<PaymentRecord> findAllGatheringMoneyRecord(String userId);
+	public List<PaymentRecord> findAllGatheringMoneyRecord(Map map);
 	
 	
 	/**

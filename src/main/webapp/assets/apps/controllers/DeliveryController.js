@@ -1042,7 +1042,24 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 		
 		 $scope.exportContract = function(){
 	    	 handle.blockUI("正在导出数据，请稍后"); 
-	    	 window.location.href=$rootScope.basePath+"/rest/delivery/exportDelivery";
+	    	 var ids = '';
+	 		// Iterate over all checkboxes in the table
+	 		table.$('input[type="checkbox"]').each(
+	 				function() {
+	 					// If checkbox exist in DOM
+	 					if ($.contains(document, this)) {
+	 						// If checkbox is checked
+	 						if (this.checked) {
+	 							// 将选中数据id放入ids中
+	 							if (ids == '') {
+	 								ids = this.id;
+	 							} else
+	 								ids = ids + ','
+	 										+ this.id;
+	 						}
+	 					}
+	 				});
+	    	 window.location.href=$rootScope.basePath+"/rest/delivery/exportDelivery"+"?serialNums="+ids;
 	    	 handle.unblockUI(); 
 	       }
 		
@@ -1092,7 +1109,7 @@ angular.module('MetronicApp').controller('DeliveryController', ['$rootScope','$s
 																row,
 																meta) {
 						                            		return "<label class='mt-checkbox mt-checkbox-single mt-checkbox-outline'>" +
-															"<input type='checkbox' name='serialNum' class='checkboxes' value='1' />" +
+															"<input type='checkbox' name='serialNum' class='checkboxes' value='1' id='"+data+"'/>" +
 															"<span></span></label>";
 														}
 						                            },
@@ -3224,7 +3241,24 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
         * 导出出库记录
         */
     $scope.exportStockOut = function(){
-	    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportStockOut";
+    	var ids = '';
+		// Iterate over all checkboxes in the table
+    	stock_table.$('input[type="checkbox"]').each(
+				function() {
+					// If checkbox exist in DOM
+					if ($.contains(document, this)) {
+						// If checkbox is checked
+						if (this.checked) {
+							// 将选中数据id放入ids中
+							if (ids == '') {
+								ids = this.value;
+							} else
+								ids = ids + ','
+										+ this.value;
+						}
+					}
+				});
+	    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportStockOut"+"?serialNums="+ids;
 	}
     
 	jQuery.validator.addMethod("deliverNumCheck", function (value, element) {
@@ -3308,8 +3342,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
                                 { mData: 'stockInOutRecord.serialNum' },
                                 { mData: 'stockInOutRecord.inOutNum' },
                                 { mData: 'stockInOutRecord.inOutType' },
-                                { mData: 'materiel'},
-                                { mData: 'materiel'},
+                                { mData: 'orderMateriel'},
+                                  { mData: 'orderMateriel'},
                                 { mData: 'stockInOutRecord.stockDate' },
                                 { mData: 'stockCount' },
                                /* { mData: 'orderNum' },
@@ -3355,8 +3389,8 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
   								
   								if(data==null){
   									return "";
-  								}else{
-  									return data.materielName;
+  								}else if(data.materiel!=null){
+  									return data.materiel.materielName;
   								}
   								
   							}
@@ -3366,8 +3400,9 @@ var warehouseAddressFlag,warehouseAddress1Flag,takeDeliveryWarehouseAddressFlag,
   									type, row, meta) {
   								if(data==null){
   									return "";
+  									
   								}else{
-  									return data.specifications;
+  									return data.materiel.specifications;
   								}
   							}
   						}/*,{

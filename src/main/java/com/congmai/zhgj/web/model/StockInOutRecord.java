@@ -1,6 +1,7 @@
 package com.congmai.zhgj.web.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -106,6 +107,8 @@ public class StockInOutRecord {
 		
 		private String wmsDeliveryId;
 		
+	    private   List<String> idList;
+	    
 		 public String getRealCount() {
 				return realCount;
 		}
@@ -466,6 +469,14 @@ public class StockInOutRecord {
 
 		public void setWmsDeliveryId(String wmsDeliveryId) {
 			this.wmsDeliveryId = wmsDeliveryId;
+		}
+
+		public List<String> getIdList() {
+			return idList;
+		}
+
+		public void setIdList(List<String> idList) {
+			this.idList = idList;
 		}
 		
 	

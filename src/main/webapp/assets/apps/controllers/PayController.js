@@ -1781,7 +1781,15 @@ angular.module('MetronicApp').controller('PayController', ['$rootScope','$scope'
 	//导出付款
 	$scope.exportPay = function(){
 		handle.blockUI("正在导出数据，请稍后"); 
-		window.location.href=$rootScope.basePath+"/rest/pay/exportPay";
+		var ids ='';
+		var ap = table.rows('.active').data();
+		for(i=0;i<ap.length;i++){
+			if(ids == ''){
+				ids = ap[i].serialNum;
+			}else ids = ids +','+ ap[i].serialNum;
+			
+		}
+		window.location.href=$rootScope.basePath+"/rest/pay/exportPay"+"?serialNums="+ids;
 		handle.unblockUI(); 
 	}
 	 $scope.goVerificate= function(serialNum) {//去核销

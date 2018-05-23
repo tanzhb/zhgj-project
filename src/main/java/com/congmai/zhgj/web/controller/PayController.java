@@ -334,7 +334,7 @@ public class PayController {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<PaymentRecord> paymentRecordlist = payService
-				.findAllGatheringMoneyRecord(currenLoginName);
+				.findAllGatheringMoneyRecord(currenLoginName,null);
 
 		// 封装datatables数据返回到前台
 		Map pageMap = new HashMap();
@@ -728,12 +728,12 @@ public class PayController {
 	 */
 	@RequestMapping("exportGatheringMoney")
 	public void exportGatheringMoney(Map<String, Object> map,
-			HttpServletRequest request, HttpServletResponse response) {
+			HttpServletRequest request, HttpServletResponse response,String serialNums) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<PaymentRecord> paymentRecordlist = payService
-				.findAllGatheringMoneyRecord(currenLoginName);
+				.findAllGatheringMoneyRecord(currenLoginName,serialNums);
 		for (PaymentRecord paymentRecord : paymentRecordlist) {
 			if ("1".equals(paymentRecord.getBillStyle())) {
 				paymentRecord.setBillStyle(PaymentRecord.XPHK);
@@ -991,7 +991,7 @@ public class PayController {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<MemoRecord> memoRecordlist = payService
-				.findReceiveMemoRecord(currenLoginName);
+				.findReceiveMemoRecord(currenLoginName,null);
 		for(MemoRecord memoRecord:memoRecordlist){
 			memoRecord.setComName(companyService.selectOne(memoRecord.getBuyComId()).getComName());
 		}
@@ -1016,7 +1016,7 @@ public class PayController {
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<MemoRecord> memoRecordlist = payService
-				.findPayMemoRecord(currenLoginName);
+				.findPayMemoRecord(currenLoginName,null);
 		for(MemoRecord memoRecord:memoRecordlist){
 			memoRecord.setComName(companyService.selectOne(memoRecord.getSupplyComId()).getComName());
 		}
@@ -1199,15 +1199,15 @@ public class PayController {
 	@RequestMapping("exportPayReceiveMemo")
 	public void exportPayReceiveMemo(Map<String, Object> map,
 			HttpServletRequest request, HttpServletResponse response,
-			String type) {
+			String type,String  serialNums) {
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();// 获取当前登录用户名
 		List<MemoRecord> memoRecordlist = new ArrayList<MemoRecord>();
 		if ("receive".equals(type)) {
-			memoRecordlist = payService.findReceiveMemoRecord(currenLoginName);
+			memoRecordlist = payService.findReceiveMemoRecord(currenLoginName,serialNums);
 		} else if ("pay".equals(type)) {
-			memoRecordlist = payService.findPayMemoRecord(currenLoginName);
+			memoRecordlist = payService.findPayMemoRecord(currenLoginName,serialNums);
 		}
 		for (MemoRecord memoRecord : memoRecordlist) {
 			if ("0".equals(memoRecord.getStatus())) {

@@ -1805,7 +1805,7 @@ public class DeliveryController {
 	 * @return
 	 */
 	@RequestMapping("exportDelivery")
-	public void exportDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response) {
+	public void exportDelivery(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String serialNums) {
 /*		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名 
@@ -1822,6 +1822,10 @@ public class DeliveryController {
 		DeliveryVO query = new DeliveryVO();
 		query.setCreator(currenLoginName);
 		query.setSupplyComIds(comIds);
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			query.setIdList(idList);
+		}
 		List<DeliveryVO> contractList=deliveryService.findAllDeliveryList(query);
 
 		dataMap.put("deliveryList",contractList);

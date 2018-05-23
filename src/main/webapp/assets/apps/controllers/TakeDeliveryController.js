@@ -843,7 +843,25 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 	        * 导出收货计划
 	        */
 	       $scope.exportTakeDelivery = function(){
-		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery";
+	    	   var ids = '';
+		 		// Iterate over all checkboxes in the table
+		 		table.$('input[type="checkbox"]').each(
+	 				function() {
+	 					// If checkbox exist in DOM
+	 					if ($.contains(document, this)) {
+	 						// If checkbox is checked
+	 						if (this.checked) {
+	 							// 将选中数据id放入ids中
+	 							if (ids == '') {
+	 								ids = this.id;
+	 							} else
+	 								ids = ids + ','
+	 										+ this.id;
+	 						}
+	 					}
+	 				});
+	    	   
+		    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportTakeDelivery"+"?serialNums="+ids;
 		   }
 
 	       
@@ -958,7 +976,24 @@ angular.module('MetronicApp').controller('TakeDeliveryController',['$rootScope',
 		        * 导出入库记录
 		        */
 		    $scope.exportStockIn = function(){
-			    	 window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportStockIn";
+		    	var ids = '';
+				// Iterate over all checkboxes in the table
+        		$('#stockInTable input[name="serialNum2"]').each(
+					function() {
+						// If checkbox exist in DOM
+						if ($.contains(document, this)) {
+							// If checkbox is checked
+							if (this.checked) {
+								// 将选中数据id放入ids中
+								if (ids == '') {
+									ids = this.value;
+								} else
+									ids = ids + ','
+											+ this.value;
+							}
+						}
+					});
+			    window.location.href=$rootScope.basePath+"/rest/takeDelivery/exportStockIn"+"?serialNums="+ids;
 			}
 		    
 		    

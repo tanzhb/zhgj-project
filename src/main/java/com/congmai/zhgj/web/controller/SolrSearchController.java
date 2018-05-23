@@ -480,6 +480,9 @@ public class SolrSearchController {
                 	}else if(comNum != null){
                     	title = "企业信息;单号：" + comNum;
                     	goType = "company";
+    				}else if(stockNum != null){//在物料之前做判断，因为库存信息也有materielNum
+    					title = "库存信息;单号：" + stockNum;
+                    	goType = "stock";
     				}else if(materielNum != null){
     					title = "物料信息;单号：" + materielNum;
                     	goType = "materiel";
@@ -495,9 +498,6 @@ public class SolrSearchController {
     				}else if(warehouseNum != null){
     					title = "仓库信息;单号：" + warehouseNum;
                     	goType = "warehouse";
-    				}else if(stockNum != null){
-    					title = "库存信息;单号：" + stockNum;
-                    	goType = "stock";
     				}else if(supplyComId != null && paymentNum != null){
     					title = "应付款;单号：" + paymentNum;
                     	goType = "buyPaymentRecord";
