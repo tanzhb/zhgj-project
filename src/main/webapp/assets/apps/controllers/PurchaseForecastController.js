@@ -238,6 +238,7 @@ angular.module('MetronicApp').controller('PurchaseForecastController', ['$rootSc
 
 			$scope.confirmNewProcurementPlan = function() {	
 				$('#confirmModal').modal('hide');// 隐藏确认删除模态框
+				$(".modal-backdrop").remove();
 				PurchaseForecastService.savePurchaseForecast(ids).then(
 						function(data) {
 							
