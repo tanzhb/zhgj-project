@@ -947,15 +947,19 @@ function loadPriceListSaleTable(){
 			    			 priceListService.savePriceList($scope.priceList)
 							 .then(
 									 function(data) {
-										 debugger;
-										 toastr.success("保存价格数据成功！");
-										 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
-										 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
-										 $scope.priceList =data;
-										 $scope.priceListView =true;
-										 $scope.priceListAdd =false;
-										 $scope.priceListEdit =true;
-										 $(".alert-danger").hide();
+										 if(!handle.isNull(data.serialNum)){
+											 toastr.success("保存价格数据成功！");
+											 data.priceEffectiveDate=timeStamp2ShortString(data.priceEffectiveDate);
+											 data.priceExpirationDate=timeStamp2ShortString(data.priceExpirationDate);
+											 $scope.priceList =data;
+											 $scope.priceListView =true;
+											 $scope.priceListAdd =false;
+											 $scope.priceListEdit =true;
+											 $(".alert-danger").hide();
+										 }else{
+											 $(".alert-danger").hide();
+											 toastr.error("已存在的价格目录，不能再次保存！");
+										 }
 									 },
 									 function(errResponse) {
 										 toastr.warning("保存错误！");
@@ -1126,10 +1130,10 @@ function loadPriceListSaleTable(){
 			 jQuery.validator.addMethod("inclusivePriceNumCheck", function (value, element) {//含税价格判断
 	    			debugger;
 					$(element).removeData();
-					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
-						toastr.warning("只能包含小数点和数字,且只能有两位小数");
-						/*$("#inclusivePrice").focus();*/
-						}
+//					if(/^[-\+]?\d+(\.\d+)?$/.test(value)==false||value==NaN||(Number(value)*100+"").indexOf(".")>-1){
+//						toastr.warning("只能包含小数点和数字,且只能有两位小数");
+//						/*$("#inclusivePrice").focus();*/
+//						}
 					return this.optional(element) || Number($(element).data("unitprice")) == NaN?false:(Number($(element).data("unitprice"))-value<= 0);
 				}, "不含税单价不能超过含税价格");
 			 jQuery.validator.addMethod("toppriceNumCheck", function (value, element) {//最低价最高价判断
@@ -1278,8 +1282,8 @@ function loadPriceListSaleTable(){
 			    	 obj[attr] = obj[attr].replace(/\.{2,}/g,"");
 			    	 //保证.只出现一次，而不能出现两次以上
 			    	 obj[attr] = obj[attr].replace(".","$#$").replace(/\./g,"").replace("$#$",".");
-			    	//保证小数点后只有9位
-			    	 obj[attr] = obj[attr].replace(/([0-9]+\.[0-9]{9})[0-9]*/,"$1");
+			    	//保证小数点后只有2位
+			    	 obj[attr] = obj[attr].replace(/([0-9]+\.[0-9]{2})[0-9]*/,"$1");
 			    	 if(attr=='inclusivePrice'&&$scope.priceList.rate!=undefined){
 	                       var inclusivePrice=$scope.priceList.inclusivePrice;
 			    		 $scope.priceList.unitPrice=inclusivePrice*(1-$scope.priceList.rate/100);

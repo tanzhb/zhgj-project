@@ -75,9 +75,8 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
 
         	validatePackageInit();//加载包装信息验证控件
        	
-        	if($stateParams.view!=1){//切换为查看
-        		selectParentMateriel();//选择物料表格初始化
-        	}
+        	selectParentMateriel();//选择物料表格初始化
+        	
         	validateBOMInit();//bom表单初始化
         	
         	validateFileInit();//file表单初始化

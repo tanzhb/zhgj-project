@@ -183,7 +183,7 @@ public class StockController {
 			comId = userCompanyService.getUserComId(String.valueOf(user.getUserId()));
 		}
     	
-    	List<Stock> stocks = stockService.selectStockListByComId(manageType,comId);
+    	List<Stock> stocks = stockService.selectStockListByComId(manageType,comId,null);
 		if(stocks.size()!=0){
 		for(Stock stock:stocks){
 			Materiel m=materielService.selectById(stock.getMaterielSerial());
@@ -335,7 +335,7 @@ public class StockController {
 	     */
 	    @RequestMapping("exportStock")
 	    @ResponseBody
-	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  type)  {
+	    public void exportStock(Map<String, Object> map,HttpServletRequest request,HttpServletResponse response,String  type,String serialNums)  {
 	    		Map<String, Object> dataMap = new HashMap<String, Object>();
 	    		String comId = null;
     	    	User user = UserUtil.getUserFromSession();
@@ -344,7 +344,7 @@ public class StockController {
     			}
 		if ("zijian".equals(type)) {
 			List<Stock> stocks = stockService
-					.selectStockListByComId("1", comId);
+					.selectStockListByComId("1", comId,serialNums);
 			if (stocks.size() != 0) {
 				for (Stock stock : stocks) {
 					Materiel m = materielService.selectById(stock
@@ -385,6 +385,17 @@ public class StockController {
 					}else{
 						stock.setLastUpdateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(stock.getCreateTime()));
 					}
+					if(StringUtil.isNotEmpty(stock.getFirstInDateZijian())){
+						int a=0;
+						try {
+							a = DateUtil.daysBetween(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(stock.getFirstInDateZijian()), new Date());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						stock.setMaxWhAge(String.valueOf(a));
+					}
+					
 					
 				}
 				dataMap.put("stocks",stocks);
@@ -394,7 +405,7 @@ public class StockController {
 			}
 		}else if("gyshang".equals(type)){
 			List<Stock> stocks = stockService
-					.selectStockListByComId("3", comId);
+					.selectStockListByComId("3", comId,null);
 			if (stocks.size() != 0) {
 				for (Stock stock : stocks) {
 					Materiel m = materielService.selectById(stock

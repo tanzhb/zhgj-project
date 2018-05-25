@@ -2077,7 +2077,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 					return;
 				}
     			var id =  $('input[name="serialNum"]:checked').val(); 
-    			var promise = materielService.chooseMateriels(id);
+    			var promise = materielService.chooseMateriels(id,$scope.buyOrder.supplyComId,'supplyComId');
         		promise.then(function(data){
         			if($scope.materielSelectedIndex != undefined){
         				$scope.orderMateriel[$scope.materielSelectedIndex].materielSerial = data.data[0].serialNum;
@@ -2125,7 +2125,7 @@ angular.module('MetronicApp').controller('buyOrderController', ['$rootScope', '$
 					}
 				}
         		handle.blockUI();
-        		var promise = materielService.chooseBasicMateriels(ids);
+        		var promise = materielService.chooseBasicMateriels(ids,$scope.buyOrder.supplyComId,'supplyComId');
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
@@ -4019,7 +4019,10 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	   params.number=obj.amount;//销售数量
 		    	   var promise = orderService.getUnitPrice(params);
 		   		promise.then(function(data){
-		   		 obj. materiel.unitPrice=data;
+		   			if(!isNull(data)){
+		   				obj. materiel.unitPrice=data;
+		   			}
+		   		 
 		   		},function(data){
 		   			//调用承诺接口reject();
 		   		});

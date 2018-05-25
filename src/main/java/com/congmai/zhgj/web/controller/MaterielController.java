@@ -55,6 +55,7 @@ import com.congmai.zhgj.web.model.JsonTreeData;
 import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.MaterielExample;
 import com.congmai.zhgj.web.model.OrderMateriel;
+import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.Search;
 import com.congmai.zhgj.web.model.User;
 import com.congmai.zhgj.web.model.MaterielExample.Criteria;
@@ -69,6 +70,7 @@ import com.congmai.zhgj.web.service.CompanyService;
 import com.congmai.zhgj.web.service.MaterielFileService;
 import com.congmai.zhgj.web.service.MaterielService;
 import com.congmai.zhgj.web.service.OrderService;
+import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.StockService;
 import com.congmai.zhgj.web.service.SupplyMaterielService;
 import com.congmai.zhgj.web.service.UserCompanyService;
@@ -115,6 +117,8 @@ public class MaterielController {
     @Resource
     private OrderService orderService;
     
+    @Resource
+    private PriceListService priceListService;
     
     
     /**
@@ -1107,6 +1111,42 @@ public class MaterielController {
 							materiel.setCategory1(StringUtil.rowCell2String(row,5));
 							materiel.setCategory2(StringUtil.rowCell2String(row,6));
 							materiel.setCategory3(StringUtil.rowCell2String(row,7));
+							//分类为空，设置为其他分类，如果没有其他分类，新增其他分类并设置
+							if(StringUtil.isEmpty(materiel.getType())){
+								materiel.setType(setOrCreateCategoryId("0","其他","1"));
+//								List<Category> fristCategoryList = categoryService.queryCategoryListByParent("0");
+//								//查找分类名是否已在分类中，存在返回分类
+//								Category category = nameInCategory("其他",fristCategoryList);
+//								if(category!=null){
+//									materiel.setType(category.getCategoryId());
+//								}else {
+//									category = new Category();
+//									category.setCategoryName("其他");
+//									category.setLevel("1");
+//									category.setParentId("0");
+//									category = saveCategory(category);
+//									materiel.setType(category.getCategoryId());
+//								}
+							}else {
+								materiel.setType(setOrCreateCategoryId("0",materiel.getType(),"1"));
+							}
+
+							if(StringUtil.isEmpty(materiel.getCategory1())){
+								materiel.setCategory1(setOrCreateCategoryId(materiel.getType(),"其他","2"));
+							}else {
+								materiel.setCategory1(setOrCreateCategoryId(materiel.getType(),materiel.getCategory1(),"2"));
+							}
+							if(StringUtil.isEmpty(materiel.getCategory2())){
+								materiel.setCategory2(setOrCreateCategoryId(materiel.getCategory1(),"其他","3"));
+							}else {
+								materiel.setCategory2(setOrCreateCategoryId(materiel.getCategory1(),materiel.getCategory2(),"3"));
+							}
+							if(StringUtil.isEmpty(materiel.getCategory3())){
+								materiel.setCategory3(setOrCreateCategoryId(materiel.getCategory2(),"其他","4"));
+							}else {
+								materiel.setCategory3(setOrCreateCategoryId(materiel.getCategory2(),materiel.getCategory3(),"4"));
+							}
+							
 							materiel.setUnit(StringUtil.rowCell2String(row,9));
 							if (StringUtils.isEmpty(materiel.getUnit())) {
 								throw new MyException("物料单位不能为空！");
@@ -1355,6 +1395,7 @@ public class MaterielController {
 		}
 		return null;
 	}
+    
 
     protected Company nameInOldSupply(String name,
 			List<Company> oldSupply) {
@@ -1397,7 +1438,43 @@ public class MaterielController {
 		}
 		return null;
 	}
-    
+    /**
+     * 
+     * @Description (物料类型名称转换为类型id，类型已存在直接返回，不存在新建后返回)
+     * @param materiel
+     * @param parent
+     * @param name
+     * @param level
+     */
+    private String setOrCreateCategoryId(String parent,String name,String level) {
+		List<Category> categoryList = categoryService.queryCategoryListByParent(parent);
+		//查找分类名是否已在分类中，存在返回分类
+		Category category = nameInCategory(name,categoryList);
+		if(category!=null){
+			return category.getCategoryId();
+		}else {
+			category = new Category();
+			category.setCategoryName(name);
+			category.setLevel(level);
+			category.setParentId(parent);
+			category = saveCategory(category);
+			return category.getCategoryId();
+		}
+	}
+	
+	private Category nameInCategory(String name,
+			List<Category> categoryList) {
+		if(CollectionUtils.isEmpty(categoryList)){
+			return null;
+		}else {
+			for (Category category : categoryList) {
+				if(name.equals(category.getCategoryName())){
+					return category;
+				}
+			}
+		}
+		return null;
+	}
     /**
      * 
      * @Description (选择的供应物料)
@@ -1406,7 +1483,7 @@ public class MaterielController {
      */
     @RequestMapping(value="chooseMateriel",method=RequestMethod.POST)
     @ResponseBody
-    public List<SupplyMateriel> chooseMateriel(@RequestBody String ids){
+    public List<SupplyMateriel> chooseMateriel(@RequestBody String ids,String comId,String comType){
     	List<SupplyMateriel> list = null;
     	try {
     		list = supplyMaterielService.chooseMateriel(ids);
@@ -1419,6 +1496,15 @@ public class MaterielController {
         				m.setStockCount(
         						(Integer.parseInt(inCountString==null?"0":inCountString)
         								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+        				
+        				if(StringUtil.isNotEmpty(comId)&&StringUtil.isNotEmpty(comType)){
+        					//首先查询当前有效的价格目录
+            				List<PriceList> priceLists = priceListService.selectCurrentPriceList(m,comId,comType);
+            				if (!CollectionUtils.isEmpty(priceLists)) {
+            					m.setUnitPrice(priceLists.get(0).getInclusivePrice());
+    						}
+        				}
+    					
     				}
     				
 					
@@ -1440,7 +1526,7 @@ public class MaterielController {
      */
     @RequestMapping(value="chooseBasicMateriels")
     @ResponseBody
-    public List<Materiel> chooseBasicMateriels(String ids,String comId){
+    public List<Materiel> chooseBasicMateriels(String ids,String comId,String comType){
     	List<Materiel> list = null;
     	try {
     		list = materielService.chooseMateriel(ids);
@@ -1451,6 +1537,14 @@ public class MaterielController {
     				list.get(i).setStockCount(
     						(Integer.parseInt(inCountString==null?"0":inCountString)
     								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+    				
+    				if(StringUtil.isNotEmpty(comId)&&StringUtil.isNotEmpty(comType)){
+    					//首先查询当前有效的价格目录
+        				List<PriceList> priceLists = priceListService.selectCurrentPriceList(list.get(i),comId,comType);
+        				if (!CollectionUtils.isEmpty(priceLists)) {
+        					list.get(i).setUnitPrice(priceLists.get(0).getInclusivePrice());
+						}
+    				}
 					
 				}
     		}

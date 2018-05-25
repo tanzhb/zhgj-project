@@ -296,10 +296,14 @@ public class StockServiceImpl extends GenericServiceImpl<Stock, String> implemen
 	}
 
 	@Override
-	public List<Stock> selectStockListByComId(String manageType, String comId) {
+	public List<Stock> selectStockListByComId(String manageType, String comId, String serialNums) {
 		Stock s = new Stock();
 		s.setManageType(manageType);
 		s.setComId(comId);
+		if(StringUtil.isNotEmpty(serialNums)){
+			List<String> idList = ApplicationUtils.getIdList(serialNums);
+			s.setIdList(idList);
+		}
 		if("3".equals(manageType)){
 			return stockMapper.selectStockSupplyList(s);
 		}else{

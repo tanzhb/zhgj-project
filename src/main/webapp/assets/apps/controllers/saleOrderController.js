@@ -2039,13 +2039,12 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
         $scope.copyMateriels = {};
     	$scope.confirmSelect = function(){//非自主销售订单，选择供应物料确认
     		if($scope.modalType=='single'){
-    			c
     			if(id_count==0){
 					toastr.warning("请选择物料");
 					return;
 				}
     			var id =  $('input[name="serialNum"]:checked').val(); 
-    			var promise = materielService.chooseMateriels(id,$scope.saleOrder.buyComId);
+    			var promise = materielService.chooseMateriels(id,$scope.saleOrder.buyComId,'buyComId');
         		promise.then(function(data){
         			if($scope.materielSelectedIndex != undefined){
         				$scope.orderMateriel[$scope.materielSelectedIndex].supplyMaterielSerial = data.data[0].serialNum;
@@ -2096,7 +2095,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
 					}
 				}
         		handle.blockUI();
-        		var promise = materielService.chooseMateriels(ids);
+        		var promise = materielService.chooseMateriels(ids,$scope.saleOrder.buyComId,'buyComId');
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
@@ -2168,7 +2167,7 @@ angular.module('MetronicApp').controller('saleOrderController', ['$rootScope', '
     			});
     			}	
         		handle.blockUI();
-        		var promise = materielService.chooseBasicMateriels(ids,$scope.saleOrder.buyComId);
+        		var promise = materielService.chooseBasicMateriels(ids,$scope.saleOrder.buyComId,'buyComId');
         		promise.then(function(data){
         			toastr.success("添加成功！");
         			handle.unblockUI();
@@ -4018,7 +4017,9 @@ $scope._totaldeliveryAmount  = function() {//计算所有支付金额
 		    	   params.number=obj.amount;//销售数量
 		    	   var promise = orderService.getUnitPrice(params);
 		   		promise.then(function(data){
-		   		 obj. materiel.unitPrice=data;
+		   			if(!isNull(data)){
+		   				obj. materiel.unitPrice=data;
+		   			}
 		   		},function(data){
 		   			//调用承诺接口reject();
 		   		});

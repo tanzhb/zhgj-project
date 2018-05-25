@@ -75,6 +75,7 @@ import com.congmai.zhgj.web.service.PriceComService;
 import com.congmai.zhgj.web.service.PriceListService;
 import com.congmai.zhgj.web.service.ProcessBaseService;
 import com.congmai.zhgj.web.service.UserCompanyService;
+import com.sun.org.apache.bcel.internal.generic.NEW;
 
 
 /**
@@ -147,7 +148,15 @@ public class PriceListController {
     	Subject currentUser = SecurityUtils.getSubject();
 		String currenLoginName = currentUser.getPrincipal().toString();//获取当前登录用户名
 		PriceList priceList=JSON.parseObject(params, PriceList.class);
-    	try{
+		
+		
+		//首先查询是否已存在有交集，相同的价格目录
+		List<PriceList> priceLists = priceListService.selectSamePriceList(priceList);
+		if(!CollectionUtils.isEmpty(priceLists)){
+			return new ResponseEntity<PriceList>(new PriceList(), HttpStatus.OK);
+		}
+		
+		try{
     		if(StringUtils.isEmpty(priceList.getSerialNum())){
     			priceList.setSerialNum(ApplicationUtils.random32UUID());
     			priceList.setPriceId(ApplicationUtils.random32UUID());
@@ -201,7 +210,7 @@ public class PriceListController {
 			if(StringUtils.isEmpty(priceList.getBuyComId())){
 				priceList.setSupplyComName(companyService.selectOne(priceList.getSupplyComId()).getComName());
 			}else{
-				priceList.setSupplyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
+				priceList.setBuyComName(companyService.selectOne(priceList.getBuyComId()).getComName());
 			}
 			Materiel m=materielService.getMaterielInfoByMaterielId(materielService.selectById(priceList.getMaterielSerial()).getMaterielId());
 			if(m!=null){

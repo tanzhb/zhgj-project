@@ -41,6 +41,14 @@ angular.module('MetronicApp').controller('HeaderController', function($rootScope
     	$rootScope.searchType = "all";//solrSearch.jsp调用
     }
  
+    
+    $scope.mySearchInputKeydown = function(e){
+        var keycode = window.event?e.keyCode:e.which;
+        if(keycode==13){
+        	$scope.search();
+        	return false;
+        }
+    };
 
     $scope.search = function() {
     	if($("#searchInput").val() == '' || $("#searchInput").val().trim() == ''){

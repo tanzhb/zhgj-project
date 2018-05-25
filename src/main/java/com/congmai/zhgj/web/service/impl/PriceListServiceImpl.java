@@ -17,6 +17,7 @@ import com.congmai.zhgj.core.util.ApplicationUtils;
 import com.congmai.zhgj.web.dao.CompanyContactMapper;
 import com.congmai.zhgj.web.dao.CompanyMapper;
 import com.congmai.zhgj.web.dao.PriceListMapper;
+import com.congmai.zhgj.web.model.Materiel;
 import com.congmai.zhgj.web.model.PriceList;
 import com.congmai.zhgj.web.model.PriceListExample;
 import com.congmai.zhgj.web.model.PriceListExample.Criteria;
@@ -139,6 +140,44 @@ public class PriceListServiceImpl extends GenericServiceImpl<PriceList, String> 
 		map.put("comId", comId);
 		PriceList priceList=priceListMapper.getGuideUnitPrice(map);
 		return priceList;
+	}
+	@Override
+	public List<PriceList> selectSamePriceList(PriceList priceList) {
+		PriceListExample ple=new PriceListExample();
+		Criteria criteria= ple.createCriteria();
+		criteria.andDelFlgEqualTo("0");
+		if(!StringUtils.isEmpty(priceList.getBuyComId())){
+			criteria.andPriceTypeEqualTo("salePrice");
+			criteria.andBuyComIdEqualTo(priceList.getBuyComId());
+		}else if(!StringUtils.isEmpty(priceList.getSupplyComId())){
+			criteria.andPriceTypeEqualTo("buyPrice");
+			criteria.andSupplyComIdEqualTo(priceList.getSupplyComId());
+		}
+		criteria.andMaterielSerialEqualTo(priceList.getMaterielSerial());
+		
+		criteria.andPriceEffectiveDateLessThanOrEqualTo(priceList.getPriceExpirationDate());
+		criteria.andPriceExpirationDateGreaterThanOrEqualTo(priceList.getPriceEffectiveDate());
+		
+		return priceListMapper.selectByExample(ple);
+	}
+	@Override
+	public List<PriceList> selectCurrentPriceList(Materiel materiel,
+			String comId, String comType) {
+			PriceListExample ple=new PriceListExample();
+			Criteria criteria= ple.createCriteria();
+			criteria.andDelFlgEqualTo("0");
+			if("buyComId".equals(comType)){
+				criteria.andBuyComIdEqualTo(comId);
+			}else if("supplyComId".equals(comType)){
+				criteria.andSupplyComIdEqualTo(comId);
+			}
+			criteria.andMaterielSerialEqualTo(materiel.getSerialNum());
+			
+			criteria.andPriceEffectiveDateLessThanOrEqualTo(new Date());
+			criteria.andPriceExpirationDateGreaterThanOrEqualTo(new Date());
+			criteria.andStatusEqualTo("1");
+			
+			return priceListMapper.selectByExample(ple);
 	}
 	
 	

@@ -87,12 +87,10 @@
 						</a></li>
 					</ul></li>
 				
-				<form class="search-form search-form-expanded"
-					action="page_general_search_3.html" method="GET">
+				<form class="search-form search-form-expanded"  method="GET">
 						<div class="input-group">
-						
 							<input type="text" class="form-control typeahead"
-								placeholder="Search..." name="query" id="searchInput"> 
+								placeholder="Search..." ng-keydown="mySearchInputKeydown($event)" name="query" id="searchInput"> 
 								<span
 								class="input-group-btn"> <a href="javascript:;" ng-click="search()" 
 								class="btn submit"> <i class="icon-magnifier"></i>

@@ -115,6 +115,8 @@ public class Stock {
 	private String  countInAmountSupply;//累计入库数量(供应商库存)
 	private String  countOutAmountSupply;//累计出库数量(供应商库存)
 	
+    private   List<String> idList;
+	
 	public String getBelongWarehouseNumZijian() {
 		return belongWarehouseNumZijian;
 	}
@@ -571,6 +573,14 @@ public class Stock {
 
 	public void setMateriel(String materiel) {
 		this.materiel = materiel;
+	}
+
+	public List<String> getIdList() {
+		return idList;
+	}
+
+	public void setIdList(List<String> idList) {
+		this.idList = idList;
 	}
 	
 }

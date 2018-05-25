@@ -1212,6 +1212,19 @@ public class OrderController {
     				m1.setStockCount(
     						(Integer.parseInt(inCountString==null?"0":inCountString)
     								-Integer.parseInt(outCountString==null?"0":outCountString))+"");
+    				
+    				List<PriceList> priceLists = null;
+    				if(StringUtil.isNotEmpty(orderInfo.getBuyComId())){
+    					//首先查询当前有效的价格目录
+        				priceLists = priceListService.selectCurrentPriceList(m1,orderInfo.getBuyComId(),"buyComId");
+    				}
+    				if(StringUtil.isNotEmpty(orderInfo.getSupplyComId())){
+    					//首先查询当前有效的价格目录
+        				priceLists = priceListService.selectCurrentPriceList(m1,orderInfo.getSupplyComId(),"supplyComId");
+    				}
+    				if (!CollectionUtils.isEmpty(priceLists)) {
+    					m1.setUnitPrice(priceLists.get(0).getInclusivePrice());
+					}
 				}
 				
 				
@@ -3284,7 +3297,7 @@ public class OrderController {
 					"buyPrice");
 		}
 		if (priceList1 != null) {
-			price = priceList1.getPrice();
+			price = priceList1.getInclusivePrice();
 			if ("1".equals(priceList1.getIsLadderPrice())) {
 				List<LadderPrice> list = ladderPriceService
 						.selectListByPriceSerial(priceList1.getSerialNum());// 获取阶梯价格

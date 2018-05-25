@@ -545,7 +545,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								if(isNull(row.deliveryCount)||row.deliveryCount==0){
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发'+'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已发'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')
+									+'（<a href="javascript:void(0);" ng-click="viewDeliverLog(\''+row.serialNum+'\')">已发</a>'+'<span style="color:#FCB95B">'+row.deliveryCount+'</span>'+'）'+'</br>'
 								}
                     			if(row.deliverStatus==null||row.deliverStatus=="0"){
                     				if(row.status==2){
@@ -592,7 +593,8 @@ angular.module('MetronicApp').controller('customerOrderController', ['$rootScope
 								if(isNull(row.payAmount)||row.payAmount==0){
 									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付' +'<span style="color:#FCB95B">0</span>'+'）'+'</br>'
 								}else{
-									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')+'（已付 '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
+									htm = (isNull(data)?'<span style="color:#FCB95B">0</span>':'<span style="color:#FCB95B">'+data+'</span>')
+									+'（<a href="javascript:void(0);" ng-click="viewPayLog(\''+row.serialNum+'\')">已付</a> '+'<span style="color:#FCB95B">'+row.payAmount+'</span>'+'）'+'</br>'
 								}
 
                     			if(row.payStatus=="0"){

@@ -368,14 +368,14 @@ margin-bottom: 20px;
 								                      <!--/row-->
 								                      <!--/row-->
 								                      <div class="row">
-								                      		<div class="col-md-4">
+								                      		<!-- <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">单价</label>
 								                                  <label class="control-label col-md-7">
 								                                      {{materiel.unitPrice}}
 								                                  </label>
 								                              </div>
-								                          </div>
+								                          </div> -->
 								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">高度</label>
@@ -395,11 +395,7 @@ margin-bottom: 20px;
 								                              </div>
 								                          </div>
 								                          <!--/span-->
-								                          
-								                      </div>
-								                      <!--/row-->
-								                      <div class="row">
-								                           <div class="col-md-4">
+								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">单件重量</label>
 								                                  <label class="control-label col-md-7">
@@ -408,6 +404,10 @@ margin-bottom: 20px;
 								
 								                              </div>
 								                          </div>
+								                      </div>
+								                      <!--/row-->
+								                      <div class="row">
+								                           
 								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">托盘规格</label>
@@ -426,14 +426,7 @@ margin-bottom: 20px;
 								
 								                              </div>
 								                          </div>
-								                         
-								                          <!--/span-->
-								                         
-								                      </div>
-								                      <!--/row-->
-								                      <!--/row-->
-								                      <div class="row">
-								                      		<div class="col-md-4">
+								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">备案项号</label>
 								                                  <label class="control-label col-md-7">
@@ -441,6 +434,14 @@ margin-bottom: 20px;
 								                                  </label>
 								                              </div>
 								                          </div>
+								                         
+								                          <!--/span-->
+								                         
+								                      </div>
+								                      <!--/row-->
+								                      <!--/row-->
+								                      <div class="row">
+								                      		
 								                       <!--/span-->
 								                          <div class="col-md-4">
 								                              <div class="form-group">
@@ -458,7 +459,14 @@ margin-bottom: 20px;
 								                                  </label>
 								                              </div>
 								                          </div>
-								                          
+								                          <div class="col-md-4">
+								                              <div class="form-group">
+								                                  <label class="control-label col-md-5 bold">海关编码</label>
+								                                  <label class="control-label col-md-7">
+								                                      {{materiel.customsCode}}
+								                                  </label>
+								                              </div>
+								                          </div>
 								                          <!--/span-->
 								                          <!-- <div class="col-md-4">
 								                              <div class="form-group">
@@ -473,14 +481,7 @@ margin-bottom: 20px;
 								                      <!--/row-->
 								                      <div class="row">
 								                          
-								                          <div class="col-md-4">
-								                              <div class="form-group">
-								                                  <label class="control-label col-md-5 bold">海关编码</label>
-								                                  <label class="control-label col-md-7">
-								                                      {{materiel.customsCode}}
-								                                  </label>
-								                              </div>
-								                          </div>
+								                          
 								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">一般交付周期</label>
@@ -498,11 +499,7 @@ margin-bottom: 20px;
 								                                  </label>
 								                              </div>
 								                          </div>
-								                          <!--/span-->
-								                      </div>
-								                      <!--/row-->
-								                      <div class="row">
-								                      	<div class="col-md-4">
+								                          <div class="col-md-4">
 								                              <div class="form-group">
 								                                  <label class="control-label col-md-5 bold">备注</label>
 								                                  <label class="control-label col-md-7">
@@ -510,6 +507,10 @@ margin-bottom: 20px;
 								                                  </label>
 								                              </div>
 								                          </div>
+								                          <!--/span-->
+								                      </div>
+								                      <!--/row-->
+								                      <div class="row">
 								                          <!--/span-->
 								                          <div class="col-md-4">
 								                              <div class="form-group">
@@ -1170,18 +1171,14 @@ margin-bottom: 20px;
                               </div>
                           </div>
                           <!--/span-->
-                          <div class="col-md-6">
+                          <!-- <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">单价</label>
                                   <label class="control-label col-md-7">
                                       {{materiel.unitPrice}}
                                   </label>
                               </div>
-                          </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
+                          </div> -->
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">高度</label>
@@ -1191,6 +1188,11 @@ margin-bottom: 20px;
 
                               </div>
                           </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">单件体积</label>
@@ -1200,10 +1202,6 @@ margin-bottom: 20px;
 
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">单件重量</label>
@@ -1213,6 +1211,11 @@ margin-bottom: 20px;
 
                               </div>
                           </div>
+                          <!--/span-->
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">托盘规格</label>
@@ -1222,9 +1225,6 @@ margin-bottom: 20px;
 
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">每托数量</label>
@@ -1234,6 +1234,10 @@ margin-bottom: 20px;
 
                               </div>
                           </div>
+                          <!--/span-->
+                      </div>
+                      <div class="row">
+                          
                            <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group">
@@ -1244,10 +1248,6 @@ margin-bottom: 20px;
                               </div>
                           </div>
                           <!--/span-->
-                      </div>
-                      <div class="row">
-                          
-                          <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-7 bold">海关监管条件</label>
@@ -1256,12 +1256,25 @@ margin-bottom: 20px;
                                   </label>
                               </div>
                           </div>
+                      </div>
+                      <div class="row">
+                          
+                          <!--/span-->
+                          
                           <!--/span-->
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">保质期</label>
                                   <label class="control-label col-md-7">
                                       {{materiel.qualityDate}}
+                                  </label>
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group">
+                                  <label class="control-label col-md-5 bold">海关编码</label>
+                                  <label class="control-label col-md-7">
+                                         {{materiel.customsCode}}
                                   </label>
                               </div>
                           </div>
@@ -1282,14 +1295,7 @@ margin-bottom: 20px;
                       </div> -->
                       <!--/row-->
                       <div class="row">
-                      		<div class="col-md-6">
-                              <div class="form-group">
-                                  <label class="control-label col-md-5 bold">海关编码</label>
-                                  <label class="control-label col-md-7">
-                                         {{materiel.customsCode}}
-                                  </label>
-                              </div>
-                          </div>
+                      		
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-7 bold">一般交付周期</label>
@@ -1298,9 +1304,6 @@ margin-bottom: 20px;
                                   </label>
                               </div>
                           </div>
-                      </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-7 bold">包含下级物料</label>
@@ -1309,6 +1312,10 @@ margin-bottom: 20px;
                                   </label>
                               </div>
                           </div>
+                      </div>
+                      <!--/row-->
+                      <div class="row">
+                          
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">备注</label>
@@ -1317,9 +1324,6 @@ margin-bottom: 20px;
                                   </label>
                               </div>
                           </div>
-                       </div>
-                      <!--/row-->
-                      <div class="row">
                           <div class="col-md-6">
                               <div class="form-group">
                                   <label class="control-label col-md-5 bold">版本</label>
@@ -1328,8 +1332,9 @@ margin-bottom: 20px;
                                   </label>
                               </div>
                           </div>
-                          <!--/span-->
-                      </div>
+                       </div>
+                      <!--/row-->
+                      
                       <!--/row-->
 				</div>
 			</div>

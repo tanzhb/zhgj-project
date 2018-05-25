@@ -371,7 +371,7 @@
     dt.transportType,d.supplyComId,d.buyComId,
 	td.serialNum as tdSerialNum,td.warehouseSerial as tdWarehouseSerial,td.takeDeliverDate,td.receiver as tdReceiver,td.contactNum as tdContactNum,td.takeDeliverNum,td.remark as take_delivery_remark,
 	td.status,td.takeDeliverAddress,
-	 sr. inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial,sr.realCount as realCount
+	 sr.inOutNum as inOutNum,  sr.inOutType as inOutType, sr.remark as  inOutRemark,sr.packageCount as  inOutPackageCount, sr.serialNum as inOutSerial,sr.realCount as realCount
     from takeDelivery td
     left join delivery  d on d.serialNum = td.deliverSerial
     left join deliveryTransport dt on d.serialNum = dt.deliverSerial
@@ -380,9 +380,10 @@
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
-    <if test="orderByClause != null" >
+    <!-- <if test="orderByClause != null" >
       order by ${orderByClause}
-    </if>
+    </if> -->
+    order by sr.inOutNum DESC
   </select>
   <select id="selectByTakeDeliveryPrimaryKey" resultMap="BaseResultMap2" parameterType="java.lang.String" >
     select

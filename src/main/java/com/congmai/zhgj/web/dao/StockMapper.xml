@@ -171,6 +171,12 @@
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR}) AND s.materielOwner =#{comId,jdbcType=VARCHAR}
         
       </if>
+      <if test="idList != null" >
+    	and s.serialNum in
+         <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
        AND s.delFlg=0
   </select>
   <!--查看供应商库存列表  -->
@@ -192,6 +198,13 @@
       <if test="comId != null" >
         AND (sm.supplyComId = #{comId,jdbcType=VARCHAR} or bm.buyComId = #{comId,jdbcType=VARCHAR})    and s.materielOwner=#{comId,jdbcType=VARCHAR}
       </if>
+      <if test="idList != null" >
+    	and s.serialNum in
+         <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">  
+		  #{item}  
+		 </foreach> 
+    </if>
+      
        AND s.delFlg=0
   </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >

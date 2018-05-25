@@ -94,7 +94,6 @@ public class SolrSearchController {
 				SolrQuery query = new SolrQuery();
 	            
 				query.set("q","search_fields:"+queryStr);
-				
 	            //设定查询字段
 	            //query.setQuery(mQueryStr);
 //	            query.set("q",p);
@@ -320,8 +319,8 @@ public class SolrSearchController {
             	searchType = "all";
             }
             //设定查询字段
-            query.setQuery(queryStr);
-                        
+//            query.setQuery(queryStr);
+            query.set("q",queryStr);            
             //指定返回结果字段
             query.setIncludeScore(true);
             // query.set("fl","id,name");

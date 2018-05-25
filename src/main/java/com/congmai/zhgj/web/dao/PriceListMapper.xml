@@ -608,8 +608,8 @@
     <include refid="Base_Column_List" />
     from priceList
     where priceType=#{priceType}  and materielSerial=#{materielSerial} and delFlg=0 and isLatestVersion=1
- and priceEffectiveDate&lt;#{NOW()}
- and  priceExpirationDate&gt;=#{NOW()}
+ and priceEffectiveDate&lt;NOW()
+ and  priceExpirationDate&gt;=NOW()
     <if test="priceType=='buyPrice'">
     and supplyComId=#{comId} 
     </if>
