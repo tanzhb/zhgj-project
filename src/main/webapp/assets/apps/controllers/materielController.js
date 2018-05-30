@@ -1120,7 +1120,7 @@ angular.module('MetronicApp').controller('materielController', ['$rootScope', '$
     		
     		
     		//********bom  start****************//
-    		var _index = 0;
+    		var _index = 1;
     	    $scope.saveBOM  = function() {//保存BOM信息
     	    	if(!$scope.materielInput){
     	    		toastr.error('请先保存基本信息！');return

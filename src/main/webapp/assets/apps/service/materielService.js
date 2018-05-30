@@ -124,7 +124,7 @@ angular.module('MetronicApp').service('materielService',
 				},chooseMateriels : function(ids,comId,comType){//选择的供应物料
 					var deferred = $q.defer();
 					$http.post("rest/materiel/chooseMateriel",
-							{ids:ids,comId:comId,comType:comType}//传整个表单数据  
+							ids//传整个表单数据  
 			    	).then(function success(result) {
 			            deferred.resolve(result);//请求成功
 			        }, function error(err) {
