@@ -736,8 +736,8 @@
 														<td></td>
 														<td  ng-if="!otherMode">{{totalOrderCount}}</td><td  ng-if="otherMode"></td>
 														<td  ng-if="!otherMode">{{totalUnDeliveryCount}}</td><td  ng-if="otherMode"></td>
-														<td>{{totalUnDeliveryCount}}</td>
-														<td>{{calcTotalDeliveryCount()}} </td>
+														<td>{{totalDeliveryCount}}</td>
+														<td>{{calcTotalDeliveryCount()}}</td>
 														<td></td>
 													</tr>
 												</tfoot>
